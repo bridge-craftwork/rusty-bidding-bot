@@ -55,6 +55,11 @@ dependencies = [
 [[package]]
 name = "bidspec"
 version = "0.1.0"
+dependencies = [
+ "bridge-card",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "bridge-card"
@@ -190,6 +195,7 @@ dependencies = [
 name = "rbb-cli"
 version = "0.1.0"
 dependencies = [
+ "bidspec",
  "bridge-card",
  "clap",
  "rbb-engine",

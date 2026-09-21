@@ -1,4 +1,4 @@
-# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module jacoby-transfers "Jacoby Transfers"
   card   notrump.transfers.jacoby

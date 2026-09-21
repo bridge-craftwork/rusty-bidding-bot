@@ -29,6 +29,8 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `cargo test --workspace`
 - `cargo run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
   passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
+- `cargo run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
+  `conventions/`; `bid compile <file>` prints the JSON IR.
 
 ## Card fields
 

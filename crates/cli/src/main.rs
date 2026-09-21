@@ -17,6 +17,24 @@ enum Command {
     /// Convention card tools.
     #[command(subcommand)]
     Card(CardCommand),
+    /// Rule file (.bid) tools.
+    #[command(subcommand)]
+    Bid(BidCommand),
+}
+
+#[derive(Subcommand)]
+enum BidCommand {
+    /// Parse and check .bid files (directories are searched recursively).
+    Check {
+        #[arg(default_value = "conventions")]
+        paths: Vec<PathBuf>,
+    },
+    /// Print a .bid file's compiled JSON IR.
+    Compile {
+        file: PathBuf,
+        #[arg(short, long)]
+        output: Option<PathBuf>,
+    },
 }
 
 #[derive(Subcommand)]
@@ -58,7 +76,84 @@ type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
 fn run(cli: Cli) -> Result<()> {
     match cli.command {
         Command::Card(cmd) => card(cmd),
+        Command::Bid(cmd) => bid(cmd),
     }
+}
+
+fn bid(cmd: BidCommand) -> Result<()> {
+    match cmd {
+        BidCommand::Check { paths } => {
+            let mut files = Vec::new();
+            for p in &paths {
+                collect_bid_files(p, &mut files)?;
+            }
+            files.sort();
+            let mut modules = Vec::new();
+            let mut errors = 0;
+            for file in &files {
+                match bidspec::compile(&read(file)?, &file.display().to_string()) {
+                    Ok(m) => modules.push(m),
+                    Err(diags) => {
+                        errors += diags.len();
+                        for d in diags {
+                            eprintln!("{d}");
+                        }
+                    }
+                }
+            }
+            // Across modules: unique names, and `needs` that resolve.
+            let mut seen = std::collections::HashMap::new();
+            for m in &modules {
+                if let Some(other) = seen.insert(m.name.as_str(), m.file.as_str()) {
+                    eprintln!("{}: module `{}` is also defined in {other}", m.file, m.name);
+                    errors += 1;
+                }
+            }
+            let mut warnings = 0;
+            for m in &modules {
+                for need in &m.needs {
+                    if !seen.contains_key(need.as_str()) {
+                        eprintln!("{}: warning: needs `{need}`, which is not defined yet", m.file);
+                        warnings += 1;
+                    }
+                }
+            }
+            let rules: usize = modules.iter().map(count_rules).sum();
+            println!(
+                "{} files, {} modules, {rules} rules: {errors} errors, {warnings} warnings",
+                files.len(),
+                modules.len()
+            );
+            if errors > 0 {
+                return Err("rule files have errors".into());
+            }
+        }
+        BidCommand::Compile { file, output } => {
+            let module = bidspec::compile(&read(&file)?, &file.display().to_string()).map_err(|diags| {
+                diags.iter().map(|d| d.to_string()).collect::<Vec<_>>().join("\n")
+            })?;
+            write(output.as_deref(), &bidspec::to_json(&module))?;
+        }
+    }
+    Ok(())
+}
+
+fn count_rules(m: &bidspec::Module) -> usize {
+    fn walk(c: &bidspec::ast::Context) -> usize {
+        c.rules.len() + c.contexts.iter().map(walk).sum::<usize>()
+    }
+    m.contexts.iter().map(walk).sum()
+}
+
+fn collect_bid_files(path: &Path, out: &mut Vec<PathBuf>) -> Result<()> {
+    if path.is_dir() {
+        for entry in fs::read_dir(path).map_err(|e| format!("{}: {e}", path.display()))? {
+            collect_bid_files(&entry?.path(), out)?;
+        }
+    } else if path.extension().is_some_and(|e| e == "bid") {
+        out.push(path.to_path_buf());
+    }
+    Ok(())
 }
 
 fn card(cmd: CardCommand) -> Result<()> {

@@ -1,7 +1,9 @@
 # The rule language (`.bid` files)
 
-Status: **draft for discussion.** Nothing parses this yet. The examples in
-[`conventions/`](../conventions/) are written in this syntax to test it.
+Status: **draft, parsed.** The `bidspec` crate parses this syntax into a JSON
+IR (`rbb bid check`, `rbb bid compile <file>`). What the terms *mean* is up to
+the engine, which does not exist yet, so the vocabulary below may still
+change. The examples in [`conventions/`](../conventions/) all compile.
 
 ## 1. The model: rules describe calls; the engine tracks what is known
 
@@ -270,7 +272,26 @@ context holds. It does not check the caller's hand, which it cannot see.
   priority and descriptiveness and no `replaces`, **loading fails** and names both
   files and lines.
 
-## 10. Open questions
+## 10. Parser rules
+
+These are enforced by `bidspec`, with file:line:column errors:
+
+- Indent with spaces; tabs are an error. Structure follows indentation:
+  header lines under `module`, rules under a context, clause lines under a
+  rule. A context may contain nested contexts.
+- Every rule needs an explanation string straight after its call.
+- An `after` pattern must alternate our calls with (their calls), and must
+  end with an opponent's call: the one just before my turn.
+- `shows`, `when` and `denies` may be repeated, on the rule line or on
+  continuation lines; the repeats are combined with AND. `prefer`,
+  `priority`, `replaces`, `as` and `alert`/`announce` may appear once.
+- `card` and `param` paths must exist in the card registry
+  (`crates/bridge-card/data/fields.toml`); an old alias is reported with the
+  current name.
+- `rbb bid check` also checks across files: module names are unique, and a
+  `needs` that names no module is a warning.
+
+## 11. Open questions
 
 1. **Relative call notation.** Are `cheapest(x)` / `jump(x)` enough, or do we
    need step notation (`step 1`, `step 2`) for relay systems and Kickback?

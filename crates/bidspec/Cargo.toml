@@ -8,3 +8,6 @@ repository.workspace = true
 
 # Part of the convention layer: must not depend on the engine.
 [dependencies]
+bridge-card.workspace = true
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

@@ -1,4 +1,4 @@
-# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module jacoby-2nt "Jacoby 2NT"
   card   major_openings.jacoby_2nt.play

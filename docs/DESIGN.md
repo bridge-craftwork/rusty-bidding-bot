@@ -324,8 +324,8 @@ knowingly chooses a higher-ranked one.
 1. **Scaffold** (done): workspace, licenses, design documents.
 2. **Card** (done): field registry, card JSON load/save compatible with
    Bridge-Classroom, JSON Schema, lossless `.bbsa` import/export.
-3. **Language**: `bidspec` parser and JSON IR for the draft syntax, with good
-   error messages (file, line, what was expected).
+3. **Language** (done): `bidspec` parser and JSON IR, with file:line:column
+   errors; `rbb bid check` / `rbb bid compile`.
 4. **Engine core with trace**: knowledge store, auction state, ranking, and
    the 1NT modules in `conventions/` (1NT, Stayman, transfers).
 5. **Compare library + CLI**: replay and full-auction modes against `bba/`,

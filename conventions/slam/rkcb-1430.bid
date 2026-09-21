@@ -1,4 +1,4 @@
-# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 #
 # No auction patterns here. These rules key off auction state that other
 # modules set (trump agreed, game forcing), so they work after any auction
@@ -14,7 +14,7 @@ when we.trump is suit, we.forcing = game, !asked
       when  slam_try                   # judgment hook (Rust evaluator)
       sets  ask=keycards(trump)
 
-# The answers (1430: 5C and 5D swapped relative to 3014).
+# The answers (1430: 5C and 5D swapped relative to 0314).
 when asked keycards(t)
   5C  "1 or 4 keycards"                shows keycards(t) in 1|4
   5D  "0 or 3 keycards"                shows keycards(t) in 0|3

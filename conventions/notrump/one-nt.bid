@@ -1,4 +1,4 @@
-# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module notrump-base "1NT opening and natural responses"
   needs  base
