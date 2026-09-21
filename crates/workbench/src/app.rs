@@ -582,8 +582,8 @@ impl App {
     fn sort_label(&self, by: SortBy, label: &str) -> String {
         match (self.sort == by, self.sort_rev) {
             (false, _) => label.to_string(),
-            (true, false) => format!("{label} ▲"),
-            (true, true) => format!("{label} ▼"),
+            (true, false) => format!("{label} ⏶"),
+            (true, true) => format!("{label} ⏷"),
         }
     }
 
@@ -673,6 +673,7 @@ impl App {
                         let r = ui
                             .add(
                                 egui::Label::new(RichText::new(label).strong())
+                                    .wrap_mode(egui::TextWrapMode::Extend)
                                     .sense(Sense::click()),
                             )
                             .on_hover_text(*help);
