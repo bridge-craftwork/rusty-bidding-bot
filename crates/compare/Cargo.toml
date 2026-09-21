@@ -8,6 +8,7 @@ repository.workspace = true
 
 [dependencies]
 rbb-engine.workspace = true
+bidspec.workspace = true
 bridge-card.workspace = true
 bridge-types.workspace = true
 bridge-encodings = { git = "https://github.com/bridge-craftwork/bridge-encodings" }

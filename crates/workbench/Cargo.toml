@@ -1,0 +1,20 @@
+[package]
+name = "rbb-workbench"
+description = "Desktop workbench: compare the engine with BBA and inspect divergences"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "rbb-workbench"
+path = "src/main.rs"
+
+[dependencies]
+rbb-compare.workspace = true
+rbb-engine.workspace = true
+bridge-types.workspace = true
+eframe = "0.36"
+egui = "0.36"
+egui_extras = "0.36"
+clap = { version = "4", features = ["derive"] }

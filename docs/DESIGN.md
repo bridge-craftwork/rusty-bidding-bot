@@ -72,7 +72,7 @@ development, and may later move to its own repo together with the card editor.
 | `crates/engine` | `rbb-engine` | Rule interpreter, auction state, inference |
 | `crates/compare` | `rbb-compare` | Headless comparison against reference corpora: statistics, divergences, par |
 | `crates/cli` | `rbb-cli` (binary `rbb`) | Bid PBN files; `rbb compare` report |
-| `crates/workbench` (later) | `rbb-workbench` | Desktop GUI over `rbb-compare` (see [Comparison workbench](#comparison-workbench)) |
+| `crates/workbench` | `rbb-workbench` | Desktop GUI over `rbb-compare` (see [Comparison workbench](#comparison-workbench)) |
 | `crates/wasm` (later) | `rbb-wasm` | wasm-bindgen wrapper with a JSON boundary, same pattern as `bridge-rulebot/wasm` |
 
 Hands, calls, and auctions come from
@@ -334,8 +334,11 @@ knowingly chooses a higher-ranked one.
    first difference, reports agreement and the most common divergence
    points, and with `--par` scores differing contracts against double-dummy
    par (tables cached in `.rbb-cache/`).
-6. **Workbench GUI**: scenario list, divergence view, A/B board detail, hot
-   reload.
+6. **Workbench GUI** (done): `rbb-workbench`. Scenario list, divergence
+   table, board list, and board detail: hands, both auctions, the engine's
+   reading of BBA's calls, and at the first difference the ranked candidates
+   (click a rule to open it in the editor) with each seat's known holding.
+   It re-runs when a `.bid` file is saved and shows what changed.
 7. **Iterate**: widen coverage in the workbench. Major openings, minor
    openings, two-level openings, slam bidding, then competitive bidding.
 8. **WASM**: browser build, wired into Bridge-Classroom beside `bbaClient.js`.

@@ -11,7 +11,7 @@ mod scenario;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 use bridge_card::{bbsa, Card};
 use rayon::prelude::*;
@@ -52,37 +52,67 @@ fn load_card(pbs: &std::path::Path, name: &str) -> Result<Card, String> {
         .map_err(|e| e.to_string())
 }
 
+/// Compiled rules plus one engine per pair of cards, built on first use.
+pub struct Engines {
+    pbs: PathBuf,
+    modules: Vec<bidspec::Module>,
+    cache: Mutex<HashMap<(String, String), Arc<Engine>>>,
+}
+
+impl Engines {
+    /// Compile the rules in `rules`; cards are read from `pbs/bbsa`.
+    pub fn new(pbs: &std::path::Path, rules: &std::path::Path) -> Result<Engines, String> {
+        let modules = rbb_engine::load_modules(rules).map_err(|d| {
+            d.iter()
+                .map(|d| d.to_string())
+                .collect::<Vec<_>>()
+                .join("\n")
+        })?;
+        Ok(Engines {
+            pbs: pbs.to_path_buf(),
+            modules,
+            cache: Mutex::new(HashMap::new()),
+        })
+    }
+
+    /// The engine for North-South playing `ns` and East-West `ew`.
+    pub fn get(&self, ns: &str, ew: &str) -> Result<Arc<Engine>, String> {
+        let key = (ns.to_string(), ew.to_string());
+        if let Some(e) = self.cache.lock().unwrap().get(&key) {
+            return Ok(e.clone());
+        }
+        let engine = Arc::new(Engine::new(
+            &load_card(&self.pbs, ns)?,
+            &load_card(&self.pbs, ew)?,
+            &self.modules,
+        ));
+        self.cache.lock().unwrap().insert(key, engine.clone());
+        Ok(engine)
+    }
+}
+
 /// Run the comparison. `progress` is called with (boards done, total).
 pub fn run(opts: &Options, progress: &(dyn Fn(usize, usize) + Sync)) -> Result<Report, String> {
-    let scenarios = discover(&opts.pbs, &opts.scenarios)?;
-    let modules = rbb_engine::load_modules(&opts.rules).map_err(|d| {
-        d.iter()
-            .map(|d| d.to_string())
-            .collect::<Vec<_>>()
-            .join("\n")
-    })?;
+    let engines = Engines::new(&opts.pbs, &opts.rules)?;
+    run_with(opts, &engines, progress)
+}
 
-    // One engine per pair of cards.
-    let mut engines: HashMap<(String, String), Arc<Engine>> = HashMap::new();
+/// `run`, with rules already compiled (so the caller can keep the engines).
+pub fn run_with(
+    opts: &Options,
+    engines: &Engines,
+    progress: &(dyn Fn(usize, usize) + Sync),
+) -> Result<Report, String> {
+    let scenarios = discover(&opts.pbs, &opts.scenarios)?;
     let mut jobs = Vec::new();
     for s in &scenarios {
-        let key = (s.ns_card.clone(), s.ew_card.clone());
-        if !engines.contains_key(&key) {
-            let ns = load_card(&opts.pbs, &s.ns_card)?;
-            let ew = load_card(&opts.pbs, &s.ew_card)?;
-            engines.insert(key.clone(), Arc::new(Engine::new(&ns, &ew, &modules)));
-        }
+        let engine = engines.get(&s.ns_card, &s.ew_card)?;
         let mut boards = bridge_encodings::pbn::read_pbn_file(&s.pbn)
             .map_err(|e| format!("{}: {e}", s.pbn.display()))?;
         if let Some(n) = opts.limit {
             boards.truncate(n);
         }
-        let engine = engines[&key].clone();
-        jobs.extend(
-            boards
-                .into_iter()
-                .map(|b| (s.name.clone(), engine.clone(), b)),
-        );
+        jobs.extend(boards.into_iter().map(|b| (s, engine.clone(), b)));
     }
 
     let total = jobs.len();
@@ -92,7 +122,9 @@ pub fn run(opts: &Options, progress: &(dyn Fn(usize, usize) + Sync)) -> Result<R
         .par_iter()
         .enumerate()
         .filter_map(|(i, (scenario, engine, board))| {
-            let mut r = board::compare(engine, scenario, board)?;
+            let mut r = board::compare(engine, &scenario.name, board)?;
+            r.ns_card = scenario.ns_card.clone();
+            r.ew_card = scenario.ew_card.clone();
             if opts.par && !r.contracts_match() {
                 board::add_par(&mut r, board, &cache);
             }

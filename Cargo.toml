@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/compare", "crates/cli"]
+members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/compare", "crates/cli", "crates/workbench"]
 
 [workspace.package]
 version = "0.1.0"

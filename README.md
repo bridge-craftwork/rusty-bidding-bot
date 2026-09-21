@@ -15,7 +15,9 @@ Status: early design. Start with [docs/DESIGN.md](docs/DESIGN.md).
 - `crates/bidspec`: the rule language
 - `conventions/`: system and convention rule files (`.bid`)
 - `crates/engine`: the bidding engine
+- `crates/compare`: comparison with reference auctions (BBA)
 - `crates/cli`: the `rbb` command-line tool
+- `crates/workbench`: `rbb-workbench`, a desktop GUI for the comparison
 
 ## License
 

@@ -20,6 +20,9 @@ pub struct ParComparison {
 #[derive(Debug, Clone, Serialize)]
 pub struct BoardResult {
     pub scenario: String,
+    /// The cards each side played (names of `bbsa/<name>.bbsa`).
+    pub ns_card: String,
+    pub ew_card: String,
     pub board: String,
     pub dealer: Direction,
     pub vul: Vulnerability,
@@ -108,6 +111,8 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     };
     Some(BoardResult {
         scenario: scenario.to_string(),
+        ns_card: String::new(),
+        ew_card: String::new(),
         board: board
             .board_id
             .clone()
