@@ -87,11 +87,15 @@ pub struct App {
     last_poll: Instant,
     pending: bool,
     limit_text: String,
+    /// Scenarios to load, space-separated; empty for all.
+    scenarios_text: String,
     scenario: Option<String>,
     sort: SortBy,
     tab: Tab,
     divs: Vec<DivRow>,
     div: Option<usize>,
+    /// Text filter on the divergence table.
+    div_filter: String,
     board: Option<usize>,
     detail: Option<Detail>,
 }
@@ -99,6 +103,7 @@ pub struct App {
 impl App {
     pub fn new(opts: Options, editor: String) -> App {
         let limit_text = opts.limit.map(|n| n.to_string()).unwrap_or_default();
+        let scenarios_text = opts.scenarios.join(" ");
         let mut app = App {
             rules_mtime: rules_mtime(&opts.rules),
             opts,
@@ -112,11 +117,13 @@ impl App {
             last_poll: Instant::now(),
             pending: true,
             limit_text,
+            scenarios_text,
             scenario: None,
             sort: SortBy::Calls,
             tab: Tab::Divergences,
             divs: Vec::new(),
             div: None,
+            div_filter: String::new(),
             board: None,
             detail: None,
         };
@@ -131,6 +138,17 @@ impl App {
         }
         self.pending = false;
         self.opts.limit = self.limit_text.trim().parse().ok();
+        self.opts.scenarios = self
+            .scenarios_text
+            .split_whitespace()
+            .map(str::to_string)
+            .collect();
+        // A scenario selected in the sidebar may no longer be loaded.
+        if let Some(s) = &self.scenario {
+            if !self.opts.scenarios.is_empty() && !self.opts.scenarios.contains(s) {
+                self.scenario = None;
+            }
+        }
         let opts = self.opts.clone();
         let done = Arc::new(AtomicUsize::new(0));
         let total = Arc::new(AtomicUsize::new(0));
@@ -419,6 +437,19 @@ impl App {
                 self.pending = true;
             }
             ui.checkbox(&mut self.auto, "re-run when a .bid file is saved");
+            ui.label("scenarios:");
+            let r = ui
+                .add(
+                    egui::TextEdit::singleline(&mut self.scenarios_text)
+                        .desired_width(160.0)
+                        .hint_text("all"),
+                )
+                .on_hover_text(
+                    "Scenario names separated by spaces; empty loads all 342. Press Enter to run.",
+                );
+            if r.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {
+                self.pending = true;
+            }
             ui.label("boards per scenario:");
             ui.add(
                 egui::TextEdit::singleline(&mut self.limit_text)
@@ -657,7 +688,42 @@ impl App {
     }
 
     fn divergence_table(&mut self, ui: &mut egui::Ui) {
-        ui.label(RichText::new("Where the engine first departs from BBA, most frequent first. Click a row for its boards.").weak());
+        ui.horizontal(|ui| {
+            ui.label("filter:");
+            ui.add(
+                egui::TextEdit::singleline(&mut self.div_filter)
+                    .desired_width(260.0)
+                    .hint_text("e.g. 1NT P 2D P 2S"),
+            );
+            if !self.div_filter.is_empty() && ui.small_button("✕").clicked() {
+                self.div_filter.clear();
+            }
+            ui.label(
+                RichText::new(
+                    "matches the auction followed by BBA's call, or either call alone; pick \"All scenarios\" to search everywhere",
+                )
+                .weak(),
+            );
+        });
+        // Match "<auction so far> <BBA call>" so a whole auction can be pasted,
+        // and also each call on its own.
+        let needle = self.div_filter.trim().to_uppercase();
+        let shown: Vec<usize> = (0..self.divs.len())
+            .filter(|&i| {
+                let d = &self.divs[i];
+                needle.is_empty()
+                    || format!("{} {}", d.auction, d.reference)
+                        .trim()
+                        .to_uppercase()
+                        .contains(&needle)
+                    || d.reference.to_uppercase() == needle
+                    || d.ours.to_uppercase() == needle
+            })
+            .collect();
+        let total: usize = shown.iter().map(|&i| self.divs[i].boards.len()).sum();
+        ui.label(
+            RichText::new(format!("{} divergence points, {total} boards", shown.len())).weak(),
+        );
         let mut clicked = None;
         TableBuilder::new(ui)
             .id_salt("divergence-table")
@@ -675,8 +741,8 @@ impl App {
                 }
             })
             .body(|body| {
-                body.rows(18.0, self.divs.len(), |mut row| {
-                    let i = row.index();
+                body.rows(18.0, shown.len(), |mut row| {
+                    let i = shown[row.index()];
                     let d = &self.divs[i];
                     row.set_selected(self.div == Some(i));
                     row.col(|ui| {
