@@ -168,13 +168,6 @@ impl<'a> Ctx<'a> {
             Expr::Maybe { expr } => Val::Bool(Tri::from_bool(self.cond(expr, b)? != Tri::False)),
             Expr::Cmp { cmp, lhs, rhs } => {
                 let (l, r) = (self.eval(lhs, b)?, self.eval(rhs, b)?);
-                // `x!=M` between suit variables asks whether they name the
-                // same suit; any other suit comparison is about lengths.
-                if let (Val::Suit(a), Val::Suit(c), true, CmpOp::Eq | CmpOp::Ne) =
-                    (&l, &r, is_var(lhs, b) && is_var(rhs, b), cmp)
-                {
-                    return Ok(Val::Bool(Tri::from_bool((a == c) == (*cmp == CmpOp::Eq))));
-                }
                 Val::Bool(self.compare(*cmp, &l, &r)?)
             }
             Expr::InRange { expr, lo, hi } => {
@@ -201,7 +194,7 @@ impl<'a> Ctx<'a> {
                     _ => Tri::Unknown,
                 })
             }
-            Expr::Is { expr, what } => {
+            Expr::Is { expr, what, not } => {
                 let v = self.eval(expr, b)?;
                 let t = match (what.as_str(), &v) {
                     ("suit", Val::Strain(s)) => *s != Strain::NoTrump,
@@ -209,9 +202,17 @@ impl<'a> Ctx<'a> {
                     ("notrump", Val::Strain(s)) => *s == Strain::NoTrump,
                     ("none", Val::Nothing) => true,
                     ("suit" | "notrump" | "none", _) => false,
-                    (w, _) => return Err(format!("`is {w}`: expected suit, notrump or none")),
+                    // Any other name is a suit: do both name the same one?
+                    (name, _) => {
+                        let other = self.eval(&path_expr(name), b)?;
+                        match (strain_value(&v), strain_value(&other)) {
+                            (Some(a), Some(c)) => a == c,
+                            (None, None) => true,
+                            _ => false,
+                        }
+                    }
                 };
-                Val::Bool(Tri::from_bool(t))
+                Val::Bool(Tri::from_bool(t != *not))
             }
             Expr::Asked { kind } => {
                 let ask = self
@@ -775,7 +776,7 @@ fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
                 && SELF_ATTRS.contains(&n)
         }
         Expr::Cmp { lhs, rhs, .. } => {
-            // A bare suit or suit variable compared with a number is a length.
+            // A suit or suit variable in a comparison is a length.
             let suitish = |x: &Expr| match x {
                 Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
                     suit_index(&path[0].name).is_some()
@@ -783,12 +784,10 @@ fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
                 }
                 _ => false,
             };
-            let identity = is_var(lhs, b) && is_var(rhs, b);
-            !identity
-                && (suitish(lhs)
-                    || suitish(rhs)
-                    || mentions_self(lhs, b, params)
-                    || mentions_self(rhs, b, params))
+            suitish(lhs)
+                || suitish(rhs)
+                || mentions_self(lhs, b, params)
+                || mentions_self(rhs, b, params)
         }
         Expr::Arith { lhs, rhs, .. } => {
             mentions_self(lhs, b, params) || mentions_self(rhs, b, params)
@@ -799,11 +798,13 @@ fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
     }
 }
 
-/// A bare name bound to a suit variable (`x`, `M`), as opposed to a suit
-/// letter.
-fn is_var(e: &Expr, b: &Bindings) -> bool {
-    matches!(e, Expr::Path { path } if path.len() == 1 && path[0].args.is_none()
-        && matches!(b.get(&path[0].name), Some(Val::Suit(_))))
+/// A suit or strain as a strain, for `is` comparisons.
+fn strain_value(v: &Val) -> Option<Strain> {
+    match v {
+        Val::Suit(s) => Some(strain_of_suit(*s)),
+        Val::Strain(s) => Some(*s),
+        _ => None,
+    }
 }
 
 fn cmp3(known_true: bool, known_false: bool) -> Tri {

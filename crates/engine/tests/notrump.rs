@@ -151,3 +151,21 @@ fn transfer_is_forcing() {
     let d = bid("AK5.Q72.Q942.K83", "1NT Pass 2D Pass");
     assert_ne!(d.call, Call::Pass, "\n{}", explain(&d));
 }
+
+#[test]
+fn jacoby_2nt_shortness_is_never_the_trump_suit() {
+    // South opens 1S; North bids Jacoby 2NT. South, 13 HCP with a singleton
+    // club, shows the shortness with 3C. `when x is not M` keeps 3S out of
+    // the shortness rule (3S is "18+, no shortness").
+    let d = bid("AKJ52.K73.Q943.8", "1S Pass 2NT Pass");
+    assert_call(&d, "3C");
+    let shortness_in_trumps = d
+        .candidates
+        .iter()
+        .any(|c| c.call == Call::bid(3, Strain::Spades) && c.explanation.starts_with("Singleton"));
+    assert!(!shortness_in_trumps, "\n{}", explain(&d));
+    // Interpretation: 2NT agreed spades and set a game force.
+    let state = &d.auction.position.sides[0];
+    assert_eq!(state.trump, Some(Strain::Spades));
+    assert_eq!(state.forcing, rbb_engine::Forcing::Game);
+}

@@ -215,10 +215,13 @@ pub enum Expr {
         expr: Box<Expr>,
         values: Vec<i64>,
     },
-    /// `we.trump is suit`
+    /// `we.trump is suit`, `x is not M`: a category (`suit`, `notrump`,
+    /// `none`) or, for any other name, whether both name the same suit.
     Is {
         expr: Box<Expr>,
         what: String,
+        #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+        not: bool,
     },
     /// `asked [kind]`: partner's pending question to me.
     Asked {

@@ -336,10 +336,15 @@ fn comparison(c: &mut Cursor) -> Result<Expr, PError> {
         }
         Some(Tok::Word(w)) if w == "is" => {
             c.bump();
-            let what = c.word("a word after `is` (suit, notrump, none)")?;
+            let not = c.peek() == Some(&Tok::Word("not".into()));
+            if not {
+                c.bump();
+            }
+            let what = c.word("a suit, or suit, notrump or none, after `is`")?;
             return Ok(Expr::Is {
                 expr: Box::new(lhs),
                 what,
+                not,
             });
         }
         _ => return Ok(lhs),
@@ -499,7 +504,11 @@ mod tests {
         assert!(path[1].args.is_some());
 
         assert!(matches!(parse("keycards(t) in 1|4"), Expr::InSet { .. }));
-        assert!(matches!(parse("we.trump is suit"), Expr::Is { .. }));
+        assert!(matches!(
+            parse("we.trump is suit"),
+            Expr::Is { not: false, .. }
+        ));
+        assert!(matches!(parse("x is not M"), Expr::Is { not: true, .. }));
         assert!(matches!(parse("!shape 4333"), Expr::Not { .. }));
         assert_eq!(
             parse("shape 5-4-x-x"),

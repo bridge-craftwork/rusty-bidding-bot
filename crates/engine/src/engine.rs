@@ -164,7 +164,14 @@ impl Engine {
                 continue;
             }
             for (call, b) in expand(&entry.rule.call, &ctx, b, &auction) {
-                if auction.is_legal(&call) {
+                // A `when` known false whatever the hand (`x is not M` with
+                // x = M) means this rule cannot make this call here.
+                let impossible = entry
+                    .rule
+                    .when
+                    .as_ref()
+                    .is_some_and(|w| ctx.cond(w, &mut b.clone()) == Ok(Tri::False));
+                if auction.is_legal(&call) && !impossible {
                     out.push(Cand {
                         entry: i,
                         call,

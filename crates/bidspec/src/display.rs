@@ -76,7 +76,9 @@ impl fmt::Display for Expr {
                 let v: Vec<String> = values.iter().map(|v| v.to_string()).collect();
                 write!(f, "{expr} in {}", v.join("|"))
             }
-            Expr::Is { expr, what } => write!(f, "{expr} is {what}"),
+            Expr::Is { expr, what, not } => {
+                write!(f, "{expr} is {}{what}", if *not { "not " } else { "" })
+            }
             Expr::Asked { kind: Some(k) } => write!(f, "asked {k}"),
             Expr::Asked { kind: None } => write!(f, "asked"),
             Expr::Answered { kind: Some(k) } => write!(f, "answered {k}"),
@@ -116,12 +118,12 @@ mod tests {
 
     #[test]
     fn expressions_print_back_as_written() {
-        let src = "module t \"t\"\n\nafter 1N (P)\n  2C \"x\" shows hcp>=8, H=4 | S=4, !shape 4333, we.keycards(t).max<=3\n";
+        let src = "module t \"t\"\n\nafter 1N (P)\n  2C \"x\" shows hcp>=8, H=4 | S=4, !shape 4333, we.keycards(t).max<=3, x is not M\n";
         let m = parse(src, "t").unwrap();
         let shows = m.contexts[0].rules[0].shows.as_ref().unwrap();
         assert_eq!(
             shows.to_string(),
-            "hcp>=8, H=4 | S=4, !shape 4333, we.keycards(t).max<=3"
+            "hcp>=8, H=4 | S=4, !shape 4333, we.keycards(t).max<=3, x is not M"
         );
     }
 }

@@ -184,7 +184,11 @@ with partner's range. Example: `we.hcp.min >= 25`.
 `partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`.
 
 **Operators:** `!` (not), `|` (or), `,` (and), `a..b` ranges, `in 1|4` sets,
-and arithmetic on numbers and `.min` / `.max`. Precedence, tightest first:
+and arithmetic on numbers and `.min` / `.max`.
+
+**Suits.** A suit in a comparison is its length (`S>=H`, `M>=4`, `x<=1`).
+`is` asks what something *is*: `we.trump is suit` (or `notrump`, `none`), and
+`x is M` / `x is not M` for "the same suit" or "a different suit". Precedence, tightest first:
 `!`, then `|`, then `,`. So `hcp>=8, H=4 | S=4` reads as "8+ HCP, and a
 4-card heart or spade suit". Parentheses override.
 
@@ -295,9 +299,12 @@ These are enforced by `bidspec`, with file:line:column errors:
 
 How `rbb-engine` implements the model, and its current limits:
 
-- **Suit comparisons.** `x!=M` and `x=M` between two suit *variables* ask
-  whether they name the same suit. Every other comparison involving a suit is
-  about lengths: `S>=H` means "at least as many spades as hearts".
+- **Suit comparisons** are about length: `S>=H` means at least as many
+  spades as hearts, and `x=M` means the same length. To ask whether two
+  names are the *same suit*, write `x is M` or `x is not M`.
+- A `when` that is false whatever the hand (such as `x is not M` with x bound
+  to M) removes the candidate before ranking. It does not appear in the
+  trace and is never used for negative inference.
 - **Knowledge** holds ranges for HCP and each suit length, and whether the
   hand is balanced. The deck constraint applies: lengths sum to 13, and a
   balanced hand has 2 to 5 cards in every suit. All other terms (`has`,
