@@ -75,7 +75,7 @@ it depends on.
 
 ```
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
-  card   slam.rkcb.style = 1430          # active when the card says so
+  card   slam.blackwood.rkcb_1430          # active when the card says so
   needs  base
   param  nt_min = notrump.one_nt.range_min default 15
 ```

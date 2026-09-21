@@ -82,37 +82,55 @@ double/redouble rules).
 
 ## The convention card
 
-**Decided.** The card schema is defined here, in Rust (`bridge-card`), and a
-JSON Schema is generated from it for the Vue editor to consume.
+**Decided.** The card schema is defined here (`crates/bridge-card`). It may
+later move to its own repo together with the card editor.
 
-Starting point: the shape of Bridge-Classroom's existing `card_data`
-(`schema_version`, `metadata`, and one section per card area: `general`,
-`notrump`, `major_openings`, `minor_openings`, `two_level`, `slam`,
-`preempts`, `overcalls`, `nt_overcalls`, `doubles`, `competitive`, `carding`,
-`leads`, `other_conventions`). Keeping that shape means existing saved cards
-load unchanged. Settings are addressed by dotted paths
-(`notrump.transfers.jacoby`, `notrump.one_nt.range_min`).
+**Implemented (milestone 2)** as a data-driven registry rather than Rust
+structs:
 
-The card records **agreements**, not bid meanings. It says "we play Smolen" and
-"our 1NT is 15–17"; what Smolen bids mean lives in `conventions/`. The card
-switches modules on and supplies their parameters.
+- [`data/fields.toml`](../crates/bridge-card/data/fields.toml) declares every
+  field once: dotted path, kind (`bool | int | enum | text`), label, options,
+  bounds, default, and **aliases** (older paths that still load). A card is a
+  set of `path = value` pairs. Adding a convention means adding a field there
+  and a `.bid` module that names it; no Rust changes are needed. This is the
+  same direction `conventionCatalog.js` describes for its "Phase 2".
+- Cards are read and written as Bridge-Classroom's nested `card_data` JSON, so
+  existing saved cards load. Leaves the registry does not know about are
+  kept and written back unchanged. So is the editor's own `skill_path`.
+- The seed card and the editor catalog disagree on some paths. For example,
+  RKCB is at `slam.blackwood.*` in the seed and `other_conventions.blackwood.*`
+  in the catalog, and the seed's `fourth_suit_forcing.game_forcing` is
+  `game_force` in the catalog. The registry picks one canonical path and
+  lists the others as aliases.
+- `rbb card schema` generates a JSON Schema (draft 2020-12) from the registry
+  for the editor.
 
-The schema will need fields the editor does not have yet. The `.bbsa` import
-is a good checklist: BBA has toggles for Kokish, Rodrigue, Collante, Roudi,
-Lavinthal, and others that have no card field today.
+The card records **agreements**, not bid meanings. It says "we play Smolen"
+and "our 1NT is 15–17"; what Smolen bids mean lives in `conventions/`. The
+card switches modules on and supplies their parameters. The engine reads
+`effective` values: the card's value, or the registry default when unset.
 
-### `.bbsa` import
+### `.bbsa` import and export
 
-A `.bbsa` file is ~258 lines of `Key = value`: a `System type` integer (0 = 2/1,
-1 = SAYC, 2 = Polish Club, 3 = Precision, 4 = Acol), about 170 on/off toggles,
-an `Opponent type`, and `Not defined` padding lines. Some toggles form a
-one-of group (the four `1NT opening range` keys; `Blackwood 0314` / `1430` /
-`0123`).
+A `.bbsa` file is 258 CRLF lines of `Key = value`: a `System type` integer
+(0 = 2/1, 1 = SAYC, 2 = Polish Club, 3 = Precision, 4 = Acol), about 170
+on/off toggles, an `Opponent type`, and `Not defined` padding.
+[`data/bbsa-map.toml`](../crates/bridge-card/data/bbsa-map.toml) maps each key
+to card fields, in one of three forms:
 
-The importer is a mapping table from each `.bbsa` key to a card path and
-value, plus the group rules. Every import produces a report of unmapped keys,
-so gaps in our schema are visible. Round-trip test: import all 18 files in
-`Practice-Bidding-Scenarios/bbsa/`.
+- a toggle (`"SMOLEN" = "notrump.smolen.play"`);
+- one member of a one-of group, which sets values when on
+  (`"1NT opening range 12-14"` sets the range);
+- an integer that selects an enum value (`System type`).
+
+Keys whose meaning needs a bridge decision are **not guessed**. They are
+kept verbatim in the card's `bba_passthrough` and written back on export, so
+`.bbsa → card → .bbsa` is lossless. Every current-layout file in
+`Practice-Bidding-Scenarios/bbsa/` exports back byte for byte; older-layout
+files keep every setting (tested). `rbb card import-bbsa` lists the
+passthrough keys. Giving them card fields is a task for a bridge expert.
+
+Commands: `rbb card import-bbsa`, `export-bbsa`, `check`, `schema`.
 
 ## The rule language (`bidspec`)
 
@@ -304,8 +322,8 @@ knowingly chooses a higher-ranked one.
 ## Milestones
 
 1. **Scaffold** (done): workspace, licenses, design documents.
-2. **Card**: `bridge-card` schema covering the existing Bridge-Classroom seed
-   card; `.bbsa` import with an unmapped-key report for all 18 PBS files.
+2. **Card** (done): field registry, card JSON load/save compatible with
+   Bridge-Classroom, JSON Schema, lossless `.bbsa` import/export.
 3. **Language**: `bidspec` parser and JSON IR for the draft syntax, with good
    error messages (file, line, what was expected).
 4. **Engine core with trace**: knowledge store, auction state, ranking, and

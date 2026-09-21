@@ -23,3 +23,15 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `Practice-Bidding-Scenarios`: reference corpora `bba/` (BBA, 500 boards per
   scenario), `GIB/`, card settings `bbsa/`, scenario definitions `btn/`.
 - `BBA-tools`: `bba-cli` for producing reference auctions.
+
+## Commands
+
+- `cargo test --workspace`
+- `cargo run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
+  passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
+
+## Card fields
+
+Add or change card fields in `crates/bridge-card/data/fields.toml`, and `.bbsa`
+mappings in `data/bbsa-map.toml`; tests validate both files. Do not guess the
+meaning of an unmapped `.bbsa` key: leave it in passthrough and ask.

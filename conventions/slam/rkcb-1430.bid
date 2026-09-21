@@ -5,7 +5,7 @@
 # that reaches that state.
 
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
-  card   slam.rkcb.style = 1430
+  card   slam.blackwood.rkcb_1430
   needs  base
 
 # The ask.
