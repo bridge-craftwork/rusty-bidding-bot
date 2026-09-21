@@ -12,6 +12,26 @@ pub struct Facts {
     pub balanced: bool,
     /// Suit lengths sorted longest first.
     pub dist: [i32; 4],
+    /// Number of tens held.
+    pub tens: i32,
+    /// Cards beyond four in each suit, summed (length points).
+    pub excess: i32,
+}
+
+/// How a hand's total points are counted, in quarter points: HCP, plus
+/// `ten` for each ten, plus `length` for each card beyond four in a suit.
+/// The defaults (a ten is ¼, a long card ½) fit BBA's invite and game
+/// decisions after 1NT best (see docs/LANGUAGE.md, "Points").
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Valuation {
+    pub ten: i32,
+    pub length: i32,
+}
+
+impl Default for Valuation {
+    fn default() -> Self {
+        Valuation { ten: 1, length: 2 }
+    }
 }
 
 pub const ACE: u8 = 14;
@@ -33,13 +53,22 @@ impl Facts {
         let mut dist = len;
         dist.sort_by(|a, b| b.cmp(a));
         let balanced = matches!(dist, [4, 3, 3, 3] | [4, 4, 3, 2] | [5, 3, 3, 2]);
+        let tens = (0..4).filter(|&s| ranks[s] & (1 << 10) != 0).count() as i32;
+        let excess = len.iter().map(|l| (l - 4).max(0)).sum();
         Facts {
+            tens,
+            excess,
             hcp,
             len,
             ranks,
             balanced,
             dist,
         }
+    }
+
+    /// Total points in quarters.
+    pub fn points_q(&self, v: Valuation) -> i32 {
+        4 * self.hcp + v.ten * self.tens + v.length * self.excess
     }
 
     pub fn has(&self, suit: usize, rank: u8) -> bool {

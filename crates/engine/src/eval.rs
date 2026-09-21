@@ -9,7 +9,7 @@ use std::collections::HashMap;
 use bidspec::ast::{ArithOp, CallSpec, CmpOp, Expr, Segment, StrainSpec};
 use bridge_types::{Call, Direction, Strain};
 
-use crate::facts::{Facts, ACE, JACK, KING, QUEEN};
+use crate::facts::{Facts, Valuation, ACE, JACK, KING, QUEEN};
 use crate::knowledge::{suit_index, Range, SeatKnowledge, Tri, SUITS};
 use crate::position::{Forcing, Position};
 
@@ -118,6 +118,7 @@ fn flip(op: CmpOp) -> CmpOp {
 
 const SELF_ATTRS: &[&str] = &[
     "hcp",
+    "points",
     "balanced",
     "semibalanced",
     "shortest",
@@ -145,6 +146,8 @@ pub struct Ctx<'a> {
     pub hand: Option<&'a Facts>,
     /// The rule's module parameters.
     pub params: &'a HashMap<String, Val>,
+    /// How total points are counted.
+    pub valuation: Valuation,
 }
 
 type R<T> = Result<T, String>;
@@ -187,7 +190,7 @@ impl<'a> Ctx<'a> {
             Expr::Not { expr } => Val::Bool(self.cond(expr, b)?.negate()),
             Expr::Maybe { expr } => Val::Bool(Tri::from_bool(self.cond(expr, b)? != Tri::False)),
             Expr::Cmp { cmp, lhs, rhs } => {
-                if let Some(e) = self.strength_as_hcp(*cmp, lhs, rhs)? {
+                if let Some(e) = self.strength_as_points(*cmp, lhs, rhs)? {
                     return self.eval(&e, b);
                 }
                 let (l, r) = (self.eval(lhs, b)?, self.eval(rhs, b)?);
@@ -323,11 +326,11 @@ impl<'a> Ctx<'a> {
         Ok(true)
     }
 
-    /// `strength <op> <band>` as a condition on the actor's HCP, given the
-    /// range partner has shown: game needs 25 combined, slam 33. With
-    /// partner's HCP p (a range):
+    /// `strength <op> <band>` as a condition on the actor's total points,
+    /// given partner's range p in whole points (points when partner has
+    /// shown points, else HCP): game needs 25 combined, slam 33.
     ///
-    /// | band        | my HCP                         |
+    /// | band        | my points                      |
     /// |-------------|--------------------------------|
     /// | signoff     | at most 24 - p.max             |
     /// | invite      | 25 - p.max ..= 24 - p.min      |
@@ -335,8 +338,9 @@ impl<'a> Ctx<'a> {
     /// | slam_invite | 33 - p.max ..= 32 - p.min      |
     /// | slam        | at least 33 - p.min            |
     ///
+    /// Points compare by their whole part, so invite 8-9 means 8 to 9¾.
     /// A band can be empty (no invitation once partner's range is exact).
-    fn strength_as_hcp(&self, cmp: CmpOp, lhs: &Expr, rhs: &Expr) -> R<Option<Expr>> {
+    fn strength_as_points(&self, cmp: CmpOp, lhs: &Expr, rhs: &Expr) -> R<Option<Expr>> {
         let name = |e: &Expr| match e {
             Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
                 Some(path[0].name.clone())
@@ -353,48 +357,47 @@ impl<'a> Ctx<'a> {
             .position(|b| *b == band)
             .ok_or_else(|| format!("`{band}` is not a strength band ({})", BANDS.join(", ")))?
             as i32;
-        let p = self.pos.knowledge(self.partner()).hcp;
-        let lo = |i: i32| match i {
-            0 => 0,
-            1 => GAME - p.hi,
-            2 => GAME - p.lo,
-            3 => SLAM - p.hi,
-            _ => SLAM - p.lo,
-        };
-        let hi = |i: i32| match i {
-            0 => GAME - 1 - p.hi,
-            1 => GAME - 1 - p.lo,
-            2 => SLAM - 1 - p.hi,
-            3 => SLAM - 1 - p.lo,
-            _ => 40,
-        };
-        let hcp = || Box::new(path_expr("hcp"));
+        let (lo, hi) = self.band(i);
+        let points = || Box::new(path_expr("points"));
         let int = |v: i32| Box::new(Expr::Int { value: v as i64 });
         let at_least = |v: i32| Expr::Cmp {
             cmp: CmpOp::Ge,
-            lhs: hcp(),
+            lhs: points(),
             rhs: int(v),
         };
         let at_most = |v: i32| Expr::Cmp {
             cmp: CmpOp::Le,
-            lhs: hcp(),
+            lhs: points(),
             rhs: int(v),
         };
         let within = Expr::InRange {
-            expr: hcp(),
-            lo: int(lo(i)),
-            hi: int(hi(i)),
+            expr: points(),
+            lo: int(lo),
+            hi: int(hi),
         };
         Ok(Some(match cmp {
             CmpOp::Eq => within,
             CmpOp::Ne => Expr::Not {
                 expr: Box::new(within),
             },
-            CmpOp::Ge => at_least(lo(i)),
-            CmpOp::Gt => at_least(hi(i) + 1),
-            CmpOp::Le => at_most(hi(i)),
-            CmpOp::Lt => at_most(lo(i) - 1),
+            CmpOp::Ge => at_least(lo),
+            CmpOp::Gt => at_least(hi + 1),
+            CmpOp::Le => at_most(hi),
+            CmpOp::Lt => at_most(lo - 1),
         }))
+    }
+
+    /// The whole-point range of strength band `i` (see
+    /// `strength_as_points`).
+    pub fn band(&self, i: i32) -> (i32, i32) {
+        let p = self.pos.knowledge(self.partner()).whole_points();
+        match i {
+            0 => (0, GAME - 1 - p.hi),
+            1 => (GAME - p.hi, GAME - 1 - p.lo),
+            2 => (GAME - p.lo, SLAM - 1 - p.hi),
+            3 => (SLAM - p.hi, SLAM - 1 - p.lo),
+            _ => (SLAM - p.lo, 40),
+        }
     }
 
     /// A value as a number range. Suits count as the actor's length there.
@@ -523,7 +526,7 @@ impl<'a> Ctx<'a> {
         }
         if SELF_ATTRS.contains(&n) {
             return Ok(match self.hand {
-                Some(f) => exact_attr(f, n),
+                Some(f) => exact_attr(f, n, self.valuation),
                 None => self.knowledge_attr(self.self_knowledge(), self.actor, seg, b)?,
             });
         }
@@ -607,6 +610,7 @@ impl<'a> Ctx<'a> {
         }
         Ok(match n {
             "hcp" => Val::Num(k.hcp),
+            "points" => Val::Num(k.whole_points()),
             "balanced" => Val::Bool(k.balanced),
             "shortest" => Val::Num(Range::new(
                 k.len.iter().map(|r| r.lo).min().unwrap_or(0),
@@ -710,6 +714,17 @@ impl<'a> Ctx<'a> {
                 break;
             };
             let name = &rest[open + 1..open + close];
+            if let Some(i) = BANDS.iter().position(|x| *x == name) {
+                let (lo, hi) = self.band(i as i32);
+                out.push_str(&match (lo.max(0), hi) {
+                    (lo, hi) if lo > hi => "—".to_string(),
+                    (lo, 40) => format!("{lo}+"),
+                    (lo, hi) if lo == hi => lo.to_string(),
+                    (lo, hi) => format!("{lo}-{hi}"),
+                });
+                rest = &rest[open + close + 1..];
+                continue;
+            }
             let shown = match self.eval(&path_expr(name), b) {
                 Ok(Val::Suit(s)) => strain_symbol(strain_of_suit(s)).to_string(),
                 Ok(Val::Strain(s)) => strain_symbol(s).to_string(),
@@ -758,7 +773,7 @@ impl<'a> Ctx<'a> {
             },
             Expr::Shape { .. } => e.clone(),
             Expr::Cmp { cmp, lhs, rhs } => {
-                if let Ok(Some(e)) = self.strength_as_hcp(*cmp, lhs, rhs) {
+                if let Ok(Some(e)) = self.strength_as_points(*cmp, lhs, rhs) {
                     return self.resolve_with(&e, b, lossy);
                 }
                 // A comparison that does not involve the actor's own hand is
@@ -926,9 +941,11 @@ fn cmp3(known_true: bool, known_false: bool) -> Tri {
     }
 }
 
-fn exact_attr(f: &Facts, n: &str) -> Val {
+fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
     match n {
         "hcp" => Val::Num(Range::point(f.hcp)),
+        // Whole points: 9¾ counts as 9.
+        "points" => Val::Num(Range::point(f.points_q(v).div_euclid(4))),
         "balanced" => Val::Bool(Tri::from_bool(f.balanced)),
         "semibalanced" => Val::Bool(Tri::from_bool(f.dist[3] >= 2 && f.dist[0] <= 6)),
         "shortest" => Val::Num(Range::point(f.dist[3])),

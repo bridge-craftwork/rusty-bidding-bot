@@ -2,31 +2,40 @@
 
 module notrump-base "1NT opening and natural responses"
   needs  base
-  param  nt_min = notrump.one_nt.range_min default 15
-  param  nt_max = notrump.one_nt.range_max default 17
+  param  nt_min   = notrump.one_nt.range_min default 15
+  param  nt_max   = notrump.one_nt.range_max default 17
+  param  one_less = notrump.one_nt.allow_one_less default false
 
+# The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
+# tens or length). With the card option "1NT may be 1 HCP light", a hand one
+# HCP short opens 1NT when its extras bring it to the range in total points.
 when opening
   1N  "{nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min..nt_max, balanced
-      # No priority needed: "15-17 balanced" says more than a 1-level suit
-      # opening, so descriptiveness ranks it first.
+  1N  "{nt_min}-{nt_max} HCP, balanced (1 HCP light with extras)"  announce "{nt_min} to {nt_max}"
+      shows hcp=nt_min-1, points>=nt_min, balanced
+      when one_less
 
-# Responder. Ranges are relative to what partner showed, so they follow the
-# card: with 15-17 these are 16-17, 10-15, 8-9 and 0-7.
+# Responder. Strength bands are total points measured against opener's
+# range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
 after 1N (P)
-  4N  "Quantitative: invites 6NT"
-      shows hcp=33-partner.hcp.max..32-partner.hcp.min, balanced
-  3N  "To play"
-      shows hcp=25-partner.hcp.min..32-partner.hcp.max
-  2N  "Invitational"
-      shows hcp=23-partner.hcp.min..24-partner.hcp.min
+  4N  "Quantitative: {slam_invite} total points, invites 6NT"
+      shows balanced, strength=slam_invite
+  3N  "To play: {game} total points"
+      shows strength=game
+  2N  "Invitational: {invite} total points"
+      shows strength=invite
       sets  ask=nt_invite
-  P   "No game interest"
-      shows hcp<=22-partner.hcp.min
+  P   "No game interest: {signoff} total points"
+      shows strength=signoff
       priority -10                     # only if nothing else fits
 
-# Opener answers the invitation: accept only when game is certain (17 with
-# an 8-9 invite), as BBA does; decline otherwise.
+# Opener answers the invitation: accept only when game is certain (17
+# opposite 8-9). With a 4-4 major fit found through Stayman, play there.
 when asked nt_invite
+  4H  "Accepts, in the 4-4 heart fit"   shows H>=4, strength>=game    when partner.H>=4
+  4S  "Accepts, in the 4-4 spade fit"   shows S>=4, strength>=game    when partner.S>=4
+  3H  "Declines, in the 4-4 heart fit"  shows H>=4, strength<=invite  when partner.H>=4
+  3S  "Declines, in the 4-4 spade fit"  shows S>=4, strength<=invite  when partner.S>=4
   3N  "Accepts the invitation"          shows strength>=game
   P   "Declines: not a maximum"         shows strength<=invite

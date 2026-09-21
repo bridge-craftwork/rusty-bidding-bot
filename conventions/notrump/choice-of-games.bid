@@ -1,0 +1,12 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+
+module choice-of-games "Choosing between 3NT and a major-suit game"
+  needs  notrump-base
+
+# Partner has bid 3NT offering a choice (after Stayman, or with five cards
+# in a major after a transfer). Correct to four of a major with an
+# eight-card fit, which is four opposite four or three opposite five.
+when asked choice
+  4H  "Corrects to the heart fit"   shows H>=8-partner.H.min  when partner.H>=4
+  4S  "Corrects to the spade fit"   shows S>=8-partner.S.min  when partner.S>=4
+  P   "Plays 3NT"

@@ -175,13 +175,25 @@ Their values are **ranges**, so a comparison means "known to be true":
 **Partnership totals**, `we.hcp` and `we.keycards(x)`, combine my exact hand
 with partner's range. Example: `we.hcp.min >= 25`.
 
+**Points.** `points` is total points: HCP, plus ¼ for each ten, plus ½ for
+each card beyond four in a suit, kept in quarter points. It compares by its
+whole part, so `points=8..9` means 8 up to 9¾, and `points>=10` needs a full
+10. These weights fit BBA's invite and game decisions after 1NT best (an
+analysis of 6,394 responder and 1,410 opener decisions: length is the
+largest effect; nines, eights, aces, jacks, queens and 4-3-3-3 showed none).
+They are engine settings (`Valuation`), not fixed. `hcp` stays pure HCP:
+BBA's 1NT is 15-17 HCP exactly.
+
 **Strength** compares with a band: `strength=invite`, `strength>=game`. Bands,
 weakest first: `signoff`, `invite`, `game`, `slam_invite`, `slam`. Each is my
-HCP range given partner's shown HCP range p, for 25 combined for game and 33
+total points given partner's range p in whole points (partner's points when
+a call showed points, else partner's HCP), for 25 combined for game and 33
 for slam: signoff ≤ 24−p.max; invite 25−p.max..24−p.min; game
 25−p.min..32−p.max; slam_invite 33−p.max..32−p.min; slam ≥ 33−p.min. A band
 can be empty: after a super-accept (p known exactly) there is no invite.
-Because it becomes an HCP range, partner infers my strength from it too.
+Because it becomes a points range, partner infers my strength from it too.
+Explanations can quote a band: `"Invitational: {invite} total points"`
+prints "Invitational: 8-9 total points" after a 15-17 1NT.
 
 **What I have already shown** uses the prefix `shown.`, for example
 `hcp >= shown.hcp.max` for "I am at the top of my range".

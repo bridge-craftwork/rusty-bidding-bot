@@ -17,7 +17,7 @@ mod system;
 use std::path::Path;
 
 pub use engine::{CandidateTrace, Choice, Decision, Engine, Interpretation, Step};
-pub use facts::Facts;
+pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
 pub use position::{Ask, Forcing, Position, SideState};
 pub use system::{RuleRef, System};

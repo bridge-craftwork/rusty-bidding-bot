@@ -28,14 +28,15 @@ after 1N (P) 2H (P)
 when answered transfer(M)
   3M  "Sign off in the known fit"              shows strength=signoff
       when partner.M>=4                        # after a 2S or 2NT super-accept
-  P   "Weak: play here"                        shows strength=signoff
-  2N  "Invitational, exactly 5 {M}"            shows M=5, balanced, strength=invite
+  P   "Weak: play here ({signoff} total points)"  shows strength=signoff
+  2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced, strength=invite
       sets ask=invite(M)
-  3M  "Invitational, 6+ {M}"                   shows M>=6, strength=invite
+  3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, strength=invite
       sets ask=invite(M)
-  3N  "Game values, 5 {M}: choose the game"    shows M=5, balanced, strength=game
+  3N  "Game: {game} total points, 5 {M}: choose the game"  shows M=5, balanced, strength=game
       when maybe partner.M<=2                  # only while the fit is unknown
-  4M  "Game values, 6+ {M}"                    shows M>=6, strength=game
+      sets ask=choice                          # opener corrects with 3+ {M}
+  4M  "Game: {game} total points, 6+ {M}"      shows M>=6, strength=game
   4M  "Game in the known fit"                  shows strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
   3m  "Second suit, game forcing"              shows m>=4, strength>=game

@@ -134,8 +134,11 @@ fn interpretation_tracks_what_each_call_showed() {
     let south = &i.steps[0].knowledge;
     assert_eq!(south.hcp, Range::new(15, 17));
     assert_eq!(south.balanced, rbb_engine::Tri::True);
+    // 2NT shows 8-9 total points (a 7-count with a five-card suit
+    // qualifies), so HCP are only capped at 9.
     let north = &i.steps[2].knowledge;
-    assert_eq!(north.hcp, Range::new(8, 9), "{:#?}", i.steps[2]);
+    assert_eq!(north.whole_points(), Range::new(8, 9), "{:#?}", i.steps[2]);
+    assert_eq!(north.hcp.hi, 9);
     assert_eq!(i.steps[2].rule.as_ref().unwrap().module, "notrump-base");
 }
 
@@ -179,11 +182,12 @@ fn jacoby_2nt_shortness_is_never_the_trump_suit() {
 
 #[test]
 fn responder_rebids_after_a_completed_transfer() {
-    // One `when answered transfer(M)` block, no auction patterns.
+    // One `when answered transfer(M)` block, no auction patterns. Strength is
+    // in total points: a six-card suit adds a point (½ per card beyond four).
     let after = "1NT Pass 2D Pass 2H Pass";
     assert_call(&bid("82.QJ973.K94.J83", after), "Pass"); // 4 HCP: sign off
     assert_call(&bid("82.KJ973.K94.Q83", after), "2NT"); // 9, five hearts
-    assert_call(&bid("82.KJ9732.K94.Q8", after), "3H"); // 9, six hearts
+    assert_call(&bid("82.QJ9732.K94.Q8", after), "3H"); // 8 HCP + 1 length = 9 points
     assert_call(&bid("82.KJ973.K94.AQ3", after), "3NT"); // 13, five hearts
     assert_call(&bid("82.KJ9732.K94.A8", after), "4H"); // 13, six hearts
     assert_call(&bid("8.KJ973.K4.AQ832", after), "3C"); // second suit, GF
@@ -206,7 +210,7 @@ fn strength_bands_follow_what_partner_showed() {
         &calls("1NT Pass 2D Pass 2H Pass 2NT"),
     );
     let north = &i.steps[6].knowledge;
-    assert_eq!(north.hcp, Range::new(8, 9));
+    assert_eq!(north.whole_points(), Range::new(8, 9));
     assert_eq!(north.len[2], Range::new(5, 5));
 }
 
@@ -227,4 +231,34 @@ fn opener_answers_invitations() {
         &bid("KQ53.KJ.AK53.J52", "1NT Pass 2D Pass 2H Pass 3H Pass"),
         "4H",
     );
+}
+
+#[test]
+fn total_points_count_tens_and_length() {
+    // 9 HCP and a six-card suit is 10 total points: game, not an invite.
+    assert_call(&bid("82.KJ9732.K94.Q8", "1NT Pass 2D Pass 2H Pass"), "4H");
+    // 7 HCP, 4-3-3-3 with four tens (7 + 1 = 8 points): invite.
+    assert_call(&bid("T82.QT7.KT9.QT83", "1NT Pass"), "2NT");
+    // Same shape and HCP without the tens: pass.
+    assert_call(&bid("982.Q87.K95.Q853", "1NT Pass"), "Pass");
+}
+
+#[test]
+fn opener_corrects_3nt_to_a_known_major_fit() {
+    // Stayman, 2H, 3NT: responder has four spades (no heart raise), so
+    // opener with four spades too plays 4S.
+    assert_call(&bid("AK52.KJ73.Q94.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"), "4S");
+    assert_call(&bid("AK5.KJ73.Q942.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"), "Pass");
+    // Transfer, then 3NT with five hearts: opener with three hearts plays 4H.
+    assert_call(&bid("AK5.KJ7.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"), "4H");
+    assert_call(&bid("AK52.KJ.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"), "Pass");
+}
+
+#[test]
+fn responder_raises_after_stayman() {
+    let after = "1NT Pass 2C Pass 2S Pass";
+    assert_call(&bid("KJ82.Q7.K943.J83", after), "4S"); // 10: game in the fit
+    assert_call(&bid("KJ82.Q7.Q943.J83", after), "3S"); // 9: invite in the fit
+    // After 2H with four spades and no heart fit: 2NT / 3NT.
+    assert_call(&bid("KJ82.Q7.K943.J83", "1NT Pass 2C Pass 2H Pass"), "3NT");
 }

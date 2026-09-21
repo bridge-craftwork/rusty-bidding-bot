@@ -6,13 +6,26 @@ module stayman "Stayman"
 
 after 1N (P)
   2C  "Stayman: asks for a 4-card major"  alert
-      shows hcp>=8, H=4 | S=4          # 5-4 in the majors included (Smolen)
-      when  !shape 4333                # 4-3-3-3 just bids notrump; not promised
+      shows strength>=invite, H=4 | S=4    # 5-4 in the majors included (Smolen)
+      when  !shape 4333                    # 4-3-3-3 just bids notrump; not promised
       sets  forcing=round, ask=majors
-      priority 1                       # ahead of transfers with 5-4 majors
+      priority 1                           # ahead of transfers with 5-4 majors
 
 # Opener. With both majors the first rule that fits (2H) wins.
 after 1N (P) 2C (P)
   2H  "4+ hearts"                 shows H>=4
   2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
   2D  "No 4-card major"           shows H<=3, S<=3
+
+# Responder's second call. No auction patterns: a fit is whatever opener's
+# answer has shown. Without a fit, 2NT and 3NT imply the other major, and
+# opener corrects with four of it (choice-of-games.bid).
+when answered majors
+  4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4
+  3H  "Invitational raise in hearts"              shows H>=4, strength=invite when partner.H>=4
+  4S  "Game in the spade fit"                     shows S>=4, strength>=game  when partner.S>=4
+  3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4
+  3N  "Game: {game} total points, no fit found"   shows strength=game         sets ask=choice
+  2N  "Invitational: {invite} total points, no fit found"
+      shows strength=invite
+      sets  ask=nt_invite

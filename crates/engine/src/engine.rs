@@ -9,7 +9,7 @@ use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
 use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, Val};
-use crate::facts::Facts;
+use crate::facts::{Facts, Valuation};
 use crate::knowledge::{SeatKnowledge, Tri};
 use crate::position::{side, Ask, Forcing, Position, SideState};
 use crate::sample;
@@ -101,6 +101,7 @@ type IndexCache = HashMap<String, Arc<Vec<u32>>>;
 pub struct Engine {
     /// By side: 0 = North-South, 1 = East-West.
     systems: [System; 2],
+    valuation: Valuation,
     pool: Vec<Facts>,
     consistent: Mutex<IndexCache>,
     descriptiveness: Mutex<HashMap<String, f64>>,
@@ -112,10 +113,19 @@ impl Engine {
     pub fn new(ns: &Card, ew: &Card, modules: &[bidspec::Module]) -> Engine {
         Engine {
             systems: [System::new(ns, modules), System::new(ew, modules)],
+            valuation: Valuation::default(),
             pool: sample::pool(),
             consistent: Mutex::new(HashMap::new()),
             descriptiveness: Mutex::new(HashMap::new()),
         }
+    }
+
+    /// Count total points differently (weights in quarter points).
+    pub fn with_valuation(mut self, valuation: Valuation) -> Engine {
+        self.valuation = valuation;
+        self.descriptiveness.lock().unwrap().clear();
+        self.consistent.lock().unwrap().clear();
+        self
     }
 
     pub fn system(&self, seat: Direction) -> &System {
@@ -134,6 +144,7 @@ impl Engine {
             actor,
             hand,
             params: &self.systems[side(actor)].params[entry.module],
+            valuation: self.valuation,
         }
     }
 
@@ -219,7 +230,9 @@ impl Engine {
             .iter()
             .enumerate()
             .filter(|(_, f)| {
+                let q = f.points_q(self.valuation);
                 if !(k.hcp.lo <= f.hcp && f.hcp <= k.hcp.hi)
+                    || !(k.pts.lo <= q && q <= k.pts.hi)
                     || (0..4).any(|s| !(k.len[s].lo <= f.len[s] && f.len[s] <= k.len[s].hi))
                 {
                     return false;
@@ -229,6 +242,7 @@ impl Engine {
                     actor,
                     hand: Some(f),
                     params: &params,
+                    valuation: self.valuation,
                 };
                 k.constraints
                     .iter()
