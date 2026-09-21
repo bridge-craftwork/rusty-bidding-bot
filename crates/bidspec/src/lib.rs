@@ -11,6 +11,7 @@
 pub mod ast;
 mod check;
 mod diag;
+mod display;
 mod expr;
 mod lexer;
 mod parser;

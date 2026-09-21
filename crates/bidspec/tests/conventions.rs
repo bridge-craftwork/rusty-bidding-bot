@@ -89,14 +89,20 @@ fn errors(src: &str) -> Vec<String> {
 #[test]
 fn diagnostics_have_locations() {
     let e = errors("module demo \"Demo\"\n\nafter 1N (P)\n  2C shows hcp>=8\n");
-    assert_eq!(e, vec!["t.bid:4:5: a rule needs an explanation string after the call"]);
+    assert_eq!(
+        e,
+        vec!["t.bid:4:5: a rule needs an explanation string after the call"]
+    );
 
     let e = errors("module demo \"Demo\"\n\nafter 1N\n  2C \"x\"\n");
     assert!(e[0].starts_with("t.bid:3:"), "{e:?}");
     assert!(e[0].contains("RHO"), "{e:?}");
 
     let e = errors("module demo \"Demo\"\n\nafter 1N (P)\n  2Q \"x\"\n");
-    assert_eq!(e, vec!["t.bid:4:3: 2Q: strain must be C D H S N or a variable M m x y"]);
+    assert_eq!(
+        e,
+        vec!["t.bid:4:3: 2Q: strain must be C D H S N or a variable M m x y"]
+    );
 
     let e = errors("module demo \"Demo\"\n  card notrump.no_such_thing\n");
     assert_eq!(e.len(), 1);

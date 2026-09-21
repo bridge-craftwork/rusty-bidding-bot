@@ -9,7 +9,7 @@ license = "MIT OR Apache-2.0"
 repository = "https://github.com/bridge-craftwork/rusty-bidding-bot"
 
 [workspace.dependencies]
-bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types" }
+bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types", features = ["serde"] }
 bridge-card = { path = "crates/bridge-card" }
 bidspec = { path = "crates/bidspec" }
 rbb-engine = { path = "crates/engine" }

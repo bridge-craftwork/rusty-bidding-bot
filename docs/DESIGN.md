@@ -326,8 +326,9 @@ knowingly chooses a higher-ranked one.
    Bridge-Classroom, JSON Schema, lossless `.bbsa` import/export.
 3. **Language** (done): `bidspec` parser and JSON IR, with file:line:column
    errors; `rbb bid check` / `rbb bid compile`.
-4. **Engine core with trace**: knowledge store, auction state, ranking, and
-   the 1NT modules in `conventions/` (1NT, Stayman, transfers).
+4. **Engine core with trace** (done): knowledge store, auction state,
+   ranking, negative inference, trace; `rbb call`. The 1NT slice (opening,
+   Stayman, Jacoby transfers, natural responses) bids end to end.
 5. **Compare library + CLI**: replay and full-auction modes against `bba/`,
    divergence statistics, and par via bridge-solver with a DD cache.
 6. **Workbench GUI**: scenario list, divergence view, A/B board detail, hot

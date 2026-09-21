@@ -1,0 +1,24 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Natural opening bids. The 1-level suit openings are written to be mutually
+# exclusive (longest suit; higher of two 5-card suits; 1C with 3-3 in the
+# minors, 1D with 4-4), so ranking only has to choose between a suit opening
+# and something more descriptive such as 1NT.
+#
+# Not yet covered: 2-level and higher openings, and anything above 21 HCP.
+
+module base "Natural opening bids"
+  param  min_open = general.min_hcp_open default 12
+
+when opening
+  1S  "5+ spades"
+      shows hcp=min_open..21, S>=5, S>=H, S>=D, S>=C
+  1H  "5+ hearts"
+      shows hcp=min_open..21, H>=5, H>S, H>=D, H>=C
+  1D  "3+ diamonds"
+      shows hcp=min_open..21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D
+  1C  "3+ clubs"
+      shows hcp=min_open..21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C
+  P   "No opening bid"
+      shows hcp<=min_open-1
+      priority -10

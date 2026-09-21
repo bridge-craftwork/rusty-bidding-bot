@@ -14,7 +14,11 @@ pub struct Diagnostic {
 impl fmt::Display for Diagnostic {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if self.col > 0 {
-            write!(f, "{}:{}:{}: {}", self.file, self.line, self.col, self.message)
+            write!(
+                f,
+                "{}:{}:{}: {}",
+                self.file, self.line, self.col, self.message
+            )
         } else {
             write!(f, "{}:{}: {}", self.file, self.line, self.message)
         }

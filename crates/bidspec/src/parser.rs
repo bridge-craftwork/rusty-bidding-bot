@@ -6,8 +6,9 @@ use crate::expr::{self, CallPos, Cursor, PError};
 use crate::lexer::{lex, Tok, Token};
 use crate::Diagnostic;
 
-const CLAUSES: &[&str] =
-    &["shows", "when", "sets", "denies", "prefer", "priority", "replaces", "as", "alert", "announce"];
+const CLAUSES: &[&str] = &[
+    "shows", "when", "sets", "denies", "prefer", "priority", "replaces", "as", "alert", "announce",
+];
 const HEADERS: &[&str] = &["card", "needs", "param"];
 
 struct Line<'a> {
@@ -49,7 +50,12 @@ pub fn parse(source: &str, file: &str) -> Result<Module, Vec<Diagnostic>> {
             Ok(toks) if toks.is_empty() => {}
             Ok(toks) => {
                 let end = toks.last().unwrap().end;
-                lines.push(Line { no: i + 1, indent, code: &trimmed[..end], toks });
+                lines.push(Line {
+                    no: i + 1,
+                    indent,
+                    code: &trimmed[..end],
+                    toks,
+                });
             }
             Err((off, msg)) => diags.push(Diagnostic {
                 file: file.to_string(),
@@ -59,7 +65,11 @@ pub fn parse(source: &str, file: &str) -> Result<Module, Vec<Diagnostic>> {
             }),
         }
     }
-    let mut p = Parser { file, lines: &lines, diags };
+    let mut p = Parser {
+        file,
+        lines: &lines,
+        diags,
+    };
     let mut idx = 0;
     let tree = build(p.lines, &mut idx, None);
     let module = p.module(&tree);
@@ -86,7 +96,9 @@ impl<'a> Parser<'a> {
     fn error(&mut self, line: usize, offset: Option<usize>, message: impl Into<String>) {
         let lines = self.lines;
         let l = &lines[line];
-        let col = offset.map_or(0, |off| l.indent + l.code[..off.min(l.code.len())].chars().count() + 1);
+        let col = offset.map_or(0, |off| {
+            l.indent + l.code[..off.min(l.code.len())].chars().count() + 1
+        });
         self.diags.push(Diagnostic {
             file: self.file.to_string(),
             line: l.no,
@@ -111,7 +123,11 @@ impl<'a> Parser<'a> {
             return None;
         };
         if lines[first.line].first_word() != Some("module") {
-            self.error(first.line, Some(0), "a .bid file must start with `module <name> \"<title>\"`");
+            self.error(
+                first.line,
+                Some(0),
+                "a .bid file must start with `module <name> \"<title>\"`",
+            );
             return None;
         }
         let (name, title) = self.module_line(first.line);
@@ -161,7 +177,11 @@ impl<'a> Parser<'a> {
         let name_end = rest.find(' ').unwrap_or(rest.len());
         let name = rest[..name_end].to_string();
         if !valid_id(&name) {
-            self.error(line, Some(0), "expected `module <name>`; names use a-z, 0-9 and `-`");
+            self.error(
+                line,
+                Some(0),
+                "expected `module <name>`; names use a-z, 0-9 and `-`",
+            );
         }
         let title = lines[line].toks.iter().find_map(|t| match &t.tok {
             Tok::Str(s) => Some(s.clone()),
@@ -174,7 +194,11 @@ impl<'a> Parser<'a> {
         let lines = self.lines;
         let line = node.line;
         if !node.children.is_empty() {
-            self.error(node.children[0].line, Some(0), "unexpected indentation under a header line");
+            self.error(
+                node.children[0].line,
+                Some(0),
+                "unexpected indentation under a header line",
+            );
         }
         let words = self.header_words(line);
         let no = lines[line].no;
@@ -192,13 +216,21 @@ impl<'a> Parser<'a> {
                 }
             }
             Some("card") => match words.as_slice() {
-                [path] => module.card.push(CardCond { path: path.to_string(), value: None, line: no }),
+                [path] => module.card.push(CardCond {
+                    path: path.to_string(),
+                    value: None,
+                    line: no,
+                }),
                 [path, "=", value] => module.card.push(CardCond {
                     path: path.to_string(),
                     value: Some(literal(value)),
                     line: no,
                 }),
-                _ => self.error(line, None, "expected `card <path>` or `card <path> = <value>`"),
+                _ => self.error(
+                    line,
+                    None,
+                    "expected `card <path>` or `card <path> = <value>`",
+                ),
             },
             Some("param") => match words.as_slice() {
                 [name, "=", path] => module.params.push(Param {
@@ -213,9 +245,17 @@ impl<'a> Parser<'a> {
                     default: Some(literal(value)),
                     line: no,
                 }),
-                _ => self.error(line, None, "expected `param <name> = <card path> [default <value>]`"),
+                _ => self.error(
+                    line,
+                    None,
+                    "expected `param <name> = <card path> [default <value>]`",
+                ),
             },
-            _ => self.error(line, Some(0), "expected `card`, `needs` or `param` under `module`"),
+            _ => self.error(
+                line,
+                Some(0),
+                "expected `card`, `needs` or `param` under `module`",
+            ),
         }
     }
 
@@ -224,14 +264,24 @@ impl<'a> Parser<'a> {
         let line = node.line;
         let l = &lines[line];
         let toks = &l.toks[1..];
-        let mut ctx = Context { after: None, when: None, rules: Vec::new(), contexts: Vec::new(), line: l.no };
+        let mut ctx = Context {
+            after: None,
+            when: None,
+            rules: Vec::new(),
+            contexts: Vec::new(),
+            line: l.no,
+        };
         let parsed = if l.first_word() == Some("after") {
             let split = toks
                 .iter()
                 .position(|t| t.tok == Tok::Word("when".into()))
                 .unwrap_or(toks.len());
             let pattern = self.pattern(&toks[..split], l.code);
-            let when = if split < toks.len() { Some(self.condition(&toks[split + 1..], l.code)) } else { None };
+            let when = if split < toks.len() {
+                Some(self.condition(&toks[split + 1..], l.code))
+            } else {
+                None
+            };
             pattern.and_then(|p| {
                 ctx.after = Some(p);
                 when.transpose().map(|w| ctx.when = w)
@@ -276,7 +326,10 @@ impl<'a> Parser<'a> {
             } else {
                 expr::call(&mut c, CallPos::Pattern)?
             };
-            if calls.last().is_some_and(|p: &PatternCall| p.theirs == theirs) {
+            if calls
+                .last()
+                .is_some_and(|p: &PatternCall| p.theirs == theirs)
+            {
                 return Err((
                     start,
                     "calls must alternate between our side and (theirs), in parentheses".into(),
@@ -318,7 +371,11 @@ impl<'a> Parser<'a> {
         };
         let Some(explanation) = expr::string(&mut c) else {
             let off = c.offset();
-            self.error(line, Some(off), "a rule needs an explanation string after the call");
+            self.error(
+                line,
+                Some(off),
+                "a rule needs an explanation string after the call",
+            );
             return None;
         };
         if let Err(e) = c.expect_end("after the explanation; expected a clause such as `shows`") {
@@ -365,10 +422,18 @@ impl<'a> Parser<'a> {
         Some(rule)
     }
 
-    fn clause(&self, rule: &mut Rule, line: usize, kw: &Token, body: &[Token]) -> Result<(), PError> {
+    fn clause(
+        &self,
+        rule: &mut Rule,
+        line: usize,
+        kw: &Token,
+        body: &[Token],
+    ) -> Result<(), PError> {
         let lines = self.lines;
         let text = lines[line].code;
-        let Tok::Word(name) = &kw.tok else { unreachable!() };
+        let Tok::Word(name) = &kw.tok else {
+            unreachable!()
+        };
         let dup = |what: &str| Err((kw.start, format!("`{what}` given twice for this rule")));
         let raw = || -> Result<String, PError> {
             match (body.first(), body.last()) {
@@ -382,7 +447,11 @@ impl<'a> Parser<'a> {
         match name.as_str() {
             "shows" | "when" | "denies" => {
                 let e = self.condition(body, text).map_err(|e| {
-                    if body.is_empty() { (kw.end, format!("expected a condition after `{name}`")) } else { e }
+                    if body.is_empty() {
+                        (kw.end, format!("expected a condition after `{name}`"))
+                    } else {
+                        e
+                    }
                 })?;
                 let slot = match name.as_str() {
                     "shows" => &mut rule.shows,
@@ -446,7 +515,9 @@ impl<'a> Parser<'a> {
                 }
                 let text = match body {
                     [] => None,
-                    [Token { tok: Tok::Str(s), .. }] => Some(s.clone()),
+                    [Token {
+                        tok: Tok::Str(s), ..
+                    }] => Some(s.clone()),
                     _ => return Err((kw.end, format!("expected a quoted string after `{name}`"))),
                 };
                 rule.alert = Some(if name == "alert" {
@@ -488,7 +559,8 @@ fn split_clauses(toks: &[Token]) -> (&[Token], Vec<(Token, &[Token])>) {
 
 fn valid_id(s: &str) -> bool {
     !s.is_empty()
-        && s.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
+        && s.chars()
+            .all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')
 }
 
 fn literal(s: &str) -> Literal {

@@ -73,7 +73,10 @@ dependencies = [
 [[package]]
 name = "bridge-types"
 version = "0.1.0"
-source = "git+https://github.com/bridge-craftwork/bridge-types#12d57d64f07e79f758fc9e0cbf5bc06c4f6814a4"
+source = "git+https://github.com/bridge-craftwork/bridge-types#0206ec5ec9003d7b5d36b7412bf01b66ee0d6868"
+dependencies = [
+ "serde",
+]
 
 [[package]]
 name = "clap"
@@ -197,6 +200,7 @@ version = "0.1.0"
 dependencies = [
  "bidspec",
  "bridge-card",
+ "bridge-types",
  "clap",
  "rbb-engine",
  "serde_json",
@@ -209,6 +213,8 @@ dependencies = [
  "bidspec",
  "bridge-card",
  "bridge-types",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]

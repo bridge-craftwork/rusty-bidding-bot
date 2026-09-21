@@ -80,7 +80,10 @@ pub enum CallSpec {
     Redouble,
     /// `(*)`: any call (patterns only).
     Any,
-    Bid { level: u8, strain: StrainSpec },
+    Bid {
+        level: u8,
+        strain: StrainSpec,
+    },
     /// `cheapest(x)`, `jump(x)`, `raise`, `new_suit`.
     Relative {
         func: String,
@@ -140,7 +143,9 @@ pub enum Alert {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         text: Option<String>,
     },
-    Announce { text: String },
+    Announce {
+        text: String,
+    },
 }
 
 /// `sets name=value`
@@ -181,18 +186,40 @@ pub struct Segment {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
 pub enum Expr {
-    And { all: Vec<Expr> },
-    Or { any: Vec<Expr> },
-    Not { expr: Box<Expr> },
+    And {
+        all: Vec<Expr>,
+    },
+    Or {
+        any: Vec<Expr>,
+    },
+    Not {
+        expr: Box<Expr>,
+    },
     /// `maybe <cond>`: not ruled out, rather than known.
-    Maybe { expr: Box<Expr> },
-    Cmp { cmp: CmpOp, lhs: Box<Expr>, rhs: Box<Expr> },
+    Maybe {
+        expr: Box<Expr>,
+    },
+    Cmp {
+        cmp: CmpOp,
+        lhs: Box<Expr>,
+        rhs: Box<Expr>,
+    },
     /// `x = lo..hi`
-    InRange { expr: Box<Expr>, lo: Box<Expr>, hi: Box<Expr> },
+    InRange {
+        expr: Box<Expr>,
+        lo: Box<Expr>,
+        hi: Box<Expr>,
+    },
     /// `x in 1|4`
-    InSet { expr: Box<Expr>, values: Vec<i64> },
+    InSet {
+        expr: Box<Expr>,
+        values: Vec<i64>,
+    },
     /// `we.trump is suit`
-    Is { expr: Box<Expr>, what: String },
+    Is {
+        expr: Box<Expr>,
+        what: String,
+    },
     /// `asked [kind]`: partner's pending question to me.
     Asked {
         #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -204,12 +231,26 @@ pub enum Expr {
         kind: Option<Box<Expr>>,
     },
     /// `shape 5-4-x-x`, `shape 4333`
-    Shape { pattern: String },
-    Arith { arith: ArithOp, lhs: Box<Expr>, rhs: Box<Expr> },
-    Neg { expr: Box<Expr> },
-    Int { value: i64 },
+    Shape {
+        pattern: String,
+    },
+    Arith {
+        arith: ArithOp,
+        lhs: Box<Expr>,
+        rhs: Box<Expr>,
+    },
+    Neg {
+        expr: Box<Expr>,
+    },
+    Int {
+        value: i64,
+    },
     /// A call used as a value: `partner.last = 5{t}`.
-    Call { call: CallSpec },
+    Call {
+        call: CallSpec,
+    },
     /// A name or dotted path: `hcp`, `partner.hcp.min`, `tp(M)`.
-    Path { path: Vec<Segment> },
+    Path {
+        path: Vec<Segment>,
+    },
 }

@@ -20,6 +20,32 @@ enum Command {
     /// Rule file (.bid) tools.
     #[command(subcommand)]
     Bid(BidCommand),
+    /// Choose a call for a hand and show why.
+    Call {
+        /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
+        hand: String,
+        /// Calls so far, e.g. "1NT Pass"
+        #[arg(short, long, default_value = "")]
+        auction: String,
+        /// Dealer: N, E, S or W.
+        #[arg(short, long, default_value = "N")]
+        dealer: char,
+        /// Vulnerability: None, NS, EW or All.
+        #[arg(short, long, default_value = "None")]
+        vul: String,
+        /// Card for both sides (.bbsa or card JSON).
+        #[arg(short, long)]
+        card: PathBuf,
+        /// A different card for East-West.
+        #[arg(long)]
+        ew_card: Option<PathBuf>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Print the full decision as JSON.
+        #[arg(long)]
+        json: bool,
+    },
 }
 
 #[derive(Subcommand)]
@@ -77,7 +103,109 @@ fn run(cli: Cli) -> Result<()> {
     match cli.command {
         Command::Card(cmd) => card(cmd),
         Command::Bid(cmd) => bid(cmd),
+        Command::Call {
+            hand,
+            auction,
+            dealer,
+            vul,
+            card,
+            ew_card,
+            rules,
+            json,
+        } => call(
+            &hand,
+            &auction,
+            dealer,
+            &vul,
+            &card,
+            ew_card.as_deref(),
+            &rules,
+            json,
+        ),
     }
+}
+
+fn load_card(path: &Path) -> Result<Card> {
+    let text = read(path)?;
+    if path.extension().is_some_and(|e| e == "bbsa") {
+        Ok(bbsa::import(&text, None)?.0)
+    } else {
+        Ok(Card::from_json(&text)?.0)
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn call(
+    hand: &str,
+    auction: &str,
+    dealer: char,
+    vul: &str,
+    card: &Path,
+    ew_card: Option<&Path>,
+    rules: &Path,
+    json: bool,
+) -> Result<()> {
+    use bridge_types::{Call, Direction, Hand, Vulnerability};
+    let hand = Hand::from_pbn(hand).ok_or("hand must be PBN S.H.D.C, e.g. AK52.KJ7.Q94.K83")?;
+    let calls = auction
+        .split_whitespace()
+        .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
+        .collect::<std::result::Result<Vec<_>, _>>()?;
+    let dealer =
+        Direction::from_char(dealer.to_ascii_uppercase()).ok_or("dealer must be N, E, S or W")?;
+    let vul = Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?;
+    let ns = load_card(card)?;
+    let ew = match ew_card {
+        Some(p) => load_card(p)?,
+        None => ns.clone(),
+    };
+    let modules = rbb_engine::load_modules(rules).map_err(|d| {
+        d.iter()
+            .map(|d| d.to_string())
+            .collect::<Vec<_>>()
+            .join("\n")
+    })?;
+    let engine = rbb_engine::Engine::new(&ns, &ew, &modules);
+    let d = engine.bid(&hand, dealer, vul, &calls);
+    if json {
+        println!("{}", serde_json::to_string_pretty(&d)?);
+        return Ok(());
+    }
+    println!("{}: {}", d.call, d.explanation);
+    if let Some(r) = &d.rule {
+        println!("  rule: {}:{} ({})", r.file, r.line, r.module);
+    }
+    println!("\ncandidates (best-ranked first):");
+    for c in &d.candidates {
+        println!(
+            "  {:5} prio {:>3}  descr {:.3}  {}",
+            c.call.to_string(),
+            c.priority,
+            c.descriptiveness,
+            c.outcome
+        );
+    }
+    if !d.auction.steps.is_empty() {
+        println!("\nauction so far:");
+        for s in &d.auction.steps {
+            let k = &s.knowledge;
+            println!(
+                "  {:?} {:5} {:30} hcp {}  S {} H {} D {} C {}",
+                s.caller,
+                s.call.to_string(),
+                s.explanation.as_deref().unwrap_or("(no rule)"),
+                k.hcp,
+                k.len[3],
+                k.len[2],
+                k.len[1],
+                k.len[0]
+            );
+        }
+    }
+    for w in &d.warnings {
+        eprintln!("warning: {w}");
+    }
+    Ok(())
 }
 
 fn bid(cmd: BidCommand) -> Result<()> {
@@ -113,7 +241,10 @@ fn bid(cmd: BidCommand) -> Result<()> {
             for m in &modules {
                 for need in &m.needs {
                     if !seen.contains_key(need.as_str()) {
-                        eprintln!("{}: warning: needs `{need}`, which is not defined yet", m.file);
+                        eprintln!(
+                            "{}: warning: needs `{need}`, which is not defined yet",
+                            m.file
+                        );
                         warnings += 1;
                     }
                 }
@@ -129,9 +260,14 @@ fn bid(cmd: BidCommand) -> Result<()> {
             }
         }
         BidCommand::Compile { file, output } => {
-            let module = bidspec::compile(&read(&file)?, &file.display().to_string()).map_err(|diags| {
-                diags.iter().map(|d| d.to_string()).collect::<Vec<_>>().join("\n")
-            })?;
+            let module =
+                bidspec::compile(&read(&file)?, &file.display().to_string()).map_err(|diags| {
+                    diags
+                        .iter()
+                        .map(|d| d.to_string())
+                        .collect::<Vec<_>>()
+                        .join("\n")
+                })?;
             write(output.as_deref(), &bidspec::to_json(&module))?;
         }
     }
@@ -165,7 +301,10 @@ fn card(cmd: CardCommand) -> Result<()> {
             write(output.as_deref(), &card.to_json_string())?;
             eprintln!("{}: {} keys mapped", file.display(), report.mapped);
             if !report.passthrough.is_empty() {
-                eprintln!("{} keys have no card field (kept in bba_passthrough):", report.passthrough.len());
+                eprintln!(
+                    "{} keys have no card field (kept in bba_passthrough):",
+                    report.passthrough.len()
+                );
                 for (key, value) in &report.passthrough {
                     eprintln!("  {key} = {value}");
                 }

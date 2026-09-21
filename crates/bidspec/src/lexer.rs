@@ -90,7 +90,11 @@ pub fn lex(text: &str) -> Result<Vec<Token>, LexError> {
                         .map_err(|_| (start, format!("bad level in {:?}", &text[start..i])))?;
                     Tok::Call(level, text[letters_start..i].to_string())
                 } else {
-                    Tok::Int(digits.parse().map_err(|_| (start, "number too large".to_string()))?)
+                    Tok::Int(
+                        digits
+                            .parse()
+                            .map_err(|_| (start, "number too large".to_string()))?,
+                    )
                 }
             }
             c if c.is_ascii_alphabetic() || c == b'_' => {
@@ -161,7 +165,10 @@ mod tests {
                 Tok::Int(17),
             ]
         );
-        assert_eq!(toks("6{t}"), vec![Tok::Int(6), Tok::LBrace, Tok::Word("t".into()), Tok::RBrace]);
+        assert_eq!(
+            toks("6{t}"),
+            vec![Tok::Int(6), Tok::LBrace, Tok::Word("t".into()), Tok::RBrace]
+        );
     }
 
     #[test]

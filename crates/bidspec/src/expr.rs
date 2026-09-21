@@ -81,7 +81,10 @@ impl<'a> Cursor<'a> {
 
     /// Is the next token directly after the current one, with no space?
     fn adjacent(&self) -> bool {
-        match (self.toks.get(self.pos.wrapping_sub(1)), self.toks.get(self.pos)) {
+        match (
+            self.toks.get(self.pos.wrapping_sub(1)),
+            self.toks.get(self.pos),
+        ) {
             (Some(a), Some(b)) if self.pos > 0 => a.end == b.start,
             _ => false,
         }
@@ -92,7 +95,10 @@ impl<'a> Cursor<'a> {
             Ok(())
         } else {
             let t = &self.toks[self.pos];
-            self.err(format!("unexpected {:?} {context}", &self.text[t.start..t.end]))
+            self.err(format!(
+                "unexpected {:?} {context}",
+                &self.text[t.start..t.end]
+            ))
         }
     }
 }
@@ -144,7 +150,10 @@ pub fn call(c: &mut Cursor, pos: CallPos) -> Result<CallSpec, PError> {
                 c.expect(&Tok::LParen, "`(` after the function name")?;
                 let arg = c.word("a suit or variable")?;
                 c.expect(&Tok::RParen, "`)`")?;
-                CallSpec::Relative { func, arg: Some(arg) }
+                CallSpec::Relative {
+                    func,
+                    arg: Some(arg),
+                }
             }
             "raise" | "new_suit" if pos == CallPos::Rule => {
                 let func = w.clone();
@@ -174,7 +183,10 @@ pub fn call(c: &mut Cursor, pos: CallPos) -> Result<CallSpec, PError> {
             c.bump();
             let name = c.word("a name inside `{}`")?;
             c.expect(&Tok::RBrace, "`}`")?;
-            CallSpec::Bid { level: level.clamp(0, 99) as u8, strain: StrainSpec::Interp(name) }
+            CallSpec::Bid {
+                level: level.clamp(0, 99) as u8,
+                strain: StrainSpec::Interp(name),
+            }
         }
         _ => return c.err("expected a call"),
     };
@@ -223,7 +235,11 @@ pub fn expr(c: &mut Cursor) -> Result<Expr, PError> {
     while c.eat(&Tok::Comma) {
         all.push(or(c)?);
     }
-    Ok(if all.len() == 1 { all.pop().unwrap() } else { Expr::And { all } })
+    Ok(if all.len() == 1 {
+        all.pop().unwrap()
+    } else {
+        Expr::And { all }
+    })
 }
 
 fn or(c: &mut Cursor) -> Result<Expr, PError> {
@@ -231,16 +247,24 @@ fn or(c: &mut Cursor) -> Result<Expr, PError> {
     while c.eat(&Tok::Pipe) {
         any.push(unary(c)?);
     }
-    Ok(if any.len() == 1 { any.pop().unwrap() } else { Expr::Or { any } })
+    Ok(if any.len() == 1 {
+        any.pop().unwrap()
+    } else {
+        Expr::Or { any }
+    })
 }
 
 fn unary(c: &mut Cursor) -> Result<Expr, PError> {
     if c.eat(&Tok::Bang) {
-        return Ok(Expr::Not { expr: Box::new(unary(c)?) });
+        return Ok(Expr::Not {
+            expr: Box::new(unary(c)?),
+        });
     }
     if c.peek() == Some(&Tok::Word("maybe".into())) {
         c.bump();
-        return Ok(Expr::Maybe { expr: Box::new(unary(c)?) });
+        return Ok(Expr::Maybe {
+            expr: Box::new(unary(c)?),
+        });
     }
     comparison(c)
 }
@@ -268,8 +292,16 @@ fn comparison(c: &mut Cursor) -> Result<Expr, PError> {
         Some(Tok::Word(w)) if w == "asked" || w == "answered" => {
             let asked = w == "asked";
             c.bump();
-            let kind = if ends_operand(c.peek()) { None } else { Some(Box::new(arith(c)?)) };
-            return Ok(if asked { Expr::Asked { kind } } else { Expr::Answered { kind } });
+            let kind = if ends_operand(c.peek()) {
+                None
+            } else {
+                Some(Box::new(arith(c)?))
+            };
+            return Ok(if asked {
+                Expr::Asked { kind }
+            } else {
+                Expr::Answered { kind }
+            });
         }
         _ => {}
     }
@@ -297,12 +329,18 @@ fn comparison(c: &mut Cursor) -> Result<Expr, PError> {
                     break;
                 }
             }
-            return Ok(Expr::InSet { expr: Box::new(lhs), values });
+            return Ok(Expr::InSet {
+                expr: Box::new(lhs),
+                values,
+            });
         }
         Some(Tok::Word(w)) if w == "is" => {
             c.bump();
             let what = c.word("a word after `is` (suit, notrump, none)")?;
-            return Ok(Expr::Is { expr: Box::new(lhs), what });
+            return Ok(Expr::Is {
+                expr: Box::new(lhs),
+                what,
+            });
         }
         _ => return Ok(lhs),
     };
@@ -310,9 +348,17 @@ fn comparison(c: &mut Cursor) -> Result<Expr, PError> {
     let rhs = arith(c)?;
     if cmp == CmpOp::Eq && c.eat(&Tok::DotDot) {
         let hi = arith(c)?;
-        return Ok(Expr::InRange { expr: Box::new(lhs), lo: Box::new(rhs), hi: Box::new(hi) });
+        return Ok(Expr::InRange {
+            expr: Box::new(lhs),
+            lo: Box::new(rhs),
+            hi: Box::new(hi),
+        });
     }
-    Ok(Expr::Cmp { cmp, lhs: Box::new(lhs), rhs: Box::new(rhs) })
+    Ok(Expr::Cmp {
+        cmp,
+        lhs: Box::new(lhs),
+        rhs: Box::new(rhs),
+    })
 }
 
 fn arith(c: &mut Cursor) -> Result<Expr, PError> {
@@ -325,7 +371,11 @@ fn arith(c: &mut Cursor) -> Result<Expr, PError> {
         };
         c.bump();
         let rhs = term(c)?;
-        lhs = Expr::Arith { arith: op, lhs: Box::new(lhs), rhs: Box::new(rhs) };
+        lhs = Expr::Arith {
+            arith: op,
+            lhs: Box::new(lhs),
+            rhs: Box::new(rhs),
+        };
     }
 }
 
@@ -333,7 +383,9 @@ fn term(c: &mut Cursor) -> Result<Expr, PError> {
     match c.peek() {
         Some(Tok::Minus) => {
             c.bump();
-            Ok(Expr::Neg { expr: Box::new(term(c)?) })
+            Ok(Expr::Neg {
+                expr: Box::new(term(c)?),
+            })
         }
         Some(Tok::LParen) => {
             c.bump();
@@ -341,15 +393,17 @@ fn term(c: &mut Cursor) -> Result<Expr, PError> {
             c.expect(&Tok::RParen, "`)`")?;
             Ok(e)
         }
-        Some(Tok::Int(_)) if c.peek_at(1) == Some(&Tok::LBrace) => {
-            Ok(Expr::Call { call: call(c, CallPos::Value)? })
-        }
+        Some(Tok::Int(_)) if c.peek_at(1) == Some(&Tok::LBrace) => Ok(Expr::Call {
+            call: call(c, CallPos::Value)?,
+        }),
         Some(Tok::Int(n)) => {
             let n = *n;
             c.bump();
             Ok(Expr::Int { value: n })
         }
-        Some(Tok::Call(..)) => Ok(Expr::Call { call: call(c, CallPos::Value)? }),
+        Some(Tok::Call(..)) => Ok(Expr::Call {
+            call: call(c, CallPos::Value)?,
+        }),
         Some(Tok::Word(_)) => path(c),
         Some(Tok::DotDot) => c.err("`..` only follows `=`, as in `hcp=15..17`"),
         _ => c.err("expected a value or condition"),
@@ -393,13 +447,20 @@ mod tests {
     }
 
     fn name(n: &str) -> Expr {
-        Expr::Path { path: vec![Segment { name: n.into(), args: None }] }
+        Expr::Path {
+            path: vec![Segment {
+                name: n.into(),
+                args: None,
+            }],
+        }
     }
 
     #[test]
     fn comma_binds_looser_than_pipe() {
         let e = parse("hcp>=8, H=4 | S=4");
-        let Expr::And { all } = e else { panic!("{e:?}") };
+        let Expr::And { all } = e else {
+            panic!("{e:?}")
+        };
         assert_eq!(all.len(), 2);
         assert!(matches!(all[1], Expr::Or { .. }));
     }
@@ -407,27 +468,49 @@ mod tests {
     #[test]
     fn ranges_with_arithmetic() {
         let e = parse("hcp=33-partner.hcp.max..32-partner.hcp.min");
-        let Expr::InRange { expr, lo, .. } = e else { panic!("{e:?}") };
+        let Expr::InRange { expr, lo, .. } = e else {
+            panic!("{e:?}")
+        };
         assert_eq!(*expr, name("hcp"));
-        assert!(matches!(*lo, Expr::Arith { arith: ArithOp::Sub, .. }));
+        assert!(matches!(
+            *lo,
+            Expr::Arith {
+                arith: ArithOp::Sub,
+                ..
+            }
+        ));
     }
 
     #[test]
     fn calls_paths_and_sets() {
         let e = parse("partner.last=5{t}, we.keycards(t).max<=3");
         let Expr::And { all } = e else { panic!() };
-        let Expr::Cmp { rhs, .. } = &all[0] else { panic!() };
+        let Expr::Cmp { rhs, .. } = &all[0] else {
+            panic!()
+        };
         assert!(matches!(**rhs, Expr::Call { .. }));
-        let Expr::Cmp { lhs, .. } = &all[1] else { panic!() };
-        let Expr::Path { path } = &**lhs else { panic!() };
+        let Expr::Cmp { lhs, .. } = &all[1] else {
+            panic!()
+        };
+        let Expr::Path { path } = &**lhs else {
+            panic!()
+        };
         assert_eq!(path.len(), 3);
         assert!(path[1].args.is_some());
 
         assert!(matches!(parse("keycards(t) in 1|4"), Expr::InSet { .. }));
         assert!(matches!(parse("we.trump is suit"), Expr::Is { .. }));
         assert!(matches!(parse("!shape 4333"), Expr::Not { .. }));
-        assert_eq!(parse("shape 5-4-x-x"), Expr::Shape { pattern: "5-4-x-x".into() });
-        assert!(matches!(parse("asked keycards(t)"), Expr::Asked { kind: Some(_) }));
+        assert_eq!(
+            parse("shape 5-4-x-x"),
+            Expr::Shape {
+                pattern: "5-4-x-x".into()
+            }
+        );
+        assert!(matches!(
+            parse("asked keycards(t)"),
+            Expr::Asked { kind: Some(_) }
+        ));
         assert!(matches!(parse("!asked"), Expr::Not { .. }));
     }
 
@@ -437,13 +520,22 @@ mod tests {
         let mut c = Cursor::new(&toks, "");
         assert!(matches!(
             call(&mut c, CallPos::Rule).unwrap(),
-            CallSpec::Bid { level: 7, strain: StrainSpec::Interp(_) }
+            CallSpec::Bid {
+                level: 7,
+                strain: StrainSpec::Interp(_)
+            }
         ));
         assert!(matches!(
             call(&mut c, CallPos::Rule).unwrap(),
-            CallSpec::Bid { level: 3, strain: StrainSpec::Var(_) }
+            CallSpec::Bid {
+                level: 3,
+                strain: StrainSpec::Var(_)
+            }
         ));
-        assert!(matches!(call(&mut c, CallPos::Rule).unwrap(), CallSpec::Relative { .. }));
+        assert!(matches!(
+            call(&mut c, CallPos::Rule).unwrap(),
+            CallSpec::Relative { .. }
+        ));
         assert!(call(&mut c, CallPos::Rule).is_err());
     }
 }

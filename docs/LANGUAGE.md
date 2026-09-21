@@ -1,9 +1,9 @@
 # The rule language (`.bid` files)
 
-Status: **draft, parsed.** The `bidspec` crate parses this syntax into a JSON
-IR (`rbb bid check`, `rbb bid compile <file>`). What the terms *mean* is up to
-the engine, which does not exist yet, so the vocabulary below may still
-change. The examples in [`conventions/`](../conventions/) all compile.
+Status: **draft, parsed and running.** The `bidspec` crate parses this syntax
+into a JSON IR (`rbb bid check`, `rbb bid compile <file>`), and `rbb-engine`
+executes it (`rbb call`). Section 11 lists how the engine currently reads
+the vocabulary, including what is not implemented yet. The examples in [`conventions/`](../conventions/) all compile.
 
 ## 1. The model: rules describe calls; the engine tracks what is known
 
@@ -291,7 +291,36 @@ These are enforced by `bidspec`, with file:line:column errors:
 - `rbb bid check` also checks across files: module names are unique, and a
   `needs` that names no module is a warning.
 
-## 11. Open questions
+## 11. The engine today
+
+How `rbb-engine` implements the model, and its current limits:
+
+- **Suit comparisons.** `x!=M` and `x=M` between two suit *variables* ask
+  whether they name the same suit. Every other comparison involving a suit is
+  about lengths: `S>=H` means "at least as many spades as hearts".
+- **Knowledge** holds ranges for HCP and each suit length, and whether the
+  hand is balanced. The deck constraint applies: lengths sum to 13, and a
+  balanced hand has 2 to 5 cards in every suit. All other terms (`has`,
+  `keycards`, `shape`, `quality`) are kept as constraints but do not narrow
+  the ranges. Partner's keycards are not tracked yet, so
+  `we.keycards(t)` is only known from my own count.
+- **Descriptiveness** is measured on a fixed sample of 20,000 random hands.
+  It is the share of hands that the call's `shows` rules out, among the
+  hands consistent with what the caller has already shown.
+- **Negative inference** is automatic. A call denies every candidate that
+  outranks it on priority and descriptiveness. It is skipped when the
+  denied rule has a term that cannot be resolved (for example `slam_try` or
+  `has(Q,t)` about another player's hand), because negating a partial
+  condition would claim more than is known.
+- **Forcing.** After `sets forcing=round`, partner may not pass at their next
+  turn. After `sets forcing=game`, neither partner may pass below game.
+- **Judgment hooks** `slam_try` and `grand_try` are placeholders (combined
+  HCP of at least 31 or 35) until real evaluators are written.
+- **No rule applies:** the engine passes and says so in the trace.
+- **Not yet implemented:** `replaces`, `raise` and `new_suit`, and the
+  conflict check between modules.
+
+## 12. Open questions
 
 1. **Relative call notation.** Are `cheapest(x)` / `jump(x)` enough, or do we
    need step notation (`step 1`, `step 2`) for relay systems and Kickback?
