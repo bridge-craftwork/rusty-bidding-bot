@@ -1,0 +1,25 @@
+# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+
+module notrump-base "1NT opening and natural responses"
+  needs  base
+  param  nt_min = notrump.one_nt.range_min default 15
+  param  nt_max = notrump.one_nt.range_max default 17
+
+when opening
+  1N  "{nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
+      shows hcp=nt_min..nt_max, balanced
+      # No priority needed: "15-17 balanced" says more than a 1-level suit
+      # opening, so descriptiveness ranks it first.
+
+# Responder. Ranges are relative to what partner showed, so they follow the
+# card: with 15-17 these are 16-17, 10-15, 8-9 and 0-7.
+after 1N (P)
+  4N  "Quantitative: invites 6NT"
+      shows hcp=33-partner.hcp.max..32-partner.hcp.min, balanced
+  3N  "To play"
+      shows hcp=25-partner.hcp.min..32-partner.hcp.max
+  2N  "Invitational"
+      shows hcp=23-partner.hcp.min..24-partner.hcp.min
+  P   "No game interest"
+      shows hcp<=22-partner.hcp.min
+      priority -10                     # only if nothing else fits

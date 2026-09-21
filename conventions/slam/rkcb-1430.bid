@@ -1,0 +1,37 @@
+# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+#
+# No auction patterns here. These rules key off auction state that other
+# modules set (trump agreed, game forcing), so they work after any auction
+# that reaches that state.
+
+module rkcb-1430 "Roman Keycard Blackwood (1430)"
+  card   slam.rkcb.style = 1430
+  needs  base
+
+# The ask.
+when we.trump is suit, we.forcing = game, !asked
+  4N  "Keycard ask in {trump}"
+      when  slam_try                   # judgment hook (Rust evaluator)
+      sets  ask=keycards(trump)
+
+# The answers (1430: 5C and 5D swapped relative to 3014).
+when asked keycards(t)
+  5C  "1 or 4 keycards"                shows keycards(t) in 1|4
+  5D  "0 or 3 keycards"                shows keycards(t) in 0|3
+  5H  "2 keycards, no {t} queen"       shows keycards(t)=2, !has(Q,t)
+  5S  "2 keycards and the {t} queen"   shows keycards(t)=2, has(Q,t)
+
+# The asker places the contract. we.keycards(t) combines my exact count
+# with partner's answer; the deck limit of 5 keycards resolves "1 or 4".
+when answered keycards(t)
+  7{t}  "Grand slam"
+        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+  6{t}  "Small slam: at most one keycard missing"
+        when we.keycards(t)>=4
+  P     "Sign off: partner's answer is in our suit"
+        when partner.last=5{t}, we.keycards(t).max<=3
+  5{t}  "Sign off: two keycards missing"
+        when we.keycards(t).max<=3     # filtered out as illegal when the answer
+                                       # is already 5{t}; P above covers that
+
+# TODO: queen ask (next step after 5C/5D), specific-king ask at 5NT.

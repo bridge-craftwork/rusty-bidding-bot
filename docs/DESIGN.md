@@ -70,7 +70,9 @@ development, and may later move to its own repo together with the card editor.
 | `crates/bidspec` | `bidspec` | Rule language: lexer, parser, AST, JSON IR, validation |
 | `conventions/` | — | `.bid` files: base systems and conventions |
 | `crates/engine` | `rbb-engine` | Rule interpreter, auction state, inference |
-| `crates/cli` | `rbb-cli` (binary `rbb`) | Bid PBN files; score against reference corpora |
+| `crates/compare` (later) | `rbb-compare` | Headless comparison against reference corpora: statistics, divergences, par |
+| `crates/cli` | `rbb-cli` (binary `rbb`) | Bid PBN files; `rbb compare` report |
+| `crates/workbench` (later) | `rbb-workbench` | Desktop GUI over `rbb-compare` (see [Comparison workbench](#comparison-workbench)) |
 | `crates/wasm` (later) | `rbb-wasm` | wasm-bindgen wrapper with a JSON boundary, same pattern as `bridge-rulebot/wasm` |
 
 Hands, calls, and auctions come from
@@ -114,8 +116,14 @@ so gaps in our schema are visible. Round-trip test: import all 18 files in
 
 ## The rule language (`bidspec`)
 
-**Decided:** a compact custom language that compiles to a JSON IR. The syntax
-below is a **first draft** to argue about.
+**Decided:** a compact custom language that compiles to a JSON IR.
+
+> **Superseded.** Rules cannot be keyed only by auction patterns (no one can
+> list every auction that reaches a Keycard 4NT). The current draft,
+> [LANGUAGE.md](LANGUAGE.md), builds knowledge about each hand and state for
+> each side call by call. Rules key off that knowledge and state, and the
+> engine ranks the candidate calls. The text below is the original sketch,
+> kept for history.
 
 ```
 # conventions/notrump/jacoby-transfers.bid
@@ -170,6 +178,10 @@ read the same compiled form.
 
 ## The engine
 
+> Updated model: see [LANGUAGE.md §1 and §7](LANGUAGE.md). Interpret each
+> call to build knowledge and state, then generate, filter, and rank the
+> candidate calls. The steps below are the original outline.
+
 For a given hand and auction:
 
 1. Build the **active module set** from the card: base system + every module
@@ -187,43 +199,124 @@ Output: the call, the rule that produced it (module + source line), the
 explanation, and the alert text. This matches `bridge-rulebot`'s reason-code
 style.
 
-## Testing against the corpora
+## Comparison workbench
 
-Reference data is in `Practice-Bidding-Scenarios`:
+Getting the engine right means many small, fast rounds: find where we differ
+from BBA, see why, fix a rule or an evaluator, and re-run. The workbench is
+built for that loop, and it is the milestone that comes right after the
+engine core.
 
-- `bba/`: 342 PBN files × 500 boards, all four seats bid by BBA. The file
-  header names the `.bbsa` cards used; each scenario's `btn/*.btn` names them
-  as `convention-card-ns/ew`. Alerts appear as `=n=` with `[Note "n:Stayman"]`.
+### Engine trace (a requirement from day one)
+
+For every call it makes, the engine returns a **trace** as well as the call:
+
+- the candidate calls, ranked, with the rule behind each (module, file, line);
+- for each losing candidate, why it lost (a `shows` or `when` clause failed,
+  or it ranked lower);
+- a snapshot of the knowledge about all four hands, and each side's auction
+  state (trump, forcing, pending ask), as they were **before** the call.
+
+The workbench shows the trace at the point of divergence, and the CLI and
+unit tests print it. It is serde data, so any tool can read it.
+
+### Reference data
+
+In `Practice-Bidding-Scenarios`:
+
+- `bba/`: 342 PBN files × 500 boards, all four seats bid by BBA. Each
+  scenario's `btn/*.btn` names the cards used, as `convention-card-ns/ew`;
+  we load the matching `.bbsa` files through our importer, so both engines
+  bid with the same agreements. Alerts appear as `=n=` with
+  `[Note "n:Stayman"]`.
 - `GIB/`: ~56 PBN files, ~30–50 boards each, BBO "BasicGIB 2/1", no alerts.
-
-The `rbb corpus` command replays each reference auction. At each turn of the
-side under test it asks the engine for a call, given that hand and the
-auction so far, and reports per scenario:
-
-- agreement rate of our call with the reference call;
-- position of the first difference;
-- whether our explanation matches the reference alert label.
-
-The output is a scoreboard of which scenarios pass. Differences that GIB and
-BBA also disagree on are informational, not failures.
+  This is a second opinion: when BBA and GIB disagree, matching either one is
+  acceptable.
 
 Reference outputs are pinned to a specific BBA library **by sha256**: builds
-that all report version 8740 bid differently.
+that all report version 8740 bid differently. New reference sets are made by
+dealing with **dealer3** (reusing the PBS dealer scripts) and bidding with
+`bba-cli`.
+
+### Comparison modes
+
+- **Full auction.** Our engine bids all four seats, then the auction and
+  final contract are compared with BBA's. This is the headline number.
+- **Replay.** At each turn of the side under test, give the engine BBA's
+  auction so far and compare its single call. A single early difference then
+  does not hide everything after it. This measures each call on its own and
+  works before the engine can bid every seat.
+
+### Statistics
+
+For each scenario and in total:
+
+- auction match %, final-contract match %;
+- **first divergence**: a histogram by call number, and, most useful for
+  deciding what to work on, a table of the **most common divergence
+  points**, grouped by the auction so far:
+
+  | Auction so far | BBA | Ours | Boards |
+  |---|---|---|---|
+  | `1N P 2C P` | 2H | 2S | 41 |
+  | `1S P 2N P` | 3C | 4S | 17 |
+
+- **Par comparison**, using bridge-solver in the same process
+  (`solve_dd_table` and `par()`): for each board, the double-dummy result of
+  our contract and of BBA's, each scored against par. Totals give an IMP
+  difference: **when we differ from BBA, who got closer to par?** A
+  divergence where we reach par more often may be an improvement, not a bug.
+  Double-dummy tables for the fixed corpus are cached by deal hash, so they
+  are computed once (~171k deals).
+
+### The GUI
+
+A desktop app in Rust. **Decided: egui/eframe**, the simplest choice for a
+data-heavy tool (tables, histograms, inspectors), and it can also build for
+the web. Bridge-Classroom's Vue components (hands, DD tables) are the path if this later becomes a web interface.
+
+- **Scenario list**: match %, contract match %, par IMPs vs BBA; sortable and
+  filterable.
+- **Divergence view** for the selected scenario, or all of them: histogram,
+  plus the divergence-point table above. Clicking a row lists its boards.
+- **Board detail (A/B)**:
+  - the four hands;
+  - both auctions side by side, with the first divergence highlighted;
+  - the engine trace at that call: ranked candidates, rules with
+    `file:line` (click to open in the editor), why each alternative lost;
+  - the knowledge table for all four seats, and each side's state;
+  - double-dummy table, par, and the result of each contract.
+- **Hot reload**: the app watches `conventions/` and re-runs automatically
+  when a `.bid` file is saved, then shows what changed ("+23 boards now match,
+  4 now differ"). Editing a rule and seeing the effect a few seconds later is
+  the point of the tool.
+
+A headless library does all the work. The GUI and a CLI report
+(`rbb compare`, for CI and quick checks) are thin layers over it.
+
+### Rule-level tests
+
+Next to each module, a `.test` file (format to be decided) holds cases such
+as `1N (P) ? with KJ84.Q52.K63.J72 → 2C`. The trace shows which rule answered.
+Later, **generated tests**: turn a rule's context and `shows` into a dealer3
+script, deal hands that fit, and check that the engine chooses that rule, or
+knowingly chooses a higher-ranked one.
 
 ## Milestones
 
-1. **Scaffold** (done): workspace, licenses, this document.
+1. **Scaffold** (done): workspace, licenses, design documents.
 2. **Card**: `bridge-card` schema covering the existing Bridge-Classroom seed
    card; `.bbsa` import with an unmapped-key report for all 18 PBS files.
 3. **Language**: `bidspec` parser and JSON IR for the draft syntax, with good
    error messages (file, line, what was expected).
-4. **First slice**: 1NT opening and uncontested responses (Stayman, Jacoby,
-   Texas, Smolen, 4-way transfers), end to end through the engine.
-5. **Scoreboard**: `rbb corpus` against the 1NT scenarios in `bba/`.
-6. **WASM**: browser build, wired into Bridge-Classroom beside `bbaClient.js`.
-7. Then widen: major openings, minor openings, two-level openings, slam
-   bidding, and finally competitive bidding. Competitive bidding is the
-   hardest part and should wait until the rule format has held up.
+4. **Engine core with trace**: knowledge store, auction state, ranking, and
+   the 1NT modules in `conventions/` (1NT, Stayman, transfers).
+5. **Compare library + CLI**: replay and full-auction modes against `bba/`,
+   divergence statistics, and par via bridge-solver with a DD cache.
+6. **Workbench GUI**: scenario list, divergence view, A/B board detail, hot
+   reload.
+7. **Iterate**: widen coverage in the workbench. Major openings, minor
+   openings, two-level openings, slam bidding, then competitive bidding.
+8. **WASM**: browser build, wired into Bridge-Classroom beside `bbaClient.js`.
 
 ## Open questions
 

@@ -1,0 +1,18 @@
+# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+
+module jacoby-2nt "Jacoby 2NT"
+  card   major_openings.jacoby_2nt.play
+  needs  base
+
+after 1M (P) when !passed_hand
+  2N  "Jacoby 2NT: 4+ {M}, game forcing"  alert
+      shows M>=4, tp(M)>=13
+      sets  trump=M, forcing=game, ask=jacoby   # trump agreed from here on
+
+# Opener's answers.
+after 1M (P) 2N (P)
+  3x  "Singleton or void in {x}"      shows x<=1                when x!=M
+  4x  "Good 5-card side suit"         shows x>=5, quality(x)>=good  when x!=M
+  3M  "18+, no shortness"             shows hcp>=18, shortest>=2
+  3N  "15-17, no shortness"           shows hcp=15..17, shortest>=2
+  4M  "Minimum, no shortness"         shows hcp<=14, shortest>=2

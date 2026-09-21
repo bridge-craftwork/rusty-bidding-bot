@@ -1,0 +1,18 @@
+# Draft syntax (docs/LANGUAGE.md). Not yet parsed.
+
+module stayman "Stayman"
+  card   notrump.stayman.play
+  needs  notrump-base
+
+after 1N (P)
+  2C  "Stayman: asks for a 4-card major"  alert
+      shows hcp>=8, H=4 | S=4          # 5-4 in the majors included (Smolen)
+      when  !shape 4333                # 4-3-3-3 just bids notrump; not promised
+      sets  forcing=round, ask=majors
+      priority 1                       # ahead of transfers with 5-4 majors
+
+# Opener. With both majors the first rule that fits (2H) wins.
+after 1N (P) 2C (P)
+  2H  "4+ hearts"                 shows H>=4
+  2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
+  2D  "No 4-card major"           shows H<=3, S<=3
