@@ -1,0 +1,10 @@
+[package]
+name = "bidspec"
+description = "Rule language for bridge bidding systems and conventions"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+# Part of the convention layer: must not depend on the engine.
+[dependencies]

@@ -1,0 +1,12 @@
+[package]
+name = "rbb-engine"
+description = "Rule-interpreting bridge bidding engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+bridge-types.workspace = true
+bridge-card.workspace = true
+bidspec.workspace = true

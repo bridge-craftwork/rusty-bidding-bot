@@ -1,0 +1,14 @@
+[package]
+name = "rbb-cli"
+description = "Command-line bidding and corpus scoring for rusty-bidding-bot"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "rbb"
+path = "src/main.rs"
+
+[dependencies]
+rbb-engine.workspace = true

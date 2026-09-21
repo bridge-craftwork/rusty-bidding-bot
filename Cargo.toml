@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/cli"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/bridge-craftwork/rusty-bidding-bot"
+
+[workspace.dependencies]
+bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types" }
+bridge-card = { path = "crates/bridge-card" }
+bidspec = { path = "crates/bidspec" }
+rbb-engine = { path = "crates/engine" }

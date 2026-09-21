@@ -1,0 +1,20 @@
+# Draft syntax; see docs/DESIGN.md, "The rule language". Not yet parsed.
+
+module jacoby-transfers
+  title  "Jacoby Transfers"
+  card   notrump.transfers.jacoby
+  needs  notrump-base
+
+# Responder, after partner opens 1NT and RHO passes.
+after 1N (P)
+  2D  "Transfer to hearts"   alert  shows H>=5
+  2H  "Transfer to spades"   alert  shows S>=5
+
+# Opener: super-accept with 4-card support and a maximum, else complete.
+after 1N (P) 2D (P)
+  3H  "Super-accept"         shows H>=4, hcp=max
+  2H  "Completes transfer"
+
+after 1N (P) 2H (P)
+  3S  "Super-accept"         shows S>=4, hcp=max
+  2S  "Completes transfer"
