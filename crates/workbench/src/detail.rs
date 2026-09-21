@@ -42,12 +42,14 @@ impl Detail {
                 }
             }
         };
-        let reading = Some(engine.interpret(b.dealer, b.vul, &b.reference));
+        let scoring = b.scoring.unwrap_or_default();
+        let reading = Some(engine.interpret(b.dealer, b.vul, scoring, &b.reference));
         let decision = match (b.first_divergence, &deal) {
             (Some(d), Some(deal)) => Some(engine.bid(
                 deal.hand(caller(b.dealer, d)),
                 b.dealer,
                 b.vul,
+                scoring,
                 &b.reference[..d],
             )),
             _ => None,
@@ -66,11 +68,13 @@ impl Detail {
         ui.horizontal_wrapped(|ui| {
             ui.heading(format!("{} — board {}", b.scenario, b.board));
             ui.label(format!(
-                "dealer {}   vul {}   NS card {}   EW card {}",
+                "dealer {}   vul {}   scoring {}   NS card {}   EW card {}   reference: {}",
                 b.dealer.to_char(),
                 b.vul.to_pbn(),
+                rbb_compare::scoring_name(b),
                 b.ns_card,
-                b.ew_card
+                b.ew_card,
+                b.generator
             ));
         });
         if let Some(e) = &self.error {

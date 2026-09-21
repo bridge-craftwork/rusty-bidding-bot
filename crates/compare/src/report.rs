@@ -49,16 +49,42 @@ pub struct Stats {
     pub first_divergence: BTreeMap<usize, usize>,
     pub par: ParTally,
     pub runaway: usize,
+    /// Replay agreement split by the conditions each call was made under,
+    /// to see whether they matter: caller not vulnerable / vulnerable, the
+    /// board's scoring, and the reference file's generator.
+    pub by_caller_vul: [Agreement; 2],
+    pub by_scoring: BTreeMap<String, Agreement>,
+    pub by_generator: BTreeMap<String, Agreement>,
+    /// Boards by the reference's scoring and generator.
+    pub boards_by_scoring: BTreeMap<String, usize>,
+    pub boards_by_generator: BTreeMap<String, usize>,
 }
 
 impl Stats {
     fn add(&mut self, b: &BoardResult) {
         self.boards += 1;
+        let scoring = scoring_name(b);
+        *self.boards_by_scoring.entry(scoring.clone()).or_default() += 1;
+        *self
+            .boards_by_generator
+            .entry(b.generator.clone())
+            .or_default() += 1;
         let mut seat = b.dealer;
         for (r, e) in b.reference.iter().zip(&b.replay) {
             let side = matches!(seat, Direction::East | Direction::West) as usize;
+            let agree = (r == e) as usize;
             self.calls[side].total += 1;
-            self.calls[side].agree += (r == e) as usize;
+            self.calls[side].agree += agree;
+            let vul = b.vul.is_vulnerable(seat) as usize;
+            self.by_caller_vul[vul].total += 1;
+            self.by_caller_vul[vul].agree += agree;
+            for a in [
+                self.by_scoring.entry(scoring.clone()).or_default(),
+                self.by_generator.entry(b.generator.clone()).or_default(),
+            ] {
+                a.total += 1;
+                a.agree += agree;
+            }
             seat = seat.next();
         }
         match b.first_divergence {
@@ -93,6 +119,16 @@ impl Stats {
 
     pub fn contract_rate(&self) -> f64 {
         ratio(self.contracts_match, self.boards)
+    }
+}
+
+/// "MP", "IMP", ... or "not recorded".
+pub fn scoring_name(b: &BoardResult) -> String {
+    match b.scoring {
+        Some(bridge_types::ScoringMethod::Matchpoints) => "MP".into(),
+        Some(bridge_types::ScoringMethod::IMP) => "IMP".into(),
+        Some(other) => format!("{other:?}"),
+        None => "not recorded (assumed MP)".into(),
     }
 }
 

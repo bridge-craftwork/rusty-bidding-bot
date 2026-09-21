@@ -189,7 +189,9 @@ Because it becomes an HCP range, partner infers my strength from it too.
 **Auction state:** `opening` (no one has bid yet), `we.trump`, `we.forcing`
 (`none | round | game`), `asked <kind>` (partner's pending question to me),
 `answered <kind>` (partner answered my question), `partner.last`, `opener`,
-`partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`.
+`partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`,
+`imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
+board-a-match).
 
 **Operators:** `!` (not), `|` (or), `,` (and), `a..b` ranges, `in 1|4` sets,
 and arithmetic on numbers and `.min` / `.max`.

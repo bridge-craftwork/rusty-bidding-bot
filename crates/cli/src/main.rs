@@ -63,6 +63,9 @@ enum Command {
         /// Vulnerability: None, NS, EW or All.
         #[arg(short, long, default_value = "None")]
         vul: String,
+        /// Scoring: MP or IMP.
+        #[arg(short, long, default_value = "MP")]
+        scoring: String,
         /// Card for both sides (.bbsa or card JSON).
         #[arg(short, long)]
         card: PathBuf,
@@ -159,6 +162,7 @@ fn run(cli: Cli) -> Result<()> {
             auction,
             dealer,
             vul,
+            scoring,
             card,
             ew_card,
             rules,
@@ -168,6 +172,7 @@ fn run(cli: Cli) -> Result<()> {
             &auction,
             dealer,
             &vul,
+            &scoring,
             &card,
             ew_card.as_deref(),
             &rules,
@@ -227,6 +232,31 @@ fn compare(
         .map(|(i, n)| format!("{}:{n}", i + 1))
         .collect();
     println!("first divergence at call #: {}", hist.join("  "));
+
+    // The conditions the reference auctions were made under.
+    let list = |m: &std::collections::BTreeMap<String, usize>| {
+        m.iter()
+            .map(|(k, v)| format!("{k} {v}"))
+            .collect::<Vec<_>>()
+            .join(", ")
+    };
+    let rates = |m: &std::collections::BTreeMap<String, rbb_compare::Agreement>| {
+        m.iter()
+            .map(|(k, a)| format!("{k} {}", pct(a.rate()).trim()))
+            .collect::<Vec<_>>()
+            .join(", ")
+    };
+    println!("\nreference conditions (boards):");
+    println!("  scoring:    {}", list(&t.boards_by_scoring));
+    println!("  generator:  {}", list(&t.boards_by_generator));
+    println!("calls agreeing, by condition:");
+    println!(
+        "  caller not vulnerable {}   vulnerable {}",
+        pct(t.by_caller_vul[0].rate()).trim(),
+        pct(t.by_caller_vul[1].rate()).trim()
+    );
+    println!("  scoring:    {}", rates(&t.by_scoring));
+    println!("  generator:  {}", rates(&t.by_generator));
 
     println!("\nmost common divergence points:");
     println!(
@@ -301,12 +331,14 @@ fn call(
     auction: &str,
     dealer: char,
     vul: &str,
+    scoring: &str,
     card: &Path,
     ew_card: Option<&Path>,
     rules: &Path,
     json: bool,
 ) -> Result<()> {
-    use bridge_types::{Call, Direction, Hand, Vulnerability};
+    use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
+    let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
     let hand = Hand::from_pbn(hand).ok_or("hand must be PBN S.H.D.C, e.g. AK52.KJ7.Q94.K83")?;
     let calls = auction
         .split_whitespace()
@@ -327,7 +359,7 @@ fn call(
             .join("\n")
     })?;
     let engine = rbb_engine::Engine::new(&ns, &ew, &modules);
-    let d = engine.bid(&hand, dealer, vul, &calls);
+    let d = engine.bid(&hand, dealer, vul, scoring, &calls);
     if json {
         println!("{}", serde_json::to_string_pretty(&d)?);
         return Ok(());

@@ -5,7 +5,7 @@ use std::sync::{Arc, Mutex};
 
 use bidspec::ast::{Alert, CallSpec, Expr, PatternCall, StrainSpec};
 use bridge_card::Card;
-use bridge_types::{Call, Direction, Hand, Vulnerability};
+use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
 use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, Val};
@@ -276,8 +276,8 @@ impl Engine {
     }
 
     /// An empty auction.
-    pub fn start(&self, dealer: Direction, vul: Vulnerability) -> Position {
-        Position::new(dealer, vul)
+    pub fn start(&self, dealer: Direction, vul: Vulnerability, scoring: ScoringMethod) -> Position {
+        Position::new(dealer, vul, scoring)
     }
 
     /// Interpret one more call: what it shows, and its effect on the state.
@@ -310,9 +310,10 @@ impl Engine {
         &self,
         dealer: Direction,
         vul: Vulnerability,
+        scoring: ScoringMethod,
         calls: &[Call],
     ) -> Interpretation {
-        let mut pos = self.start(dealer, vul);
+        let mut pos = self.start(dealer, vul, scoring);
         let steps = calls.iter().map(|c| self.advance(&mut pos, c)).collect();
         Interpretation {
             steps,
@@ -326,9 +327,10 @@ impl Engine {
         hand: &Hand,
         dealer: Direction,
         vul: Vulnerability,
+        scoring: ScoringMethod,
         calls: &[Call],
     ) -> Decision {
-        let auction = self.interpret(dealer, vul, calls);
+        let auction = self.interpret(dealer, vul, scoring, calls);
         let c = self.choose(&auction.position, hand);
         Decision {
             call: c.call,

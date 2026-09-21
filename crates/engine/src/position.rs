@@ -1,7 +1,7 @@
 //! The state of an auction at one point: the calls so far, what is known
 //! about each hand, and each side's auction state.
 
-use bridge_types::{Call, Direction, Strain, Vulnerability};
+use bridge_types::{Call, Direction, ScoringMethod, Strain, Vulnerability};
 use serde::Serialize;
 
 use crate::knowledge::SeatKnowledge;
@@ -49,6 +49,8 @@ pub fn side(d: Direction) -> usize {
 pub struct Position {
     pub dealer: Direction,
     pub vul: Vulnerability,
+    /// How the board is scored. Rules see it as `imps` / `matchpoints`.
+    pub scoring: ScoringMethod,
     pub calls: Vec<Call>,
     /// By `Direction::to_index`.
     pub knowledge: [SeatKnowledge; 4],
@@ -57,10 +59,11 @@ pub struct Position {
 }
 
 impl Position {
-    pub fn new(dealer: Direction, vul: Vulnerability) -> Position {
+    pub fn new(dealer: Direction, vul: Vulnerability, scoring: ScoringMethod) -> Position {
         Position {
             dealer,
             vul,
+            scoring,
             calls: Vec::new(),
             knowledge: Default::default(),
             sides: Default::default(),
@@ -125,6 +128,15 @@ impl Position {
     /// Has the side of `d` made a bid, double or redouble?
     pub fn side_acted(&self, d: Direction) -> bool {
         (0..self.calls.len()).any(|i| side(self.caller(i)) == side(d) && !self.calls[i].is_pass())
+    }
+
+    /// Scored by total points, where a game bonus is worth stretching for:
+    /// IMPs and the like. Matchpoints and board-a-match are not.
+    pub fn is_imps(&self) -> bool {
+        !matches!(
+            self.scoring,
+            ScoringMethod::Matchpoints | ScoringMethod::BAM
+        )
     }
 
     pub fn is_vulnerable(&self, d: Direction) -> bool {

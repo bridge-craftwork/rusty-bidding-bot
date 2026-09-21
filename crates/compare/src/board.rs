@@ -1,7 +1,7 @@
 //! Comparing one board: replay the reference auction through the engine, then
 //! let the engine finish the auction on its own from the first difference.
 
-use bridge_types::{Auction, Board, Call, Direction, FinalContract, Vulnerability};
+use bridge_types::{Auction, Board, Call, Direction, FinalContract, ScoringMethod, Vulnerability};
 use rbb_engine::Engine;
 use serde::Serialize;
 
@@ -26,6 +26,11 @@ pub struct BoardResult {
     pub board: String,
     pub dealer: Direction,
     pub vul: Vulnerability,
+    /// The board's `[Scoring]` tag; `None` when the file does not record it
+    /// (the engine then assumes matchpoints, bba-cli's default).
+    pub scoring: Option<ScoringMethod>,
+    /// What produced the reference auction (see `Scenario::generator`).
+    pub generator: String,
     /// PBN deal, North first.
     pub deal: String,
     /// The reference auction and its alert texts (`[Note]`s).
@@ -74,7 +79,8 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     }
     let hand = |d: Direction| board.deal.hand(d);
 
-    let mut pos = engine.start(dealer, board.vulnerable);
+    let scoring = board.extra_tag("Scoring").and_then(ScoringMethod::from_pbn);
+    let mut pos = engine.start(dealer, board.vulnerable, scoring.unwrap_or_default());
     let mut replay = Vec::with_capacity(reference.len());
     let mut at_divergence = None;
     for (i, call) in reference.iter().enumerate() {
@@ -120,6 +126,8 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             .unwrap_or_default(),
         dealer,
         vul: board.vulnerable,
+        scoring,
+        generator: String::new(),
         deal: board.deal.to_pbn(Direction::North),
         reference_alerts: (0..auction.calls.len())
             .map(|i| alert_text(auction, i))

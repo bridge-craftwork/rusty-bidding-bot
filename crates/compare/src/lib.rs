@@ -19,7 +19,7 @@ use rbb_engine::Engine;
 use serde::Serialize;
 
 pub use board::{BoardResult, ParComparison};
-pub use report::{short, summarize, Agreement, Divergence, ParTally, Stats, Summary};
+pub use report::{scoring_name, short, summarize, Agreement, Divergence, ParTally, Stats, Summary};
 pub use scenario::{discover, Scenario};
 
 #[derive(Debug, Clone)]
@@ -124,6 +124,7 @@ pub fn run_with(
         .filter_map(|(i, (scenario, engine, board))| {
             let mut r = board::compare(engine, &scenario.name, board)?;
             r.ns_card = scenario.ns_card.clone();
+            r.generator = scenario.generator.clone();
             r.ew_card = scenario.ew_card.clone();
             if opts.par && !r.contracts_match() {
                 board::add_par(&mut r, board, &cache);

@@ -497,6 +497,15 @@ impl App {
                 ));
                 ui.separator();
                 ui.label(format!("identical auctions {}", pct(t.auction_rate())));
+                ui.label(format!(
+                    "calls by caller not vul {} / vul {}",
+                    pct(t.by_caller_vul[0].rate()),
+                    pct(t.by_caller_vul[1].rate())
+                ))
+                .on_hover_text(format!(
+                    "Reference boards by scoring: {:?}\nBy generator: {:?}",
+                    t.boards_by_scoring, t.boards_by_generator
+                ));
                 ui.label(format!("same contract {}", pct(t.contract_rate())));
                 if t.par.scored > 0 {
                     ui.separator();

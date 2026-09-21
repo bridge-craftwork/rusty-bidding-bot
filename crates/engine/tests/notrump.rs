@@ -5,7 +5,7 @@ use std::path::Path;
 use std::sync::OnceLock;
 
 use bridge_card::bbsa;
-use bridge_types::{Call, Direction, Hand, Strain, Vulnerability};
+use bridge_types::{Call, Direction, Hand, ScoringMethod, Strain, Vulnerability};
 use rbb_engine::{Decision, Engine, Range};
 
 fn engine() -> &'static Engine {
@@ -34,6 +34,7 @@ fn bid(hand: &str, auction: &str) -> Decision {
         &Hand::from_pbn(hand).unwrap(),
         Direction::South,
         Vulnerability::None,
+        ScoringMethod::Matchpoints,
         &calls(auction),
     )
 }
@@ -127,6 +128,7 @@ fn interpretation_tracks_what_each_call_showed() {
     let i = engine().interpret(
         Direction::South,
         Vulnerability::None,
+        ScoringMethod::Matchpoints,
         &calls("1NT Pass 2NT Pass"),
     );
     let south = &i.steps[0].knowledge;
@@ -140,7 +142,12 @@ fn interpretation_tracks_what_each_call_showed() {
 #[test]
 fn negative_inference_from_the_opening_pass() {
     // West passes as dealer... here South deals and passes: denies an opening.
-    let i = engine().interpret(Direction::South, Vulnerability::None, &calls("Pass"));
+    let i = engine().interpret(
+        Direction::South,
+        Vulnerability::None,
+        ScoringMethod::Matchpoints,
+        &calls("Pass"),
+    );
     let south = &i.steps[0].knowledge;
     assert!(south.hcp.hi <= 11, "{south:#?}");
 }
@@ -195,6 +202,7 @@ fn strength_bands_follow_what_partner_showed() {
     let i = engine().interpret(
         Direction::South,
         Vulnerability::None,
+        ScoringMethod::Matchpoints,
         &calls("1NT Pass 2D Pass 2H Pass 2NT"),
     );
     let north = &i.steps[6].knowledge;

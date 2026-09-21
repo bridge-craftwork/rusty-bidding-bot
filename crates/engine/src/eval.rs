@@ -540,6 +540,8 @@ impl<'a> Ctx<'a> {
                 Val::Num(Range::point(seat))
             }
             "vul" => Val::Bool(Tri::from_bool(self.pos.is_vulnerable(self.actor))),
+            "imps" => Val::Bool(Tri::from_bool(self.pos.is_imps())),
+            "matchpoints" => Val::Bool(Tri::from_bool(!self.pos.is_imps())),
             "trump" => self.we_attr(seg, b)?,
             // Judgment hooks. Placeholders until real evaluators are written.
             "slam_try" => {
