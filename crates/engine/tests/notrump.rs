@@ -209,3 +209,22 @@ fn strength_bands_follow_what_partner_showed() {
     assert_eq!(north.hcp, Range::new(8, 9));
     assert_eq!(north.len[2], Range::new(5, 5));
 }
+
+#[test]
+fn opener_answers_invitations() {
+    // 1NT-2NT: accept only with a maximum (Basic_NT board 51: 17 HCP);
+    // BBA declines with 16.
+    assert_call(&bid("KQJ.KJ73.AK5.T52", "1NT Pass 2NT Pass"), "3NT"); // 17
+    assert_call(&bid("KQJ.KJ73.AQ5.T52", "1NT Pass 2NT Pass"), "Pass"); // 16
+                                                                        // After a transfer and 2NT (five hearts): fit decides the strain.
+    let inv = "1NT Pass 2D Pass 2H Pass 2NT Pass";
+    assert_call(&bid("KQ5.KJ7.AK53.J52", inv), "4H"); // 17, three hearts
+    assert_call(&bid("KQ5.KJ7.AQ53.T52", inv), "3H"); // 15, three hearts
+    assert_call(&bid("KQ53.KJ.AK53.J52", inv), "3NT"); // 17, two hearts
+    assert_call(&bid("KQ53.KJ.AQ53.T52", inv), "Pass"); // 15, two hearts
+                                                        // After 3H (six hearts) two-card support is a fit.
+    assert_call(
+        &bid("KQ53.KJ.AK53.J52", "1NT Pass 2D Pass 2H Pass 3H Pass"),
+        "4H",
+    );
+}

@@ -30,7 +30,9 @@ when answered transfer(M)
       when partner.M>=4                        # after a 2S or 2NT super-accept
   P   "Weak: play here"                        shows strength=signoff
   2N  "Invitational, exactly 5 {M}"            shows M=5, balanced, strength=invite
+      sets ask=invite(M)
   3M  "Invitational, 6+ {M}"                   shows M>=6, strength=invite
+      sets ask=invite(M)
   3N  "Game values, 5 {M}: choose the game"    shows M=5, balanced, strength=game
       when maybe partner.M<=2                  # only while the fit is unknown
   4M  "Game values, 6+ {M}"                    shows M>=6, strength=game
@@ -39,3 +41,12 @@ when answered transfer(M)
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
       sets forcing=game
   4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
+
+# Opener answers the invitation (2NT with five, 3M with six). Accept only
+# when game is certain; play in the major with an eight-card fit, which is
+# 3+ cards opposite five and 2+ opposite six.
+when asked invite(M)
+  4M  "Accepts, in the fit"             shows M>=8-partner.M.min, strength>=game
+  3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
+  3M  "Declines, in the fit"            shows M>=8-partner.M.min, strength<=invite
+  P   "Declines"                        shows strength<=invite

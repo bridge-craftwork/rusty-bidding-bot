@@ -20,6 +20,13 @@ after 1N (P)
       shows hcp=25-partner.hcp.min..32-partner.hcp.max
   2N  "Invitational"
       shows hcp=23-partner.hcp.min..24-partner.hcp.min
+      sets  ask=nt_invite
   P   "No game interest"
       shows hcp<=22-partner.hcp.min
       priority -10                     # only if nothing else fits
+
+# Opener answers the invitation: accept only when game is certain (17 with
+# an 8-9 invite), as BBA does; decline otherwise.
+when asked nt_invite
+  3N  "Accepts the invitation"          shows strength>=game
+  P   "Declines: not a maximum"         shows strength<=invite
