@@ -400,6 +400,9 @@ impl eframe::App for App {
     }
 
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        // Text in the lists must not take the click from its row (selectable
+        // labels would); the detail panel turns selection back on for copying.
+        ui.style_mut().interaction.selectable_labels = false;
         egui::Panel::top("toolbar").show(ui, |ui| self.toolbar(ui));
         egui::Panel::left("scenarios")
             .resizable(true)
@@ -409,6 +412,7 @@ impl eframe::App for App {
             .resizable(true)
             .default_size(470.0)
             .show(ui, |ui| {
+                ui.style_mut().interaction.selectable_labels = true;
                 egui::ScrollArea::both().id_salt("detail-scroll").show(ui, |ui| {
                 let action = match (&self.detail, self.board, &self.loaded) {
                     (Some(d), Some(i), Some(l)) => d.ui(ui, &l.report.boards[i]),
@@ -575,6 +579,8 @@ impl App {
         {
             show_all = true;
         }
+        // No gap between rows, so every point of a row is clickable.
+        ui.spacing_mut().item_spacing.y = 0.0;
         TableBuilder::new(ui)
             .id_salt("scenario-table")
             .striped(true)
@@ -596,7 +602,7 @@ impl App {
                 });
             })
             .body(|body| {
-                body.rows(18.0, rows.len(), |mut row| {
+                body.rows(20.0, rows.len(), |mut row| {
                     let s = rows[row.index()];
                     row.set_selected(self.scenario.as_deref() == Some(&s.name));
                     row.col(|ui| {
@@ -725,6 +731,8 @@ impl App {
             RichText::new(format!("{} divergence points, {total} boards", shown.len())).weak(),
         );
         let mut clicked = None;
+        // No gap between rows, so every point of a row is clickable.
+        ui.spacing_mut().item_spacing.y = 0.0;
         TableBuilder::new(ui)
             .id_salt("divergence-table")
             .striped(true)
@@ -741,7 +749,7 @@ impl App {
                 }
             })
             .body(|body| {
-                body.rows(18.0, shown.len(), |mut row| {
+                body.rows(20.0, shown.len(), |mut row| {
                     let i = shown[row.index()];
                     let d = &self.divs[i];
                     row.set_selected(self.div == Some(i));
@@ -796,6 +804,8 @@ impl App {
     fn board_table(&mut self, ui: &mut egui::Ui, list: &[usize], salt: &str) {
         let Some(l) = &self.loaded else { return };
         let mut clicked = None;
+        // No gap between rows, so every point of a row is clickable.
+        ui.spacing_mut().item_spacing.y = 0.0;
         TableBuilder::new(ui)
             .id_salt(salt)
             .striped(true)
@@ -827,7 +837,7 @@ impl App {
                 }
             })
             .body(|body| {
-                body.rows(18.0, list.len(), |mut row| {
+                body.rows(20.0, list.len(), |mut row| {
                     let i = list[row.index()];
                     let b = &l.report.boards[i];
                     row.set_selected(self.board == Some(i));

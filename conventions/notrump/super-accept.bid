@@ -1,0 +1,13 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+
+module super-accept "Super-accepting a Jacoby transfer"
+  card   notrump.transfers.super_accept
+  needs  jacoby-transfers
+
+# Four-card support: jump in the major. With superaccept-doubleton on as well,
+# maximums with a doubleton choose the more descriptive doubleton bids, so
+# this is left for minimums and 4-3-3-3 hands.
+after 1N (P) 2D (P)
+  3H  "Super-accept: 4+ hearts"   shows H>=4
+after 1N (P) 2H (P)
+  3S  "Super-accept: 4+ spades"   shows S>=4

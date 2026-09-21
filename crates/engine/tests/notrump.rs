@@ -186,9 +186,10 @@ fn responder_rebids_after_a_completed_transfer() {
 
 #[test]
 fn strength_bands_follow_what_partner_showed() {
-    // After a super-accept opener is known to hold exactly 17, so there is
-    // no invitational band: 9 HCP is a game hand.
-    let d = bid("82.KJ973.K94.Q83", "1NT Pass 2D Pass 3H Pass");
+    // After a maximum super-accept (2NT: 16-17 with four hearts) the
+    // invitational band shrinks to exactly 8, so 9 HCP is a game hand, in
+    // the known fit.
+    let d = bid("82.KJ973.K94.Q83", "1NT Pass 2D Pass 2NT Pass");
     assert_call(&d, "4H");
     // What an invitational 2NT shows, as partner sees it: 8-9 HCP, 5 hearts.
     let i = engine().interpret(

@@ -10,14 +10,12 @@ after 1N (P)
   2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)
   2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)
 
-# Opener: super-accept with 4-card support and a maximum, else complete.
-# `shown.hcp` is what I have already shown (here, the 1NT range).
+# Opener completes the transfer. Super-accepts are separate modules
+# (super-accept.bid, superaccept-doubleton.bid), switched on by the card.
 after 1N (P) 2D (P)
-  3H  "Super-accept"        shows H>=4, hcp>=shown.hcp.max
   2H  "Completes transfer"
 
 after 1N (P) 2H (P)
-  3S  "Super-accept"        shows S>=4, hcp>=shown.hcp.max
   2S  "Completes transfer"
 
 # Responder's second call, once opener has answered. There is no auction
@@ -28,6 +26,8 @@ after 1N (P) 2H (P)
 # 15-17 1NT, invite is 8-9 and game 10-15; after a super-accept (a known
 # maximum) there is no invitational band, so invitational hands bid game.
 when answered transfer(M)
+  3M  "Sign off in the known fit"              shows strength=signoff
+      when partner.M>=4                        # after a 2S or 2NT super-accept
   P   "Weak: play here"                        shows strength=signoff
   2N  "Invitational, exactly 5 {M}"            shows M=5, balanced, strength=invite
   3M  "Invitational, 6+ {M}"                   shows M>=6, strength=invite

@@ -1,0 +1,16 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+
+module superaccept-doubleton "Superaccept doubleton"
+  card   notrump.transfers.super_accept_doubleton
+  needs  super-accept
+
+# Four-card support, a maximum and a doubleton: bid the doubleton when it is
+# cheaper than 2NT, otherwise 2NT. (BBA calls this "Extended acceptance".)
+after 1N (P) 2D (P)
+  2S  "Super-accept: 4+ hearts, maximum, doubleton spade"  alert
+      shows H>=4, hcp>=16, S=2
+  2N  "Super-accept: 4+ hearts, maximum, a doubleton"      alert
+      shows H>=4, hcp>=16, shortest=2
+after 1N (P) 2H (P)
+  2N  "Super-accept: 4+ spades, maximum, a doubleton"      alert
+      shows S>=4, hcp>=16, shortest=2
