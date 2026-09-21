@@ -90,12 +90,32 @@ const SYMBOLS: &[&str] = &[
     "fair",
     "good",
     "excellent",
+    "signoff",
+    "invite",
+    "slam_invite",
+    "slam",
     "A",
     "K",
     "Q",
     "J",
     "T",
 ];
+/// Strength bands, weakest first (see `Ctx::strength_as_hcp`).
+pub const BANDS: [&str; 5] = ["signoff", "invite", "game", "slam_invite", "slam"];
+/// Combined HCP for game and for small slam.
+const GAME: i32 = 25;
+const SLAM: i32 = 33;
+
+fn flip(op: CmpOp) -> CmpOp {
+    match op {
+        CmpOp::Lt => CmpOp::Gt,
+        CmpOp::Le => CmpOp::Ge,
+        CmpOp::Gt => CmpOp::Lt,
+        CmpOp::Ge => CmpOp::Le,
+        o => o,
+    }
+}
+
 const SELF_ATTRS: &[&str] = &[
     "hcp",
     "balanced",
@@ -167,6 +187,9 @@ impl<'a> Ctx<'a> {
             Expr::Not { expr } => Val::Bool(self.cond(expr, b)?.negate()),
             Expr::Maybe { expr } => Val::Bool(Tri::from_bool(self.cond(expr, b)? != Tri::False)),
             Expr::Cmp { cmp, lhs, rhs } => {
+                if let Some(e) = self.strength_as_hcp(*cmp, lhs, rhs)? {
+                    return self.eval(&e, b);
+                }
                 let (l, r) = (self.eval(lhs, b)?, self.eval(rhs, b)?);
                 Val::Bool(self.compare(*cmp, &l, &r)?)
             }
@@ -287,16 +310,91 @@ impl<'a> Ctx<'a> {
                         && !b.contains_key(&path[0].name)
                         && path[0].args.is_none() =>
                 {
-                    b.insert(path[0].name.clone(), Val::Strain(*actual));
+                    let v = suit_of_strain(*actual).map_or(Val::Strain(*actual), Val::Suit);
+                    b.insert(path[0].name.clone(), v);
                 }
                 other => {
-                    if self.eval(other, b)? != Val::Strain(*actual) {
+                    if strain_value(&self.eval(other, b)?) != Some(*actual) {
                         return Ok(false);
                     }
                 }
             }
         }
         Ok(true)
+    }
+
+    /// `strength <op> <band>` as a condition on the actor's HCP, given the
+    /// range partner has shown: game needs 25 combined, slam 33. With
+    /// partner's HCP p (a range):
+    ///
+    /// | band        | my HCP                         |
+    /// |-------------|--------------------------------|
+    /// | signoff     | at most 24 - p.max             |
+    /// | invite      | 25 - p.max ..= 24 - p.min      |
+    /// | game        | 25 - p.min ..= 32 - p.max      |
+    /// | slam_invite | 33 - p.max ..= 32 - p.min      |
+    /// | slam        | at least 33 - p.min            |
+    ///
+    /// A band can be empty (no invitation once partner's range is exact).
+    fn strength_as_hcp(&self, cmp: CmpOp, lhs: &Expr, rhs: &Expr) -> R<Option<Expr>> {
+        let name = |e: &Expr| match e {
+            Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
+                Some(path[0].name.clone())
+            }
+            _ => None,
+        };
+        let (band, cmp) = match (name(lhs).as_deref(), name(rhs)) {
+            (Some("strength"), Some(band)) => (band, cmp),
+            (Some(band), Some(s)) if s == "strength" => (band.to_string(), flip(cmp)),
+            _ => return Ok(None),
+        };
+        let i = BANDS
+            .iter()
+            .position(|b| *b == band)
+            .ok_or_else(|| format!("`{band}` is not a strength band ({})", BANDS.join(", ")))?
+            as i32;
+        let p = self.pos.knowledge(self.partner()).hcp;
+        let lo = |i: i32| match i {
+            0 => 0,
+            1 => GAME - p.hi,
+            2 => GAME - p.lo,
+            3 => SLAM - p.hi,
+            _ => SLAM - p.lo,
+        };
+        let hi = |i: i32| match i {
+            0 => GAME - 1 - p.hi,
+            1 => GAME - 1 - p.lo,
+            2 => SLAM - 1 - p.hi,
+            3 => SLAM - 1 - p.lo,
+            _ => 40,
+        };
+        let hcp = || Box::new(path_expr("hcp"));
+        let int = |v: i32| Box::new(Expr::Int { value: v as i64 });
+        let at_least = |v: i32| Expr::Cmp {
+            cmp: CmpOp::Ge,
+            lhs: hcp(),
+            rhs: int(v),
+        };
+        let at_most = |v: i32| Expr::Cmp {
+            cmp: CmpOp::Le,
+            lhs: hcp(),
+            rhs: int(v),
+        };
+        let within = Expr::InRange {
+            expr: hcp(),
+            lo: int(lo(i)),
+            hi: int(hi(i)),
+        };
+        Ok(Some(match cmp {
+            CmpOp::Eq => within,
+            CmpOp::Ne => Expr::Not {
+                expr: Box::new(within),
+            },
+            CmpOp::Ge => at_least(lo(i)),
+            CmpOp::Gt => at_least(hi(i) + 1),
+            CmpOp::Le => at_most(hi(i)),
+            CmpOp::Lt => at_most(lo(i) - 1),
+        }))
     }
 
     /// A value as a number range. Suits count as the actor's length there.
@@ -416,6 +514,12 @@ impl<'a> Ctx<'a> {
         }
         if n == "N" || n == "NT" {
             return Ok(Val::Strain(Strain::NoTrump));
+        }
+        if n == "strength" {
+            return Err(format!(
+                "`strength` is compared with a band: strength=invite, strength>=game ({})",
+                BANDS.join(", ")
+            ));
         }
         if SELF_ATTRS.contains(&n) {
             return Ok(match self.hand {
@@ -652,6 +756,9 @@ impl<'a> Ctx<'a> {
             },
             Expr::Shape { .. } => e.clone(),
             Expr::Cmp { cmp, lhs, rhs } => {
+                if let Ok(Some(e)) = self.strength_as_hcp(*cmp, lhs, rhs) {
+                    return self.resolve_with(&e, b, lossy);
+                }
                 // A comparison that does not involve the actor's own hand is
                 // a fact about the auction: fold it to a constant if known.
                 if !mentions_self(e, b, self.params) {

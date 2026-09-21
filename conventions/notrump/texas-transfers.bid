@@ -1,0 +1,21 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+
+module texas-transfers "Texas Transfers"
+  card   notrump.transfers.texas
+  needs  notrump-base
+
+# A six-card major and game values, no slam interest: transfer at the four
+# level and play there. (With slam interest, transfer at the two level and
+# continue.) A different question from Jacoby's, so the Jacoby continuations
+# do not apply.
+after 1N (P)
+  4D  "Texas: transfer to hearts"  announce "Transfer"  shows H>=6, strength=game  sets ask=texas(H)
+  4H  "Texas: transfer to spades"  announce "Transfer"  shows S>=6, strength=game  sets ask=texas(S)
+
+after 1N (P) 4D (P)
+  4H  "Completes the transfer"
+after 1N (P) 4H (P)
+  4S  "Completes the transfer"
+
+when answered texas(M)
+  P   "Game reached"

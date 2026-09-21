@@ -175,6 +175,14 @@ Their values are **ranges**, so a comparison means "known to be true":
 **Partnership totals**, `we.hcp` and `we.keycards(x)`, combine my exact hand
 with partner's range. Example: `we.hcp.min >= 25`.
 
+**Strength** compares with a band: `strength=invite`, `strength>=game`. Bands,
+weakest first: `signoff`, `invite`, `game`, `slam_invite`, `slam`. Each is my
+HCP range given partner's shown HCP range p, for 25 combined for game and 33
+for slam: signoff ≤ 24−p.max; invite 25−p.max..24−p.min; game
+25−p.min..32−p.max; slam_invite 33−p.max..32−p.min; slam ≥ 33−p.min. A band
+can be empty: after a super-accept (p known exactly) there is no invite.
+Because it becomes an HCP range, partner infers my strength from it too.
+
 **What I have already shown** uses the prefix `shown.`, for example
 `hcp >= shown.hcp.max` for "I am at the top of my range".
 
@@ -276,7 +284,33 @@ context holds. It does not check the caller's hand, which it cannot see.
   priority and descriptiveness and no `replaces`, **loading fails** and names both
   files and lines.
 
-## 10. Parser rules
+## 10. Writing continuations without listing auctions
+
+`after` patterns are for the opening of an auction, where the calls really
+are the context (`after 1N (P)`). Later rounds should not name auctions: there
+are too many ways to reach the same point. Write them against **state** and
+**what has been shown**:
+
+- **Questions and answers.** A call that asks partner to do something (a
+  transfer, Stayman, keycard) says `sets ask=transfer(H)`. Partner's next call
+  answers it, whatever it is. The asker's second call is then written once:
+
+  ```
+  when answered transfer(M)          # after 1NT, 2NT, or with interference
+    P   "Weak: play here"            shows strength=signoff
+    2N  "Invitational, exactly 5 {M}" shows M=5, balanced, strength=invite
+    4M  "Game in the known fit"      shows strength=game   when partner.M>=3
+  ```
+
+- **Strength bands** (`strength`, section 6) turn "invite / game / slam" into
+  HCP ranges relative to partner's shown range, so one rule reads correctly
+  after 1NT, 2NT or a super-accept.
+
+- **Knowledge, known vs possible.** `partner.M>=3` is true only when partner
+  has *shown* three. "The fit is not known yet" is `maybe partner.M<=2`, not
+  `!partner.M>=3` (with partner's length unknown, both of those are unknown).
+
+## 11. Parser rules
 
 These are enforced by `bidspec`, with file:line:column errors:
 
@@ -295,7 +329,7 @@ These are enforced by `bidspec`, with file:line:column errors:
 - `rbb bid check` also checks across files: module names are unique, and a
   `needs` that names no module is a warning.
 
-## 11. The engine today
+## 12. The engine today
 
 How `rbb-engine` implements the model, and its current limits:
 
@@ -327,7 +361,7 @@ How `rbb-engine` implements the model, and its current limits:
 - **Not yet implemented:** `replaces`, `raise` and `new_suit`, and the
   conflict check between modules.
 
-## 12. Open questions
+## 13. Open questions
 
 1. **Relative call notation.** Are `cheapest(x)` / `jump(x)` enough, or do we
    need step notation (`step 1`, `step 2`) for relay systems and Kickback?

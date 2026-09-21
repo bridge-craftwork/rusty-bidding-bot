@@ -169,3 +169,34 @@ fn jacoby_2nt_shortness_is_never_the_trump_suit() {
     assert_eq!(state.trump, Some(Strain::Spades));
     assert_eq!(state.forcing, rbb_engine::Forcing::Game);
 }
+
+#[test]
+fn responder_rebids_after_a_completed_transfer() {
+    // One `when answered transfer(M)` block, no auction patterns.
+    let after = "1NT Pass 2D Pass 2H Pass";
+    assert_call(&bid("82.QJ973.K94.J83", after), "Pass"); // 4 HCP: sign off
+    assert_call(&bid("82.KJ973.K94.Q83", after), "2NT"); // 9, five hearts
+    assert_call(&bid("82.KJ9732.K94.Q8", after), "3H"); // 9, six hearts
+    assert_call(&bid("82.KJ973.K94.AQ3", after), "3NT"); // 13, five hearts
+    assert_call(&bid("82.KJ9732.K94.A8", after), "4H"); // 13, six hearts
+    assert_call(&bid("8.KJ973.K4.AQ832", after), "3C"); // second suit, GF
+                                                        // The same block over spades.
+    assert_call(&bid("KJ973.82.K94.Q83", "1NT Pass 2H Pass 2S Pass"), "2NT");
+}
+
+#[test]
+fn strength_bands_follow_what_partner_showed() {
+    // After a super-accept opener is known to hold exactly 17, so there is
+    // no invitational band: 9 HCP is a game hand.
+    let d = bid("82.KJ973.K94.Q83", "1NT Pass 2D Pass 3H Pass");
+    assert_call(&d, "4H");
+    // What an invitational 2NT shows, as partner sees it: 8-9 HCP, 5 hearts.
+    let i = engine().interpret(
+        Direction::South,
+        Vulnerability::None,
+        &calls("1NT Pass 2D Pass 2H Pass 2NT"),
+    );
+    let north = &i.steps[6].knowledge;
+    assert_eq!(north.hcp, Range::new(8, 9));
+    assert_eq!(north.len[2], Range::new(5, 5));
+}

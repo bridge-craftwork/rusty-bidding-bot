@@ -4,9 +4,11 @@ module jacoby-transfers "Jacoby Transfers"
   card   notrump.transfers.jacoby
   needs  notrump-base
 
+# The transfer is a question: "bid my suit". Opener's next call answers it,
+# whether a plain completion or a super-accept.
 after 1N (P)
-  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round
-  2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round
+  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)
+  2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)
 
 # Opener: super-accept with 4-card support and a maximum, else complete.
 # `shown.hcp` is what I have already shown (here, the 1NT range).
@@ -17,3 +19,23 @@ after 1N (P) 2D (P)
 after 1N (P) 2H (P)
   3S  "Super-accept"        shows S>=4, hcp>=shown.hcp.max
   2S  "Completes transfer"
+
+# Responder's second call, once opener has answered. There is no auction
+# pattern: `answered transfer(M)` holds after any auction where partner
+# answered my transfer, and binds M to the major.
+#
+# `strength` bands are measured against what opener has shown: after a
+# 15-17 1NT, invite is 8-9 and game 10-15; after a super-accept (a known
+# maximum) there is no invitational band, so invitational hands bid game.
+when answered transfer(M)
+  P   "Weak: play here"                        shows strength=signoff
+  2N  "Invitational, exactly 5 {M}"            shows M=5, balanced, strength=invite
+  3M  "Invitational, 6+ {M}"                   shows M>=6, strength=invite
+  3N  "Game values, 5 {M}: choose the game"    shows M=5, balanced, strength=game
+      when maybe partner.M<=2                  # only while the fit is unknown
+  4M  "Game values, 6+ {M}"                    shows M>=6, strength=game
+  4M  "Game in the known fit"                  shows strength=game
+      when partner.M>=3                        # known, e.g. after a super-accept
+  3m  "Second suit, game forcing"              shows m>=4, strength>=game
+      sets forcing=game
+  4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
