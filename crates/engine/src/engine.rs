@@ -70,6 +70,18 @@ pub struct CandidateTrace {
     pub outcome: String,
 }
 
+/// The engine's call at one position, and how every candidate fared.
+#[derive(Debug, Clone, Serialize)]
+pub struct Choice {
+    pub call: Call,
+    pub explanation: String,
+    pub alert: Option<Alert>,
+    pub rule: Option<RuleRef>,
+    /// Every candidate considered, best-ranked first.
+    pub candidates: Vec<CandidateTrace>,
+    pub warnings: Vec<String>,
+}
+
 /// The engine's call, with everything needed to explain it.
 #[derive(Debug, Clone, Serialize)]
 pub struct Decision {
@@ -263,6 +275,36 @@ impl Engine {
         d
     }
 
+    /// An empty auction.
+    pub fn start(&self, dealer: Direction, vul: Vulnerability) -> Position {
+        Position::new(dealer, vul)
+    }
+
+    /// Interpret one more call: what it shows, and its effect on the state.
+    pub fn advance(&self, pos: &mut Position, call: &Call) -> Step {
+        let mut warnings = Vec::new();
+        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
+        self.advance_from(pos, call, &cands, warnings)
+    }
+
+    /// Choose a call for `hand` at the current position.
+    pub fn choose(&self, pos: &Position, hand: &Hand) -> Choice {
+        let mut warnings = Vec::new();
+        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
+        self.choose_from(pos, hand, &cands, warnings)
+    }
+
+    /// Both at once, sharing the candidate list: what would the engine call
+    /// with `hand` here, and what does the `actual` call show? This is the
+    /// step used to replay a reference auction.
+    pub fn step(&self, pos: &mut Position, hand: &Hand, actual: &Call) -> (Choice, Step) {
+        let mut warnings = Vec::new();
+        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
+        let choice = self.choose_from(pos, hand, &cands, warnings.clone());
+        let step = self.advance_from(pos, actual, &cands, warnings);
+        (choice, step)
+    }
+
     /// Replay `calls`, working out what each call showed.
     pub fn interpret(
         &self,
@@ -270,119 +312,8 @@ impl Engine {
         vul: Vulnerability,
         calls: &[Call],
     ) -> Interpretation {
-        let mut pos = Position::new(dealer, vul);
-        let mut steps = Vec::new();
-        for call in calls {
-            let caller = pos.next_caller();
-            let mut warnings = Vec::new();
-            let cands = self.candidates(&pos, caller, &mut warnings);
-            let sys = &self.systems[side(caller)];
-            // Rules that could have produced this call. A `when` known to be
-            // false for this caller rules the rule out.
-            let matching: Vec<&Cand> = cands
-                .iter()
-                .filter(|c| &c.call == call)
-                .filter(|c| {
-                    let e = &sys.rules[c.entry];
-                    let ctx = self.ctx(&pos, caller, None, e);
-                    e.rule
-                        .when
-                        .as_ref()
-                        .is_none_or(|w| ctx.cond(w, &mut c.b.clone()) != Ok(Tri::False))
-                })
-                .collect();
-            let mut k = pos.knowledge(caller).clone();
-            let mut step = Step {
-                caller,
-                call: call.clone(),
-                rule: None,
-                explanation: None,
-                alert: None,
-                knowledge: k.clone(),
-                warnings: Vec::new(),
-            };
-            let best = matching.first().copied();
-            if let Some(best) = best {
-                let entry = &sys.rules[best.entry];
-                let ctx = self.ctx(&pos, caller, None, entry);
-                let mut b = best.b.clone();
-                step.rule = Some(entry.source.clone());
-                step.explanation = Some(ctx.interpolate(&entry.rule.explanation, &mut b));
-                step.alert = entry.rule.alert.clone();
-                // What the call shows: the union over every rule that makes it.
-                let meanings: Vec<Expr> = matching
-                    .iter()
-                    .filter_map(|c| {
-                        let e = &sys.rules[c.entry];
-                        let ctx = self.ctx(&pos, caller, None, e);
-                        e.rule
-                            .shows
-                            .as_ref()
-                            .map(|s| ctx.resolve(s, &mut c.b.clone()))
-                    })
-                    .collect();
-                if meanings.len() == matching.len() && !meanings.is_empty() {
-                    let meaning = if meanings.len() == 1 {
-                        meanings.into_iter().next().unwrap()
-                    } else {
-                        Expr::Or { any: meanings }
-                    };
-                    if !k.add(meaning) {
-                        warnings.push(format!("{call} contradicts what {caller:?} showed before"));
-                    }
-                }
-                if let Some(d) = &entry.rule.denies {
-                    k.add(Expr::Not {
-                        expr: Box::new(ctx.resolve(d, &mut b)),
-                    });
-                }
-                // Negative inference: the caller would have made any call that
-                // outranks this one, had the hand qualified.
-                for other in cands.iter().filter(|c| &c.call != call && c.outranks(best)) {
-                    let e = &sys.rules[other.entry];
-                    let ctx = self.ctx(&pos, caller, None, e);
-                    let mut ob = other.b.clone();
-                    let parts: Vec<&Expr> = e.rule.shows.iter().chain(e.rule.when.iter()).collect();
-                    if parts.is_empty() {
-                        continue;
-                    }
-                    let whole = Expr::And {
-                        all: parts.into_iter().cloned().collect(),
-                    };
-                    // Only when every term resolves: a dropped term would make
-                    // the denial claim more than we know.
-                    if let Some(resolved) = ctx.resolve_exact(&whole, &mut ob) {
-                        if !is_const(&resolved) {
-                            k.add(Expr::Not {
-                                expr: Box::new(resolved),
-                            });
-                        }
-                    }
-                }
-            }
-            // State: questions answered, forcing satisfied, then this call's effects.
-            advance_state(&mut pos.sides[side(caller)], caller);
-            if let Some(best) = best {
-                let entry = &sys.rules[best.entry];
-                let ctx = self.ctx(&pos, caller, None, entry);
-                let mut b = best.b.clone();
-                let mut st = pos.sides[side(caller)].clone();
-                apply_sets(
-                    &mut st,
-                    &entry.rule.sets,
-                    &ctx,
-                    &mut b,
-                    caller,
-                    &mut warnings,
-                );
-                pos.sides[side(caller)] = st;
-            }
-            step.knowledge = k.clone();
-            step.warnings = warnings;
-            pos.knowledge[caller.to_index()] = k;
-            pos.calls.push(call.clone());
-            steps.push(step);
-        }
+        let mut pos = self.start(dealer, vul);
+        let steps = calls.iter().map(|c| self.advance(&mut pos, c)).collect();
         Interpretation {
             steps,
             position: pos,
@@ -398,11 +329,143 @@ impl Engine {
         calls: &[Call],
     ) -> Decision {
         let auction = self.interpret(dealer, vul, calls);
-        let pos = &auction.position;
+        let c = self.choose(&auction.position, hand);
+        Decision {
+            call: c.call,
+            explanation: c.explanation,
+            alert: c.alert,
+            rule: c.rule,
+            candidates: c.candidates,
+            auction,
+            warnings: c.warnings,
+        }
+    }
+
+    fn advance_from(
+        &self,
+        pos: &mut Position,
+        call: &Call,
+        cands: &[Cand],
+        mut warnings: Vec<String>,
+    ) -> Step {
+        let caller = pos.next_caller();
+        let sys = &self.systems[side(caller)];
+        // Rules that could have produced this call. A `when` known to be
+        // false for this caller rules the rule out.
+        let matching: Vec<&Cand> = cands
+            .iter()
+            .filter(|c| &c.call == call)
+            .filter(|c| {
+                let e = &sys.rules[c.entry];
+                let ctx = self.ctx(pos, caller, None, e);
+                e.rule
+                    .when
+                    .as_ref()
+                    .is_none_or(|w| ctx.cond(w, &mut c.b.clone()) != Ok(Tri::False))
+            })
+            .collect();
+        let mut k = pos.knowledge(caller).clone();
+        let mut step = Step {
+            caller,
+            call: call.clone(),
+            rule: None,
+            explanation: None,
+            alert: None,
+            knowledge: k.clone(),
+            warnings: Vec::new(),
+        };
+        let best = matching.first().copied();
+        if let Some(best) = best {
+            let entry = &sys.rules[best.entry];
+            let ctx = self.ctx(pos, caller, None, entry);
+            let mut b = best.b.clone();
+            step.rule = Some(entry.source.clone());
+            step.explanation = Some(ctx.interpolate(&entry.rule.explanation, &mut b));
+            step.alert = entry.rule.alert.clone();
+            // What the call shows: the union over every rule that makes it.
+            let meanings: Vec<Expr> = matching
+                .iter()
+                .filter_map(|c| {
+                    let e = &sys.rules[c.entry];
+                    let ctx = self.ctx(pos, caller, None, e);
+                    e.rule
+                        .shows
+                        .as_ref()
+                        .map(|s| ctx.resolve(s, &mut c.b.clone()))
+                })
+                .collect();
+            if meanings.len() == matching.len() && !meanings.is_empty() {
+                let meaning = if meanings.len() == 1 {
+                    meanings.into_iter().next().unwrap()
+                } else {
+                    Expr::Or { any: meanings }
+                };
+                if !k.add(meaning) {
+                    warnings.push(format!("{call} contradicts what {caller:?} showed before"));
+                }
+            }
+            if let Some(d) = &entry.rule.denies {
+                k.add(Expr::Not {
+                    expr: Box::new(ctx.resolve(d, &mut b)),
+                });
+            }
+            // Negative inference: the caller would have made any call that
+            // outranks this one, had the hand qualified.
+            for other in cands.iter().filter(|c| &c.call != call && c.outranks(best)) {
+                let e = &sys.rules[other.entry];
+                let ctx = self.ctx(pos, caller, None, e);
+                let mut ob = other.b.clone();
+                let parts: Vec<&Expr> = e.rule.shows.iter().chain(e.rule.when.iter()).collect();
+                if parts.is_empty() {
+                    continue;
+                }
+                let whole = Expr::And {
+                    all: parts.into_iter().cloned().collect(),
+                };
+                // Only when every term resolves: a dropped term would make
+                // the denial claim more than we know.
+                if let Some(resolved) = ctx.resolve_exact(&whole, &mut ob) {
+                    if !is_const(&resolved) {
+                        k.add(Expr::Not {
+                            expr: Box::new(resolved),
+                        });
+                    }
+                }
+            }
+        }
+        // State: questions answered, forcing satisfied, then this call's effects.
+        advance_state(&mut pos.sides[side(caller)], caller);
+        if let Some(best) = best {
+            let entry = &sys.rules[best.entry];
+            let ctx = self.ctx(pos, caller, None, entry);
+            let mut b = best.b.clone();
+            let mut st = pos.sides[side(caller)].clone();
+            apply_sets(
+                &mut st,
+                &entry.rule.sets,
+                &ctx,
+                &mut b,
+                caller,
+                &mut warnings,
+            );
+            pos.sides[side(caller)] = st;
+        }
+        step.knowledge = k.clone();
+        step.warnings = warnings;
+        pos.knowledge[caller.to_index()] = k;
+        pos.calls.push(call.clone());
+        step
+    }
+
+    fn choose_from(
+        &self,
+        pos: &Position,
+        hand: &Hand,
+        cands: &[Cand],
+        mut warnings: Vec<String>,
+    ) -> Choice {
         let actor = pos.next_caller();
         let facts = Facts::new(hand);
-        let mut warnings = Vec::new();
-        let cands = self.candidates(pos, actor, &mut warnings);
         let sys = &self.systems[side(actor)];
         let state = pos.side_state(actor);
         let forced = (state.forcing == Forcing::Round && state.forcing_by == Some(actor.partner()))
@@ -498,13 +561,12 @@ impl Engine {
             }
             None => (Call::Pass, "No rule applies".into(), None, None),
         };
-        Decision {
+        Choice {
             call,
             explanation,
             alert,
             rule,
             candidates: traces,
-            auction,
             warnings,
         }
     }

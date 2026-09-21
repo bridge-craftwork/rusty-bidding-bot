@@ -33,6 +33,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   `conventions/`; `bid compile <file>` prints the JSON IR.
 - `cargo run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything).
+- `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
+  compare with BBA's auctions in `../Practice-Bidding-Scenarios` (all 342
+  scenarios in ~8 s in release). The top divergence points are the work queue.
 
 ## Card fields
 

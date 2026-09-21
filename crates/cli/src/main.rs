@@ -20,6 +20,36 @@ enum Command {
     /// Rule file (.bid) tools.
     #[command(subcommand)]
     Bid(BidCommand),
+    /// Compare the engine with BBA's auctions in Practice-Bidding-Scenarios.
+    Compare {
+        /// Scenario names (e.g. 1N Stayman); all when none are given.
+        scenarios: Vec<String>,
+        /// Practice-Bidding-Scenarios checkout.
+        #[arg(long, default_value = "../Practice-Bidding-Scenarios")]
+        pbs: PathBuf,
+        /// At most this many boards per scenario.
+        #[arg(short, long)]
+        limit: Option<usize>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Score differing contracts against double-dummy par (slow the first
+        /// time; results are cached).
+        #[arg(long)]
+        par: bool,
+        /// Double-dummy cache file.
+        #[arg(long, default_value = ".rbb-cache/dd.jsonl")]
+        dd_cache: PathBuf,
+        /// How many divergence points to list.
+        #[arg(long, default_value_t = 25)]
+        top: usize,
+        /// How many scenarios to list (worst first).
+        #[arg(long, default_value_t = 30)]
+        worst: usize,
+        /// Write the full report (every board) as JSON.
+        #[arg(long)]
+        json: Option<PathBuf>,
+    },
     /// Choose a call for a hand and show why.
     Call {
         /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
@@ -103,6 +133,27 @@ fn run(cli: Cli) -> Result<()> {
     match cli.command {
         Command::Card(cmd) => card(cmd),
         Command::Bid(cmd) => bid(cmd),
+        Command::Compare {
+            scenarios,
+            pbs,
+            limit,
+            rules,
+            par,
+            dd_cache,
+            top,
+            worst,
+            json,
+        } => {
+            let opts = rbb_compare::Options {
+                pbs,
+                scenarios,
+                limit,
+                rules,
+                par,
+                dd_cache,
+            };
+            compare(&opts, top, worst, json.as_deref())
+        }
         Command::Call {
             hand,
             auction,
@@ -123,6 +174,116 @@ fn run(cli: Cli) -> Result<()> {
             json,
         ),
     }
+}
+
+fn pct(x: f64) -> String {
+    format!("{:5.1}%", 100.0 * x)
+}
+
+fn compare(
+    opts: &rbb_compare::Options,
+    top: usize,
+    worst: usize,
+    json: Option<&Path>,
+) -> Result<()> {
+    let started = std::time::Instant::now();
+    let report = rbb_compare::run(opts, &|done, total| {
+        eprint!("\r{done}/{total} boards");
+    })?;
+    eprintln!("  ({:.1}s)", started.elapsed().as_secs_f64());
+    let s = &report.summary;
+    let t = &s.total;
+    let calls = t.calls_all();
+    println!("{} scenarios, {} boards", s.scenarios.len(), t.boards);
+    println!(
+        "calls agreeing with BBA (replay): {} ({}/{})   NS {}   EW {}",
+        pct(calls.rate()),
+        calls.agree,
+        calls.total,
+        pct(t.calls[0].rate()),
+        pct(t.calls[1].rate())
+    );
+    println!(
+        "identical auctions: {}   same final contract: {}",
+        pct(t.auction_rate()),
+        pct(t.contract_rate())
+    );
+    if t.runaway > 0 {
+        println!(
+            "auctions the engine did not finish in 60 calls: {}",
+            t.runaway
+        );
+    }
+    if t.par.scored > 0 {
+        println!(
+            "differing contracts vs par ({} boards): ours closer {}, BBA closer {}, equal {}; net {:+} IMPs to us",
+            t.par.scored, t.par.ours_closer, t.par.reference_closer, t.par.equal, t.par.imps_vs_reference
+        );
+    }
+    let hist: Vec<String> = t
+        .first_divergence
+        .iter()
+        .take(12)
+        .map(|(i, n)| format!("{}:{n}", i + 1))
+        .collect();
+    println!("first divergence at call #: {}", hist.join("  "));
+
+    println!("\nmost common divergence points:");
+    println!(
+        "  {:>5}  {:28} {:>5} {:>5}  scenarios",
+        "count", "auction so far", "BBA", "ours"
+    );
+    for d in s.divergences.iter().take(top) {
+        let auction = if d.auction.is_empty() {
+            "(opening)".to_string()
+        } else {
+            d.auction.clone()
+        };
+        let mut names = d
+            .scenarios
+            .iter()
+            .take(3)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join(", ");
+        if d.scenarios.len() > 3 {
+            names += &format!(" +{}", d.scenarios.len() - 3);
+        }
+        println!(
+            "  {:>5}  {:28} {:>5} {:>5}  {names}",
+            d.count, auction, d.reference, d.ours
+        );
+    }
+
+    if s.scenarios.len() > 1 {
+        let mut by = s.scenarios.clone();
+        by.sort_by(|a, b| {
+            a.calls_all()
+                .rate()
+                .partial_cmp(&b.calls_all().rate())
+                .unwrap_or(std::cmp::Ordering::Equal)
+        });
+        println!("\nscenarios, lowest call agreement first:");
+        println!(
+            "  {:32} {:>6} {:>7} {:>8} {:>9}",
+            "scenario", "boards", "calls", "auction", "contract"
+        );
+        for sc in by.iter().take(worst) {
+            println!(
+                "  {:32} {:>6} {:>7} {:>8} {:>9}",
+                sc.name,
+                sc.boards,
+                pct(sc.calls_all().rate()),
+                pct(sc.auction_rate()),
+                pct(sc.contract_rate())
+            );
+        }
+    }
+    if let Some(path) = json {
+        std::fs::write(path, serde_json::to_string(&report)?)?;
+        eprintln!("wrote {}", path.display());
+    }
+    Ok(())
 }
 
 fn load_card(path: &Path) -> Result<Card> {

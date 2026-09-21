@@ -70,7 +70,7 @@ development, and may later move to its own repo together with the card editor.
 | `crates/bidspec` | `bidspec` | Rule language: lexer, parser, AST, JSON IR, validation |
 | `conventions/` | — | `.bid` files: base systems and conventions |
 | `crates/engine` | `rbb-engine` | Rule interpreter, auction state, inference |
-| `crates/compare` (later) | `rbb-compare` | Headless comparison against reference corpora: statistics, divergences, par |
+| `crates/compare` | `rbb-compare` | Headless comparison against reference corpora: statistics, divergences, par |
 | `crates/cli` | `rbb-cli` (binary `rbb`) | Bid PBN files; `rbb compare` report |
 | `crates/workbench` (later) | `rbb-workbench` | Desktop GUI over `rbb-compare` (see [Comparison workbench](#comparison-workbench)) |
 | `crates/wasm` (later) | `rbb-wasm` | wasm-bindgen wrapper with a JSON boundary, same pattern as `bridge-rulebot/wasm` |
@@ -329,8 +329,11 @@ knowingly chooses a higher-ranked one.
 4. **Engine core with trace** (done): knowledge store, auction state,
    ranking, negative inference, trace; `rbb call`. The 1NT slice (opening,
    Stayman, Jacoby transfers, natural responses) bids end to end.
-5. **Compare library + CLI**: replay and full-auction modes against `bba/`,
-   divergence statistics, and par via bridge-solver with a DD cache.
+5. **Compare library + CLI** (done): `rbb compare` replays every BBA board
+   (the whole corpus in about 8 seconds), finishes the auction from the
+   first difference, reports agreement and the most common divergence
+   points, and with `--par` scores differing contracts against double-dummy
+   par (tables cached in `.rbb-cache/`).
 6. **Workbench GUI**: scenario list, divergence view, A/B board detail, hot
    reload.
 7. **Iterate**: widen coverage in the workbench. Major openings, minor

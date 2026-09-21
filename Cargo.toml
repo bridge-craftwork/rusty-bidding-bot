@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/cli"]
+members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/compare", "crates/cli"]
 
 [workspace.package]
 version = "0.1.0"
@@ -13,3 +13,4 @@ bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types", featu
 bridge-card = { path = "crates/bridge-card" }
 bidspec = { path = "crates/bidspec" }
 rbb-engine = { path = "crates/engine" }
+rbb-compare = { path = "crates/compare" }
