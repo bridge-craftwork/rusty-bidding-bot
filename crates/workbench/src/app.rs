@@ -91,6 +91,11 @@ pub struct App {
     scenarios_text: String,
     scenario: Option<String>,
     sort: SortBy,
+    /// Reverse the natural order (worst first for rates, A-Z for names).
+    sort_rev: bool,
+    /// The sort key the last single click newly selected, so the second
+    /// click of a double-click can reverse it.
+    sort_just_selected: Option<SortBy>,
     tab: Tab,
     divs: Vec<DivRow>,
     div: Option<usize>,
@@ -120,6 +125,8 @@ impl App {
             scenarios_text,
             scenario: None,
             sort: SortBy::Calls,
+            sort_rev: false,
+            sort_just_selected: None,
             tab: Tab::Divergences,
             divs: Vec::new(),
             div: None,
@@ -552,15 +559,75 @@ impl App {
         }
     }
 
+    /// A click on a sort button or column header. Clicking the active key
+    /// reverses it; a double-click on a new key selects it reversed.
+    fn sort_click(&mut self, by: SortBy, r: &egui::Response) {
+        if r.double_clicked() {
+            if self.sort_just_selected == Some(by) {
+                self.sort_rev = !self.sort_rev;
+            }
+            self.sort_just_selected = None;
+        } else if r.clicked() {
+            if self.sort == by {
+                self.sort_rev = !self.sort_rev;
+                self.sort_just_selected = None;
+            } else {
+                self.sort = by;
+                self.sort_rev = false;
+                self.sort_just_selected = Some(by);
+            }
+        }
+    }
+
+    fn sort_label(&self, by: SortBy, label: &str) -> String {
+        match (self.sort == by, self.sort_rev) {
+            (false, _) => label.to_string(),
+            (true, false) => format!("{label} ▲"),
+            (true, true) => format!("{label} ▼"),
+        }
+    }
+
     fn scenarios(&mut self, ui: &mut egui::Ui) {
         ui.heading("Scenarios");
+        const KEYS: [(SortBy, &str, &str); 4] = [
+            (
+                SortBy::Calls,
+                "calls",
+                "Replay agreement: at each call of BBA's auction, the engine is given the same hand and \
+                 BBA's auction so far; the share of calls where it bids what BBA bid. Both sides \
+                 (East-West mostly pass, which raises it).",
+            ),
+            (SortBy::Auction, "auction", "Share of boards where the engine's whole auction equals BBA's."),
+            (SortBy::Contract, "contract", "Share of boards where the final contract equals BBA's."),
+            (SortBy::Name, "name", "Scenario name."),
+        ];
+        let mut action = None;
         ui.horizontal(|ui| {
             ui.label("sort:");
-            ui.selectable_value(&mut self.sort, SortBy::Calls, "calls");
-            ui.selectable_value(&mut self.sort, SortBy::Auction, "auction");
-            ui.selectable_value(&mut self.sort, SortBy::Contract, "contract");
-            ui.selectable_value(&mut self.sort, SortBy::Name, "name");
-        });
+            for (by, label, help) in KEYS {
+                let r = ui
+                    .selectable_label(self.sort == by, self.sort_label(by, label))
+                    .on_hover_text(help);
+                if r.clicked() || r.double_clicked() {
+                    action = Some((by, r));
+                }
+            }
+        })
+        .response
+        .on_hover_text("Click the active key, or double-click any key, to reverse the order.");
+        if let Some((by, r)) = action.take() {
+            self.sort_click(by, &r);
+        }
+        let headers: Vec<(SortBy, String, &str)> = [KEYS[3], KEYS[0], KEYS[1], KEYS[2]]
+            .iter()
+            .map(|(b, l, h)| {
+                (
+                    *b,
+                    self.sort_label(*b, if *l == "name" { "scenario" } else { l }),
+                    *h,
+                )
+            })
+            .collect();
         let Some(l) = &self.loaded else { return };
         let mut rows: Vec<&Stats> = l.report.summary.scenarios.iter().collect();
         let key = |s: &Stats| match self.sort {
@@ -576,7 +643,11 @@ impl App {
                 key(a)
                     .partial_cmp(&key(b))
                     .unwrap_or(std::cmp::Ordering::Equal)
+                    .then(a.name.cmp(&b.name))
             });
+        }
+        if self.sort_rev {
+            rows.reverse();
         }
         let all = self.scenario.is_none();
         let mut clicked = None;
@@ -597,18 +668,19 @@ impl App {
             .column(Column::remainder().at_least(140.0).clip(true))
             .columns(Column::auto(), 3)
             .header(20.0, |mut h| {
-                h.col(|ui| {
-                    ui.strong("scenario");
-                });
-                h.col(|ui| {
-                    ui.strong("calls");
-                });
-                h.col(|ui| {
-                    ui.strong("auction");
-                });
-                h.col(|ui| {
-                    ui.strong("contract");
-                });
+                for (by, label, help) in &headers {
+                    h.col(|ui| {
+                        let r = ui
+                            .add(
+                                egui::Label::new(RichText::new(label).strong())
+                                    .sense(Sense::click()),
+                            )
+                            .on_hover_text(*help);
+                        if r.clicked() || r.double_clicked() {
+                            action = Some((*by, r));
+                        }
+                    });
+                }
             })
             .body(|body| {
                 body.rows(20.0, rows.len(), |mut row| {
@@ -631,6 +703,9 @@ impl App {
                     }
                 });
             });
+        if let Some((by, r)) = action {
+            self.sort_click(by, &r);
+        }
         if show_all {
             self.scenario = None;
             self.rebuild_divs();
