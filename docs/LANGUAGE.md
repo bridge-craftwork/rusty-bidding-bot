@@ -134,7 +134,7 @@ after (1x) X (P)               # they opened, partner doubled, RHO passed
 - Leading passes are skipped unless written. Use the state `seat` or
   `passed_hand` when position matters.
 - `(*)` means any opponent call. Suit variables: `M` = a major, `m` = a minor,
-  `x` / `y` = any suit, `N` = notrump. A variable binds on first use and can be
+  `x` / `y` / `z` = any suit, `N` = notrump. A variable binds on first use and can be
   used in the rules below (`shows M>=4`).
 
 ### State conditions: `when`

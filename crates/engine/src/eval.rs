@@ -723,14 +723,16 @@ impl<'a> Ctx<'a> {
                 )?)?;
                 // Partner's answer ("1 or 4"), limited by the deck: five
                 // keycards in all, so "1 or 4" facing my 2 can only be 1.
+                // With no trump suit (`keycards(N)`) they are the four aces.
                 let suit = self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)?;
+                let deck = if suit.is_some() { 5 } else { 4 };
                 let theirs = self.partner_keycards(suit);
-                let fits: Vec<i32> = (0..=5)
-                    .filter(|v| theirs.contains(v) && mine.lo + v <= 5)
+                let fits: Vec<i32> = (0..=deck)
+                    .filter(|v| theirs.contains(v) && mine.lo + v <= deck)
                     .collect();
                 match (fits.first(), fits.last()) {
                     (Some(lo), Some(hi)) => Val::Num(Range::new(mine.lo + lo, mine.hi + hi)),
-                    _ => Val::Num(Range::new(mine.lo, 5)),
+                    _ => Val::Num(Range::new(mine.lo, deck)),
                 }
             }
             n => return Err(format!("unknown attribute `we.{n}`")),
@@ -919,7 +921,11 @@ impl<'a> Ctx<'a> {
                         .iter()
                         .map(|a| match self.eval(a, b) {
                             Ok(Val::Suit(s)) => Some(path_expr(SUITS[s])),
-                            Ok(Val::Strain(st)) => suit_of_strain(st).map(|s| path_expr(SUITS[s])),
+                            // Notrump (`keycards(N)`: aces only) stays as written.
+                            Ok(Val::Strain(st)) => Some(
+                                suit_of_strain(st)
+                                    .map_or_else(|| a.clone(), |s| path_expr(SUITS[s])),
+                            ),
                             _ => Some(a.clone()),
                         })
                         .collect::<Option<Vec<_>>>()?;

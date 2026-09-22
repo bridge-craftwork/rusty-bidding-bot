@@ -1,0 +1,10 @@
+# Standard Blackwood (Basic-Bridge card).
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction                      | expect | why
+N K532.J83.QJ43.Q3      | 1S P 3S P 4NT P              | 5C     | no aces: "0 or 4"
+N A532.J83.QJ43.Q3      | 1S P 3S P 4NT P              | 5D     | one ace
+S AK932.KQ4.AQ5.K2      | 1S P 3S P 4NT P 5D P         | 6S     | two aces + one: one missing, slam
+S AK932.KQ4.AQ5.K2      | 1S P 3S P 4NT P 5C P         | 5S     | two + "0 or 4" = two: two missing, sign off
+S KQ932.KQ4.KQ5.K2      | 1S P 3S P 4NT P 5C P         | 6S     | no aces of mine: "0 or 4" is 4

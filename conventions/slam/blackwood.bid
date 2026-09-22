@@ -1,0 +1,34 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Standard Blackwood: 4NT asks for aces once a trump suit is agreed. The
+# answers count aces only; keycards(N) is aces without a trump king.
+
+module blackwood "Blackwood (standard)"
+  card   slam.blackwood.standard
+  needs  base
+
+when we.trump is suit, !asked
+  4N  "Blackwood: how many aces?"
+      when  slam_try                   # judgment hook (Rust evaluator)
+      sets  ask=aces
+      artificial
+      priority -1                      # after any natural 4NT
+
+when asked aces
+  5C  "0 or 4 aces"                    shows keycards(N) in 0|4  artificial
+  5D  "1 ace"                          shows keycards(N)=1       artificial
+  5H  "2 aces"                         shows keycards(N)=2       artificial
+  5S  "3 aces"                         shows keycards(N)=3       artificial
+
+# The asker places the contract: slam with at most one ace missing,
+# otherwise five of the trump suit (or pass when that is the answer).
+when answered aces
+  6{trump}  "Small slam: at most one ace missing"
+            when we.keycards(N)>=3
+  P         "Sign off: the answer is in our suit"
+            when partner.last=5{trump}, we.keycards(N).max<=2
+  5{trump}  "Sign off: two aces missing"
+            when we.keycards(N).max<=2
+  6{trump}  "Small slam: \"0 or 4\" with no aces of my own is 4"
+            when maybe we.keycards(N)>=3
+            priority -1

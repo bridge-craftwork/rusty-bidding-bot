@@ -103,7 +103,7 @@ impl<'a> Cursor<'a> {
     }
 }
 
-const SUIT_VARS: &[&str] = &["M", "m", "x", "y"];
+const SUIT_VARS: &[&str] = &["M", "m", "x", "y", "z"];
 
 fn strain(letters: &str) -> Option<StrainSpec> {
     Some(match letters {
@@ -172,7 +172,7 @@ pub fn call(c: &mut Cursor, pos: CallPos) -> Result<CallSpec, PError> {
             let Some(strain) = strain(&letters) else {
                 return Err((
                     start,
-                    format!("{level}{letters}: strain must be C D H S N or a variable M m x y"),
+                    format!("{level}{letters}: strain must be C D H S N or a variable M m x y z"),
                 ));
             };
             CallSpec::Bid { level, strain }

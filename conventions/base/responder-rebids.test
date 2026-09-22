@@ -1,0 +1,52 @@
+# Responder's second call (SAYC, BBA's Basic-Bridge card). Every hand is a
+# Basic_* corpus deal where we and BBA agree.
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction          | expect | why
+# ── After opener's 1NT (12-14): Rick's rulings
+N T93.A5.KJ52.KJ84      | 1C P 1D P 1NT P  | 2NT    | invites with 2NT: 12
+N J65.KJ9643.A5.Q7      | 1C P 1H P 1NT P  | 3H     | invites with a jump: six hearts, 11
+N AKJ73.Q942.Q.T72      | 1C P 1S P 1NT P  | 2H     | a new suit below spades: not forcing
+N K873.QJ9.AQT65.T      | 1C P 1D P 1NT P  | 2S     | responder's reverse: game forcing
+N A43.J85.A643.863      | 1C P 1D P 1NT P  | P      | 9: no game
+N KJT865.J3.J52.A4      | 1C P 1S P 1NT P  | 2S     | weak with six spades
+N J97.Q7652.AKQ2.Q      | 1C P 1H P 1NT P  | 3NT    | 14: game
+# ── After opener rebid his suit
+N 864.Q842.KQJ54.J      | 1C P 1D P 2C P   | P      | weak
+N KQ4.K532.KT94.JT      | 1C P 1D P 2C P   | 3NT    | 12, balanced: game
+N A742.KQ9765.73.T      | 1C P 1H P 2C P   | 2H     | weak with six hearts
+N KQ83.K9.Q8763.95      | 1H P 1S P 2H P   | 3H     | raise with two hearts: 10
+N AKT95.3.KQ2.J752      | 1H P 1S P 2H P   | 3NT    | 13, short hearts: game
+# ── After opener raised
+N 643.A9843.Q4.JT7      | 1C P 1H P 2H P   | P      | 7: no game
+N KJ6.QJ972.A6.632      | 1D P 1H P 2H P   | 3H     | 11: invites
+N 97.AQJT92.T7.KJ9      | 1D P 1H P 2H P   | 4H     | 11 with six hearts: game
+# ── After opener's new suit at the one level
+N JT8.J972.A65.A86      | 1C P 1H P 1S P   | 1NT    | 10, no fit
+N Q753.AJ74.65.Q97      | 1C P 1H P 1S P   | 2S     | four spades, weak: raise
+N JT96.8.KQT63.A32      | 1C P 1D P 1H P   | 1S     | four spades at the one level
+N 87.KQT763.QJ8.A2      | 1C P 1H P 1S P   | 3H     | six hearts, 12: invites
+N AJ64.AT93.4.QJT7      | 1D P 1H P 1S P   | 4S     | four spades, 12 + singleton: game
+N A85.QJ975..QJ542      | 1D P 1H P 1S P   | 2C     | five clubs, 8-10
+# ── After opener's new suit at the two level
+N A764.K432.76.QT3      | 1D P 1H P 2C P   | P      | three clubs, two diamonds: pass
+N 87.QJT74.K853.K7      | 1D P 1H P 2C P   | 2D     | preference: more diamonds
+N Q843.J6.KT.A9532      | 1H P 1S P 2D P   | 2H     | preference to the major with two
+N QT87.A75.97.J753      | 1D P 1S P 2H P   | 2NT    | forced after the reverse: minimum, no fit
+# ── After opener's jumps and 2NT
+N AK95.T732.J432.J      | 1C P 1D P 3C P   | 3NT    | 9 facing 16-18: game
+N A853.82.QJ86.T76      | 1C P 1D P 3C P   | P      | 7: no game
+N J76.K974.A9.J975      | 1D P 1H P 3H P   | 4H     | 9 facing a jump raise: game
+N J832.J742.3.A942      | 1D P 1H P 3H P   | P      | 6: no game
+N AQ965.J43.964.72      | 1C P 1S P 2NT P  | 3NT    | 7 facing 18-19: game
+# ── After responder's 1NT
+N T2.A432.Q2.AT987      | 1S P 1NT P 2D P  | 2S     | false preference: two spades, two diamonds
+N 8.KJT3.K97.J7542      | 1S P 1NT P 2D P  | P      | three diamonds, one spade: pass
+N 62.KJ53.AT863.J5      | 1S P 1NT P 3S P  | 4S     | two spades, 9: game
+N 3.85.QT97.AQ9642      | 1S P 1NT P 3S P  | P      | singleton spade, 8: no game
+# ── After a 2/1 and opener's rebid
+N 9743.J5.KQ8.AJT2      | 1S P 2C P 2S P   | 4S     | support: game
+N A.K983.Q873.K754      | 1S P 2C P 2S P   | 2NT    | no fit, 12
+N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 3NT    | 12, two spades: 3NT
+N AT2.8753.K2.A742      | 1H P 2C P 2D P   | 4H     | four hearts: game

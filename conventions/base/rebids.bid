@@ -16,8 +16,8 @@ module rebids "Opener's rebid"
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
-  2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15
-  3y  "Jump raise: 4+ {y}, 16-18"          shows y>=4, tp(y)=16..18
+  2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15   sets trump=y
+  3y  "Jump raise: 4+ {y}, 16-18"          shows y>=4, tp(y)=16..18   sets trump=y
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
       priority -1                          # a new suit first
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
@@ -27,7 +27,7 @@ after 1x (P) 1y (P)
   1N  "Minimum, no better rebid"           shows hcp<=15, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
 after 1x (P) 1M (P)
-  4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19
+  4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
 
 # A new suit: at the one level 4+ and up to 18; at the two level below the
 # first suit 4+, not a reverse; a reverse (two level, above the first suit)

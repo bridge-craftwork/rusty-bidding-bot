@@ -100,6 +100,7 @@ after 1H (P)
       sets forcing=round
   3H  "Limit raise: 10-12 support points, 3+ hearts"  shows H>=3, tp(H)=10..12, hcp<=12, H>=4 | S<=3
       when limit_raise                 # 3 hearts and 4 spades: 1S first
+      sets trump=H
   3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js
   3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js
 
@@ -116,13 +117,16 @@ after 1S (P)
       sets forcing=round
   3S  "Limit raise: 10-12 support points, 3+ spades"  shows S>=3, tp(S)=10..12, hcp<=12
       when limit_raise
+      sets trump=S
   3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, S<=2  when inv_js
   3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, S<=2  when inv_js
   3H  "Invitational jump shift: 10-12, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js
 
 after 1M (P)
   2M  "Raise: 6-9 support points, 3+ {M}"  shows M>=3, tp(M)=6..9, hcp=6..9
+      sets trump=M
   4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9
+      sets trump=M
   2C  "Game values with a fit: a three-card minor to start"
       shows M>=3, tp(M)>=13, C>=3
       sets  forcing=round

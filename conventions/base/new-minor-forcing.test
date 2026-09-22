@@ -1,0 +1,15 @@
+# New Minor Forcing (21GF-DEFAULT plays it).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P          | 2D     | NMF: 11 with five spades
+S Q76.K42.AQ5.K987      | 1C P 1S P 1NT P 2D P     | 2S     | three spades
+S K7.K42.AJ53.Q987      | 1C P 1S P 1NT P 2D P     | 2NT    | no fit, minimum (13)
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P 2D P 2S P | 3S    | fit, invitational
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P 2D P 2NT P | P    | no fit, opener minimum
+N KQJ54.A32.A4.J76      | 1C P 1S P 1NT P 2D P 2S P | 4S    | fit, 15: game
+
+# Without NMF (Basic-Bridge), 2D is natural and not forcing.
+card    Basic-Bridge
+N AT832.Q93.AT64.3      | 1C P 1S P 1NT P          | 2D     | five spades, four diamonds, 10

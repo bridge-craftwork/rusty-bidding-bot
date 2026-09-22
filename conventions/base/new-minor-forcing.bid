@@ -1,0 +1,47 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# New Minor Forcing: after 1m-1M-1NT, two of the other minor is artificial,
+# invitational or better, and asks opener about support for responder's
+# major (and four cards in the other major). Without it, that bid is natural
+# and not forcing (responder-rebids.bid).
+
+module new-minor-forcing "New Minor Forcing"
+  card   other_conventions.new_minor_forcing.play
+  needs  responder-rebids
+
+after 1C (P) 1M (P) 1N (P)
+  2D  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
+      shows M>=4, points>=11
+      sets  forcing=round, ask=nmf
+      artificial
+      priority 1                       # ahead of a natural 2NT or 3NT
+after 1D (P) 1M (P) 1N (P)
+  2C  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
+      shows M>=4, points>=11
+      sets  forcing=round, ask=nmf
+      artificial
+      priority 1                       # ahead of a natural 2NT or 3NT
+
+# Opener answers: three cards in responder's major first, then four hearts
+# after a 1S response (1NT over 1S can hide four hearts; over 1H it denies
+# four spades), else notrump by strength.
+when asked nmf
+  2H  "Three hearts"                       shows H=3        when partner.H>=4
+  2S  "Three spades"                       shows S=3        when partner.S>=4
+  2H  "Four hearts, not three spades"      shows H>=4, S<=2  when partner.S>=4
+  2N  "Minimum (12-13), no fit"            shows hcp<=13
+      priority -1
+  3N  "Maximum (14), no fit"               shows hcp>=14
+      priority -1
+
+# Responder places the contract: with a fit, invite (3M) or bid game (4M);
+# without one, 2NT invites and 3NT is game.
+when answered nmf
+  4H  "Game in the heart fit"              shows points>=13   when partner.H>=3
+  3H  "Invitational, heart fit"            shows points=11..12   when partner.H>=3   sets ask=invite(H)
+  4S  "Game in the spade fit"              shows points>=13   when partner.S>=3
+  3S  "Invitational, spade fit"            shows points=11..12   when partner.S>=3   sets ask=invite(S)
+  3N  "Game, no fit"                       shows points>=13
+  2N  "Invitational, no fit"               shows points=11..12   sets ask=nt_invite
+  P   "Accepts the notrump game"           when partner.last=3N
+  P   "No game: opener is minimum"         shows points<=12   when partner.last=2N

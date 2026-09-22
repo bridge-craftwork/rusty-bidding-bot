@@ -57,8 +57,6 @@ contract 14.9% → 20.8%.
 
 ## Gaps (not built yet)
 
-- **Responder's second call**: now the top "no rule" points (1♣-1♦-1NT,
-  1♣-1♠-1NT, 1♦-1♠-2♣).
 - **Inverted minors** (the 2/1 cards): 1m-3m is weak there, but we read it
   as a limit raise, so opener bids 3NT over it.
 - **A passed hand's new suit is not forcing**: BBA's opener may pass it.
