@@ -140,9 +140,23 @@ impl Default for SeatKnowledge {
 
 impl SeatKnowledge {
     pub fn is_contradiction(&self) -> bool {
-        self.hcp.is_empty()
-            || self.pts.iter().any(Range::is_empty)
-            || self.len.iter().any(Range::is_empty)
+        self.bounds().is_contradiction()
+    }
+
+    fn bounds(&self) -> Bounds {
+        Bounds {
+            hcp: self.hcp,
+            len: self.len,
+            balanced: self.balanced,
+            pts: self.pts,
+        }
+    }
+
+    fn set_bounds(&mut self, b: Bounds) {
+        self.hcp = b.hcp;
+        self.len = b.len;
+        self.balanced = b.balanced;
+        self.pts = b.pts;
     }
 
     /// Total points as whole points (fractions dropped), for comparisons:
@@ -171,28 +185,41 @@ impl SeatKnowledge {
     /// narrow the ranges by it. Returns false if it contradicts what was
     /// known, in which case the ranges are left unchanged.
     pub fn add(&mut self, e: Expr) -> bool {
-        let narrowed = narrow(self, &e, true);
+        let narrowed = narrow(self.bounds(), &e, true);
         let ok = !narrowed.is_contradiction();
         if ok {
-            self.hcp = narrowed.hcp;
-            self.len = narrowed.len;
-            self.balanced = narrowed.balanced;
-            self.pts = narrowed.pts;
             self.shown.push(e.to_string());
             self.constraints.push(e);
             // Earlier disjunctions may settle now ("4 hearts or 4 spades",
             // then "not 4 hearts"): narrow by everything once more.
-            for c in self.constraints.clone() {
-                let again = narrow(self, &c, true);
+            let mut b = narrowed;
+            for c in &self.constraints {
+                let again = narrow(b, c, true);
                 if !again.is_contradiction() {
-                    self.hcp = again.hcp;
-                    self.len = again.len;
-                    self.balanced = again.balanced;
-                    self.pts = again.pts;
+                    b = again;
                 }
             }
+            self.set_bounds(b);
         }
         ok
+    }
+}
+
+/// The ranges `narrow` works on: the part of `SeatKnowledge` that is cheap
+/// to copy (no printed or stored constraints).
+#[derive(Clone, Copy)]
+struct Bounds {
+    hcp: Range,
+    len: [Range; 4],
+    balanced: Tri,
+    pts: [Range; 2],
+}
+
+impl Bounds {
+    fn is_contradiction(&self) -> bool {
+        self.hcp.is_empty()
+            || self.pts.iter().any(Range::is_empty)
+            || self.len.iter().any(Range::is_empty)
     }
 
     /// Deck and shape consequences: lengths sum to 13; balanced means every
@@ -221,21 +248,21 @@ impl SeatKnowledge {
         }
     }
 
-    fn contradiction() -> SeatKnowledge {
-        SeatKnowledge {
+    fn contradiction() -> Bounds {
+        Bounds {
             hcp: Range::new(1, 0),
-            ..SeatKnowledge::default()
+            ..SeatKnowledge::default().bounds()
         }
     }
 
-    fn hull(&self, o: &SeatKnowledge) -> SeatKnowledge {
+    fn hull(&self, o: &Bounds) -> Bounds {
         if self.is_contradiction() {
-            return o.clone();
+            return *o;
         }
         if o.is_contradiction() {
-            return self.clone();
+            return *self;
         }
-        let mut k = self.clone();
+        let mut k = *self;
         k.hcp = self.hcp.hull(o.hcp);
         for i in 0..4 {
             k.len[i] = self.len[i].hull(o.len[i]);
@@ -347,33 +374,33 @@ fn apply_const(r: Range, op: CmpOp, n: i32) -> Range {
 }
 
 /// Narrow `k` by `e` (or by its negation when `positive` is false).
-pub fn narrow(k: &SeatKnowledge, e: &Expr, positive: bool) -> SeatKnowledge {
-    let mut out = k.clone();
+fn narrow(k: Bounds, e: &Expr, positive: bool) -> Bounds {
+    let mut out = k;
     match e {
         Expr::And { all } if positive => {
             for sub in all {
-                out = narrow(&out, sub, true);
+                out = narrow(out, sub, true);
             }
             // A second pass lets later conjuncts tighten earlier relations.
             for sub in all {
-                out = narrow(&out, sub, true);
+                out = narrow(out, sub, true);
             }
         }
         Expr::Or { any } if !positive => {
             for sub in any {
-                out = narrow(&out, sub, false);
+                out = narrow(out, sub, false);
             }
         }
         Expr::And { all } => {
             // not (a and b) = not a or not b
             if all.is_empty() {
-                return SeatKnowledge::contradiction();
+                return Bounds::contradiction();
             }
             return hull_of(k, all.iter().map(|sub| (sub, false)));
         }
         Expr::Or { any } => {
             if any.is_empty() {
-                return SeatKnowledge::contradiction();
+                return Bounds::contradiction();
             }
             return hull_of(k, any.iter().map(|sub| (sub, true)));
         }
@@ -451,7 +478,7 @@ pub fn narrow(k: &SeatKnowledge, e: &Expr, positive: bool) -> SeatKnowledge {
         Expr::Path { path } if path.len() == 1 && path[0].name == "balanced" => {
             let want = Tri::from_bool(positive);
             if out.balanced == want.negate() {
-                return SeatKnowledge::contradiction();
+                return Bounds::contradiction();
             }
             out.balanced = want;
         }
@@ -461,11 +488,8 @@ pub fn narrow(k: &SeatKnowledge, e: &Expr, positive: bool) -> SeatKnowledge {
     out
 }
 
-fn hull_of<'a>(
-    k: &SeatKnowledge,
-    branches: impl Iterator<Item = (&'a Expr, bool)>,
-) -> SeatKnowledge {
-    let mut acc = SeatKnowledge::contradiction();
+fn hull_of<'a>(k: Bounds, branches: impl Iterator<Item = (&'a Expr, bool)>) -> Bounds {
+    let mut acc = Bounds::contradiction();
     for (e, pos) in branches {
         acc = acc.hull(&narrow(k, e, pos));
     }
