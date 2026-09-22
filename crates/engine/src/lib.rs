@@ -6,6 +6,7 @@
 //! by ranking the candidate rules (priority, descriptiveness, prefer, file
 //! order) among those the hand satisfies.
 
+pub mod cases;
 mod engine;
 mod eval;
 mod facts;
