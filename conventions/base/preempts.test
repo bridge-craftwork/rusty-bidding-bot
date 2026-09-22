@@ -1,0 +1,27 @@
+# Weak twos and preempts (Rick's rules), Basic-Bridge card.
+card    Basic-Bridge
+dealer  S
+vul     None
+
+# seat hand             | auction | expect | why
+S KQJ976.32.54.J43      |         | 2S     | 6 HCP, six spades: weak two
+S 32.KQJ976.54.J43      |         | 2H     | six hearts
+S 32.54.KQJ976.J43      |         | 2D     | six diamonds
+S J87654.K3.Q42.83      |         | 2S     | not vulnerable: a poor suit is fine
+S KQJ9764.32.54.J3      |         | 3S     | seven spades: the three level
+S KQJ97642.3.54.J3      |         | 4S     | eight spades: game
+S KQJ976.K3.A4.J43      |         | 1S     | 12 HCP: an opening bid, not a weak two
+S KQ976.32.A4.J432      |         | P      | 8 HCP, five spades: nothing in first seat
+
+vul     NS
+S J87654.K3.Q42.83      |         | P      | vulnerable: two of the top three or three of the top five
+S KQJ654.32.Q42.83      |         | 2S     | vulnerable with KQJ: fine
+
+# Third seat is looser: a good five-card suit will do.
+vul     None
+N KQT96.32.54.J432      | P P     | 2S     | third seat: a good five-card suit
+N J8764.32.54.KJ32      | P P     | P      | third seat: a poor five-card suit is still a pass
+
+# Fourth seat has no weak two: 2S is a sound opening.
+E KQJ976.K3.A42.83      | P P P   | 2S     | fourth seat: six spades and opening values
+E KQJ976.32.54.J43      | P P P   | P      | fourth seat: no weak two with 6 HCP

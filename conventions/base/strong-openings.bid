@@ -1,0 +1,36 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The strong openings above 1NT: 2NT (20-21 balanced) and an artificial 2♣.
+# Responder's 2♦ is a waiting bid; opener then describes.
+
+module strong-openings "2♣ and 2NT openings"
+  needs  base
+  param  two_c = two_level.two_clubs.meaning default strong
+
+when opening
+  2N  "20-21 HCP, balanced"            shows hcp=20..21, balanced
+  2C  "Strong, artificial: 22+ HCP"    alert
+      shows hcp>=22
+      when  two_c is strong | two_c is very_strong
+      sets  forcing=game, ask=strong_2c
+      artificial
+
+after 2C (P)
+  2D  "Waiting"                        artificial
+      priority -1
+  2H  "Positive: 5+ hearts, 8+"        shows H>=5, hcp>=8
+  2S  "Positive: 5+ spades, 8+"        shows S>=5, hcp>=8
+  3C  "Positive: 5+ clubs, 8+"         shows C>=5, hcp>=8
+      priority -1                      # balanced hands bid 2NT
+  3D  "Positive: 5+ diamonds, 8+"      shows D>=5, hcp>=8
+      priority -1
+  2N  "Positive: balanced, 8+"         shows balanced, hcp>=8
+
+# Opener describes after the waiting bid.
+after 2C (P) 2D (P)
+  2N  "22-24 HCP, balanced"            shows hcp=22..24, balanced
+  3N  "25-27 HCP, balanced"            shows hcp>=25, balanced
+  2H  "5+ hearts"                      shows H>=5
+  2S  "5+ spades"                      shows S>=5
+  3C  "5+ clubs"                       shows C>=5
+  3D  "5+ diamonds"                    shows D>=5

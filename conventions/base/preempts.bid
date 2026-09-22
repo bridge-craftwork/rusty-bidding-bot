@@ -1,0 +1,61 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Weak two-bids and higher preempts (Rick, 2026-09-22):
+#
+# - a weak two is 4-9 HCP with a six-card suit; vulnerable it needs two of
+#   the top three or three of the top five honours;
+# - third seat is looser: a five-card suit will do, and no suit-quality
+#   requirement;
+# - fourth seat has no weak two: 2 of a suit there shows a six-card suit
+#   and the values of a minimum opening bid;
+# - with a seven-card suit open at the three level, not the two;
+# - the same guidelines apply to a weak jump overcall (competitive.bid,
+#   not written yet).
+
+module preempts "Weak two-bids and preempts"
+  needs  base
+  param  two_d = two_level.two_diamonds.meaning default weak
+  param  two_h = two_level.two_hearts.meaning default weak
+  param  two_s = two_level.two_spades.meaning default weak
+
+# ── Weak two-bids, first and second seat ─────────────────────────────
+when opening, seat<=2
+  2D  "Weak two: six diamonds, 4-9"    shows D=6, hcp=4..9, H<=3, S<=3
+      when two_d is weak, !vul | quality(D)>=good | top5(D)>=3
+  2H  "Weak two: six hearts, 4-9"      shows H=6, hcp=4..9, S<=3
+      when two_h is weak, !vul | quality(H)>=good | top5(H)>=3
+  2S  "Weak two: six spades, 4-9"      shows S=6, hcp=4..9
+      when two_s is weak, !vul | quality(S)>=good | top5(S)>=3
+
+# ── Third seat: five cards will do, and no quality requirement ───────
+when opening, seat=3
+  2D  "Weak two, third seat: a good five-card suit will do"  shows D>=5, D<=6, hcp=4..9, H<=3, S<=3
+      when two_d is weak, D>=6 | quality(D)>=good
+  2H  "Weak two, third seat: a good five-card suit will do"  shows H>=5, H<=6, hcp=4..9, S<=3
+      when two_h is weak, H>=6 | quality(H)>=good
+  2S  "Weak two, third seat: a good five-card suit will do"  shows S>=5, S<=6, hcp=4..9
+      when two_s is weak, S>=6 | quality(S)>=good
+
+# ── Fourth seat: no weak two; 2 of a suit is a sound opening ─────────
+when opening, seat=4
+  2D  "Fourth seat: six diamonds, opening values"  shows D>=6, hcp>=12, hcp<=21
+      when two_d is weak
+  2H  "Fourth seat: six hearts, opening values"    shows H>=6, hcp>=12, hcp<=21
+      when two_h is weak
+  2S  "Fourth seat: six spades, opening values"    shows S>=6, hcp>=12, hcp<=21
+      when two_s is weak
+
+# ── Three- and four-level preempts (not in fourth seat) ─────────────
+when opening, seat<=3
+  3C  "Preempt: seven clubs, 4-9"      shows C=7, hcp=4..9, H<=3, S<=3
+      when !vul | quality(C)>=good | top5(C)>=3
+  3D  "Preempt: seven diamonds, 4-9"   shows D=7, hcp=4..9, H<=3, S<=3
+      when !vul | quality(D)>=good | top5(D)>=3
+  3H  "Preempt: seven hearts, 4-9"     shows H=7, hcp=4..9, S<=3
+      when !vul | quality(H)>=good | top5(H)>=3
+  3S  "Preempt: seven spades, 4-9"     shows S=7, hcp=4..9
+      when !vul | quality(S)>=good | top5(S)>=3
+  4H  "Preempt: eight hearts"          shows H>=8, hcp=4..10, S<=3
+  4S  "Preempt: eight spades"          shows S>=8, hcp=4..10
+  5C  "Preempt: eight clubs"           shows C>=8, hcp=4..10, H<=3, S<=3
+  5D  "Preempt: eight diamonds"        shows D>=8, hcp=4..10, H<=3, S<=3

@@ -124,10 +124,12 @@ const SELF_ATTRS: &[&str] = &[
     "semibalanced",
     "shortest",
     "longest",
+    "second_longest",
+    "length_points",
     "controls",
     "losers",
 ];
-const SELF_FUNCS: &[&str] = &["tp", "keycards", "has", "quality", "stop"];
+const SELF_FUNCS: &[&str] = &["tp", "keycards", "has", "quality", "top5", "stop"];
 
 /// Printed name of a strain for explanations.
 pub fn strain_symbol(s: Strain) -> &'static str {
@@ -637,6 +639,9 @@ impl<'a> Ctx<'a> {
             "quality" => Val::Num(Range::point(
                 self.suit_arg(args, 0, b)?.map_or(0, |s| f.quality(s)),
             )),
+            "top5" => Val::Num(Range::point(
+                self.suit_arg(args, 0, b)?.map_or(0, |s| f.top5(s)),
+            )),
             "stop" => Val::Bool(Tri::from_bool(
                 self.suit_arg(args, 0, b)?.is_some_and(|s| f.stop(s)),
             )),
@@ -681,6 +686,17 @@ impl<'a> Ctx<'a> {
                 k.len.iter().map(|r| r.lo).max().unwrap_or(0),
                 k.len.iter().map(|r| r.hi).max().unwrap_or(13),
             )),
+            "second_longest" => {
+                let mut los: Vec<i32> = k.len.iter().map(|r| r.lo).collect();
+                let mut his: Vec<i32> = k.len.iter().map(|r| r.hi).collect();
+                los.sort_unstable_by(|a, b| b.cmp(a));
+                his.sort_unstable_by(|a, b| b.cmp(a));
+                Val::Num(Range::new(los[1], his[1]))
+            }
+            "length_points" => Val::Num(Range::new(
+                k.len.iter().map(|r| (r.lo - 4).max(0)).sum(),
+                k.len.iter().map(|r| (r.hi - 4).max(0)).sum(),
+            )),
             "last" => self
                 .pos
                 .last_call_of(seat)
@@ -688,7 +704,9 @@ impl<'a> Ctx<'a> {
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
             "has" | "stop" | "semibalanced" => Val::Bool(Tri::Unknown),
-            "keycards" | "tp" | "controls" | "losers" | "quality" => Val::Num(Range::new(0, 40)),
+            "keycards" | "tp" | "controls" | "losers" | "quality" | "top5" => {
+                Val::Num(Range::new(0, 40))
+            }
             _ => return Err(format!("unknown attribute `{n}`")),
         })
     }
@@ -1077,6 +1095,8 @@ fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
         "semibalanced" => Val::Bool(Tri::from_bool(f.dist[3] >= 2 && f.dist[0] <= 6)),
         "shortest" => Val::Num(Range::point(f.dist[3])),
         "longest" => Val::Num(Range::point(f.dist[0])),
+        "second_longest" => Val::Num(Range::point(f.second_longest())),
+        "length_points" => Val::Num(Range::point(f.length_points())),
         "controls" => Val::Num(Range::point(f.controls())),
         "losers" => Val::Num(Range::point(f.losers())),
         _ => unreachable!(),

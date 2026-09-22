@@ -1,0 +1,57 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responses to a weak two, and opener's answer to 2NT. Two treatments
+# (card `two_level.weak_two_2nt_response`): `feature`, where opener shows a
+# side ace or king with a maximum, and `ogust`, where opener's answer shows
+# minimum or maximum and the suit's quality.
+
+module weak-two-responses "Responses to a weak two"
+  needs  preempts
+  param  ask2nt = two_level.weak_two_2nt_response default feature
+
+after 2x (P) when x is not N
+  2N  "Asks: how good is the weak two?"   alert
+      shows hcp>=15
+      sets  forcing=round, ask=weak_two(x)
+      artificial
+  3x  "Preemptive raise: four-card support"    shows x>=4, hcp<=14
+  4x  "Game in the fit"                        shows x>=4, hcp>=14
+      when  x is H | x is S                    # with three, ask first
+  P   "No interest"                            shows hcp<=14
+      priority -5
+
+# ── Opener's answer to 2NT ───────────────────────────────────────────
+when asked weak_two(t), ask2nt is feature
+  3C  "Feature: the club ace or king, maximum"     shows has(A,C) | has(K,C), hcp>=7   when t is not C
+  3D  "Feature: the diamond ace or king, maximum"  shows has(A,D) | has(K,D), hcp>=7   when t is not D
+  3H  "Feature: the heart ace or king, maximum"    shows has(A,H) | has(K,H), hcp>=7   when t is not H
+  3S  "Feature: the spade ace or king, maximum"    shows has(A,S) | has(K,S), hcp>=7   when t is not S
+  3{t}  "No feature to show"                       shows hcp<=9
+        priority -1
+
+when asked weak_two(t), ask2nt is ogust
+  3C  "Ogust: minimum, poor suit"         shows hcp<=6, quality(t)<=1   artificial
+  3D  "Ogust: minimum, good suit"         shows hcp<=6, quality(t)>=2   artificial
+  3H  "Ogust: maximum, poor suit"         shows hcp>=7, quality(t)<=1   artificial
+  3S  "Ogust: maximum, good suit"         shows hcp>=7, quality(t)>=2   artificial
+  3N  "Ogust: the top three honours"      shows quality(t)=3
+
+# ── Responder after the answer: place the contract, never pass an
+# artificial answer.
+when answered weak_two(t)
+  4{t}  "Game in the weak two suit"   shows hcp>=17
+        when  t is H | t is S
+  3N    "Game in notrump"             shows hcp>=17
+        when  t is C | t is D
+  P     "Sign off: the answer is our suit"
+        when  partner.last=3{t}
+  4{t}  "Corrects 3NT to our suit"    shows hcp<=16
+        when  partner.last=3N, t is H | t is S
+  3{t}  "Sign off in {t}"             shows hcp<=16
+  3N    "To play: the answer was higher than our suit"   shows hcp<=16
+        priority -1
+  4{t}  "Sign off in our major"       shows hcp<=16
+        when  t is H | t is S
+        priority -2
+  P     "No game"                     shows hcp<=16
+        priority -5

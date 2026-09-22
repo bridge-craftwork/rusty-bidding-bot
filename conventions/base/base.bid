@@ -10,18 +10,38 @@
 module base "Natural opening bids"
   param  min_open = general.min_hcp_open default 12
 
+# An opening needs 12 total points: HCP plus one for each card beyond four
+# in every suit (12 flat, 11 with a five-card suit, 10 with a six-card one).
+# The rule of 20 was tried as an extra requirement without a six-card suit
+# (it rules out 11 HCP with 5-3-3-2). BBA opens those hands far more often
+# than it passes them: it cost 2,939 agreeing calls and gained 225, so we
+# keep the 12 total points alone.
+# That leaves no gap between a weak two and a one-level opening.
 when opening
   1S  "5+ spades"
-      shows hcp=min_open..21, S>=5, S>=H, S>=D, S>=C
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, S>=5, S>=H, S>=D, S>=C
   1H  "5+ hearts"
-      shows hcp=min_open..21, H>=5, H>S, H>=D, H>=C
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, H>=5, H>S, H>=D, H>=C
   1D  "3+ diamonds"
-      shows hcp=min_open..21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D
   1C  "3+ clubs"
-      shows hcp=min_open..21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C
   P   "No opening bid"
-      shows hcp<=min_open-1
+      shows hcp<=min_open-1, hcp+length_points<=min_open-1 | hcp<=9
       priority -10
+
+# Third seat may open light with a good four-card major; fourth seat opens
+# by the rule of 15 (HCP plus spade length), and passes otherwise.
+when opening, seat=3
+  1S  "Third seat: 10-11 with a good four-card spade suit"
+      shows S>=4, hcp=10..11, quality(S)>=good
+  1H  "Third seat: 10-11 with a good four-card heart suit"
+      shows H>=4, hcp=10..11, quality(H)>=good, S<=3
+when opening, seat=4
+  P   "Fourth seat: the rule of 15 says pass"
+      shows hcp<=14
+      when  hcp + S <= 14
+      priority 1
 
 # Once our side has bid game, a player with nothing more to add passes.
 # Slam tries and corrections are separate rules that outrank this.

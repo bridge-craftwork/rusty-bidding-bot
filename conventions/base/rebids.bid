@@ -45,11 +45,14 @@ after 1C (P) 1H (P)
       when  H<=3                           # four hearts: raise first
       priority 2                           # four spades: 1S before 1NT
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
+      priority 1
   2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
 after 1C (P) 1S (P)
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
+      priority 1
   2H  "Reverse: 4+ hearts, longer clubs, 17+"    shows H>=4, C>H, suit_points>=17  sets forcing=round
+      priority 1
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
   3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
 after 1D (P) 1H (P)
@@ -62,6 +65,7 @@ after 1D (P) 1H (P)
 after 1D (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
+      priority 1
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
   3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
 after 1H (P) 1S (P)
@@ -90,16 +94,22 @@ after 1H (P) 1N (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2D  "4+ diamonds, up to 18"              shows D>=4, suit_points<=18, D>=C | C<=3
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
+      priority 1
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
 after 1D (P) 1N (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
+      priority 1
   2S  "Reverse: 4+ spades, longer diamonds, 17+"  shows S>=4, D>S, suit_points>=17  sets forcing=round
+      priority 1
 after 1C (P) 1N (P)
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
+      priority 1
   2H  "Reverse: 4+ hearts, longer clubs, 17+"    shows H>=4, C>H, suit_points>=17  sets forcing=round
+      priority 1
   2S  "Reverse: 4+ spades, longer clubs, 17+"    shows S>=4, C>S, suit_points>=17  sets forcing=round
+      priority 1
 
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a
@@ -150,8 +160,10 @@ after 1S (P) 2H (P)
 after 1H (P) 2C (P)
   2D  "4+ diamonds"                        shows D>=4
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
+      priority 1
 after 1H (P) 2D (P)
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
+      priority 1
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
 after 1D (P) 2C (P)
   2D  "Rebids diamonds: minimum"           shows D>=5, suit_points<=15

@@ -1,0 +1,9 @@
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction | expect | why
+S AQ5.KQ7.AKJ4.Q76      |         | 2NT    | 21 balanced
+S AKQ.KQ7.AKJ4.QJ6      |         | 2C     | 22+: strong and artificial
+N 8632.J54.973.T62      | 2C P    | 2D     | waiting
+N AKQ32.J54.97.T62      | 2C P    | 2S     | positive: five spades, 10
+S AKQ.KQ7.AKJ4.Q76      | 2C P 2D P |2NT   | 22-24 balanced

@@ -38,6 +38,7 @@ pub const ACE: u8 = 14;
 pub const KING: u8 = 13;
 pub const QUEEN: u8 = 12;
 pub const JACK: u8 = 11;
+pub const TEN: u8 = 10;
 
 impl Facts {
     pub fn new(hand: &Hand) -> Facts {
@@ -120,6 +121,24 @@ impl Facts {
     /// 3 excellent.
     pub fn quality(&self, suit: usize) -> i32 {
         [ACE, KING, QUEEN]
+            .iter()
+            .filter(|&&r| self.has(suit, r))
+            .count() as i32
+    }
+
+    /// The length of the second-longest suit.
+    pub fn second_longest(&self) -> i32 {
+        self.dist[1]
+    }
+
+    /// Length points: one for each card beyond four in every suit.
+    pub fn length_points(&self) -> i32 {
+        (0..4).map(|s| (self.len[s] - 4).max(0)).sum()
+    }
+
+    /// How many of the top five honours (A K Q J T) are held.
+    pub fn top5(&self, suit: usize) -> i32 {
+        [ACE, KING, QUEEN, JACK, TEN]
             .iter()
             .filter(|&&r| self.has(suit, r))
             .count() as i32

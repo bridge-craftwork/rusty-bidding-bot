@@ -1,0 +1,19 @@
+# Responses to a weak two, and opener's answer to 2NT.
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction    | expect | why
+N AK4.AQ5.KQ76.Q83      | 2S P       | 2NT    | 20: asks
+N K843.A5.Q976.Q83      | 2S P       | 3S     | four-card support, not enough for game
+N KQ43.A5.AQ76.A83      | 2S P       | 4S     | four-card support and 17: game
+N 84.A52.QJ76.J832      | 2S P       | P      | no interest
+# Feature (the default treatment)
+S KQJ976.32.A4.J43      | 2S P 2NT P | 3D     | maximum with the diamond ace: the feature
+S KQJ976.32.54.543      | 2S P 2NT P | 3S     | minimum: no feature
+
+# Ogust
+card    Basic-Bridge two_level.weak_two_2nt_response=ogust
+S KQJ976.32.A4.J43      | 2S P 2NT P | 3S     | Ogust: maximum, good suit
+S J87654.32.A4.KJ3      | 2S P 2NT P | 3H     | Ogust: maximum, poor suit
+S KQJ976.32.54.543      | 2S P 2NT P | 3D     | Ogust: minimum, good suit
+S J87654.32.543.K3      | 2S P 2NT P | 3C     | Ogust: minimum, poor suit
