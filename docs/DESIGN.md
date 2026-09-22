@@ -268,9 +268,17 @@ In `Practice-Bidding-Scenarios`:
   we load the matching `.bbsa` files through our importer, so both engines
   bid with the same agreements. Alerts appear as `=n=` with
   `[Note "n:Stayman"]`.
-- `GIB/`: ~56 PBN files, ~30–50 boards each, BBO "BasicGIB 2/1", no alerts.
-  This is a second opinion: when BBA and GIB disagree, matching either one is
-  acceptable.
+- `GIB/`: 65 scenarios, ~50 boards each, BBO "BasicGIB 2/1", no alerts
+  (none yet for 1NT, Stayman or transfers). A third party for deciding
+  conflicts between us and BBA, consulted by hand; it is not part of
+  `rbb compare`.
+
+**BBA's meanings.** The PBS files carry only alerts. EPBot describes every
+call through its public info API: a short meaning ("Cue bid, a ♣ stopper",
+"denies stoppers: ♦") and an extended one with ranges ("7 to 10 total
+points, 5 to 13 cards in spades"). `bba-cli --all-meanings` (branch
+`feat/bba-cli-all-meanings` in BBA-tools) writes both as a `[Note]` on every
+call, so a scenario can be re-bid to see what BBA meant.
 
 Reference outputs are pinned to a specific BBA library **by sha256**: builds
 that all report version 8740 bid differently. New reference sets are made by

@@ -30,10 +30,11 @@ corpus):
 
 ## Gaps (not built yet)
 
-- **After 2NT, BBA's responder bids 3C**, and opener answers 3D (then 3S,
-  and so on: 263 corpus deals). This looks like a relay asking about the
-  super-accept, but its meaning is not clear from the auctions, so it is not
-  built. We bid game or sign off.
+- **Cuebids after the super-accept.** After 2NT, BBA's responder bids 3C:
+  "Cue bid, a ♣ stopper" by EPBot's own meanings, not a relay. Opener cuebids
+  in turn (3D, "a ♦ stopper"), or returns to 3M, "denies stoppers" in the
+  suits skipped; then 4NT or game (263 corpus deals). We bid game or sign
+  off instead.
 - Opener's rebids after responder's 3m over the super-accept.
 
 ## Fixed (2026-09-21)
@@ -45,5 +46,5 @@ corpus):
 
 ## Questions
 
-- The 3C relay after 2NT: Rick will look at hands and auctions before
-  deciding.
+- Cuebidding after a super-accept: build it (with controls, not
+  stoppers?), or keep bidding game directly?
