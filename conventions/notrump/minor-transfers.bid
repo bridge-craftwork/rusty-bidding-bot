@@ -1,0 +1,63 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+
+module minor-transfers "Minor-suit responses to 1NT"
+  needs  notrump-base
+  param  style = notrump.minor_transfers default relay
+
+# One card field chooses the treatment (see notes). Only the calls that
+# start the sequence and opener's answer differ; responder's next call is
+# written once, for every treatment, against `answered transfer(m)`.
+#
+# The transfers are for weak and invitational hands with no five-card major
+# (with one, transfer to the major first). With game values, bid 3NT.
+
+# ── relay (the default): 2S relays to 3C; pass with clubs, 3D with diamonds.
+after 1N (P) when style is relay
+  2S  "Relay to 3♣: a weak hand with a long minor"  alert
+      shows C>=6 | D>=6, H<=4, S<=4, strength=signoff
+      sets forcing=round, ask=relay
+      artificial
+after 1N (P) 2S (P) when style is relay
+  3C  "Completes the relay"  artificial
+when answered relay
+  P   "Clubs: play here"       shows C>=6
+  3D  "Diamonds: play here"    shows D>=6
+
+# ── four-way: 2S transfers to clubs, 2NT to diamonds. Opener shows good
+# support (Kxx or better) by bidding the step below the suit (four_way) or the
+# suit itself (four_way_reversed); the other call denies it.
+after 1N (P) when style is four_way | style is four_way_reversed
+  2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
+  2N  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
+
+after 1N (P) 2S (P) when style is four_way
+  2N  "Good club support (Kxx or better)"   alert  shows C>=3, has(A,C) | has(K,C)  artificial
+  3C  "No good club support"
+after 1N (P) 2N (P) when style is four_way
+  3C  "Good diamond support (Kxx or better)"   alert  shows D>=3, has(A,D) | has(K,D)  artificial
+  3D  "No good diamond support"
+
+after 1N (P) 2S (P) when style is four_way_reversed
+  3C  "Good club support (Kxx or better)"   shows C>=3, has(A,C) | has(K,C)
+  2N  "No good club support"                alert  artificial
+after 1N (P) 2N (P) when style is four_way_reversed
+  3D  "Good diamond support (Kxx or better)"   shows D>=3, has(A,D) | has(K,D)
+  3C  "No good diamond support"                alert  artificial
+
+# ── bba: 2S transfers to clubs, 3C to diamonds; opener always completes.
+after 1N (P) when style is bba
+  2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
+  3C  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
+after 1N (P) 2S (P) when style is bba
+  3C  "Completes the transfer"
+after 1N (P) 3C (P) when style is bba
+  3D  "Completes the transfer"
+
+# ── Responder after any minor transfer. Game values: 3NT. Opposite good
+# support the long minor should run, so invitational values bid 3NT too.
+# Otherwise play the minor at the three level.
+when answered transfer(m)
+  P   "Play here"                          shows strength<=invite   when partner.last=3{m}
+  3m  "Sign off in {m}"                    shows strength<=invite
+  3N  "To play: {game} total points"       shows strength>=game
+  3N  "To play: the {m} suit should run"   shows strength=invite    when partner.m>=3

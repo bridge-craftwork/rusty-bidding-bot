@@ -89,6 +89,30 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
   name.
 - `needs <module>`: load order and dependencies.
 
+**Treatments.** When players agree on a convention but not on its details,
+the card holds one enum field for the choice (`notrump.minor_transfers`:
+`relay`, `four_way`, `four_way_reversed`, `bba`, `none`). The module reads
+it as a param and tests it with `is`:
+
+```
+module minor-transfers "Minor-suit responses to 1NT"
+  param  style = notrump.minor_transfers default relay
+
+after 1N (P) when style is relay
+  2S  "Relay to 3♣"  ...
+after 1N (P) when style is four_way | style is four_way_reversed
+  2S  "Transfer to clubs"  ...  sets ask=transfer(C)
+when answered transfer(m)          # shared by every treatment
+  ...
+```
+
+Only the rules that give a call its meaning differ between treatments. What
+follows is written once against state (`answered transfer(m)`), whichever
+call made the transfer. `rbb bid check` rejects an option the field does not
+have (`style is four-way`), which would otherwise never match. Another
+module can read the same field: `one-nt.bid` turns off its natural 2NT when
+2NT is a transfer.
+
 ## 4. Contexts
 
 A **context** says when a group of rules applies. Rules are indented under
@@ -217,7 +241,8 @@ and arithmetic on numbers and `.min` / `.max`.
 
 **Suits.** A suit in a comparison is its length (`S>=H`, `M>=4`, `x<=1`).
 `is` asks what something *is*: `we.trump is suit` (or `notrump`, `none`), and
-`x is M` / `x is not M` for "the same suit" or "a different suit". Precedence, tightest first:
+`x is M` / `x is not M` for "the same suit" or "a different suit", and
+`style is relay` for a card option (section 3). Precedence, tightest first:
 `!`, then `|`, then `,`. So `hcp>=8, H=4 | S=4` reads as "8+ HCP, and a
 4-card heart or spade suit". Parentheses override.
 

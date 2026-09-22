@@ -5,6 +5,7 @@ module notrump-base "1NT opening and natural responses"
   param  nt_min   = notrump.one_nt.range_min default 15
   param  nt_max   = notrump.one_nt.range_max default 17
   param  one_less = notrump.one_nt.allow_one_less default false
+  param  minors   = notrump.minor_transfers default relay
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -27,6 +28,7 @@ after 1N (P)
       shows strength=game
   2N  "Invitational: {invite} total points"
       shows strength=invite
+      when  minors is not four_way, minors is not four_way_reversed   # 2NT is a transfer
       sets  ask=nt_invite
   P   "No game interest: {signoff} total points"
       shows strength=signoff

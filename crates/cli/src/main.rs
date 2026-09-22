@@ -672,6 +672,10 @@ fn bid(cmd: BidCommand) -> Result<()> {
                     errors += 1;
                 }
             }
+            for e in rbb_engine::check_card_refs(&modules) {
+                eprintln!("{e}");
+                errors += 1;
+            }
             let mut warnings = 0;
             for m in &modules {
                 for need in &m.needs {

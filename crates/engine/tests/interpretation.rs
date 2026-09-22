@@ -78,7 +78,11 @@ fn flat_hand_skips_stayman() {
         .iter()
         .find(|c| c.call == Call::bid(2, Strain::Clubs))
         .unwrap();
-    assert_eq!(stayman.outcome, "hand fails `when !shape 4333`");
+    assert!(
+        stayman.outcome.starts_with("hand fails `when !shape 4333"),
+        "{}",
+        stayman.outcome
+    );
 }
 
 #[test]

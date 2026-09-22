@@ -149,3 +149,110 @@ impl System {
         conditions.truncate(nc);
     }
 }
+
+/// Check what modules say about the card against the card registry: every
+/// `card` and `param` path is a field, values fit it, and an enum parameter
+/// is only compared with its options (`style is relay`). A misspelled option
+/// would otherwise never match, silently.
+pub fn check_card_refs(modules: &[Module]) -> Vec<String> {
+    let reg = bridge_card::registry();
+    let mut errors = Vec::new();
+    for m in modules {
+        let at = |line: usize| format!("{}:{line}", m.file);
+        for c in &m.card {
+            match reg.get(&c.path) {
+                None => errors.push(format!("{}: card: no field {}", at(c.line), c.path)),
+                Some(f) => {
+                    if let Some(v) = &c.value {
+                        if let Err(e) = f.normalize(literal_value(v)) {
+                            errors.push(format!("{}: card {}: {e}", at(c.line), c.path));
+                        }
+                    }
+                }
+            }
+        }
+        let mut options: HashMap<&str, &[String]> = HashMap::new();
+        for p in &m.params {
+            match reg.get(&p.path) {
+                None => errors.push(format!(
+                    "{}: param {}: no field {}",
+                    at(p.line),
+                    p.name,
+                    p.path
+                )),
+                Some(f) => {
+                    if let Some(d) = &p.default {
+                        if let Err(e) = f.normalize(literal_value(d)) {
+                            errors.push(format!("{}: param {} default: {e}", at(p.line), p.name));
+                        }
+                    }
+                    if !f.options.is_empty() {
+                        options.insert(p.name.as_str(), &f.options);
+                    }
+                }
+            }
+        }
+        if options.is_empty() {
+            continue;
+        }
+        fn walk(
+            e: &Expr,
+            line: usize,
+            options: &HashMap<&str, &[String]>,
+            out: &mut Vec<(usize, String)>,
+        ) {
+            match e {
+                Expr::Is { expr, what, .. } => {
+                    if let Expr::Path { path } = expr.as_ref() {
+                        if let [seg] = path.as_slice() {
+                            if let Some(opts) = options.get(seg.name.as_str()) {
+                                if !opts.iter().any(|o| o == what) {
+                                    out.push((
+                                        line,
+                                        format!(
+                                            "`{} is {what}`: options are {}",
+                                            seg.name,
+                                            opts.join(", ")
+                                        ),
+                                    ));
+                                }
+                            }
+                        }
+                    }
+                }
+                Expr::And { all } => all.iter().for_each(|x| walk(x, line, options, out)),
+                Expr::Or { any } => any.iter().for_each(|x| walk(x, line, options, out)),
+                Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => {
+                    walk(expr, line, options, out)
+                }
+                Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
+                    walk(lhs, line, options, out);
+                    walk(rhs, line, options, out);
+                }
+                _ => {}
+            }
+        }
+        fn ctx(c: &Context, options: &HashMap<&str, &[String]>, out: &mut Vec<(usize, String)>) {
+            if let Some(w) = &c.when {
+                walk(w, c.line, options, out);
+            }
+            for r in &c.rules {
+                for e in [&r.shows, &r.when, &r.denies, &r.prefer]
+                    .into_iter()
+                    .flatten()
+                {
+                    walk(e, r.line, options, out);
+                }
+            }
+            c.contexts.iter().for_each(|x| ctx(x, options, out));
+        }
+        let mut found = Vec::new();
+        m.contexts.iter().for_each(|c| ctx(c, &options, &mut found));
+        errors.extend(
+            found
+                .into_iter()
+                .map(|(line, e)| format!("{}: {e}", at(line))),
+        );
+    }
+    errors
+}

@@ -64,21 +64,7 @@ same contract.
 
 ## Gaps (not built yet)
 
-- **Six-card minor.** 21GF-DEFAULT sets `1N-2S transfer to clubs` and
-  `1N-3C transfer to diamonds` (card fields
-  `notrump.transfers.two_s_clubs` and `.three_c_diamonds`); 2NT stays a
-  natural invitation, and 3D is natural. In the corpus BBA's opener always
-  completes (3C or 3D, no super-accept), and responder with six passes when
-  weak (43 and 56 deals), bids 3NT when invitational or better (22, 23), or
-  4NT or a new suit with slam interest. We have no rules for these yet: with
-  `5.K73.QJ9542.J83` we pass or bid 2NT.
-  Rick's notes on other methods, for when a card asks for them: the common
-  standard is 2S for either minor (opener 3C, responder corrects to 3D).
-  With four-suit transfers, 2S shows clubs and 2NT diamonds. With a 2S range
-  ask, 2S is weak with clubs or a notrump invitation: opener bids 3C with a
-  maximum, 2NT otherwise, and responder can then bid 3C with clubs. Rick's
-  own: 2NT transfers to diamonds, and opener bids 3C as a super-accept (Kxx
-  or better in diamonds), else 3D.
+- (Six-card minors are now `minor-transfers.bid`; see its notes.)
 - **Grand slam**: nothing above the slam band. BBA bids 7NT with 21–23.
 - **Interference** over 1NT (the `Opps_*` scenarios).
 

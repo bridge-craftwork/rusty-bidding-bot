@@ -1,0 +1,41 @@
+# Minor-suit responses to 1NT, one section per treatment
+# (card field notrump.minor_transfers).
+dealer  S
+
+# ── relay (the default): 2S relays to 3C; pass or correct to 3D.
+card    21GF-DEFAULT notrump.minor_transfers=relay
+# seat hand             | auction          | expect | why
+N 5.K73.QJ9542.J83      | 1NT P            | 2S     | weak with six diamonds: relay
+S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 3C     | the relay is forced
+N 5.K73.QJ9542.J83      | 1NT P 2S P 3C P  | 3D     | diamonds: correct
+N 5.K73.J83.QJ9542      | 1NT P 2S P 3C P  | P      | clubs: play 3C
+N 5.K73.QJ9542.K83      | 1NT P            | 2NT    | 9: invitational hands bid a natural 2NT
+
+# ── four_way: 2S clubs, 2NT diamonds; the step below the suit is good support.
+card    21GF-DEFAULT notrump.minor_transfers=four_way
+N 5.K73.J83.QJ9542      | 1NT P            | 2S     | six clubs
+N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | six diamonds: 2NT is a transfer
+S AK5.KJ7.Q94.K832      | 1NT P 2S P       | 2NT    | Kxxx in clubs: good support
+S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 3C     | QJx: not good support
+S AK5.KJ72.QJ3.A94      | 1NT P 2NT P      | 3D     | QJx in diamonds: not good support
+S AK5.KJ72.A94.QJ3      | 1NT P 2NT P      | 3C     | Axx in diamonds: good support
+N 5.K73.J83.QJ9542      | 1NT P 2S P 2NT P | 3C     | weak: sign off
+N 5.K73.J83.QJ9542      | 1NT P 2S P 3C P  | P      | weak: play here
+N 5.Q73.J83.AQ9542      | 1NT P 2S P 2NT P | 3NT    | 9 opposite good support: the clubs should run
+N 5.Q73.J83.AQ9542      | 1NT P 2S P 3C P  | P      | 9 without good support: play 3C
+N Q82.K73.J83.K954      | 1NT P            | 2C     | invitational, no major: Stayman, then 2NT
+N Q82.K73.J83.K954      | 1NT P 2C P 2D P  | 2NT    | the invitation
+
+# ── four_way_reversed: the suit itself shows good support.
+card    21GF-DEFAULT notrump.minor_transfers=four_way_reversed
+S AK5.KJ7.Q94.K832      | 1NT P 2S P       | 3C     | good club support
+S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 2NT    | not good support
+S AK5.KJ72.A94.QJ3      | 1NT P 2NT P      | 3D     | good diamond support
+
+# ── bba (21GF-DEFAULT as imported): 2S clubs, 3C diamonds, always completed.
+card    21GF-DEFAULT
+N 5.K73.QJ9542.J83      | 1NT P            | 3C     | six diamonds
+S AK5.KJ72.Q94.QJ3      | 1NT P 3C P       | 3D     | completes
+N 5.K73.QJ9542.J83      | 1NT P 3C P 3D P  | P      | weak: play here
+N 5.K73.J83.QJ9542      | 1NT P            | 2S     | six clubs
+N Q82.K73.J83.K954      | 1NT P            | 2NT    | 2NT stays natural

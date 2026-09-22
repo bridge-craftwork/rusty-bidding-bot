@@ -224,6 +224,10 @@ impl<'a> Ctx<'a> {
             Expr::Is { expr, what, not } => {
                 let v = self.eval(expr, b)?;
                 let t = match (what.as_str(), &v) {
+                    // A named value: a card option (`style is relay`) or a
+                    // symbol (`we.forcing is none`). Before the names below,
+                    // which an option may share.
+                    (name, Val::Sym(s)) => s == name,
                     ("suit", Val::Strain(s)) => *s != Strain::NoTrump,
                     ("suit", Val::Suit(_)) => true,
                     ("notrump", Val::Strain(s)) => *s == Strain::NoTrump,
@@ -314,8 +318,16 @@ impl<'a> Ctx<'a> {
                         && !b.contains_key(&path[0].name)
                         && path[0].args.is_none() =>
                 {
-                    let v = suit_of_strain(*actual).map_or(Val::Strain(*actual), Val::Suit);
-                    b.insert(path[0].name.clone(), v);
+                    // `transfer(M)` binds only a major, `transfer(m)` a minor.
+                    let name = &path[0].name;
+                    let suit = suit_of_strain(*actual);
+                    if matches!(name.as_str(), "M" | "m")
+                        && !suit.is_some_and(|s| crate::engine::var_allows(name, s))
+                    {
+                        return Ok(false);
+                    }
+                    let v = suit.map_or(Val::Strain(*actual), Val::Suit);
+                    b.insert(name.clone(), v);
                 }
                 other => {
                     if strain_value(&self.eval(other, b)?) != Some(*actual) {

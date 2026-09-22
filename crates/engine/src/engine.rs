@@ -725,7 +725,8 @@ fn match_pattern(p: &[PatternCall], calls: &[Call], ctx: &Ctx, b: &mut Bindings)
         .all(|(pc, call)| match_call(&pc.call, call, ctx, b))
 }
 
-fn var_allows(var: &str, suit: usize) -> bool {
+/// Suit variable classes: `M` is a major, `m` a minor, others any suit.
+pub(crate) fn var_allows(var: &str, suit: usize) -> bool {
     match var {
         "M" => suit >= 2,
         "m" => suit < 2,

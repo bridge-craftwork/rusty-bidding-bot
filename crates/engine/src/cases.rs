@@ -3,7 +3,8 @@
 //! ```text
 //! # Settings apply to the lines below them and can change part way.
 //! card    21GF-DEFAULT        # a card name (looked up in the cards
-//!                             # directory) or a path to .bbsa / card JSON
+//!                             # directory) or a path to .bbsa / card JSON,
+//!                             # then optional changes: path=value ...
 //! dealer  S
 //! vul     None
 //! scoring MP
@@ -20,7 +21,7 @@
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-use bridge_card::{bbsa, Card};
+use bridge_card::{bbsa, Card, Value};
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
@@ -264,7 +265,30 @@ pub fn find(dir: &Path) -> Vec<PathBuf> {
     out
 }
 
-fn load_card(spec: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, String> {
+/// A `card` line: the card, then `path=value` changes to it.
+fn load_card(line: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, String> {
+    let mut words = line.split_whitespace();
+    let spec = words.next().ok_or("card: expected a card name or path")?;
+    let mut card = load_card_file(spec, test_dir, cards_dir)?;
+    for w in words {
+        let (path, value) = w
+            .split_once('=')
+            .ok_or_else(|| format!("card change {w:?}: expected path=value"))?;
+        let value = match value {
+            "true" => Value::Bool(true),
+            "false" => Value::Bool(false),
+            v => v
+                .parse::<i64>()
+                .map(Value::Int)
+                .unwrap_or_else(|_| Value::Text(v.to_string())),
+        };
+        card.set(path, value)
+            .map_err(|e| format!("card change {w:?}: {e}"))?;
+    }
+    Ok(card)
+}
+
+fn load_card_file(spec: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, String> {
     let candidates = [
         test_dir.join(spec),
         PathBuf::from(spec),

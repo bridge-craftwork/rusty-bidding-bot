@@ -127,8 +127,10 @@ Keys whose meaning needs a bridge decision are **not guessed**. They are
 kept verbatim in the card's `bba_passthrough` and written back on export, so
 `.bbsa → card → .bbsa` is lossless. Every current-layout file in
 `Practice-Bidding-Scenarios/bbsa/` exports back byte for byte; older-layout
-files keep every setting (tested). `rbb card import-bbsa` lists the
-passthrough keys. Giving them card fields is a task for a bridge expert.
+files keep every setting (tested). A treatment field that BBA spreads over
+several switches is derived on import (`[[derived]]` in `bbsa-map.toml`):
+BBA's switches stay on the card for export, and the rules read the field.
+`rbb card import-bbsa` lists the passthrough keys. Giving them card fields is a task for a bridge expert.
 
 Commands: `rbb card import-bbsa`, `export-bbsa`, `check`, `schema`.
 
@@ -382,6 +384,8 @@ agreed, one per line: `seat hand | auction | expect | why`. Header lines
 (`card`, `dealer`, `vul`, `scoring`) apply to the lines below them. `card`
 names a `.bbsa` in the cards directory (default
 `crates/bridge-card/tests/fixtures/bbsa`), or a path; both sides play it.
+Changes can follow, so one file can test each treatment:
+`card 21GF-DEFAULT notrump.minor_transfers=four_way`.
 `expect` is a call, `!call` (anything but), or alternatives `a/b`.
 
 ```

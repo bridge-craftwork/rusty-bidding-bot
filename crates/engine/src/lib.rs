@@ -33,7 +33,7 @@ pub fn suit_of(strain: bridge_types::Strain) -> Option<bridge_types::Suit> {
         Strain::NoTrump => None,
     }
 }
-pub use system::{RuleRef, System};
+pub use system::{check_card_refs, RuleRef, System};
 
 /// Compile every `.bid` file under `dir`, sorted by path (which fixes the
 /// file-order tie-breaker).
