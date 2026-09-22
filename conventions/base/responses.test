@@ -44,3 +44,18 @@ N T987.QT2.A52.A84      | 1S P    | 3S     | 10 with four spades: limit raise
 N AQ962.732.QJ83.6      | 1S P    | 4S     | 9 with five spades and a singleton: preemptive raise
 N T.AKT542.87.A953      | 1S P    | 3H     | 11 with six hearts: invitational jump shift
 N 2.84.76543.J8653      | 1S P    | P      | 1 HCP
+
+# ── Game values with a fit and no side suit: a three-card minor first (BBA)
+N KJ9753.A73.8.KT2      | 1S P    | 2C     | 11 + singleton: game values, no four-card side suit
+
+# ── Treatment: Walsh (card one_club_responses=walsh)
+card    Basic-Bridge minor_openings.one_club_responses=walsh
+N KQ2.JT63.KQ742.8      | 1C P    | 1H     | Walsh: bypass diamonds for the four-card major
+N AK96.76.AQ62.T73      | 1C P    | 1D     | Walsh, but 13 and game forcing: diamonds first
+N A86.T93.KJT64.K2      | 1C P    | 1D     | no four-card major: 1D
+
+# ── Treatment: 1m-2NT game forcing (card two_nt_response=game_forcing)
+card    Basic-Bridge minor_openings.two_nt_response=game_forcing
+N K73.QJ5.AQ93.K32      | 1D P    | 2NT    | 15, balanced, no major: game forcing 2NT
+N K73.QJ5.AQ93.KQ2      | 1D P    | 3NT    | 17, balanced: 3NT is 16-17 in this treatment
+N K73.QJ5.AQ93.732      | 1D P    | 2C     | 12, balanced: a new suit first, then 2NT

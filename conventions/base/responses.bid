@@ -13,15 +13,29 @@ module responses "Responses to one-level suit openings"
   param  limit_raise = major_openings.jump_raise.inv default true
   param  strong_js   = general.jump_shifts.strong_2 default true
   param  inv_js      = general.jump_shifts.invitational default false
+  param  over_1c     = minor_openings.one_club_responses default up_the_line
+  param  nt2         = minor_openings.two_nt_response default invitational
 
 # ── Over 1♣ / 1♦ ───────────────────────────────────────────────────────
-after 1C (P)
+after 1C (P) when over_1c is up_the_line
   1D  "4+ diamonds, 6+ HCP"         shows D>=4, hcp>=6, D>=H, D>H | D=4, D>=S, D>S | D=4
       sets forcing=round
   1H  "4+ hearts, 6+ HCP"           shows H>=4, hcp>=6, H>=D, H>D | H>=5, H>=S, H>S | H=4
       sets forcing=round
   1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6, S>=D, S>D | S>=5, S>H | S>=5, S>=H
       sets forcing=round
+
+# Walsh: with a four-card major, bypass diamonds unless game forcing (12+).
+after 1C (P) when over_1c is walsh
+  1D  "4+ diamonds, 6+ HCP: no four-card major, or game forcing"
+      shows D>=4, hcp>=6, (H<=3, S<=3) | points>=12, D>=H, D>=S
+      sets forcing=round
+  1H  "4+ hearts, 6+ HCP"           shows H>=4, hcp>=6, H>=S, H>S | H=4, points<=11 | H>D
+      sets forcing=round
+  1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6, S>H | S>=5, S>=H, points<=11 | S>D
+      sets forcing=round
+
+after 1C (P)
   1N  "6-10, balanced, no 4-card major or diamonds"   shows hcp>=6, points<=10, H<=3, S<=3, D<=3
   2D  "Strong jump shift: 15+, 5+ diamonds"  shows D>=5, points>=15  when strong_js, !passed_hand
       sets forcing=game
@@ -42,13 +56,32 @@ after 1m (P)
   2m  "Raise: 6-9, 5+ {m}, no 4-card major"     shows m>=5, hcp>=6, points<=9, H<=3, S<=3
   3m  "Limit raise: 10-12, 5+ {m}, no 4-card major"  shows m>=5, points=10..12, H<=3, S<=3
   2N  "11-12, balanced, no 4-card major"        shows balanced, points=11..12, H<=3, S<=3
+      when  nt2 is invitational
       priority -1                      # a one-level suit first when there is one
   3N  "13-15, balanced, no 4-card major"        shows balanced, points=13..15, H<=3, S<=3
+      when  nt2 is invitational
+      priority -1
+  2N  "13-15, balanced, no 4-card major: game forcing"  shows balanced, points=13..15, H<=3, S<=3
+      when  nt2 is game_forcing
+      sets  forcing=game
+      priority -1
+  3N  "16-17, balanced, no 4-card major"        shows balanced, points=16..17, H<=3, S<=3
+      when  nt2 is game_forcing
       priority -1
   2H  "Strong jump shift: 15+, 5+ hearts"       shows H>=5, points>=15  when strong_js, !passed_hand
       sets forcing=game
   2S  "Strong jump shift: 15+, 5+ spades"       shows S>=5, points>=15  when strong_js, !passed_hand
       sets forcing=game
+
+# With 2NT game forcing, 11-12 balanced bids a new minor first (2NT next).
+after 1D (P) when nt2 is game_forcing
+  2C  "11-12, balanced, no 4-card major: 2NT next"   shows balanced, points=11..12, C>=3, H<=3, S<=3
+      sets forcing=round
+      priority -1
+after 1C (P) when nt2 is game_forcing
+  1D  "11-12, balanced, no 4-card major: 2NT next"   shows balanced, points=11..12, D>=3, H<=3, S<=3
+      sets forcing=round
+      priority -1
 
 # ── Over 1♥ / 1♠ ───────────────────────────────────────────────────────
 after 1H (P)
@@ -90,9 +123,17 @@ after 1S (P)
 after 1M (P)
   2M  "Raise: 6-9 support points, 3+ {M}"  shows M>=3, tp(M)=6..9, hcp=6..9
   4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9
-  4M  "Game in the fit: 13+ support points, no side suit to show"
+  2C  "Game values with a fit: a three-card minor to start"
+      shows M>=3, tp(M)>=13, C>=3
+      sets  forcing=round
+      priority -2                      # no four-card side suit: temporize, as BBA
+  2D  "Game values with a fit: a three-card minor to start"
+      shows M>=3, tp(M)>=13, D>=3, C<=2
+      sets  forcing=round
+      priority -2
+  4M  "Game in the fit: 13+ support points"
       shows M>=3, tp(M)>=13
-      priority -2                      # a new suit or 3NT first
+      priority -3                      # no three-card minor either
   2N  "11-12, balanced, no fit"        shows balanced, points=11..12, M<=2
       priority -1                      # a new suit first when there is one
   3N  "13-15, balanced"                shows balanced, points=13..15, M<=3

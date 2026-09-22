@@ -4,10 +4,22 @@ Responses to a one-level suit opening, uncontested. Standard American as BBA's
 Basic-Bridge card plays it; the Basic_* scenarios use that card. Cases:
 `responses.test` (one corpus hand per response, all agreeing with BBA).
 
-## Guidance
+## Guidance (Rick, 2026-09-22)
 
-None from Rick yet: the rules follow SAYC and BBA's own meanings (see
-Questions).
+- **Treatments**, one card field each:
+  - `minor_openings.one_club_responses`: `up_the_line` (default, as BBA:
+    1♦ with four diamonds and a four-card major) or `walsh` (bypass
+    diamonds for a four-card major unless game forcing, 12+).
+  - `minor_openings.two_nt_response`: `invitational` (default, as BBA:
+    1m-2NT 11-12, 1m-3NT 13-15) or `game_forcing` (1m-2NT 13-15, 1m-3NT
+    16-17; with 11-12 bid a new minor, then 2NT).
+- **Strong jump shift: 15+**, matching BBA for now.
+- **Two-level new suit: as BBA**, 11+, or a six-card suit with 10.
+- **Game values with a fit and no four-card side suit: a three-card minor
+  first**, as BBA (4M only when there is no three-card minor).
+- BBA's own "Walsh style" switch stays on the card as
+  `minor_openings.walsh.play`, but the rules read `one_club_responses`:
+  with the switch on, BBA still bids up the line.
 
 ## How the rules were set
 
@@ -57,8 +69,6 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 - BBA's preemptive 4M with 8-10 HCP, four trumps and a singleton (it counts
   these as game hands); we make a limit raise.
 - Some 6-counts BBA passes (for example `65.K8654.KT43.86`).
-- With 13+ support points and no side suit to show, we bid 4M; BBA bids a
-  three-card minor to temporize (`KJ9753.A73.8.KT2`: BBA 2♣).
 
 ## Gaps (not built yet)
 
@@ -72,13 +82,4 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 
 ## Questions
 
-1. **Walsh.** The card says Walsh, but BBA bids 1♦ over 1♣ with four
-   diamonds and a four-card major (76 of 76). We follow BBA: up the line.
-   Real Walsh would bypass diamonds with a weak hand.
-2. **Strong jump shift: 15+?** That is BBA's range; many play 17+ or 19+.
-3. **Two-level new suit: 11+** (with 10 and a four-card suit BBA bids 1NT),
-   or 10+ with a six-card suit.
-4. **2NT response: 11-12 invitational**, used only when there is no new
-   suit to bid, as BBA does. SAYC's 2NT is 13-15 forcing; which do you want?
-5. **Game-forcing raise without a side suit**: 4M (ours) or a temporizing
-   three-card minor (BBA)?
+None open.
