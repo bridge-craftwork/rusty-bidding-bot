@@ -460,8 +460,19 @@ impl eframe::App for App {
             if let Ok((outcome, cases)) = r.rx.try_recv() {
                 let took = r.started.elapsed();
                 self.running = None;
+                // Keep the selected case across re-runs, by where it is.
+                let at = |c: &CaseResults, i: usize| {
+                    c.as_ref()
+                        .ok()?
+                        .get(i)
+                        .map(|o| (o.case.file.clone(), o.case.line))
+                };
+                let selected = self.case.and_then(|i| at(&self.cases, i));
                 self.cases = cases;
-                self.case = None;
+                self.case = selected.and_then(|s| {
+                    (0..self.cases.as_ref().map_or(0, Vec::len))
+                        .find(|&i| at(&self.cases, i).as_ref() == Some(&s))
+                });
                 self.finish(outcome, took);
             }
         }
@@ -497,6 +508,7 @@ impl eframe::App for App {
                 ui.style_mut().interaction.selectable_labels = true;
                 egui::ScrollArea::both().id_salt("detail-scroll").show(ui, |ui| {
                 let action = match (&self.detail, self.board, &self.loaded) {
+                    _ if self.tab == Tab::Cases => self.case_detail(ui),
                     (Some(d), Some(i), Some(l)) => d.ui(ui, &l.report.boards[i]),
                     _ => {
                         ui.label("Select a board to see both auctions and the engine's reasoning.");
@@ -1017,15 +1029,12 @@ impl App {
             .collect();
         rows.sort_by_key(|&i| outcomes[i].passed);
         let mut clicked = None;
-        let mut open = None;
         ui.push_id("cases", |ui| {
             ui.spacing_mut().item_spacing.y = 0.0;
-            let height = ui.available_height() * 0.6;
             TableBuilder::new(ui)
                 .id_salt("case-table")
                 .striped(true)
                 .sense(Sense::click())
-                .max_scroll_height(height)
                 .column(Column::initial(190.0).clip(true))
                 .column(Column::initial(170.0).clip(true))
                 .column(Column::initial(230.0).clip(true))
@@ -1082,27 +1091,51 @@ impl App {
         if let Some(i) = clicked {
             self.case = Some(i);
         }
-        if let Some(o) = self.case.and_then(|i| outcomes.get(i)) {
-            ui.separator();
-            ui.horizontal(|ui| {
-                if ui
-                    .link(format!("{}:{}", short_path(&o.case.file), o.case.line))
-                    .clicked()
-                {
-                    open = Some((o.case.file.clone(), o.case.line));
-                }
-                ui.label(format!(
-                    "expected {}, got {} ({})",
-                    o.case.expect,
-                    o.got.to_pbn(),
-                    o.explanation
-                ));
+    }
+
+    /// The selected case in the detail panel: what it expected, the call
+    /// and its candidates. Returns the case's location when its link is
+    /// clicked.
+    fn case_detail(&self, ui: &mut egui::Ui) -> Option<(String, usize)> {
+        let Some(o) = self.case.and_then(|i| self.cases.as_ref().ok()?.get(i)) else {
+            ui.label("Select a case to see the engine's candidates.");
+            return None;
+        };
+        let mut open = None;
+        let c = &o.case;
+        ui.horizontal(|ui| {
+            if ui
+                .link(format!("{}:{}", short_path(&c.file), c.line))
+                .clicked()
+            {
+                open = Some((c.file.clone(), c.line));
+            }
+            let text = RichText::new(format!(
+                "expected {}, got {} ({})",
+                c.expect,
+                o.got.to_pbn(),
+                o.explanation
+            ));
+            ui.label(if o.passed {
+                text.color(GOOD)
+            } else {
+                text.color(BAD)
             });
-            ui.monospace(&o.trace);
+        });
+        let auction: Vec<String> = c.auction.iter().map(|c| c.to_pbn()).collect();
+        ui.monospace(format!(
+            "{} {}   dealer {}   {}",
+            c.seat.to_char(),
+            c.hand,
+            c.dealer.to_char(),
+            auction.join(" ")
+        ));
+        if !c.why.is_empty() {
+            ui.label(format!("why: {}", c.why));
         }
-        if let Some((file, line)) = open {
-            self.open_in_editor(&file, line);
-        }
+        ui.separator();
+        ui.monospace(&o.trace);
+        open
     }
 
     fn problem_table(&mut self, ui: &mut egui::Ui) {
