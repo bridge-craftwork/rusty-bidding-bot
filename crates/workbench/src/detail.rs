@@ -303,7 +303,7 @@ impl Detail {
     }
 }
 
-fn short_path(p: &str) -> &str {
+pub fn short_path(p: &str) -> &str {
     p.find("conventions/")
         .map_or(p, |i| &p[i + "conventions/".len()..])
 }

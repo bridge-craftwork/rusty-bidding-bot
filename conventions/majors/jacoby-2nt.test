@@ -1,0 +1,5 @@
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction     | expect | why
+S AKJ52.K73.Q943.8      | 1S P 2NT P  | 3C     | 13 HCP, singleton club: show the shortness

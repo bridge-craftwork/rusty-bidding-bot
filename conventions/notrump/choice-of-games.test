@@ -1,0 +1,9 @@
+# Opener corrects 3NT to 4M with an 8-card fit, after Stayman or a transfer.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                | expect | why
+S AK52.KJ73.Q94.K8      | 1NT P 2C P 2H P 3NT P  | 4S     | responder has four spades (no heart raise), so do we
+S AK5.KJ73.Q942.K8      | 1NT P 2C P 2H P 3NT P  | P      | no spade fit
+S AK5.KJ7.Q942.K83      | 1NT P 2D P 2H P 3NT P  | 4H     | five hearts opposite three
+S AK52.KJ.Q942.K83      | 1NT P 2D P 2H P 3NT P  | P      | two hearts: 3NT

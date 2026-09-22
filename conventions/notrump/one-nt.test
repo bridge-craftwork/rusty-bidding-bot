@@ -1,0 +1,11 @@
+# The 1NT opening and natural responses.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction        | expect | why
+S AK52.KJ7.Q94.K83      |                | 1NT    | 16 HCP, 4-3-3-3
+N Q82.J73.Q942.J83      | 1NT P          | P      | 5 HCP: no game interest
+N T82.QT7.KT9.QT83      | 1NT P          | 2NT    | 7 HCP and four tens: 8 points, invite
+N 982.Q87.K95.Q853      | 1NT P          | P      | the same without the tens: 7 points
+S KQJ.KJ73.AK5.T52      | 1NT P 2NT P    | 3NT    | 17 opposite 8-9: game is certain
+S KQJ.KJ73.AQ5.T52      | 1NT P 2NT P    | P      | 16 declines (BBA too, Basic_NT board 51)

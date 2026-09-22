@@ -326,7 +326,7 @@ the web. Bridge-Classroom's Vue components (hands, DD tables) are the path if th
   - the knowledge table for all four seats, and each side's state;
   - double-dummy table, par, and the result of each contract.
 - **Hot reload**: the app watches `conventions/` and re-runs automatically
-  when a `.bid` file is saved, then shows what changed ("+23 boards now match,
+  when a `.bid` or `.test` file is saved, then shows what changed ("+23 boards now match,
   4 now differ"). Editing a rule and seeing the effect a few seconds later is
   the point of the tool.
 
@@ -369,8 +369,27 @@ rbb probe --hand S=AQ52.KJ73.A95.Q8 --vary-tens --prefix "1NT Pass 2NT Pass" --d
 
 ### Rule-level tests
 
-Next to each module, a `.test` file (format to be decided) holds cases such
-as `1N (P) ? with KJ84.Q52.K63.J72 → 2C`. The trace shows which rule answered.
+Next to each module, a `<module>.test` file holds hands whose call is
+agreed, one per line: `seat hand | auction | expect | why`. Header lines
+(`card`, `dealer`, `vul`, `scoring`) apply to the lines below them. `card`
+names a `.bbsa` in the cards directory (default
+`crates/bridge-card/tests/fixtures/bbsa`), or a path; both sides play it.
+`expect` is a call, `!call` (anything but), or alternatives `a/b`.
+
+```
+card    21GF-DEFAULT
+dealer  S
+N 82.QJ973.K94.J83  | 1NT P      | 2D  | weak, five hearts: transfer
+S AK5.Q72.Q942.K83  | 1NT P 2D P | !P  | the transfer is forcing
+```
+
+`rbb bid test [paths]` runs them and prints each failure with its
+candidates. `cargo test` runs every `conventions/**/*.test`
+(`crates/engine/tests/cases.rs`), and the workbench's Cases tab lists
+failing cases, re-running when a `.bid` or `.test` file is saved. Tests of
+what the engine *knows* (interpretation, knowledge, traces) stay in Rust
+(`crates/engine/tests/interpretation.rs`).
+
 Later, **generated tests**: turn a rule's context and `shows` into a dealer3
 script, deal hands that fit, and check that the engine chooses that rule, or
 knowingly chooses a higher-ranked one.

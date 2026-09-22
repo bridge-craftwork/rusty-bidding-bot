@@ -31,6 +31,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
 - `cargo run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
   `conventions/`; `bid compile <file>` prints the JSON IR.
+- `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
+  (`seat hand | auction | expect | why`) next to the modules; `-v` lists passes.
+  `cargo test` runs them too. Put call expectations there, not in Rust tests.
 - `cargo run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything).
 - `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:

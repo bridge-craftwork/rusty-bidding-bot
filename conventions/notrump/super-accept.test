@@ -1,0 +1,5 @@
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction    | expect | why
+S AK5.KJ72.Q94.KQ3      | 1NT P 2D P | 3H     | four hearts, 17

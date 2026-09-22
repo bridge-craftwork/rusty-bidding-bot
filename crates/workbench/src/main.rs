@@ -20,6 +20,9 @@ struct Args {
     /// Directory of .bid modules (watched for changes).
     #[arg(long, default_value = "conventions")]
     rules: PathBuf,
+    /// Where `.test` files look up card names.
+    #[arg(long, default_value = "crates/bridge-card/tests/fixtures/bbsa")]
+    cards: PathBuf,
     /// At most this many boards per scenario.
     #[arg(short, long)]
     limit: Option<usize>,
@@ -49,6 +52,6 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "rbb workbench",
         native,
-        Box::new(move |_cc| Ok(Box::new(app::App::new(opts, args.editor)))),
+        Box::new(move |_cc| Ok(Box::new(app::App::new(opts, args.cards, args.editor)))),
     )
 }

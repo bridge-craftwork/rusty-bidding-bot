@@ -11,18 +11,21 @@ use egui::{Color32, RichText, Sense};
 use egui_extras::{Column, TableBuilder};
 use rbb_compare::{short, BoardResult, Engines, Options, Report, Stats};
 
-use crate::detail::Detail;
+use crate::detail::{short_path, Detail};
 
 pub const GOOD: Color32 = Color32::from_rgb(60, 170, 90);
 pub const BAD: Color32 = Color32::from_rgb(210, 80, 70);
 
 type Outcome = Result<(Report, Arc<Engines>), String>;
 
+/// The `.test` cases under the rules directory, or why they could not run.
+type CaseResults = Result<Vec<rbb_engine::cases::Outcome>, Vec<String>>;
+
 struct Running {
     started: Instant,
     done: Arc<AtomicUsize>,
     total: Arc<AtomicUsize>,
-    rx: mpsc::Receiver<Outcome>,
+    rx: mpsc::Receiver<(Outcome, CaseResults)>,
 }
 
 struct Loaded {
@@ -57,6 +60,7 @@ enum Tab {
     Problems,
     Boards,
     Changes,
+    Cases,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -85,6 +89,8 @@ struct DivRow {
 
 pub struct App {
     opts: Options,
+    /// Where `.test` files look up card names.
+    cards: PathBuf,
     editor: String,
     running: Option<Running>,
     loaded: Option<Loaded>,
@@ -114,15 +120,20 @@ pub struct App {
     div_filter: String,
     board: Option<usize>,
     detail: Option<Detail>,
+    cases: CaseResults,
+    /// The selected case, an index into `cases`.
+    case: Option<usize>,
+    show_passing: bool,
 }
 
 impl App {
-    pub fn new(opts: Options, editor: String) -> App {
+    pub fn new(opts: Options, cards: PathBuf, editor: String) -> App {
         let limit_text = opts.limit.map(|n| n.to_string()).unwrap_or_default();
         let scenarios_text = opts.scenarios.join(" ");
         let mut app = App {
             rules_mtime: rules_mtime(&opts.rules),
             opts,
+            cards,
             editor,
             running: None,
             loaded: None,
@@ -146,6 +157,9 @@ impl App {
             div_filter: String::new(),
             board: None,
             detail: None,
+            cases: Ok(Vec::new()),
+            case: None,
+            show_passing: false,
         };
         app.pending = true;
         app
@@ -174,7 +188,10 @@ impl App {
         let total = Arc::new(AtomicUsize::new(0));
         let (tx, rx) = mpsc::channel();
         let (d, t, c) = (done.clone(), total.clone(), ctx.clone());
+        let cards = self.cards.clone();
         std::thread::spawn(move || {
+            let files = rbb_engine::cases::find(&opts.rules);
+            let cases = rbb_engine::cases::run(&files, &opts.rules, &cards);
             let outcome = Engines::new(&opts.pbs, &opts.rules).and_then(|engines| {
                 let engines = Arc::new(engines);
                 rbb_compare::run_with(&opts, &engines, &|n, of| {
@@ -184,7 +201,7 @@ impl App {
                 })
                 .map(|r| (r, engines))
             });
-            let _ = tx.send(outcome);
+            let _ = tx.send((outcome, cases));
             c.request_repaint();
         });
         self.running = Some(Running {
@@ -419,7 +436,7 @@ fn rules_mtime(dir: &Path) -> Option<SystemTime> {
             let p: PathBuf = e.path();
             if p.is_dir() {
                 walk(&p, best);
-            } else if p.extension().is_some_and(|x| x == "bid") {
+            } else if p.extension().is_some_and(|x| x == "bid" || x == "test") {
                 if let Ok(t) = e.metadata().and_then(|m| m.modified()) {
                     if best.is_none_or(|b| t > b) {
                         *best = Some(t);
@@ -440,9 +457,11 @@ fn pct(x: f64) -> String {
 impl eframe::App for App {
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if let Some(r) = &self.running {
-            if let Ok(outcome) = r.rx.try_recv() {
+            if let Ok((outcome, cases)) = r.rx.try_recv() {
                 let took = r.started.elapsed();
                 self.running = None;
+                self.cases = cases;
+                self.case = None;
                 self.finish(outcome, took);
             }
         }
@@ -503,7 +522,7 @@ impl App {
             {
                 self.pending = true;
             }
-            ui.checkbox(&mut self.auto, "re-run when a .bid file is saved");
+            ui.checkbox(&mut self.auto, "re-run when a .bid or .test file is saved");
             ui.label("scenarios:");
             let r = ui
                 .add(
@@ -790,6 +809,20 @@ impl App {
                 Tab::Changes,
                 format!("Changes since last run ({changes})"),
             );
+            let (label, bad) = match &self.cases {
+                Ok(o) => {
+                    let failed = o.iter().filter(|o| !o.passed).count();
+                    (format!("Cases ({failed} failing)"), failed > 0)
+                }
+                Err(e) => (format!("Cases ({} errors)", e.len()), true),
+            };
+            let text = RichText::new(label);
+            ui.selectable_value(
+                &mut self.tab,
+                Tab::Cases,
+                if bad { text.color(BAD) } else { text },
+            )
+            .on_hover_text("The .test files next to the modules: hands whose call is agreed.");
             ui.separator();
             ui.label(
                 RichText::new(match &self.scenario {
@@ -800,6 +833,10 @@ impl App {
             );
         });
         ui.separator();
+        if self.tab == Tab::Cases {
+            self.case_table(ui);
+            return;
+        }
         if self.loaded.is_none() {
             ui.label(if self.running.is_some() {
                 "Running the comparison…"
@@ -824,6 +861,7 @@ impl App {
                 }
                 self.board_table(ui, &list, "boards");
             }
+            Tab::Cases => {}
             Tab::Changes => {
                 let (worse, better) = self
                     .delta
@@ -944,6 +982,126 @@ impl App {
             if let Some(&first) = self.divs[i].boards.first() {
                 self.select_board(first);
             }
+        }
+    }
+
+    fn case_table(&mut self, ui: &mut egui::Ui) {
+        let outcomes = match &self.cases {
+            Ok(o) => o,
+            Err(errors) => {
+                ui.label(
+                    RichText::new("The cases could not run:")
+                        .color(BAD)
+                        .strong(),
+                );
+                for e in errors {
+                    ui.label(RichText::new(e).color(BAD).monospace());
+                }
+                return;
+            }
+        };
+        let failed = outcomes.iter().filter(|o| !o.passed).count();
+        ui.horizontal(|ui| {
+            ui.label(
+                RichText::new(format!(
+                    "{} cases: {} pass, {failed} fail. Click a row for its candidates.",
+                    outcomes.len(),
+                    outcomes.len() - failed
+                ))
+                .weak(),
+            );
+            ui.checkbox(&mut self.show_passing, "show passing cases");
+        });
+        let mut rows: Vec<usize> = (0..outcomes.len())
+            .filter(|&i| self.show_passing || !outcomes[i].passed)
+            .collect();
+        rows.sort_by_key(|&i| outcomes[i].passed);
+        let mut clicked = None;
+        let mut open = None;
+        ui.push_id("cases", |ui| {
+            ui.spacing_mut().item_spacing.y = 0.0;
+            let height = ui.available_height() * 0.6;
+            TableBuilder::new(ui)
+                .id_salt("case-table")
+                .striped(true)
+                .sense(Sense::click())
+                .max_scroll_height(height)
+                .column(Column::initial(190.0).clip(true))
+                .column(Column::initial(170.0).clip(true))
+                .column(Column::initial(230.0).clip(true))
+                .column(Column::auto().at_least(70.0))
+                .column(Column::auto().at_least(50.0))
+                .column(Column::remainder().clip(true))
+                .header(20.0, |mut h| {
+                    for t in ["case", "hand", "auction", "expected", "got", "why"] {
+                        h.col(|ui| {
+                            ui.strong(t);
+                        });
+                    }
+                })
+                .body(|body| {
+                    body.rows(20.0, rows.len(), |mut row| {
+                        let i = rows[row.index()];
+                        let o = &outcomes[i];
+                        let c = &o.case;
+                        row.set_selected(self.case == Some(i));
+                        row.col(|ui| {
+                            let place = format!("{}:{}", short_path(&c.file), c.line);
+                            ui.label(if o.passed {
+                                RichText::new(place).color(GOOD)
+                            } else {
+                                RichText::new(place).color(BAD)
+                            });
+                        });
+                        row.col(|ui| {
+                            ui.monospace(format!("{} {}", c.seat.to_char(), c.hand));
+                        });
+                        row.col(|ui| {
+                            let a: Vec<String> = c.auction.iter().map(|c| c.to_pbn()).collect();
+                            ui.monospace(if a.is_empty() {
+                                "(opening)".to_string()
+                            } else {
+                                a.join(" ")
+                            });
+                        });
+                        row.col(|ui| {
+                            ui.monospace(c.expect.to_string());
+                        });
+                        row.col(|ui| {
+                            ui.monospace(o.got.to_pbn());
+                        });
+                        row.col(|ui| {
+                            ui.label(&c.why);
+                        });
+                        if row.response().clicked() {
+                            clicked = Some(i);
+                        }
+                    });
+                });
+        });
+        if let Some(i) = clicked {
+            self.case = Some(i);
+        }
+        if let Some(o) = self.case.and_then(|i| outcomes.get(i)) {
+            ui.separator();
+            ui.horizontal(|ui| {
+                if ui
+                    .link(format!("{}:{}", short_path(&o.case.file), o.case.line))
+                    .clicked()
+                {
+                    open = Some((o.case.file.clone(), o.case.line));
+                }
+                ui.label(format!(
+                    "expected {}, got {} ({})",
+                    o.case.expect,
+                    o.got.to_pbn(),
+                    o.explanation
+                ));
+            });
+            ui.monospace(&o.trace);
+        }
+        if let Some((file, line)) = open {
+            self.open_in_editor(&file, line);
         }
     }
 

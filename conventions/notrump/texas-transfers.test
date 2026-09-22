@@ -1,0 +1,10 @@
+# Texas means game only, or slam values followed by keycard. Mild slam
+# interest goes through Jacoby instead (jacoby-transfers.test).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction          | expect | why
+N 8.KQ9732.K94.Q83      | 1NT P            | 4D     | game only (12 suit points)
+N 8.KQ9732.K94.Q83      | 1NT P 4D P 4H P  | P      | game only: pass the completion
+N 8.AQ9732.K94.AQ8      | 1NT P            | 4D     | slam values (17 suit points)
+N 8.AQ9732.K94.AQ8      | 1NT P 4D P 4H P  | 4NT    | slam values: keycard

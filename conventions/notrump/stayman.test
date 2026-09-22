@@ -1,0 +1,13 @@
+# Stayman and what follows it.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction          | expect | why
+N KJ82.Q7.K943.J83      | 1NT P            | 2C     | 10 HCP, four spades
+N KJ82.Q73.K94.J83      | 1NT P            | 3NT    | 4-3-3-3 bids notrump, not Stayman
+S AK5.KJ72.Q94.K83      | 1NT P 2C P       | 2H     | four hearts
+S AK52.KJ7.Q94.K83      | 1NT P 2C P       | 2S     | four spades, not four hearts
+S AK5.KJ7.Q942.K83      | 1NT P 2C P       | 2D     | no four-card major
+N KJ82.Q7.K943.J83      | 1NT P 2C P 2S P  | 4S     | 10: game in the fit
+N KJ82.Q7.Q943.J83      | 1NT P 2C P 2S P  | 3S     | 9: invite in the fit
+N KJ82.Q7.K943.J83      | 1NT P 2C P 2H P  | 3NT    | four spades, no heart fit: game

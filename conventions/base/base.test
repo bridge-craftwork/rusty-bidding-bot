@@ -1,0 +1,9 @@
+# Natural openings, with the 21GF-DEFAULT card imported from BBA.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction | expect | why
+S AKJ52.K73.94.Q83      |         | 1S     | 13 HCP, five spades
+S K52.A73.Q94.KJ83      |         | 1C     | 13 HCP, four clubs
+S K52.A73.QJ94.K83      |         | 1D     | 13 HCP, four diamonds
+S Q52.J73.Q94.K832      |         | P      | 8 HCP

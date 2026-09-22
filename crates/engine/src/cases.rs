@@ -78,6 +78,38 @@ pub struct Outcome {
     pub trace: String,
 }
 
+impl Outcome {
+    /// One line: `file:line: seat hand | auction | expected X, got Y (meaning)`.
+    pub fn summary(&self) -> String {
+        let c = &self.case;
+        let auction: Vec<String> = c.auction.iter().map(|c| c.to_pbn()).collect();
+        format!(
+            "{}:{}: {} {} | {} | expected {}, got {} ({})",
+            c.file,
+            c.line,
+            c.seat.to_char(),
+            c.hand,
+            auction.join(" "),
+            c.expect,
+            self.got.to_pbn(),
+            self.explanation
+        )
+    }
+
+    /// The summary, the case's `why`, and for a failure the candidates.
+    pub fn report(&self) -> String {
+        let mut s = self.summary();
+        if !self.case.why.is_empty() {
+            s += &format!("\n    why: {}", self.case.why);
+        }
+        if !self.passed {
+            s += "\n";
+            s += &self.trace;
+        }
+        s
+    }
+}
+
 fn parse_calls(s: &str) -> Result<Vec<Call>, String> {
     s.split_whitespace()
         .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))

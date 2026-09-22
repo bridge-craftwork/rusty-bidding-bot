@@ -145,6 +145,20 @@ enum BidCommand {
         #[arg(default_value = "conventions")]
         paths: Vec<PathBuf>,
     },
+    /// Run the cases in .test files (directories are searched recursively).
+    Test {
+        #[arg(default_value = "conventions")]
+        paths: Vec<PathBuf>,
+        /// The rule files the cases run against.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Where card names (`card 21GF-DEFAULT`) are looked up as .bbsa.
+        #[arg(long, default_value = "crates/bridge-card/tests/fixtures/bbsa")]
+        cards: PathBuf,
+        /// Also list the cases that pass.
+        #[arg(short, long)]
+        verbose: bool,
+    },
     /// Print a .bid file's compiled JSON IR.
     Compile {
         file: PathBuf,
@@ -678,6 +692,39 @@ fn bid(cmd: BidCommand) -> Result<()> {
             );
             if errors > 0 {
                 return Err("rule files have errors".into());
+            }
+        }
+        BidCommand::Test {
+            paths,
+            rules,
+            cards,
+            verbose,
+        } => {
+            if let Some(p) = paths.iter().find(|p| !p.exists()) {
+                return Err(format!("{}: no such file or directory", p.display()).into());
+            }
+            let files: Vec<PathBuf> = paths
+                .iter()
+                .flat_map(|p| rbb_engine::cases::find(p))
+                .collect();
+            let outcomes = rbb_engine::cases::run(&files, &rules, &cards)
+                .map_err(|errors| errors.join("\n"))?;
+            let failed = outcomes.iter().filter(|o| !o.passed).count();
+            for o in &outcomes {
+                if o.passed && !verbose {
+                    continue;
+                }
+                let mark = if o.passed { "ok  " } else { "FAIL" };
+                println!("{mark} {}", o.report());
+            }
+            println!(
+                "{} files, {} cases: {} passed, {failed} failed",
+                files.len(),
+                outcomes.len(),
+                outcomes.len() - failed
+            );
+            if failed > 0 {
+                return Err("some cases failed".into());
             }
         }
         BidCommand::Compile { file, output } => {
