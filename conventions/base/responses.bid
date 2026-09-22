@@ -1,0 +1,104 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responses to a one-level suit opening, uncontested: Standard American
+# (SAYC), as BBA's Basic-Bridge card plays it. Ranges come from BBA's own
+# meanings (bba-cli --all-meanings) and the Basic_* corpus; see
+# responses.notes.md.
+#
+# Which suit to bid first at the one level: the longest; with two four-card
+# suits the cheaper (up the line); with two five-card suits the higher.
+
+module responses "Responses to one-level suit openings"
+  needs  base
+  param  limit_raise = major_openings.jump_raise.inv default true
+  param  strong_js   = general.jump_shifts.strong_2 default true
+  param  inv_js      = general.jump_shifts.invitational default false
+
+# ── Over 1♣ / 1♦ ───────────────────────────────────────────────────────
+after 1C (P)
+  1D  "4+ diamonds, 6+ HCP"         shows D>=4, hcp>=6, D>=H, D>H | D=4, D>=S, D>S | D=4
+      sets forcing=round
+  1H  "4+ hearts, 6+ HCP"           shows H>=4, hcp>=6, H>=D, H>D | H>=5, H>=S, H>S | H=4
+      sets forcing=round
+  1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6, S>=D, S>D | S>=5, S>H | S>=5, S>=H
+      sets forcing=round
+  1N  "6-10, balanced, no 4-card major or diamonds"   shows hcp>=6, points<=10, H<=3, S<=3, D<=3
+  2D  "Strong jump shift: 15+, 5+ diamonds"  shows D>=5, points>=15  when strong_js, !passed_hand
+      sets forcing=game
+
+after 1D (P)
+  1H  "4+ hearts, 6+ HCP"           shows H>=4, hcp>=6, H>=S, H>S | H=4
+      when  points<=10 | H>=C          # 11+ with longer clubs: 2C first
+      sets forcing=round
+  1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6, S>H | S>=5, S>=H
+      when  points<=10 | S>=C
+      sets forcing=round
+  1N  "6-10, no 4-card major"          shows hcp>=6, points<=10, H<=3, S<=3
+  2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6, suit_points>=10, H<=3 | C>H, S<=3 | C>S
+      sets forcing=round
+  3C  "Invitational jump shift: 10-12, 6+ clubs"  shows C>=6, points=10..12, H<=3, S<=3  when inv_js
+
+after 1m (P)
+  2m  "Raise: 6-9, 5+ {m}, no 4-card major"     shows m>=5, hcp>=6, points<=9, H<=3, S<=3
+  3m  "Limit raise: 10-12, 5+ {m}, no 4-card major"  shows m>=5, points=10..12, H<=3, S<=3
+  2N  "11-12, balanced, no 4-card major"        shows balanced, points=11..12, H<=3, S<=3
+      priority -1                      # a one-level suit first when there is one
+  3N  "13-15, balanced, no 4-card major"        shows balanced, points=13..15, H<=3, S<=3
+      priority -1
+  2H  "Strong jump shift: 15+, 5+ hearts"       shows H>=5, points>=15  when strong_js, !passed_hand
+      sets forcing=game
+  2S  "Strong jump shift: 15+, 5+ spades"       shows S>=5, points>=15  when strong_js, !passed_hand
+      sets forcing=game
+
+# ── Over 1♥ / 1♠ ───────────────────────────────────────────────────────
+after 1H (P)
+  1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6
+      when  H<=2 | tp(H)>=10, points<=10 | (S>=C, S>=D)
+      # weak with 3+ hearts: raise first; 11+ with a longer minor: 2m first
+      sets forcing=round
+  1N  "6-10, no heart fit, no 4 spades"   shows hcp>=6, points<=10, H<=2, S<=3
+  2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, points>=15  when strong_js, !passed_hand
+      sets forcing=game
+  2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6, suit_points>=10, C>=D, S<=3 | C>S
+      when  H<=2 | tp(H)>=13           # with a fit and limit values, raise first
+      sets forcing=round               # with 4 spades and no longer minor: 1S first
+  2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6, suit_points>=10, D>C, S<=3 | D>S
+      when  H<=2 | tp(H)>=13
+      sets forcing=round
+  3H  "Limit raise: 10-12 support points, 3+ hearts"  shows H>=3, tp(H)=10..12, hcp<=12, H>=4 | S<=3
+      when limit_raise                 # 3 hearts and 4 spades: 1S first
+  3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js
+  3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js
+
+after 1S (P)
+  1N  "6-10, no spade fit"             shows hcp>=6, points<=10, S<=2
+  2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6, suit_points>=10, C>=D, C>=H
+      when  S<=2 | tp(S)>=13           # with a fit and limit values, raise first
+      sets forcing=round
+  2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6, suit_points>=10, D>C, D>=H
+      when  S<=2 | tp(S)>=13
+      sets forcing=round
+  2H  "11+ points, 5+ hearts"          shows H>=5, points>=11 | H>=6, suit_points>=10
+      when  S<=2 | tp(S)>=13
+      sets forcing=round
+  3S  "Limit raise: 10-12 support points, 3+ spades"  shows S>=3, tp(S)=10..12, hcp<=12
+      when limit_raise
+  3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, S<=2  when inv_js
+  3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, S<=2  when inv_js
+  3H  "Invitational jump shift: 10-12, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js
+
+after 1M (P)
+  2M  "Raise: 6-9 support points, 3+ {M}"  shows M>=3, tp(M)=6..9, hcp=6..9
+  4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9
+  4M  "Game in the fit: 13+ support points, no side suit to show"
+      shows M>=3, tp(M)>=13
+      priority -2                      # a new suit or 3NT first
+  2N  "11-12, balanced, no fit"        shows balanced, points=11..12, M<=2
+      priority -1                      # a new suit first when there is one
+  3N  "13-15, balanced"                shows balanced, points=13..15, M<=3
+      priority -1
+
+# ── Any one-level suit opening ─────────────────────────────────────────
+after 1x (P)
+  P   "Fewer than 6 HCP"               shows hcp<=5
+      priority -10

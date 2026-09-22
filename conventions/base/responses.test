@@ -1,0 +1,46 @@
+# Responses to one-level suit openings (SAYC, BBA's Basic-Bridge card).
+# Every hand is a Basic_* corpus deal where we and BBA agree.
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction | expect | why
+# ── over 1♣
+N KQ2.JT63.KQ742.8      | 1C P    | 1D     | longest suit first: five diamonds
+N 9532.AQ972.K854.      | 1C P    | 1H     | five hearts before four spades
+N AK96.76.A62.T732      | 1C P    | 1S     | four spades, no diamonds or hearts to bid first
+N 986.Q83.QJ5.KJ82      | 1C P    | 1NT    | 9, balanced, nothing to show at the one level
+N 874.T9.Q72.KQJ96      | 1C P    | 2C     | 8 with five clubs: raise
+N 432.A.QJ72.QJT53      | 1C P    | 3C     | 10 with five clubs: limit raise
+N 986.AKQ92.KQ.K65      | 1C P    | 2H     | 17 with five hearts: strong jump shift
+N 3.T9842.T6.J8752      | 1C P    | P      | 1 HCP
+# ── over 1♦
+N KJT3.K76543.Q4.T      | 1D P    | 1H     | six hearts before four spades
+N K97653.A82.T32.J      | 1D P    | 1S     | six spades
+N Q2.QT4.T974.A642      | 1D P    | 1NT    | 8, no four-card major
+N A854.Q7.K7.QT984      | 1D P    | 2C     | 11+ with longer clubs: 2C before 1S
+N A86.T93.T6432.K2      | 1D P    | 2D     | 7 with five diamonds: raise
+N 643.3.AKT98.KJ94      | 1D P    | 3D     | 11 with five diamonds: limit raise
+N K73.QJ5.AQ93.732      | 1D P    | 2NT    | 12, balanced, no four-card major
+N A8.94.532.AK8632      | 1D P    | 3C     | 11 with six clubs: invitational jump shift
+N 8754.T6.765.KJT5      | 1D P    | P      | 4 HCP
+# ── over 1♥
+N KQ4.84.JT865.K54      | 1H P    | 1NT    | 9, no heart fit, no four spades
+N KQT842..Q762.AJ7      | 1H P    | 1S     | six spades
+N T54.K9.542.AKJ32      | 1H P    | 2C     | 11 with five clubs
+N Q85.A5.KJ952.J73      | 1H P    | 2D     | 11 with five diamonds
+N KT52.J86.KJ4.942      | 1H P    | 2H     | 8 with three hearts: raise before 1S
+N 932.854.62.AKQJ2      | 1H P    | 3H     | 10 + doubleton = 11 support points: limit raise
+N 87.A96542.42.K64      | 1H P    | 4H     | 7 with six hearts: preemptive raise
+N AT752.Q3.AK.A932      | 1H P    | 2S     | 17 with five spades: strong jump shift
+N AK85.8.QT9862.K3      | 1H P    | 3D     | 12 with six diamonds: invitational jump shift
+N 64.JT3.KT76.9854      | 1H P    | P      | 4 HCP
+# ── over 1♠
+N Q8.JT8.A982.K852      | 1S P    | 1NT    | 10: 1NT, not a 2/1 on a four-card suit
+N J8.AQ72.T32.A762      | 1S P    | 2C     | 11 with four clubs
+N T7.J6.KQ875.AJ62      | 1S P    | 2D     | 11, longer diamonds first
+N .KT9763.AQ98.432      | 1S P    | 2H     | 9 with six hearts
+N QJ52.K87.T53.J85      | 1S P    | 2S     | 7 with four spades: raise
+N T987.QT2.A52.A84      | 1S P    | 3S     | 10 with four spades: limit raise
+N AQ962.732.QJ83.6      | 1S P    | 4S     | 9 with five spades and a singleton: preemptive raise
+N T.AKT542.87.A953      | 1S P    | 3H     | 11 with six hearts: invitational jump shift
+N 2.84.76543.J8653      | 1S P    | P      | 1 HCP

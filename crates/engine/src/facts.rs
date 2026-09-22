@@ -134,16 +134,19 @@ impl Facts {
             || (l >= 4 && self.has(suit, JACK))
     }
 
-    /// HCP plus shortness in the side suits (void 5, singleton 3,
-    /// doubleton 1) when `trump` is a suit; plain HCP for notrump.
+    /// Support points: HCP plus shortness in the side suits when `trump` is
+    /// a suit (void 5, singleton 3, doubleton 1; with only three trumps
+    /// void 3, singleton 2, doubleton 1); plain HCP for notrump.
     pub fn total_points(&self, trump: Option<usize>) -> i32 {
         let Some(t) = trump else { return self.hcp };
+        // Dummy points: shortness counts less with only three trumps.
+        let (void, singleton) = if self.len[t] <= 3 { (3, 2) } else { (5, 3) };
         self.hcp
             + (0..4)
                 .filter(|&s| s != t)
                 .map(|s| match self.len[s] {
-                    0 => 5,
-                    1 => 3,
+                    0 => void,
+                    1 => singleton,
                     2 => 1,
                     _ => 0,
                 })

@@ -9,6 +9,7 @@ after 1M (P) when !passed_hand
       shows M>=4, tp(M)>=13
       sets  trump=M, forcing=game, ask=jacoby   # trump agreed from here on
       artificial
+      priority 1                       # ahead of a natural new suit (responses.bid)
 
 # Opener's answers.
 after 1M (P) 2N (P)
