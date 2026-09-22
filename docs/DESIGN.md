@@ -278,8 +278,7 @@ In `Practice-Bidding-Scenarios`:
 **BBA's meanings.** The PBS files carry only alerts. EPBot describes every
 call through its public info API: a short meaning ("Cue bid, a ♣ stopper",
 "denies stoppers: ♦") and an extended one with ranges ("7 to 10 total
-points, 5 to 13 cards in spades"). `bba-cli --all-meanings` (branch
-`feat/bba-cli-all-meanings` in BBA-tools) writes both as a `[Note]` on every
+points, 5 to 13 cards in spades"). `bba-cli --all-meanings` (BBA-Tools PR #24) writes both as a `[Note]` on every
 call, so a scenario can be re-bid to see what BBA meant.
 
 Reference outputs are pinned to a specific BBA library **by sha256**: builds
