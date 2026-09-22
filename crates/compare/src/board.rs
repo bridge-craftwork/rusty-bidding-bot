@@ -307,7 +307,23 @@ fn find_problems(
 
 /// Fill in `result.par` from double-dummy analysis.
 pub fn add_par(result: &mut BoardResult, board: &Board, cache: &crate::par::DdCache) {
-    let dd = cache.table(&board.deal);
+    result.par = Some(par_of(result, &board.deal, cache));
+}
+
+/// Par for a result on its own, from the deal it records (the workbench
+/// solves a board on demand when the run skipped par). None if the deal
+/// does not parse.
+pub fn par_for(result: &BoardResult, cache: &crate::par::DdCache) -> Option<ParComparison> {
+    let deal = bridge_types::Deal::from_pbn(&result.deal)?;
+    Some(par_of(result, &deal, cache))
+}
+
+fn par_of(
+    result: &BoardResult,
+    deal: &bridge_types::Deal,
+    cache: &crate::par::DdCache,
+) -> ParComparison {
+    let dd = cache.table(deal);
     let contract = |calls: &[Call]| {
         let mut a = Auction::new(result.dealer);
         for c in calls {
@@ -316,10 +332,10 @@ pub fn add_par(result: &mut BoardResult, board: &Board, cache: &crate::par::DdCa
         a.final_contract()
     };
     let (par_ns, par_contract) = crate::par::par_ns(&dd, result.vul);
-    result.par = Some(ParComparison {
+    ParComparison {
         par_ns,
         par_contract,
         reference_ns: crate::par::score_ns(contract(&result.reference).as_ref(), &dd, result.vul),
         ours_ns: crate::par::score_ns(contract(&result.ours).as_ref(), &dd, result.vul),
-    });
+    }
 }

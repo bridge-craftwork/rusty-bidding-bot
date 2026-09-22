@@ -1,10 +1,10 @@
 //! The workbench window: toolbar, summary, scenario list, divergence and
 //! board lists, and the board detail.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{mpsc, Arc};
+use std::sync::{mpsc, Arc, OnceLock};
 use std::time::{Duration, Instant, SystemTime};
 
 use egui::{Color32, RichText, Sense};
@@ -17,6 +17,12 @@ pub const GOOD: Color32 = Color32::from_rgb(60, 170, 90);
 pub const BAD: Color32 = Color32::from_rgb(210, 80, 70);
 
 type Outcome = Result<(Report, Arc<Engines>), String>;
+
+/// A board by scenario and board number.
+type BoardKey = (String, String);
+
+/// Par solved on demand for one board.
+type ParResult = (BoardKey, Option<rbb_compare::ParComparison>);
 
 /// The `.test` cases under the rules directory, or why they could not run.
 type CaseResults = Result<Vec<rbb_engine::cases::Outcome>, Vec<String>>;
@@ -120,6 +126,12 @@ pub struct App {
     div_filter: String,
     board: Option<usize>,
     detail: Option<Detail>,
+    /// Double-dummy tables, opened on first use (on the solver thread).
+    dd: Arc<OnceLock<rbb_compare::par::DdCache>>,
+    par_tx: mpsc::Sender<ParResult>,
+    par_rx: mpsc::Receiver<ParResult>,
+    /// Boards being solved for par.
+    solving: HashSet<BoardKey>,
     cases: CaseResults,
     /// The selected case, an index into `cases`.
     case: Option<usize>,
@@ -130,6 +142,7 @@ impl App {
     pub fn new(opts: Options, cards: PathBuf, editor: String) -> App {
         let limit_text = opts.limit.map(|n| n.to_string()).unwrap_or_default();
         let scenarios_text = opts.scenarios.join(" ");
+        let (par_tx, par_rx) = mpsc::channel();
         let mut app = App {
             rules_mtime: rules_mtime(&opts.rules),
             opts,
@@ -157,6 +170,10 @@ impl App {
             div_filter: String::new(),
             board: None,
             detail: None,
+            dd: Arc::new(OnceLock::new()),
+            par_tx,
+            par_rx,
+            solving: HashSet::new(),
             cases: Ok(Vec::new()),
             case: None,
             show_passing: false,
@@ -396,6 +413,45 @@ impl App {
             .loaded
             .as_ref()
             .map(|l| Detail::compute(&l.report.boards[i], &l.engines));
+        self.solve_par(i);
+    }
+
+    /// Solve the board double dummy for par when the run did not (par off,
+    /// or the contracts matched). The table goes into the shared cache.
+    fn solve_par(&mut self, i: usize) {
+        let Some(l) = &self.loaded else { return };
+        let b = &l.report.boards[i];
+        let key = (b.scenario.clone(), b.board.clone());
+        if b.par.is_some() || !self.solving.insert(key.clone()) {
+            return;
+        }
+        let (b, dd, tx, path) = (
+            b.clone(),
+            self.dd.clone(),
+            self.par_tx.clone(),
+            self.opts.dd_cache.clone(),
+        );
+        std::thread::spawn(move || {
+            let cache = dd.get_or_init(|| rbb_compare::par::DdCache::open(path));
+            let _ = tx.send((key, rbb_compare::par_for(&b, cache)));
+        });
+    }
+
+    /// Put solved par into the loaded boards.
+    fn receive_par(&mut self) {
+        while let Ok((key, par)) = self.par_rx.try_recv() {
+            self.solving.remove(&key);
+            if let Some(l) = &mut self.loaded {
+                if let Some(b) = l
+                    .report
+                    .boards
+                    .iter_mut()
+                    .find(|b| b.scenario == key.0 && b.board == key.1)
+                {
+                    b.par = par;
+                }
+            }
+        }
     }
 
     pub fn open_in_editor(&self, file: &str, line: usize) {
@@ -469,6 +525,7 @@ impl eframe::App for App {
                 };
                 let selected = self.case.and_then(|i| at(&self.cases, i));
                 self.cases = cases;
+                self.solving.clear();
                 self.case = selected.and_then(|s| {
                     (0..self.cases.as_ref().map_or(0, Vec::len))
                         .find(|&i| at(&self.cases, i).as_ref() == Some(&s))
@@ -476,6 +533,7 @@ impl eframe::App for App {
                 self.finish(outcome, took);
             }
         }
+        self.receive_par();
         if self.last_poll.elapsed() > Duration::from_millis(700) {
             self.last_poll = Instant::now();
             let m = rules_mtime(&self.opts.rules);
@@ -509,7 +567,13 @@ impl eframe::App for App {
                 egui::ScrollArea::both().id_salt("detail-scroll").show(ui, |ui| {
                 let action = match (&self.detail, self.board, &self.loaded) {
                     _ if self.tab == Tab::Cases => self.case_detail(ui),
-                    (Some(d), Some(i), Some(l)) => d.ui(ui, &l.report.boards[i]),
+                    (Some(d), Some(i), Some(l)) => {
+                        let b = &l.report.boards[i];
+                        if self.solving.contains(&(b.scenario.clone(), b.board.clone())) {
+                            ui.label(RichText::new("solving double dummy for par…").weak());
+                        }
+                        d.ui(ui, b)
+                    }
                     _ => {
                         ui.label("Select a board to see both auctions and the engine's reasoning.");
                         None

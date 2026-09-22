@@ -19,7 +19,7 @@ use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
 
-pub use board::{BoardResult, ParComparison, Problem, ProblemKind};
+pub use board::{par_for, BoardResult, ParComparison, Problem, ProblemKind};
 pub use report::{
     scoring_name, short, summarize, Agreement, Divergence, ParTally, ProblemPoint, Stats, Summary,
 };
