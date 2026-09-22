@@ -8,7 +8,8 @@ four trumps, a maximum and a doubleton. Cases: in `jacoby-transfers.test`
 ## Guidance
 
 - Over 2D: **2S with 4+ hearts, 16+ and a doubleton spade; otherwise 2NT**
-  (a doubleton elsewhere).
+  (a doubleton elsewhere). **With the queen in the spade doubleton (Qx, KQ,
+  AQ), 2NT** as BBA plays it (Rick, 2026-09-21).
 - Over 2H: 2NT with 4+ spades, 16+ and a doubleton.
 - Both are artificial: never a place to play.
 
@@ -44,5 +45,5 @@ corpus):
 
 ## Questions
 
-- **Queen in the doubleton**: BBA bids 2NT, not 2S, whenever the spade
-  doubleton holds the queen. Adopt that rule?
+- The 3C relay after 2NT: Rick will look at hands and auctions before
+  deciding.

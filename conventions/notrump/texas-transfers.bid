@@ -5,7 +5,8 @@ module texas-transfers "Texas Transfers"
   needs  notrump-base
 
 # Texas shows a six-card major and one of two hands: game with no slam
-# interest (pass the completion), or slam values (keycard after it). With
+# interest (pass the completion), or slam values (keycard after it): 33 total
+# points or more even opposite opener's minimum, so 18+ opposite 15-17. With
 # mild slam interest responder transfers at the two level and jumps to game
 # instead (jacoby-transfers.bid), which lets opener bid on.
 after 1N (P)
@@ -14,7 +15,7 @@ after 1N (P)
       sets  ask=texas(H)
       artificial
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
-      shows H>=6, suit_strength>=slam_invite
+      shows H>=6, suit_points>=33-partner.points.min
       sets  ask=texas(H)
       artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
@@ -22,7 +23,7 @@ after 1N (P)
       sets  ask=texas(S)
       artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
-      shows S>=6, suit_strength>=slam_invite
+      shows S>=6, suit_points>=33-partner.points.min
       sets  ask=texas(S)
       artificial
 
@@ -32,5 +33,5 @@ after 1N (P) 4H (P)
   4S  "Completes the transfer"
 
 when answered texas(M)
-  4N  "Keycard ask in {M}"   shows suit_strength>=slam_invite   sets ask=keycards(M)  artificial
+  4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
   P   "Game reached"

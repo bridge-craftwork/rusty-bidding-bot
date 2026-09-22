@@ -1,10 +1,13 @@
-# Texas means game only, or slam values followed by keycard. Mild slam
-# interest goes through Jacoby instead (jacoby-transfers.test).
+# Texas means game only, or slam values (18+ suit points: 33 opposite a
+# 15 minimum) followed by keycard. Mild slam interest (14-17) goes through
+# Jacoby instead.
 card    21GF-DEFAULT
 dealer  S
 
 # seat hand             | auction          | expect | why
 N 8.KQ9732.K94.Q83      | 1NT P            | 4D     | game only (12 suit points)
 N 8.KQ9732.K94.Q83      | 1NT P 4D P 4H P  | P      | game only: pass the completion
-N 8.AQ9732.K94.AQ8      | 1NT P            | 4D     | slam values (17 suit points)
-N 8.AQ9732.K94.AQ8      | 1NT P 4D P 4H P  | 4NT    | slam values: keycard
+N 8.AQ9732.K94.AKJ      | 1NT P            | 4D     | slam values: 18 suit points, 33 even opposite 15
+N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P  | 4NT    | slam values: keycard
+N 8.AQ9732.K94.AQ8      | 1NT P            | 2D     | 16 suit points: mild slam interest, not Texas
+N 8.AQ9732.K94.AQ8      | 1NT P 2D P 2H P  | 4H     | then jump to game; opener may bid on

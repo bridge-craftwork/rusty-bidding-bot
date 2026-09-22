@@ -16,7 +16,8 @@ The 1NT opening, responder's natural notrump raises, and opener's answer to
 - Opener accepts 2NT **only when game is certain**: 17 opposite 8–9. That is
   17 notrump points, so 15 HCP with four tens accepts.
 - Differences in where a point boundary falls are acceptable; mistakes are
-  not.
+  not. **We do not model BBA's finer valuation: the aim is defensible bids**
+  (Rick, 2026-09-21).
 
 ## Evidence from BBA
 
@@ -51,11 +52,10 @@ same contract.
 
 - **BBA's valuation has more in it than HCP and tens.** These probes are the
   same on every random layout, and they are the same with Basic-Bridge and
-  21GF-DEFAULT, so this is not noise:
+  21GF-DEFAULT, so this is not noise. Rick: not modeled.
   `984.95.8654.AKQJ` (10) and `75.AK6.Q753.J752` (10): BBA invites;
   `T82.QT7.A82.QT65` (8, three tens) and `T64.AT8.QJ9.J432` (8, two tens):
-  BBA bids game; `72.A97.K432.J983` (8): BBA passes. We do not model it.
-  Honors bunched in one suit, and the nines, are the likely factors; untested.
+  BBA bids game; `72.A97.K432.J983` (8): BBA passes.
 - **8 HCP flat with no tens**: we invite, and BBA passes 65% of the time.
 - **Five-card minor**: BBA does not count tens. `Q5.K73.J83.K9542` with two
   to four tens: BBA 2NT, we 3NT. We count them.
@@ -64,10 +64,21 @@ same contract.
 
 ## Gaps (not built yet)
 
-- **Six-card minor**: `5.K73.QJ9542.J83` (7 HCP), with or without tens:
-  BBA bids 3C and passes opener's 3D. We pass or bid 2NT. This looks like a
-  minor-suit transfer or sign-off in 21GF-DEFAULT, but which `.bbsa` key
-  controls it is not confirmed.
+- **Six-card minor.** 21GF-DEFAULT sets `1N-2S transfer to clubs` and
+  `1N-3C transfer to diamonds` (card fields
+  `notrump.transfers.two_s_clubs` and `.three_c_diamonds`); 2NT stays a
+  natural invitation, and 3D is natural. In the corpus BBA's opener always
+  completes (3C or 3D, no super-accept), and responder with six passes when
+  weak (43 and 56 deals), bids 3NT when invitational or better (22, 23), or
+  4NT or a new suit with slam interest. We have no rules for these yet: with
+  `5.K73.QJ9542.J83` we pass or bid 2NT.
+  Rick's notes on other methods, for when a card asks for them: the common
+  standard is 2S for either minor (opener 3C, responder corrects to 3D).
+  With four-suit transfers, 2S shows clubs and 2NT diamonds. With a 2S range
+  ask, 2S is weak with clubs or a notrump invitation: opener bids 3C with a
+  maximum, 2NT otherwise, and responder can then bid 3C with clubs. Rick's
+  own: 2NT transfers to diamonds, and opener bids 3C as a super-accept (Kxx
+  or better in diamonds), else 3D.
 - **Grand slam**: nothing above the slam band. BBA bids 7NT with 21–23.
 - **Interference** over 1NT (the `Opps_*` scenarios).
 
@@ -78,7 +89,3 @@ same contract.
   transfer continuations got slam rules too. Corpus: +365 calls agree,
   same contract 10.6% → 11.1%.
 
-## Questions
-
-- Should we try to model BBA's finer valuation, or keep ½ per ten and
-  accept the differences?

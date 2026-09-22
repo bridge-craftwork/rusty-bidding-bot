@@ -6,9 +6,9 @@ the completion. Cases: `texas-transfers.test`.
 ## Guidance
 
 - **Texas means game only, or slam values followed by 4NT keycard.**
-  Game only is 10–13 suit points opposite 15–17. Slam values are the slam
-  invitation band or better.
-- **Mild slam interest** (14–15 suit points) does not use Texas. Responder
+  Game only is 10–13 suit points opposite 15–17. **Slam values are 33 total
+  points even opposite opener's minimum: 18+** (Rick, 2026-09-21).
+- **Mild slam interest** (14–17 suit points) does not use Texas. Responder
   transfers at the two level and jumps to 4M, and opener bids on with 3+
   trumps and a maximum (`jacoby-transfers.bid`).
 - Suit points are HCP + ½ per card beyond four, so a six-card suit adds 1.
@@ -39,7 +39,12 @@ BBA's first call, by North's HCP ("short" is a singleton or void):
 | 10–12, no shortness | 2D 76% | 4D | 24 of 98 |
 | 10–12, short | 4D 56%, 2D 44% | 4D | 92 of 164 |
 | 13–14 | 4D 81% | 2D (mild slam) | 13 of 67 |
-| 15–18 | 4D 98% | 4D | 43 of 44 |
+| 15–16 | 4D 97% | 2D (mild slam) | 1 of 32 |
+| 17–18 | 4D 100% | 4D | 12 of 12 |
+
+HCP here; a six-card suit adds one suit point, so 15–16 HCP is 16–17 suit
+points: mild slam interest by Rick's rule, where BBA uses Texas. Overall
+276 of 600 agree.
 
 With 10–12 BBA's usual route through 2D is 2D, 2H, 4H (84 deals), which is
 our route for mild slam interest.
@@ -54,16 +59,17 @@ The top four divergences in Texas_Transfer are this choice (234 boards).
   (Rick: 8 HCP with a six-card major invites).
 - **10–12 HCP**: BBA's choice depends on shape. Flat hands usually go
   through 2D and then 4H. We use Texas for all game-only hands.
-- **13–14 HCP**: BBA uses Texas; we show mild slam interest through 2D.
+- **13–17**: BBA uses Texas, and keycards after it with 16–17; we show mild
+  slam interest through 2D (Rick: Texas slam needs 18). Moving the slam line
+  from 16 to 18 cost about 390 agreeing calls; that is expected.
 - **After a 5D answer ("0 or 3")**: BBA bids six with 13–16 (9 boards),
   reading it as 3. When the answer is ambiguous we sign off in five, and
   opener corrects with the higher count (Rick's rule).
 
 ## Gaps (not built yet)
 
-- **When to keycard after Texas.** BBA asks with 11–14 HCP and a long suit
-  or shortness (22 boards over spades, 24 over hearts); we pass the
-  completion. The slam values band may be too high for shapely hands.
+- After Texas BBA also keycards with 11–14 HCP and a long suit or shortness
+  (46 boards). Rick's rule is 33 total points, so we pass the completion.
 - **Queen ask** (5D over 5C, 4 boards) and the **grand slam** (7S after 5S
   with 15–20, 5 boards): see `rkcb-1430.bid`.
 - Interference over Texas.

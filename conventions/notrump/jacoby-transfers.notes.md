@@ -15,9 +15,13 @@ super-accepts are separate modules. Cases: `jacoby-transfers.test`.
   length is 9 suit points.
 - 3NT with exactly five offers a choice; opener corrects to 4M with three
   (`choice-of-games.bid`).
-- **Mild slam interest** (six-card major, 14–15 suit points): transfer,
+- **Mild slam interest** (six-card major, 14–17 suit points): transfer,
   then jump to 4M. Opener bids on (4NT keycard) with 3+ trumps and a
-  maximum. Game-only hands and slam hands use Texas (`texas-transfers.bid`).
+  maximum. Game-only hands and slam hands (18+: Texas needs 33 even opposite
+  a 15 minimum) use Texas (`texas-transfers.bid`).
+- **Responder's new suit (3m) is game forcing** (Rick, 2026-09-21). Opener
+  rebids the major with three-card support, which agrees it below game so
+  responder can look for slam; otherwise 3NT.
 - Opener accepts an invitation only when game is certain, and plays in the
   major with an eight-card fit: three opposite five, two opposite six.
 - After a super-accept (a known fit of nine or more) responder counts suit
@@ -45,19 +49,21 @@ auctions, 39.2% the same contract. Jacoby_Super-Accept: 81.7%, 30.8%, 33.8%.
   every layout. That looks like an internal quirk of BBA, not a principle,
   so we do not model it.
 - With a six-card major, BBA's choice between Jacoby and Texas differs from
-  ours at 8 and at 10–14 HCP (see `texas-transfers.notes.md`).
+  ours at 8 and at 10–17 (see `texas-transfers.notes.md`).
+- **Opener after the new suit**: BBA jumps to 4M with three trumps (106
+  Jacoby_Transfer boards); we bid 3M, as Rick plays it. Once 3M agrees the
+  suit, BBA's responder sometimes bids 3NT, offering a choice; we bid 4M in the
+  known fit.
 - After a plain 3M super-accept, which may be a minimum, BBA passes some
   invitational hands where we bid game (8 boards; 24 others go our way).
 
 ## Gaps (not built yet)
 
 - **5-4 invitations.** 9 HCP with five spades and four of a minor bids 3m
-  for BBA (for example `A6543.7.K43.QT63`), so its new suit is not game
-  forcing. We have no rule for these hands and pass the completion (76
-  boards in Jacoby_Transfer and Texas_or_Jacoby).
-- **Opener after the new suit.** After `1NT P 2M P 2M P 3m P`, BBA's
-  opener raises to 4M with three trumps (106 Jacoby_Transfer boards). We
-  have no rule for opener here, so base's game-force rule bids 3NT.
+  for BBA (for example `A6543.7.K43.QT63`). Our 3m is game forcing, so these
+  hands need another route (2NT with an unbalanced hand?). For now they
+  have no rule and pass the completion (76 boards in Jacoby_Transfer and
+  Texas_or_Jacoby).
 - **Five-four with game values after a super-accept.** BBA bids 4M; our
   game-forcing 3m ranks higher (17 boards).
 - **Opener after 6NT with five**: no correction to 6M yet.
@@ -65,5 +71,5 @@ auctions, 39.2% the same contract. Jacoby_Super-Accept: 81.7%, 30.8%, 33.8%.
 
 ## Questions
 
-- The 5-4 invitation above means BBA's 3m after a transfer is invitational
-  or better. Should our 3m be invitational too?
+- How should responder invite with a five-card major and a four-card minor,
+  now that 3m is game forcing?

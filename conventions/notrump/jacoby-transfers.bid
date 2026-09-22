@@ -43,8 +43,9 @@ when answered transfer(M)
       sets ask=choice                          # opener corrects with 3+ {M}
   4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
       when !texas                              # with Texas, game-only hands use it
-  4M  "Mild slam interest, 6+ {M}"             shows M>=6, suit_strength=game, suit_points>=31-partner.points.max
-      when texas                               # top of the game range; opener may bid on
+  4M  "Mild slam interest, 6+ {M}"             shows M>=6, suit_points>=31-partner.points.max, suit_points<=32-partner.points.min
+      when texas                               # 14-17 opposite 15-17: slam if opener has
+                                               # the right hand; Texas is for 18+
       sets ask=slam_try(M)
   4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
       when texas                               # game-only hands normally use Texas
@@ -52,7 +53,7 @@ when answered transfer(M)
   4M  "Game in the known fit"                  shows suit_strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
-      sets forcing=game
+      sets forcing=game, ask=new_suit(M)
   4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
   6N  "Slam: {slam} total points, 5 {M}"       shows M=5, balanced, strength=slam
 
@@ -64,6 +65,13 @@ when asked invite(M)
   3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
   3M  "Declines, in the fit"            shows M>=8-partner.M.min, strength<=invite
   P   "Declines"                        shows strength<=invite
+
+# Opener after responder's second suit (game forcing): rebid the major with
+# three-card support, which agrees it below game so that responder can look
+# for slam; otherwise 3NT.
+when asked new_suit(M)
+  3M  "3+ {M}: support"             shows M>=3   sets trump=M
+  3N  "No fit: 2 {M}"               shows M<=2
 
 # Opener after the jump to game with mild slam interest: bid on with a good
 # fit and a maximum, even without having super-accepted.

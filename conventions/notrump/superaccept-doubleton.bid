@@ -6,9 +6,11 @@ module superaccept-doubleton "Superaccept doubleton"
 
 # Four-card support, a maximum and a doubleton: bid the doubleton when it is
 # cheaper than 2NT, otherwise 2NT. (BBA calls this "Extended acceptance".)
+# With the queen in a spade doubleton BBA bids 2NT: the queen is worth
+# more as a stopper than the shortness is for ruffs.
 after 1N (P) 2D (P)
   2S  "Super-accept: 4+ hearts, maximum, doubleton spade"  alert
-      shows H>=4, hcp>=16, S=2
+      shows H>=4, hcp>=16, S=2, !has(Q,S)      # with Qx, KQ or AQ: 2NT, as BBA
       artificial
   2N  "Super-accept: 4+ hearts, maximum, a doubleton"      alert
       shows H>=4, hcp>=16, shortest=2
