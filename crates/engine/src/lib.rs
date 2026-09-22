@@ -19,7 +19,19 @@ use std::path::Path;
 pub use engine::{CandidateTrace, Choice, Decision, Engine, Interpretation, Step};
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
-pub use position::{Ask, Forcing, Position, SideState};
+pub use position::{side, Ask, Forcing, Position, SideState};
+
+/// The playing suit of a strain (`None` for notrump).
+pub fn suit_of(strain: bridge_types::Strain) -> Option<bridge_types::Suit> {
+    use bridge_types::{Strain, Suit};
+    match strain {
+        Strain::Clubs => Some(Suit::Clubs),
+        Strain::Diamonds => Some(Suit::Diamonds),
+        Strain::Hearts => Some(Suit::Hearts),
+        Strain::Spades => Some(Suit::Spades),
+        Strain::NoTrump => None,
+    }
+}
 pub use system::{RuleRef, System};
 
 /// Compile every `.bid` file under `dir`, sorted by path (which fixes the

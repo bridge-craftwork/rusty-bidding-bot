@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, HashMap};
 use bridge_types::{Call, Direction};
 use serde::Serialize;
 
-use crate::board::BoardResult;
+use crate::board::{BoardResult, ProblemKind};
 use crate::par::imps;
 
 /// Agreement counts for one side's calls.
@@ -55,6 +55,9 @@ pub struct Stats {
     pub by_caller_vul: [Agreement; 2],
     pub by_scoring: BTreeMap<String, Agreement>,
     pub by_generator: BTreeMap<String, Agreement>,
+    /// Problems in our own auctions, by kind, and boards with any.
+    pub problems: BTreeMap<ProblemKind, usize>,
+    pub boards_with_problems: usize,
     /// Boards by the reference's scoring and generator.
     pub boards_by_scoring: BTreeMap<String, usize>,
     pub boards_by_generator: BTreeMap<String, usize>,
@@ -63,6 +66,10 @@ pub struct Stats {
 impl Stats {
     fn add(&mut self, b: &BoardResult) {
         self.boards += 1;
+        for p in &b.problems {
+            *self.problems.entry(p.kind).or_default() += 1;
+        }
+        self.boards_with_problems += (!b.problems.is_empty()) as usize;
         let scoring = scoring_name(b);
         *self.boards_by_scoring.entry(scoring.clone()).or_default() += 1;
         *self
@@ -159,6 +166,22 @@ pub struct Summary {
     pub scenarios: Vec<Stats>,
     /// Most frequent first.
     pub divergences: Vec<Divergence>,
+    /// Most frequent first.
+    pub problems: Vec<ProblemPoint>,
+}
+
+/// A place in our auctions where a problem of one kind occurs.
+#[derive(Debug, Clone, Serialize)]
+pub struct ProblemPoint {
+    pub kind: ProblemKind,
+    /// The calls before the one at fault.
+    pub auction: String,
+    /// The call at fault.
+    pub call: String,
+    pub count: usize,
+    /// Up to five board indices, for the A/B view.
+    pub examples: Vec<usize>,
+    pub scenarios: Vec<String>,
 }
 
 /// Short call text: `P` for pass, `1NT`, `X`.
@@ -209,11 +232,42 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
             }
         }
     }
+    let mut probs: HashMap<(ProblemKind, String, String), ProblemPoint> = HashMap::new();
+    for (i, b) in boards.iter().enumerate() {
+        for p in &b.problems {
+            let auction = b.ours[..p.index.min(b.ours.len())]
+                .iter()
+                .map(short)
+                .collect::<Vec<_>>()
+                .join(" ");
+            let call = b.ours.get(p.index).map(short).unwrap_or_default();
+            let e = probs
+                .entry((p.kind, auction.clone(), call.clone()))
+                .or_insert_with(|| ProblemPoint {
+                    kind: p.kind,
+                    auction,
+                    call,
+                    count: 0,
+                    examples: Vec::new(),
+                    scenarios: Vec::new(),
+                });
+            e.count += 1;
+            if e.examples.len() < 5 && !e.examples.contains(&i) {
+                e.examples.push(i);
+            }
+            if !e.scenarios.contains(&b.scenario) {
+                e.scenarios.push(b.scenario.clone());
+            }
+        }
+    }
+    let mut problems: Vec<ProblemPoint> = probs.into_values().collect();
+    problems.sort_by(|a, b| b.count.cmp(&a.count).then(a.auction.cmp(&b.auction)));
     let mut divergences: Vec<Divergence> = points.into_values().collect();
     divergences.sort_by(|a, b| b.count.cmp(&a.count).then(a.auction.cmp(&b.auction)));
     Summary {
         total,
         scenarios: by_scenario.into_values().collect(),
         divergences,
+        problems,
     }
 }

@@ -100,6 +100,18 @@ impl Detail {
                 ));
             }
         });
+        for p in &b.problems {
+            ui.label(
+                RichText::new(format!(
+                    "⚠ {} at call {}: {}",
+                    p.kind.label(),
+                    p.index + 1,
+                    p.detail
+                ))
+                .color(BAD)
+                .strong(),
+            );
+        }
         ui.separator();
 
         ui.horizontal_top(|ui| {

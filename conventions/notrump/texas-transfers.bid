@@ -12,15 +12,19 @@ after 1N (P)
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, suit_strength=game, suit_points<=30-partner.points.max
       sets  ask=texas(H)
+      artificial
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, suit_strength>=slam_invite
       sets  ask=texas(H)
+      artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
       shows S>=6, suit_strength=game, suit_points<=30-partner.points.max
       sets  ask=texas(S)
+      artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
       shows S>=6, suit_strength>=slam_invite
       sets  ask=texas(S)
+      artificial
 
 after 1N (P) 4D (P)
   4H  "Completes the transfer"
@@ -28,5 +32,5 @@ after 1N (P) 4H (P)
   4S  "Completes the transfer"
 
 when answered texas(M)
-  4N  "Keycard ask in {M}"   shows suit_strength>=slam_invite   sets ask=keycards(M)
+  4N  "Keycard ask in {M}"   shows suit_strength>=slam_invite   sets ask=keycards(M)  artificial
   P   "Game reached"

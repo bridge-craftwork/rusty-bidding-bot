@@ -9,6 +9,7 @@ after 1N (P)
       shows strength>=invite, H=4 | S=4    # 5-4 in the majors included (Smolen)
       when  !shape 4333                    # 4-3-3-3 just bids notrump; not promised
       sets  forcing=round, ask=majors
+      artificial
       priority 1                           # ahead of transfers with 5-4 majors
 
 # Opener. With both majors the first rule that fits (2H) wins.
@@ -23,8 +24,10 @@ after 1N (P) 2C (P)
 when answered majors
   4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4
   3H  "Invitational raise in hearts"              shows H>=4, strength=invite when partner.H>=4
+      sets ask=invite(H)
   4S  "Game in the spade fit"                     shows S>=4, strength>=game  when partner.S>=4
   3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4
+      sets ask=invite(S)
   3N  "Game: {game} total points, no fit found"   shows strength=game         sets ask=choice
   2N  "Invitational: {invite} total points, no fit found"
       shows strength=invite

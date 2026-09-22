@@ -284,8 +284,14 @@ fn texas_or_jacoby_by_slam_interest() {
     assert_call(&bid("82.KQ9732.A94.KQ", "1NT Pass"), "2D");
     assert_call(&bid("82.KQ9732.A94.KQ", "1NT Pass 2D Pass 2H Pass"), "4H");
     // Opener bids on with a good fit and a maximum, else passes.
-    assert_call(&bid("AK5.Q74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"), "4NT");
-    assert_call(&bid("AJ5.J74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"), "Pass");
+    assert_call(
+        &bid("AK5.Q74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"),
+        "4NT",
+    );
+    assert_call(
+        &bid("AJ5.J74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"),
+        "Pass",
+    );
     // Slam values (17 suit points): Texas, then keycard.
     assert_call(&bid("8.AQ9732.K94.AQ8", "1NT Pass"), "4D");
     assert_call(&bid("8.AQ9732.K94.AQ8", "1NT Pass 4D Pass 4H Pass"), "4NT");
@@ -302,4 +308,19 @@ fn keycard_answers_resolve_with_the_deck_limit() {
     let signed_off = format!("{asked} 5D Pass 5H Pass");
     assert_call(&bid("AK5.K74.KQ82.A93", &signed_off), "6H"); // 3 keycards
     assert_call(&bid("KJ5.K74.KQ82.Q93", &signed_off), "Pass"); // 0 keycards
+}
+
+#[test]
+fn keycard_answer_does_not_contradict_what_opener_showed() {
+    // "No queen" cannot be checked for another player; dropping it inside a
+    // negation used to make opener's knowledge contradictory.
+    let i = engine().interpret(
+        Direction::South,
+        Vulnerability::None,
+        ScoringMethod::Matchpoints,
+        &calls("1NT Pass 4D Pass 4H Pass 4NT Pass 5H"),
+    );
+    let answer = &i.steps[8];
+    assert!(answer.warnings.is_empty(), "{:?}", answer.warnings);
+    assert_eq!(answer.knowledge.hcp, Range::new(15, 17));
 }

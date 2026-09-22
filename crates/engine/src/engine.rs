@@ -43,6 +43,8 @@ pub struct Step {
     pub rule: Option<RuleRef>,
     pub explanation: Option<String>,
     pub alert: Option<Alert>,
+    /// The rule marked the call `artificial`: not a place to play.
+    pub artificial: bool,
     /// What the caller's hand is known to hold after this call.
     pub knowledge: SeatKnowledge,
     /// Problems met while interpreting (unknown terms, contradictions).
@@ -400,6 +402,7 @@ impl Engine {
             rule: None,
             explanation: None,
             alert: None,
+            artificial: false,
             knowledge: k.clone(),
             warnings: Vec::new(),
         };
@@ -411,6 +414,7 @@ impl Engine {
             step.rule = Some(entry.source.clone());
             step.explanation = Some(ctx.interpolate(&entry.rule.explanation, &mut b));
             step.alert = entry.rule.alert.clone();
+            step.artificial = entry.rule.artificial;
             // What the call shows: the union over every rule that makes it.
             let meanings: Vec<Expr> = matching
                 .iter()

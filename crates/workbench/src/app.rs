@@ -54,6 +54,7 @@ struct Delta {
 #[derive(Clone, Copy, PartialEq)]
 enum Tab {
     Divergences,
+    Problems,
     Boards,
     Changes,
 }
@@ -64,6 +65,14 @@ enum SortBy {
     Auction,
     Contract,
     Name,
+}
+
+/// One row of the problem table.
+struct ProbRow {
+    kind: rbb_compare::ProblemKind,
+    auction: String,
+    call: String,
+    boards: Vec<usize>,
 }
 
 /// One row of the divergence table.
@@ -99,6 +108,8 @@ pub struct App {
     tab: Tab,
     divs: Vec<DivRow>,
     div: Option<usize>,
+    probs: Vec<ProbRow>,
+    prob: Option<usize>,
     /// Text filter on the divergence table.
     div_filter: String,
     board: Option<usize>,
@@ -130,6 +141,8 @@ impl App {
             tab: Tab::Divergences,
             divs: Vec::new(),
             div: None,
+            probs: Vec::new(),
+            prob: None,
             div_filter: String::new(),
             board: None,
             detail: None,
@@ -287,6 +300,7 @@ impl App {
             });
             self.divs[n].boards.push(i);
         }
+        self.rebuild_probs();
         self.divs.sort_by(|a, b| {
             b.boards
                 .len()
@@ -301,10 +315,52 @@ impl App {
         }
     }
 
+    fn rebuild_probs(&mut self) {
+        self.probs.clear();
+        self.prob = None;
+        let Some(l) = &self.loaded else { return };
+        let mut index: HashMap<(rbb_compare::ProblemKind, String, String), usize> = HashMap::new();
+        for (i, b) in l.report.boards.iter().enumerate() {
+            if self.scenario.as_ref().is_some_and(|s| s != &b.scenario) {
+                continue;
+            }
+            for p in &b.problems {
+                let auction = b.ours[..p.index.min(b.ours.len())]
+                    .iter()
+                    .map(short)
+                    .collect::<Vec<_>>()
+                    .join(" ");
+                let call = b.ours.get(p.index).map(short).unwrap_or_default();
+                let key = (p.kind, auction.clone(), call.clone());
+                let n = *index.entry(key).or_insert_with(|| {
+                    self.probs.push(ProbRow {
+                        kind: p.kind,
+                        auction,
+                        call,
+                        boards: vec![],
+                    });
+                    self.probs.len() - 1
+                });
+                if self.probs[n].boards.last() != Some(&i) {
+                    self.probs[n].boards.push(i);
+                }
+            }
+        }
+        self.probs.sort_by(|a, b| {
+            b.boards
+                .len()
+                .cmp(&a.boards.len())
+                .then(a.auction.cmp(&b.auction))
+        });
+    }
+
     /// Boards shown in the Boards tab: the selected divergence's, else the
     /// selected scenario's, else all.
     fn board_list(&self) -> Vec<usize> {
         let Some(l) = &self.loaded else { return vec![] };
+        if let Some(p) = self.prob.and_then(|p| self.probs.get(p)) {
+            return p.boards.clone();
+        }
         if let Some(d) = self.div.and_then(|d| self.divs.get(d)) {
             return d.boards.clone();
         }
@@ -721,6 +777,9 @@ impl App {
     fn lists(&mut self, ui: &mut egui::Ui) {
         ui.horizontal(|ui| {
             ui.selectable_value(&mut self.tab, Tab::Divergences, "Divergences");
+            let n: usize = self.probs.iter().map(|p| p.boards.len()).sum();
+            ui.selectable_value(&mut self.tab, Tab::Problems, format!("Problems ({n})"))
+                .on_hover_text("Wrong whatever the convention: no rule in a live auction, passing an artificial call, a trump fit under 7 cards, contradictions.");
             ui.selectable_value(&mut self.tab, Tab::Boards, "Boards");
             let changes = self
                 .delta
@@ -751,6 +810,7 @@ impl App {
         }
         match self.tab {
             Tab::Divergences => self.divergence_table(ui),
+            Tab::Problems => self.problem_table(ui),
             Tab::Boards => {
                 let list = self.board_list();
                 if let Some(d) = self.div.and_then(|d| self.divs.get(d)) {
@@ -879,8 +939,67 @@ impl App {
             });
         if let Some(i) = clicked {
             self.div = Some(i);
+            self.prob = None;
             self.tab = Tab::Boards;
             if let Some(&first) = self.divs[i].boards.first() {
+                self.select_board(first);
+            }
+        }
+    }
+
+    fn problem_table(&mut self, ui: &mut egui::Ui) {
+        ui.label(
+            RichText::new("Problems in our own auctions, most frequent first. These are never a matter of judgment. Click a row for its boards.")
+                .weak(),
+        );
+        let mut clicked = None;
+        ui.spacing_mut().item_spacing.y = 0.0;
+        TableBuilder::new(ui)
+            .id_salt("problem-table")
+            .striped(true)
+            .sense(Sense::click())
+            .column(Column::auto().at_least(50.0))
+            .column(Column::initial(200.0).clip(true))
+            .column(Column::initial(260.0).clip(true))
+            .column(Column::auto().at_least(40.0))
+            .header(20.0, |mut h| {
+                for t in ["boards", "problem", "auction so far", "call"] {
+                    h.col(|ui| {
+                        ui.strong(t);
+                    });
+                }
+            })
+            .body(|body| {
+                body.rows(20.0, self.probs.len(), |mut row| {
+                    let i = row.index();
+                    let p = &self.probs[i];
+                    row.set_selected(self.prob == Some(i));
+                    row.col(|ui| {
+                        ui.label(p.boards.len().to_string());
+                    });
+                    row.col(|ui| {
+                        ui.label(RichText::new(p.kind.label()).color(BAD));
+                    });
+                    row.col(|ui| {
+                        ui.monospace(if p.auction.is_empty() {
+                            "(opening)"
+                        } else {
+                            &p.auction
+                        });
+                    });
+                    row.col(|ui| {
+                        ui.monospace(&p.call);
+                    });
+                    if row.response().clicked() {
+                        clicked = Some(i);
+                    }
+                });
+            });
+        if let Some(i) = clicked {
+            self.prob = Some(i);
+            self.div = None;
+            self.tab = Tab::Boards;
+            if let Some(&first) = self.probs[i].boards.first() {
                 self.select_board(first);
             }
         }

@@ -22,3 +22,19 @@ when opening
   P   "No opening bid"
       shows hcp<=min_open-1
       priority -10
+
+# Once our side has bid game, a player with nothing more to add passes.
+# Slam tries and corrections are separate rules that outrank this.
+when game_reached
+  P   "Game reached: nothing more to say"
+      priority -50
+
+# A game force must not be passed below game. When no better rule applies,
+# bid game: in the agreed suit, or in notrump without one.
+when we.forcing = game, !game_reached
+  4{trump}  "Game in the agreed suit"   when we.trump is H | we.trump is S
+            priority -40
+  5{trump}  "Game in the agreed suit"   when we.trump is C | we.trump is D
+            priority -40
+  3N        "Game in notrump"           when we.trump is none
+            priority -40

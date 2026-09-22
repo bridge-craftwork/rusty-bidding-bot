@@ -136,6 +136,7 @@ A context can combine both: `after 1N (P) when !passed_hand`.
     prefer   <expression>     # score used when ranking (section 7)
     priority <n>
     replaces <module>[.<rule-id>]
+    artificial                # not a place to play: passing it out is a mistake
     as       <rule-id>
 ```
 

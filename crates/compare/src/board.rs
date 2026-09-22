@@ -8,6 +8,45 @@ use serde::Serialize;
 /// Longest auction the engine may produce before we stop it.
 const MAX_CALLS: usize = 60;
 
+/// Something that is wrong whatever the convention: not a matter of
+/// judgment, and independent of BBA.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ProblemKind {
+    /// The engine had no rule, in an auction its side had already entered.
+    NoRule,
+    /// The auction ended in an artificial call (a keycard answer, a transfer).
+    ArtificialContract,
+    /// The contract is in a suit where the declaring side has fewer than
+    /// seven cards between them.
+    ShortFit,
+    /// A call contradicted what the same player had shown.
+    Contradiction,
+    /// The engine did not finish the auction.
+    Runaway,
+}
+
+impl ProblemKind {
+    pub fn label(self) -> &'static str {
+        match self {
+            ProblemKind::NoRule => "no rule in a live auction",
+            ProblemKind::ArtificialContract => "contract is an artificial call",
+            ProblemKind::ShortFit => "trump fit under 7 cards",
+            ProblemKind::Contradiction => "contradicts earlier calls",
+            ProblemKind::Runaway => "auction not finished",
+        }
+    }
+}
+
+/// One problem in the engine's own auction.
+#[derive(Debug, Clone, Serialize)]
+pub struct Problem {
+    pub kind: ProblemKind,
+    /// The call it concerns, as an index into `BoardResult::ours`.
+    pub index: usize,
+    pub detail: String,
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct ParComparison {
     pub par_ns: i32,
@@ -47,6 +86,8 @@ pub struct BoardResult {
     pub par: Option<ParComparison>,
     /// The engine stopped its auction at `MAX_CALLS`.
     pub runaway: bool,
+    /// Problems in the engine's own auction (see `ProblemKind`).
+    pub problems: Vec<Problem>,
 }
 
 impl BoardResult {
@@ -82,12 +123,26 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     let scoring = board.extra_tag("Scoring").and_then(ScoringMethod::from_pbn);
     let mut pos = engine.start(dealer, board.vulnerable, scoring.unwrap_or_default());
     let mut replay = Vec::with_capacity(reference.len());
+    // For our own auction: at each call, whether a rule chose it, and how the
+    // engine read it. Before the first difference our auction is BBA's.
+    let mut decided: Vec<bool> = Vec::new();
+    let mut steps: Vec<rbb_engine::Step> = Vec::new();
+    let mut acted = [false; 2];
+    let mut live: Vec<bool> = Vec::new();
     let mut at_divergence = None;
     for (i, call) in reference.iter().enumerate() {
         let before = pos.clone();
-        let (choice, _) = engine.step(&mut pos, hand(before.next_caller()), call);
+        let seat = before.next_caller();
+        let (choice, step) = engine.step(&mut pos, hand(seat), call);
         if at_divergence.is_none() && &choice.call != call {
             at_divergence = Some((i, before));
+        }
+        if at_divergence.is_none() {
+            let side = rbb_engine::side(seat);
+            live.push(acted[side]);
+            acted[side] |= !call.is_pass();
+            decided.push(choice.rule.is_some());
+            steps.push(step);
         }
         replay.push(choice.call);
     }
@@ -102,11 +157,17 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
                 runaway = true;
                 break;
             }
-            let choice = engine.choose(&p, hand(p.next_caller()));
-            engine.advance(&mut p, &choice.call);
+            let seat = p.next_caller();
+            let choice = engine.choose(&p, hand(seat));
+            let side = rbb_engine::side(seat);
+            live.push(acted[side]);
+            acted[side] |= !choice.call.is_pass();
+            decided.push(choice.rule.is_some());
+            steps.push(engine.advance(&mut p, &choice.call));
             ours.push(choice.call);
         }
     }
+    let problems = find_problems(board, dealer, &ours, &decided, &live, &steps, runaway);
 
     let contract_of = |calls: &[Call]| {
         let mut a = Auction::new(dealer);
@@ -140,7 +201,108 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
         first_divergence,
         par: None,
         runaway,
+        problems,
     })
+}
+
+fn find_problems(
+    board: &Board,
+    dealer: Direction,
+    ours: &[Call],
+    decided: &[bool],
+    live: &[bool],
+    steps: &[rbb_engine::Step],
+    runaway: bool,
+) -> Vec<Problem> {
+    let mut out = Vec::new();
+    let seat_of = |i: usize| (0..i).fold(dealer, |d, _| d.next());
+    for i in 0..ours.len().min(decided.len()).min(live.len()) {
+        if !decided[i] && live[i] {
+            out.push(Problem {
+                kind: ProblemKind::NoRule,
+                index: i,
+                detail: format!("{} had no rule", seat_of(i).to_char()),
+            });
+        }
+    }
+    for (i, s) in steps.iter().enumerate() {
+        for w in s.warnings.iter().filter(|w| w.contains("contradicts")) {
+            out.push(Problem {
+                kind: ProblemKind::Contradiction,
+                index: i,
+                detail: w.clone(),
+            });
+        }
+    }
+    // The call that set the contract.
+    if let Some(j) = ours.iter().rposition(Call::is_bid) {
+        if let (Some(step), true) = (steps.get(j), !runaway) {
+            let fit8 = match ours[j] {
+                Call::Bid { strain, .. } => rbb_engine::suit_of(strain).is_some_and(|suit| {
+                    let s = rbb_engine::side(seat_of(j));
+                    [
+                        Direction::North,
+                        Direction::East,
+                        Direction::South,
+                        Direction::West,
+                    ]
+                    .into_iter()
+                    .filter(|d| rbb_engine::side(*d) == s)
+                    .map(|d| board.deal.hand(d).suit_length(suit))
+                    .sum::<usize>()
+                        >= 8
+                }),
+                _ => false,
+            };
+            // An artificial call that happens to name our real fit (a keycard
+            // answer in the trump suit) is a fine place to stop.
+            if step.artificial && !fit8 {
+                out.push(Problem {
+                    kind: ProblemKind::ArtificialContract,
+                    index: j,
+                    detail: format!(
+                        "{} ({}) was passed out",
+                        ours[j].to_pbn(),
+                        step.explanation.as_deref().unwrap_or("artificial")
+                    ),
+                });
+            }
+        }
+        // A one-level contract is an opening or response passed out: normal.
+        if let Call::Bid { level: 2.., strain } = ours[j] {
+            if let Some(suit) = rbb_engine::suit_of(strain) {
+                let declarer_side = rbb_engine::side(seat_of(j));
+                let fit: usize = [
+                    Direction::North,
+                    Direction::East,
+                    Direction::South,
+                    Direction::West,
+                ]
+                .into_iter()
+                .filter(|d| rbb_engine::side(*d) == declarer_side)
+                .map(|d| board.deal.hand(d).suit_length(suit))
+                .sum();
+                if fit < 7 {
+                    out.push(Problem {
+                        kind: ProblemKind::ShortFit,
+                        index: j,
+                        detail: format!(
+                            "{}: {fit} cards between the declaring pair",
+                            ours[j].to_pbn()
+                        ),
+                    });
+                }
+            }
+        }
+    }
+    if runaway {
+        out.push(Problem {
+            kind: ProblemKind::Runaway,
+            index: ours.len().saturating_sub(1),
+            detail: "no end".into(),
+        });
+    }
+    out
 }
 
 /// Fill in `result.par` from double-dummy analysis.

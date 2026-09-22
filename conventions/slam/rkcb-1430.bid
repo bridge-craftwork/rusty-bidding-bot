@@ -13,13 +13,14 @@ when we.trump is suit, we.forcing = game, !asked
   4N  "Keycard ask in {trump}"
       when  slam_try                   # judgment hook (Rust evaluator)
       sets  ask=keycards(trump)
+      artificial
 
 # The answers (1430: 5C and 5D swapped relative to 0314).
 when asked keycards(t)
-  5C  "1 or 4 keycards"                shows keycards(t) in 1|4
-  5D  "0 or 3 keycards"                shows keycards(t) in 0|3
-  5H  "2 keycards, no {t} queen"       shows keycards(t)=2, !has(Q,t)
-  5S  "2 keycards and the {t} queen"   shows keycards(t)=2, has(Q,t)
+  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
+  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+  5H  "2 keycards, no {t} queen"       shows keycards(t)=2, !has(Q,t)  artificial
+  5S  "2 keycards and the {t} queen"   shows keycards(t)=2, has(Q,t)  artificial
 
 # The asker places the contract. we.keycards(t) combines my exact count
 # with partner's answer; the deck limit of 5 keycards resolves "1 or 4".

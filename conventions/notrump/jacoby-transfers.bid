@@ -8,8 +8,8 @@ module jacoby-transfers "Jacoby Transfers"
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
 after 1N (P)
-  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)
-  2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)
+  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)  artificial
+  2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)  artificial
 
 # Opener completes the transfer. Super-accepts are separate modules
 # (super-accept.bid, superaccept-doubleton.bid), switched on by the card.
@@ -67,4 +67,5 @@ when asked invite(M)
 when asked slam_try(M)
   4N  "Keycard ask: good fit and a maximum"   shows M>=3, points>=31-partner.suit_points.min
       sets ask=keycards(M)
+      artificial
   P   "No slam: plays game"

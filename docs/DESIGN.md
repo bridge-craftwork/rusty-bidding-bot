@@ -333,6 +333,25 @@ the web. Bridge-Classroom's Vue components (hands, DD tables) are the path if th
 A headless library does all the work. The GUI and a CLI report
 (`rbb compare`, for CI and quick checks) are thin layers over it.
 
+### Problems: wrong whatever the convention
+
+BBA agreement mixes judgment (where a point boundary falls) with mistakes.
+Problems are the mistakes, found in our own auctions independently of BBA,
+and shown in `rbb compare` and the workbench's Problems tab:
+
+- **no rule in a live auction**: the engine had nothing to say once its side
+  had bid (entering over the opponents is not counted yet);
+- **contract is an artificial call**: the auction ended in a call its rule
+  marks `artificial` (a transfer, a keycard answer), unless it happens to
+  be an eight-card fit;
+- **trump fit under 7 cards**, from the two level up;
+- **contradicts earlier calls**: a call the engine read as impossible given
+  what the same player had shown;
+- **auction not finished**.
+
+The target is zero. Differences from BBA that are judgment are recorded
+in each module's notes as accepted.
+
 ### Probes: asking BBA directly
 
 `rbb probe` makes a small reference set on purpose, to isolate one

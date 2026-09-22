@@ -7,7 +7,17 @@ use crate::lexer::{lex, Tok, Token};
 use crate::Diagnostic;
 
 const CLAUSES: &[&str] = &[
-    "shows", "when", "sets", "denies", "prefer", "priority", "replaces", "as", "alert", "announce",
+    "shows",
+    "when",
+    "sets",
+    "denies",
+    "prefer",
+    "priority",
+    "replaces",
+    "as",
+    "alert",
+    "announce",
+    "artificial",
 ];
 const HEADERS: &[&str] = &["card", "needs", "param"];
 
@@ -393,6 +403,7 @@ impl<'a> Parser<'a> {
             priority: None,
             replaces: None,
             id: None,
+            artificial: false,
             line: l.no,
         };
         let mut all = vec![(line, clauses)];
@@ -508,6 +519,12 @@ impl<'a> Parser<'a> {
                     return dup("as");
                 }
                 rule.id = Some(raw()?);
+            }
+            "artificial" => {
+                if !body.is_empty() {
+                    return Err((kw.end, "`artificial` takes nothing after it".into()));
+                }
+                rule.artificial = true;
             }
             "alert" | "announce" => {
                 if rule.alert.is_some() {

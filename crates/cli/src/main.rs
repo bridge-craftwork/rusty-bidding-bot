@@ -428,6 +428,39 @@ fn compare(
         .collect();
     println!("first divergence at call #: {}", hist.join("  "));
 
+    // Problems: wrong whatever the convention, and independent of BBA.
+    println!(
+        "\nproblems in our auctions ({} boards):",
+        t.boards_with_problems
+    );
+    for (kind, n) in &t.problems {
+        println!("  {:32} {n}", kind.label());
+    }
+    for p in s.problems.iter().take(top) {
+        let auction = if p.auction.is_empty() {
+            "(opening)".to_string()
+        } else {
+            p.auction.clone()
+        };
+        let mut names = p
+            .scenarios
+            .iter()
+            .take(3)
+            .cloned()
+            .collect::<Vec<_>>()
+            .join(", ");
+        if p.scenarios.len() > 3 {
+            names += &format!(" +{}", p.scenarios.len() - 3);
+        }
+        println!(
+            "  {:>5}  {:26} {:28} {:>5}  {names}",
+            p.count,
+            p.kind.label(),
+            auction,
+            p.call
+        );
+    }
+
     // The conditions the reference auctions were made under.
     let list = |m: &std::collections::BTreeMap<String, usize>| {
         m.iter()

@@ -133,6 +133,10 @@ pub struct Rule {
     pub replaces: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// The call does not name a place to play (a transfer, an ask, an
+    /// answer): passing it out is always a mistake.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub artificial: bool,
     pub line: usize,
 }
 

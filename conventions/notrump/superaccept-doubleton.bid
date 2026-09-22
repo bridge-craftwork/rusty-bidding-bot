@@ -9,8 +9,11 @@ module superaccept-doubleton "Superaccept doubleton"
 after 1N (P) 2D (P)
   2S  "Super-accept: 4+ hearts, maximum, doubleton spade"  alert
       shows H>=4, hcp>=16, S=2
+      artificial
   2N  "Super-accept: 4+ hearts, maximum, a doubleton"      alert
       shows H>=4, hcp>=16, shortest=2
+      artificial
 after 1N (P) 2H (P)
   2N  "Super-accept: 4+ spades, maximum, a doubleton"      alert
       shows S>=4, hcp>=16, shortest=2
+      artificial

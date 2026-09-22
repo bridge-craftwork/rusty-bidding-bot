@@ -19,8 +19,10 @@ use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
 
-pub use board::{BoardResult, ParComparison};
-pub use report::{scoring_name, short, summarize, Agreement, Divergence, ParTally, Stats, Summary};
+pub use board::{BoardResult, ParComparison, Problem, ProblemKind};
+pub use report::{
+    scoring_name, short, summarize, Agreement, Divergence, ParTally, ProblemPoint, Stats, Summary,
+};
 pub use scenario::{discover, Scenario};
 
 #[derive(Debug, Clone)]

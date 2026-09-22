@@ -587,6 +587,10 @@ impl<'a> Ctx<'a> {
                 Val::Num(Range::point(seat))
             }
             "vul" => Val::Bool(Tri::from_bool(self.pos.is_vulnerable(self.actor))),
+            // Our side's last bid is game or higher (and it is our contract).
+            "game_reached" => Val::Bool(Tri::from_bool(
+                self.pos.side_acted(self.actor) && !self.pos.below_game(self.actor),
+            )),
             "imps" => Val::Bool(Tri::from_bool(self.pos.is_imps())),
             "matchpoints" => Val::Bool(Tri::from_bool(!self.pos.is_imps())),
             "trump" => self.we_attr(seg, b)?,
@@ -822,9 +826,20 @@ impl<'a> Ctx<'a> {
             Expr::Or { any } => Expr::Or {
                 any: any.iter().map(|x| self.resolve_with(x, b, lossy)).collect(),
             },
-            Expr::Not { expr } => Expr::Not {
-                expr: Box::new(self.resolve_with(expr, b, lossy)),
-            },
+            Expr::Not { expr } => {
+                // A term dropped inside a negation would turn "not (unknown)"
+                // into "not true" = false. Drop the whole negation instead.
+                let mut inner_lossy = false;
+                let inner = self.resolve_with(expr, b, &mut inner_lossy);
+                if inner_lossy {
+                    *lossy = true;
+                    konst(true)
+                } else {
+                    Expr::Not {
+                        expr: Box::new(inner),
+                    }
+                }
+            }
             Expr::Shape { .. } => e.clone(),
             Expr::Cmp { cmp, lhs, rhs } => {
                 if let Ok(Some(e)) = self.strength_as_points(*cmp, lhs, rhs) {
