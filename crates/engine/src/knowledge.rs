@@ -97,6 +97,11 @@ impl Tri {
 /// Suit letters in index order C, D, H, S.
 pub const SUITS: [&str; 4] = ["C", "D", "H", "S"];
 
+/// The most a hand's points can exceed its HCP, in quarters, with the
+/// default valuation: four tens at ½ (notrump); nine cards beyond four at ½
+/// (suit).
+const MAX_BONUS: [i32; 2] = [8, 18];
+
 pub fn suit_index(name: &str) -> Option<usize> {
     SUITS.iter().position(|s| *s == name)
 }
@@ -107,11 +112,9 @@ pub struct SeatKnowledge {
     /// Suit lengths, C D H S.
     pub len: [Range; 4],
     pub balanced: Tri,
-    /// Total points, in quarter points (see `facts::Valuation`).
-    pub pts: Range,
-    /// Whether a call has said anything about total points (rather than
-    /// only HCP). Strength bands use points when it has, HCP otherwise.
-    pub pts_shown: bool,
+    /// Total points in quarter points, [notrump, suit] (see
+    /// `facts::Valuation`).
+    pub pts: [Range; 2],
     /// Everything this seat has shown or denied, resolved so that it refers
     /// only to the seat's own hand (see `eval::resolve`), printed.
     pub shown: Vec<String>,
@@ -125,8 +128,10 @@ impl Default for SeatKnowledge {
             hcp: Range::new(0, 37),
             len: [Range::new(0, 13); 4],
             balanced: Tri::Unknown,
-            pts: Range::new(0, 4 * 37 + 4 + 2 * 9),
-            pts_shown: false,
+            pts: [
+                Range::new(0, 4 * 37 + MAX_BONUS[0]),
+                Range::new(0, 4 * 37 + MAX_BONUS[1]),
+            ],
             shown: Vec::new(),
             constraints: Vec::new(),
         }
@@ -135,17 +140,31 @@ impl Default for SeatKnowledge {
 
 impl SeatKnowledge {
     pub fn is_contradiction(&self) -> bool {
-        self.hcp.is_empty() || self.pts.is_empty() || self.len.iter().any(Range::is_empty)
+        self.hcp.is_empty()
+            || self.pts.iter().any(Range::is_empty)
+            || self.len.iter().any(Range::is_empty)
     }
 
     /// Total points as whole points (fractions dropped), for comparisons:
-    /// the shown range when a call showed points, else the HCP range.
-    pub fn whole_points(&self) -> Range {
-        if self.pts_shown {
-            Range::new(self.pts.lo.div_euclid(4), self.pts.hi.div_euclid(4))
+    /// the shown range when a call showed that kind of points, else the
+    /// other kind if shown (a suit invitation, then a notrump decision: both
+    /// measure the same strength), else the HCP range.
+    pub fn whole_points(&self, kind: usize) -> Range {
+        let k = if self.points_shown(kind) {
+            kind
+        } else if self.points_shown(1 - kind) {
+            1 - kind
         } else {
-            self.hcp
-        }
+            return self.hcp;
+        };
+        Range::new(self.pts[k].lo.div_euclid(4), self.pts[k].hi.div_euclid(4))
+    }
+
+    /// Has a call said something about this kind of points beyond what the
+    /// HCP range implies?
+    pub fn points_shown(&self, kind: usize) -> bool {
+        let p = self.pts[kind];
+        p.lo > 4 * self.hcp.lo || p.hi < 4 * self.hcp.hi + MAX_BONUS[kind]
     }
 
     /// Record a constraint (already resolved to this seat's own hand) and
@@ -159,7 +178,6 @@ impl SeatKnowledge {
             self.len = narrowed.len;
             self.balanced = narrowed.balanced;
             self.pts = narrowed.pts;
-            self.pts_shown = narrowed.pts_shown;
             self.shown.push(e.to_string());
             self.constraints.push(e);
             // Earlier disjunctions may settle now ("4 hearts or 4 spades",
@@ -193,8 +211,11 @@ impl SeatKnowledge {
             }
         }
         // Points are at least HCP; HCP are at most the whole points.
-        self.pts.lo = self.pts.lo.max(4 * self.hcp.lo);
-        self.hcp.hi = self.hcp.hi.min(self.pts.hi.div_euclid(4));
+        for (p, bonus) in self.pts.iter_mut().zip(MAX_BONUS) {
+            p.lo = p.lo.max(4 * self.hcp.lo);
+            p.hi = p.hi.min(4 * self.hcp.hi + bonus);
+            self.hcp.hi = self.hcp.hi.min(p.hi.div_euclid(4));
+        }
         if self.balanced == Tri::Unknown && self.len.iter().any(|r| r.hi <= 1 || r.lo >= 6) {
             self.balanced = Tri::False;
         }
@@ -219,8 +240,9 @@ impl SeatKnowledge {
         for i in 0..4 {
             k.len[i] = self.len[i].hull(o.len[i]);
         }
-        k.pts = self.pts.hull(o.pts);
-        k.pts_shown = self.pts_shown || o.pts_shown;
+        for i in 0..2 {
+            k.pts[i] = self.pts[i].hull(o.pts[i]);
+        }
         k.balanced = if self.balanced == o.balanced {
             self.balanced
         } else {
@@ -233,10 +255,7 @@ impl SeatKnowledge {
         match attr {
             Attr::Hcp => &mut self.hcp,
             Attr::Len(s) => &mut self.len[s],
-            Attr::Pts => {
-                self.pts_shown = true;
-                &mut self.pts
-            }
+            Attr::Pts(i) => &mut self.pts[i],
         }
     }
 }
@@ -245,8 +264,9 @@ impl SeatKnowledge {
 enum Attr {
     Hcp,
     Len(usize),
-    /// Total points: kept in quarters, compared by whole points.
-    Pts,
+    /// Total points (0 notrump, 1 suit): kept in quarters, compared by
+    /// whole points.
+    Pts(usize),
 }
 
 fn attr_of(e: &Expr) -> Option<Attr> {
@@ -256,7 +276,8 @@ fn attr_of(e: &Expr) -> Option<Attr> {
     }
     match path[0].name.as_str() {
         "hcp" => Some(Attr::Hcp),
-        "points" => Some(Attr::Pts),
+        "points" => Some(Attr::Pts(0)),
+        "suit_points" => Some(Attr::Pts(1)),
         n => suit_index(n).map(Attr::Len),
     }
 }
@@ -293,7 +314,7 @@ fn negate(op: CmpOp) -> CmpOp {
 /// bound n covers quarters 4n..=4n+3.
 fn apply_attr(attr: Attr, r: Range, op: CmpOp, n: i32) -> Range {
     match attr {
-        Attr::Pts => match op {
+        Attr::Pts(_) => match op {
             CmpOp::Eq => r.intersect(Range::new(4 * n, 4 * n + 3)),
             CmpOp::Ne => r,
             CmpOp::Lt => apply_const(r, CmpOp::Lt, 4 * n),
@@ -370,7 +391,9 @@ pub fn narrow(k: &SeatKnowledge, e: &Expr, positive: bool) -> SeatKnowledge {
                 }
                 // Relations between two attributes (S>=H); not for points,
                 // which are in different units.
-                (Some(a), Some(b), _, _) if !matches!(a, Attr::Pts) && !matches!(b, Attr::Pts) => {
+                (Some(a), Some(b), _, _)
+                    if !matches!(a, Attr::Pts(_)) && !matches!(b, Attr::Pts(_)) =>
+                {
                     let (ra, rb) = (*out.range_mut(a), *out.range_mut(b));
                     let (na, nb) = match op {
                         CmpOp::Ge => (
@@ -400,7 +423,7 @@ pub fn narrow(k: &SeatKnowledge, e: &Expr, positive: bool) -> SeatKnowledge {
         }
         Expr::InRange { expr, lo, hi } => {
             if let (Some(a), Some(lo), Some(hi)) = (attr_of(expr), int_of(lo), int_of(hi)) {
-                let (lo, hi) = if matches!(a, Attr::Pts) {
+                let (lo, hi) = if matches!(a, Attr::Pts(_)) {
                     (4 * lo, 4 * hi + 3)
                 } else {
                     (lo, hi)

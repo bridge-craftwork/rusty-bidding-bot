@@ -9,8 +9,8 @@ module texas-transfers "Texas Transfers"
 # continue.) A different question from Jacoby's, so the Jacoby continuations
 # do not apply.
 after 1N (P)
-  4D  "Texas: transfer to hearts"  announce "Transfer"  shows H>=6, strength=game  sets ask=texas(H)
-  4H  "Texas: transfer to spades"  announce "Transfer"  shows S>=6, strength=game  sets ask=texas(S)
+  4D  "Texas: transfer to hearts"  announce "Transfer"  shows H>=6, suit_strength=game  sets ask=texas(H)
+  4H  "Texas: transfer to spades"  announce "Transfer"  shows S>=6, suit_strength=game  sets ask=texas(S)
 
 after 1N (P) 4D (P)
   4H  "Completes the transfer"

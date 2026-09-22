@@ -5,6 +5,7 @@
 
 mod board;
 pub mod par;
+pub mod probe;
 mod report;
 mod scenario;
 

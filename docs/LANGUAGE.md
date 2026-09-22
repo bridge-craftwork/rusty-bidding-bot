@@ -175,16 +175,21 @@ Their values are **ranges**, so a comparison means "known to be true":
 **Partnership totals**, `we.hcp` and `we.keycards(x)`, combine my exact hand
 with partner's range. Example: `we.hcp.min >= 25`.
 
-**Points.** `points` is total points: HCP, plus ¼ for each ten, plus ½ for
-each card beyond four in a suit, kept in quarter points. It compares by its
-whole part, so `points=8..9` means 8 up to 9¾, and `points>=10` needs a full
-10. These weights fit BBA's invite and game decisions after 1NT best (an
-analysis of 6,394 responder and 1,410 opener decisions: length is the
-largest effect; nines, eights, aces, jacks, queens and 4-3-3-3 showed none).
-They are engine settings (`Valuation`), not fixed. `hcp` stays pure HCP:
-BBA's 1NT is 15-17 HCP exactly.
+**Points.** Two measures, kept in quarter points and compared by their
+whole part (`points=8..9` means 8 up to 9¾):
 
-**Strength** compares with a band: `strength=invite`, `strength>=game`. Bands,
+- `points`, for notrump: HCP plus ½ for each ten.
+- `suit_points`, for a suit contract: HCP plus ½ for each card beyond four.
+
+This is what BBA does, found by probing it hand by hand with `rbb probe`
+(the same hand with 0-4 tens; with and without a long suit): tens count at
+notrump and not in a suit contract; length counts in a suit contract and not
+at notrump. Nines and eights showed no effect. The weights are engine
+settings (`Valuation`). `hcp` stays pure HCP: BBA's 1NT is 15-17 HCP
+exactly, whatever the tens or length.
+
+**Strength** compares with a band: `strength=invite`, `strength>=game`
+(notrump points), or `suit_strength=invite` (suit points). Bands,
 weakest first: `signoff`, `invite`, `game`, `slam_invite`, `slam`. Each is my
 total points given partner's range p in whole points (partner's points when
 a call showed points, else partner's HCP), for 25 combined for game and 33

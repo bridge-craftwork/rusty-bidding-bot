@@ -119,6 +119,7 @@ fn flip(op: CmpOp) -> CmpOp {
 const SELF_ATTRS: &[&str] = &[
     "hcp",
     "points",
+    "suit_points",
     "balanced",
     "semibalanced",
     "shortest",
@@ -347,9 +348,14 @@ impl<'a> Ctx<'a> {
             }
             _ => None,
         };
-        let (band, cmp) = match (name(lhs).as_deref(), name(rhs)) {
-            (Some("strength"), Some(band)) => (band, cmp),
-            (Some(band), Some(s)) if s == "strength" => (band.to_string(), flip(cmp)),
+        let kind = |s: &str| match s {
+            "strength" => Some(0),
+            "suit_strength" => Some(1),
+            _ => None,
+        };
+        let (band, cmp, kind) = match (name(lhs), name(rhs)) {
+            (Some(s), Some(band)) if kind(&s).is_some() => (band, cmp, kind(&s).unwrap()),
+            (Some(band), Some(s)) if kind(&s).is_some() => (band, flip(cmp), kind(&s).unwrap()),
             _ => return Ok(None),
         };
         let i = BANDS
@@ -357,8 +363,9 @@ impl<'a> Ctx<'a> {
             .position(|b| *b == band)
             .ok_or_else(|| format!("`{band}` is not a strength band ({})", BANDS.join(", ")))?
             as i32;
-        let (lo, hi) = self.band(i);
-        let points = || Box::new(path_expr("points"));
+        let (lo, hi) = self.band(i, kind);
+        let measure = if kind == 0 { "points" } else { "suit_points" };
+        let points = || Box::new(path_expr(measure));
         let int = |v: i32| Box::new(Expr::Int { value: v as i64 });
         let at_least = |v: i32| Expr::Cmp {
             cmp: CmpOp::Ge,
@@ -389,8 +396,8 @@ impl<'a> Ctx<'a> {
 
     /// The whole-point range of strength band `i` (see
     /// `strength_as_points`).
-    pub fn band(&self, i: i32) -> (i32, i32) {
-        let p = self.pos.knowledge(self.partner()).whole_points();
+    pub fn band(&self, i: i32, kind: usize) -> (i32, i32) {
+        let p = self.pos.knowledge(self.partner()).whole_points(kind);
         match i {
             0 => (0, GAME - 1 - p.hi),
             1 => (GAME - p.hi, GAME - 1 - p.lo),
@@ -518,7 +525,7 @@ impl<'a> Ctx<'a> {
         if n == "N" || n == "NT" {
             return Ok(Val::Strain(Strain::NoTrump));
         }
-        if n == "strength" {
+        if n == "strength" || n == "suit_strength" {
             return Err(format!(
                 "`strength` is compared with a band: strength=invite, strength>=game ({})",
                 BANDS.join(", ")
@@ -610,7 +617,8 @@ impl<'a> Ctx<'a> {
         }
         Ok(match n {
             "hcp" => Val::Num(k.hcp),
-            "points" => Val::Num(k.whole_points()),
+            "points" => Val::Num(k.whole_points(0)),
+            "suit_points" => Val::Num(k.whole_points(1)),
             "balanced" => Val::Bool(k.balanced),
             "shortest" => Val::Num(Range::new(
                 k.len.iter().map(|r| r.lo).min().unwrap_or(0),
@@ -715,7 +723,7 @@ impl<'a> Ctx<'a> {
             };
             let name = &rest[open + 1..open + close];
             if let Some(i) = BANDS.iter().position(|x| *x == name) {
-                let (lo, hi) = self.band(i as i32);
+                let (lo, hi) = self.band(i as i32, 0);
                 out.push_str(&match (lo.max(0), hi) {
                     (lo, hi) if lo > hi => "—".to_string(),
                     (lo, 40) => format!("{lo}+"),
@@ -885,6 +893,45 @@ impl<'a> Ctx<'a> {
     }
 }
 
+/// Does the truth of `e` depend on the actor's own hand? (Everything else
+/// in a condition is public: what each seat has shown, and the state.) A
+/// `when` that does not depend on the hand, and is not known true, cannot
+/// be what the caller relied on.
+pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
+    match e {
+        Expr::And { all } => all.iter().any(|x| hand_dependent(x, b)),
+        Expr::Or { any } => any.iter().any(|x| hand_dependent(x, b)),
+        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => hand_dependent(expr, b),
+        Expr::Cmp { lhs, rhs, .. } => hand_dependent(lhs, b) || hand_dependent(rhs, b),
+        Expr::InRange { expr, lo, hi } => {
+            hand_dependent(expr, b) || hand_dependent(lo, b) || hand_dependent(hi, b)
+        }
+        Expr::InSet { expr, .. } => hand_dependent(expr, b),
+        Expr::Arith { lhs, rhs, .. } => hand_dependent(lhs, b) || hand_dependent(rhs, b),
+        Expr::Shape { .. } => true,
+        Expr::Is { .. } | Expr::Asked { .. } | Expr::Answered { .. } => false,
+        Expr::Int { .. } | Expr::Call { .. } => false,
+        Expr::Path { path } => {
+            let first = path[0].name.as_str();
+            match first {
+                "me" => true,
+                "we" => path
+                    .get(1)
+                    .is_some_and(|s| matches!(s.name.as_str(), "hcp" | "keycards" | "points")),
+                "partner" | "lho" | "rho" | "shown" | "they" => false,
+                _ if path.len() > 1 => false,
+                n => {
+                    SELF_ATTRS.contains(&n)
+                        || SELF_FUNCS.contains(&n)
+                        || matches!(n, "slam_try" | "grand_try" | "strength" | "suit_strength")
+                        || suit_index(n).is_some()
+                        || matches!(b.get(n), Some(Val::Suit(_)))
+                }
+            }
+        }
+    }
+}
+
 /// Does `e` refer to the actor's own hand (so it must not be folded to a
 /// constant from knowledge)?
 fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
@@ -946,6 +993,7 @@ fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
         "hcp" => Val::Num(Range::point(f.hcp)),
         // Whole points: 9¾ counts as 9.
         "points" => Val::Num(Range::point(f.points_q(v).div_euclid(4))),
+        "suit_points" => Val::Num(Range::point(f.suit_points_q(v).div_euclid(4))),
         "balanced" => Val::Bool(Tri::from_bool(f.balanced)),
         "semibalanced" => Val::Bool(Tri::from_bool(f.dist[3] >= 2 && f.dist[0] <= 6)),
         "shortest" => Val::Num(Range::point(f.dist[3])),

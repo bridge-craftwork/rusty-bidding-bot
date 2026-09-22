@@ -333,6 +333,21 @@ the web. Bridge-Classroom's Vue components (hands, DD tables) are the path if th
 A headless library does all the work. The GUI and a CLI report
 (`rbb compare`, for CI and quick checks) are thin layers over it.
 
+### Probes: asking BBA directly
+
+`rbb probe` makes a small reference set on purpose, to isolate one
+decision. Deals come from fixed holdings (with `--vary-tens`, the same hand
+with 0-4 tens), a dealer3 script, or at random. bba-cli (default
+`/Applications/Bridge Utilities/bba-cli`) bids them with `--auction-prefix`
+forcing the auction up to the decision, with any card: a PBS card, a
+`.bbsa` file, or `bare:2/1` (every toggle off), plus `--set Key=value`
+edits. Our engine replays the result, and the report shows the decision
+hand by hand. Files go to `.rbb-cache/probes/`. Example:
+
+```
+rbb probe --hand S=AQ52.KJ73.A95.Q8 --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S
+```
+
 ### Rule-level tests
 
 Next to each module, a `.test` file (format to be decided) holds cases such

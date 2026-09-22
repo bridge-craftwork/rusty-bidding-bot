@@ -137,7 +137,7 @@ fn interpretation_tracks_what_each_call_showed() {
     // 2NT shows 8-9 total points (a 7-count with a five-card suit
     // qualifies), so HCP are only capped at 9.
     let north = &i.steps[2].knowledge;
-    assert_eq!(north.whole_points(), Range::new(8, 9), "{:#?}", i.steps[2]);
+    assert_eq!(north.whole_points(0), Range::new(8, 9), "{:#?}", i.steps[2]);
     assert_eq!(north.hcp.hi, 9);
     assert_eq!(i.steps[2].rule.as_ref().unwrap().module, "notrump-base");
 }
@@ -210,7 +210,7 @@ fn strength_bands_follow_what_partner_showed() {
         &calls("1NT Pass 2D Pass 2H Pass 2NT"),
     );
     let north = &i.steps[6].knowledge;
-    assert_eq!(north.whole_points(), Range::new(8, 9));
+    assert_eq!(north.whole_points(0), Range::new(8, 9));
     assert_eq!(north.len[2], Range::new(5, 5));
 }
 
@@ -247,11 +247,23 @@ fn total_points_count_tens_and_length() {
 fn opener_corrects_3nt_to_a_known_major_fit() {
     // Stayman, 2H, 3NT: responder has four spades (no heart raise), so
     // opener with four spades too plays 4S.
-    assert_call(&bid("AK52.KJ73.Q94.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"), "4S");
-    assert_call(&bid("AK5.KJ73.Q942.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"), "Pass");
+    assert_call(
+        &bid("AK52.KJ73.Q94.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"),
+        "4S",
+    );
+    assert_call(
+        &bid("AK5.KJ73.Q942.K8", "1NT Pass 2C Pass 2H Pass 3NT Pass"),
+        "Pass",
+    );
     // Transfer, then 3NT with five hearts: opener with three hearts plays 4H.
-    assert_call(&bid("AK5.KJ7.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"), "4H");
-    assert_call(&bid("AK52.KJ.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"), "Pass");
+    assert_call(
+        &bid("AK5.KJ7.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"),
+        "4H",
+    );
+    assert_call(
+        &bid("AK52.KJ.Q942.K83", "1NT Pass 2D Pass 2H Pass 3NT Pass"),
+        "Pass",
+    );
 }
 
 #[test]
@@ -259,6 +271,6 @@ fn responder_raises_after_stayman() {
     let after = "1NT Pass 2C Pass 2S Pass";
     assert_call(&bid("KJ82.Q7.K943.J83", after), "4S"); // 10: game in the fit
     assert_call(&bid("KJ82.Q7.Q943.J83", after), "3S"); // 9: invite in the fit
-    // After 2H with four spades and no heart fit: 2NT / 3NT.
+                                                        // After 2H with four spades and no heart fit: 2NT / 3NT.
     assert_call(&bid("KJ82.Q7.K943.J83", "1NT Pass 2C Pass 2H Pass"), "3NT");
 }

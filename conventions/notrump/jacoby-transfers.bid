@@ -23,21 +23,23 @@ after 1N (P) 2H (P)
 # answered my transfer, and binds M to the major.
 #
 # `strength` bands are measured against what opener has shown: after a
-# 15-17 1NT, invite is 8-9 and game 10-15; after a super-accept (a known
-# maximum) there is no invitational band, so invitational hands bid game.
+# 15-17 1NT, invite is 8-9 and game 10-15; after a maximum super-accept the
+# invitational band shrinks, so invitational hands bid game. Notrump
+# decisions use `strength` (HCP + ½ per ten); playing in the major uses
+# `suit_strength` (HCP + ½ per card beyond four).
 when answered transfer(M)
   3M  "Sign off in the known fit"              shows strength=signoff
       when partner.M>=4                        # after a 2S or 2NT super-accept
   P   "Weak: play here ({signoff} total points)"  shows strength=signoff
   2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced, strength=invite
       sets ask=invite(M)
-  3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, strength=invite
+  3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, suit_strength=invite
       sets ask=invite(M)
   3N  "Game: {game} total points, 5 {M}: choose the game"  shows M=5, balanced, strength=game
       when maybe partner.M<=2                  # only while the fit is unknown
       sets ask=choice                          # opener corrects with 3+ {M}
-  4M  "Game: {game} total points, 6+ {M}"      shows M>=6, strength=game
-  4M  "Game in the known fit"                  shows strength=game
+  4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
+  4M  "Game in the known fit"                  shows suit_strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
       sets forcing=game

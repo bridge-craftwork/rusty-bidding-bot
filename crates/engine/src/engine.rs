@@ -187,13 +187,20 @@ impl Engine {
                 continue;
             }
             for (call, b) in expand(&entry.rule.call, &ctx, b, &auction) {
-                // A `when` known false whatever the hand (`x is not M` with
-                // x = M) means this rule cannot make this call here.
-                let impossible = entry
-                    .rule
-                    .when
-                    .as_ref()
-                    .is_some_and(|w| ctx.cond(w, &mut b.clone()) == Ok(Tri::False));
+                // A `when` that cannot hold for this caller rules the rule out:
+                // known false, or not known true while depending only on public
+                // knowledge (`x is not M` with x = M; `partner.M>=4` before
+                // partner has shown four).
+                let impossible =
+                    entry
+                        .rule
+                        .when
+                        .as_ref()
+                        .is_some_and(|w| match ctx.cond(w, &mut b.clone()) {
+                            Ok(Tri::True) => false,
+                            Ok(Tri::False) => true,
+                            _ => !crate::eval::hand_dependent(w, &b),
+                        });
                 if auction.is_legal(&call) && !impossible {
                     out.push(Cand {
                         entry: i,
@@ -230,9 +237,9 @@ impl Engine {
             .iter()
             .enumerate()
             .filter(|(_, f)| {
-                let q = f.points_q(self.valuation);
+                let q = [f.points_q(self.valuation), f.suit_points_q(self.valuation)];
                 if !(k.hcp.lo <= f.hcp && f.hcp <= k.hcp.hi)
-                    || !(k.pts.lo <= q && q <= k.pts.hi)
+                    || (0..2).any(|i| !(k.pts[i].lo <= q[i] && q[i] <= k.pts[i].hi))
                     || (0..4).any(|s| !(k.len[s].lo <= f.len[s] && f.len[s] <= k.len[s].hi))
                 {
                     return false;

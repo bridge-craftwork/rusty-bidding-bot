@@ -50,6 +50,63 @@ enum Command {
         #[arg(long)]
         json: Option<PathBuf>,
     },
+    /// Ask bba-cli how it bids chosen hands, and compare our engine with it.
+    ///
+    /// Example: rbb probe --hand S=AK52.KQ73.A95.J8 --vary-tens
+    ///          --prefix "1NT Pass 2NT Pass" --dealer S
+    Probe {
+        /// A fixed holding, SEAT=S.H.D.C (repeatable). Other seats are dealt
+        /// at random.
+        #[arg(long = "hand")]
+        hands: Vec<String>,
+        /// Also try the first holding with 1, 2, 3, 4 more tens (same HCP
+        /// and shape).
+        #[arg(long)]
+        vary_tens: bool,
+        /// Random layouts of the other hands per holding.
+        #[arg(long, default_value_t = 1)]
+        layouts: usize,
+        /// A dealer3 script to deal from instead of fixed holdings.
+        #[arg(long)]
+        script: Option<PathBuf>,
+        /// Deals from --script, or random deals when neither is given.
+        #[arg(short = 'n', long, default_value_t = 50)]
+        count: usize,
+        /// Calls forced before the decision under study.
+        #[arg(short, long, default_value = "")]
+        prefix: String,
+        #[arg(short, long, default_value = "N")]
+        dealer: char,
+        #[arg(short, long, default_value = "None")]
+        vul: String,
+        #[arg(short, long, default_value = "MP")]
+        scoring: String,
+        /// Card for North-South: a name in PBS bbsa/, a .bbsa path, or
+        /// bare:2/1 (also bare:sayc, bare:precision, bare:acol, bare:polish).
+        #[arg(long, default_value = "21GF-DEFAULT")]
+        ns_card: String,
+        #[arg(long, default_value = "21GF-GIB")]
+        ew_card: String,
+        /// Set a .bbsa key on the North-South card, "Key=value" (repeatable).
+        #[arg(long = "set")]
+        ns_set: Vec<String>,
+        /// Same for East-West.
+        #[arg(long = "ew-set")]
+        ew_set: Vec<String>,
+        #[arg(long, default_value = "../Practice-Bidding-Scenarios")]
+        pbs: PathBuf,
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        #[arg(long, default_value = rbb_compare::probe::DEFAULT_BBA_CLI)]
+        bba_cli: PathBuf,
+        /// dealer3's binary (for --script).
+        #[arg(long, default_value = "dealer")]
+        dealer_bin: PathBuf,
+        #[arg(long, default_value = ".rbb-cache/probes/last")]
+        out: PathBuf,
+        #[arg(long, default_value_t = 1)]
+        seed: u64,
+    },
     /// Choose a call for a hand and show why.
     Call {
         /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
@@ -157,6 +214,97 @@ fn run(cli: Cli) -> Result<()> {
             };
             compare(&opts, top, worst, json.as_deref())
         }
+        Command::Probe {
+            hands,
+            vary_tens,
+            layouts,
+            script,
+            count,
+            prefix,
+            dealer,
+            vul,
+            scoring,
+            ns_card,
+            ew_card,
+            ns_set,
+            ew_set,
+            pbs,
+            rules,
+            bba_cli,
+            dealer_bin,
+            out,
+            seed,
+        } => {
+            use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
+            use rbb_compare::probe::{Deals, ProbeOptions};
+            let parse_set = |v: &[String]| -> Result<Vec<(String, i64)>> {
+                v.iter()
+                    .map(|s| {
+                        let (k, n) = s.rsplit_once('=').ok_or("--set takes Key=value")?;
+                        Ok((
+                            k.trim().to_string(),
+                            n.trim().parse().map_err(|_| "value must be a number")?,
+                        ))
+                    })
+                    .collect()
+            };
+            let fixed = hands
+                .iter()
+                .map(|h| {
+                    let (seat, cards) = h.split_once('=').ok_or("--hand takes SEAT=S.H.D.C")?;
+                    let seat = seat
+                        .chars()
+                        .next()
+                        .and_then(|c| Direction::from_char(c.to_ascii_uppercase()));
+                    let hand = Hand::from_pbn(cards);
+                    match (seat, hand) {
+                        (Some(s), Some(h)) => Ok((s, h)),
+                        _ => Err(format!("bad --hand {h:?}").into()),
+                    }
+                })
+                .collect::<Result<Vec<_>>>()?;
+            let deals = match (&script, fixed.is_empty()) {
+                (Some(s), _) => Deals::Script {
+                    script: s.clone(),
+                    count,
+                    dealer_bin: if dealer_bin == Path::new("dealer")
+                        && Path::new("../dealer3/target/release/dealer").exists()
+                    {
+                        PathBuf::from("../dealer3/target/release/dealer")
+                    } else {
+                        dealer_bin
+                    },
+                },
+                (None, false) => Deals::Fixed {
+                    hands: fixed,
+                    vary_tens,
+                    layouts,
+                },
+                (None, true) => Deals::Random { count },
+            };
+            let opts = ProbeOptions {
+                deals,
+                dealer: Direction::from_char(dealer.to_ascii_uppercase())
+                    .ok_or("dealer must be N, E, S or W")?,
+                vul: Vulnerability::from_pbn(&vul)
+                    .ok_or("vulnerability must be None, NS, EW or All")?,
+                scoring: ScoringMethod::from_pbn(&scoring).ok_or("scoring must be MP or IMP")?,
+                prefix: prefix
+                    .split_whitespace()
+                    .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
+                    .collect::<std::result::Result<_, _>>()?,
+                ns_card,
+                ew_card,
+                ns_set: parse_set(&ns_set)?,
+                ew_set: parse_set(&ew_set)?,
+                pbs,
+                rules,
+                bba_cli,
+                out_dir: out,
+                seed,
+            };
+            probe(&opts)
+        }
         Command::Call {
             hand,
             auction,
@@ -179,6 +327,53 @@ fn run(cli: Cli) -> Result<()> {
             json,
         ),
     }
+}
+
+fn probe(opts: &rbb_compare::probe::ProbeOptions) -> Result<()> {
+    let report = rbb_compare::probe::run(opts)?;
+    let prefix: Vec<String> = opts.prefix.iter().map(rbb_compare::short).collect();
+    println!(
+        "probe: {} boards, dealer {}, vul {}, {}; after `{}`",
+        report.rows.len(),
+        opts.dealer.to_char(),
+        opts.vul.to_pbn(),
+        if matches!(opts.scoring, bridge_types::ScoringMethod::Matchpoints) {
+            "MP"
+        } else {
+            "IMP"
+        },
+        prefix.join(" ")
+    );
+    println!(
+        "NS card {} {:?}   EW card {} {:?}",
+        opts.ns_card, opts.ns_set, opts.ew_card, opts.ew_set
+    );
+    println!(
+        "\n  seat {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}",
+        "hand", "HCP", "tens", "NT pts", "suit", "BBA", "ours"
+    );
+    let call = |c: &Option<bridge_types::Call>| c.as_ref().map_or("-".into(), rbb_compare::short);
+    for r in &report.rows {
+        let quarters = |q: i32| format!("{}{}", q / 4, ["", "¼", "½", "¾"][(q % 4) as usize]);
+        let mark = if r.reference == r.ours { "" } else { "  ≠" };
+        println!(
+            "  {:4} {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}{mark}",
+            r.seat.to_char(),
+            r.hand,
+            r.hcp,
+            r.tens,
+            quarters(r.points_q),
+            quarters(r.suit_points_q),
+            call(&r.reference),
+            call(&r.ours)
+        );
+    }
+    let (agree, of) = report.agreement();
+    println!(
+        "\nsame decision as BBA: {agree}/{of}   (files in {})",
+        report.out_dir.display()
+    );
+    Ok(())
 }
 
 fn pct(x: f64) -> String {

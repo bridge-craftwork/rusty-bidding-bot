@@ -18,10 +18,10 @@ pub struct Facts {
     pub excess: i32,
 }
 
-/// How a hand's total points are counted, in quarter points: HCP, plus
-/// `ten` for each ten, plus `length` for each card beyond four in a suit.
-/// The defaults (a ten is ¼, a long card ½) fit BBA's invite and game
-/// decisions after 1NT best (see docs/LANGUAGE.md, "Points").
+/// How total points are counted, in quarter points. There are two measures:
+/// for notrump, HCP plus `ten` per ten; for a suit contract, HCP plus
+/// `length` per card beyond four in a suit. The defaults (½ each) are what
+/// BBA does when probed hand by hand (see docs/LANGUAGE.md, "Points").
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Valuation {
     pub ten: i32,
@@ -30,7 +30,7 @@ pub struct Valuation {
 
 impl Default for Valuation {
     fn default() -> Self {
-        Valuation { ten: 1, length: 2 }
+        Valuation { ten: 2, length: 2 }
     }
 }
 
@@ -66,9 +66,23 @@ impl Facts {
         }
     }
 
-    /// Total points in quarters.
+    /// Notrump points in quarters: HCP plus tens.
     pub fn points_q(&self, v: Valuation) -> i32 {
-        4 * self.hcp + v.ten * self.tens + v.length * self.excess
+        4 * self.hcp + v.ten * self.tens
+    }
+
+    /// Suit points in quarters: HCP plus length beyond four.
+    pub fn suit_points_q(&self, v: Valuation) -> i32 {
+        4 * self.hcp + v.length * self.excess
+    }
+
+    /// Points of either kind: 0 notrump, 1 suit.
+    pub fn points_of(&self, kind: usize, v: Valuation) -> i32 {
+        if kind == 0 {
+            self.points_q(v)
+        } else {
+            self.suit_points_q(v)
+        }
     }
 
     pub fn has(&self, suit: usize, rank: u8) -> bool {

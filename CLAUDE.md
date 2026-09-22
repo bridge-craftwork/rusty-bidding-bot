@@ -36,6 +36,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
   compare with BBA's auctions in `../Practice-Bidding-Scenarios` (all 342
   scenarios in ~8 s in release). The top divergence points are the work queue.
+- `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
+  ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
+  `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).
