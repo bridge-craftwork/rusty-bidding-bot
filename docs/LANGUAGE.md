@@ -207,6 +207,7 @@ prints "Invitational: 8-9 total points" after a 15-17 1NT.
 (`none | round | game`), `asked <kind>` (partner's pending question to me),
 `answered <kind>` (partner answered my question), `partner.last`, `opener`,
 `partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`,
+`we.keycards(t)` (my keycards plus partner's answer, within the deck limit),
 `imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
 board-a-match).
 
@@ -274,7 +275,13 @@ context holds. It does not check the caller's hand, which it cannot see.
 
 - If several rules give the same call different meanings (a Multi 2♦, or a
   2NT that is natural or a relay), the knowledge becomes the **union** of their
-  `shows`, and later calls can narrow it.
+  `shows`, and later calls can narrow it. Only the rules of the highest
+  `priority` count: a lower-priority rule for the same call is a fallback
+  ("only if nothing better") and does not widen the call's meaning.
+- A rule's `when` rules it out if it depends only on public knowledge and is
+  not known true. (`when partner.M>=4` cannot be what the caller relied on
+  before partner has shown four.) A `when` that depends on the caller's own
+  hand (`slam_try`, `shape 4333`, `we.keycards(t)`) stays possible.
 - **Negative inference.** *Decided:* this is automatic, and the knowledge
   model must support it. The caller would have made any higher-ranked
   candidate its hand satisfied, so a call also says the caller's hand fails
@@ -377,6 +384,10 @@ How `rbb-engine` implements the model, and its current limits:
 - **Judgment hooks** `slam_try` and `grand_try` are placeholders (combined
   HCP of at least 31 or 35) until real evaluators are written.
 - **No rule applies:** the engine passes and says so in the trace.
+- **Keycards.** Partner's keycard answer is combined with my own count and
+  the deck limit (five in all): "1 or 4" facing my 2 is 1. When it stays
+  ambiguous the asker signs off in five of the suit, and the answerer
+  corrects to six holding the higher count.
 - **Not yet implemented:** `replaces`, `raise` and `new_suit`, and the
   conflict check between modules.
 

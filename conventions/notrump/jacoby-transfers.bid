@@ -3,6 +3,7 @@
 module jacoby-transfers "Jacoby Transfers"
   card   notrump.transfers.jacoby
   needs  notrump-base
+  param  texas = notrump.transfers.texas default false
 
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
@@ -39,6 +40,13 @@ when answered transfer(M)
       when maybe partner.M<=2                  # only while the fit is unknown
       sets ask=choice                          # opener corrects with 3+ {M}
   4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
+      when !texas                              # with Texas, game-only hands use it
+  4M  "Mild slam interest, 6+ {M}"             shows M>=6, suit_strength=game, suit_points>=31-partner.points.max
+      when texas                               # top of the game range; opener may bid on
+      sets ask=slam_try(M)
+  4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
+      when texas                               # game-only hands normally use Texas
+      priority -1                              # a fallback: 4M still reads as the slam try
   4M  "Game in the known fit"                  shows suit_strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
@@ -53,3 +61,10 @@ when asked invite(M)
   3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
   3M  "Declines, in the fit"            shows M>=8-partner.M.min, strength<=invite
   P   "Declines"                        shows strength<=invite
+
+# Opener after the jump to game with mild slam interest: bid on with a good
+# fit and a maximum, even without having super-accepted.
+when asked slam_try(M)
+  4N  "Keycard ask: good fit and a maximum"   shows M>=3, points>=31-partner.suit_points.min
+      sets ask=keycards(M)
+  P   "No slam: plays game"

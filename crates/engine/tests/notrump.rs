@@ -274,3 +274,32 @@ fn responder_raises_after_stayman() {
                                                         // After 2H with four spades and no heart fit: 2NT / 3NT.
     assert_call(&bid("KJ82.Q7.K943.J83", "1NT Pass 2C Pass 2H Pass"), "3NT");
 }
+
+#[test]
+fn texas_or_jacoby_by_slam_interest() {
+    // Game only (12 suit points): Texas, then pass the completion.
+    assert_call(&bid("8.KQ9732.K94.Q83", "1NT Pass"), "4D");
+    assert_call(&bid("8.KQ9732.K94.Q83", "1NT Pass 4D Pass 4H Pass"), "Pass");
+    // Mild slam interest (15 suit points): 2D, then jump to game.
+    assert_call(&bid("82.KQ9732.A94.KQ", "1NT Pass"), "2D");
+    assert_call(&bid("82.KQ9732.A94.KQ", "1NT Pass 2D Pass 2H Pass"), "4H");
+    // Opener bids on with a good fit and a maximum, else passes.
+    assert_call(&bid("AK5.Q74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"), "4NT");
+    assert_call(&bid("AJ5.J74.KQ82.K93", "1NT Pass 2D Pass 2H Pass 4H Pass"), "Pass");
+    // Slam values (17 suit points): Texas, then keycard.
+    assert_call(&bid("8.AQ9732.K94.AQ8", "1NT Pass"), "4D");
+    assert_call(&bid("8.AQ9732.K94.AQ8", "1NT Pass 4D Pass 4H Pass"), "4NT");
+}
+
+#[test]
+fn keycard_answers_resolve_with_the_deck_limit() {
+    let asked = "1NT Pass 4D Pass 4H Pass 4NT Pass";
+    // "1 or 4" facing my two: only 1 fits, so two are missing: sign off.
+    assert_call(&bid("8.AQ9732.K94.AQ8", &format!("{asked} 5C Pass")), "5H");
+    // "0 or 3" facing my two: 2 or 5 in all, unresolved: sign off in five,
+    // and partner corrects holding the higher count.
+    assert_call(&bid("8.AQ9732.K94.AQ8", &format!("{asked} 5D Pass")), "5H");
+    let signed_off = format!("{asked} 5D Pass 5H Pass");
+    assert_call(&bid("AK5.K74.KQ82.A93", &signed_off), "6H"); // 3 keycards
+    assert_call(&bid("KJ5.K74.KQ82.Q93", &signed_off), "Pass"); // 0 keycards
+}

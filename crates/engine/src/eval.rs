@@ -407,6 +407,43 @@ impl<'a> Ctx<'a> {
         }
     }
 
+    /// The keycard counts partner has shown for `trump` (an answer such as
+    /// `keycards(H) in 1|4`); all counts when partner has shown none.
+    fn partner_keycards(&self, trump: Option<usize>) -> Vec<i32> {
+        let mut possible: Vec<i32> = (0..=5).collect();
+        let is_keycards = |e: &Expr| match e {
+            Expr::Path { path } if path.len() == 1 && path[0].name == "keycards" => {
+                match path[0].args.as_deref() {
+                    Some([Expr::Path { path: a }]) => suit_index(&a[0].name) == trump,
+                    _ => false,
+                }
+            }
+            _ => false,
+        };
+        fn walk(e: &Expr, f: &dyn Fn(&Expr) -> bool, possible: &mut Vec<i32>) {
+            match e {
+                Expr::And { all } => all.iter().for_each(|x| walk(x, f, possible)),
+                Expr::InSet { expr, values } if f(expr) => {
+                    possible.retain(|v| values.contains(&(*v as i64)));
+                }
+                Expr::Cmp {
+                    cmp: CmpOp::Eq,
+                    lhs,
+                    rhs,
+                } if f(lhs) => {
+                    if let Expr::Int { value } = **rhs {
+                        possible.retain(|v| *v as i64 == value);
+                    }
+                }
+                _ => {}
+            }
+        }
+        for c in &self.pos.knowledge(self.partner()).constraints {
+            walk(c, &is_keycards, &mut possible);
+        }
+        possible
+    }
+
     /// A value as a number range. Suits count as the actor's length there.
     pub fn num(&self, v: &Val) -> R<Range> {
         match v {
@@ -668,8 +705,17 @@ impl<'a> Ctx<'a> {
                     seg.args.as_deref().unwrap_or(&[]),
                     b,
                 )?)?;
-                // Partner's keycards are not tracked yet: anything up to 5 in all.
-                Val::Num(Range::new(mine.lo, 5))
+                // Partner's answer ("1 or 4"), limited by the deck: five
+                // keycards in all, so "1 or 4" facing my 2 can only be 1.
+                let suit = self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)?;
+                let theirs = self.partner_keycards(suit);
+                let fits: Vec<i32> = (0..=5)
+                    .filter(|v| theirs.contains(v) && mine.lo + v <= 5)
+                    .collect();
+                match (fits.first(), fits.last()) {
+                    (Some(lo), Some(hi)) => Val::Num(Range::new(mine.lo + lo, mine.hi + hi)),
+                    _ => Val::Num(Range::new(mine.lo, 5)),
+                }
             }
             n => return Err(format!("unknown attribute `we.{n}`")),
         })

@@ -33,5 +33,15 @@ when answered keycards(t)
   5{t}  "Sign off: two keycards missing"
         when we.keycards(t).max<=3     # filtered out as illegal when the answer
                                        # is already 5{t}; P above covers that
+        sets ask=keycard_correct(t)    # partner corrects only with 3-4
+  5{t}  "Sign off: partner corrects to 6 with the higher count"
+        when maybe we.keycards(t)>=4   # 0 or 3 / 1 or 4 still open
+        sets ask=keycard_correct(t)
+
+# When the answer was ambiguous the asker signs off in five, and the answerer
+# corrects to six holding the higher count (3 or 4 keycards).
+when asked keycard_correct(t)
+  6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
+  P     "Accepts the sign-off"
 
 # TODO: queen ask (next step after 5C/5D), specific-king ask at 5NT.

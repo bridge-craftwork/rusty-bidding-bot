@@ -191,16 +191,13 @@ impl Engine {
                 // known false, or not known true while depending only on public
                 // knowledge (`x is not M` with x = M; `partner.M>=4` before
                 // partner has shown four).
-                let impossible =
-                    entry
-                        .rule
-                        .when
-                        .as_ref()
-                        .is_some_and(|w| match ctx.cond(w, &mut b.clone()) {
-                            Ok(Tri::True) => false,
-                            Ok(Tri::False) => true,
-                            _ => !crate::eval::hand_dependent(w, &b),
-                        });
+                // A condition on the caller's own hand is never judged here: the
+                // hand is not known yet (and `.max` of an unknown count means
+                // nothing).
+                let impossible = entry.rule.when.as_ref().is_some_and(|w| {
+                    !crate::eval::hand_dependent(w, &b)
+                        && ctx.cond(w, &mut b.clone()) != Ok(Tri::True)
+                });
                 if auction.is_legal(&call) && !impossible {
                     out.push(Cand {
                         entry: i,
@@ -381,11 +378,20 @@ impl Engine {
             .filter(|c| {
                 let e = &sys.rules[c.entry];
                 let ctx = self.ctx(pos, caller, None, e);
-                e.rule
-                    .when
-                    .as_ref()
-                    .is_none_or(|w| ctx.cond(w, &mut c.b.clone()) != Ok(Tri::False))
+                // Conditions on the caller's hand stay possible; public ones
+                // were already required to hold (see `candidates`).
+                e.rule.when.as_ref().is_none_or(|w| {
+                    crate::eval::hand_dependent(w, &c.b)
+                        || ctx.cond(w, &mut c.b.clone()) == Ok(Tri::True)
+                })
             })
+            .collect();
+        // Lower-priority rules are fallbacks ("only if nothing better"): they
+        // do not widen what the call means to partner.
+        let top = matching.iter().map(|c| c.priority).max();
+        let matching: Vec<&Cand> = matching
+            .into_iter()
+            .filter(|c| Some(c.priority) == top)
             .collect();
         let mut k = pos.knowledge(caller).clone();
         let mut step = Step {
