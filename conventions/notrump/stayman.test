@@ -11,3 +11,5 @@ S AK5.KJ7.Q942.K83      | 1NT P 2C P       | 2D     | no four-card major
 N KJ82.Q7.K943.J83      | 1NT P 2C P 2S P  | 4S     | 10: game in the fit
 N KJ82.Q7.Q943.J83      | 1NT P 2C P 2S P  | 3S     | 9: invite in the fit
 N KJ82.Q7.K943.J83      | 1NT P 2C P 2H P  | 3NT    | four spades, no heart fit: game
+N A852.AT8.KQT.KQ3      | 1NT P 2C P 2S P  | 6S     | 18 in the fit: slam
+N A852.AT8.KQT.KQ3      | 1NT P 2C P 2D P  | 6NT    | 18, no fit: slam in notrump

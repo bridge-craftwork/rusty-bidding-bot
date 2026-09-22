@@ -19,6 +19,8 @@ when opening
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
 after 1N (P)
+  6N  "To play: {slam} total points"
+      shows balanced, strength=slam, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
       shows balanced, strength=slam_invite
   3N  "To play: {game} total points"

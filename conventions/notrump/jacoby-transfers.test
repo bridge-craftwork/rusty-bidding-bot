@@ -21,7 +21,11 @@ N 82.KJ9732.K94.Q8      | 1NT P 2D P 2H P      | 4H     | 9 HCP + 1 length = 10 
 N 8.KJ973.K4.AQ832      | 1NT P 2D P 2H P      | 3C     | second suit, game forcing
 N 82.KQ9732.A94.KQ      | 1NT P 2D P 2H P      | 4H     | mild slam interest: jump to game
 N KJ973.82.K94.Q83      | 1NT P 2H P 2S P      | 2NT    | the same rules over spades
+N Q65.AK653.AT.AQ5      | 1NT P                | 2D     | 19 with five hearts: transfer first, not 6NT
+N Q65.AK653.AT.AQ5      | 1NT P 2D P 2H P      | 6NT    | then slam
 N 82.KJ973.K94.Q83      | 1NT P 2D P 2NT P     | 4H     | after a maximum super-accept, 9 is a game hand
+N AT984.KT.954.874      | 1NT P 2H P 2NT P     | 3S     | 7½ suit points: sign off; never pass the artificial 2NT
+N J82.Q8652.J4.A83      | 1NT P 2D P 2NT P     | 4H     | 8½ suit points opposite a maximum: game
 
 # Opener answers an invitation: the fit decides the strain.
 S KQ5.KJ7.AK53.J52      | 1NT P 2D P 2H P 2NT P | 4H    | 17, three hearts

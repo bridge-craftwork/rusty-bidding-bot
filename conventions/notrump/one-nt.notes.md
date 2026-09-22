@@ -1,0 +1,84 @@
+# notrump-base (`one-nt.bid`): notes
+
+The 1NT opening, responder's natural notrump raises, and opener's answer to
+2NT. Cases: `one-nt.test`.
+
+## Guidance
+
+- 1NT is **15–17 HCP exactly**, balanced, as BBA plays it. Tens and length
+  do not move the range. The card option "1NT may be 1 HCP light"
+  (`notrump.one_nt.allow_one_less`) opens a 14 whose extras bring it to 15
+  total points.
+- Responder's strength is in **notrump points: HCP + ½ per ten**. A fifth
+  card in a suit does not count at notrump.
+- Bands are measured against opener's range. Opposite 15–17: sign off 0–7,
+  invite 8–9, game 10–15, slam invite (4NT) 16–17, slam (6NT) 18+.
+- Opener accepts 2NT **only when game is certain**: 17 opposite 8–9. That is
+  17 notrump points, so 15 HCP with four tens accepts.
+- Differences in where a point boundary falls are acceptable; mistakes are
+  not.
+
+## Evidence from BBA
+
+Probes (21GF-DEFAULT). Reproduce with, for example,
+`rbb probe --hand S=AQ52.KJ73.A95.J8 --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`.
+
+| Decision | Hand (then 1–4 more tens) | BBA | Agree |
+|---|---|---|---|
+| Opener over 2NT | `AQ52.KJ73.A95.J8` (15) | pass with 0–3 tens, 3NT with 4 | 5/5 |
+| Opener over 2NT | `AQ52.KJ73.A95.Q8` (16) | pass with 0–1, 3NT with 2+ | 5/5 |
+| Opener over 2NT | `AQ952.KJ7.A95.Q8` (16, 5-3-3-2) | the same: the fifth card does not count | 5/5 |
+| Responder | `Q82.K73.J83.K954` (9) | 2NT with 0–1, 3NT with 2+ | 5/5 |
+| Responder | `Q82.K73.J832.K95` (9) | the same | 5/5 |
+
+Corpus: BBA's call over `1NT P` with balanced hands and no four-card major,
+by HCP and tens (all scenarios, one row per deal):
+
+| HCP | 0 tens | 1 ten | 2 tens | 3 tens |
+|---|---|---|---|---|
+| 7 | P 100% | P 100% | 2NT 66% | 2NT 71% |
+| 8 | P 65%, 2NT 32% | 2NT 71% | 2NT 61%, 3NT 23% | 2NT 48%, 3NT 27% |
+| 9 | 2NT 94% | 2NT 79% | 3NT 60% | 3NT 68% |
+| 10 | 3NT 71% | 3NT 83% | 3NT 80% | 3NT 65% |
+
+½ per ten is BBA's central tendency, not its whole rule (see below).
+
+Basic_NT (500 boards, played with BBA's **Basic-Bridge** card, not
+21GF-DEFAULT): 97.2% of calls agree, 85.4% identical auctions, 88.2% the
+same contract.
+
+## Accepted differences from BBA
+
+- **BBA's valuation has more in it than HCP and tens.** These probes are the
+  same on every random layout, and they are the same with Basic-Bridge and
+  21GF-DEFAULT, so this is not noise:
+  `984.95.8654.AKQJ` (10) and `75.AK6.Q753.J752` (10): BBA invites;
+  `T82.QT7.A82.QT65` (8, three tens) and `T64.AT8.QJ9.J432` (8, two tens):
+  BBA bids game; `72.A97.K432.J983` (8): BBA passes. We do not model it.
+  Honors bunched in one suit, and the nines, are the likely factors; untested.
+- **8 HCP flat with no tens**: we invite, and BBA passes 65% of the time.
+- **Five-card minor**: BBA does not count tens. `Q5.K73.J83.K9542` with two
+  to four tens: BBA 2NT, we 3NT. We count them.
+- **16–17 opposite 15–17**: BBA often bids 6NT directly (13 Basic_NT
+  boards). We invite with 4NT, as most players would.
+
+## Gaps (not built yet)
+
+- **Six-card minor**: `5.K73.QJ9542.J83` (7 HCP), with or without tens:
+  BBA bids 3C and passes opener's 3D. We pass or bid 2NT. This looks like a
+  minor-suit transfer or sign-off in 21GF-DEFAULT, but which `.bbsa` key
+  controls it is not confirmed.
+- **Grand slam**: nothing above the slam band. BBA bids 7NT with 21–23.
+- **Interference** over 1NT (the `Opps_*` scenarios).
+
+## Fixed (2026-09-21)
+
+- 18+ balanced had no rule and passed 1NT (7 Basic_NT boards). Added 6NT;
+  with a five-card major, responder transfers first. Stayman and the
+  transfer continuations got slam rules too. Corpus: +365 calls agree,
+  same contract 10.6% → 11.1%.
+
+## Questions
+
+- Should we try to model BBA's finer valuation, or keep ½ per ten and
+  accept the differences?

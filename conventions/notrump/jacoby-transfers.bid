@@ -29,8 +29,10 @@ after 1N (P) 2H (P)
 # decisions use `strength` (HCP + ½ per ten); playing in the major uses
 # `suit_strength` (HCP + ½ per card beyond four).
 when answered transfer(M)
-  3M  "Sign off in the known fit"              shows strength=signoff
+  3M  "Sign off in the known fit"              shows suit_strength=signoff
       when partner.M>=4                        # after a 2S or 2NT super-accept
+  4M  "Game in the known fit, opposite a maximum"  shows suit_strength=invite
+      when partner.M>=4                        # the super-accept is for thin games
   P   "Weak: play here ({signoff} total points)"  shows strength=signoff
   2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced, strength=invite
       sets ask=invite(M)
@@ -52,6 +54,7 @@ when answered transfer(M)
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
       sets forcing=game
   4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
+  6N  "Slam: {slam} total points, 5 {M}"       shows M=5, balanced, strength=slam
 
 # Opener answers the invitation (2NT with five, 3M with six). Accept only
 # when game is certain; play in the major with an eight-card fit, which is

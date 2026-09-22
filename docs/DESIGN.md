@@ -390,6 +390,10 @@ failing cases, re-running when a `.bid` or `.test` file is saved. Tests of
 what the engine *knows* (interpretation, knowledge, traces) stay in Rust
 (`crates/engine/tests/interpretation.rs`).
 
+Next to each module, a `<module>.notes.md` records the agreed guidance, the
+probe and corpus evidence behind it, the accepted differences from BBA, the
+gaps, and questions still open.
+
 Later, **generated tests**: turn a rule's context and `shows` into a dealer3
 script, deal hands that fit, and check that the engine chooses that rule, or
 knowingly chooses a higher-ranked one.
