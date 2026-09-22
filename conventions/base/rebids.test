@@ -1,0 +1,54 @@
+# Opener's rebid (SAYC, BBA's Basic-Bridge card). Every hand is a Basic_*
+# corpus deal where we and BBA agree.
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction      | expect | why
+# ── Rick's rulings
+S KQ2.974.K82.AT94      | 1C P 1D P    | 1NT    | 1NT rebid: 12-14 HCP, balanced
+S A2.AJ2.K4.KQT854      | 1C P 1D P    | 3C     | jump rebid: 16-18, six clubs
+S K7.KQ96.K5.AT432      | 1C P 1H P    | 3H     | jump raise: 16-18 support points, four hearts
+S AK5.7.J832.AKQT9      | 1C P 1H P    | 2D     | reverse: 17+, clubs longer than diamonds
+S KQJ4.KJ.A2.AJT63      | 1C P 1H P    | 2S     | jump in a new suit: 19+, game forcing
+
+# ── After a one-level response
+S KT86.AK72.J9.Q87      | 1C P 1D P    | 1H     | both majors: 1H rather than 1NT
+S AJT53.Q.8.AKT974      | 1C P 1D P    | 1S     | a new suit at the one level
+S J8.AJ.763.AK8654      | 1C P 1D P    | 2C     | six clubs, minimum
+S AT7.AQ.A84.A8743      | 1C P 1D P    | 2NT    | 18-19, balanced
+S AT82.52.Q.AKJ862      | 1C P 1H P    | 1S     | four spades: 1S before anything else
+S J87.AJ86.KJ5.A43      | 1C P 1H P    | 2H     | four hearts, minimum: raise
+S AK6.AKQT.876.K83      | 1C P 1H P    | 4H     | four hearts, 19+: game
+S 5432.AQT2.J4.AJ8      | 1C P 1S P    | 2S     | four spades, minimum: raise
+S Q542.J.A7654.AQ4      | 1D P 1H P    | 1S     | 1S with four spades
+S 5.A5.AK9843.AJ75      | 1D P 1H P    | 2C     | 6-4: the new suit, not a diamond rebid
+S Q72.9.KJ9762.AK6      | 1D P 1H P    | 2D     | six diamonds, minimum
+S A.KQ64.KQ862.AK4      | 1D P 1S P    | 2H     | reverse: 21 HCP, diamonds longer
+S J.QJ7643.AK4.K32      | 1H P 1S P    | 2H     | six hearts, minimum
+S AQ4.AKQ93.A93.43      | 1H P 1S P    | 2NT    | 18-19, balanced
+S AQ.AKJT7.QJ83.K2      | 1H P 1S P    | 3D     | jump in a new suit: 20, game forcing
+S Q8.AKQ832.963.KJ      | 1H P 1S P    | 3H     | jump rebid: six hearts, 16-18 suit points
+
+# ── After 1NT
+S KQ986.K75.AJ.J42      | 1S P 1NT P   | P      | minimum, nothing to add
+S K8765.AJ43.K.Q94      | 1S P 1NT P   | 2H     | a second suit
+S AT8754.8.AK8.QT2      | 1S P 1NT P   | 2S     | six spades, minimum
+S KQ987.962.AK.AQ7      | 1S P 1NT P   | 2NT    | 18-19, balanced
+S AQ9762.K4.K5.K83      | 1S P 1NT P   | 3S     | six spades, 16-18
+S K.KQ87.AKQT65.92      | 1D P 1NT P   | 2H     | reverse: 17+, diamonds longer
+
+# ── After a raise
+S KJ972.AT.A863.QT      | 1S P 2S P    | P      | 14 with two doubletons: no game
+S KJT65.Q3.AQ72.A8      | 1S P 2S P    | 3S     | invitation
+S AQ632.AQ62.8.AQ2      | 1S P 2S P    | 4S     | 18 with a singleton: game
+S AK432.J.T62.AJ42      | 1S P 3S P    | 4S     | accepts the limit raise: a singleton
+S AK952.A3.Q54.952      | 1S P 3S P    | P      | 13, flat: declines
+
+# ── After a two-over-one
+S KJT75.AK4.Q4.543      | 1S P 2C P    | 2S     | minimum: rebid the spades
+S A9874.AQJ8.J98.Q      | 1S P 2C P    | 2H     | four hearts
+S AT965.Q.AQT2.KT4      | 1S P 2C P    | 2D     | four diamonds
+S AKQ73.AJ7.Q3.Q42      | 1S P 2D P    | 3NT    | 18-19, balanced
+S AKJ64.Q76.83.QJ6      | 1S P 2H P    | 3H     | three hearts: raise
+S 95.AKQT4.QJ.Q953      | 1H P 2C P    | 3C     | four clubs: raise
+S T32.AKQ732.A7.A4      | 1H P 2C P    | 3H     | six hearts, 16-18: jump rebid
