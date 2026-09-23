@@ -154,22 +154,26 @@ impl Facts {
     }
 
     /// Support points: HCP plus shortness in the side suits when `trump` is
-    /// a suit (void 5, singleton 3, doubleton 1; with only three trumps
-    /// void 3, singleton 2, doubleton 1); plain HCP for notrump.
+    /// a suit — void 5, singleton 3, doubleton 1 — and plain HCP for
+    /// notrump.
+    ///
+    /// **The shortness is capped by the number of trumps held** (Rick,
+    /// 2026-09-23): a hand can only ruff as often as it has trumps, so
+    /// three trumps are worth at most three points of shortness however
+    /// many short suits there are. Without the cap a 3-1-4-5 hand with a
+    /// void counted the whole 5.
     pub fn total_points(&self, trump: Option<usize>) -> i32 {
         let Some(t) = trump else { return self.hcp };
-        // Dummy points: shortness counts less with only three trumps.
-        let (void, singleton) = if self.len[t] <= 3 { (3, 2) } else { (5, 3) };
-        self.hcp
-            + (0..4)
-                .filter(|&s| s != t)
-                .map(|s| match self.len[s] {
-                    0 => void,
-                    1 => singleton,
-                    2 => 1,
-                    _ => 0,
-                })
-                .sum::<i32>()
+        let shortness: i32 = (0..4)
+            .filter(|&s| s != t)
+            .map(|s| match self.len[s] {
+                0 => 5,
+                1 => 3,
+                2 => 1,
+                _ => 0,
+            })
+            .sum();
+        self.hcp + shortness.min(self.len[t])
     }
 
     /// Match a shape pattern against the sorted distribution: `4333`,
@@ -212,5 +216,21 @@ mod tests {
         assert_eq!(f.shape_matches("4-x-x-3"), Some(true));
         // Losers: spades 0, hearts KQx 1, diamonds Axx 2, clubs Kxx 2.
         assert_eq!(f.losers(), 5);
+    }
+
+    #[test]
+    fn shortness_is_capped_by_the_trumps_held() {
+        // Four trumps, a void and a doubleton: 5 + 1 = 6, capped at 4.
+        let f = Facts::new(&Hand::from_pbn("KQ54.AQ876.65.").unwrap());
+        assert_eq!(f.len[3], 4, "four spades");
+        assert_eq!(f.total_points(Some(3)), f.hcp + 4);
+        // The same shortness with only three trumps is worth three.
+        let f = Facts::new(&Hand::from_pbn("KQ5.AQ8765.65.").unwrap());
+        assert_eq!(f.total_points(Some(3)), f.hcp + 3);
+        // Nothing short: support points are just the high cards.
+        let f = Facts::new(&Hand::from_pbn("KQ54.A87.653.J84").unwrap());
+        assert_eq!(f.total_points(Some(3)), f.hcp);
+        // Notrump ignores shape entirely.
+        assert_eq!(f.total_points(None), f.hcp);
     }
 }
