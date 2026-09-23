@@ -50,3 +50,11 @@ N 9743.J5.KQ8.AJT2      | 1S P 2C P 2S P   | 4S     | support: game
 N A.K983.Q873.K754      | 1S P 2C P 2S P   | 2NT    | no fit, 12
 N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 3NT    | 12, two spades: 3NT
 N AT2.8753.K2.A742      | 1H P 2C P 2D P   | 4H     | four hearts: game
+
+# ── Opener reversed: forcing, so responder always has a call.
+N 43.K86.9542.K986      | 1D P 1NT P 2H P  | 3D     | 6 HCP: preference to the first suit
+N A97.86.AJ76.9876      | 1H P 1NT P 2S P  | 3NT    | 9, a maximum for the 1NT response
+N QT.J65.Q965.KQ43      | 1D P 1NT P 2H P  | 3NT    | 10: game
+N 43.KJ86.9542.K98      | 1D P 1NT P 2H P  | 3H     | four hearts: raise the second suit
+# A second suit below the first is not a reverse, and may be passed.
+N 43.K86.9542.K986      | 1S P 1NT P 2H P  | 2S     | not a reverse: a simple preference, no force

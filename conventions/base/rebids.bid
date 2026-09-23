@@ -18,12 +18,19 @@ module rebids "Opener's rebid"
 after 1x (P) 1y (P)
   2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15   sets trump=y
   3y  "Jump raise: 4+ {y}, 16-18"          shows y>=4, tp(y)=16..18   sets trump=y
+      when  y is H | y is S                  # a major: 19+ jumps to game
+  3y  "Jump raise: 4+ {y}, 16+"             shows y>=4, tp(y)>=16   sets trump=y
+      when  y is C | y is D                  # a minor: there is no four-level game
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
       priority -1                          # a new suit first
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
       priority -1                          # a new suit first
+  2x  "Rebids {x}: five or more, too weak to reverse"
+      shows x>=5, suit_points<=18
+      when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
+      priority -2
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14, y<=3
-  2N  "18-19 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=18..19, y<=3
+  2N  "18-21 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=18..21, y<=3
   1N  "Minimum, no better rebid"           shows hcp<=15, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
 after 1x (P) 1M (P)
@@ -38,8 +45,8 @@ after 1C (P) 1D (P)
       priority 2                           # balanced: 1NT even with a major (as BBA)
   1H  "4+ hearts, up to 18"                shows H>=4, suit_points<=18, H>=S
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18, S>H
-  2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19, C>=5   sets forcing=game
-  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19, C>=5   sets forcing=game
+  2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
 after 1C (P) 1H (P)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
@@ -111,6 +118,20 @@ after 1C (P) 1N (P)
   2S  "Reverse: 4+ spades, longer clubs, 17+"    shows S>=4, C>S, suit_points>=17  sets forcing=round
       priority 1
 
+# ── Too strong for a jump rebid ──────────────────────────────────────
+# A jump rebid of our own suit is 16-18, so 19+ with a one-suiter had no
+# rebid at all and passed a forcing response. BBA plays these as 3NT with
+# a long minor ("calculated bid: 18 to 21 total points, 6+ clubs"), and
+# game in a long major.
+after 1m (P) 1y (P) | 1m (P) 1N (P) | 1m (P) 2y (P)
+  3N  "18-21 with six or more {m}: to play"
+      shows m>=6, hcp=18..21
+      when  y is not m
+after 1M (P) 1y (P) | 1M (P) 1N (P) | 1M (P) 2y (P)
+  4M  "19+ with six or more {M}: game"
+      shows M>=6, suit_points>=19
+      when  y is not M
+
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a
 # simple raise with 16-18 and a singleton, but passes 14-15 with doubletons.
@@ -141,6 +162,9 @@ after 1m (P) 2N (P)
 after 1M (P) 2x (P) when x is not M
   2M  "Rebids {M}: 5+, minimum"            shows M>=5, suit_points<=15
       priority -1                          # the default minimum rebid
+  2M  "Rebids {M}: five or more, too weak to reverse"
+      shows M>=5, suit_points<=18
+      priority -2
   3M  "Jump rebid: 6+ {M}, 16-18"          shows M>=6, suit_points=16..18
   3x  "Raise: 4+ {x}"                      shows x>=4
   2N  "15-17 HCP, balanced"                shows balanced, hcp=15..17
@@ -168,10 +192,16 @@ after 1H (P) 2D (P)
 after 1D (P) 2C (P)
   2D  "Rebids diamonds: minimum"           shows D>=5, suit_points<=15
       priority -1
+  3D  "Jump rebid: 6+ diamonds, 16-18"     shows D>=6, suit_points=16..18
+      priority -1
+  2D  "Rebids diamonds: five or more, no better rebid"
+      shows D>=5, suit_points<=18
+      priority -2
   3C  "Raise: 4+ clubs"                    shows C>=4
   2H  "4+ hearts"                          shows H>=4
   2S  "4+ spades"                          shows S>=4
   2N  "12-14 HCP, balanced"                shows balanced, hcp=12..14
+  3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
 
 # ── After an invitational jump shift (10-12, six cards) ──────────────
 after 1x (P) 3y (P) when y is not x

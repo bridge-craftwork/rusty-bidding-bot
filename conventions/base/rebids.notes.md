@@ -55,6 +55,30 @@ contract 14.9% → 20.8%.
   we invite with 17 support points).
 - 1D-1S with four clubs, balanced: BBA mixes 1NT and 2C.
 
+
+## Hands with no rebid at all (2026-09-22)
+
+The Problems tab grew a kind of its own, `passed a forcing auction`: a
+pass where our own rules said the auction was forcing. The engine will
+not *choose* such a pass, but when no rule matches it falls back to one
+and the auction dies. Over the nine Basic_* scenarios there were 32, and
+every one was opener with no rebid to make:
+
+| hole | what fires now |
+|---|---|
+| 18-21 with six of a minor (a jump rebid is 16-18) | **3NT**, which is what BBA bids: "calculated bid, 18 to 21 total points, 6+ clubs" |
+| 19+ with six of a major | **game in the major** |
+| 16-18 with 5-4 and too weak to reverse (a reverse is 17+) | **rebid the five-card suit** at the two level, priority -2 |
+| 19+ support for responder's *minor* (the jump raise stopped at 18) | the jump raise, with no upper bound: there is no four-level game in a minor |
+| 21 with 4-4-1-4 opening 1♣ | the jump shift, which no longer asks for a fifth club |
+| 16-18 after a two-over-one with a five-card major | rebid the major, priority -2 |
+| balanced 20-21 after a one-level response | the 2NT rebid, now 18-21: BBA's own 2NT hands run to 21 |
+
+Basic_* now has **no** broken forces at all (32 → 0), with call agreement
+unchanged (83.1%) and the contracts a shade closer to par (net -4,145 →
+-4,059 IMPs). The whole corpus still has 1,803, all in scenarios on other
+cards.
+
 ## Gaps (not built yet)
 
 - **Inverted minors** (the 2/1 cards): 1m-3m is weak there, but we read it

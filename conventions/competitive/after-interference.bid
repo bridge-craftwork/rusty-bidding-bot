@@ -192,6 +192,5 @@ after 1x (2y) 3y (P) | 1x (3y) 4y (P)
   3N  "Accepts: 16+ with a stopper in {y}"
       shows balanced, hcp>=16
       when  stop(y), x is C | x is D
-  cheapest(x) "Minimum: no game opposite a limit raise"
-      shows hcp<=15
+  cheapest(x) "No game opposite a limit raise"
       priority -1

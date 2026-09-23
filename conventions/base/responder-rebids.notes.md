@@ -50,3 +50,17 @@ no-rule problems 73,286 → 29,714.
 - Slam tries by responder; opener's continuations after responder's
   second call beyond the invitations.
 - Passed-hand and competitive versions.
+
+## Answering a reverse (2026-09-22)
+
+Opener's reverse is 17+ and forcing for one round, and responder had no
+rules for it: he passed, which broke the force. He now bids game with a
+maximum for his 1NT response, raises the second suit with four, and
+otherwise gives a preference to opener's first suit.
+
+The context is `after 1x (P) 1N (P) 2y (P) when y is not x, we.forcing =
+round`. **The `we.forcing` test is what tells a reverse from an ordinary
+second suit**: 1♠-1NT-2♥ is not a reverse and responder may pass it,
+while 1♦-1NT-2♥ is. Without that condition the rules fired on every
+second suit and bid over hands that should pass, at a cost of about a
+dozen calls in the Basic_* scenarios.

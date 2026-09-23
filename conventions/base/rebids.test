@@ -52,3 +52,16 @@ S AKQ73.AJ7.Q3.Q42      | 1S P 2D P    | 3NT    | 18-19, balanced
 S AKJ64.Q76.83.QJ6      | 1S P 2H P    | 3H     | three hearts: raise
 S 95.AKQT4.QJ.Q953      | 1H P 2C P    | 3C     | four clubs: raise
 S T32.AKQ732.A7.A4      | 1H P 2C P    | 3H     | six hearts, 16-18: jump rebid
+
+# ── Too strong for a jump rebid, and the hands with no natural rebid.
+# All of these used to pass a forcing response (rebids.notes.md).
+S AT2.A.953.AKQJ75      | 1C P 1H P    | 3NT    | 18 and six clubs: 3NT, not a 16-18 jump
+S Q64.A7.AKQ754.A5      | 1D P 1H P    | 3NT    | 19 and six diamonds
+S 63.AKQJ97.A9.A43      | 1H P 1S P    | 4H     | 19 in suit points with six hearts: game
+S A4.AKJ9.52.A8432      | 1C P 1S P    | 2C     | 16 with 5-4: too weak to reverse, rebid the clubs
+S JT.A7.A742.AK654      | 1C P 1H P    | 2C     | 16 with five clubs and four diamonds
+S J83.A.AQ62.AQT85      | 1C P 1D P    | 3D     | 19 support points for diamonds: the minor jump raise
+S K93.AK6.AT9542.J      | 1D P 2C P    | 3D     | 16-18 with six diamonds after a two-over-one
+S KJ6.Q2.AQJ87.AQ5      | 1D P 2C P    | 3NT    | 19 balanced
+S KQJ8.AKJ6.K.KJ82      | 1C P 1D P    | 2H     | 21 with 4-4-1-4: the jump shift needs no fifth club
+S AKJ6.KJ632.J.K94      | 1H P 2D P    | 2H     | 16 with five hearts: no reverse, rebid them

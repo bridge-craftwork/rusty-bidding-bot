@@ -171,3 +171,18 @@ after 1M (P) 2M (P) 3M (P)
 # ── After a two-over-one and opener's jump rebid (6+, 16-18) ─────────
 after 1M (P) 2x (P) 3M (P) when x is not M
   4M  "Game"                               shows points>=11
+
+# ── Opener reversed ──────────────────────────────────────────────────
+# A reverse is 17+ and forcing for one round, so responder always bids
+# again: game with a maximum, a raise with four of the second suit, and
+# otherwise a preference back to opener's first suit. `we.forcing = round`
+# is what tells a reverse from an ordinary second suit below the first,
+# which responder may pass.
+after 1x (P) 1N (P) 2y (P) when y is not x, we.forcing = round
+  3N  "Game: a maximum for the 1NT response"
+      shows hcp>=9
+  3{y} "Raise: four or more {y}"
+      shows y>=4
+  3{x} "Preference to {x}"
+      shows x>=2
+      priority -1
