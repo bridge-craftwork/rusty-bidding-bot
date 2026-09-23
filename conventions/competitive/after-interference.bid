@@ -74,12 +74,13 @@ after 1x (X)
   cheapest(D) "6-9 total points, four or more diamonds"
       shows D>=4, S<=3, H<=3, hcp+length_points>=6, hcp+length_points<=9
       when  x is not D, x is not H, x is not S
-  2{x} "Raise: 6-9 total points, support for partner's suit"
-      shows x>=3, hcp+length_points>=6, hcp+length_points<=9
+  2{x} "Raise: 4-9 total points, support for partner's suit"
+      shows x>=3, hcp+length_points>=4, hcp+length_points<=9
       when  x is H | x is S | x>=5
       when  (S<=3 | x is S), (H<=3 | x is H)
-  3{x} "Preemptive raise: four-card support, less than 8 total points"
-      shows x>=4, hcp+length_points<=7
+  3{x} "Preemptive raise: five-card support for a major, less than 8"
+      shows x>=5, hcp+length_points<=7
+      when  x is H | x is S
   1N  "6-9 total points, balanced"
       shows balanced, hcp+length_points>=6, hcp+length_points<=9
       when  (S<=3 | x is S), (H<=3 | x is H)

@@ -11,8 +11,11 @@ opening, and opener's answer to a negative double. Cases:
   unbid major**, so a suit bid in the only unbid major promises five.
   Where both majors have been bid (1♥-(1♠)) it shows the minors.
 - **Redouble is 10+** and says we own the hand.
-- Raises are 6-9 with support; over a double, four-card support with less
-  than 8 jumps as a preempt.
+- Raises are 6-9 with support over an overcall. **Over a double the raise
+  starts at 4 total points**: BBA raises on 5 HCP with three trumps, and
+  taking the level away from a doubler is worth it. The jump raise is
+  five-card support for a major with less than 8; a minor raises to two,
+  which is what BBA does with the same hands.
 - 1NT denies an unbid four-card major (partner would hear about it from
   the double) and denies three-card support for partner's major.
 

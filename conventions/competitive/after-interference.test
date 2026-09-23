@@ -18,7 +18,8 @@ S Q6.987.AJ6542.K7          | 1D X    | XX     | 10 HCP: we own the hand
 S AQ53.T964.Q85.Q3          | 1D X    | XX     | 10 HCP balanced
 S K854.J72.Q93.T87          | 1H X    | 1S     | four spades and 7 total points
 S K85.J72.Q93.T874          | 1H X    | 2H     | three hearts and 7 total points: raise
-S 852.J7.Q9732.874          | 1D X    | 3D     | four-card support and nothing: preemptive raise
+S 852.J7.Q9732.874          | 1D X    | 2D     | five diamonds and 4 HCP: the single raise
+S 852.J7532.Q73.87          | 1H X    | 3H     | five hearts and 3 HCP: preempt them in a major
 
 # Opener answers a negative double.
 N K862.A3.KQ54.T87          | 1D 1H X P | 1S  | four spades for partner's double

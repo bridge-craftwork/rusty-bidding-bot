@@ -130,9 +130,9 @@ after (1x) X (1y)
   cheapest(C) "Free bid: 6+ total points, five or more clubs"
       shows C>=5, S<=3, H<=4, hcp+length_points>=6
       when  x is not C, y is not C
-  1N  "8-11 total points, balanced, a stopper in {x}"
+  1N  "8-11 total points, balanced, a stopper in both their suits"
       shows balanced, hcp+length_points>=8, hcp+length_points<=11
-      when  stop(x)
+      when  stop(x), stop(y)
   2{x} "Cue bid: 12+ total points"
       alert  artificial
       shows  hcp+length_points>=12
