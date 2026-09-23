@@ -30,9 +30,14 @@ after 1x (P) 1y (P)
       when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
       priority -4
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14, y<=3
-  2N  "18-21 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=18..21, y<=3
+  2N  "18+ HCP, balanced"                  shows balanced | shape 5-4-2-2, hcp>=18, y<=3
   1N  "Minimum, no better rebid"           shows hcp<=14, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
+  3x  "Jump rebid: 6+ {x}, too good for a simple rebid"
+      shows x>=6, suit_points>=16
+      priority -4                          # a long suit with 19+ and no 3NT or 4M
+  2N  "15-17 balanced, no other rebid"     shows balanced, hcp=15..17, y<=3
+      priority -4                          # 1NT would be a lie: the rebid is 12-14
 after 1x (P) 1M (P)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
 
@@ -277,3 +282,319 @@ when asked invite(m)
   3N  "Accepts, in notrump: 14+ and a shape for it"
       shows hcp>=14, balanced | semibalanced
   5m  "Accepts in {m}: 18+ with the fit"      shows hcp>=18, m>=5
+
+# ══ Opener's rebid once they come in ═════════════════════════════════
+#
+# Everything above is keyed on `after 1x (P) 1y (P)` and its relatives,
+# so none of it fires once the opponents act: opener had no second call
+# in any contested auction. That was the largest cluster of dead
+# auctions left in the corpus (about 20,000 boards) and, wherever our
+# own rules made partner's free bid forcing, the largest source of
+# `passed a forcing auction` too.
+#
+# What opener does with his own hand — raise partner, rebid his suit,
+# bid the game — does not depend on what they bid, so these blocks are
+# written with `(*)` for their calls and with relative calls
+# (`cheapest`, `jump`) so the level takes care of itself. The two things
+# that do depend on their call are handled without naming it:
+#
+#   - **never bid a suit they have shown.** `maybe lho.x<=4` is "LHO has
+#     not shown five", which is false after an overcall in that suit and
+#     true after a takeout double. Knowledge does the work a pattern
+#     variable would have done, and it is right over a double, an
+#     overcall, a cue bid or a jump alike.
+#   - **notrump needs a stopper**, and a stopper needs their suit bound.
+#     Those rules are the one place a pattern names it, in blocks of
+#     their own below; over a takeout double there is no suit to stop.
+#
+# Strength is measured as it is uncontested — notrump in HCP, suit
+# rebids in suit points, raises in support points — and Rick's ladder is
+# unchanged: 1NT 12-14, a jump rebid or jump raise 16-18, a reverse 17+,
+# a jump in a new suit 19+. Partner's free bid is worth about what an
+# uncontested response is worth, so the same numbers apply.
+
+# ── Partner made a free bid in a new suit at the one level ───────────
+# BBA never passes here, over an overcall or over a double (49 of 49
+# positions in the Basic-Bridge scenarios), so the block ends with a
+# rebid of opener's own suit rather than a pass when RHO has passed.
+after 1x (*) 1z (*) when they.bid, z is not x
+  cheapest(z) "Raise: four or more {z}, minimum"
+      shows z>=4, tp(z)<=15
+      when  partner.z>=4
+      sets  trump=z, ask=signoff
+  jump(z) "Jump raise: four or more {z}, 16-18"
+      shows z>=4, tp(z)=16..18
+      when  partner.z>=4, z is H | z is S
+      sets  trump=z, ask=invite(z)
+  jump(z) "Jump raise: four or more {z}, 16+"
+      shows z>=4, tp(z)>=16
+      when  partner.z>=4, z is C | z is D
+      sets  trump=z
+  4{z} "Game raise: four or more {z}, 19+"
+      shows z>=4, tp(z)>=19
+      when  partner.z>=4, z is H | z is S
+      sets  trump=z
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, suit_points<=15
+      sets  ask=signoff
+      priority -1
+  jump(x) "Jump rebid: six or more {x}, 16-18"
+      shows x>=6, suit_points=16..18
+      sets  ask=invite(x)
+      priority -1
+  4{x} "Game: six or more {x}, 19+"
+      shows x>=6, suit_points>=19
+      when  x is H | x is S
+  P   "Nothing to say: they have bid again"  priority -10
+# Their pass leaves partner's free bid unanswered, and it is not a call
+# opener may leave: with nothing else, he repeats his own suit.
+after 1x (*) 1z (P) when they.bid, z is not x
+  # A second suit, when neither opponent has shown it: at the one level
+  # four cards, at the two level four cards below opener's first suit,
+  # and above it a reverse, 17+ with the first suit longer.
+  1H  "Four or more hearts, up to 18"
+      shows H>=4, suit_points<=18
+      when  x is not H, z is not H
+      when  maybe lho.H<=4, maybe rho.H<=4
+  1S  "Four or more spades, up to 18"
+      shows S>=4, suit_points<=18
+      when  x is not S, z is not S
+      when  maybe lho.S<=4, maybe rho.S<=4
+  cheapest(C) "Four or more clubs, up to 18"
+      shows C>=4, suit_points<=18
+      when  x is not C, z is not C
+      when  maybe lho.C<=4, maybe rho.C<=4
+      priority -2
+  cheapest(D) "Four or more diamonds, up to 18"
+      shows D>=4, suit_points<=18
+      when  x is H | x is S
+      when  z is not D
+      when  maybe lho.D<=4, maybe rho.D<=4
+      priority -2
+  2H  "Reverse: four or more hearts, longer {x}, 17+"
+      shows H>=4, x>H, suit_points>=17
+      when  x is C | x is D
+      when  z is not H
+      when  maybe lho.H<=4, maybe rho.H<=4
+      sets  forcing=round
+  2S  "Reverse: four or more spades, longer {x}, 17+"
+      shows S>=4, x>S, suit_points>=17
+      when  x is not S, z is not S
+      when  maybe lho.S<=4, maybe rho.S<=4
+      sets  forcing=round
+  2D  "Reverse: four or more diamonds, longer clubs, 17+"
+      shows D>=4, C>D, suit_points>=17
+      when  x is C, z is not D
+      when  maybe lho.D<=4, maybe rho.D<=4
+      sets  forcing=round
+  cheapest(x) "Rebids {x}: five or more, nothing better to say"
+      shows x>=5, suit_points<=18
+      sets  ask=signoff
+      priority -4
+  cheapest(x) "Partner's free bid needs an answer"
+      priority -6
+
+# Notrump is the one rebid that has to know which suit they bid, so it
+# is written with their call bound. Over a takeout double there is no
+# suit to stop and the range is the same.
+after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
+  cheapest(N) "12-14 balanced with a stopper in {y}"
+      shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
+      when  stop(y)
+      sets  ask=signoff
+  jump(N) "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19, z<=3
+      when  stop(y)
+after 1x (X) 1z (P) when z is not x
+  cheapest(N) "12-14 balanced"
+      shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
+      sets  ask=signoff
+  jump(N) "18-19 balanced"
+      shows balanced, hcp=18..19, z<=3
+
+# ── Partner made a free bid in a new suit at the two level or higher ─
+# Partner has 8-10 or more and five cards, and on the cards where a new
+# suit over interference is forcing (`competitive.new_suit_after_
+# overcall_forcing`, on by default and off on Basic-Bridge) opener must
+# bid: those auctions were 1,438 of the corpus's 1,838 broken forces.
+# Where it is not forcing, BBA passes a minimum with no fit about a
+# third of the time, and that is the `P` at the foot of the block — the
+# engine drops it of its own accord when the auction is forcing.
+after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x
+  cheapest(z) "Raise: three or more {z} for partner's five"
+      shows z>=3, tp(z)<=17
+      when  partner.z>=5
+      sets  trump=z, ask=signoff
+  cheapest(z) "Raise: four or more {z}, minimum"
+      shows z>=4, tp(z)<=17
+      when  partner.z>=4, maybe partner.z<=4
+      sets  trump=z, ask=signoff
+  4{z} "Game raise: 18+ with the fit"
+      shows z>=3, tp(z)>=18
+      when  partner.z>=4, z is H | z is S
+      sets  trump=z
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, suit_points<=15
+      sets  ask=signoff
+      priority -1
+  jump(x) "Jump rebid: six or more {x}, 16-18"
+      shows x>=6, suit_points=16..18
+      sets  ask=invite(x)
+      priority -1
+  4{x} "Game: six or more {x}, 19+"
+      shows x>=6, suit_points>=19
+      when  x is H | x is S
+  P   "Minimum with no fit: partner's bid was limited"
+      shows suit_points<=15
+      priority -4                          # BBA passes these ahead of 2NT
+  cheapest(x) "Rebids {x}: five or more, nothing better to say"
+      shows x>=5
+      sets  ask=signoff
+      priority -6
+  P   "Nothing to say"  priority -10
+after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y is not x, z is not x, z is not y
+  cheapest(N) "Balanced with a stopper in {y}, minimum"
+      shows balanced | shape 5-4-2-2, hcp<=15, z<=3
+      when  stop(y)
+      sets  ask=signoff
+      priority -5                          # below the pass: only when forced
+  jump(N) "16-18 balanced with a stopper in {y}"
+      shows balanced, hcp=16..18, z<=3
+      when  stop(y)
+after 1x (X) 2z (P) when z is not x
+  cheapest(N) "Balanced, minimum"
+      shows balanced | shape 5-4-2-2, hcp<=15, z<=3
+      sets  ask=signoff
+      priority -5                          # below the pass: only when forced
+
+# ── Partner raised opener's suit ─────────────────────────────────────
+# The raise is 6-9 over an overcall and 4-9 over a double, close enough
+# to the uncontested 6-10 that the same ladder applies: pass up to 16
+# support points, invite with 17-18, bid the game with 19. BBA passes
+# these hands about two thirds of the time.
+after 1x (*) 2x (*) when they.bid
+  P   "Minimum: no game"
+      shows tp(x)<=16
+      priority -5
+  cheapest(x) "Invitation: 17-18 with the fit"
+      shows tp(x)=17..18
+      sets  trump=x, ask=invite(x)
+  4{x} "Game: 19+ with the fit"
+      shows tp(x)>=19
+      when  x is H | x is S
+      sets  trump=x
+  3N  "Game: 19+ balanced, nowhere else to play"
+      shows balanced, hcp>=19
+      when  x is C | x is D
+  P   "Nothing to say"  priority -10
+# A jump raise over their call is preemptive, so opener bids the game or
+# lets it alone.
+after 1x (*) 3x (*) when they.bid
+  4{x} "Game: 19+ opposite a preemptive raise"
+      shows tp(x)>=19
+      when  x is H | x is S
+      sets  trump=x
+  P   "Nothing to add to a preemptive raise"  priority -10
+
+# ── Partner bid notrump over their call ──────────────────────────────
+# 1NT here is 6-10 with a stopper in their suit, so opener passes a
+# minimum, repeats a six-card suit, and jumps with 16-18.
+after 1x (*) 1N (*) when they.bid
+  P   "Minimum: partner is limited"
+      shows suit_points<=15
+      priority -5
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, suit_points<=15
+      sets  ask=signoff
+      priority -1
+  jump(x) "Jump rebid: six or more {x}, 16-18"
+      shows x>=6, suit_points=16..18
+      sets  ask=invite(x)
+      priority -1
+  jump(N) "18-19 balanced"
+      shows balanced, hcp=18..19
+  4{x} "Game: six or more {x}, 19+"
+      shows x>=6, suit_points>=19
+      when  x is H | x is S
+  P   "Nothing to say"  priority -10
+
+# ── Partner redoubled ────────────────────────────────────────────────
+# The redouble is 10+ and says we own the hand, so opener has nothing to
+# prove: he repeats a six-card suit, shows a second suit with extras,
+# and otherwise passes and leaves the next decision to partner, who has
+# the values. BBA never doubles them here on these cards.
+after 1x (X) XX (*)
+  cheapest(x) "Rebids {x}: six or more"
+      shows x>=6, suit_points<=18
+      sets  ask=signoff
+      priority -1
+  cheapest(S) "Five or more spades"
+      shows S>=5, suit_points<=18
+      when  x is not S
+      when  maybe lho.S<=4, maybe rho.S<=4
+      sets  ask=signoff
+      priority -2
+  cheapest(H) "Five or more hearts"
+      shows H>=5, S<=4, suit_points<=18
+      when  x is not H
+      when  maybe lho.H<=4, maybe rho.H<=4
+      sets  ask=signoff
+      priority -2
+  cheapest(D) "Five or more diamonds"
+      shows D>=5, S<=4, H<=4, suit_points<=18
+      when  x is not D
+      when  maybe lho.D<=4, maybe rho.D<=4
+      sets  ask=signoff
+      priority -2
+  cheapest(C) "Five or more clubs"
+      shows C>=5, S<=4, H<=4, suit_points<=18
+      when  x is not C
+      when  maybe lho.C<=4, maybe rho.C<=4
+      sets  ask=signoff
+      priority -2
+  P   "Partner has the values: over to him"  priority -5
+
+# ── Partner passed and they kept bidding ─────────────────────────────
+# Partner has nothing (0-5 over a double, or nothing to say over an
+# overcall), so opener needs a real reason to bid again. BBA passes
+# about two thirds of these.
+# `maybe lho.hcp<=14` is "they have not shown a strong hand": after a
+# 1NT overcall they own the balance of the pack, partner has nothing,
+# and BBA passes every one of these. Without the guard opener kept
+# rebidding his six-card suit over their Stayman and lost 157 calls in
+# the five We_Overcall_NT_* scenarios.
+after 1x (*) P (*) when they.bid, maybe lho.hcp<=14, maybe rho.hcp<=14
+  cheapest(x) "Rebids {x}: six or more"
+      shows x>=6, suit_points<=18
+      priority -1
+  jump(x) "Jump rebid: six or more {x}, 16-18"
+      shows x>=6, suit_points=16..18
+      priority -1
+after 1x (*) P (*) when they.bid
+  P   "Partner has nothing: let them have it"  priority -10
+
+# ── They bought it and partner passed: opener reopens ────────────────
+# `1x (1y) P (P)` and `1x (2y) P (P)` were 2,725 dead boards in the
+# corpus. Partner may hold a trap pass or 5 points with no bid, so BBA
+# reopens more often than it passes: a takeout double short in their
+# suit, a second suit of five, a rebid of a six-card suit, or 2NT with
+# 18-19 and a stopper.
+after 1x (1y) P (P) | 1x (2y) P (P) | 1x (3y) P (P) when y is not x
+  X   "Reopening double: short in {y}, support for the other suits"
+      shows y<=2, hcp>=12
+      shows ((S>=3 | x is S | y is S), (H>=3 | x is H | y is H), (D>=3 | x is D | y is D), (C>=3 | x is C | y is C)) | hcp>=16
+  cheapest(S) "Five or more spades, 14+"
+      shows S>=5, suit_points>=14
+      when  x is not S, y is not S
+  cheapest(H) "Five or more hearts, 14+"
+      shows H>=5, S<=4, suit_points>=14
+      when  x is not H, y is not H
+  cheapest(D) "Five or more diamonds, 14+"
+      shows D>=5, S<=4, H<=4, suit_points>=14
+      when  x is not D, y is not D
+  cheapest(C) "Five or more clubs, 14+"
+      shows C>=5, S<=4, H<=4, D<=4, suit_points>=14
+      when  x is not C, y is not C
+  cheapest(N) "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19
+      when  stop(y)

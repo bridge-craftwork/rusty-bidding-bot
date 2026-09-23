@@ -83,3 +83,90 @@ S AJ84.Q952.A.AT63      | 1C P 1D P 1H P 1S P  | 3S     | four spades, 16-18: ju
 
 # ── A big one-suiter after a 1NT response
 S AJ8.AKQ96432..K4      | 1H P 1NT P           | 4H     | 19+ with six hearts: game
+
+# ── Opener's rebid once they come in ─────────────────────────────────
+# Basic_* corpus deals where we and BBA agree, one or more per rule.
+
+# Partner made a free bid in a new suit at the one level: opener always
+# bids again, over an overcall or over a takeout double.
+S KJT4.Q63.A86.A75      | 1C 1D 1H P   | 1NT | 12-14 balanced with a diamond stopper
+S A3.KJ72.AQ7.AT83      | 1C 1H 1S P   | 2NT | 18-19 balanced with a heart stopper
+S Q6.K83.AK9.AKT76      | 1C 1D 1S P   | 2NT | 19 balanced: the jump in notrump
+S KQ.K6.KQ642.AT64      | 1D 1H 1S P   | 2C  | a second suit below the first, four cards
+S T.KQJ.QJT543.AJ3      | 1D 1H 1S P   | 2D  | six diamonds, minimum
+S KJ2.T9.J2.AKQ842      | 1C 1D 1H P   | 2C  | six clubs, minimum
+S KJ97.AK95.QT.T43      | 1C 1D 1H P   | 2H  | four hearts for partner's free bid: raise
+S Q973.T82.AKQ85.K      | 1D 1H 1S P   | 3S  | 16-18 support points with four spades
+S J872.K.KQ942.KT5      | 1D X 1H P    | 1S  | over the double: four spades at the one level
+S 86.KT5.AKJ864.A2      | 1D X 1H P    | 3D  | six diamonds, 16-18 suit points
+S AQ4.Q52.T83.AT43      | 1C X 1H P    | 1NT | 12-14 balanced; no stopper is needed over a double
+S A.J942.K3.KJT652      | 1C X 1S P    | 2C  | six clubs, minimum
+S 94.AT.AJ9.KQJT75      | 1C X 1S P    | 3C  | six clubs, 16-18
+S KJ63.T83.KQJ7.Q3      | 1D X 1S P    | 2S  | four spades for partner's free bid
+S A93.QT.84.AK9854      | 1C X 1H P    | 2C  | six clubs rather than a three-card raise
+
+# A free bid at the two level: partner has five and 8-10 or more.
+S 74.AKJ432.Q93.K8      | 1H 1S 2C P   | 2H  | six hearts, minimum
+S A8.74.A43.KQ6432      | 1C 1S 2H P   | 3C  | six clubs, minimum, at the cheapest level
+S AK.432.KQJ643.AK      | 1D 1S 2H P   | 4H  | 18+ support points opposite partner's five hearts
+S AK5.853.KQ85.QT3      | 1D 1S 2H P   | 3H  | three hearts for partner's five: the fit
+S 4.AQ4.A2.AT97653      | 1C 1H 2D P   | 3C  | seven clubs, minimum
+S J862..AKQT97.T43      | 1D 1S 2H P   | 3D  | seven diamonds, minimum
+S 64.AK8432.AK86.9      | 1H 2C 2D P   | 2H  | six hearts over a two-level overcall
+S J72.AJT.KQ953.Q8      | 1D 2C 2S P   | 3S  | three spades for partner's five
+S AK9.KJT5.72.AK87      | 1C 2D 2H P   | 4H  | 19 with four hearts: the game
+
+# Partner raised opener's suit: the uncontested ladder, pass to 16
+# support points, invite with 17-18, bid the game with 19.
+S AKT2.JT742.AT.A6      | 1H 1S 2H P   | 3H  | 17-18 support points: the invitation
+S K.AKQ8532.954.KJ      | 1H 1S 2H P   | 4H  | 19+ support points with seven hearts
+S K84.Q954.AKQ73.T      | 1D 1S 2D P   | 3D  | 17-18 with the diamond fit
+S KQ6.AKJT3.AT82.3      | 1H 2C 2H P   | 4H  | 19+ support points: game over their overcall
+S K5.KQ984.Q4.AQ62      | 1H 2C 2H P   | 3H  | 17-18: one more try
+S AQT987.AQ2.AJ3.5      | 1S 2C 2S P   | 4S  | 19+ with six spades
+S K98642.A3.AJ5.K5      | 1S 2C 2S P   | 3S  | 17 support points: invite
+S AKJ874.AKJ6.KT.6      | 1S X 2S P    | 4S  | over the double: 19+ and the game
+S AJ976.AQJT.62.KJ      | 1S X 2S P    | 3S  | 17-18: the invitation
+S 9.AQJ543.AKJT9.5      | 1H 3C 3H P   | 4H  | game opposite a preemptive raise
+S AK9532.A5.AQ63.5      | 1S 3C 3S P   | 4S  | game opposite a preemptive raise
+
+# Partner bid 1NT over their call: 6-10 with a stopper.
+S K7.975.AT.AJT542      | 1C 1S 1N P   | 2C  | six clubs, minimum
+S 643.AJ.43.AKT843      | 1C 1D 1N P   | 2C  | six clubs, minimum
+
+# Partner redoubled and they ran: we own the hand, and opener has
+# nothing to prove.
+S 9.KQJ986.AT6.Q95      | 1H X XX 1S   | 2H  | six hearts after the redouble
+S KQJ965.K6.KJ3.JT      | 1S X XX 2H   | 2S  | six spades after the redouble
+S AT52.Q7.AJ9432.7      | 1D X XX 2C   | 2D  | six diamonds after the redouble
+
+# Partner passed and they kept bidding: opener needs a real reason.
+S T.96.AKQJT32.KQ6      | 1D 1S P 2S   | 4D  | seven solid diamonds: bid the game
+S .A753.KJ6.AJ9754      | 1C 1S P 2S   | 3C  | six clubs, worth one more
+S AJ9873.AQ4.632.K      | 1S X P 2H    | 2S  | six spades opposite a silent partner
+S AQJ832.QT86.AK3.      | 1S X P 2H    | 3S  | six spades and 16-18: the jump
+S 96.AKQ9542.AQ98.      | 1H X P 2S    | 4H  | seven hearts and 19+
+S K.K3.AKQJ962.J96      | 1D X P 1S    | 3D  | seven diamonds and 16-18
+S Q63.AKQJ963.QT4.      | 1H X P 2H    | 3H  | seven hearts, minimum, over their cue bid
+S KQ93.Q3.AJT984.7      | 1D 1H P 2C   | 2D  | six diamonds, minimum
+S 6.A42.73.AKJ9754      | 1C 1D P 2S   | 3C  | seven clubs, minimum
+
+# They bought it and partner passed: opener reopens.
+S 8.AKQJ5.T43.K972      | 1H 1S P P    | X   | reopening double: a singleton spade
+S Q6.T84.KQT82.AK6      | 1D 1S P P    | X   | reopening double: short in spades
+S QJ92.KT76.A9.KJT      | 1C 1D P P    | X   | reopening double: two diamonds, the other suits
+S 4.AQT94.AQ9853.A      | 1D 1S P P    | 2H  | five hearts and 14+ in the reopening seat
+S 8.AQT9.J4.AKT986      | 1C 1S P P    | 2C  | six clubs in the reopening seat
+S A64.A82.A.J97543      | 1C 2S P P    | 3C  | six clubs over their two-level overcall
+S AK7.J98.A542.KQJ      | 1D 2S P P    | 2NT | 18 balanced with a spade stopper
+S A76.A82.AQT8542.      | 1D 2H P P    | 3D  | seven diamonds in the reopening seat
+S AQ65.KJ83.KQ876.      | 1D 2C P P    | X   | reopening double: no clubs, the other three suits
+
+# They competed over partner's free bid.
+S KQT8.AKJ.KQ4.T94      | 1C 1D 1S 2D  | 3S  | four spades and 16-18 support points
+S 52.J84.A8.AQJT92      | 1C 1D 1H 2D  | 3C  | six clubs, minimum
+S 82.AQ84.76.AQT93      | 1C 1D 1H 2D  | 2H  | four hearts for partner's free bid
+S AKT5.AK.92.A8754      | 1C 1H 1S 2H  | 4S  | 19+ support points with four spades
+S Q6.K652.AKJ75.J4      | 1D 1S 2H 2S  | 3H  | four hearts for partner's five
+S A74.K63.A932.K83      | 1D 1S 2C 2S  | 3C  | three clubs for partner's five
+S 3.Q92.AQ2.AKT873      | 1C 1S 2H 2S  | 4H  | 18+ support points with three hearts

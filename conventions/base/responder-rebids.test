@@ -71,3 +71,22 @@ N A84.AKT94.J6.T96      | 1S P 2H P 2S P      | 4S     | three spades opposite s
 
 # ── Maximum for the 1NT response, when opener rebids his suit
 N A76.Q4.QT52.JT64      | 1D P 1NT P 2D P     | 3D     | 10 with four diamonds: invites
+
+# ── Responder's second call once they have come in ───────────────────
+# Basic_* corpus deals where we and BBA agree.
+N AK53.KT854.9.KJ7      | 1C 1D X P 1H P      | 4H     | 13+ with four hearts for opener's answer
+N J98.A.AJ9743.743      | 1D X XX 1H P P      | 2D     | back to partner's suit after the redouble
+N KT6.KT2.JT3.QJT7      | 1H X XX 2S P P      | 3H     | three hearts for opener after they ran
+N AJ42.J93.K76.J52      | 1H X XX 2C P P      | 2H     | three hearts for opener after they ran
+N K63.863.K73.A986      | 1H X XX 2D P P      | 2H     | three hearts for opener after they ran
+N 432.765.A64.Q742      | 1D 1S P P X P       | 2C     | four clubs for the reopening double
+N K87.983.T86.Q965      | 1C 1D P P X P       | 2C     | four clubs for the reopening double
+N T95.J32.KJ6.AT87      | 1D 1H P P X P       | 2C     | four clubs for the reopening double
+N 985.A2.986.K8542      | 1D 2H P P X P       | 3C     | five clubs for the reopening double
+N Q85.T9.J8753.T53      | 1H 2C P P X P       | 2D     | five diamonds for the reopening double
+N .AT743.Q9753.854      | 1S 2C P P X P       | 2H     | five hearts for the reopening double
+N JT8653.A6.4.J632      | 1D 2H P P X P       | 2S     | six spades for the reopening double
+N 85.J872.AKT.9874      | 1C 1D 1H P 1S P     | 1NT    | 6-10 with no fit for opener's second suit
+N J97632.Q84.AT.53      | 1D 1H 1S P 2C P     | 2S     | six spades, weak
+N AK984.32.J85.K65      | 1D 1H 1S P 2C P     | 2D     | preference back to opener's first suit
+N T98653.92.A83.A7      | 1C 1D 1S 2D P P     | 2S     | six spades: worth one more when they compete

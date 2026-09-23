@@ -225,3 +225,174 @@ after 1x (P) 1N (P) 2y (P) when y is not x, we.forcing = round
   3{x} "Preference to {x}"
       shows x>=2
       priority -1
+
+# ══ Responder's second call once they have come in ═══════════════════
+#
+# Opener's contested rebids (rebids.bid) mostly set `ask=signoff` or
+# `ask=invite`, and the state blocks answer those wherever they came
+# from. What is left is opener's free calls — his answer to a negative
+# double, his rebids after a redouble, and the auctions where he has
+# passed and left the decision here.
+
+# ── We doubled for takeout and opener answered ───────────────────────
+# The double showed 6+ and four cards in each unbid major, so opener's
+# answer is limited and responder is usually done: BBA passes 16 of the
+# 24 positions in the Basic-Bridge scenarios, with 6-10. `z` is
+# opener's answer, which may be a repeat of his own suit.
+after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.bid
+  P   "Minimum for the double: nothing more to say"
+      shows hcp+length_points<=10
+      priority -5
+  cheapest(z) "Raise: four or more {z}, 11-12"
+      shows z>=4, hcp+length_points=11..12
+      when  partner.z>=3          # opener's answer may be a three-card major
+      sets  trump=z, ask=invite(z)
+  4{z} "Game in {z}: 13+ with the fit"
+      shows z>=4, hcp+length_points>=13
+      when  partner.z>=3, z is H | z is S
+      sets  trump=z
+  cheapest(N) "Invitational: 11-12 balanced"
+      shows balanced, hcp+length_points=11..12
+      sets  ask=nt_invite
+      priority -1                 # the fit first
+  jump(N) "Game: 13+ balanced"
+      shows balanced, hcp+length_points>=13
+      priority -1
+  P   "Nothing more to say"  priority -10
+
+# ── We redoubled and they ran ────────────────────────────────────────
+# The redouble was 10+, so the partnership owns the hand. Opener has
+# passed it back: responder doubles with four of their suit, supports
+# opener with three, and otherwise lets it go.
+after 1x (X) XX (1y) P (P) | 1x (X) XX (2y) P (P) | 1x (X) XX (3y) P (P) when y is not x
+  X   "Penalty: four or more {y} behind the bidder"
+      shows y>=4
+  cheapest(x) "Back to partner's suit: three or more"
+      shows x>=3
+      sets  ask=signoff
+      priority -1
+  cheapest(S) "Five or more spades"
+      shows S>=5
+      when  x is not S, y is not S
+      priority -2
+  cheapest(H) "Five or more hearts"
+      shows H>=5, S<=4
+      when  x is not H, y is not H
+      priority -2
+  P   "Nothing to say over their escape"  priority -10
+
+# ── Opener reopened with a double ────────────────────────────────────
+# Opener's reopening double (rebids.bid) is takeout, so responder names
+# his longest suit at the cheapest level, passes it for penalty with
+# four of theirs, or goes back to opener's suit.
+after 1x (1y) P (P) X (P) | 1x (2y) P (P) X (P) | 1x (3y) P (P) X (P) when y is not x
+  P   "Passes the reopening double: four or more {y}"
+      shows y>=4
+      priority 1
+  cheapest(S) "Four or more spades for the reopening double"
+      shows S>=4, S>=H, S>=D, S>=C
+      when  x is not S, y is not S
+  cheapest(H) "Four or more hearts for the reopening double"
+      shows H>=4, H>S, H>=D, H>=C
+      when  x is not H, y is not H
+  cheapest(D) "Four or more diamonds for the reopening double"
+      shows D>=4, D>S, D>H, D>=C
+      when  x is not D, y is not D
+  cheapest(C) "Four or more clubs for the reopening double"
+      shows C>=4, C>S, C>H, C>D
+      when  x is not C, y is not C
+  cheapest(x) "Back to partner's suit"
+      shows x>=3
+      sets  ask=signoff
+      priority -2
+  cheapest(N) "Balanced with a stopper in {y}"
+      shows balanced
+      when  stop(y)
+      priority -3
+  P   "Nothing better than defending"  priority -10
+
+# ── Both sides have stopped ──────────────────────────────────────────
+# Responder passed the overcall and opener passed again: nobody has
+# anything, and BBA passes every one of these (6 of 6 with 3-9 points).
+after 1x (*) P (*) P (P) when they.bid
+  P   "Partner had no reopening bid either: let them play it"
+      priority -10
+
+# ── Opener rebid a new suit over their call ──────────────────────────
+# The mirror of the uncontested blocks above, for the auctions where
+# they have come in: opener's second suit at the one level leaves room
+# for everything, and at the two level it may be a reverse, which our
+# own rules make forcing — 58 of the corpus's broken forces were
+# responder with no answer to one.
+after 1x (*) 1y (*) 1z (*) when they.bid, y is not x, z is not x, z is not y
+  cheapest(N) "6-10, no fit"                shows points<=10, z<=3   sets ask=signoff
+  cheapest(x) "Preference: three or more {x}, weak"
+      shows x>=3, points<=10, z<=3   sets ask=signoff
+      priority -1
+  cheapest(z) "Raise: four or more {z}, weak"   shows z>=4, points<=10   sets trump=z, ask=signoff
+  jump(z) "Invitational raise: four or more {z}, 11-12"
+      shows z>=4, points=11..12   sets trump=z, ask=invite(z)
+  cheapest(y) "Weak: six or more {y}"       shows y>=6, points<=10   sets ask=signoff
+  jump(y) "Invitational: six or more {y}, 11-12"  shows y>=6, points=11..12   sets ask=invite(y)
+  jump(N) "Game: 13+"                       shows points>=13, z<=3
+  4{z} "Game raise: four or more {z}, 13+"  shows z>=4, points>=13
+      when  z is H | z is S
+      sets  trump=z
+  P   "Nothing to say"  priority -10
+after 1x (*) 1y (*) 2z (*) when they.bid, y is not x, z is not x, z is not y
+  cheapest(x) "Preference: two or more {x}"
+      shows x>=2, points<=12
+      sets  ask=signoff
+      priority -1
+  cheapest(z) "Raise: four or more {z}"     shows z>=4, points>=10   sets trump=z, ask=invite(z)
+  cheapest(y) "Weak: six or more {y}"       shows y>=6, points<=10   sets ask=signoff
+  cheapest(N) "No fit, forced to bid"       shows points<=12
+      priority -4
+  jump(N) "Game: 13+"                       shows points>=13, z<=3
+  P   "Weak, and partner may pass"          shows points<=10
+      priority -5
+  P   "Nothing to say"  priority -10
+
+# ── They competed and both partners have nothing more ────────────────
+# We made a free bid, they bid again, and opener passed it out to us.
+# With a minimum we let it go; with a sixth card in our suit we compete.
+after 1x (*) 1z (*) P (P) | 1x (*) 2z (*) P (P) when they.bid, z is not x
+  cheapest(z) "Six or more {z}: worth one more"
+      shows z>=6, points>=8
+      sets  ask=signoff
+  cheapest(x) "Preference: three or more {x}, worth one more"
+      shows x>=3, points>=10
+      when  partner.x>=5
+      sets  ask=signoff
+      priority -2
+  P   "Minimum: they have bought it"  priority -10
+
+# ── Opener answered the negative double in notrump ───────────────────
+# The notrump answer is 12-14 with a stopper (18-19 for the jump), so
+# responder treats it as the 1NT rebid: pass, raise by strength, or show
+# a six-card suit.
+after 1x (*) X (*) 1N (*) | 1x (*) X (*) 2N (*) when they.bid
+  P   "Minimum for the double: no game"
+      shows points<=10
+      priority -5
+  cheapest(S) "Weak: six or more spades"    shows S>=6, points<=10   sets ask=signoff
+  cheapest(H) "Weak: six or more hearts"    shows H>=6, S<=5, points<=10   sets ask=signoff
+  cheapest(N) "Invitational: 11-12"         shows points=11..12   sets ask=nt_invite
+  jump(N) "Game: 13+"                       shows points>=13
+  P   "Nothing more to say"  priority -10
+
+# ── Our double was left to them ──────────────────────────────────────
+# They bid over the negative double and opener passed it out. He has a
+# minimum with nothing to say, so responder needs real values to bid on.
+after 1x (*) X (*) P (P) when they.bid
+  cheapest(S) "Five or more spades and 11+: worth competing"
+      shows S>=5, points>=11
+      sets  ask=signoff
+  cheapest(H) "Five or more hearts and 11+: worth competing"
+      shows H>=5, S<=4, points>=11
+      sets  ask=signoff
+  cheapest(x) "Preference to partner's suit with 11+"
+      shows x>=3, points>=11
+      sets  ask=signoff
+      priority -2
+  P   "Partner had nothing to say either"  priority -10

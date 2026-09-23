@@ -199,3 +199,204 @@ went the wrong way, both small and both outside these auctions:
 - Opener's 2NT at the third call: BBA bids it with 17 and 4-4-1-4 after
   1♦-1♥-1♠-1NT. We have no rule for it (a 17-count that has already
   shown two suits). Is 2NT right, or is pass?
+
+## Opener's rebid once they come in (2026-09-23)
+
+Everything above is written as `after 1x (P) 1y (P)` and its relatives,
+so none of it fired once the opponents acted: **opener had no second
+call in any contested auction**. On the Basic-Bridge cards that was 911
+dead boards, and across the corpus about 46,000 — the largest cluster
+of dead auctions left anywhere. It was also the largest source of
+`passed a forcing auction`: 1,438 of the 1,838 were opener with no
+answer to partner's forcing free bid at the two level.
+
+### The shape of the solution
+
+Opener's problem after interference is the same problem as before it.
+What he does with his own hand — raise partner, rebid his suit, bid the
+game — does not depend on what they bid, so the new blocks are written
+with `(*)` for the opponents' calls and with **relative calls**
+(`cheapest(x)`, `jump(x)`, `4{z}`) so the level looks after itself.
+Seven contexts replace what would otherwise have been a few dozen
+eight-call patterns, one per (their call × partner's call × level):
+
+| block | when | what opener does |
+|---|---|---|
+| `1x (*) 1z (*)` | partner's one-level free bid | raise, rebid, second suit, notrump |
+| `1x (*) 2z (*)`, `3z`, `4z` | partner's two-level-or-higher free bid | raise, rebid, pass a minimum |
+| `1x (*) 2x (*)` / `3x (*)` | partner raised | the uncontested ladder |
+| `1x (*) 1N (*)` | partner bid notrump | pass, rebid, jump |
+| `1x (X) XX (*)` | partner redoubled | rebid or leave it to him |
+| `1x (*) P (*)` | partner passed, they keep bidding | a six-card suit, else pass |
+| `1x (1y) P (P)` … | they bought it, partner passed | reopen: double, second suit, 2NT |
+
+Two things do depend on their call, and neither needed a pattern
+variable for it:
+
+- **Never bid a suit they have shown.** `maybe lho.S<=4, maybe rho.S<=4`
+  reads "neither of them has shown five spades". It is false after a
+  spade overcall (the overcall showed 5+) and true after a takeout
+  double (which showed 3+), so one rule is right over a double, an
+  overcall, a cue bid or a jump alike. Knowledge does the work a `y is
+  not S` guard would have done, and it does it in a `(*)` context where
+  there is no `y` to name.
+- **Never compete against a strong notrump.** `maybe lho.hcp<=14, maybe
+  rho.hcp<=14` is "they have not shown the balance of the pack". Without
+  it, opener kept rebidding his six-card suit over a 1NT overcall and
+  its Stayman, and that alone cost 157 calls in the five
+  `We_Overcall_NT_*` scenarios.
+
+The only place a pattern still names their suit is **notrump**, which
+needs `stop(y)`; those rules sit in small blocks of their own, with a
+copy for the takeout double where there is no suit to stop.
+
+Rick's ladder is unchanged, because partner's free bid is worth about
+what an uncontested response is worth: 1NT 12-14, a jump rebid or jump
+raise 16-18, a reverse 17+ with the first suit longer, a jump in a new
+suit 19+, and over a raise pass to 16 support points, invite with 17-18,
+game with 19.
+
+Every minimum rebid sets `ask=signoff` and every one-more-try sets
+`ask=invite(suit)`, so the state blocks written in the last wave answer
+them without a single new pattern.
+
+### Evidence (bba-cli --all-meanings, Basic-Bridge scenarios)
+
+Twenty-two scenarios were re-bid with meanings; the positions are thin
+one auction at a time, so the rules follow the shape rather than the
+exact boundaries.
+
+| position | BBA |
+|---|---|
+| `1x (1y) 1z (P)` | **39 calls, no pass**: raise partner's four 12-14, 1NT 12-14 with a stopper, rebid six 12-15, 2NT 18-19, jump raise 14+ |
+| `1x (X) 1y (P)` | **49 calls, no pass**: a new suit at the one level 11-15, 1NT 12-16, jump rebid 15-17, raise partner's four 12-14 |
+| `1x (1y) 2z (P)` | pass 8, rebid six 10-15, raise partner's five 14, game 18-20 |
+| `1x (1y) 2x (P)` | pass 23 (12-15), invite 6 (12-17), game 5 (14-17) |
+| `1x (2y) 2x (P)` | pass 22, game 11 (14-18), invite 6 (15-17) |
+| `1x (X) 2x (P)` | pass 32, game 3 (17-19) |
+| `1x (1y) P (P)` | **reopen**: double 11 (a singleton or doubleton in their suit), a five-card suit 11, rebid six 8, pass only 6 |
+| `1x (2y) P (P)` | rebid six 13, a five-card suit 10, reopening double 10, pass 19 |
+| `1x (X) P (2y)` | pass 48, rebid six 18, jump with six 16-17 |
+| `1x (X) XX (1y/2y)` | rebids and second suits; **never a penalty double** on these cards |
+| `1x (X) P (P)` | pass, 8 of 8 |
+
+So: opener always answers a one-level free bid, may pass a two-level
+one, passes most of what partner's pass leaves him, and reopens more
+often than he passes when they have bought it cheaply.
+
+### Numbers
+
+Basic-Bridge cards (24 scenarios, 11,656 boards), before → after, with
+`responder-rebids.bid`:
+
+| | before | after |
+|---|---|---|
+| calls agreeing | 89,583 (85.2%) | **89,841 (85.4%)** |
+| identical auctions | 41.1% | **41.5%** |
+| same final contract | 54.6% | **56.2%** |
+| par, net IMPs vs BBA | -5,806 | **-4,971** |
+| no rule in a live auction | 4,941 | **3,863** |
+| passed a forcing auction | 1 | 5 |
+| trump fit under 7 cards | 127 | 128 |
+| contradicts earlier calls | 0 | 1 |
+
+Whole corpus (342 scenarios, 170,161 boards):
+
+| | before | after |
+|---|---|---|
+| calls agreeing | 1,334,882 (75.1%) | **1,340,690 (75.4%)** |
+| identical auctions | 15.0% | **15.4%** |
+| same final contract | 28.8% | **30.1%** |
+| par, net IMPs vs BBA | -213,199 | **-200,197** |
+| no rule in a live auction | 147,686 | **112,025** |
+| passed a forcing auction | 1,838 | **102** |
+| trump fit under 7 cards | 3,143 | **2,949** |
+| contradicts earlier calls | 28 | 43 |
+
+The two tables above are measured against the tree these files were
+written from (78cb267). Re-measured on top of the notrump-under-
+interference work that landed while they were being written (dbe10ec),
+the same six files give the same picture: subset calls 89,635 (85.3%) →
+89,892 (85.5%), same contract 54.6% → 56.2%, no rule 4,890 → 3,825;
+corpus calls 1,336,873 (75.2%) → 1,342,617 (75.5%), identical auctions
+15.1% → 15.5%, same contract 28.9% → 30.2%, par -214,172 → -201,138
+IMPs, no rule 143,210 → 108,381, passed a forcing auction 1,838 → 102,
+short fits 3,239 → 3,020.
+
+258 scenarios moved, +5,808 calls and +2,152 contracts in all. Biggest
+movers: Competitive_Doubles +303 calls, Trap_Pass +254,
+Snapdragon_Double +176, Trap_Pass_Maybe +157, Double_Showing_2_Suits
++149, Robot_Free_Bid +136, Opps_Takeout_X +131, WB5_Collante +125.
+
+Every contested opener-rebid cluster on the subset went to zero: the
+seven the competitive notes listed (68, 65, 60, 55, 51, 50, 48 boards)
+and thirteen more, 911 points in all. Corpus-wide the `1x (…)` clusters
+of 200 boards or more fell from 46,309 to 7,100, and what is left there
+is `1x (1N)` (5,584, their 1NT overcall — not written anywhere) and
+`1x (P)` (782, responder with no call at all).
+
+No divergence point in these contexts appears in the twenty most
+expensive by IMPs, on the subset or corpus-wide.
+
+### Accepted differences from BBA
+
+- **Opener invites over a contested raise where BBA passes.** The ladder
+  is the uncontested one (pass to 16 support points, invite 17-18), and
+  partner's contested raise shows a point or two less than an
+  uncontested one, so we invite on a handful of hands BBA passes: +11
+  new disagreements at `1x (2y) 2x (P)` and `1x (X) 2x (P)`. In exchange
+  the same two auctions lost 14 where BBA bid game and we had no rule.
+  Keeping one ladder is worth more than the eleven calls.
+- **We pass a two-level notrump rebid that BBA also passes, but we rank
+  it differently.** Over partner's two-level free bid a 12-15 balanced
+  hand with a stopper is ranked *below* the pass (priority -5), so the
+  2NT rebid only appears when our own rules have made the auction
+  forcing. That is what BBA does in practice and it is worth 8 calls.
+- **Opener never doubles them for penalty after partner's redouble.**
+  BBA does not either on these cards, and the redoubler is better placed
+  to judge; opener passes and leaves it to him (`responder-rebids.bid`
+  then doubles with four of their suit).
+- **A 15-17 balanced hand with no fit, no six-card suit and no reverse
+  rebids 2NT** (priority -4, so only when nothing else fits). Under
+  Rick's 12-14 ruling 1NT would be a lie. On a card whose 1NT opening is
+  15-17 the hand never arises; it appears in the strong-club scenarios,
+  where it was 279 of the corpus's broken forces.
+
+### Tried and rejected
+
+- **New suits by opener when they have bid again.** The second-suit
+  rules were first written in the `1x (*) 1z (*)` context, where they
+  also fired after `1x (1y) 1z (2y)` and produced three-level bids BBA
+  passes. They now live in the trailing-`(P)` context only: opener shows
+  a second suit when partner's free bid is still unanswered, and
+  competes with a fit or a big hand when they have bid again.
+
+### Gaps and open questions
+
+- **Their 1NT overcall** was the largest single hole left after this
+  work (5,584 boards: `after 1x (1y)` binds a suit, so nothing fired
+  after `1x (1N)`). It was closed independently by
+  `competitive/their-1nt-overcall.bid` (dbe10ec) while these blocks were
+  being written, which is why the merged corpus numbers above are better
+  than either change on its own.
+- **For Rick.** Opener's reopening double (`1x (2y) P (P) X`) is written
+  as 12+ with a doubleton or shorter in their suit and three cards in
+  each other suit, or 16+ with any shape. BBA reopens with 12-17 and
+  0-2 in their suit. Is the three-card requirement in every other suit
+  right for an opening bidder, or should a long suit of his own reopen
+  with the double as well?
+- **For Rick.** Over partner's two-level free bid opener raises with
+  three cards when partner has promised five (`1x (1y) 2z (P) 3z`). BBA
+  does the same with 14, but on the cards where the free bid shows only
+  8 total points this gets high quickly. Is three-card support enough at
+  the three level?
+- Opener's third call in a contested auction is answered only through
+  `ask=signoff` and `ask=invite`. The calls that set neither — the
+  reopening double, the second suit at the one level — are answered by
+  the new blocks in `responder-rebids.bid`, but only for the patterns
+  that occur often; the long tail is still open.
+- `contradicts earlier calls` went 28 → 43 corpus-wide. About eleven of
+  the new ones are in these contexts: `when asked signoff`'s "raise with
+  the fit" fires for a player who has already denied the length. The
+  rule needs a `maybe` on its own shown length, which is
+  `rebids.bid`'s to fix in the next pass.

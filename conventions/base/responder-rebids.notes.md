@@ -131,3 +131,62 @@ calls 89,437 → 89,506, identical auctions 41.3% → 41.4%, same contract
   nothing but a preference fits. `responses.bid` decides which hands bid
   a two-over-one at all; if it required 11 notrump points or a real
   suit, several of these would not arise.
+
+## Responder's second call once they have come in (2026-09-23)
+
+Written alongside the contested opener rebids (`rebids.notes.md`),
+because opener's new calls need an answer and because responder's own
+second call was the next dead turn in every one of those auctions.
+
+Opener's contested rebids set `ask=signoff` or `ask=invite(suit)`
+wherever they are limited, and the state blocks in `rebids.bid` answer
+those whatever the auction was. Four things set no ask, and each has a
+block here:
+
+- **opener's answer to our negative double** (`1x (*) X (*) 1z/2z/3z`,
+  and a separate one for his notrump answer). The double showed 6+ and
+  four cards in each unbid major, so responder is usually done: BBA
+  passes 16 of the 24 positions in the Basic-Bridge scenarios with 6-10.
+  We pass to 10, raise his suit with four and 11-12, bid the game with
+  13, and put notrump below the fit (`priority -1`) because opener's
+  answer may be a three-card major — `partner.z>=3`, not `>=4`, is what
+  lets the raise fire at all.
+- **opener's rebids after our redouble**, and the auctions where he
+  passes them back: responder doubles with four of their suit, goes back
+  to opener's suit with three, or bids his own five-card major. BBA bids
+  2x/3x on these with 10-11 and never doubles; we keep the penalty
+  double, because the redouble said we own the hand and somebody has to
+  be able to collect.
+- **opener's reopening double** (`1x (2y) P (P) X`): responder takes it
+  out in his longest suit, passes it with four of theirs, or returns to
+  opener's suit.
+- **opener's second suit over their call** (`1x (*) 1y (*) 1z/2z`), the
+  mirror of the uncontested blocks above. Our own rules make a contested
+  reverse forcing, and 58 corpus broken forces were responder with no
+  answer to one.
+
+Two blocks are pass-by-rule rather than pass-by-accident: when both
+partners have passed and they have stopped (`1x (*) P (*) P (P)`, which
+BBA passes 6 of 6 with 3-9), and when they bid over our negative double
+and opener passed it out — there responder needs 11+ to bid again.
+
+### Numbers
+
+Included in the totals in `rebids.notes.md`. On their own these blocks
+were worth +26 calls and about -390 no-rule points on the Basic-Bridge
+subset,
+and corpus-wide they closed `1x (1y) X (P) 2x (P)` (1,235 boards),
+`1x (1y) X (2y) P (P)` (958), `1x (1y) X (P) 2z (P)` (738),
+`1x (1y) X (3y) P (P)` (724), `1x (X) XX (1y/2y) P (P)` (1,471),
+`1x (2y) P (P) X (P)` (646) and `1x (1y) X (P) 1N (P)` (404).
+
+### Open questions
+
+- Responder's double of their escape after our redouble is written as
+  four cards in their suit and nothing else. BBA never doubles there, so
+  the corpus cannot settle whether that is too free; it needs a probe of
+  its own.
+- `1x (1y) X (P) 2x (P)` is written against `z` bound to opener's
+  answer, which may be his own suit repeated. A repeat shows six, so
+  raising it with four is an eleven-card fit and the rule is generous
+  about the level. BBA's sample here is three hands.
