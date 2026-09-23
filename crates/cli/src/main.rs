@@ -45,6 +45,10 @@ enum Command {
         /// How many divergence points to list.
         #[arg(long, default_value_t = 25)]
         top: usize,
+        /// Order the divergence points by what they cost against par
+        /// rather than by how often they happen.
+        #[arg(long)]
+        by_imps: bool,
         /// How many scenarios to list (worst first).
         #[arg(long, default_value_t = 30)]
         worst: usize,
@@ -217,6 +221,7 @@ fn run(cli: Cli) -> Result<()> {
             par,
             dd_cache,
             top,
+            by_imps,
             worst,
             json,
         } => {
@@ -228,7 +233,7 @@ fn run(cli: Cli) -> Result<()> {
                 par,
                 dd_cache,
             };
-            compare(&opts, top, worst, json.as_deref())
+            compare(&opts, top, by_imps, worst, json.as_deref())
         }
         Command::Probe {
             hands,
@@ -399,6 +404,7 @@ fn pct(x: f64) -> String {
 fn compare(
     opts: &rbb_compare::Options,
     top: usize,
+    by_imps: bool,
     worst: usize,
     json: Option<&Path>,
 ) -> Result<()> {
@@ -507,12 +513,18 @@ fn compare(
     println!("  scoring:    {}", rates(&t.by_scoring));
     println!("  generator:  {}", rates(&t.by_generator));
 
-    println!("\nmost common divergence points:");
+    let mut points: Vec<&rbb_compare::Divergence> = s.divergences.iter().collect();
+    if by_imps {
+        points.sort_by_key(|d| d.imps);
+        println!("\nmost expensive divergence points (IMPs against par, ours minus BBA's):");
+    } else {
+        println!("\nmost common divergence points:");
+    }
     println!(
-        "  {:>5}  {:28} {:>5} {:>5}  scenarios",
-        "count", "auction so far", "BBA", "ours"
+        "  {:>5} {:>7}  {:28} {:>5} {:>5}  scenarios",
+        "count", "IMPs", "auction so far", "BBA", "ours"
     );
-    for d in s.divergences.iter().take(top) {
+    for d in points.into_iter().take(top) {
         let auction = if d.auction.is_empty() {
             "(opening)".to_string()
         } else {
@@ -529,8 +541,8 @@ fn compare(
             names += &format!(" +{}", d.scenarios.len() - 3);
         }
         println!(
-            "  {:>5}  {:28} {:>5} {:>5}  {names}",
-            d.count, auction, d.reference, d.ours
+            "  {:>5} {:>+7}  {:28} {:>5} {:>5}  {names}",
+            d.count, d.imps, auction, d.reference, d.ours
         );
     }
 

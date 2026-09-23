@@ -330,6 +330,10 @@ A desktop app in Rust. **Decided: egui/eframe**, the simplest choice for a
 data-heavy tool (tables, histograms, inspectors), and it can also build for
 the web. Bridge-Classroom's Vue components (hands, DD tables) are the path if this later becomes a web interface.
 
+- **Divergence list**: each point carries what it costs against par (our
+  contract's IMP distance from par subtracted from BBA's, over the boards
+  where the two differ), so the work queue can be read by price as well as
+  by frequency: `rbb compare --by-imps`, or the "by IMPs" box in the GUI.
 - **Scenario list**: match %, contract match %, par IMPs vs BBA; sortable and
   filterable.
 - **Divergence view** for the selected scenario, or all of them: histogram,

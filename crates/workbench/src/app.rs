@@ -94,6 +94,9 @@ struct DivRow {
     reference: String,
     ours: String,
     boards: Vec<usize>,
+    /// What the difference is worth against par, summed over the boards
+    /// where the contracts differ. Negative: our call costs.
+    imps: i64,
 }
 
 pub struct App {
@@ -127,6 +130,9 @@ pub struct App {
     prob: Option<usize>,
     /// Text filter on the divergence table.
     div_filter: String,
+    /// Order the divergence table by what each point costs against par
+    /// rather than by how many boards it covers.
+    div_by_imps: bool,
     board: Option<usize>,
     detail: Option<Detail>,
     /// Double-dummy tables, opened on first use (on the solver thread).
@@ -171,6 +177,7 @@ impl App {
             probs: Vec::new(),
             prob: None,
             div_filter: String::new(),
+            div_by_imps: false,
             board: None,
             detail: None,
             dd: Arc::new(OnceLock::new()),
@@ -332,23 +339,40 @@ impl App {
                     reference: key.1.clone(),
                     ours: key.2.clone(),
                     boards: vec![],
+                    imps: 0,
                 });
                 self.divs.len() - 1
             });
             self.divs[n].boards.push(i);
+            if let Some(p) = &b.par {
+                let ours = rbb_compare::par::imps((p.ours_ns - p.par_ns).abs());
+                let reference = rbb_compare::par::imps((p.reference_ns - p.par_ns).abs());
+                self.divs[n].imps += (reference - ours) as i64;
+            }
         }
         self.rebuild_probs();
-        self.divs.sort_by(|a, b| {
-            b.boards
-                .len()
-                .cmp(&a.boards.len())
-                .then(a.auction.cmp(&b.auction))
-        });
+        self.sort_divs();
         if let Some((a, r, o)) = keep {
             self.div = self
                 .divs
                 .iter()
                 .position(|d| d.auction == a && d.reference == r && d.ours == o);
+        }
+    }
+
+    /// Order the divergence table: by what each point costs against par,
+    /// worst first, or by how many boards it covers.
+    fn sort_divs(&mut self) {
+        if self.div_by_imps {
+            self.divs
+                .sort_by(|a, b| a.imps.cmp(&b.imps).then(a.auction.cmp(&b.auction)));
+        } else {
+            self.divs.sort_by(|a, b| {
+                b.boards
+                    .len()
+                    .cmp(&a.boards.len())
+                    .then(a.auction.cmp(&b.auction))
+            });
         }
     }
 
@@ -969,6 +993,22 @@ impl App {
             if !self.div_filter.is_empty() && ui.small_button("✕").clicked() {
                 self.div_filter.clear();
             }
+            if ui
+                .checkbox(&mut self.div_by_imps, "by IMPs")
+                .on_hover_text("order by what each point costs against par, worst first")
+                .changed()
+            {
+                let keep = self
+                    .div
+                    .and_then(|i| self.divs.get(i))
+                    .map(|d| (d.auction.clone(), d.reference.clone(), d.ours.clone()));
+                self.sort_divs();
+                self.div = keep.and_then(|(a, r, o)| {
+                    self.divs
+                        .iter()
+                        .position(|d| d.auction == a && d.reference == r && d.ours == o)
+                });
+            }
             ui.label(
                 RichText::new(
                     "matches the auction followed by BBA's call, or either call alone; pick \"All scenarios\" to search everywhere",
@@ -1003,11 +1043,19 @@ impl App {
             .striped(true)
             .sense(Sense::click())
             .column(Column::auto().at_least(50.0))
+            .column(Column::auto().at_least(50.0))
             .column(Column::initial(260.0).clip(true))
             .columns(Column::auto().at_least(40.0), 2)
             .column(Column::remainder().clip(true))
             .header(20.0, |mut h| {
-                for t in ["boards", "auction so far", "BBA", "ours", "scenarios"] {
+                for t in [
+                    "boards",
+                    "IMPs",
+                    "auction so far",
+                    "BBA",
+                    "ours",
+                    "scenarios",
+                ] {
                     h.col(|ui| {
                         ui.strong(t);
                     });
@@ -1020,6 +1068,12 @@ impl App {
                     row.set_selected(self.div == Some(i));
                     row.col(|ui| {
                         ui.label(d.boards.len().to_string());
+                    });
+                    row.col(|ui| {
+                        if d.imps != 0 {
+                            let color = if d.imps < 0 { BAD } else { GOOD };
+                            ui.label(RichText::new(format!("{:+}", d.imps)).color(color));
+                        }
                     });
                     row.col(|ui| {
                         ui.monospace(if d.auction.is_empty() {

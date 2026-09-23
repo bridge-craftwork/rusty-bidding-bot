@@ -161,6 +161,11 @@ pub struct Divergence {
     pub reference: String,
     pub ours: String,
     pub count: usize,
+    /// What the difference is worth: summed over the boards where the two
+    /// sides reached different contracts and the deal has a double-dummy
+    /// table, our contract's IMP distance from par subtracted from the
+    /// reference's. Negative means our call costs.
+    pub imps: i64,
     /// Up to five `(board index in Report::boards)`, for the A/B view.
     pub examples: Vec<usize>,
     pub scenarios: Vec<String>,
@@ -226,10 +231,16 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
                 reference: key.1.clone(),
                 ours: key.2.clone(),
                 count: 0,
+                imps: 0,
                 examples: Vec::new(),
                 scenarios: Vec::new(),
             });
             e.count += 1;
+            if let Some(p) = &b.par {
+                let ours = imps((p.ours_ns - p.par_ns).abs());
+                let reference = imps((p.reference_ns - p.par_ns).abs());
+                e.imps += (reference - ours) as i64;
+            }
             if e.examples.len() < 5 {
                 e.examples.push(i);
             }

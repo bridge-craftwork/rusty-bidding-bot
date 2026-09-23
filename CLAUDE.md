@@ -46,6 +46,8 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   `OptimumResultTable`; `--par` solves the deals that have none.
   A scenario argument may be a pattern: `compare 'Basic_*'`, quoted so the
   shell leaves it alone. The workbench takes the same arguments.
+  `--by-imps` orders the divergence points by what they cost against par
+  instead of by how often they happen.
 - `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
