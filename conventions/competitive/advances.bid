@@ -1,25 +1,35 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 #
-# Advancer: partner has overcalled at the one level and RHO has passed.
+# Advancer: partner has overcalled, and it is our turn.
 #
-# Ranges follow BBA's Basic-Bridge meanings, which are the usual ones: a
-# raise is 7-11 total points with three-card support, a new suit at the
-# one level 8+ with four cards, at the two level 9+ with five, and 1NT
-# 8-11 balanced with a stopper in their suit. The jump raise is weak.
+# Ranges follow BBA's Basic-Bridge meanings, which are the usual ones.
+# Over a one-level overcall a raise is 7-11 total points with three-card
+# support, a new suit 8+ with four cards at the one level and 9+ with
+# five at the two, 1NT 8-11 balanced with a stopper in their suit, and
+# the cue bid of their suit a limit raise or better (12+ with three).
+# The jump raise is weak.
 #
 # An overcall is not forcing, so advancer passes with less; there is no
 # forced bid here as there is after a takeout double.
 #
-# Not written yet: advances of a two-level or jump overcall, of a 1NT
-# overcall (BBA plays systems on: Stayman and transfers), advancer after
-# RHO has bid, and the cue-bid raise.
+# The file then covers, in order: advancer when RHO does not pass, the
+# balancing overcall (partner is 8-15 there, so everything costs about
+# two points more), the two-level overcall — simple or a weak jump, and
+# they need different answers — advancer over RHO's 1NT, and the
+# overcaller's reply to the cue-bid raise.
+#
+# Not written yet: advancer's continuations once the overcaller has
+# rebid, and the support cue bid.
+#
+# Advancing a 1NT overcall needs nothing here: systems are on, and the
+# notrump modules carry the `(1x) 1N (P)` spelling of their patterns.
 
 module advances "Advancing partner's overcall"
   needs  base
   needs  overcalls
   param  jump_raise = overcalls.responses.jump_raise default weak
 
-after (1x) 1y (P) | (1x) P (P) 1y (P)
+after (1x) 1y (P)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
   3{y} "Preemptive raise: four-card support, less than 8 total points"
@@ -42,7 +52,51 @@ after (1x) 1y (P) | (1x) P (P) 1y (P)
   cheapest(H) "9+ total points, five or more hearts"
       shows H>=5, hcp+length_points>=9
       when  x is not H, y is not H
+  2{x} "Cue bid: limit raise or better in {y}"
+      alert  artificial
+      shows  y>=3, hcp+length_points>=12
+      sets   forcing=round, ask=cue_raise(y)
+  2N  "12-15 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=12, hcp+length_points<=15
+      when  stop(x), y<=2
   P   "Not enough to advance"  priority -10
+
+# ── Advancing a balancing overcall ───────────────────────────────────
+# Partner reopened, so he is 8-15 rather than 8-17 and some of his values
+# are borrowed from us: everything costs about two points more than in
+# the direct seat. BBA's Balancing meanings: the raise 9-11, 1NT 10-11,
+# a new suit at the one level 7-9, the cue bid 13+.
+after (1x) P (P) 1y (P)
+  2{y} "Raise: 9-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=9, hcp+length_points<=11
+  3{y} "Preemptive raise: four-card support, less than 9 total points"
+      shows y>=4, hcp+length_points<=8
+      when  jump_raise is weak
+  1S  "7+ total points, four or more spades"
+      shows S>=4, hcp+length_points>=7
+      when  x is not S, y is not S
+  1N  "10-11 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=10, hcp+length_points<=11
+      when  stop(x)
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+      when  y<=2 | y is C | y is D
+  cheapest(C) "11+ total points, five or more clubs"
+      shows C>=5, hcp+length_points>=11
+      when  x is not C, y is not C
+  cheapest(D) "11+ total points, five or more diamonds"
+      shows D>=5, hcp+length_points>=11
+      when  x is not D, y is not D
+  cheapest(H) "11+ total points, five or more hearts"
+      shows H>=5, hcp+length_points>=11
+      when  x is not H, y is not H
+  2{x} "Cue bid: limit raise or better in {y}"
+      alert  artificial
+      shows  y>=3, hcp+length_points>=13
+      sets   forcing=round, ask=cue_raise(y)
+  2N  "13-15 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=13, hcp+length_points<=15
+      when  stop(x), y<=2
+  P   "Not enough to advance a reopening bid"  priority -10
 
 # ── Advancer when RHO does not pass ──────────────────────────────────
 # RHO has doubled or bid over the overcall. Support is still the first
@@ -76,3 +130,94 @@ after (1x) 1y (2z) | (1x) P (P) 1y (2z)
   3{y} "Raise to the three level: four-card support, 8-11 total points"
       shows y>=4, hcp+length_points>=8, hcp+length_points<=11
   P   "Nothing to say over their bid"  priority -10
+
+# ── Advancing a two-level overcall ───────────────────────────────────
+# `(*)` is any call by RHO, so this covers the seat however he has
+# answered the overcall, and passing is much the commonest advance.
+#
+# `y is not x` throughout: their opening bid repeated by partner would
+# be a cue bid (Michaels), not an overcall.
+after (1x) 2y (*) | (1x) P (P) 2y (*) when y is not x
+  P   "Not enough to advance"  priority -10
+
+# Advancer bids only while RHO has left him room: his pass, his double,
+# or his simple raise of their own suit. Once RHO has bid a suit of his
+# own, or notrump, or jumped, BBA's advancer passes, and so do we — the
+# context above is then the only one that matches. A two-level overcall
+# in the balancing seat is passed out for the same reason.
+
+# A weak jump overcall is a six-card suit, so three-card support is nine
+# trumps and the raise is a further preempt: partner is not invited to
+# do anything. The `when` is the complement of the simple-overcall one
+# below: "y could have been bid at the one level over x".
+after (1x) 2y (P) | (1x) 2y (X) | (1x) 2y (2x) when y is not x, x is C | (x is D, y is not C) | (x is H, y is S)
+  4{y} "Raise to game: four-card support and 11+, with no cue bid to make"
+      shows y>=4, hcp+length_points>=11
+      when  y is H | y is S
+  3{y} "Preemptive raise: three-card support for a major, less than 11"
+      shows y>=3, hcp+length_points<=10
+      when  y is H | y is S
+  3{y} "Preemptive raise: four-card support for a minor, less than 11"
+      shows y>=4, hcp+length_points<=10
+      when  y is C | y is D
+
+# The rest only when the overcall was a *simple* two-level overcall,
+# where partner has 12-17 and an opening hand to go with it. The `when`
+# spells out "y could not have been bid at the one level over x": over
+# 1C every two-level suit is a jump, over 1D only clubs is simple, over
+# 1H everything but spades, and over 1S all three.
+after (1x) 2y (P) | (1x) 2y (X) | (1x) 2y (2x) when y is not x, x is S | (x is H, y is not S) | (x is D, y is C)
+  4{y} "Raise to game in partner's major: four-card support, 13+"
+      shows y>=4, hcp+length_points>=13
+      when  y is H | y is S
+  3{y} "Raise: 7-10 total points, four-card support"
+      shows y>=4, hcp+length_points>=7, hcp+length_points<=10
+  cheapest(x) "Cue bid: limit raise or better in {y}"
+      alert  artificial
+      shows  y>=3, hcp+length_points>=11
+      sets   forcing=round, ask=cue_raise(y)
+  2N  "11-12 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=11, hcp+length_points<=12
+      when  stop(x), y<=2
+  3N  "13+ total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=13
+      when  stop(x), y<=2
+  cheapest(S) "10+ total points, five or more spades"
+      shows S>=5, hcp+length_points>=10
+      when  x is not S, y is not S
+  cheapest(H) "10+ total points, five or more hearts"
+      shows H>=5, S<=4, hcp+length_points>=10
+      when  x is not H, y is not H
+  cheapest(D) "12+ total points, five or more diamonds"
+      shows D>=5, S<=4, H<=4, hcp+length_points>=12
+      when  x is not D, y is not D
+  cheapest(C) "12+ total points, five or more clubs"
+      shows C>=5, S<=4, H<=4, hcp+length_points>=12
+      when  x is not C, y is not C
+
+# ── Advancer over RHO's 1NT ──────────────────────────────────────────
+# `after (1x) 1y (1z)` binds a suit, so RHO's 1NT left advancer with no
+# rule at all. Support is still the first thing to show.
+after (1x) 1y (1N) | (1x) P (P) 1y (1N)
+  2{y} "Raise: 9-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=9, hcp+length_points<=11
+  cheapest(x) "Cue bid: limit raise or better in {y}"
+      alert  artificial
+      shows  y>=3, hcp+length_points>=12
+      sets   forcing=round, ask=cue_raise(y)
+  P   "Nothing to say over their notrump"  priority -10
+
+# ── The overcaller answers advancer's cue bid ────────────────────────
+# The cue showed three-card support and a limit raise or better, so the
+# overcall's own range decides: a minimum signs off in the suit, and
+# 13+ total points bids the game. Written against the question, so it is
+# the same rule whatever level the cue was made at.
+when asked cue_raise(t)
+  4{t} "Accepts: game in {t}"
+      shows hcp+length_points>=13
+      when  t is H | t is S
+  3N  "Accepts: 13+ balanced, game in notrump"
+      shows balanced, hcp+length_points>=13
+      when  t is C | t is D
+  cheapest(t) "Minimum overcall: no game opposite a limit raise"
+      priority -1

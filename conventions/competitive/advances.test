@@ -16,3 +16,34 @@ N KQ5.J72.Q93.T874          | 1D 1S X  | 2S     | three spades and 8 HCP: raise 
 N K8542.J72.93.T87          | 1D 1S X  | 3S     | five spades and 5 HCP: preempt them
 N KQ5.J72.Q93.T874          | 1D 1S 2H | 2S     | the raise still comes first
 N 843.J72.932.T874          | 1D 1S 2H | P      | 1 HCP: pass
+
+# ── Advancing a two-level overcall ───────────────────────────────────
+# Corpus hands where BBA makes the same call (Basic_Overcall,
+# Basic_Minor, Basic_Major, dealer E throughout).
+N AT52.T7.K95.QT53          | 1D 2C P  | 3C  | four clubs and 8 total points: the raise
+N AK42.72.T9.JT742          | 1D 2C P  | 3C  | five clubs and 8 total points
+N J853.Q52.43.A942          | 1H 2C P  | 3C  | four clubs and 7 total points
+N AQT862.J9.QJ6.73          | 1D 2C P  | 2S  | six spades and 12 total points: a new suit
+N 72.AT9732.A6.Q75          | 1S 2C P  | 2H  | six hearts and 11 total points
+N 42.K8742.A63.AT2          | 1S 2H P  | 2S  | five hearts and 12 total points: cue, do not blast
+N T87.Q865.Q3.9764          | 1H 2C 2H | P   | 4 HCP: nothing to advance with
+N QJ3.QJ.T74.98543          | 1H 2C 2H | 3C  | five clubs and 7 total points over their raise
+N KT93.4.K864.J743          | 1H 2D 2H | 3D  | four diamonds and 7 total points
+
+# A two-level overcall over 1C, or in a suit that ranks above theirs, is
+# a weak jump: three-card support in a major is enough to raise.
+N J765.AJ97.Q3.942          | 1C 2S P  | 3S  | four spades opposite a weak jump: preempt further
+
+# ── Advancer over RHO's 1NT ──────────────────────────────────────────
+N KJT862.T87.3.A76          | 1D 1H 1N | 2H  | three hearts and 10 total points
+N 86.Q92.86.AQJT75          | 1D 1H 1N | 2H  | three hearts and 11 total points
+N 963.J83.K4.98763          | 1D 1H 1N | P   | 4 HCP: pass
+
+# ── Advancing a balancing overcall ───────────────────────────────────
+# Partner is 8-15 there, so everything costs about two points more.
+# `Balancing` hands, dealer E, advancer is South.
+S K92.6432.KJ5.QJ7          | 1C P P 1S P | 2S  | three spades and 10 HCP: the raise
+S 732.J632.KQT.AT8          | 1H P P 1S P | 2S  | three spades and 10 HCP
+S 83.KT32.J62.KQT9          | 1D P P 1S P | P   | 9 total points with a doubleton: not enough
+S 83.K94.Q743.KQJ8          | 1D P P 1S P | 1N  | 11 HCP balanced with a diamond stopper
+S K7532.A852.872.2          | 1C P P 1D P | 1S  | five spades and 8 HCP

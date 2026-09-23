@@ -38,3 +38,20 @@ S K54.Q76.AQ3.KJ62          | 1H 3C   | 4C     | 15 HCP: the cue bid at the thre
 # Opener answers the double at the level the overcall forced.
 N A2.KQJ654.K873.T         | 1H 2C X P | 2H    | six hearts, minimum
 N K862.KQJ65.A4.T7         | 1H 2C X P | 2S    | four spades for the double
+
+# Opener answers a negative double with no major of his own: an unbid
+# four-card minor, then three cards in the major partner promised, then
+# five cards in his own suit. Corpus hands (Basic_Minor, Basic_Overcall)
+# where BBA makes the same call.
+N 754.AQ.AQ52.QT74          | 1D 1S X P | 2C  | four clubs: a new suit before rebidding a four-card one
+N 8.A9.KJ643.AT543          | 1D 1H X P | 2C  | five clubs beside five diamonds
+N 762.KQ4.AQ85.J97          | 1D 1S X P | 2H  | three hearts is the fit partner promised
+N K964.K4.AT.AQJT9          | 1C 1S X P | 2C  | five clubs, no major and no spade stopper
+N A63.AT92.A.AQJ43          | 1C 1S X P | 4H  | four hearts and 19 HCP: bid the game
+
+# Opener when they compete over the negative double: a four-card major
+# at the cheapest level, a six-card suit with the values, else pass.
+N 865.AKT6.94.AK84          | 1C 1D X 2D | 2H | four hearts, competing
+N K3.K2.A98752.QJ4          | 1D 1H X 2H | 3D | six diamonds and 13 HCP
+N A75.J642.AK543.Q          | 1D 1H X 2H | P  | a minimum with nothing to add
+N 762.KQ4.AQ85.J97          | 1D 1S X 2S | P  | the three-card fit is not worth the three level

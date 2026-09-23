@@ -29,10 +29,23 @@ calls). Grouped by the opening they reopened over:
 | suit, two level | "bidable suit", 10-15, 5+ |
 | cue bid | Michaels (not on our card) |
 
-Advancer needs no new rules: the advance contexts in `takeout-double.bid`
-and `advances.bid` now carry the balancing spelling of their patterns
-(`(1x) P (P) X (P)` beside `(1x) X (P)`), and the notrump modules carry
-`(1x) P (P) 1N (P)`, so systems are on over the balancing notrump too.
+Advancer over the reopening **double** needs no new rules: those
+contexts in `takeout-double.bid` carry the balancing spelling of their
+patterns (`(1x) P (P) X (P)` beside `(1x) X (P)`), and the notrump
+modules carry `(1x) P (P) 1N (P)`, so systems are on over the balancing
+notrump too.
+
+Advancer over the reopening **suit bid** now has its own block in
+`advances.bid` (2026-09-23): partner is 8-15 rather than 8-17, so the
+raise is 9-11 rather than 7-11, 1NT is 10-11, 2NT 13-15, a new suit at
+the one level 7+ and at the two level 11+, and the cue bid 13+. Those
+are BBA's own `Balancing` meanings. The direct-seat block no longer
+carries the `(1x) P (P) 1y (P)` spelling. Effect over the three
+balancing scenarios: calls +5, contracts 11.7% → 12.1%, par +98 IMPs,
+identical auctions 8.7% → 8.1%.
+
+A two-level overcall in the balancing seat is left to the bare pass rule
+in `advances.bid`: BBA's advancer passed 32 of the 33 in the corpus.
 
 Effect: the `Balancing` scenario gained 6.7 points of call agreement,
 11.0 of identical auctions and 13.4 of contracts; Too_Strong_for_Overcall4th
@@ -48,5 +61,6 @@ the 46 scenarios that moved: calls +29.8, contracts +11.0, auctions -6.8
   double of 1NT.
 - Michaels and the unusual notrump in balancing (`competitive.michaels`
   is off on our cards).
-- Partner should read a reopening double as lighter than a direct one;
-  the advance rules use the direct-seat ranges for both.
+- Partner should read a reopening **double** as lighter than a direct
+  one; those advance rules still use the direct-seat ranges (the suit
+  overcall no longer does).
