@@ -19,7 +19,7 @@ module advances "Advancing partner's overcall"
   needs  overcalls
   param  jump_raise = overcalls.responses.jump_raise default weak
 
-after (1x) 1y (P)
+after (1x) 1y (P) | (1x) P (P) 1y (P)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
   3{y} "Preemptive raise: four-card support, less than 8 total points"
@@ -47,14 +47,14 @@ after (1x) 1y (P)
 # ── Advancer when RHO does not pass ──────────────────────────────────
 # RHO has doubled or bid over the overcall. Support is still the first
 # thing to show, and raising at once takes bidding room from them.
-after (1x) 1y (X)
+after (1x) 1y (X) | (1x) P (P) 1y (X)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
   3{y} "Preemptive raise: four-card support, less than 8 total points"
       shows y>=4, hcp+length_points<=7
   P   "Nothing to say over their double"  priority -10
 
-after (1x) 1y (1z)
+after (1x) 1y (1z) | (1x) P (P) 1y (1z)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
   3{y} "Preemptive raise: four-card support, less than 8 total points"
@@ -70,7 +70,7 @@ after (1x) 1y (1z)
       when  x is not H, y is not H, z is not H
   P   "Nothing to say over their bid"  priority -10
 
-after (1x) 1y (2z)
+after (1x) 1y (2z) | (1x) P (P) 1y (2z)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
   3{y} "Raise to the three level: four-card support, 8-11 total points"

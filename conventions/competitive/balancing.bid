@@ -1,0 +1,55 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The balancing seat: they opened, partner passed, and RHO passed too.
+# Partner is marked with values, so everything is lighter than in the
+# direct seat (Rick, 2026-09-22, following BBA's Basic-Bridge meanings):
+#
+# - the reopening double is 8+ total points with three or more cards in
+#   every unbid suit, or 18+ with any shape;
+# - a suit at the one level is 8-15 total points with five cards, at the
+#   two level 10-15;
+# - 1NT is 12-15 balanced with a stopper, not the 15-18 of the direct
+#   seat, and 2NT is 19-21.
+#
+# Systems are on over the balancing 1NT: the notrump modules carry the
+# `(1x) P (P) 1N (P)` spelling of their patterns.
+
+module balancing "The balancing seat"
+  needs  base
+  needs  overcalls
+  param  one_min = overcalls.one_level_min default 8
+  param  two_min = overcalls.two_level_min default 12
+  param  nt_min  = nt_overcalls.balance.range_min default 12
+  param  nt_max  = nt_overcalls.balance.range_max default 15
+  param  oc_max  = overcalls.one_level_max default 17
+
+# ── Reopening ────────────────────────────────────────────────────────
+after (1x) P (P)
+  X   "Reopening double: 8+ total points and the unbid suits"
+      shows hcp+length_points>=8
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)) | hcp+length_points>=oc_max+1
+  1S  "Reopening: five spades, 8-15 total points"
+      shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=one_min, hcp+length_points<=15
+      when  x is not S
+  1H  "Reopening: five hearts, 8-15 total points"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=one_min, hcp+length_points<=15
+      when  x is not H
+  1D  "Reopening: five diamonds, 8-15 total points"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=one_min, hcp+length_points<=15
+      when  x is not D
+  2C  "Reopening: five clubs, 10-15 total points"
+      shows C>=5, C>S, C>H, C>D, hcp+length_points>=two_min-2, hcp+length_points<=15
+      when  x is not C
+  2D  "Reopening: five diamonds, 10-15 total points"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=two_min-2, hcp+length_points<=15
+      when  x is not D, x is not C
+  2H  "Reopening: five hearts, 10-15 total points"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=two_min-2, hcp+length_points<=15
+      when  x is not H, x is not D, x is not C
+  1N  "Balancing notrump: {nt_min}-{nt_max} balanced with a stopper in {x}"
+      shows balanced, hcp>=nt_min, hcp<=nt_max
+      when  stop(x)
+  2N  "19-21 balanced with a stopper in {x}"
+      shows balanced, hcp=19..21
+      when  stop(x)
+  P   "Nothing to reopen with"  priority -10

@@ -1,0 +1,19 @@
+# The balancing seat: they opened, two passes, our call.
+card    Basic-Bridge
+dealer  E
+vul     None
+
+# seat hand                 | auction | expect | why
+N KJ54.Q762.A3.876          | 1D P P  | X      | 10 HCP with the unbid suits: reopen
+N KQJ54.Q7.A93.876          | 1D P P  | 1S     | five spades and 11 total points
+N KQJ54.Q7.93.8763          | 1S P P  | P      | five spades behind theirs: nothing to reopen with
+N KJ4.QJ6.AQ3.8765          | 1D P P  | 1NT    | 13 balanced with a diamond stopper
+N KJ4.QJ6.AQ3.K876          | 1D P P  | X      | 16 is too strong for the balancing notrump
+N AQ4.KJ6.AQ3.K876          | 1D P P  | 2NT    | 20 balanced
+N J54.Q76.A32.8765          | 1D P P  | P      | 7 HCP: pass it out
+N K5.Q7.A932.KQ876          | 1S P P  | 2C     | five clubs and 13 total points
+N J5.KQ76.A932.876          | 1S P P  | X      | 10 HCP and three in each unbid suit
+
+# Advancer answers a reopening double with the same ladder.
+S 76532.Q84.T54.32          | 1D P P X P | 1S  | forced: the cheapest four-card suit
+S KQ32.AJ54.97.T87          | 1S P P X P | 3H  | four hearts and 11 HCP: jump

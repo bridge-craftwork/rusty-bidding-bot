@@ -30,7 +30,7 @@ after (1x)
 # ── Advancer, when RHO passes ────────────────────────────────────────
 # The double is forcing: advancer names his suit however weak he is.
 # A suit at the cheapest level says nothing beyond 0-8 total points.
-after (1x) X (P)
+after (1x) X (P) | (1x) P (P) X (P)
   1H  "0-8 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points<=8
       when  x is not H, x is not S
   1S  "0-8 total points, four or more spades"   shows S>=4, S>H, hcp+length_points<=8
@@ -48,7 +48,7 @@ after (1x) X (P)
       when  stop(x)
 
 # Jumps invite: 9-11 total points with the same suits.
-after (1x) X (P)
+after (1x) X (P) | (1x) P (P) X (P)
   2H  "9-11 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points=9..11
       when  x is not H, x is not S
   2S  "9-11 total points, four or more spades"   shows S>=4, S>H, hcp+length_points=9..11
@@ -64,7 +64,7 @@ after (1x) X (P)
       when  stop(x)
 
 # The cue bid is the only game force: 12+ with no clear suit to jump in.
-after (1x) X (P)
+after (1x) X (P) | (1x) P (P) X (P)
   2{x} "Cue bid: 12+ total points, asking partner to describe his hand"
       alert  artificial
       shows  hcp+length_points>=12
@@ -76,7 +76,7 @@ after (1x) X (P)
 # hands too strong to overcall show themselves now: 18+ total points
 # bids its own suit, raises with support, or bids notrump with a
 # stopper. This is the second half of "double first, then bid the suit".
-after (1x) X (P) 1y (P)
+after (1x) X (P) 1y (P) | (1x) P (P) X (P) 1y (P)
   P   "Minimum takeout double: partner has chosen"
       shows hcp+length_points<=17
       priority -5
@@ -103,7 +103,7 @@ after (1x) X (P) 1y (P)
       shows C>=5, hcp+length_points>=18
       when  x is not C, y is not C
 
-after (1x) X (P) 2y (P)
+after (1x) X (P) 2y (P) | (1x) P (P) X (P) 2y (P)
   P   "Minimum takeout double: partner has chosen"
       shows hcp+length_points<=17
       priority -5
@@ -117,7 +117,7 @@ after (1x) X (P) 2y (P)
 # The double is no longer forcing: advancer passes with nothing and bids
 # his own suit freely. Over a one-level bid a four-card major is enough;
 # higher up he needs five cards and more values.
-after (1x) X (1y)
+after (1x) X (1y) | (1x) P (P) X (1y)
   1S  "Free bid: 6+ total points, four or more spades"
       shows S>=4, hcp+length_points>=6
       when  x is not S, y is not S
@@ -140,7 +140,7 @@ after (1x) X (1y)
       priority 1
   P   "No free bid"  priority -10
 
-after (1x) X (2y)
+after (1x) X (2y) | (1x) P (P) X (2y)
   cheapest(S) "Free bid: 8+ total points, five or more spades"
       shows S>=5, hcp+length_points>=8
       when  x is not S, y is not S
@@ -160,7 +160,7 @@ after (1x) X (2y)
 
 # RHO redoubled: partner still wants to hear a suit, so advancer names
 # his cheapest four-card suit however weak he is.
-after (1x) X (XX)
+after (1x) X (XX) | (1x) P (P) X (XX)
   cheapest(S) "Four or more spades"   shows S>=4, S>H
       when  x is not S
   cheapest(H) "Four or more hearts"   shows H>=4, H>=S
