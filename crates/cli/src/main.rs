@@ -5,6 +5,8 @@ use std::process::ExitCode;
 use bridge_card::{bbsa, schema, Card};
 use clap::{Parser, Subcommand};
 
+mod coverage;
+
 #[derive(Parser)]
 #[command(name = "rbb", about = "rusty-bidding-bot command-line tools")]
 struct Cli {
@@ -49,6 +51,10 @@ enum Command {
         /// rather than by how often they happen.
         #[arg(long)]
         by_imps: bool,
+        /// Only scenarios whose cards our rules cover at least this well,
+        /// as a percentage (see `card coverage`). Both sides must pass.
+        #[arg(long)]
+        min_coverage: Option<f64>,
         /// How many scenarios to list (worst first).
         #[arg(long, default_value_t = 30)]
         worst: usize,
@@ -195,6 +201,18 @@ enum CardCommand {
         #[arg(short, long)]
         output: Option<PathBuf>,
     },
+    /// How much of a card our rules read: what they honour, what they
+    /// ignore, and which .bbsa keys have no card field at all.
+    Coverage {
+        /// A .bbsa file or card JSON; several may be given.
+        files: Vec<PathBuf>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// List every setting, not just the counts.
+        #[arg(short, long)]
+        verbose: bool,
+    },
 }
 
 fn main() -> ExitCode {
@@ -222,10 +240,11 @@ fn run(cli: Cli) -> Result<()> {
             dd_cache,
             top,
             by_imps,
+            min_coverage,
             worst,
             json,
         } => {
-            let opts = rbb_compare::Options {
+            let mut opts = rbb_compare::Options {
                 pbs,
                 scenarios,
                 limit,
@@ -233,6 +252,9 @@ fn run(cli: Cli) -> Result<()> {
                 par,
                 dd_cache,
             };
+            if let Some(min) = min_coverage {
+                opts.scenarios = covered_scenarios(&opts, min)?;
+            }
             compare(&opts, top, by_imps, worst, json.as_deref())
         }
         Command::Probe {
@@ -824,6 +846,102 @@ fn card(cmd: CardCommand) -> Result<()> {
         CardCommand::Schema { output } => {
             let text = serde_json::to_string_pretty(&schema::json_schema())?;
             write(output.as_deref(), &text)?;
+        }
+        CardCommand::Coverage {
+            files,
+            rules,
+            verbose,
+        } => card_coverage(&files, &rules, verbose)?,
+    }
+    Ok(())
+}
+
+/// The scenarios whose two cards our rules both cover at least `min`
+/// percent of. Reports what it leaves out, since that is the point.
+fn covered_scenarios(opts: &rbb_compare::Options, min: f64) -> Result<Vec<String>> {
+    use std::collections::HashMap;
+    let modules = rbb_engine::load_modules(&opts.rules).map_err(|_| "rule files have errors")?;
+    let read = coverage::fields_read(&modules);
+    let scenarios = rbb_compare::discover(&opts.pbs, &opts.scenarios)?;
+    let mut score: HashMap<String, f64> = HashMap::new();
+    let mut of = |name: &str| -> f64 {
+        if let Some(s) = score.get(name) {
+            return *s;
+        }
+        let path = opts.pbs.join("bbsa").join(format!("{name}.bbsa"));
+        let s = coverage::load(&path)
+            .map(|(n, card, unmapped)| coverage::of_card(&n, &card, unmapped, &read).score())
+            .unwrap_or(0.0);
+        score.insert(name.to_string(), s);
+        s
+    };
+    let mut kept = Vec::new();
+    let mut dropped: Vec<(String, f64)> = Vec::new();
+    for sc in &scenarios {
+        let worst = of(&sc.ns_card).min(of(&sc.ew_card));
+        if worst * 100.0 >= min {
+            kept.push(sc.name.clone());
+        } else {
+            dropped.push((sc.name.clone(), worst * 100.0));
+        }
+    }
+    eprintln!(
+        "coverage filter: {} of {} scenarios have both cards at {min:.0}% or better ({} left out)",
+        kept.len(),
+        scenarios.len(),
+        dropped.len()
+    );
+    if kept.is_empty() {
+        return Err(format!("no scenario has both cards covered to {min:.0}%").into());
+    }
+    Ok(kept)
+}
+
+/// `card coverage`: what the rules read of each card.
+fn card_coverage(files: &[PathBuf], rules: &Path, verbose: bool) -> Result<()> {
+    let modules = rbb_engine::load_modules(rules).map_err(|d| {
+        for e in &d {
+            eprintln!("{e}");
+        }
+        "rule files have errors"
+    })?;
+    let read = coverage::fields_read(&modules);
+    println!(
+        "{} modules read {} card fields\n",
+        modules.len(),
+        read.len()
+    );
+    println!(
+        "{:24} {:14} {:>6} {:>8} {:>9} {:>9}",
+        "card", "system", "read", "ignored", "unmapped", "coverage"
+    );
+    let mut covs = Vec::new();
+    for f in files {
+        let (name, card, unmapped) = coverage::load(f)?;
+        let cov = coverage::of_card(&name, &card, unmapped, &read);
+        println!(
+            "{:24} {:14} {:6} {:8} {:9} {:8.0}%",
+            cov.name,
+            cov.system,
+            cov.read.len(),
+            cov.ignored.len(),
+            cov.unmapped.len(),
+            100.0 * cov.score()
+        );
+        covs.push(cov);
+    }
+    if verbose {
+        for cov in &covs {
+            println!("\n{}: settings switched on that no rule reads", cov.name);
+            for p in &cov.ignored {
+                println!("  {p}");
+            }
+            if !cov.unmapped.is_empty() {
+                println!("{}: .bbsa keys with no card field", cov.name);
+                for k in &cov.unmapped {
+                    println!("  {k}");
+                }
+            }
         }
     }
     Ok(())

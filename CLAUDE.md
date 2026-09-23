@@ -29,6 +29,10 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `cargo test --workspace`
 - `cargo run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
   passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
+- `cargo run -q -p rbb-cli -- card coverage <file.bbsa>...`: how much of each
+  card the rules read — settings honoured, settings ignored, `.bbsa` keys with
+  no field (`-v` lists them). `compare --min-coverage 50` restricts the
+  comparison to scenarios whose cards we cover that well.
 - `cargo run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
   `conventions/`; `bid compile <file>` prints the JSON IR.
 - `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
@@ -45,7 +49,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   queue. Par comes free for boards whose corpus file carries an
   `OptimumResultTable`; `--par` solves the deals that have none.
   A scenario argument may be a pattern: `compare 'Basic_*'`, quoted so the
-  shell leaves it alone. The workbench takes the same arguments.
+  shell leaves it alone. The workbench takes the same arguments. The cards
+  each side played come from the PBN's own `% CC1/CC2` header, falling back
+  to the `.btn`.
   `--by-imps` orders the divergence points by what they cost against par
   instead of by how often they happen.
 - `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:

@@ -309,6 +309,12 @@ For each scenario and in total:
   | `1N P 2C P` | 2H | 2S | 41 |
   | `1S P 2N P` | 3C | 4S | 17 |
 
+- **Card coverage**: a card is a few hundred switches and the rules read a few
+  dozen; `rbb card coverage` splits what a card switches on into read,
+  ignored, and play-only (carding and leads cannot change a call), and counts
+  the `.bbsa` keys with no field at all. The gap is the difference between
+  "we disagree with BBA" and "we were never playing the same system", so the
+  comparison can be restricted to cards we cover (`--min-coverage`).
 - **Par comparison**, using bridge-solver in the same process
   (`solve_dd_table` and `par()`): for each board, the double-dummy result of
   our contract and of BBA's, each scored against par. Totals give an IMP
