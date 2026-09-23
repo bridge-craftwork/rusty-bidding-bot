@@ -8,7 +8,10 @@
 //! - **read**: a module names it in a `card` line or a `param`, or a
 //!   `[[derived]]` rule turns it into one that does;
 //! - **ignored**: the field exists and nothing reads it;
-//! - **unmapped**: the `.bbsa` key has no card field at all (passthrough).
+//! - **unmapped**: the `.bbsa` key has no card field at all, so the setting
+//!   never reaches our model (it is kept in `bba_passthrough` so an export
+//!   round-trips). Only keys the card switches *on* are counted, to match
+//!   the other two buckets.
 //!
 //! Carding, opening leads and free-text notes cannot change a call, so they
 //! are counted apart from the conventions.
@@ -119,7 +122,14 @@ pub fn load(path: &Path) -> Result<(String, Card, Vec<String>), String> {
         .to_string();
     if path.extension().is_some_and(|e| e == "bbsa") {
         let (card, report) = bbsa::import(&text, Some(&name)).map_err(|e| e.to_string())?;
-        let unmapped = report.passthrough.iter().map(|(k, _)| k.clone()).collect();
+        // A key set to 0 says the card does not play it: nothing is lost by
+        // having nowhere to put it.
+        let unmapped = report
+            .passthrough
+            .iter()
+            .filter(|(_, v)| *v != 0)
+            .map(|(k, _)| k.clone())
+            .collect();
         Ok((name, card, unmapped))
     } else {
         let (card, _) = Card::from_json(&text).map_err(|e| e.to_string())?;
