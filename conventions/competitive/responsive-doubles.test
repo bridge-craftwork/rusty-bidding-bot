@@ -1,0 +1,21 @@
+# Responsive doubles: partner doubled or overcalled and RHO raised.
+card    21GF-DEFAULT
+dealer  E
+vul     None
+
+# seat hand                 | auction  | expect | why
+N KJ54.Q762.A3.876          | 1C X 2C  | X      | both majors over their minor, 8 HCP
+N J5.762.KQ32.K876          | 1H X 2H  | X      | both minors over their major
+N J5.762.KQ32.K876          | 1H X 3H  | X      | the three level needs 8+
+N J5.762.K432.8765          | 1H X 2H  | P      | 3 HCP: too weak to be responsive
+N KQJ54.Q76.A3.876          | 1H X 2H  | 2S     | five spades, not four of each minor: bid them
+
+# After partner's overcall the double shows the other two suits and a
+# doubleton in his; with three-card support we raise instead.
+N 87.KJ54.A32.K876          | 1D 1S 2D | X      | 11 HCP, 4-4 in the unbid suits, two spades
+N 872.KJ54.A32.K87          | 1D 1S 2D | 2S     | three spades: raise partner instead
+N 87.KJ54.A32.8765          | 1D 1S 2D | P      | 7 HCP: not enough at the two level
+
+# Partner answers by picking the suit he is longer in.
+S A2.53.KQ76.KJ954          | 1H X 2H X P | 3C  | clubs, the longer of the two minors
+S A2.53.KQ765.KJ94         | 1H X 2H X P | 3D  | diamonds this time

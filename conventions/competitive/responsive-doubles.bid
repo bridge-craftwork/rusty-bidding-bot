@@ -1,0 +1,95 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responsive doubles (Rick, 2026-09-22): when partner has doubled or
+# overcalled and RHO raises, our double is for takeout, not penalty.
+#
+# - after partner's takeout double it shows both majors when they have
+#   bid a minor, and both minors when they have bid a major;
+# - after partner's overcall it shows the other two suits, with
+#   tolerance (usually Hx) for partner's suit;
+# - advancer needs 6+ total points at the two level, 8+ at the three and
+#   10+ at the four.
+#
+# The card switches them on (`doubles.responsive.play`): the 21GF cards
+# play them, Basic-Bridge does not.
+
+module responsive-doubles "Responsive doubles"
+  card   doubles.responsive.play
+  needs  base
+
+# ── After partner's takeout double ───────────────────────────────────
+# Partner has the other three suits, so the double picks the two he can
+# hold four of: the majors over a minor, the minors over a major.
+after (1x) X (2x) when x is C | x is D
+  X   "Responsive: both majors, 6+ total points"
+      alert  artificial
+      shows  S>=4, H>=4, hcp+length_points>=6
+      sets   ask=responsive
+      priority 1
+after (1x) X (3x) when x is C | x is D
+  X   "Responsive: both majors, 8+ total points"
+      alert  artificial
+      shows  S>=4, H>=4, hcp+length_points>=8
+      sets   ask=responsive
+      priority 1
+after (1x) X (4x) when x is C | x is D
+  X   "Responsive: both majors, 10+ total points"
+      alert  artificial
+      shows  S>=4, H>=4, hcp+length_points>=10
+      sets   ask=responsive
+      priority 1
+
+after (1x) X (2x) when x is H | x is S
+  X   "Responsive: both minors, 6+ total points"
+      alert  artificial
+      shows  D>=4, C>=4, hcp+length_points>=6
+      sets   ask=responsive
+      priority 1
+after (1x) X (3x) when x is H | x is S
+  X   "Responsive: both minors, 8+ total points"
+      alert  artificial
+      shows  D>=4, C>=4, hcp+length_points>=8
+      sets   ask=responsive
+      priority 1
+after (1x) X (4x) when x is H | x is S
+  X   "Responsive: both minors, 10+ total points"
+      alert  artificial
+      shows  D>=4, C>=4, hcp+length_points>=10
+      sets   ask=responsive
+      priority 1
+
+# ── After partner's overcall ─────────────────────────────────────────
+# The two unbid suits and a doubleton in partner's, which is tolerance
+# enough for him to pass or rebid it. With three we raise instead.
+after (1x) 1y (2x) | (1x) 2y (3x) | (1x) P (P) 1y (2x)
+  X   "Responsive: the two unbid suits, 6+ total points"
+      alert  artificial
+      shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
+      shows  (D>=4 | x is D | y is D), (C>=4 | x is C | y is C)
+      shows  y=2, x<=3, hcp+length_points>=10
+      sets   ask=responsive
+after (1x) 1y (3x) | (1x) 2y (4x)
+  X   "Responsive: the two unbid suits, 8+ total points"
+      alert  artificial
+      shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
+      shows  (D>=4 | x is D | y is D), (C>=4 | x is C | y is C)
+      shows  y=2, x<=3, hcp+length_points>=11
+      sets   ask=responsive
+
+# ── Answering a responsive double ────────────────────────────────────
+# Partner named two suits; pick the one we are longer in, at the
+# cheapest level. Written against the question, so it is the same rule
+# after a double of their raise at any level.
+when asked responsive
+  cheapest(S) "Spades, partner's choice taken"
+      shows S>=3, S>=H
+      when  partner.S>=4
+  cheapest(H) "Hearts, partner's choice taken"
+      shows H>=3, H>S
+      when  partner.H>=4
+  cheapest(D) "Diamonds, partner's choice taken"
+      shows D>=3, D>=C
+      when  partner.D>=4
+  cheapest(C) "Clubs, partner's choice taken"
+      shows C>=3, C>D
+      when  partner.C>=4
