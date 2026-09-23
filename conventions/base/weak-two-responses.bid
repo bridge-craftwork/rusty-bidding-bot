@@ -8,8 +8,13 @@
 module weak-two-responses "Responses to a weak two"
   needs  preempts
   param  ask2nt = two_level.weak_two_2nt_response default feature
+  param  two_c  = two_level.two_clubs.meaning default strong
 
-after 2x (P) when x is not N
+# The weak twos are 2♦, 2♥ and 2♠: 2♣ is the strong opening unless the
+# card says it is natural. Without the guard, responder's 2NT over a
+# strong 2♣ was read as the weak-two ask and opener answered with a
+# feature (95 boards in the Basic_* scenarios, -478 IMPs).
+after 2x (P) when x is not N, x is not C | two_c is natural
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=15
       sets  forcing=round, ask=weak_two(x)

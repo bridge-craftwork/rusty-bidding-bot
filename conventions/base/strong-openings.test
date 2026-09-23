@@ -6,4 +6,32 @@ S AQ5.KQ7.AKJ4.Q76      |         | 2NT    | 21 balanced
 S AKQ.KQ7.AKJ4.QJ6      |         | 2C     | 22+: strong and artificial
 N 8632.J54.973.T62      | 2C P    | 2D     | waiting
 N AKQ32.J54.97.T62      | 2C P    | 2S     | positive: five spades, 10
-S AKQ.KQ7.AKJ4.Q76      | 2C P 2D P |2NT   | 22-24 balanced
+S AKQ.KQ7.AKJ4.Q76      | 2C P 2D P |3NT   | 24: the ladder's third rung
+S AKQ.KQ7.AKJ4.764      | 2C P 2D P |2NT   | 22-23 balanced
+S AKQ.AKQ.AKJ4.Q64      | 2C P 2D P |4NT   | 28+ balanced
+
+# ── The balanced ladder (Rick, 2026-09-23)
+S AQ5.KQ7.AQJ4.Q76      |         | 2NT    | 20 balanced
+S AKQ.KQ7.AKJ4.764      |         | 2C     | 22: through 2C, then 2NT
+S AKQ.AK7.AKJ4.Q76      |         | 3NT    | 26 balanced: the fourth rung
+S AKQ.AKQ.AKJ4.Q64      |         | 2C     | 28: through 2C, then 4NT
+
+# ── Unbalanced: within one trick of game, and 23 total points.
+# All of these are hands BBA opened 2C on the Basic-Bridge card.
+S A2.AQJT7542.A.A3      |         | 2C     | 19 and eight hearts: ten tricks
+S AKQ654.AK9.J5.K5      |         | 1S     | 22 total points: one short of the 2C line (BBA opens 2C)
+S 2.AQJ872.AKQJ83.      |         | 1H     | 21 total points: under the line (BBA opens 2C)
+S KQT43.AKQ32..AKT      |         | 2C     | 21 with 5-5 in the majors
+S Q98765.AQ7.AK6.A      |         | 1S     | six ragged spades: not a 2C suit
+S AKQJ6.AQ96.Q42.K      |         | 1S     | 21 flat-ish: one level is enough
+
+# ── Responses need a real suit, and the second negative
+N AKQ32.J54.97.T62      | 2C P    | 2S     | five spades to the AKQ
+N QJ932.J54.97.T62      | 2C P    | 2D     | five ragged spades: wait instead
+N 8632.J54.973.T62      | 2C P 2D P 2H P | 3C | 1 HCP: the second negative
+N K632.J54.Q973.T6      | 2C P 2D P 2H P | 3NT | 8 HCP: not a bust
+
+# ── Opener after a positive
+S AKQ642.K8.AKJ9.6      | 2C P 2NT P | 3S  | six spades opposite a balanced positive
+S AKQ642.K8.AKJ9.6      | 2C P 2H P  | 2S  | our own suit over partner's hearts
+S AK7.K83.AKJ9.AQ6      | 2C P 2H P  | 3H  | three hearts: raise

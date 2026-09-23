@@ -1,36 +1,127 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 #
-# The strong openings above 1NT: 2NT (20-21 balanced) and an artificial 2♣.
-# Responder's 2♦ is a waiting bid; opener then describes.
+# The strong openings above 1NT (Rick, 2026-09-23).
+#
+# Balanced hands have a ladder, and every rung is a place to stop:
+#
+#   2NT            20-21        2♣ then 3NT    24-25
+#   2♣ then 2NT    22-23        3NT            26-27
+#                               2♣ then 4NT    28+
+#
+# Unbalanced hands open 2♣ on **23 total points**, or on playing strength:
+# within one trick of game, which is nine tricks with a major and ten with
+# a minor, since game there is eleven. Playing tricks are counted as
+# 13 - losers, and the hand needs a six-card suit or 5-5 to be counted
+# that way at all (strong-openings.notes.md has BBA's own 2♣ hands).
+#
+# Responder: 2♦ waits, a suit at the cheapest level is a positive with a
+# real suit, and after opener describes, the cheapest minor is the second
+# negative — a bust, less than a jack and a queen.
 
 module strong-openings "2♣ and 2NT openings"
   needs  base
-  param  two_c = two_level.two_clubs.meaning default strong
+  param  two_c      = two_level.two_clubs.meaning default strong
+  param  two_d_resp = two_level.two_clubs.2d_response default waiting
+  param  bust_2h    = two_level.two_clubs.parrish_bust default false
+  param  two_nt_min = notrump.two_nt.range_min default 20
+  param  two_nt_max = notrump.two_nt.range_max default 21
+  param  three_nt_min = notrump.three_nt.range_min default 26
+  param  three_nt_max = notrump.three_nt.range_max default 27
+  param  gambling   = notrump.three_nt.one_suit default false
 
 when opening
-  2N  "20-21 HCP, balanced"            shows hcp=20..21, balanced
+  2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
+      shows hcp=two_nt_min..two_nt_max, balanced
+  3N  "{three_nt_min}-{three_nt_max} HCP, balanced"
+      shows hcp=three_nt_min..three_nt_max, balanced
+      when  !gambling
+  # Three ways in, written apart because one condition for all of them
+  # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
-      shows hcp>=22
+      shows hcp>=22, !balanced | hcp<=25 | hcp>=28   # balanced 26-27 opens 3NT
       when  two_c is strong | two_c is very_strong
       sets  forcing=game, ask=strong_2c
       artificial
+      priority 1                       # ahead of a one-level opening
+  2C  "Strong: nine tricks with a major"  alert
+      shows hcp>=17, losers<=4, hcp+length_points>=23
+      shows (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | (H>=5, S>=5)
+      when  two_c is strong | two_c is very_strong
+      sets  forcing=game, ask=strong_2c
+      artificial
+      priority 1
+  2C  "Strong: ten tricks with a long suit"  alert
+      shows hcp>=17, losers<=3, hcp+length_points>=23
+      shows (C>=6, quality(C)>=good) | (D>=6, quality(D)>=good) | (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | shape 5-5-x-x
+      when  two_c is strong | two_c is very_strong
+      sets  forcing=game, ask=strong_2c
+      artificial
+      priority 1
 
+# ── Responder ────────────────────────────────────────────────────────
 after 2C (P)
   2D  "Waiting"                        artificial
+      when  two_d_resp is waiting | two_d_resp is negative
       priority -1
-  2H  "Positive: 5+ hearts, 8+"        shows H>=5, hcp>=8
-  2S  "Positive: 5+ spades, 8+"        shows S>=5, hcp>=8
-  3C  "Positive: 5+ clubs, 8+"         shows C>=5, hcp>=8
+  2H  "Positive: five or more hearts, 8+"
+      shows H>=5, hcp>=8
+      when  !bust_2h, (H>=6, top5(H)>=3) | quality(H)>=good
+  2S  "Positive: five or more spades, 8+"
+      shows S>=5, hcp>=8
+      when  (S>=6, top5(S)>=3) | quality(S)>=good
+  3C  "Positive: five or more clubs, 8+"
+      shows C>=5, hcp>=8
+      when  (C>=6, top5(C)>=3) | quality(C)>=good
       priority -1                      # balanced hands bid 2NT
-  3D  "Positive: 5+ diamonds, 8+"      shows D>=5, hcp>=8
+  3D  "Positive: five or more diamonds, 8+"
+      shows D>=5, hcp>=8
+      when  (D>=6, top5(D)>=3) | quality(D)>=good
       priority -1
   2N  "Positive: balanced, 8+"         shows balanced, hcp>=8
+  2H  "Bust: fewer than 3 HCP"         shows hcp<=2
+      when  bust_2h
+      artificial
+      priority 1
 
-# Opener describes after the waiting bid.
+# ── Opener describes after the waiting bid ───────────────────────────
 after 2C (P) 2D (P)
-  2N  "22-24 HCP, balanced"            shows hcp=22..24, balanced
-  3N  "25-27 HCP, balanced"            shows hcp>=25, balanced
+  2N  "22-23 HCP, balanced"            shows hcp=22..23, balanced
+  3N  "24-25 HCP, balanced"            shows hcp=24..25, balanced
+  4N  "28+ HCP, balanced"              shows hcp>=28, balanced
   2H  "5+ hearts"                      shows H>=5
   2S  "5+ spades"                      shows S>=5
   3C  "5+ clubs"                       shows C>=5
   3D  "5+ diamonds"                    shows D>=5
+
+# ── Opener after a positive response ─────────────────────────────────
+# Partner has a real suit and 8+, so the only questions left are the fit
+# and the strain. `y is not D | partner.D>=5` is what tells the 3♦
+# positive from the 2♦ waiting bid, which has its own block above.
+after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
+  cheapest(y) "Raise: three or more {y}"      shows y>=3   sets trump=y
+  cheapest(S) "Five or more spades"           shows S>=5   when y is not S
+  cheapest(H) "Five or more hearts"           shows H>=5   when y is not H
+  cheapest(D) "Five or more diamonds"         shows D>=5   when y is not D
+  cheapest(C) "Five or more clubs"            shows C>=5   when y is not C
+  cheapest(N) "Balanced, no fit for {y}"      shows balanced
+      priority -1
+
+# After the balanced positive, opener shows a suit or raises the notrump.
+after 2C (P) 2N (P)
+  3S  "Five or more spades"                   shows S>=5
+  3H  "Five or more hearts"                   shows H>=5
+  3D  "Five or more diamonds"                 shows D>=5
+  3C  "Five or more clubs"                    shows C>=5
+  3N  "Balanced, no suit to show"             shows balanced
+      priority -1
+  6N  "Slam: the values are there"            shows hcp>=25, balanced
+
+# ── Responder's second call: the second negative ─────────────────────
+# Having waited, responder shows a bust by bidding the cheapest minor;
+# anything else is a positive and the auction is already game forcing.
+after 2C (P) 2D (P) 2H (P)
+  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
+after 2C (P) 2D (P) 2S (P)
+  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
+after 2C (P) 2D (P) 3C (P)
+  3D  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
