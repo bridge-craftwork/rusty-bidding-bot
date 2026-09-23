@@ -1027,9 +1027,13 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
             let first = path[0].name.as_str();
             match first {
                 "me" => true,
-                "we" => path
-                    .get(1)
-                    .is_some_and(|s| matches!(s.name.as_str(), "hcp" | "keycards" | "points")),
+                // Every `we.` term that adds my own hand to partner's
+                // range. One missing from this list is not an error: the
+                // condition is judged with no hand, comes out false, and
+                // the candidate vanishes silently.
+                "we" => path.get(1).is_some_and(|s| {
+                    matches!(s.name.as_str(), "hcp" | "keycards" | "points" | "tp")
+                }),
                 "partner" | "lho" | "rho" | "shown" | "they" => false,
                 _ if path.len() > 1 => false,
                 n => {
