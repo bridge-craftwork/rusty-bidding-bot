@@ -129,7 +129,12 @@ pub fn run_with(
             r.ns_card = scenario.ns_card.clone();
             r.generator = scenario.generator.clone();
             r.ew_card = scenario.ew_card.clone();
-            if opts.par && !r.contracts_match() {
+            // Par is worth having where the contracts differ. With a table
+            // in the file it costs nothing to look up; without one it means
+            // solving the deal, which is what `--par` asks for. Boards whose
+            // contracts match keep their table, so the workbench can work
+            // par out for a selected one without solving.
+            if !r.contracts_match() && (r.dd.is_some() || opts.par) {
                 board::add_par(&mut r, board, &cache);
             }
             let n = done.fetch_add(1, Ordering::Relaxed) + 1;

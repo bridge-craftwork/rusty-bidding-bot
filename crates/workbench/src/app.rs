@@ -21,8 +21,11 @@ type Outcome = Result<(Report, Arc<Engines>), String>;
 /// A board by scenario and board number.
 type BoardKey = (String, String);
 
-/// Par solved on demand for one board.
-type ParResult = (BoardKey, Option<rbb_compare::ParComparison>);
+/// Par solved on demand for one board, with the table it came from.
+type ParResult = (
+    BoardKey,
+    Option<(rbb_compare::ParComparison, bridge_types::DdTable)>,
+);
 
 /// The `.test` cases under the rules directory, or why they could not run.
 type CaseResults = Result<Vec<rbb_engine::cases::Outcome>, Vec<String>>;
@@ -437,9 +440,9 @@ impl App {
         });
     }
 
-    /// Put solved par into the loaded boards.
+    /// Put solved par into the loaded boards, with the table it came from.
     fn receive_par(&mut self) {
-        while let Ok((key, par)) = self.par_rx.try_recv() {
+        while let Ok((key, solved)) = self.par_rx.try_recv() {
             self.solving.remove(&key);
             if let Some(l) = &mut self.loaded {
                 if let Some(b) = l
@@ -448,7 +451,10 @@ impl App {
                     .iter_mut()
                     .find(|b| b.scenario == key.0 && b.board == key.1)
                 {
-                    b.par = par;
+                    if let Some((par, dd)) = solved {
+                        b.par = Some(par);
+                        b.dd = Some(dd);
+                    }
                 }
             }
         }
@@ -1329,7 +1335,9 @@ impl App {
                         ui.label(RichText::new(c).monospace().color(color));
                     });
                     row.col(|ui| {
-                        if let Some(p) = &b.par {
+                        // Only where the contracts differ: the same contract
+                        // is the same distance from par on both sides.
+                        if let (Some(p), false) = (&b.par, b.contracts_match()) {
                             let ours = (p.ours_ns - p.par_ns).abs();
                             let theirs = (p.reference_ns - p.par_ns).abs();
                             let (text, color) = match ours.cmp(&theirs) {

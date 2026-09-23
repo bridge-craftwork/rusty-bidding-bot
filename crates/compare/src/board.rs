@@ -1,7 +1,9 @@
 //! Comparing one board: replay the reference auction through the engine, then
 //! let the engine finish the auction on its own from the first difference.
 
-use bridge_types::{Auction, Board, Call, Direction, FinalContract, ScoringMethod, Vulnerability};
+use bridge_types::{
+    Auction, Board, Call, DdTable, Direction, FinalContract, ScoringMethod, Vulnerability,
+};
 use rbb_engine::Engine;
 use serde::Serialize;
 
@@ -83,6 +85,11 @@ pub struct BoardResult {
     pub first_divergence: Option<usize>,
     pub reference_contract: Option<String>,
     pub our_contract: Option<String>,
+    /// The deal's double-dummy table, when the reference file carried one
+    /// (PBN `OptimumResultTable`). Par then costs nothing: no solving, and
+    /// every board can be scored against it, not just the slow `--par` run.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dd: Option<DdTable>,
     pub par: Option<ParComparison>,
     /// The engine stopped its auction at `MAX_CALLS`.
     pub runaway: bool,
@@ -195,6 +202,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             .collect(),
         reference_contract: contract_text(contract_of(&reference).as_ref()),
         our_contract: contract_text(contract_of(&ours).as_ref()),
+        dd: board.double_dummy_tricks.filter(|t| !t.is_null()),
         reference,
         replay,
         ours,
@@ -305,17 +313,22 @@ fn find_problems(
     out
 }
 
-/// Fill in `result.par` from double-dummy analysis.
+/// Fill in `result.par` from double-dummy analysis: from the board's own
+/// `OptimumResultTable` when it has one, else by solving the deal.
 pub fn add_par(result: &mut BoardResult, board: &Board, cache: &crate::par::DdCache) {
     result.par = Some(par_of(result, &board.deal, cache));
 }
 
 /// Par for a result on its own, from the deal it records (the workbench
-/// solves a board on demand when the run skipped par). None if the deal
-/// does not parse.
-pub fn par_for(result: &BoardResult, cache: &crate::par::DdCache) -> Option<ParComparison> {
+/// solves a board on demand when the run skipped par), with the table it
+/// used so the caller can keep it. None if the deal does not parse.
+pub fn par_for(
+    result: &BoardResult,
+    cache: &crate::par::DdCache,
+) -> Option<(ParComparison, DdTable)> {
     let deal = bridge_types::Deal::from_pbn(&result.deal)?;
-    Some(par_of(result, &deal, cache))
+    let dd = result.dd.unwrap_or_else(|| cache.table(&deal));
+    Some((par_of(result, &deal, cache), dd))
 }
 
 fn par_of(
@@ -323,7 +336,8 @@ fn par_of(
     deal: &bridge_types::Deal,
     cache: &crate::par::DdCache,
 ) -> ParComparison {
-    let dd = cache.table(deal);
+    // The file's own table if it has one; otherwise solve (and cache) it.
+    let dd = result.dd.unwrap_or_else(|| cache.table(deal));
     let contract = |calls: &[Call]| {
         let mut a = Auction::new(result.dealer);
         for c in calls {

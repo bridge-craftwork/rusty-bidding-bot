@@ -2,13 +2,17 @@
 
 use std::path::Path;
 
-use rbb_compare::{run, Options};
+use rbb_compare::{par, run, Options};
 
 fn options() -> Options {
+    options_for("1N")
+}
+
+fn options_for(scenario: &str) -> Options {
     let here = Path::new(env!("CARGO_MANIFEST_DIR"));
     Options {
         pbs: here.join("tests/fixtures/pbs"),
-        scenarios: vec![],
+        scenarios: vec![scenario.to_string()],
         limit: None,
         rules: here.join("../../conventions"),
         par: false,
@@ -68,4 +72,41 @@ fn bba_alerts_are_read_from_notes() {
         .map(String::as_str)
         .collect();
     assert!(!alerts.is_empty());
+}
+
+/// The corpus files carry `OptimumResultTable` sections. Par must come from
+/// them: no solving, on every run rather than only under `--par`.
+#[test]
+fn par_comes_from_the_files_double_dummy_table() {
+    use bridge_types::{Direction, Strain};
+
+    let mut opts = options_for("Basic_NT");
+    // A cache path that does not exist and must not be written to: any
+    // solving here would be a bug.
+    opts.dd_cache = std::env::temp_dir().join("rbb-compare-test-no-solve.jsonl");
+    let _ = std::fs::remove_file(&opts.dd_cache);
+    assert!(!opts.par, "par is off: the tables come from the file");
+
+    let report = run(&opts, &|_, _| {}).unwrap();
+    assert_eq!(report.summary.total.dd_tables, report.boards.len());
+    for b in &report.boards {
+        let dd = b.dd.expect("the file's double-dummy table");
+        assert!(!dd.is_null());
+        assert_eq!(
+            b.par.is_some(),
+            !b.contracts_match(),
+            "par is scored where the contracts differ"
+        );
+        if b.board == "1" {
+            // North-South make ten tricks in diamonds and nine in notrump.
+            assert_eq!(dd.tricks(Direction::North, Strain::Diamonds), 10);
+            assert_eq!(dd.tricks(Direction::North, Strain::NoTrump), 9);
+            // 3NT by North makes, not vulnerable: par is +400 to us.
+            let (par, table) = rbb_compare::par_for(b, &par::DdCache::open(opts.dd_cache.clone()))
+                .expect("par from the board's own table");
+            assert_eq!(table, dd);
+            assert_eq!(par.par_ns, 400);
+        }
+    }
+    assert!(!opts.dd_cache.exists(), "nothing was solved");
 }

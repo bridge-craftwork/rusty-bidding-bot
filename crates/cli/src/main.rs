@@ -433,6 +433,11 @@ fn compare(
             "differing contracts vs par ({} boards): ours closer {}, BBA closer {}, equal {}; net {:+} IMPs to us",
             t.par.scored, t.par.ours_closer, t.par.reference_closer, t.par.equal, t.par.imps_vs_reference
         );
+        let solved = t.boards.saturating_sub(t.dd_tables);
+        println!(
+            "  double-dummy tables: {} read from the corpus files, {solved} boards without one",
+            t.dd_tables
+        );
     }
     let hist: Vec<String> = t
         .first_divergence

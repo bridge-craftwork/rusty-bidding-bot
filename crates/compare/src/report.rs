@@ -48,6 +48,8 @@ pub struct Stats {
     /// First divergence by call index (0 = the first call).
     pub first_divergence: BTreeMap<usize, usize>,
     pub par: ParTally,
+    /// Boards whose reference file carried a double-dummy table.
+    pub dd_tables: usize,
     pub runaway: usize,
     /// Replay agreement split by the conditions each call was made under,
     /// to see whether they matter: caller not vulnerable / vulnerable, the
@@ -100,7 +102,11 @@ impl Stats {
         }
         self.contracts_match += b.contracts_match() as usize;
         self.runaway += b.runaway as usize;
-        if let Some(p) = &b.par {
+        self.dd_tables += b.dd.is_some() as usize;
+        // Par is tallied where the contracts differ: with a table from the
+        // file every board has par, and scoring the identical ones would
+        // only add ties.
+        if let (Some(p), false) = (&b.par, b.contracts_match()) {
             self.par.scored += 1;
             let ours = imps((p.ours_ns - p.par_ns).abs());
             let reference = imps((p.reference_ns - p.par_ns).abs());

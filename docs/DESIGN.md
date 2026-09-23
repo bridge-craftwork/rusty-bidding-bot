@@ -314,8 +314,15 @@ For each scenario and in total:
   our contract and of BBA's, each scored against par. Totals give an IMP
   difference: **when we differ from BBA, who got closer to par?** A
   divergence where we reach par more often may be an improvement, not a bug.
-  Double-dummy tables for the fixed corpus are cached by deal hash, so they
-  are computed once (~171k deals).
+
+  The table comes from the corpus file when it has one: the reference PBNs
+  carry a PBN 2.1 `OptimumResultTable` section, which `bridge-encodings`
+  reads into `Board::double_dummy_tricks`. Those boards are scored against
+  par on every run, `--par` or not, and nothing is solved. `--par` is for
+  the rest: it solves the deals that have no table, and those are cached by
+  deal in `.rbb-cache/dd.jsonl` so they are computed once. A board's table
+  is kept on its `BoardResult`, so the workbench can work out par for a
+  selected board without solving it.
 
 ### The GUI
 

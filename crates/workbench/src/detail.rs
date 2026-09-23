@@ -1,7 +1,7 @@
 //! Board detail: the deal, both auctions, how the engine read BBA's calls,
 //! and the engine's reasoning at the first difference.
 
-use bridge_types::{Call, Deal, Direction, Hand, Suit};
+use bridge_types::{Call, DdTable, Deal, Direction, Hand, Suit, DECLARERS, STRAINS};
 use egui::{Color32, RichText};
 use rbb_compare::{short, BoardResult, Engines};
 use rbb_engine::{Decision, Interpretation, SeatKnowledge, Tri};
@@ -115,9 +115,15 @@ impl Detail {
         ui.separator();
 
         ui.horizontal_top(|ui| {
-            if let Some(deal) = &self.deal {
-                compass(ui, deal);
-            }
+            ui.vertical(|ui| {
+                if let Some(deal) = &self.deal {
+                    compass(ui, deal);
+                }
+                if let Some(dd) = &b.dd {
+                    ui.add_space(8.0);
+                    dd_grid(ui, dd);
+                }
+            });
             ui.add_space(24.0);
             ui.vertical(|ui| {
                 ui.strong("BBA");
@@ -342,6 +348,35 @@ fn hand_block(ui: &mut egui::Ui, seat: Direction, hand: &Hand) {
             });
         }
     });
+}
+
+/// Tricks available to each declarer in each strain, from the reference
+/// file's `OptimumResultTable` or from solving the deal.
+fn dd_grid(ui: &mut egui::Ui, dd: &DdTable) {
+    ui.label(RichText::new("double dummy").strong());
+    egui::Grid::new("dd-table")
+        .spacing([10.0, 2.0])
+        .show(ui, |ui| {
+            ui.label("");
+            for s in STRAINS {
+                let color = if s.is_red() {
+                    Color32::from_rgb(200, 60, 60)
+                } else {
+                    ui.visuals().text_color()
+                };
+                ui.label(RichText::new(s.symbol()).monospace().color(color));
+            }
+            ui.end_row();
+            for d in DECLARERS {
+                ui.monospace(d.to_char().to_string());
+                for s in STRAINS {
+                    let n = dd.tricks(d, s);
+                    let text = RichText::new(format!("{n:2}")).monospace();
+                    ui.label(if n >= 7 { text } else { text.weak() });
+                }
+                ui.end_row();
+            }
+        });
 }
 
 fn compass(ui: &mut egui::Ui, deal: &Deal) {
