@@ -18,6 +18,22 @@ direct 1NT overcall. Cases: `overcalls.test`. Advancer is in
 - **The direct 1NT overcall is 15-18 balanced with a stopper**, a point
   wider than our 1NT opening.
 
+## The suit has to be worth bidding (Rick, 2026-09-23)
+
+A one-level overcall needs **two of the top three or three of the top
+five honours**, or else **an opening hand**: it takes 12 total points to
+overcall on a ten-high suit.
+
+Found from board 120 of Basic_Major, where we overcalled 1♠ on
+`J8753.QJ8.A63.Q3` — ten HCP and a jack-high suit. BBA passed, we pushed
+the auction and they played 2♥ instead of our 3♦.
+
+It is worth far more than that one board: **+4,520 IMPs against par**
+across the corpus, identical auctions 15.4% → 15.6%, same contract 30.1%
+→ 30.5%. Two `.test` cases had to change, both of which had encoded the
+old behaviour on suits like `AT852` (nine HCP, two of the top five) and
+`J87654` (seven HCP).
+
 ## Evidence
 
 `bba-cli --all-meanings` on `Basic_Overcall.pbn` and

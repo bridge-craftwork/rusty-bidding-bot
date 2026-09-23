@@ -262,11 +262,16 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
 
 # ── We redoubled and they ran ────────────────────────────────────────
 # The redouble was 10+, so the partnership owns the hand. Opener has
-# passed it back: responder doubles with four of their suit, supports
-# opener with three, and otherwise lets it go.
+# passed it back: responder doubles with four **good** cards in their
+# suit, supports opener with three, and otherwise lets it go.
+#
+# Rick, 2026-09-23: four small is not a penalty double. The holding has
+# to be worth about two natural trump tricks on its own -- two of the
+# top three honours, or three of the top five behind the bidder.
 after 1x (X) XX (1y) P (P) | 1x (X) XX (2y) P (P) | 1x (X) XX (3y) P (P) when y is not x
-  X   "Penalty: four or more {y} behind the bidder"
+  X   "Penalty: four good {y} behind the bidder"
       shows y>=4
+      when  quality(y)>=good | top5(y)>=3
   cheapest(x) "Back to partner's suit: three or more"
       shows x>=3
       sets  ask=signoff

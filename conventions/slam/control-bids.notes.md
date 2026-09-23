@@ -5,6 +5,18 @@ you can control instead of asking for keycards straight away. Cases:
 `control-bids.test`. The decision to start the dialogue at all is the
 ask's own decision, written up in `slam-catch.notes.md`.
 
+## Rick's rulings (2026-09-23)
+
+- **A singleton is a control and protects the suit.** What a control bid
+  guards against is the defenders cashing the ace and king of a side
+  suit; keycard makes sure they cannot cash two aces, and controls check
+  for the top two in one suit. So "bare" means two or more cards with
+  neither the ace nor the king — a singleton or void is not bare.
+- **Control-bid when there is room and we have an open suit**, rather
+  than asking straight away.
+- **The answerer keeps showing controls** for now, with no extra values
+  required. Serious and Non-Serious 3NT will divide those hands later.
+
 ## Guidance
 
 Rick's ruling, which this module and the ask both implement:

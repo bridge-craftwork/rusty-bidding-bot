@@ -38,6 +38,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
   (`seat hand | auction | expect | why`) next to the modules; `-v` lists passes.
   `cargo test` runs them too. Put call expectations there, not in Rust tests.
+- **Par decides, BBA teaches**: where agreement with BBA and distance from
+  double-dummy par disagree, par wins, and the trade goes in the notes and
+  the commit message (docs/DESIGN.md).
 - `<module>.notes.md` next to each module: Rick's guidance, probe and corpus
   evidence, accepted differences from BBA, gaps and open questions. Update it
   when a decision is made or a probe settles something.

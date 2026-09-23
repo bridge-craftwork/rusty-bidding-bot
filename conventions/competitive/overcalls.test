@@ -6,7 +6,7 @@ vul     None
 
 # seat hand                 | auction | expect | why
 S AKT75.KJ9.3.JT93          | 1D      | 1S     | 11 HCP, five spades: a one-level overcall
-S 72.AT852.K92.KT6          | 1D      | 1H     | 9 HCP, five hearts: 8 total points is enough
+S 72.AT852.K92.KT6          | 1D      | P      | AT852 is not a suit: 2 of the top 5 and only 10 total points
 S KJ432.JT.A85.Q94          | 1H      | 1S     | five spades over their heart opening
 S 3.AQ3.AJ5.T97652          | 1D      | 2C     | 11 HCP, six clubs: the two level needs 12 total points
 S T986.A4.Q8.AQJ65          | 1H      | 2C     | 13 HCP, five clubs headed by AQJ
@@ -19,5 +19,5 @@ S 872.J43.QT65.964          | 1D      | P      | no overcall: nothing to say
 S AKQ765.A4.KQ3.A2          | 1H      | X      | 20 HCP: too strong to overcall, double first
 
 vul     Both
-S J87654.K3.Q42.83          | 1C      | 1S     | vulnerable: no jump on a poor suit, but 8 total points overcall
+S J87654.K3.Q42.83          | 1C      | P      | six ragged spades and 9 total points: nothing to bid
 S KQJ654.32.Q42.83          | 1C      | 2S     | vulnerable with KQJ: the jump is fine

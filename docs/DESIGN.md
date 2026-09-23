@@ -309,6 +309,16 @@ For each scenario and in total:
   | `1N P 2C P` | 2H | 2S | 41 |
   | `1S P 2N P` | 3C | 4S | 17 |
 
+- **Par decides; BBA teaches** (Rick, 2026-09-23). The two measures usually
+  move together, and where they do not, **par wins** — but the trade is
+  recorded, in the module's notes and in the commit, so it can be revisited.
+  BBA's job is to show us what is *missing*: a divergence tells us a rule
+  does not exist or does not fire. Par's job is to judge the rule we then
+  write. Following BBA into a contract further from par is copying, not
+  bidding. Recorded instances so far:
+  - notrump under interference: +1,991 calls agreeing, −973 IMPs against par
+    (−0.006 a board), taken because passing out their 1NT overcall with no
+    rule at all was the worse bridge.
 - **Card coverage**: a card is a few hundred switches and the rules read a few
   dozen; `rbb card coverage` splits what a card switches on into read,
   ignored, and play-only (carding and leads cannot change a call), and counts

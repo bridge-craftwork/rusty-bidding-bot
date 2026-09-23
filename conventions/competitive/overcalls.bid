@@ -28,19 +28,28 @@ module overcalls "Suit and notrump overcalls"
 
 # ── Simple overcalls at the one level ────────────────────────────────
 # `(1x)` binds x to the suit they opened; the rules below never bid it.
+#
+# The suit has to be worth bidding (Rick, 2026-09-23): two of the top
+# three or three of the top five honours, **or else an opening hand** --
+# it takes 12 total points to overcall on a ten-high suit. Without that
+# we overcalled 1♠ on J8753 with 10 HCP and pushed the auction up for
+# the opponents.
 after (1x)
   1S  "Overcall: five spades, {one_min}-{one_max} total points"
       shows S>=5, S>=H, S>=D, S>=C
       shows hcp+length_points>=one_min, hcp+length_points<=one_max
       when  x is not S
+      when  quality(S)>=good | top5(S)>=3 | hcp+length_points>=12
   1H  "Overcall: five hearts, {one_min}-{one_max} total points"
       shows H>=5, H>S, H>=D, H>=C
       shows hcp+length_points>=one_min, hcp+length_points<=one_max
       when  x is not H
+      when  quality(H)>=good | top5(H)>=3 | hcp+length_points>=12
   1D  "Overcall: five diamonds, {one_min}-{one_max} total points"
       shows D>=5, D>S, D>H, D>=C
       shows hcp+length_points>=one_min, hcp+length_points<=one_max
       when  x is not D
+      when  quality(D)>=good | top5(D)>=3 | hcp+length_points>=12
 
 # ── Simple overcalls at the two level ────────────────────────────────
 # Only where the suit cannot be shown at the one level: clubs over any
