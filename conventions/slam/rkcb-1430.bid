@@ -8,10 +8,41 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
   card   slam.blackwood.rkcb_1430
   needs  base
 
-# The ask.
-when we.trump is suit, we.forcing = game, !asked
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# When slam is worth investigating: see slam-catch.notes.md for the test
+# and the evidence behind it. Two branches, because the two cases are not
+# the same decision.
+#
+# 1. Partner's hand is limited (a raise, a limit raise) and nothing has
+#    forced us to game. The only other call on offer is game itself, so
+#    the ask must outrank it and its own test carries the whole decision:
+#    33 support points for the agreed suit if partner is at the top of
+#    what they have shown, seven controls in my own hand, and at most four
+#    losers. The loser and control tests are what keep five of the trump
+#    suit safe when the answer is bad, and what keeps the sign-off
+#    reliable: no hand short of this ever leaves game.
+#
+# 2. We are already forced to game. Partner has shown game values with no
+#    top to the range, so partner's maximum is the rest of the deck and
+#    the test above cannot be used. What is known instead is partner's
+#    floor: a game force promises about 13 support points. So the test is
+#    my own 18, for 31 between us -- the same number the `slam_try` hook
+#    uses, but counted in support points for the agreed suit rather than
+#    in bare HCP. Here the ask ranks *behind* the system's descriptive
+#    calls: shortness, a second suit and a control bid all say more than
+#    4NT does, and the ask is what is left when they are used up.
+
+when we.trump is suit, !asked, we.forcing = none | we.forcing = round
   4N  "Keycard ask in {trump}"
-      when  slam_try                   # judgment hook (Rust evaluator)
+      when  tp(trump) + partner.hcp.max >= 33, controls >= 7, losers <= 4
+      sets  ask=keycards(trump)
+      artificial
+      priority 1
+
+when we.trump is suit, !asked, we.forcing = game
+  4N  "Keycard ask in {trump}"
+      when  tp(trump) >= 18
       sets  ask=keycards(trump)
       artificial
 

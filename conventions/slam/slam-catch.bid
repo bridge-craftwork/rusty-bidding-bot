@@ -1,0 +1,27 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The card-independent half of the catch that takes over once a trump suit
+# is agreed. There are no auction patterns here: the rules key on
+# `we.trump` and `we.forcing`, so the same rule serves a simple raise, a
+# limit raise, a Jacoby 2NT, a splinter, a two-over-one and a transfer.
+#
+# The ask lives in blackwood.bid and rkcb-1430.bid, because which of them
+# is active is a card question and the answers differ. The test that
+# decides *whether* to ask is the same in both, and is written up in
+# slam-catch.notes.md.
+
+module slam-catch "Game or slam once a trump suit is agreed"
+  needs  base
+
+# ── The sign-off ──────────────────────────────────────────────────────
+#
+# Once a suit is agreed and we are forced to game, game in that suit is
+# always a call we can fall back on. Nothing here says anything about the
+# hand, so it ranks last: any rule with something to show beats it, and
+# the slam tries above it beat it. It exists so that an auction which has
+# agreed a trump suit never dies below game for want of a rule.
+
+when we.trump is suit, we.forcing = game, !asked
+  4{trump}  "Game in {trump}: nothing more to show"
+            when trump is H | trump is S
+            priority -20

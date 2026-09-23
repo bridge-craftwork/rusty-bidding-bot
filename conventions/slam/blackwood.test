@@ -8,3 +8,21 @@ N A532.J83.QJ43.Q3      | 1S P 3S P 4NT P              | 5D     | one ace
 S AK932.KQ4.AQ5.K2      | 1S P 3S P 4NT P 5D P         | 6S     | two aces + one: one missing, slam
 S AK932.KQ4.AQ5.K2      | 1S P 3S P 4NT P 5C P         | 5S     | two + "0 or 4" = two: two missing, sign off
 S KQ932.KQ4.KQ5.K2      | 1S P 3S P 4NT P 5C P         | 6S     | no aces of mine: "0 or 4" is 4
+
+# When to ask. Over a limited raise the ask must beat bidding game, so it
+# needs 33 support points facing partner's maximum, seven controls and at
+# most four losers. Hands from Rabbis_Rule and To_Finesse_Or_Not_To_Finesse
+# where BBA bids the same.
+S AKQ952.A.AQ865.5      | 1S P 2S P                    | 4NT    | 25 support points opposite a 6-9 raise, 7 controls, 2 losers
+S AK9874.A.AQJ54.9      | 1S P 2S P                    | 4NT    | 6-5 with every top card: only the aces are in doubt
+S AKT842.A.AQJ97.5      | 1S P 2S P                    | 4NT    | as above
+S AK9743.A.AQ32.93      | 1S P 3S P                    | 4NT    | opposite a limit raise the bar is two points lower
+S AKT862.A.AQ92.95      | 1S P 3S P                    | 4NT    | as above
+
+# And when not to. These are the same shape and nearly the same strength;
+# what they lack is the last two support points, so game is the limit.
+S AKJ642.A6.AQ52.7      | 1S P 2S P                    | 4S     | 22 support points: not enough to leave game
+S AK9865.A8.AQ85.7      | 1S P 2S P                    | 4S     | as above
+S AKT876.A.AQ97.T9      | 1S P 2S P                    | 4S     | as above
+S AKJ63.T5.Q8.AJT9      | 1S P 3S P                    | 4S     | 15 HCP: game in the fit
+S AKQJ5..T9643.AJ6      | 1S P 3S P                    | 4S     | shape but only six controls

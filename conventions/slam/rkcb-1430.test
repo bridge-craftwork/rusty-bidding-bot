@@ -9,3 +9,9 @@ N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT P 5C P           | 5H     | "1 or 
 N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT P 5D P           | 5H     | "0 or 3" facing my two: 2 or 5, unresolved: sign off
 S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P 5D P 5H P      | 6H     | three keycards: correct to six
 S KJ5.K74.KQ82.Q93      | 1NT P 4D P 4H P 4NT P 5D P 5H P      | P      | no keycards: accept the sign-off
+
+# When to ask. Same test as standard Blackwood (slam-catch.notes.md); only
+# the answers differ. Checked against BBA with `rbb probe` on this card.
+S AKQ952.A.AQ865.5      | 1S P 3S P                            | 4NT    | 25 support points opposite a limit raise, 7 controls
+S AK9874.A.AQJ54.9      | 1S P 3S P                            | 4NT    | 6-5 with every top card
+S AKJ63.T5.Q8.AJT9      | 1S P 3S P                            | 4S     | 15 HCP: game in the fit, no ask

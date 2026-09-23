@@ -1,0 +1,21 @@
+# The catch once a trump suit is agreed. The sign-off: with the suit agreed
+# and the auction forced to game, game in that suit is always available, so
+# an auction that has found a fit never dies below game for want of a rule.
+# Every hand here is a corpus hand where BBA bids the same (Jacoby_2N and
+# Splinters, 21GF-DEFAULT).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                | expect | why
+N Q753.KQ94.KQ7.63      | 1S P 2NT P 3H P        | 4S     | shortness heard, no slam values: game in the fit
+N AT754.7.A72.Q987      | 1S P 2NT P 3C P        | 4S     | nothing more to show
+N JT72.75.KQT4.AQ6      | 1S P 2NT P 3D P        | 4S     | nothing more to show
+N QT98.K5.AK752.82      | 1S P 2NT P 3D P        | 4S     | nothing more to show
+N AQ73.JT87.KQ9.52      | 1H P 2NT P 3D P        | 4H     | nothing more to show
+N J98.AT765.T3.AKT      | 1H P 2NT P 3C P        | 4H     | nothing more to show
+N A754.KQT9.9.Q632      | 1H P 2NT P 3S P        | 4H     | nothing more to show
+
+# The sign-off must not turn into a slam try: these hands stop in game.
+S AKJ63.T5.Q8.AJT9      | 1S P 3S P              | 4S     | 15 HCP opposite a limit raise: game, no ask
+S AK952.A3.Q54.952      | 1S P 3S P              | P      | a minimum: the limit raise is declined
+S AKT74.64.Q4.AJ43      | 1S P 2S P              | P      | a minimum opposite a simple raise
