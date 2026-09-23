@@ -1,0 +1,23 @@
+# Overcalls of a one-level opening, Basic-Bridge card. Hands are from
+# Practice-Bidding-Scenarios boards where we and BBA make the same call.
+card    Basic-Bridge
+dealer  E
+vul     None
+
+# seat hand                 | auction | expect | why
+S AKT75.KJ9.3.JT93          | 1D      | 1S     | 11 HCP, five spades: a one-level overcall
+S 72.AT852.K92.KT6          | 1D      | 1H     | 9 HCP, five hearts: 8 total points is enough
+S KJ432.JT.A85.Q94          | 1H      | 1S     | five spades over their heart opening
+S 3.AQ3.AJ5.T97652          | 1D      | 2C     | 11 HCP, six clubs: the two level needs 12 total points
+S T986.A4.Q8.AQJ65          | 1H      | 2C     | 13 HCP, five clubs headed by AQJ
+S 9.AKQ752.AT9.T98          | 1S      | 2H     | 13 HCP, six hearts: hearts over spades costs a level
+S KT3.T87.AQJT3.KQ          | 1C      | 1N     | 15 HCP balanced with a club stopper
+S AKQ8.QJ65.985.A8          | 1C      | 1N     | 17 HCP balanced, no five-card major
+S KQJ752.2.J32.Q73          | 1C      | 2S     | 8 HCP, six spades: the weak jump overcall
+S KQ976.32.A4.J432          | 1C      | 1S     | five spades and 9 total points: overcall, not a jump
+S 872.J43.QT65.964          | 1D      | P      | no overcall: nothing to say
+S AKQ765.A4.KQ3.A2          | 1H      | X      | 20 HCP: too strong to overcall, double first
+
+vul     Both
+S J87654.K3.Q42.83          | 1C      | 1S     | vulnerable: no jump on a poor suit, but 8 total points overcall
+S KQJ654.32.Q42.83          | 1C      | 2S     | vulnerable with KQJ: the jump is fine

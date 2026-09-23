@@ -1,0 +1,24 @@
+# Takeout doubles and advancer's replies, Basic-Bridge card.
+card    Basic-Bridge
+dealer  E
+vul     None
+
+# The double itself.
+# seat hand                 | auction | expect | why
+S AT92.A52.9.QJ942          | 1D      | X      | 12 HCP, three or more in every unbid suit
+S KJT6.AQ7.4.JT765          | 1D      | X      | 12 total points and a singleton in their suit
+S AKQ765.A4.KQ3.A2          | 1H      | X      | 20 HCP: too strong to overcall, double first
+S AT92.A52.9.QJ942          | 1H      | P      | only two spades... no: three unbid suits are needed
+S J54.A52.93.QJ942          | 1D      | P      | 8 HCP: not enough for a double
+
+# Advancer, after RHO passes. The double is forcing.
+N 76532.Q84.T54.32          | 1D X P  | 1S     | forced: five spades and nothing else to say
+N QJT2.75.JT62.932          | 1D X P  | 1S     | four spades, 3 HCP: the cheapest suit says 0-8
+N K32.QJ54.976.T87          | 1S X P  | 2H     | four hearts, 7 total points
+N KQ32.AJ54.97.T87          | 1S X P  | 3H     | four hearts and 10 HCP: jump to invite
+N K32.Q54.A976.KT7          | 1S X P  | 2S     | 13 HCP: the cue bid is the game force
+N KJ54.Q72.Q93.T87          | 1S X P  | 1N     | 9 total points, balanced, a spade stopper
+
+# The doubler's rebid: a minimum passes, 18+ bids on.
+S AJ82.4.KQ63.K872          | 1H X P 1S P | P  | a minimum double has said its piece
+S AKQ765.A4.KQ3.A2          | 1H X P 1S P | 4S | 20 HCP and six spades: raise to game

@@ -1,0 +1,12 @@
+# Advancing partner's one-level overcall, Basic-Bridge card.
+card    Basic-Bridge
+dealer  E
+vul     None
+
+# seat hand                 | auction  | expect | why
+N KQ5.J72.Q93.T874          | 1D 1S P  | 2S     | three spades and 8 HCP: raise
+N K8542.J72.93.T87          | 1D 1S P  | 3S     | five spades and 5 HCP: preemptive raise
+N AQ85.J7.Q932.T87          | 1D 1H P  | 1S     | four spades, no heart support: bid the major
+N K8.J72.Q93.AQT87          | 1D 1H P  | 2C     | five clubs and 10 HCP at the two level
+N KJ.Q72.A932.T874          | 1D 1S P  | 1N     | 10 HCP balanced with a diamond stopper, no fit
+N 843.J72.932.T874          | 1D 1S P  | P      | 1 HCP: an overcall is not forcing

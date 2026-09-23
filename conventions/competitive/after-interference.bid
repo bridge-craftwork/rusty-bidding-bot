@@ -1,0 +1,116 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responder's call when RHO has overcalled or doubled partner's one-level
+# opening (Rick, 2026-09-22): negative doubles through 3S, and natural
+# bids otherwise.
+#
+# The uncontested rules in responses.bid are written as `after 1x (P)`
+# patterns, so none of them fire once the opponents come in; everything
+# responder needs over interference is here.
+#
+# Negative double: 6+ total points with four or more cards in each unbid
+# major, so a suit bid in the only unbid major promises five. Where both
+# majors are bid (1H-(1S)) the double shows the minors instead.
+#
+# Not written yet: two-level and higher overcalls, the cue-bid raise,
+# jump raises, and opener's rebid after the auction has been contested.
+
+module after-interference "Our side once the opponents come in"
+  needs  base
+  param  neg = doubles.negative.play default true
+
+# ── They overcalled at the one level ─────────────────────────────────
+after 1x (1y) when neg
+  X   "Negative double: 6+ total points, four or more in each unbid major"
+      alert  artificial
+      shows  hcp+length_points>=6
+      shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
+      shows  ((D>=4 | x is D | y is D), (C>=4 | x is C | y is C)) | S>=4 | H>=4
+      when   (S<=4 | x is S | y is S), (H<=4 | x is H | y is H)
+      priority 1
+
+after 1x (1y)
+  1S  "6+ total points, four or more spades"
+      shows S>=4, hcp+length_points>=6
+      when  x is not S, y is not S
+      when  S>=5 | (x is not H, y is not H, H<=3)
+  1H  "6+ total points, four or more hearts"
+      shows H>=4, hcp+length_points>=6
+      when  x is not H, y is not H, y is not S
+      when  H>=5 | (x is not S, y is not S, S<=3)
+  1N  "6-10 total points, balanced, a stopper in {y}"
+      shows balanced, hcp+length_points>=6, hcp+length_points<=10
+      when  stop(y)
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+  2{x} "Raise: 6-9 total points, support for partner's suit"
+      shows x>=3, hcp+length_points>=6, hcp+length_points<=9
+      when  x is H | x is S | x>=5
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+  cheapest(C) "8+ total points, five or more clubs"
+      shows C>=5, hcp+length_points>=8
+      when  x is not C, y is not C
+  cheapest(D) "8+ total points, five or more diamonds"
+      shows D>=5, hcp+length_points>=8
+      when  x is not D, y is not D
+  2H  "8+ total points, five or more hearts"
+      shows H>=5, hcp+length_points>=8
+      when  y is S, x is not H
+  P   "Nothing to say over the overcall"  priority -10
+
+# ── They doubled for takeout ─────────────────────────────────────────
+# Redouble shows the balance of the strength; everything else is what it
+# would have been, a level lower in ambition.
+after 1x (X)
+  XX  "Redouble: 10+ total points, we own the hand"
+      alert  artificial
+      shows hcp+length_points>=10
+      priority 1
+  cheapest(S) "6-9 total points, four or more spades"
+      shows S>=4, S>H, hcp+length_points>=6, hcp+length_points<=9
+      when  x is not S
+  cheapest(H) "6-9 total points, four or more hearts"
+      shows H>=4, H>=S, hcp+length_points>=6, hcp+length_points<=9
+      when  x is not H, x is not S
+  cheapest(D) "6-9 total points, four or more diamonds"
+      shows D>=4, S<=3, H<=3, hcp+length_points>=6, hcp+length_points<=9
+      when  x is not D, x is not H, x is not S
+  2{x} "Raise: 6-9 total points, support for partner's suit"
+      shows x>=3, hcp+length_points>=6, hcp+length_points<=9
+      when  x is H | x is S | x>=5
+      when  (S<=3 | x is S), (H<=3 | x is H)
+  3{x} "Preemptive raise: four-card support, less than 8 total points"
+      shows x>=4, hcp+length_points<=7
+  1N  "6-9 total points, balanced"
+      shows balanced, hcp+length_points>=6, hcp+length_points<=9
+      when  (S<=3 | x is S), (H<=3 | x is H)
+      when  x<=2 | x is C | x is D
+  P   "Nothing to say over the double"  priority -10
+
+# ── Opener answers a negative double ─────────────────────────────────
+# Partner has shown 6+ total points and four or more cards in each unbid
+# major, so opener names the major he has, bids notrump with a stopper,
+# or rebids his own suit. A negative double is forcing: opener always
+# bids something, and jumps with 16-18.
+after 1x (1y) X (P)
+  cheapest(S) "Four spades for partner's double, minimum"
+      shows S>=4, hcp<=15
+      when  x is not S, y is not S
+  cheapest(H) "Four hearts for partner's double, minimum"
+      shows H>=4, hcp<=15
+      when  x is not H, y is not H
+  jump(S) "Four spades, 16-18"
+      shows S>=4, hcp=16..18
+      when  x is not S, y is not S
+  jump(H) "Four hearts, 16-18"
+      shows H>=4, hcp=16..18
+      when  x is not H, y is not H
+  1N  "12-14 balanced with a stopper in {y}"
+      shows balanced, hcp<=14
+      when  stop(y)
+  2N  "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19
+      when  stop(y)
+  2{x} "Six cards in {x}, minimum"
+      shows x>=6, hcp<=15
+  3{x} "Six cards in {x}, 16-18"
+      shows x>=6, hcp=16..18

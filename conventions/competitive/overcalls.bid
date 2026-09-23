@@ -1,0 +1,110 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Overcalls of a one-level opening on our right (Rick, 2026-09-22):
+#
+# - a simple overcall is always a five-card suit: 8-17 total points at the
+#   one level, 12-17 at the two level (BBA's Basic-Bridge meanings, which
+#   Rick adopted). No four-card overcalls on this card;
+# - too strong to overcall (18+ total points) is a takeout double first and
+#   the suit afterwards, whatever the shape (takeout-double.bid);
+# - a jump overcall follows the weak-two rules: six cards, 4-9 HCP, and
+#   vulnerable two of the top three or three of the top five honours;
+# - a direct 1NT overcall is 15-18 balanced with a stopper in their suit,
+#   a point wider than our 1NT opening.
+#
+# With two five-card suits the higher-ranking one is bid, as in base.bid:
+# each rule requires its suit to be at least as long as the suits above it
+# and longer than the suits below it, so only one of them can fire.
+
+module overcalls "Suit and notrump overcalls"
+  needs  base
+  param  one_min = overcalls.one_level_min default 8
+  param  one_max = overcalls.one_level_max default 17
+  param  two_min = overcalls.two_level_min default 12
+  param  two_max = overcalls.two_level_max default 17
+  param  jump    = overcalls.jump default weak
+  param  nt_min  = nt_overcalls.direct.range_min default 15
+  param  nt_max  = nt_overcalls.direct.range_max default 18
+
+# ── Simple overcalls at the one level ────────────────────────────────
+# `(1x)` binds x to the suit they opened; the rules below never bid it.
+after (1x)
+  1S  "Overcall: five spades, {one_min}-{one_max} total points"
+      shows S>=5, S>=H, S>=D, S>=C
+      shows hcp+length_points>=one_min, hcp+length_points<=one_max
+      when  x is not S
+  1H  "Overcall: five hearts, {one_min}-{one_max} total points"
+      shows H>=5, H>S, H>=D, H>=C
+      shows hcp+length_points>=one_min, hcp+length_points<=one_max
+      when  x is not H
+  1D  "Overcall: five diamonds, {one_min}-{one_max} total points"
+      shows D>=5, D>S, D>H, D>=C
+      shows hcp+length_points>=one_min, hcp+length_points<=one_max
+      when  x is not D
+
+# ── Simple overcalls at the two level ────────────────────────────────
+# Only where the suit cannot be shown at the one level: clubs over any
+# opening, diamonds over a major, hearts over 1S. A two-level bid in a
+# suit that could have been shown more cheaply is a jump, below.
+after (1x)
+  2C  "Overcall: five clubs, {two_min}-{two_max} total points"
+      shows C>=5, C>S, C>H, C>D
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      when  x is not C
+      when  C>=6 | quality(C)>=good | top5(C)>=4
+  2D  "Overcall: five diamonds, {two_min}-{two_max} total points"
+      shows D>=5, D>S, D>H, D>=C
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      when  x is not D, x is not C
+      when  D>=6 | quality(D)>=good | top5(D)>=4
+  2H  "Overcall: five hearts, {two_min}-{two_max} total points"
+      shows H>=5, H>S, H>=D, H>=C
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      when  x is not H, x is not D, x is not C
+      when  H>=6 | quality(H)>=good | top5(H)>=4
+
+# ── Notrump overcall ─────────────────────────────────────────────────
+# With a five-card major we show the major instead, which is what BBA
+# does: every 1NT overcall in the corpus had four cards or fewer in both.
+after (1x)
+  1N  "{nt_min}-{nt_max} balanced with a stopper in {x}"
+      shows balanced, hcp>=nt_min, hcp<=nt_max, S<=4, H<=4
+      when  stop(x)
+
+# ── Weak jump overcalls ──────────────────────────────────────────────
+# The weak-two rules of preempts.bid: six cards and 4-9 HCP, and
+# vulnerable two of the top three or three of the top five honours.
+# A jump is only a jump where the suit was biddable more cheaply, so
+# each rule names the openings it applies to.
+after (1x) when jump is weak
+  2D  "Weak jump overcall: six diamonds, 4-9"   shows D=6, hcp=4..9, H<=3, S<=3
+      when  x is not D, x is not H, x is not S
+      when  !vul | quality(D)>=good | top5(D)>=3
+  2H  "Weak jump overcall: six hearts, 4-9"     shows H=6, hcp=4..9, S<=3
+      when  x is not H, x is not S
+      when  !vul | quality(H)>=good | top5(H)>=3
+  2S  "Weak jump overcall: six spades, 4-9"     shows S=6, hcp=4..9
+      when  x is not S
+      when  !vul | quality(S)>=good | top5(S)>=3
+
+# Seven-card suits jump to the three level, as they open at the three
+# level uncontested.
+after (1x) when jump is weak
+  3C  "Jump overcall: seven clubs, 4-9"    shows C=7, hcp=4..9, H<=3, S<=3
+      when  x is not C
+      when  !vul | quality(C)>=good | top5(C)>=3
+  3D  "Jump overcall: seven diamonds, 4-9" shows D=7, hcp=4..9, H<=3, S<=3
+      when  x is not D
+      when  !vul | quality(D)>=good | top5(D)>=3
+  3H  "Jump overcall: seven hearts, 4-9"   shows H=7, hcp=4..9, S<=3
+      when  x is not H
+      when  !vul | quality(H)>=good | top5(H)>=3
+  3S  "Jump overcall: seven spades, 4-9"   shows S=7, hcp=4..9
+      when  x is not S
+      when  !vul | quality(S)>=good | top5(S)>=3
+
+# ── Nothing to say ───────────────────────────────────────────────────
+# An explicit pass, so that the seat is covered and partner can draw the
+# negative inference that we had no overcall.
+after (1x)
+  P   "No overcall"  priority -10

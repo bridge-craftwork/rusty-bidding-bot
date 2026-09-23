@@ -1,0 +1,45 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Advancer: partner has overcalled at the one level and RHO has passed.
+#
+# Ranges follow BBA's Basic-Bridge meanings, which are the usual ones: a
+# raise is 7-11 total points with three-card support, a new suit at the
+# one level 8+ with four cards, at the two level 9+ with five, and 1NT
+# 8-11 balanced with a stopper in their suit. The jump raise is weak.
+#
+# An overcall is not forcing, so advancer passes with less; there is no
+# forced bid here as there is after a takeout double.
+#
+# Not written yet: advances of a two-level or jump overcall, of a 1NT
+# overcall (BBA plays systems on: Stayman and transfers), advancer after
+# RHO has bid, and the cue-bid raise.
+
+module advances "Advancing partner's overcall"
+  needs  base
+  needs  overcalls
+  param  jump_raise = overcalls.responses.jump_raise default weak
+
+after (1x) 1y (P)
+  2{y} "Raise: 7-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
+  3{y} "Preemptive raise: four-card support, less than 8 total points"
+      shows y>=4, hcp+length_points<=7
+      when  jump_raise is weak
+  1S  "8+ total points, four or more spades"
+      shows S>=4, hcp+length_points>=8
+      when  x is not S, y is not S
+  1N  "8-11 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=8, hcp+length_points<=11
+      when  stop(x)
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+      when  y<=2 | y is C | y is D
+  cheapest(C) "9+ total points, five or more clubs"
+      shows C>=5, hcp+length_points>=9
+      when  x is not C, y is not C
+  cheapest(D) "9+ total points, five or more diamonds"
+      shows D>=5, hcp+length_points>=9
+      when  x is not D, y is not D
+  cheapest(H) "9+ total points, five or more hearts"
+      shows H>=5, hcp+length_points>=9
+      when  x is not H, y is not H
+  P   "Not enough to advance"  priority -10
