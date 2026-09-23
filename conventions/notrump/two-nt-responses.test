@@ -1,0 +1,17 @@
+# Responses to a 2NT opening: the 1NT structure one level up.
+card    Basic-Bridge
+dealer  S
+
+# seat hand             | auction        | expect | why
+N KJ54.Q762.93.874      | 2NT P          | 3C     | 6 HCP with four hearts and four spades: Stayman
+N KJ8542.Q72.93.87      | 2NT P          | 3H     | six spades: transfer
+N 82.QJ9732.K94.J8      | 2NT P          | 3D     | six hearts: transfer
+N K8.K74.Q963.T874      | 2NT P          | 3NT    | 8 HCP, no major: game
+N KJ2.Q74.K963.KT7      | 2NT P          | 4NT    | 12: quantitative, invites six
+N 832.J74.9632.874      | 2NT P          | P      | 1 HCP: 2NT is the limit
+S AQ3.KJ84.AQ54.K9      | 2NT P 3C P     | 3H     | four hearts
+S AQ32.KJ8.AQ54.K9      | 2NT P 3C P     | 3S     | four spades, not four hearts
+S AQ3.KJ8.AQ542.K9      | 2NT P 3C P     | 3D     | no four-card major
+S AQ3.KJ84.AQ54.K9      | 2NT P 3D P     | 3H     | completes the transfer
+N KJ54.Q762.93.874      | 2NT P 3C P 3H P | 4H    | the heart fit: game
+N KJ8542.Q72.93.87      | 2NT P 3H P 3S P | 4S    | six spades opposite 20-21: game

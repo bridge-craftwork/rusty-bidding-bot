@@ -1,0 +1,56 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responses to a 2NT opening: the 1NT structure one level up, which is
+# what BBA plays on this card — 3♣ Stayman, 3♦ and 3♥ transfers, 3NT to
+# play, 4NT quantitative.
+#
+# Only the asking calls and opener's answers are here. What follows is
+# already written against the question in `stayman.bid` and
+# `jacoby-transfers.bid` (`when answered majors`, `when answered
+# transfer(M)`), and the strength bands read opener's 20-21, so the same
+# rules invite and bid game at the right level.
+#
+# Without these rules responder passed a 2NT opening whatever he held:
+# 4,345 boards across the corpus, 123 of them in the Basic_* scenarios.
+
+module two-nt-responses "Responses to a 2NT opening"
+  needs  notrump-base
+  param  stayman = notrump.stayman.play default true
+  param  jacoby  = notrump.transfers.jacoby default true
+  param  puppet  = notrump.two_nt.puppet default false
+
+after 2N (P)
+  3C  "Stayman: asks for a four-card major"  alert
+      shows H=4 | S=4
+      when  stayman, !puppet, !shape 4333
+      sets  forcing=round, ask=majors
+      artificial
+      priority 1                           # ahead of a transfer with 5-4
+  3D  "Transfer to hearts"  announce "Transfer"
+      shows H>=5
+      when  jacoby
+      sets  forcing=round, ask=transfer(H)
+      artificial
+  3H  "Transfer to spades"  announce "Transfer"
+      shows S>=5
+      when  jacoby
+      sets  forcing=round, ask=transfer(S)
+      artificial
+  3N  "To play: {game} total points"       shows strength>=game, H<=4, S<=4
+  4N  "Quantitative: {slam_invite} total points, invites 6NT"
+      shows balanced, strength=slam_invite
+  6N  "Slam: {slam} total points"          shows balanced, strength=slam
+  P   "Nothing: {signoff} total points"    shows strength=signoff
+      priority -10
+
+# Opener answers Stayman. 3♦ is the negative, as over 1NT.
+after 2N (P) 3C (P)
+  3H  "4+ hearts"                 shows H>=4
+  3S  "4 spades, not 4 hearts"    shows S>=4, H<=3
+  3D  "No four-card major"        shows H<=3, S<=3
+
+# Opener completes the transfer.
+after 2N (P) 3D (P)
+  3H  "Completes transfer"
+after 2N (P) 3H (P)
+  3S  "Completes transfer"

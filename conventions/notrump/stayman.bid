@@ -37,6 +37,8 @@ when answered majors
       sets ask=invite(S)
   6N  "Slam: {slam} total points, no fit found"   shows strength=slam
   3N  "Game: {game} total points, no fit found"   shows strength=game         sets ask=choice
+      priority -1                                 # a known major fit first
   2N  "Invitational: {invite} total points, no fit found"
       shows strength=invite
       sets  ask=nt_invite
+      priority -1                                 # a known major fit first
