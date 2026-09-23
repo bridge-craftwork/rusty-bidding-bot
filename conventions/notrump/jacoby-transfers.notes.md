@@ -68,8 +68,31 @@ auctions, 39.2% the same contract. Jacoby_Super-Accept: 81.7%, 30.8%, 33.8%.
   game-forcing 3m ranks higher (17 boards).
 - **Opener after 6NT with five**: no correction to 6M yet.
 - **Interference**: a double of the transfer (31 boards), or an overcall.
+  (RHO's double of the 1NT opening and a 2♣ overcall are now covered —
+  see below — but not an overcall of the transfer itself.)
 
 ## Questions
 
 - How should responder invite with a five-card major and a four-card minor,
   now that 3m is game forcing?
+
+## Under interference (2026-09-23)
+
+`after 1N (X) when vs_double` and `after 1N (2C) when vs_2c` keep the
+transfers on their own calls, 2♦ for hearts and 2♥ for spades, with the
+completions written for each. Two differences from the uncontested
+rules:
+
+- **the longer major wins, and spades when they are equal**
+  (`when S>=H` / `when H>S`). Uncontested there is no such tie-break and
+  5-5 hands go through Stayman; under interference BBA transfers, and to
+  the higher suit. Note that a `prefer S` / `prefer H` pair did **not**
+  break the 5-5 tie — the two calls score the same — so the choice is a
+  `when` on each rule.
+- **over a 2♣ overcall the transfer has a five-HCP floor.** Below that
+  BBA leaves their 2♣ alone rather than push to the two level with
+  nothing; over a double there is no floor, because running is the
+  point.
+
+The super-accepts are not written for these auctions: opener simply
+completes. Evidence and numbers: `nt-interference.notes.md`.

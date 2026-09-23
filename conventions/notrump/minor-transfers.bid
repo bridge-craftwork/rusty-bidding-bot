@@ -4,6 +4,7 @@ module minor-transfers "Minor-suit responses to 1NT"
   needs  notrump-base
   param  style = notrump.minor_transfers default relay
   param  systems_on = nt_overcalls.direct.systems_on default true
+  param  vs_2c = notrump.transfers.vs_2c default false
 
 # One card field chooses the treatment (see notes). Only the calls that
 # start the sequence and opener's answer differ; responder's next call is
@@ -62,3 +63,27 @@ when answered transfer(m)
   3m  "Sign off in {m}"                    shows strength<=invite
   3N  "To play: {game} total points"       shows strength>=game
   3N  "To play: the {m} suit should run"   shows strength=invite    when partner.m>=3
+
+# ── Over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`). Every
+# treatment keeps its own calls: 2♣ was not one of them, so nothing
+# moves. The minor transfer picks up the same five-HCP floor as the
+# major ones: below that BBA leaves their 2♣ alone.
+after 1N (2C) when vs_2c, style is relay
+  2S  "Relay to 3♣: a weak hand with a long minor"  alert
+      shows C>=6 | D>=6, H<=4, S<=4, hcp>=5, strength=signoff
+      sets forcing=round, ask=relay
+      artificial
+after 1N (2C) 2S (P) when vs_2c, style is relay
+  3C  "Completes the relay"  artificial
+
+after 1N (2C) when vs_2c, style is four_way | style is four_way_reversed
+  2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
+  2N  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
+
+after 1N (2C) when vs_2c, style is bba
+  2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
+  3C  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
+after 1N (2C) 2S (P) when vs_2c, style is bba
+  3C  "Completes the transfer"
+after 1N (2C) 3C (P) when vs_2c, style is bba
+  3D  "Completes the transfer"

@@ -53,3 +53,19 @@ Corpus, when this module was added: +752 calls agree with BBA, 1 fewer.
 - Slam tries and game-forcing hands with a long minor.
 - The 2S range ask.
 - Interference over the transfers.
+
+## Under interference (2026-09-23)
+
+A 2♣ overcall of our 1NT takes none of these calls away, so
+`after 1N (2C) when vs_2c` repeats each treatment's opening call and
+opener's answer. The only change is a **five-HCP floor**, the same one
+the major transfers picked up: BBA does not enter at the two level over
+their 2♣ with nothing.
+
+Over a *double* there is no minor transfer written. On the cards that
+keep transfers on over a double (Basic-Bridge, 21GF-GIB) the minor
+transfers are off, so a weak hand with a long minor has nowhere to run
+and passes, which is what BBA does. A card with both on would want
+these rules here too.
+
+Evidence and numbers: `nt-interference.notes.md`.

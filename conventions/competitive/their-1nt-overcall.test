@@ -1,0 +1,27 @@
+# Responder when RHO overcalls partner's one-level opening with 1NT.
+# Every hand here is a board from `Opps_Overcall_1NT` where BBA makes the
+# same call.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand                 | auction | expect | why
+N KT54.K72.Q97.T85          | 1S 1NT  | 2S     | four-card support, 8 total points: raise
+N 965.Q842.A8753.9          | 1S 1NT  | 2S     | three-card support and a doubleton: 7 support points
+N J752.943.AJ6.T52          | 1H 1NT  | 2H     | three hearts, 6: raise
+N AT8752.J9.K5.T87          | 1C 1NT  | 2S     | 8 HCP and two extra spades: 10 total points
+N AJ864.98.KT4.976          | 1C 1NT  | 2S     | 8 HCP, five spades: 9 total points
+N 4.KT964.74.A8743          | 1D 1NT  | 2H     | 7 HCP, 5-5: 9 total points
+N KQ.KQ7654.93.T62          | 1D 1NT  | 2H     | 10 HCP, six hearts
+N 9873.AJ.2.QJT742          | 1D 1NT  | 2C     | six clubs and 9 total points
+N 94.42.A98762.A93          | 1C 1NT  | 2D     | six diamonds and 10 total points
+N A64.KT42.K3.QT82          | 1D 1NT  | X      | 12 balanced: we own the balance, penalise them
+N KQ84.985.KQ54.QT          | 1C 1NT  | X      | 12 with no five-card suit
+N 8.K95.K854.KQT84          | 1S 1NT  | X      | 11: a five-card minor is not enough to bid
+N AJT2.J853.KQ98.7          | 1C 1NT  | X      | 11, 4-4-4-1: double
+N 52.Q4.Q8.JT85432          | 1D 1NT  | 3C     | seven clubs and 5 total points: preempt
+
+# Below nine total points a suit of our own is not worth the two level:
+# they have 15-18 with a stopper and we are bidding into their strength.
+N K9432.J6.Q72.974          | 1D 1NT  | P      | five spades but only 7 total points
+N T7642.Q952.76.42          | 1D 1NT  | P      | 2 HCP
+N J53.86543.J53.82          | 1C 1NT  | P      | 2 HCP, five hearts

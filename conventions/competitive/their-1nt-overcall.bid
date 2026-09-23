@@ -1,0 +1,66 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responder after RHO overcalls partner's one-level opening with 1NT.
+#
+# `after-interference.bid` writes every one-level context as `after 1x (1y)`,
+# and `1y` binds a suit, so nothing there fires over a notrump overcall and
+# responder passed whatever he held. `1D (1N)` and `1C (1N)` were the two
+# largest no-rule points in the corpus.
+#
+# Their 1NT is 15-18 balanced with a stopper, so partner's opening plus our
+# own hand locates the rest of the deck: with 10+ total points we own the
+# balance and double for penalty. Otherwise it is a competitive auction one
+# level up, and the calls are natural. Nine total points is the floor for
+# bidding a suit of our own: they have 15-18 and a stopper, so entering at
+# the two level on less runs into their strength. BBA declares the bid as
+# 7-12 but only makes it from 9 up (366 of the 406 `Opps_Overcall_1NT`
+# decisions match at 9; the declared 7 matches 344).
+#
+# See their-1nt-overcall.notes.md for the BBA meanings this is built from.
+
+module their-1nt-overcall "Responder over their 1NT overcall"
+  needs  base
+
+after 1x (1N)
+  X   "Penalty: 10+ total points, no long suit of our own"
+      shows hcp+length_points>=10
+      when  (S<=4 | x is S), (H<=4 | x is H)
+      when  C<=5, D<=5
+      priority 1
+
+  2{x} "Raise: 6-9 total points, support for partner's suit"
+      shows x>=3, tp(x)>=6, tp(x)<=9
+      when  x is H | x is S | x>=5
+      priority 1                      # a fit first, even holding a suit of our own
+
+  2H  "9+ total points, five or more hearts"
+      shows H>=5, hcp+length_points>=9
+      when  x is not H
+
+  2S  "9+ total points, five or more spades"
+      shows S>=5, hcp+length_points>=9
+      when  x is not S
+
+  2C  "9+ total points, six or more clubs"
+      shows C>=6, hcp+length_points>=9
+      when  x is not C
+
+  2D  "9+ total points, six or more diamonds"
+      shows D>=6, hcp+length_points>=9
+      when  x is not D
+
+  # Seven cards and too little to bid them at the two level and be
+  # raised: jump instead and take the room away. At nine total points
+  # both this and the 2-level bid fit, and the seven-card suit says more.
+  3C  "Preemptive: seven or more clubs, 5-9 total points"
+      shows C>=7, hcp+length_points>=5, hcp+length_points<=9
+      when  x is not C
+  3D  "Preemptive: seven or more diamonds, 5-9 total points"
+      shows D>=7, hcp+length_points>=5, hcp+length_points<=9
+      when  x is not D
+
+  # No preemptive jump raise: BBA's 4M over their 1NT is a shapely 11
+  # count, not a weak five-card raise, and jumping to game on a raise
+  # this side of their 15-18 loses contracts.
+
+  P   "Nothing to say over their notrump"  priority -10

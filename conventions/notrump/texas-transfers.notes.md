@@ -72,7 +72,8 @@ The top four divergences in Texas_Transfer are this choice (234 boards).
   (46 boards). Rick's rule is 33 total points, so we pass the completion.
 - **Queen ask** (5D over 5C, 4 boards) and the **grand slam** (7S after 5S
   with 15–20, 5 boards): see `rkcb-1430.bid`.
-- Interference over Texas.
+- Interference over Texas (an overcall of the 4♦/4♥ transfer). A 2♣
+  overcall of the 1NT opening is covered; see below.
 
 ## Unexplained
 
@@ -80,3 +81,19 @@ The top four divergences in Texas_Transfer are this choice (234 boards).
   four or five keycards between the hands (for example
   `A4.QJT932.A.AT42` opposite a 5H answer). We bid 6H. It is not clear
   what BBA's 5H means there.
+
+## Under interference (2026-09-23)
+
+`after 1N (2C) when vs_2c` repeats the four Texas rules and the two
+completions, and adds one that only exists under interference:
+
+- **Texas as a preempt.** With **seven** cards in a major and no values
+  BBA transfers straight to game rather than to the two level, taking
+  the auction away from them: `A9.JT87432.2.T65` (5 HCP) bids 4♦ over
+  their 2♣. Written as `shows H>=7, hcp>=4, strength=signoff`.
+
+Nothing is written over a double: 4♦ and 4♥ are still available there,
+but BBA does not use them, and with `vs_double` off the two-level
+escapes are the whole structure.
+
+Evidence and numbers: `nt-interference.notes.md`.

@@ -5,6 +5,8 @@ module jacoby-transfers "Jacoby Transfers"
   needs  notrump-base
   param  texas = notrump.transfers.texas default false
   param  systems_on = nt_overcalls.direct.systems_on default true
+  param  vs_double = notrump.transfers.vs_double default false
+  param  vs_2c = notrump.transfers.vs_2c default false
 
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
@@ -81,3 +83,35 @@ when asked slam_try(M)
       sets ask=keycards(M)
       artificial
   P   "No slam: plays game"
+
+# ── Under interference ───────────────────────────────────────────────
+# `transfers.vs_double` and `transfers.vs_2c` say the transfers survive
+# RHO's double or 2♣ overcall. They keep their own calls in both cases:
+# 2♦ for hearts and 2♥ for spades. Opener completes as usual; the
+# super-accepts are not written for these auctions, so he simply bids
+# the major. One `after` line takes one `when`, so the double and the
+# 2♣ overcall are two contexts.
+
+# With both majors, transfer to the longer, and to spades when they are
+# equal: that is what BBA does under interference, and the higher suit
+# leaves us better placed if they bid again. (Uncontested, Stayman comes
+# first with 5-4 for Smolen; here it does not.)
+after 1N (X) when vs_double
+  2H  "Transfer to spades"  announce "Transfer"  shows S>=5  when S>=H  sets forcing=round, ask=transfer(S)  artificial
+  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  when H>S   sets forcing=round, ask=transfer(H)  artificial
+
+# Over the 2♣ overcall the transfer has a floor of five HCP: below that
+# BBA leaves the auction alone rather than push to the two level with
+# nothing. (Over the double there is no floor — running is the point.)
+after 1N (2C) when vs_2c
+  2H  "Transfer to spades"  announce "Transfer"  shows S>=5, hcp>=5  when S>=H  sets forcing=round, ask=transfer(S)  artificial
+  2D  "Transfer to hearts"  announce "Transfer"  shows H>=5, hcp>=5  when H>S   sets forcing=round, ask=transfer(H)  artificial
+
+after 1N (X) 2D (P) when vs_double
+  2H  "Completes transfer"
+after 1N (X) 2H (P) when vs_double
+  2S  "Completes transfer"
+after 1N (2C) 2D (P) when vs_2c
+  2H  "Completes transfer"
+after 1N (2C) 2H (P) when vs_2c
+  2S  "Completes transfer"

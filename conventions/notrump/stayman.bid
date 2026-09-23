@@ -5,6 +5,8 @@ module stayman "Stayman"
   needs  notrump-base
   param  minors = notrump.minor_transfers default relay
   param  systems_on = nt_overcalls.direct.systems_on default true
+  param  vs_double = notrump.transfers.vs_double default false
+  param  vs_2c = notrump.transfers.vs_2c default false
 
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
@@ -42,3 +44,41 @@ when answered majors
       shows strength=invite
       sets  ask=nt_invite
       priority -1                                 # a known major fit first
+
+# ── Under interference ───────────────────────────────────────────────
+# Two card switches say the 1NT structure survives RHO's action:
+# `transfers.vs_double` keeps it over a double, and `transfers.vs_2c`
+# over a 2♣ overcall. Over the double 2♣ is still Stayman; over 2♣ the
+# call is gone and the double takes its place, which is what BBA plays
+# on every card in the corpus that sets the switch.
+
+# Over the double Stayman starts a point below the invitational floor
+# (7 opposite 15-17): finding the 4-4 fit is also somewhere to run to.
+# It denies a five-card major, unlike the uncontested 2C: with 5-4 BBA
+# transfers rather than looking for the other major first.
+after 1N (X) when vs_double
+  2C  "Stayman: asks for a 4-card major"  alert
+      shows hcp>=24-partner.hcp.max, H=4 | S=4
+      when  H<=4, S<=4
+      sets  forcing=round, ask=majors
+      artificial
+      priority 1
+
+after 1N (2C) when vs_2c
+  X   "Stayman: asks for a 4-card major"  alert
+      shows strength>=invite, H=4 | S=4
+      when  H<=4, S<=4
+      sets  forcing=round, ask=majors
+      artificial
+      priority 1
+
+# Opener answers, one level higher over the 2♣ overcall.
+after 1N (X) 2C (P) when vs_double
+  2H  "4+ hearts"                 shows H>=4
+  2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
+  2D  "No 4-card major"           shows H<=3, S<=3
+
+after 1N (2C) X (P) when vs_2c
+  2H  "4+ hearts"                 shows H>=4
+  2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
+  2D  "No 4-card major"           shows H<=3, S<=3

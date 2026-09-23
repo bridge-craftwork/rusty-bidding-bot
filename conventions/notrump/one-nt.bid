@@ -9,6 +9,7 @@ module notrump-base "1NT opening and natural responses"
   param  three_c_transfer = notrump.transfers.three_c_diamonds default false
   param  three_d  = notrump.three_d_response default natural
   param  systems_on = nt_overcalls.direct.systems_on default true
+  param  vs_2c   = notrump.transfers.vs_2c default false
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -55,3 +56,25 @@ when asked nt_invite
   3S  "Declines, in the 4-4 spade fit"  shows S>=4, strength<=invite  when partner.S>=4
   3N  "Accepts the invitation"          shows strength>=game
   P   "Declines: not a maximum"         shows strength<=invite
+
+# Responder over a 2♣ overcall of our 1NT, when the card keeps the
+# structure on (`notrump.transfers.vs_2c`). The natural notrump calls
+# are unchanged — 2♣ takes nothing away from them — and the double
+# replaces the 2♣ Stayman call (stayman.bid). BBA plays it this way on
+# every card in the corpus that sets the switch.
+after 1N (2C) when vs_2c
+  6N  "To play: {slam} total points"
+      shows balanced, strength=slam, H<=4, S<=4
+  4N  "Quantitative: {slam_invite} total points, invites 6NT"
+      shows balanced, strength=slam_invite
+  3N  "To play: {game} total points"
+      shows strength=game
+  2N  "Invitational: {invite} total points"
+      shows strength=invite
+      when  minors is not four_way, minors is not four_way_reversed
+      sets  ask=nt_invite
+  3N  "No better call: {game} total points or more"
+      shows strength>=game
+      priority -5
+  P   "Nothing to say over their 2♣"
+      priority -10

@@ -4,6 +4,7 @@ module texas-transfers "Texas Transfers"
   card   notrump.transfers.texas
   needs  notrump-base
   param  systems_on = nt_overcalls.direct.systems_on default true
+  param  vs_2c = notrump.transfers.vs_2c default false
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
@@ -36,3 +37,38 @@ after 1N (P) 4H (P) | (1x) 1N (P) 4H (P) | (1x) P (P) 1N (P) 4H (P)
 when answered texas(M)
   4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
   P   "Game reached"
+
+# Texas over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`).
+after 1N (2C) when vs_2c
+  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, suit_strength=game, suit_points<=30-partner.points.max
+      sets  ask=texas(H)
+      artificial
+  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, suit_points>=33-partner.points.min
+      sets  ask=texas(H)
+      artificial
+  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, suit_strength=game, suit_points<=30-partner.points.max
+      sets  ask=texas(S)
+      artificial
+  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, suit_points>=33-partner.points.min
+      sets  ask=texas(S)
+      artificial
+  # Over interference Texas doubles as a preempt: with seven cards and
+  # no values BBA transfers straight to game rather than to the two
+  # level, and takes the auction away from them.
+  4D  "Preemptive: seven or more hearts, no values"  announce "Transfer"
+      shows H>=7, hcp>=4, strength=signoff
+      sets  ask=texas(H)
+      artificial
+  4H  "Preemptive: seven or more spades, no values"  announce "Transfer"
+      shows S>=7, hcp>=4, strength=signoff
+      sets  ask=texas(S)
+      artificial
+
+after 1N (2C) 4D (P) when vs_2c
+  4H  "Completes the transfer"
+after 1N (2C) 4H (P) when vs_2c
+  4S  "Completes the transfer"

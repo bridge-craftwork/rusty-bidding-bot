@@ -66,7 +66,13 @@ same contract.
 
 - (Six-card minors are now `minor-transfers.bid`; see its notes.)
 - **Grand slam**: nothing above the slam band. BBA bids 7NT with 21–23.
-- **Interference** over 1NT (the `Opps_*` scenarios).
+- **Interference** over 1NT: a double and a 2♣ overcall are now covered
+  (`nt-interference.bid` and the `after 1N (X)` / `after 1N (2C)`
+  contexts in `stayman.bid`, `jacoby-transfers.bid`,
+  `minor-transfers.bid`, `texas-transfers.bid` and the natural calls at
+  the foot of this file). **Anything higher than 2♣ is still not
+  covered**, and that is where Lebensohl belongs
+  (`notrump.lebensohl.over_interference`, on for 21GF-DEFAULT).
 
 ## Fixed (2026-09-21)
 
@@ -116,3 +122,21 @@ band matters.
 Corpus par improves by 623 IMPs and the divergence point drops from
 -2,669 to -2,198, where it stays as a *treatment* gap: we now bid 3NT
 where BBA starts a minor-suit sequence with 2♠.
+
+## Under interference (2026-09-23)
+
+`notrump.transfers.vs_double` and `notrump.transfers.vs_2c` were both on
+for Basic-Bridge and read by no rule: every notrump pattern was
+`after 1N (P)` or a competitive spelling of it, so a double or a 2♣
+overcall turned Stayman and the transfers off and responder passed
+whatever he held — 1,331 and 1,243 corpus decisions.
+
+Responder's natural notrump calls over a 2♣ overcall are written at the
+foot of `one-nt.bid` as their own `after 1N (2C) when vs_2c` context:
+2♣ takes none of them away, so 2NT is still the invitation and 3NT the
+game. Over a *double* there is no such block — BBA redoubles with the
+balanced 6+ hands instead of bidding notrump, and that rule is in
+`nt-interference.bid`.
+
+The full evidence, the two treatments of the double, and the measured
+effect are in `nt-interference.notes.md`.

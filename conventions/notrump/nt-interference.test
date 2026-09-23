@@ -1,0 +1,47 @@
+# Our 1NT when RHO doubles or overcalls 2♣.
+#
+# Basic-Bridge has `Transfers if RHO doubles` on, so the 1NT structure
+# survives the double. Hands from a `1NT X` probe of that card.
+card    Basic-Bridge
+dealer  S
+
+# seat hand                 | auction  | expect | why
+N KJ9.8632.KT532.A          | 1NT X    | 2C     | four hearts, 11: Stayman is still 2♣
+N Q965.J87.Q76.Q95          | 1NT X    | 2C     | four spades and 7: a point below the uncontested floor
+N T943.KQT97.75.42          | 1NT X    | 2D     | five hearts: transfer, however weak
+N T6.AT865.984.872          | 1NT X    | 2D     | 4 HCP, five hearts: transfer
+N A9854.8643.J5.95          | 1NT X    | 2H     | five spades: transfer
+N AJT862.65.Q43.98          | 1NT X    | 2H     | six spades
+N KJ532.97432.A7.6          | 1NT X    | 2H     | 5-5: transfer to the longer, not Stayman
+N J872.J6432.AK9.7          | 1NT X    | 2D     | five hearts and four spades: transfer, not Stayman
+N 9.AK6.K63.AKJT82          | 1NT X    | XX     | 18: we own the hand
+N 74.Q98.AT42.8654          | 1NT X    | XX     | 6 HCP, no suit to show
+N K6.84.T32.JT8532          | 1NT X    | P      | 4 HCP and no major: pass
+
+# 21GF-DEFAULT leaves `Transfers if RHO doubles` off, so the two-level
+# calls are natural escapes and nothing else acts. Hands from
+# `Opps_Double_1_NT`.
+card    21GF-DEFAULT
+dealer  S
+
+N J9753.KT63.54.T6          | 1NT X    | 2S     | 4 HCP, five spades: run
+N JT98762.63.K8.83          | 1NT X    | 2S     | seven spades
+N QT9.976543.T73.3          | 1NT X    | 2H     | 2 HCP, six hearts
+N 64.T73.42.KJ9632          | 1NT X    | 2C     | 4 HCP, six clubs
+N J5.84.QJ7632.T84          | 1NT X    | 2D     | 4 HCP, six diamonds
+N KJT63.T976.QJ6.7          | 1NT X    | P      | 7 HCP: sit for the double
+N T8762.87.A97.AT7          | 1NT X    | P      | 8 HCP with five spades: no reason to run
+N J96542.5.J53.K74          | 1NT X    | P      | 5 HCP: above the escape cut
+
+# A 2♣ overcall: the double takes over as Stayman and everything else
+# keeps its own call (`Transfers if RHO bids clubs`, on for both cards).
+N AJ52.95.KT.T6542          | 1NT 2C   | X      | four spades and 8: Stayman
+N Q85.Q962.J7.KJ54          | 1NT 2C   | X      | four hearts and 9
+N 6.AT953.Q75.JT93          | 1NT 2C   | 2D     | five hearts and 7: transfer
+N J95432.Q87.T93.K          | 1NT 2C   | 2H     | six spades and 6
+N AT9.J6.K2.976532          | 1NT 2C   | 2S     | six clubs and 8: the minor transfer is unchanged
+N 9.T73.AJT874.964          | 1NT 2C   | 3C     | six diamonds and 5
+N KQ8.KT6.742.T952          | 1NT 2C   | 2NT    | 8 balanced: the natural invitation
+N A9.JT87432.2.T65          | 1NT 2C   | 4D     | seven hearts and nothing: Texas as a preempt
+N 942.QJ9854.532.2          | 1NT 2C   | P      | 3 HCP: below the floor for entering at the two level
+N KT852.8732.5.T82          | 1NT 2C   | P      | 3 HCP with five spades

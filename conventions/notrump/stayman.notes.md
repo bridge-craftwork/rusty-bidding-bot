@@ -47,3 +47,22 @@ Choice of games after `1NT P 2C P 2M P 3NT P`: 210 of 211 corpus boards agree.
 - **Weak hands.** Of the corpus deals where BBA bids Stayman and we do not,
   176 are under 8 HCP and not 4-3-3-3: Garbage Stayman, or the lighter
   invitation above. Build Garbage Stayman as its own card option?
+
+## Under interference (2026-09-23)
+
+Two contexts at the foot of `stayman.bid` keep Stayman alive when RHO
+acts, gated by the card switches `notrump.transfers.vs_double` and
+`notrump.transfers.vs_2c`:
+
+- over a **double** it is still 2♣, from a point below the invitational
+  floor (`hcp>=24-partner.hcp.max`, so 7 opposite 15-17: finding the
+  4-4 fit is also somewhere to run to);
+- over a **2♣ overcall** the call is gone and **the double takes its
+  place**, 8+ as usual.
+
+Both **deny a five-card major**, unlike the uncontested 2♣: under
+interference BBA transfers with 5-4 rather than looking for the other
+major first, so Smolen's priority does not apply here. Opener's answers
+are the same three calls, written once per context.
+
+Evidence and numbers: `nt-interference.notes.md`.

@@ -1,0 +1,52 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responder when RHO acts over our 1NT opening.
+#
+# Stayman and the transfers keep their own calls in `stayman.bid` and
+# `jacoby-transfers.bid`, gated by the two card switches
+# `notrump.transfers.vs_double` and `notrump.transfers.vs_2c`. What is
+# left, and lives here, is what only exists because they bid: the
+# redouble, the weak escapes when the transfers are off, and the pass.
+#
+# See nt-interference.notes.md for the BBA meanings behind the ranges.
+
+module nt-interference "Our 1NT when RHO acts"
+  needs  notrump-base
+  param  vs_double = notrump.transfers.vs_double default false
+
+# ── They doubled, transfers on ───────────────────────────────────────
+# 2♣ is Stayman and 2♦/2♥ are the transfers (see the other modules).
+# Everything else with values redoubles: partner has 15-17 and they have
+# opened their mouth on the rest, so the hand is ours.
+after 1N (X) when vs_double
+  XX  "We own the hand: 6+ HCP and no suit to show"
+      shows hcp>=6
+      priority -1
+  P   "Not enough to act over the double"
+      shows hcp<=5
+      priority -10
+
+# ── They doubled, transfers off ──────────────────────────────────────
+# Without the transfers the two-level calls are natural escapes: a weak
+# hand runs to its own long suit and everything else passes. The cut is
+# four HCP, measured against BBA on the cards that leave the switch off
+# (see the notes): at five and up BBA sits for the double whatever the
+# shape, and running there loses more calls than it wins. There is no
+# redouble here for the same reason — BBA redoubles only about one hand
+# in twenty-five, and no condition we can write picks those out.
+after 1N (X) when !vs_double
+  2H  "Weak: five or more hearts, running from the double"
+      shows H>=5, H>=S, hcp<=4
+  2S  "Weak: five or more spades, running from the double"
+      shows S>=5, hcp<=4
+  2C  "Weak: six or more clubs, running from the double"
+      shows C>=6, H<=4, S<=4, hcp<=4
+  2D  "Weak: six or more diamonds, running from the double"
+      shows D>=6, H<=4, S<=4, hcp<=4
+  P   "Sitting for the double"
+      priority -10
+
+# Over a 2♣ overcall nothing new is needed: the double is Stayman
+# (stayman.bid), the transfers keep their calls (jacoby-transfers.bid,
+# minor-transfers.bid, texas-transfers.bid) and the natural notrump
+# calls and the pass are in one-nt.bid.
