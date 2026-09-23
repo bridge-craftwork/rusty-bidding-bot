@@ -431,7 +431,8 @@ knowingly chooses a higher-ranked one.
    first difference, reports agreement and the most common divergence
    points, and with `--par` scores differing contracts against double-dummy
    par (tables cached in `.rbb-cache/`).
-6. **Workbench GUI** (done): `rbb-workbench`. Scenario list, divergence
+6. **Workbench GUI** (done): `rbb-workbench [SCENARIO...]`, where a
+   scenario argument may be a pattern (`'Basic_*'`). Scenario list, divergence
    table, board list, and board detail: hands, both auctions, the engine's
    reading of BBA's calls, and at the first difference the ranked candidates
    (click a rule to open it in the editor) with each seat's known holding.

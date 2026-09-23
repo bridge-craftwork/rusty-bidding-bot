@@ -22,7 +22,9 @@ enum Command {
     Bid(BidCommand),
     /// Compare the engine with BBA's auctions in Practice-Bidding-Scenarios.
     Compare {
-        /// Scenario names (e.g. 1N Stayman); all when none are given.
+        /// Scenario names, or patterns with `*` and `?` (e.g. 1N Stayman
+        /// 'Basic_*'); all when none are given. Quote a pattern so the
+        /// shell does not try to expand it into filenames.
         scenarios: Vec<String>,
         /// Practice-Bidding-Scenarios checkout.
         #[arg(long, default_value = "../Practice-Bidding-Scenarios")]

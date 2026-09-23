@@ -26,7 +26,9 @@ struct Args {
     /// At most this many boards per scenario.
     #[arg(short, long)]
     limit: Option<usize>,
-    /// Scenarios to load; all when none are given.
+    /// Scenarios to load: names, or patterns with `*` and `?` (e.g.
+    /// 'Basic_*'); all when none are given. Quote a pattern so the shell
+    /// does not try to expand it into filenames.
     scenarios: Vec<String>,
     /// Command to open a rule in an editor; {file} and {line} are replaced.
     #[arg(long, default_value = "code -g {file}:{line}")]

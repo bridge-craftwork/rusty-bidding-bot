@@ -110,3 +110,22 @@ fn par_comes_from_the_files_double_dummy_table() {
     }
     assert!(!opts.dd_cache.exists(), "nothing was solved");
 }
+
+/// Scenario arguments may be patterns, so the workbench can be pointed at
+/// a family of scenarios without listing them.
+#[test]
+fn scenario_patterns_select_a_family() {
+    let report = run(&options_for("Basic_*"), &|_, _| {}).unwrap();
+    assert!(report
+        .summary
+        .scenarios
+        .iter()
+        .all(|s| s.name.starts_with("Basic_")));
+    assert_eq!(report.summary.scenarios.len(), 1, "one Basic_ fixture");
+
+    let all = run(&options_for("*"), &|_, _| {}).unwrap();
+    assert_eq!(all.summary.scenarios.len(), 2, "1N and Basic_NT");
+
+    let err = run(&options_for("Basik_*"), &|_, _| {}).unwrap_err();
+    assert!(err.contains("no scenario matching"), "{err}");
+}

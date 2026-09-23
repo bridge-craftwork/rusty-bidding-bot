@@ -19,7 +19,36 @@ pub struct Scenario {
     pub generator: String,
 }
 
-/// Every scenario under `pbs/bba`, or just those named in `only`.
+/// Does `name` match `pattern`? `*` stands for any run of characters and
+/// `?` for one; everything else is literal, so a pattern without either is
+/// an exact name.
+pub fn matches(pattern: &str, name: &str) -> bool {
+    let (p, n): (Vec<char>, Vec<char>) = (pattern.chars().collect(), name.chars().collect());
+    // The usual backtracking walk: remember the last `*` and, when the rest
+    // fails, let it swallow one more character.
+    let (mut i, mut j) = (0, 0);
+    let (mut star, mut after_star) = (None, 0);
+    while j < n.len() {
+        if i < p.len() && (p[i] == '?' || p[i] == n[j]) {
+            i += 1;
+            j += 1;
+        } else if i < p.len() && p[i] == '*' {
+            star = Some(i);
+            i += 1;
+            after_star = j;
+        } else if let Some(s) = star {
+            i = s + 1;
+            after_star += 1;
+            j = after_star;
+        } else {
+            return false;
+        }
+    }
+    p[i..].iter().all(|&c| c == '*')
+}
+
+/// Every scenario under `pbs/bba`, or those matching a pattern in `only`
+/// (`Basic_*`; quote it so the shell leaves it alone).
 pub fn discover(pbs: &Path, only: &[String]) -> Result<Vec<Scenario>, String> {
     let dir = pbs.join("bba");
     let entries = std::fs::read_dir(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
@@ -34,7 +63,7 @@ pub fn discover(pbs: &Path, only: &[String]) -> Result<Vec<Scenario>, String> {
             .unwrap_or_default()
             .to_string_lossy()
             .to_string();
-        if !only.is_empty() && !only.contains(&name) {
+        if !only.is_empty() && !only.iter().any(|p| matches(p, &name)) {
             continue;
         }
         let (ns_card, ew_card) = cards_for(&pbs.join("btn").join(format!("{name}.btn")));
@@ -50,8 +79,11 @@ pub fn discover(pbs: &Path, only: &[String]) -> Result<Vec<Scenario>, String> {
     out.sort_by(|a, b| a.name.cmp(&b.name));
     if !only.is_empty() {
         for want in only {
-            if !out.iter().any(|s| &s.name == want) {
-                return Err(format!("no scenario {want:?} in {}", dir.display()));
+            if !out.iter().any(|s| matches(want, &s.name)) {
+                return Err(format!(
+                    "no scenario matching {want:?} in {}",
+                    dir.display()
+                ));
             }
         }
     }
@@ -88,4 +120,28 @@ fn cards_for(btn: &Path) -> (String, String) {
         find("# convention-card-ns:").unwrap_or_else(|| DEFAULT_NS.into()),
         find("# convention-card-ew:").unwrap_or_else(|| DEFAULT_EW.into()),
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::matches;
+
+    #[test]
+    fn patterns_match_scenario_names() {
+        assert!(matches("Basic_NT", "Basic_NT"));
+        assert!(!matches("Basic_NT", "Basic_NTX"));
+        assert!(matches("Basic_*", "Basic_Takeout_Double"));
+        assert!(matches("Basic_*", "Basic_"));
+        assert!(!matches("Basic_*", "1N"));
+        assert!(matches("*Overcall*", "Opps_Preemptive_Overcall"));
+        assert!(matches("*", "anything"));
+        assert!(matches("1N?", "1N5"));
+        assert!(!matches("1N?", "1N"));
+        // Backtracking: the first `*` must give characters back.
+        assert!(matches(
+            "*_Double",
+            "Responsive_Double_after_Overcall_Double"
+        ));
+        assert!(!matches("*_Double", "Responsive_Double_after_Overcall"));
+    }
 }
