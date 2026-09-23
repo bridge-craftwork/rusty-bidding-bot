@@ -65,6 +65,10 @@ Across the corpus this slice is worth +36.6 points of call agreement and
 
 ## Gaps and open questions
 
+- **Their 1NT overcall**: `after 1x (1y)` binds a suit, so nothing fires
+  after `1x (1N)` and responder passes. It is the largest single no-rule
+  point left in the corpus — about 3,700 boards (`1D 1NT`, `1C 1NT`) —
+  and the `Opps_Overcall_1NT` scenario is 500 of them.
 - **Jump shifts** (`competitive.jump_shift_after_overcall` is strong on
   this card) and Lebensohl over an overcall of 1m (BBA plays it on the
   21GF card).

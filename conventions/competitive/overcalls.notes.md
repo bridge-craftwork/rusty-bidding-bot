@@ -88,8 +88,9 @@ diamonds", 4♦ "Texas", 2NT "8-9" and 3NT "9-15".
 
 ## Gaps and open questions
 
-- The balancing seat: `(1x) P (P)` has no rules at all, and the card has
-  separate `nt_overcalls.balance.*` ranges for it.
+The balancing seat is `balancing.bid`; responsive doubles are
+`responsive-doubles.bid`.
+
 - Overcalls of a 1NT opening, of a weak two, and of two-level openings.
 - Two-suited overcalls (Michaels, unusual notrump) are off on this card
   but the fields exist.

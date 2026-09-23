@@ -52,8 +52,10 @@ contracts from 5.6% to 7.4%.
 
 ## Gaps and open questions
 
-- **Responsive doubles** are off on this card (`doubles.responsive.play`),
-  so a double by advancer over their raise has no rule.
+- **Responsive doubles** are in `responsive-doubles.bid`, switched on by
+  `doubles.responsive.play` — the 21GF cards play them, Basic-Bridge does
+  not, so on this card a double by advancer over their raise still has no
+  rule.
 - The **penalty pass** of a takeout double with length in their suit.
 - Doubles of anything but a one-level suit opening: weak twos, preempts,
   1NT, and the **balancing double**.

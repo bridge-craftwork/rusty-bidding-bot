@@ -30,12 +30,16 @@ From `bba-cli --all-meanings`, grouped over all four opening suits:
 
 ## Gaps and open questions
 
-- **Advancing a 1NT overcall**: BBA plays systems on (Stayman 2♣ and
-  transfers 2♦/2♥ appear in the corpus). Nothing fires after
-  `(1x) 1N (P)` yet, which is about 3,600 corpus boards.
 - Advancing a **two-level or jump overcall**. Advancing when RHO doubles
   or bids is written, but only the raises, 1NT and a five-card suit at
-  the one level; there is no free bid at the three level and no cue bid.
-- The **cue-bid raise** of their suit (limit raise or better), and the
-  support cue bid (`overcalls.responses.support_cuebid`).
+  the one level; there is no free bid at the three level.
+- Advancer's **cue-bid raise** of their suit. Responder's is written
+  (`after-interference.bid`); advancer's is not, nor the support cue bid
+  (`overcalls.responses.support_cuebid`).
+- Advancing a **balancing** overcall uses the direct-seat ranges, though
+  partner is 8-15 there rather than 8-17.
+
+Advancing our 1NT overcall needs nothing here: systems are on, and the
+notrump modules carry the `(1x) 1N (P)` and `(1x) P (P) 1N (P)`
+spellings of their patterns (see `overcalls.notes.md`).
 - Advancer's continuations after the overcaller rebids.
