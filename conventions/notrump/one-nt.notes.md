@@ -75,3 +75,44 @@ same contract.
   transfer continuations got slam rules too. Corpus: +365 calls agree,
   same contract 10.6% → 11.1%.
 
+## A strong responder never passes 1NT (2026-09-22)
+
+The par-priced work queue put `1NT P — BBA 2♠, we pass` fifth in the
+corpus, 322 boards and -2,669 IMPs. Two separate things were going on,
+and only one of them is ours.
+
+**Not a transfer floor.** Jacoby transfers have no strength condition —
+`shows H>=5` and nothing else — and a 0-count with five hearts transfers.
+That was the first guess and it was wrong.
+
+**BBA's 2♠ was Minor Suit Stayman**, on `21GF-MSTandMSS`: the card sets
+`1N-2S Minor Suit Stayman = 1`, `1N-2N transfer to clubs = 1` and
+`1N-3C transfer to diamonds = 1`. Our card derivation has no option for
+that combination, so `notrump.minor_transfers` falls through to `none`
+and no rule claims 2♠ (see the gaps below).
+
+**What was ours**: responder held 16-21 with a long minor, and every
+natural response we had wanted either a five-card major or a balanced
+hand — 6NT, 4NT and 3NT all ask for `balanced` or an exact band — so
+nothing matched and he *passed* a 1NT opening with 17 HCP. Now:
+
+- **3♣ / 3♦** with six or more and too strong for 3NT
+  (`strength>=slam_invite`), when the card leaves those calls natural
+  (`transfers.three_c_diamonds`, `three_d_response`, and not the `bba`
+  minor style);
+- **3NT at `priority -5`** as the catch-all for `strength>=game`, so a
+  strong hand always has a call.
+
+The 3♣/3♦ rules were `strength>=game` at first, which bid the minor on
+ordinary game hands where BBA bids 3NT: -104 calls in Ned_2S alone. The
+band matters.
+
+| scenario | before | after |
+|---|---|---|
+| Ned_2S contracts | 60.2% | 61.0% |
+| Minor_Suit_Stayman contracts | 60.2% | 62.2% |
+| MST_or_MSS contracts | 1.8% | 3.4% |
+
+Corpus par improves by 623 IMPs and the divergence point drops from
+-2,669 to -2,198, where it stays as a *treatment* gap: we now bid 3NT
+where BBA starts a minor-suit sequence with 2♠.

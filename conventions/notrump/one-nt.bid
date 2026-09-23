@@ -6,6 +6,8 @@ module notrump-base "1NT opening and natural responses"
   param  nt_max   = notrump.one_nt.range_max default 17
   param  one_less = notrump.one_nt.allow_one_less default false
   param  minors   = notrump.minor_transfers default relay
+  param  three_c_transfer = notrump.transfers.three_c_diamonds default false
+  param  three_d  = notrump.three_d_response default natural
   param  systems_on = nt_overcalls.direct.systems_on default true
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
@@ -31,6 +33,15 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       shows strength=invite
       when  minors is not four_way, minors is not four_way_reversed   # 2NT is a transfer
       sets  ask=nt_invite
+  3C  "Too strong for 3NT, with six or more clubs"
+      shows C>=6, strength>=slam_invite, H<=4, S<=4
+      when  !three_c_transfer, minors is not bba
+  3D  "Too strong for 3NT, with six or more diamonds"
+      shows D>=6, strength>=slam_invite, H<=4, S<=4
+      when  three_d is natural
+  3N  "No better call: {game} total points or more"
+      shows strength>=game
+      priority -5                      # a strong hand never passes 1NT
   P   "No game interest: {signoff} total points"
       shows strength=signoff
       priority -10                     # only if nothing else fits

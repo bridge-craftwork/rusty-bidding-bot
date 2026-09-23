@@ -11,3 +11,12 @@ N K75.KQ3.KQ74.KQ7      | 1NT P          | 6NT    | 18 opposite 15-17: slam, no 
 N K96.Q5.AKQ6.QT73      | 1NT P          | 4NT    | 16: invites 6NT
 S KQJ.KJ73.AK5.T52      | 1NT P 2NT P    | 3NT    | 17 opposite 8-9: game is certain
 S KQJ.KJ73.AQ5.T52      | 1NT P 2NT P    | P      | 16 declines (BBA too, Basic_NT board 51)
+
+# A strong responder never passes 1NT. Too strong for 3NT with a long
+# minor, he bids it; otherwise 3NT is the fallback.
+card    Basic-Bridge
+N 54.AQ.KQ6.AQ8654      | 1NT P          | 3C     | 17 with six clubs: too strong for 3NT
+N Q.K9.AQJ843.KQ87      | 1NT P          | 3D     | 17 with six diamonds
+N QT7.8.KQ72.AKQT6      | 1NT P          | 3NT    | 16 with 5-4 in the minors: no better call
+N KQ2.Q8.KQ72.A874      | 1NT P          | 4NT    | 16 balanced: quantitative
+N 54.A2.KQ6.Q98654      | 1NT P          | 3NT    | 11 with six clubs: game values, play 3NT
