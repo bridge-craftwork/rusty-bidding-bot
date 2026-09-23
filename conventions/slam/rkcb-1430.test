@@ -15,3 +15,12 @@ S KJ5.K74.KQ82.Q93      | 1NT P 4D P 4H P 4NT P 5D P 5H P      | P      | no key
 S AKQ952.A.AQ865.5      | 1S P 3S P                            | 4NT    | 25 support points opposite a limit raise, 7 controls
 S AK9874.A.AQJ54.9      | 1S P 3S P                            | 4NT    | 6-5 with every top card
 S AKJ63.T5.Q8.AJT9      | 1S P 3S P                            | 4S     | 15 HCP: game in the fit, no ask
+
+# In a game force the 33 is measured against partner's floor. Opener's
+# jump to game over the Jacoby 2NT is a minimum, and responder's own
+# support points carry the rest. Corpus hands (Slam_After_Major_Fit)
+# where BBA also asks.
+N T642.AQJ3.AK93.K      | 1S P 2NT P 4S P                      | 4NT    | 17 HCP and a singleton king facing a game force: 33 between us
+N AQT6.Q8762.T.AKQ      | 1H P 2NT P 4H P                      | 4NT    | as above, with the ♦ singleton counted against five trumps
+N K985.AQ.AQT.AJ42      | 1S P 2NT P 4S P                      | 4NT    | 20 HCP: no suit is bare, so the keycards are the last question
+

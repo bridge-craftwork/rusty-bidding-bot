@@ -26,3 +26,9 @@ S AK9865.A8.AQ85.7      | 1S P 2S P                    | 4S     | as above
 S AKT876.A.AQ97.T9      | 1S P 2S P                    | 4S     | as above
 S AKJ63.T5.Q8.AJT9      | 1S P 3S P                    | 4S     | 15 HCP: game in the fit
 S AKQJ5..T9643.AJ6      | 1S P 3S P                    | 4S     | shape but only six controls
+
+# Two bare side suits and the ask is off: there is no answer that makes
+# twelve tricks safe when the first two tricks can go in either of two
+# suits. `rbb probe` on the Basic-Bridge card, where BBA agrees.
+S AKQJT9.AK.Q54.32      | 1S P 3S P                    | 4S     | ♦Q54 and ♣32: two suits where the first two tricks can go
+S AKQJT9.A.KQ54.32      | 1S P 3S P                    | 4NT    | the same hand with the ♦K: one bare suit is allowed

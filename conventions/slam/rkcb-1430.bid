@@ -10,41 +10,81 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
 
 # ── The ask ───────────────────────────────────────────────────────────
 #
-# When slam is worth investigating: see slam-catch.notes.md for the test
-# and the evidence behind it. Two branches, because the two cases are not
-# the same decision.
+# Rick's ruling:
 #
-# 1. Partner's hand is limited (a raise, a limit raise) and nothing has
-#    forced us to game. The only other call on offer is game itself, so
-#    the ask must outrank it and its own test carries the whole decision:
-#    33 support points for the agreed suit if partner is at the top of
-#    what they have shown, seven controls in my own hand, and at most four
-#    losers. The loser and control tests are what keep five of the trump
-#    suit safe when the answer is bad, and what keeps the sign-off
-#    reliable: no hand short of this ever leaves game.
+#   Slam asks isn't about 18 -- what has partner shown? It's more about
+#   33+ combined points, where in a suit contract the player with fewer
+#   trumps gets to switch to short-suit points -- 1 for a doubleton, 3
+#   for a singleton, 5 for a void, capped by number of trumps held. When
+#   the slam asker has unprotected suits, we will normally use control
+#   bids before keycard, and stop in game if there is a suit unprotected
+#   in both hands.
 #
-# 2. We are already forced to game. Partner has shown game values with no
-#    top to the range, so partner's maximum is the rest of the deck and
-#    the test above cannot be used. What is known instead is partner's
-#    floor: a game force promises about 13 support points. So the test is
-#    my own 18, for 31 between us -- the same number the `slam_try` hook
-#    uses, but counted in support points for the agreed suit rather than
-#    in bare HCP. Here the ask ranks *behind* the system's descriptive
-#    calls: shortness, a second suit and a control bid all say more than
-#    4NT does, and the ask is what is left when they are used up.
+# So the test is **33 combined support points with the agreed suit as
+# trump**, `we.tp(trump)`: my exact count plus the range a raise recorded
+# for partner. It replaces `tp(trump) + partner.hcp.max`, which was a
+# workaround from before raises showed support points. The evidence
+# behind the boundaries is in slam-catch.notes.md.
+#
+# Two branches, because partner's range is read from a different end.
+#
+# 1. **Partner is limited** (a raise, a limit raise) and nothing has
+#    forced us to game. Partner has shown a top as well as a bottom, and
+#    the only other call on offer is game, so the ask carries the whole
+#    decision and 33 is measured against partner's maximum:
+#    `we.tp(trump).max >= 33`. With it, the hand must play for twelve
+#    tricks opposite a minimum (`losers <= 4`) and must not have **two
+#    bare side suits** -- two or more cards with neither the ace nor the
+#    king, where the first two tricks can go. That last test replaces
+#    `controls >= 7`: it says which suit is the problem rather than
+#    counting. One bare suit is allowed, because a raise facing it will
+#    usually hold something there; two is where partner cannot cover
+#    both. BBA draws the same line: over `1S P 2S P` and `1S P 3S P` on
+#    the Basic-Bridge card it asks with none or one bare suit (272
+#    boards) and never with two.
+#
+# 2. **We are already forced to game.** Partner's range has no top, so
+#    `we.tp(trump).max` says nothing; what is known is partner's floor.
+#    33 between us on that floor is the test, and where the trump
+#    agreement recorded no support points for partner the fallback is my
+#    own 18, a game force being worth about 13. (`we.tp(trump).min` would
+#    be the way to write the first half, but the engine does not treat
+#    `we.tp` as depending on my hand and drops the candidate before the
+#    hand is looked at -- see slam-catch.notes.md, "For Rick".) Here the
+#    ask ranks *behind* the system's descriptive calls: shortness, a
+#    second suit and a control bid all say more than 4NT does, and the
+#    ask is what is left when they are used up.
+#
+# When the card plays control bids (`slam.cue_bids.play`), a hand with a
+# bare suit goes to `control-bids.bid` first and comes back here only
+# once partner has shown a control.
 
 when we.trump is suit, !asked, we.forcing = none | we.forcing = round
   4N  "Keycard ask in {trump}"
-      when  tp(trump) + partner.hcp.max >= 33, controls >= 7, losers <= 4
+      when  we.tp(trump).max >= 33, losers <= 4     # 33 facing partner's maximum
+      when  !((trump is not C, C>=2, !has(A,C), !has(K,C), trump is not D, D>=2, !has(A,D), !has(K,D)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not H, H>=2, !has(A,H), !has(K,H), trump is not S, S>=2, !has(A,S), !has(K,S)))  # and no two bare side suits
       sets  ask=keycards(trump)
       artificial
       priority 1
 
 when we.trump is suit, !asked, we.forcing = game
   4N  "Keycard ask in {trump}"
-      when  tp(trump) >= 18
+      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18  # 33 on partner's floor, or 18 of my own
       sets  ask=keycards(trump)
       artificial
+
+# After a control-bid exchange (`control-bids.bid`, when the card plays
+# them). `asked control(t)` is partner's control bid; `answered control(u)`
+# says partner was answering mine, so I am the hand that opened the
+# dialogue and the one that takes charge. Above it, the stop-in-game rule
+# at priority 20 has already ruled out a suit bare in both hands; below
+# it, any control still to show outranks the ask.
+
+when we.trump is suit, asked control(t), answered control(u)
+  4N  "Keycard ask in {trump}"
+      sets  ask=keycards(trump)
+      artificial
+      priority 5
 
 # The answers (1430: 5C and 5D swapped relative to 0314).
 when asked keycards(t)

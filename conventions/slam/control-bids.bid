@@ -1,0 +1,229 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Control bids: with a trump suit agreed and slam in the air, name a suit
+# you can control instead of asking for keycards straight away. Rick's
+# ruling:
+#
+#   When the slam asker has unprotected suits, we will normally use
+#   control bids before keycard, and stop in game if there is a suit
+#   unprotected in both hands.
+#
+# So this is the branch that runs *before* the ask in `blackwood.bid` /
+# `rkcb-1430.bid`, whenever the card plays control bids and the asker has
+# a suit it cannot control on its own. It is gated on the card:
+# `slam.cue_bids.play` is BBA's own `Cue bid` key, off on Basic-Bridge
+# (which is why BBA blasts 4NT there) and on for the 21GF cards.
+#
+# No auction patterns: like the rest of slam/, the rules key on
+# `we.trump`, `we.forcing` and the control-bid dialogue itself.
+
+module control-bids "Control bids before the keycard ask"
+  card   slam.cue_bids.play
+  needs  base
+  param  style = slam.cue_bids.style default first_or_second_round
+
+# ── What a control bid promises ───────────────────────────────────────
+#
+# `style` chooses. `first_round` is the ace or a void; the default,
+# `first_or_second_round`, adds the king and a singleton, the more common
+# modern treatment and the one BBA plays. Of 1024 control bids in
+# Slam_After_Major_Fit, Jacoby_2N and Splinters (21GF-DEFAULT, bba-cli
+# `--all-meanings`), every one held the ace, the king, a singleton or a
+# void of the suit named. Two held three small cards; none held a bare
+# doubleton, which is why a doubleton is not a control here either.
+#
+# ── Bare suits ────────────────────────────────────────────────────────
+#
+# A side suit is **bare** when I hold two or more cards in it and neither
+# the ace nor the king: I can lose the first two tricks there. That is
+# the suit a control bid is asking about, and a keycard answer cannot
+# settle it.
+#
+# ── Which call ────────────────────────────────────────────────────────
+#
+# The cheapest suit I can control, above the last bid: 3♠ (only with
+# hearts agreed, over partner's 3♥), then 4♣, 4♦, 4♥, 4♠, skipping the
+# trump suit, whose four level is the sign-off. The priorities put them
+# in bidding order, so skipping a suit denies a control in it. That
+# matches BBA, which cue-bids from `1H P 2N P 3H P` with 3♠ and from
+# `1S P 2N P 3S P` with 4♣, and goes on past game in hearts (4♣, 4♦, 4♠).
+#
+# Majors only, as with the sign-off in slam-catch.bid: five of a minor is
+# a different conversation.
+
+
+# ── Opening the dialogue, in a game force ─────────────────────────────
+#
+# The values are the ask's own (slam-catch.notes.md): 33 support points
+# between us with the agreed suit as trump, or 18 of my own facing a
+# game force, which promises about 13. What sends the hand here rather
+# than straight to 4NT is the bare suit.
+
+when we.trump is suit, !asked, (trump is H | trump is S), we.forcing = game
+  when trump is not S, partner.last = 3{trump}
+    3S  "Control bid in ♠: slam interest"  alert
+      shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      when  (tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18)                    # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(S)
+      artificial
+      priority 14
+  when trump is not C
+    4C  "Control bid in ♣: slam interest"  alert
+      shows has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
+      when  (tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18)                    # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(C)
+      artificial
+      priority 13
+  when trump is not D
+    4D  "Control bid in ♦: slam interest"  alert
+      shows has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
+      when  (tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18)                    # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(D)
+      artificial
+      priority 12
+  when trump is not H
+    4H  "Control bid in ♥: slam interest"  alert
+      shows has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
+      when  (tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18)                    # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(H)
+      artificial
+      priority 11
+  when trump is not S, !game_reached
+    4S  "Control bid in ♠: slam interest"  alert
+      shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      when  (tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18)                    # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(S)
+      artificial
+      priority 10
+
+# ── Opening the dialogue over a limited raise ─────────────────────────
+#
+# Partner has shown a top as well as a bottom, so 33 is measured against
+# partner's maximum. Nothing has forced us to game, so the control bid
+# says so itself.
+
+when we.trump is suit, !asked, (trump is H | trump is S), (we.forcing = none | we.forcing = round)
+  when trump is not S, partner.last = 3{trump}
+    3S  "Control bid in ♠: slam interest"  alert
+      shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      when  we.tp(trump).max >= 33, losers <= 4                                     # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(S), forcing=game
+      artificial
+      priority 14
+  when trump is not C
+    4C  "Control bid in ♣: slam interest"  alert
+      shows has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
+      when  we.tp(trump).max >= 33, losers <= 4                                     # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(C), forcing=game
+      artificial
+      priority 13
+  when trump is not D
+    4D  "Control bid in ♦: slam interest"  alert
+      shows has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
+      when  we.tp(trump).max >= 33, losers <= 4                                     # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(D), forcing=game
+      artificial
+      priority 12
+  when trump is not H
+    4H  "Control bid in ♥: slam interest"  alert
+      shows has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
+      when  we.tp(trump).max >= 33, losers <= 4                                     # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(H), forcing=game
+      artificial
+      priority 11
+  when trump is not S, !game_reached
+    4S  "Control bid in ♠: slam interest"  alert
+      shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      when  we.tp(trump).max >= 33, losers <= 4                                     # the ask's values
+      when  ((C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not S, S>=2, !has(A,S), !has(K,S)))  # a suit I cannot control
+      sets  ask=control(S), forcing=game
+      artificial
+      priority 10
+
+# ── Answering a control bid ───────────────────────────────────────────
+#
+# Partner has named a suit they can control; `t` is that suit.
+#
+# **Stop in game when a suit is unprotected in both hands.** This is what
+# makes the ask safe rather than a point count, and it is why the
+# dialogue exists: with two losers in a side suit that partner's control
+# bid did not name, twelve tricks are not there whatever the keycard
+# answer is, so game is the contract. It outranks everything else here.
+#
+# Which suits count as unprotected in partner's hand is what the ladder
+# buys us. Partner's control bid in `t` is partner's *cheapest* control,
+# so partner has denied every side suit below `t` that was there to be
+# bid, and will never bid one of them again. Two cases:
+#
+# - **Partner opened the dialogue** (`!answered control`): everything
+#   below `t` was available, so a bare suit of mine below `t` is bare in
+#   both hands, and game is the limit.
+# - **Partner is answering my own control bid in `u`**: only the suits
+#   *between* `u` and `t` were available to partner, and those are the
+#   ones now known to be bare in both. My own bare suits below `u` are
+#   not: partner bid on knowing I had denied them, which promises cover
+#   there. That is why the test is not symmetric.
+#
+# What neither case reaches is a suit below the first control bid of the
+# whole dialogue: nobody can name it, and the keycard ask has to settle
+# it. See slam-catch.notes.md.
+
+when we.trump is suit, asked control(t), (trump is H | trump is S)
+  4{trump}  "A suit is bare in both hands: game is the limit"
+      when  (!answered control, ((t is D, (C>=2, !has(A,C), !has(K,C))) | (t is H, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D))) | (t is S, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))))) | (answered control(u), ((u is C, t is H, (D>=2, !has(A,D), !has(K,D))) | (u is C, t is S, (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))) | (u is D, t is S, (trump is not H, H>=2, !has(A,H), !has(K,H)))))  # a bare suit partner's control bid has ruled out
+      priority 20
+  5{trump}  "A suit is bare in both hands: the dialogue is already past game"
+      when  (!answered control, ((t is D, (C>=2, !has(A,C), !has(K,C))) | (t is H, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D))) | (t is S, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))))) | (answered control(u), ((u is C, t is H, (D>=2, !has(A,D), !has(K,D))) | (u is C, t is S, (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))) | (u is D, t is S, (trump is not H, H>=2, !has(A,H), !has(K,H)))))  # as above; 4{trump} has gone by
+      priority 19
+
+  # Otherwise the next control up the line.
+  when trump is not C
+    4C  "Control bid in ♣: slam interest"  alert
+      shows has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
+      sets  ask=control(C)
+      artificial
+      priority 13
+  when trump is not D
+    4D  "Control bid in ♦: slam interest"  alert
+      shows has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
+      sets  ask=control(D)
+      artificial
+      priority 12
+  when trump is not H
+    4H  "Control bid in ♥: slam interest"  alert
+      shows has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
+      sets  ask=control(H)
+      artificial
+      priority 11
+  when trump is not S, !game_reached
+    4S  "Control bid in ♠: slam interest"  alert
+      shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      sets  ask=control(S)
+      artificial
+      priority 10
+
+  # Nothing more to show and nothing bare: game. The ask in
+  # blackwood.bid / rkcb-1430.bid sits between this and the control bids.
+  4{trump}  "No further control: game in {trump}"
+      priority -5
+  5{trump}  "No further control, and the dialogue is past game"
+      priority -6
+
+# ── Partner stopped in game ───────────────────────────────────────────
+#
+# I control-bid and partner bid game in the agreed suit. That is the
+# sign-off: the suit I could not control is bare in both hands. Pass.
+
+when we.trump is suit, answered control(t)
+  P   "Partner stopped in game over my control bid"
+      when partner.last = 4{trump}
+      priority 2

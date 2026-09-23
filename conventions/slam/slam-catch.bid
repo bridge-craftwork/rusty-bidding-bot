@@ -8,7 +8,8 @@
 # The ask lives in blackwood.bid and rkcb-1430.bid, because which of them
 # is active is a card question and the answers differ. The test that
 # decides *whether* to ask is the same in both, and is written up in
-# slam-catch.notes.md.
+# slam-catch.notes.md. When the card plays control bids, control-bids.bid
+# runs first and this sign-off is what the dialogue falls back to.
 
 module slam-catch "Game or slam once a trump suit is agreed"
   needs  base

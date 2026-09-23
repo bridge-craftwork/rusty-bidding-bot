@@ -1,0 +1,64 @@
+# Control bids before the keycard ask. Unless a comment says otherwise,
+# every hand is a corpus hand from Slam_After_Major_Fit, Jacoby_2N or
+# Splinters (21GF-DEFAULT, which has BBA's `Cue bid` switch on) where BBA
+# makes the same call. The last two blocks change a card field, so there
+# is no BBA to compare with: they pin the two switches instead.
+card    21GF-DEFAULT
+dealer  S
+
+# ── Opening the dialogue: the cheapest suit I can control ─────────────
+#
+# seat hand             | auction                          | expect | why
+S AKQT65.A.K82.JT5      | 1S P 2NT P 3H P 3S P             | 4D     | ♣JT5 is bare, so ask rather than blast: ♦K is the cheapest control
+S AKJ85.K.J752.QJ3      | 1S P 2NT P 3H P 3S P             | 4H     | no control in ♣ or ♦: the singleton ♥K is the first one up the line
+N QJ97.8653.K.AK87      | 1H P 2NT P 3H P                  | 4C     | with ♥ agreed the ♣A is cheapest; ♠QJ97 is not a control
+S A8732..KJ5.AKQJ5      | 1S P 2NT P 4C P 4D P             | 4H     | the heart void, cheapest above partner's 4♦
+
+# The 3♠ control bid: hearts agreed, so 3♠ is the one control bid still
+# below game and comes first. `rbb probe` on this card: BBA bids 3♠ too.
+dealer  N
+S A2.AKQJ85.KQ3.43      | 1H P 2NT P 3H P                  | 3S     | ♣43 is bare; 3♠ is the cheapest control and still below game
+dealer  S
+
+# ── Answering: the next control up the line ───────────────────────────
+S AKJ54.K852.K2.A3      | 1S P 2NT P 3S P 4C P             | 4D     | ♦K over partner's club control
+S KJ.AJ864.Q7.AJ72      | 1H P 2NT P 3H P 4D P             | 4S     | nothing in ♣ or ♥ to add; the doubleton ♠KJ is a king
+S AQT32.5.864.AQJ6      | 1S P 2NT P 3H P 4D P             | 4H     | the singleton heart is a second-round control
+S KQ982.AQ73.96.AQ      | 1S P 2NT P 3S P 4D P             | 4H     | ♥AQ over partner's diamond control
+N KQ73.T92.KQJ872.      | 1S P 3S P 4C P                   | 4D     | a limit raise, then opener's control bid: ♦KQJ and a club void
+
+# ── Stop in game when a suit is bare in both hands ────────────────────
+#
+# Partner's control bid is partner's cheapest, so it denies every side
+# suit below it. A suit I cannot control either is bare in both hands and
+# no keycard answer will change that.
+S KQ973.K743.KQ.QJ      | 1S P 2NT P 3S P 4D P             | 4S     | partner's 4♦ denied clubs, and ♣QJ loses the first two
+S AQ875.AK.A4.9872      | 1S P 2NT P 3S P 4D P             | 4S     | ♣9872: two fast losers in a suit neither of us can stop
+S A3.AKJT5.Q7.QJ74      | 1H P 2NT P 3H P 3S P             | 4H     | partner's 3♠ denied ♣ and ♦, and I hold both bare
+
+# ── Nothing more to show ──────────────────────────────────────────────
+S Q3.AQ975.Q8.KJ72      | 1H P 2NT P 3NT P 4C P            | 4H     | no control above partner's 4♣, and nothing bare below it
+
+# ── Partner stopped in game over my control bid ───────────────────────
+N AT64.AJ2.AT.T875      | 1S P 2NT P 3S P 4D P 4S P        | P      | partner could not cover the suit I bypassed: game is the limit
+N KJT94.J63.KJ9.QJ      | 1S P 2NT P 3S P 4D P 4S P        | P      | as above
+
+# ── The ask, once the controls are shown ──────────────────────────────
+S AKQT65.A.K82.JT5      | 1S P 2NT P 3H P 3S P 4D P 4H P   | 4NT    | partner has a control above my 4♦: now the keycards
+S Q9863.T92.A.AKQJ      | 1S P 2NT P 3D P 3S P 4C P 4H P   | 4NT    | as above
+
+# ── What the control bid promises: `slam.cue_bids.style` ──────────────
+#
+# The default is `first_or_second_round`: ace, king, singleton or void,
+# which is what BBA plays. Under `first_round` only the ace and the void
+# count, so the same hand bids its ace instead of its king.
+card    21GF-DEFAULT slam.cue_bids.style=first_round
+S AKQT65.A.K82.JT5      | 1S P 2NT P 3H P 3S P             | 4H     | the ♦K is not a control here; the singleton ♥A is
+S AKJ85.K.J752.QJ3      | 1S P 2NT P 3H P 3S P             | !4H    | the singleton ♥K is not a first-round control
+
+# ── The card switch ───────────────────────────────────────────────────
+#
+# `slam.cue_bids.play` is BBA's `Cue bid` key: off on Basic-Bridge, which
+# is why BBA blasts 4NT there and cue-bids on the 21GF cards.
+card    21GF-DEFAULT slam.cue_bids.play=false
+S AKQT65.A.K82.JT5      | 1S P 2NT P 3H P 3S P             | !4D    | no control bids on this card
