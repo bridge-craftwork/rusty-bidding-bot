@@ -115,6 +115,11 @@ pub struct SeatKnowledge {
     /// Total points in quarter points, [notrump, suit] (see
     /// `facts::Valuation`).
     pub pts: [Range; 2],
+    /// Support points with each suit as trump, C D H S, in whole points:
+    /// HCP plus shortness capped by the trump length. A raise shows these
+    /// and nothing else, so without them partner's floor for a slam
+    /// decision was unknowable.
+    pub tp: [Range; 4],
     /// Everything this seat has shown or denied, resolved so that it refers
     /// only to the seat's own hand (see `eval::resolve`), printed.
     pub shown: Vec<String>,
@@ -132,6 +137,7 @@ impl Default for SeatKnowledge {
                 Range::new(0, 4 * 37 + MAX_BONUS[0]),
                 Range::new(0, 4 * 37 + MAX_BONUS[1]),
             ],
+            tp: [Range::new(0, 37 + 13); 4],
             shown: Vec::new(),
             constraints: Vec::new(),
         }
@@ -149,6 +155,7 @@ impl SeatKnowledge {
             len: self.len,
             balanced: self.balanced,
             pts: self.pts,
+            tp: self.tp,
         }
     }
 
@@ -157,6 +164,7 @@ impl SeatKnowledge {
         self.len = b.len;
         self.balanced = b.balanced;
         self.pts = b.pts;
+        self.tp = b.tp;
     }
 
     /// Total points as whole points (fractions dropped), for comparisons:
@@ -213,12 +221,15 @@ struct Bounds {
     len: [Range; 4],
     balanced: Tri,
     pts: [Range; 2],
+    /// Support points per trump suit, C D H S (whole points).
+    tp: [Range; 4],
 }
 
 impl Bounds {
     fn is_contradiction(&self) -> bool {
         self.hcp.is_empty()
             || self.pts.iter().any(Range::is_empty)
+            || self.tp.iter().any(Range::is_empty)
             || self.len.iter().any(Range::is_empty)
     }
 
@@ -242,6 +253,16 @@ impl Bounds {
             p.lo = p.lo.max(4 * self.hcp.lo);
             p.hi = p.hi.min(4 * self.hcp.hi + bonus);
             self.hcp.hi = self.hcp.hi.min(p.hi.div_euclid(4));
+        }
+        // The same for support points, which are HCP plus shortness: at
+        // least the HCP, and at most the HCP plus a whole hand of trumps.
+        // A raise showing 10-12 support points therefore says 12 is the
+        // ceiling on the high cards, which is how partner's floor for a
+        // slam decision becomes knowable at all.
+        for (i, t) in self.tp.iter_mut().enumerate() {
+            t.lo = t.lo.max(self.hcp.lo);
+            t.hi = t.hi.min(self.hcp.hi + self.len[i].hi);
+            self.hcp.hi = self.hcp.hi.min(t.hi);
         }
         if self.balanced == Tri::Unknown && self.len.iter().any(|r| r.hi <= 1 || r.lo >= 6) {
             self.balanced = Tri::False;
@@ -270,6 +291,9 @@ impl Bounds {
         for i in 0..2 {
             k.pts[i] = self.pts[i].hull(o.pts[i]);
         }
+        for i in 0..4 {
+            k.tp[i] = self.tp[i].hull(o.tp[i]);
+        }
         k.balanced = if self.balanced == o.balanced {
             self.balanced
         } else {
@@ -283,6 +307,7 @@ impl Bounds {
             Attr::Hcp => &mut self.hcp,
             Attr::Len(s) => &mut self.len[s],
             Attr::Pts(i) => &mut self.pts[i],
+            Attr::Tp(s) => &mut self.tp[s],
         }
     }
 }
@@ -294,11 +319,25 @@ enum Attr {
     /// Total points (0 notrump, 1 suit): kept in quarters, compared by
     /// whole points.
     Pts(usize),
+    /// Support points with one suit as trump, in whole points.
+    Tp(usize),
 }
 
 fn attr_of(e: &Expr) -> Option<Attr> {
     let Expr::Path { path } = e else { return None };
-    if path.len() != 1 || path[0].args.is_some() {
+    if path.len() != 1 {
+        return None;
+    }
+    // `tp(S)`: the suit is a literal by the time a `shows` is recorded, a
+    // bound variable having been substituted by `eval::term`.
+    if let Some(args) = &path[0].args {
+        if path[0].name == "tp" && args.len() == 1 {
+            if let Expr::Path { path: arg } = &args[0] {
+                if arg.len() == 1 {
+                    return suit_index(&arg[0].name).map(Attr::Tp);
+                }
+            }
+        }
         return None;
     }
     match path[0].name.as_str() {
@@ -517,6 +556,23 @@ mod tests {
         assert!(k.add(expr("H>=4, S<=3")));
         assert_eq!(k.len[2], Range::new(4, 5));
         assert_eq!(k.len[3], Range::new(2, 3));
+    }
+
+    #[test]
+    fn a_raise_records_support_points_and_bounds_the_high_cards() {
+        let mut k = SeatKnowledge::default();
+        // A limit raise: support points and nothing else, which used to
+        // leave partner's strength completely unknown.
+        assert!(k.add(expr("tp(S)=10..12, S>=4")));
+        assert_eq!(k.tp[3], Range::new(10, 12));
+        assert_eq!(k.hcp.hi, 12, "support points are at least the high cards");
+        // Only spades were agreed; hearts keep the bound the high cards
+        // and the possible heart length imply.
+        assert_eq!(k.tp[2], Range::new(0, k.hcp.hi + k.len[2].hi));
+        // Support points never fall below the high cards.
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("hcp>=13")));
+        assert_eq!(k.tp[3].lo, 13);
     }
 
     #[test]

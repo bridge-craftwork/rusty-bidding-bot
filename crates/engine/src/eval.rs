@@ -704,9 +704,12 @@ impl<'a> Ctx<'a> {
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
             "has" | "stop" | "semibalanced" => Val::Bool(Tri::Unknown),
-            "keycards" | "tp" | "controls" | "losers" | "quality" | "top5" => {
-                Val::Num(Range::new(0, 40))
-            }
+            // Support points are known when a raise showed them.
+            "tp" => match self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)? {
+                Some(t) => Val::Num(k.tp[t]),
+                None => Val::Num(k.hcp),
+            },
+            "keycards" | "controls" | "losers" | "quality" | "top5" => Val::Num(Range::new(0, 40)),
             _ => return Err(format!("unknown attribute `{n}`")),
         })
     }
@@ -731,6 +734,18 @@ impl<'a> Ctx<'a> {
             "hcp" => {
                 let mine = self.num(&self.name(&plain("hcp"), b)?)?;
                 let theirs = self.pos.knowledge(self.partner()).hcp;
+                Val::Num(Range::new(mine.lo + theirs.lo, mine.hi + theirs.hi))
+            }
+            // The partnership's support points with `t` as trump: what the
+            // slam decision is made on, since a fit is worth more than the
+            // high cards say.
+            "tp" => {
+                let args = seg.args.as_deref().unwrap_or(&[]);
+                let mine = self.num(&self.self_func("tp", args, b)?)?;
+                let theirs = match self.suit_arg(args, 0, b)? {
+                    Some(t) => self.pos.knowledge(self.partner()).tp[t],
+                    None => self.pos.knowledge(self.partner()).hcp,
+                };
                 Val::Num(Range::new(mine.lo + theirs.lo, mine.hi + theirs.hi))
             }
             "keycards" => {
