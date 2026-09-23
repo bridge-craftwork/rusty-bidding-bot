@@ -18,6 +18,8 @@
 module after-interference "Our side once the opponents come in"
   needs  base
   param  neg = doubles.negative.play default true
+  param  cue_raise = competitive.cue_bid_raise.play default true
+  param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
 
 # ── They overcalled at the one level ─────────────────────────────────
 after 1x (1y) when neg
@@ -57,6 +59,69 @@ after 1x (1y)
       when  y is S, x is not H
   P   "Nothing to say over the overcall"  priority -10
 
+# ── They overcalled at the two level or jumped ───────────────────────
+# Rick: over a two-level overcall a new suit is 10+ total points with five
+# cards and forcing, and the negative double is 8+ with four. At the three
+# level the free bid needs another point.
+after 1x (2y) | 1x (3y) when y is not x
+  X   "Negative double: 8+ total points, four or more in each unbid major"
+      alert  artificial
+      shows  hcp+length_points>=8
+      shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
+      shows  ((D>=4 | x is D | y is D), (C>=4 | x is C | y is C)) | S>=4 | H>=4
+      when   (S<=4 | x is S | y is S), (H<=4 | x is H | y is H)
+      when   neg
+      priority 1
+  cheapest(y) "Cue bid: limit raise or better in {x}"
+      alert  artificial
+      shows  x>=3, hcp+length_points>=11
+      when   cue_raise
+      sets   forcing=round
+      priority 1
+  cheapest(x) "Raise: 7-10 total points, three-card support"
+      shows x>=3, hcp+length_points>=7, hcp+length_points<=10
+  cheapest(S) "10+ total points, five or more spades"
+      shows S>=5, hcp+length_points>=10
+      when  x is not S, y is not S, new_suit_forcing
+      sets  forcing=round
+  cheapest(H) "10+ total points, five or more hearts"
+      shows H>=5, S<=4, hcp+length_points>=10
+      when  x is not H, y is not H, new_suit_forcing
+      sets  forcing=round
+  cheapest(D) "10+ total points, five or more diamonds"
+      shows D>=5, S<=4, H<=4, hcp+length_points>=10
+      when  x is not D, y is not D, new_suit_forcing
+      sets  forcing=round
+  cheapest(C) "10+ total points, five or more clubs"
+      shows C>=5, S<=4, H<=4, hcp+length_points>=10
+      when  x is not C, y is not C, new_suit_forcing
+      sets  forcing=round
+
+# The same bids where the card says a new suit is not forcing
+# (Basic-Bridge sets `1X-(Y)-2Z forcing` off). Only the force differs.
+after 1x (2y) | 1x (3y) when y is not x, !new_suit_forcing
+  cheapest(S) "10+ total points, five or more spades, not forcing"
+      shows S>=5, hcp+length_points>=10
+      when  x is not S, y is not S
+  cheapest(H) "10+ total points, five or more hearts, not forcing"
+      shows H>=5, S<=4, hcp+length_points>=10
+      when  x is not H, y is not H
+  cheapest(D) "10+ total points, five or more diamonds, not forcing"
+      shows D>=5, S<=4, H<=4, hcp+length_points>=10
+      when  x is not D, y is not D
+  cheapest(C) "10+ total points, five or more clubs, not forcing"
+      shows C>=5, S<=4, H<=4, hcp+length_points>=10
+      when  x is not C, y is not C
+
+after 1x (2y) | 1x (3y) when y is not x
+  2N  "11-12 total points, balanced, a stopper in {y}"
+      shows balanced, hcp+length_points>=11, hcp+length_points<=12
+      when  stop(y)
+  3N  "13+ total points, balanced, a stopper in {y}"
+      shows balanced, hcp+length_points>=13
+      when  stop(y)
+  P   "Nothing to say over their overcall"  priority -10
+
 # ── They doubled for takeout ─────────────────────────────────────────
 # Redouble shows the balance of the strength; everything else is what it
 # would have been, a level lower in ambition.
@@ -88,11 +153,12 @@ after 1x (X)
   P   "Nothing to say over the double"  priority -10
 
 # ── Opener answers a negative double ─────────────────────────────────
-# Partner has shown 6+ total points and four or more cards in each unbid
-# major, so opener names the major he has, bids notrump with a stopper,
-# or rebids his own suit. A negative double is forcing: opener always
-# bids something, and jumps with 16-18.
-after 1x (1y) X (P)
+# Partner has shown four or more cards in each unbid major and 6+ total
+# points (8+ over a two-level overcall), so opener names the major he
+# has, bids notrump with a stopper, or rebids his own suit. A negative
+# double is forcing: opener always bids something, and jumps with 16-18.
+# Relative calls keep one set of rules right at every level.
+after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
   cheapest(S) "Four spades for partner's double, minimum"
       shows S>=4, hcp<=15
       when  x is not S, y is not S
@@ -105,13 +171,27 @@ after 1x (1y) X (P)
   jump(H) "Four hearts, 16-18"
       shows H>=4, hcp=16..18
       when  x is not H, y is not H
-  1N  "12-14 balanced with a stopper in {y}"
+  cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced, hcp<=14
       when  stop(y)
-  2N  "18-19 balanced with a stopper in {y}"
+  jump(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19
       when  stop(y)
-  2{x} "Six cards in {x}, minimum"
+  cheapest(x) "Six cards in {x}, minimum"
       shows x>=6, hcp<=15
-  3{x} "Six cards in {x}, 16-18"
+  jump(x) "Six cards in {x}, 16-18"
       shows x>=6, hcp=16..18
+
+# ── Opener answers the cue-bid raise ─────────────────────────────────
+# The cue bid showed three-card support and 11+ total points, so opener
+# accepts with more than a minimum and signs off otherwise.
+after 1x (2y) 3y (P) | 1x (3y) 4y (P)
+  4{x} "Accepts: game in {x}"
+      shows hcp>=16
+      when  x is H | x is S
+  3N  "Accepts: 16+ with a stopper in {y}"
+      shows balanced, hcp>=16
+      when  stop(y), x is C | x is D
+  cheapest(x) "Minimum: no game opposite a limit raise"
+      shows hcp<=15
+      priority -1

@@ -25,3 +25,16 @@ S 852.J7532.Q73.87          | 1H X    | 3H     | five hearts and 3 HCP: preempt 
 N K862.A3.KQ54.T87          | 1D 1H X P | 1S  | four spades for partner's double
 N A2.A3.KQJ654.T87          | 1D 1H X P | 2D  | six diamonds, minimum
 N A2.KQ3.AQJ654.T8          | 1D 1H X P | 3D  | six diamonds and 16 HCP: jump
+
+# Responder over a two-level overcall: Rick's ranges (X 8+ with four,
+# a new suit 10+ with five, the cue bid a limit raise or better).
+S KJ54.Q762.A3.876          | 1H 2C   | X      | 8 HCP with four spades: the negative double
+S KQJ54.Q7.A93.876          | 1H 2C   | 2S     | five spades and 11 HCP
+S K54.Q76.AQ3.8762          | 1H 2C   | 3C     | three hearts and 11 HCP: the cue-bid raise
+S KJ4.Q76.J93.8762          | 1H 2C   | 2H     | three hearts and 7 HCP: the simple raise
+S 954.Q76.J93.8762          | 1H 2C   | P      | 4 HCP: nothing
+S K54.Q76.AQ3.KJ62          | 1H 3C   | 4C     | 15 HCP: the cue bid at the three level
+
+# Opener answers the double at the level the overcall forced.
+N A2.KQJ654.K873.T         | 1H 2C X P | 2H    | six hearts, minimum
+N K862.KQJ65.A4.T7         | 1H 2C X P | 2S    | four spades for the double
