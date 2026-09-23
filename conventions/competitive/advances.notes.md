@@ -33,8 +33,9 @@ From `bba-cli --all-meanings`, grouped over all four opening suits:
 - **Advancing a 1NT overcall**: BBA plays systems on (Stayman 2♣ and
   transfers 2♦/2♥ appear in the corpus). Nothing fires after
   `(1x) 1N (P)` yet, which is about 3,600 corpus boards.
-- Advancing a **two-level or jump overcall**, and advancing when RHO has
-  bid or doubled.
+- Advancing a **two-level or jump overcall**. Advancing when RHO doubles
+  or bids is written, but only the raises, 1NT and a five-card suit at
+  the one level; there is no free bid at the three level and no cue bid.
 - The **cue-bid raise** of their suit (limit raise or better), and the
   support cue bid (`overcalls.responses.support_cuebid`).
 - Advancer's continuations after the overcaller rebids.

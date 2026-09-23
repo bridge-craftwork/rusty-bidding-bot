@@ -43,3 +43,36 @@ after (1x) 1y (P)
       shows H>=5, hcp+length_points>=9
       when  x is not H, y is not H
   P   "Not enough to advance"  priority -10
+
+# ── Advancer when RHO does not pass ──────────────────────────────────
+# RHO has doubled or bid over the overcall. Support is still the first
+# thing to show, and raising at once takes bidding room from them.
+after (1x) 1y (X)
+  2{y} "Raise: 7-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
+  3{y} "Preemptive raise: four-card support, less than 8 total points"
+      shows y>=4, hcp+length_points<=7
+  P   "Nothing to say over their double"  priority -10
+
+after (1x) 1y (1z)
+  2{y} "Raise: 7-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
+  3{y} "Preemptive raise: four-card support, less than 8 total points"
+      shows y>=4, hcp+length_points<=7
+  1N  "8-11 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=8, hcp+length_points<=11
+      when  stop(x), y<=2
+  cheapest(S) "Free bid: 9+ total points, five or more spades"
+      shows S>=5, hcp+length_points>=9
+      when  x is not S, y is not S, z is not S
+  cheapest(H) "Free bid: 9+ total points, five or more hearts"
+      shows H>=5, S<=4, hcp+length_points>=9
+      when  x is not H, y is not H, z is not H
+  P   "Nothing to say over their bid"  priority -10
+
+after (1x) 1y (2z)
+  2{y} "Raise: 7-11 total points, three-card support"
+      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
+  3{y} "Raise to the three level: four-card support, 8-11 total points"
+      shows y>=4, hcp+length_points>=8, hcp+length_points<=11
+  P   "Nothing to say over their bid"  priority -10

@@ -44,10 +44,16 @@ passing). Adding it took call-2 agreement from 46.6% to 87.5%.
 - We require three cards in every unbid suit; BBA's meaning allows a
   doubleton in an unbid minor on stronger hands.
 
+Advancer when RHO does not pass is written too: a free bid needs 6+ at
+the one level and 8+ higher, the cue bid is still 12+, and over a
+redouble advancer names his cheapest four-card suit however weak. That
+alone took Basic_Takeout_Double from 71.3% to 72.5% of calls and its
+contracts from 5.6% to 7.4%.
+
 ## Gaps and open questions
 
-- Advancer when **RHO bids over the double** — no rules at all yet, and
-  responsive doubles are off on this card (`doubles.responsive.play`).
+- **Responsive doubles** are off on this card (`doubles.responsive.play`),
+  so a double by advancer over their raise has no rule.
 - The **penalty pass** of a takeout double with length in their suit.
 - Doubles of anything but a one-level suit opening: weak twos, preempts,
   1NT, and the **balancing double**.

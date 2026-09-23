@@ -112,3 +112,61 @@ after (1x) X (P) 2y (P)
   2N  "18-19 balanced with a stopper in {x}"
       shows balanced, hcp=18..19
       when  stop(x)
+
+# ── Advancer when RHO does not pass ──────────────────────────────────
+# The double is no longer forcing: advancer passes with nothing and bids
+# his own suit freely. Over a one-level bid a four-card major is enough;
+# higher up he needs five cards and more values.
+after (1x) X (1y)
+  1S  "Free bid: 6+ total points, four or more spades"
+      shows S>=4, hcp+length_points>=6
+      when  x is not S, y is not S
+  cheapest(H) "Free bid: 6+ total points, five or more hearts"
+      shows H>=5, hcp+length_points>=6
+      when  x is not H, y is not H
+  cheapest(D) "Free bid: 6+ total points, five or more diamonds"
+      shows D>=5, S<=3, H<=4, hcp+length_points>=6
+      when  x is not D, y is not D
+  cheapest(C) "Free bid: 6+ total points, five or more clubs"
+      shows C>=5, S<=3, H<=4, hcp+length_points>=6
+      when  x is not C, y is not C
+  1N  "8-11 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=8, hcp+length_points<=11
+      when  stop(x)
+  2{x} "Cue bid: 12+ total points"
+      alert  artificial
+      shows  hcp+length_points>=12
+      sets   forcing=game
+      priority 1
+  P   "No free bid"  priority -10
+
+after (1x) X (2y)
+  cheapest(S) "Free bid: 8+ total points, five or more spades"
+      shows S>=5, hcp+length_points>=8
+      when  x is not S, y is not S
+  cheapest(H) "Free bid: 8+ total points, five or more hearts"
+      shows H>=5, S<=4, hcp+length_points>=8
+      when  x is not H, y is not H
+  cheapest(D) "Free bid: 8+ total points, five or more diamonds"
+      shows D>=5, S<=4, H<=4, hcp+length_points>=8
+      when  x is not D, y is not D
+  cheapest(C) "Free bid: 8+ total points, five or more clubs"
+      shows C>=5, S<=4, H<=4, hcp+length_points>=8
+      when  x is not C, y is not C
+  2N  "11-12 total points, balanced, a stopper in {x}"
+      shows balanced, hcp+length_points>=11, hcp+length_points<=12
+      when  stop(x)
+  P   "No free bid"  priority -10
+
+# RHO redoubled: partner still wants to hear a suit, so advancer names
+# his cheapest four-card suit however weak he is.
+after (1x) X (XX)
+  cheapest(S) "Four or more spades"   shows S>=4, S>H
+      when  x is not S
+  cheapest(H) "Four or more hearts"   shows H>=4, H>=S
+      when  x is not H
+  cheapest(D) "Four or more diamonds" shows D>=4, D>C, S<=3, H<=3
+      when  x is not D
+  cheapest(C) "Four or more clubs"    shows C>=4, C>=D, S<=3, H<=3
+      when  x is not C
+  P   "No four-card suit to name"  priority -10

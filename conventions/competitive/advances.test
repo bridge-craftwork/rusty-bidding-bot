@@ -10,3 +10,9 @@ N AQ85.J7.Q932.T87          | 1D 1H P  | 1S     | four spades, no heart support:
 N K8.J72.Q93.AQT87          | 1D 1H P  | 2C     | five clubs and 10 HCP at the two level
 N KJ.Q72.A932.T874          | 1D 1S P  | 1N     | 10 HCP balanced with a diamond stopper, no fit
 N 843.J72.932.T874          | 1D 1S P  | P      | 1 HCP: an overcall is not forcing
+
+# Advancer when RHO does not pass.
+N KQ5.J72.Q93.T874          | 1D 1S X  | 2S     | three spades and 8 HCP: raise over their double
+N K8542.J72.93.T87          | 1D 1S X  | 3S     | five spades and 5 HCP: preempt them
+N KQ5.J72.Q93.T874          | 1D 1S 2H | 2S     | the raise still comes first
+N 843.J72.932.T874          | 1D 1S 2H | P      | 1 HCP: pass

@@ -22,3 +22,10 @@ N KJ54.Q72.Q93.T87          | 1S X P  | 1N     | 9 total points, balanced, a spa
 # The doubler's rebid: a minimum passes, 18+ bids on.
 S AJ82.4.KQ63.K872          | 1H X P 1S P | P  | a minimum double has said its piece
 S AKQ765.A4.KQ3.A2          | 1H X P 1S P | 4S | 20 HCP and six spades: raise to game
+
+# Advancer when RHO does not pass: the double is no longer forcing.
+N 76532.Q84.T54.32          | 1D X 1H | P      | 3 HCP: no free bid
+N KQ532.Q84.T5.T32          | 1D X 1H | 1S     | 8 HCP and five spades: a free bid
+N KQ5.Q84.T54.T932          | 1D X 1H | P      | no suit and no stopper: pass
+N K32.QJ54.A97.KT7          | 1D X 1H | 2D     | 15 HCP: the cue bid
+N QJT2.75.JT62.932          | 1D X XX | 1S     | partner still wants a suit
