@@ -24,6 +24,10 @@ pub enum ProblemKind {
     ShortFit,
     /// A call contradicted what the same player had shown.
     Contradiction,
+    /// A pass where our own rules said the auction was forcing: partner's
+    /// call was forcing for one round, or we were in a game force below
+    /// game. The engine only does this when no rule matched at all.
+    BrokenForce,
     /// The engine did not finish the auction.
     Runaway,
 }
@@ -35,6 +39,7 @@ impl ProblemKind {
             ProblemKind::ArtificialContract => "contract is an artificial call",
             ProblemKind::ShortFit => "trump fit under 7 cards",
             ProblemKind::Contradiction => "contradicts earlier calls",
+            ProblemKind::BrokenForce => "passed a forcing auction",
             ProblemKind::Runaway => "auction not finished",
         }
     }
@@ -136,10 +141,16 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     let mut steps: Vec<rbb_engine::Step> = Vec::new();
     let mut acted = [false; 2];
     let mut live: Vec<bool> = Vec::new();
+    // Whether the caller's side was forced to bid at each call of our
+    // auction: partner's call forcing for a round, or a game force below
+    // game. The engine will not choose a pass there, so a pass means no
+    // rule matched and it fell back to one.
+    let mut forced: Vec<bool> = Vec::new();
     let mut at_divergence = None;
     for (i, call) in reference.iter().enumerate() {
         let before = pos.clone();
         let seat = before.next_caller();
+        let was_forced = is_forced(&before, seat);
         let (choice, step) = engine.step(&mut pos, hand(seat), call);
         if at_divergence.is_none() && &choice.call != call {
             at_divergence = Some((i, before));
@@ -149,6 +160,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             live.push(acted[side]);
             acted[side] |= !call.is_pass();
             decided.push(choice.rule.is_some());
+            forced.push(was_forced);
             steps.push(step);
         }
         replay.push(choice.call);
@@ -170,11 +182,14 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             live.push(acted[side]);
             acted[side] |= !choice.call.is_pass();
             decided.push(choice.rule.is_some());
+            forced.push(is_forced(&p, seat));
             steps.push(engine.advance(&mut p, &choice.call));
             ours.push(choice.call);
         }
     }
-    let problems = find_problems(board, dealer, &ours, &decided, &live, &steps, runaway);
+    let problems = find_problems(
+        board, dealer, &ours, &decided, &live, &forced, &steps, runaway,
+    );
 
     let contract_of = |calls: &[Call]| {
         let mut a = Auction::new(dealer);
@@ -213,12 +228,22 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     })
 }
 
+/// Must this seat bid? Partner's call was forcing for a round, or the side
+/// is in a game force and the auction is below game.
+fn is_forced(pos: &rbb_engine::Position, seat: Direction) -> bool {
+    let st = pos.side_state(seat);
+    (st.forcing == rbb_engine::Forcing::Round && st.forcing_by == Some(seat.partner()))
+        || (st.forcing == rbb_engine::Forcing::Game && pos.below_game(seat))
+}
+
+#[allow(clippy::too_many_arguments)]
 fn find_problems(
     board: &Board,
     dealer: Direction,
     ours: &[Call],
     decided: &[bool],
     live: &[bool],
+    forced: &[bool],
     steps: &[rbb_engine::Step],
     runaway: bool,
 ) -> Vec<Problem> {
@@ -230,6 +255,13 @@ fn find_problems(
                 kind: ProblemKind::NoRule,
                 index: i,
                 detail: format!("{} had no rule", seat_of(i).to_char()),
+            });
+        }
+        if ours[i].is_pass() && forced.get(i).copied().unwrap_or(false) {
+            out.push(Problem {
+                kind: ProblemKind::BrokenForce,
+                index: i,
+                detail: format!("{} passed a forcing auction", seat_of(i).to_char()),
             });
         }
     }
