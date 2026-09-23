@@ -131,6 +131,18 @@ after (1x) X (P)               # they opened, partner doubled, RHO passed
 - Our side's calls are bare; the opponents' calls are in parentheses. Calls
   alternate, and the pattern always ends with the call made just before my
   turn.
+- **Alternatives.** `after A | B` holds when either pattern matches, and the
+  first that matches supplies the bindings. This is how "systems on" is
+  written: the auction after our 1NT overcall is the auction after a 1NT
+  opening, one call later.
+
+  ```
+  after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
+    2C  "Stayman" ...
+  ```
+
+  Rules under such a context must not rely on a variable that only one
+  alternative binds, unless a `when` rules the others out.
 - Leading passes are skipped unless written. Use the state `seat` or
   `passed_hand` when position matters.
 - `(*)` means any opponent call. Suit variables: `M` = a major, `m` = a minor,
@@ -371,7 +383,9 @@ These are enforced by `bidspec`, with file:line:column errors:
   rule. A context may contain nested contexts.
 - Every rule needs an explanation string straight after its call.
 - An `after` pattern must alternate our calls with (their calls), and must
-  end with an opponent's call: the one just before my turn.
+  end with an opponent's call: the one just before my turn. Several
+  alternatives may be written on one `after` line, separated by `|`; each is
+  checked on its own and any match is enough.
 - `shows`, `when` and `denies` may be repeated, on the rule line or on
   continuation lines; the repeats are combined with AND. `prefer`,
   `priority`, `replaces`, `as` and `alert`/`announce` may appear once.

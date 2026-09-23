@@ -21,7 +21,9 @@ pub struct RuleRef {
 #[derive(Debug, Clone)]
 pub struct RuleEntry {
     pub rule: Rule,
-    pub patterns: Vec<Vec<PatternCall>>,
+    /// One entry per enclosing `after`; each holds that line's
+    /// alternatives, of which any one matching is enough.
+    pub patterns: Vec<Vec<Vec<PatternCall>>>,
     pub conditions: Vec<Expr>,
     pub module: usize,
     pub source: RuleRef,
@@ -116,7 +118,7 @@ impl System {
     fn flatten(
         &mut self,
         ctx: &Context,
-        patterns: &mut Vec<Vec<PatternCall>>,
+        patterns: &mut Vec<Vec<Vec<PatternCall>>>,
         conditions: &mut Vec<Expr>,
         module: usize,
         m: &Module,

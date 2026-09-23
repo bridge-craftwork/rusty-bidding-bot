@@ -49,6 +49,34 @@ Scenario effect (Basic-Bridge card, 500 boards each):
 | Basic_Overcall, calls | 66.1% | 72.0% | 74.1% |
 | Basic_Takeout_Double, calls | 59.6% | 60.4% | 71.3% |
 
+## Systems on over the 1NT overcall
+
+`nt_overcalls.direct.systems_on` (default on, which is what BBA plays).
+Rather than copy the 1NT family into a competitive module, the `after`
+line now takes alternatives (`docs/LANGUAGE.md` section 4), so every
+notrump context reads
+
+```
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
+```
+
+and Stayman, Jacoby and Texas transfers, minor-suit transfers,
+super-accepts and the natural 2NT/3NT responses all apply after our
+overcall, direct or balancing. The continuations were already written
+against state (`when answered transfer(M)`), so they needed nothing.
+
+BBA's meanings confirm it plays the same way: over `(1x) 1N (P)` the
+corpus has 2♣ "Stayman" (7+), 2♦/2♥ "transfer", 3♣ "1N-3C transfer to
+diamonds", 4♦ "Texas", 2NT "8-9" and 3NT "9-15".
+
+| scenario | calls | auctions | contracts |
+|---|---|---|---|
+| We_Overcall_NT_then_Stayman | 75.3% → **87.3%** | 10.6% → 46.6% | 11.4% → 65.8% |
+| We_Overcall_NT_then_Texas | 70.5% → **80.8%** | 0.0% → 18.6% | 0.0% → 22.8% |
+| We_Overcall_NT_then_Jacoby | 70.0% → **79.5%** | 0.4% → 20.2% | 1.4% → 26.6% |
+| We_Overcall_1N | 74.2% → **80.4%** | 15.0% → 26.2% | 15.4% → 33.4% |
+| After_1x_1N | 73.3% → **75.7%** | 13.6% → 16.2% | 13.6% → 19.6% |
+
 ## Accepted differences from BBA
 
 - BBA passes some 12-14 HCP hands with a five-card minor over a major
@@ -65,6 +93,4 @@ Scenario effect (Basic-Bridge card, 500 boards each):
 - Overcalls of a 1NT opening, of a weak two, and of two-level openings.
 - Two-suited overcalls (Michaels, unusual notrump) are off on this card
   but the fields exist.
-- Systems on over our 1NT overcall (BBA plays Stayman and transfers over
-  it): `nt_overcalls.direct.systems_on`. The notrump modules key off
-  `after 1N (P)`, so nothing fires after `(1x) 1N (P)` yet.
+- Overcalls of a 1NT opening, of a weak two, and of two-level openings.

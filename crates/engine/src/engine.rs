@@ -167,7 +167,7 @@ impl Engine {
             if !entry
                 .patterns
                 .iter()
-                .all(|p| match_pattern(p, &pos.calls, &ctx, &mut b))
+                .all(|alts| match_any(alts, &pos.calls, &ctx, &mut b))
             {
                 continue;
             }
@@ -712,6 +712,19 @@ fn apply_sets(
             n => warnings.push(format!("sets: unknown state `{n}`")),
         }
     }
+}
+
+/// Does the auction end with any of one `after` line's alternatives?
+/// The first that matches keeps its bindings; the others leave none.
+fn match_any(alts: &[Vec<PatternCall>], calls: &[Call], ctx: &Ctx, b: &mut Bindings) -> bool {
+    for p in alts {
+        let mut trial = b.clone();
+        if match_pattern(p, calls, ctx, &mut trial) {
+            *b = trial;
+            return true;
+        }
+    }
+    false
 }
 
 /// Does the auction so far end with this pattern (after leading passes)?

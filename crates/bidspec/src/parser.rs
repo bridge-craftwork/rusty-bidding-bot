@@ -286,7 +286,7 @@ impl<'a> Parser<'a> {
                 .iter()
                 .position(|t| t.tok == Tok::Word("when".into()))
                 .unwrap_or(toks.len());
-            let pattern = self.pattern(&toks[..split], l.code);
+            let pattern = self.patterns(&toks[..split], l.code);
             let when = if split < toks.len() {
                 Some(self.condition(&toks[split + 1..], l.code))
             } else {
@@ -323,6 +323,15 @@ impl<'a> Parser<'a> {
             }
         }
         Some(ctx)
+    }
+
+    /// The alternatives of one `after` line, separated by `|`.
+    fn patterns(&self, toks: &[Token], text: &str) -> Result<Vec<Vec<PatternCall>>, PError> {
+        let mut out = Vec::new();
+        for part in toks.split(|t| t.tok == Tok::Pipe) {
+            out.push(self.pattern(part, text)?);
+        }
+        Ok(out)
     }
 
     fn pattern(&self, toks: &[Token], text: &str) -> Result<Vec<PatternCall>, PError> {

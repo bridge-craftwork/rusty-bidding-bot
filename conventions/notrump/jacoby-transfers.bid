@@ -4,19 +4,20 @@ module jacoby-transfers "Jacoby Transfers"
   card   notrump.transfers.jacoby
   needs  notrump-base
   param  texas = notrump.transfers.texas default false
+  param  systems_on = nt_overcalls.direct.systems_on default true
 
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
-after 1N (P)
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)  artificial
   2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)  artificial
 
 # Opener completes the transfer. Super-accepts are separate modules
 # (super-accept.bid, superaccept-doubleton.bid), switched on by the card.
-after 1N (P) 2D (P)
+after 1N (P) 2D (P) | (1x) 1N (P) 2D (P) | (1x) P (P) 1N (P) 2D (P)
   2H  "Completes transfer"
 
-after 1N (P) 2H (P)
+after 1N (P) 2H (P) | (1x) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2H (P)
   2S  "Completes transfer"
 
 # Responder's second call, once opener has answered. There is no auction

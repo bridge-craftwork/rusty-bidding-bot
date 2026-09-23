@@ -4,8 +4,9 @@ module stayman "Stayman"
   card   notrump.stayman.play
   needs  notrump-base
   param  minors = notrump.minor_transfers default relay
+  param  systems_on = nt_overcalls.direct.systems_on default true
 
-after 1N (P)
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
       shows strength>=invite, H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite)
       when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite)
@@ -17,7 +18,7 @@ after 1N (P)
       priority 1                           # ahead of transfers with 5-4 majors
 
 # Opener. With both majors the first rule that fits (2H) wins.
-after 1N (P) 2C (P)
+after 1N (P) 2C (P) | (1x) 1N (P) 2C (P) | (1x) P (P) 1N (P) 2C (P)
   2H  "4+ hearts"                 shows H>=4
   2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
   2D  "No 4-card major"           shows H<=3, S<=3

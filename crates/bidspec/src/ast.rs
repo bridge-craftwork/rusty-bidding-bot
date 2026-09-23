@@ -50,10 +50,14 @@ pub enum Literal {
 }
 
 /// An `after` and/or `when` context with the rules and contexts under it.
+///
+/// `after` holds the alternative patterns of one context: `after A | B`
+/// matches when either does, which is how "systems on" is written (the
+/// auction after our 1NT overcall is the auction after a 1NT opening).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Context {
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub after: Option<Vec<PatternCall>>,
+    pub after: Option<Vec<Vec<PatternCall>>>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub when: Option<Expr>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]

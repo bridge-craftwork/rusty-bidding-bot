@@ -13,3 +13,9 @@ N KJ82.Q7.Q943.J83      | 1NT P 2C P 2S P  | 3S     | 9: invite in the fit
 N KJ82.Q7.K943.J83      | 1NT P 2C P 2H P  | 3NT    | four spades, no heart fit: game
 N A852.AT8.KQT.KQ3      | 1NT P 2C P 2S P  | 6S     | 18 in the fit: slam
 N A852.AT8.KQT.KQ3      | 1NT P 2C P 2D P  | 6NT    | 18, no fit: slam in notrump
+
+# Systems on over our 1NT overcall: the same auction, one call later.
+dealer  E
+N KJ82.Q7.K943.J83      | 1C 1NT P         | 2C     | Stayman over partner's 1NT overcall
+S AK5.KJ72.Q94.K83      | 1C 1NT P 2C P    | 2H     | four hearts, as over a 1NT opening
+N KJ82.Q7.K943.J83      | 1C 1NT P 2C P 2S P | 4S   | the spade fit, game

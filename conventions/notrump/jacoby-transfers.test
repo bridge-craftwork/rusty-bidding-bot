@@ -37,3 +37,8 @@ S KQ53.KJ.AK53.J52      | 1NT P 2D P 2H P 3H P  | 4H    | 3H showed six: two-car
 # Opener after responder's jump to 4M (mild slam interest).
 S AK5.Q74.KQ82.K93      | 1NT P 2D P 2H P 4H P  | 4NT   | three trumps and a maximum: keycard
 S AJ5.J74.KQ82.K93      | 1NT P 2D P 2H P 4H P  | P     | a minimum: game
+
+# Systems on over our 1NT overcall.
+dealer  E
+N 82.QJ973.K94.J83      | 1C 1NT P         | 2D     | transfer over partner's 1NT overcall
+S AK5.KJ7.Q942.K83      | 1C 1NT P 2D P    | 2H     | completes the transfer

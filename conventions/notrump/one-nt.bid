@@ -6,6 +6,7 @@ module notrump-base "1NT opening and natural responses"
   param  nt_max   = notrump.one_nt.range_max default 17
   param  one_less = notrump.one_nt.allow_one_less default false
   param  minors   = notrump.minor_transfers default relay
+  param  systems_on = nt_overcalls.direct.systems_on default true
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -19,7 +20,7 @@ when opening
 
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
-after 1N (P)
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   6N  "To play: {slam} total points"
       shows balanced, strength=slam, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
