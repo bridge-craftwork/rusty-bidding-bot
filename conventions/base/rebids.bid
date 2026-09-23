@@ -28,10 +28,10 @@ after 1x (P) 1y (P)
   2x  "Rebids {x}: five or more, too weak to reverse"
       shows x>=5, suit_points<=18
       when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
-      priority -2
+      priority -4
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14, y<=3
   2N  "18-21 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=18..21, y<=3
-  1N  "Minimum, no better rebid"           shows hcp<=15, y<=3
+  1N  "Minimum, no better rebid"           shows hcp<=14, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
 after 1x (P) 1M (P)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
@@ -85,6 +85,9 @@ after 1H (P) 1S (P)
 after 1x (P) 1N (P)
   P   "Minimum, nothing more to show"      shows suit_points<=15
       priority -5
+  2x  "Rebids {x}: five or more, too good to pass and no reverse"
+      shows x>=5, suit_points=16..18
+      priority -2                          # 5-4 with 16-18: a reverse needs 17
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
       priority -1
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
@@ -123,14 +126,23 @@ after 1C (P) 1N (P)
 # rebid at all and passed a forcing response. BBA plays these as 3NT with
 # a long minor ("calculated bid: 18 to 21 total points, 6+ clubs"), and
 # game in a long major.
-after 1m (P) 1y (P) | 1m (P) 1N (P) | 1m (P) 2y (P)
+after 1m (P) 1y (P) | 1m (P) 2y (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
       when  y is not m
-after 1M (P) 1y (P) | 1M (P) 1N (P) | 1M (P) 2y (P)
+after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, suit_points>=19
       when  y is not M
+# The same two rules after a 1NT response. They cannot share the context
+# above: `y` is bound by the other alternatives only, and a `when` that
+# names it can never be decided after 1NT, so the rules never fired.
+after 1m (P) 1N (P)
+  3N  "18-21 with six or more {m}: to play"
+      shows m>=6, hcp=18..21
+after 1M (P) 1N (P)
+  4M  "19+ with six or more {M}: game"
+      shows M>=6, suit_points>=19
 
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a
@@ -210,3 +222,58 @@ after 1x (P) 3y (P) when y is not x
   3N  "Accepts: 14+, to play notrump"      shows hcp>=14, y<=2
   4y  "Accepts in the fit: 14+"            shows y>=2, suit_points>=14
       when  y is H | y is S
+
+# ── Responder bid a fourth suit at the one level ─────────────────────
+# 1♣-1♦-1♥-1♠ is natural on this card, and opener had no third call at
+# all. He raises with four, and otherwise shows his shape once more. The
+# fourth suit at the one level is always a major, so it binds to `M`.
+after 1x (P) 1y (P) 1z (P) 1M (P)
+  2M  "Raise: 4+ {M}, minimum"             shows M>=4, tp(M)<=15   sets trump=M, ask=signoff
+  3M  "Jump raise: 4+ {M}, 16-18"          shows M>=4, tp(M)=16..18   sets trump=M, ask=invite(M)
+  4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
+  1N  "Minimum, no fit for {M}"            shows M<=3, hcp<=15   sets ask=signoff
+  2N  "16-18, no fit for {M}"              shows M<=3, hcp=16..18   sets ask=nt_invite
+  2x  "Six or more {x}"                    shows x>=6, suit_points<=15   sets ask=signoff
+      priority -1
+
+# ── Partner has signed off ───────────────────────────────────────────
+# Responder's weak second calls — a preference, a weak rebid of his own
+# suit, a raise of opener's second suit, 1NT — say "play here", and set
+# `ask=signoff` (responder-rebids.bid). Opener's answer is the same
+# whatever the auction was, so it is written once against the ask rather
+# than as the dozen eight-call patterns it would otherwise take: pass
+# with a minimum, one more try with 16-18, game with 19+.
+when asked signoff
+  P   "Nothing to add: partner is limited"
+      priority -5
+  2x  "Six or more {x}: a better spot"        shows x>=6, suit_points<=15
+      when  maybe partner.x<=2
+      sets  ask=signoff
+      priority -1
+  3x  "Six or more {x}, 16-18: one more try"  shows x>=6, suit_points=16..18
+      sets  ask=invite(x)
+  3x  "Raise: 16-18 with the fit"             shows x>=3, suit_points=16..18
+      when  partner.x>=5
+      sets  ask=invite(x)
+  2y  "Preference: three or more {y}"         shows y>=3
+      when  partner.y>=5
+      sets  ask=signoff
+      priority -2
+  4M  "Game: 6+ {M}, 19+"                     shows M>=6, suit_points>=19
+  4M  "Game in the fit: 19+"                  shows M>=3, suit_points>=19
+      when  partner.M>=4
+
+# ── Answering an invitation in a minor ───────────────────────────────
+# Responder's invitational raise or jump sets `ask=invite(x)`. A major
+# invitation is answered where the same question is answered after a
+# transfer (`when asked invite(M)`, jacoby-transfers.bid); a minor one
+# had no answer anywhere, so opener passed a live auction. Opposite
+# 10-12, opener needs 14 to go on, and there is no game below 5 of a
+# minor: 3NT with the values and a shape for it, 5 of the minor with
+# real extras, otherwise pass.
+when asked invite(m)
+  P   "Declines: no more than a minimum"
+      priority -5
+  3N  "Accepts, in notrump: 14+ and a shape for it"
+      shows hcp>=14, balanced | semibalanced
+  5m  "Accepts in {m}: 18+ with the fit"      shows hcp>=18, m>=5

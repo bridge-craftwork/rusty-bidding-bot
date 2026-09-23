@@ -65,3 +65,21 @@ S K93.AK6.AT9542.J      | 1D P 2C P    | 3D     | 16-18 with six diamonds after 
 S KJ6.Q2.AQJ87.AQ5      | 1D P 2C P    | 3NT    | 19 balanced
 S KQJ8.AKJ6.K.KJ82      | 1C P 1D P    | 2H     | 21 with 4-4-1-4: the jump shift needs no fifth club
 S AKJ6.KJ632.J.K94      | 1H P 2D P    | 2H     | 16 with five hearts: no reverse, rebid them
+
+# ── Opener's third call, when responder has signed off (`asked signoff`)
+S Q975.9.AKJ96.KT3      | 1D P 1H P 1S P 1NT P | P      | 13 opposite 6-10: nothing more to say
+S AJ62.A2.AQ7632.Q      | 1D P 1H P 1S P 1NT P | 3D     | 17 with six diamonds: one more try
+S T93.QT5.KT86.AKQ      | 1D P 1S P 1NT P 2H P | 2S     | three spades opposite five: preference
+S K32.QT5.AT2.QJ73      | 1C P 1S P 1NT P 2H P | 2S     | the same after a 1NT rebid
+S QJ.Q.J52.AKT7643      | 1C P 1H P 2C P 2H P  | P      | 13: partner has chosen hearts
+
+# ── Answering an invitational raise in a minor (`asked invite(m)`)
+S A7.42.AK976.A875      | 1D P 1H P 2C P 3C P  | 3NT    | 15 and a shape for notrump: accepts
+S J4.JT.AKJ72.J954      | 1D P 1H P 2C P 3C P  | P      | 10: declines
+
+# ── The fourth suit at the one level
+S KT64.KQ98.AQ.T94      | 1C P 1D P 1H P 1S P  | 2S     | four spades, minimum: raise
+S AJ84.Q952.A.AT63      | 1C P 1D P 1H P 1S P  | 3S     | four spades, 16-18: jump raise
+
+# ── A big one-suiter after a 1NT response
+S AJ8.AKQ96432..K4      | 1H P 1NT P           | 4H     | 19+ with six hearts: game

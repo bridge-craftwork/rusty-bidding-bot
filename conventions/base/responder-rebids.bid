@@ -7,6 +7,11 @@
 # New Minor Forcing on, 2 of the other minor is artificial instead:
 # new-minor-forcing.bid). Ranges: weak 6-10, invitational 11-12, game 13+
 # opposite a minimum rebid. See responder-rebids.notes.md.
+#
+# Every call here that says "play here" sets `ask=signoff`, and every
+# invitation sets `ask=invite(suit)` or `ask=nt_invite`. Opener answers
+# all three in rebids.bid, written against the question instead of
+# against the auction that asked it (LANGUAGE.md §10).
 
 module responder-rebids "Responder's second call"
   needs  rebids
@@ -16,12 +21,12 @@ module responder-rebids "Responder's second call"
 after 1x (P) 1y (P) 1N (P)
   P   "Weak: no game"                      shows points<=10
       priority -5
-  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10
+  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
       when  y is H | y is S                # a weak minor passes 1NT
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   2N  "Invitational: 11-12"                shows points=11..12, y<=5   sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, y<=5
-  2x  "Weak: 5+ {x}"                       shows x>=5, points<=10
+  2x  "Weak: 5+ {x}"                       shows x>=5, points<=10   sets ask=signoff
 after 1x (P) 1M (P) 1N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, suit_points>=13
 
@@ -31,26 +36,26 @@ after 1C (P) 1D (P) 1N (P)
   2H  "Responder's reverse: 4+ hearts, 5+ diamonds, game forcing"  shows H>=4, D>=5, points>=13  sets forcing=game
   2S  "Responder's reverse: 4+ spades, 5+ diamonds, game forcing"  shows S>=4, D>=5, points>=13  sets forcing=game
 after 1C (P) 1H (P) 1N (P)
-  2D  "4+ diamonds, 5+ hearts, not forcing"  shows D>=4, H>=5, points<=12   when !nmf
+  2D  "4+ diamonds, 5+ hearts, not forcing"  shows D>=4, H>=5, points<=12   when !nmf   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
 after 1C (P) 1S (P) 1N (P)
-  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !nmf
-  2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12
+  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !nmf   sets ask=signoff
+  2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1D (P) 1H (P) 1N (P)
-  2C  "4+ clubs, 5+ hearts, not forcing"   shows C>=4, H>=5, points<=12   when !nmf
+  2C  "4+ clubs, 5+ hearts, not forcing"   shows C>=4, H>=5, points<=12   when !nmf   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
 after 1D (P) 1S (P) 1N (P)
-  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !nmf
-  2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12
+  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !nmf   sets ask=signoff
+  2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1H (P) 1S (P) 1N (P)
-  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12
-  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12
+  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   sets ask=signoff
+  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   sets ask=signoff
 
 # ── Opener rebid his suit (6+, minimum) ──────────────────────────────
 after 1x (P) 1y (P) 2x (P)
   P   "Weak: no game"                      shows points<=10
       priority -5
-  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10
+  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   3x  "Raise: 2+ {x}, 10-12"              shows x>=2, points=10..12   sets ask=invite(x)
   2N  "Invitational: 11-12"                shows points=11..12, x<=1 | x=2, y<=5  sets ask=nt_invite
@@ -73,28 +78,28 @@ after 1C (P) 1D (P) 1H (P)
   1S  "4+ spades"                          shows S>=4, H<=3
       priority 1
 after 1x (P) 1y (P) 1z (P)
-  1N  "6-10, no fit"                       shows points<=10, z<=3
-  2x  "Preference: 3+ {x}, weak"           shows x>=3, points<=10, z<=3
+  1N  "6-10, no fit"                       shows points<=10, z<=3   sets ask=signoff
+  2x  "Preference: 3+ {x}, weak"           shows x>=3, points<=10, z<=3   sets ask=signoff
       priority -1
-  2z  "Raise: 4+ {z}, weak"                shows z>=4, points<=10
+  2z  "Raise: 4+ {z}, weak"                shows z>=4, points<=10   sets ask=signoff
   3z  "Invitational raise: 4+ {z}, 11-12"  shows z>=4, points=11..12   sets ask=invite(z)
-  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10
+  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   2N  "Invitational: 11-12"                shows points=11..12, z<=3   sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, z<=3
 after 1x (P) 1y (P) 1M (P)
   4M  "Game raise: 4+ {M}, 13+"            shows M>=4, points>=13
 after 1D (P) 1H (P) 1S (P)
-  2C  "5+ clubs, 8-10"                     shows C>=5, points=8..10, S<=3
+  2C  "5+ clubs, 8-10"                     shows C>=5, points=8..10, S<=3   sets ask=signoff
 
 # ── Opener bid a new suit at the two level (a reverse is forcing) ────
 after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
   P   "Weak: passes {z}"                   shows points<=10, z>=4 | z>x
       priority -5
-  2x  "Preference: weak"                   shows x>=2, points<=10, x>=z | (z<=3, x is H) | (z<=3, x is S)
-  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10
-  3z  "Invitational raise: 4+ {z}"         shows z>=4, points=11..12
-  3x  "Invitational: 3+ {x}"               shows x>=3, points=11..12
+  2x  "Preference: weak"                   shows x>=2, points<=10, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
+  2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
+  3z  "Invitational raise: 4+ {z}"         shows z>=4, points=11..12   sets ask=invite(z)
+  3x  "Invitational: 3+ {x}"               shows x>=3, points=11..12   sets ask=invite(x)
   2N  "Invitational: 11-12"                shows points=11..12, z<=3   sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, z<=3
   2N  "Forced to bid: minimum, no fit"     shows points<=10
@@ -128,11 +133,13 @@ after 1x (P) 1M (P) 2N (P)
 after 1x (P) 1N (P) 2z (P) when z is not x
   P   "Passes: {z} at least as long, or a four-card {z}"   shows z>=4 | z>x
       priority -5
-  2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)
-  3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10
+  2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
+  3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
 after 1x (P) 1N (P) 2x (P)
-  P   "Weak: no game"                      shows points<=9
+  P   "Weak: no game"                      shows points<=10
       priority -5
+  3x  "Raise: 3+ {x}, maximum for the 1NT response"
+      shows x>=3, points>=10   sets ask=invite(x)
 after 1x (P) 1N (P) 3x (P)
   P   "No game"                            shows points<=8
       priority -5
@@ -145,21 +152,53 @@ after 1x (P) 1N (P) 2N (P)
   3N  "Game: 7+"                           shows points>=7
 
 # ── After a two-over-one and opener's rebid ──────────────────────────
-# A 2/1 is 11+, opposite an opening: with support, game.
+# A 2/1 is 11+ suit points opposite an opening, so the pair is close to
+# game: with support for opener's major, bid it; without a major fit,
+# 2NT invites and 3NT is game. Opener's suit may be a minor (1♦-2♣-2♥),
+# and then notrump is the only game to look for, so the rules that do
+# not name a major are written for any opening suit `y`.
+#
+# The 2/1 itself is measured in suit points (a 5-4-3-1 ten-count bids
+# it), so the calls that choose a suit are measured the same way, and
+# only the notrump bids count notrump points.
+after 1y (P) 2x (P) 2z (P) when x is not y
+  2N  "Invitational, no fit: 11-12"        shows points=11..12, y<=2 | y is C | y is D
+      sets  ask=nt_invite
+  3N  "Game, no fit"                       shows points>=13, y<=2 | y is C | y is D
+  3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, suit_points=11..12, y<=2 | y is C | y is D
+      sets  ask=invite(x)
+  2y  "Preference: 2+ {y}, nothing better to say"
+      shows y>=2, suit_points<=12
+      sets  ask=signoff
+      priority -3                          # a ten-count with shape: no game bid fits
+  P   "Minimum for the two-over-one: no game"
+      shows suit_points<=12
+      priority -5                          # opener rebid his own suit: nowhere to go
 after 1M (P) 2x (P) 2z (P) when x is not M
-  4M  "Game with support"                  shows points>=11, M>=3 | (M>=2, partner.M>=6)
-  2N  "Invitational, no fit: 11-12"        shows points=11..12, M<=2   sets ask=nt_invite
-  3N  "Game, no fit"                       shows points>=13, M<=2
-  3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, points=11..12, M<=2
-after 1M (P) 2x (P) 3x (P) when x is not M
-  4x  "Game in the fit"                    shows points>=11
+  4M  "Game with support"                  shows tp(M)>=11, M>=3 | (M>=2, partner.M>=6)
+after 1y (P) 2x (P) 3x (P) when x is not y
+  4x  "Game in the fit"                    shows suit_points>=11
       when  x is H
       priority 1                           # responder's own major fit first
-  3N  "Game"                               shows points>=12, M<=2
-  4M  "Game with support"                  shows points>=11, M>=3
+  3N  "Game"                               shows points>=12, y<=2 | y is C | y is D
+  P   "Minimum for the two-over-one"       shows suit_points<=12
+      priority -5
+after 1M (P) 2x (P) 3x (P) when x is not M
+  4M  "Game with support"                  shows tp(M)>=11, M>=3
+after 1y (P) 2x (P) 3z (P) when x is not y, z is not y, z is not x
+  3N  "Game, no fit"                       shows points>=10, y<=2 | y is C | y is D
 after 1M (P) 2x (P) 3z (P) when x is not M, z is not M, z is not x
-  3N  "Game, no fit"                       shows points>=10, M<=2
-  4M  "Game with support"                  shows points>=11, M>=3
+  4M  "Game with support"                  shows tp(M)>=11, M>=3
+# Opener's 2NT (15-17 balanced) or jump rebid over a two-over-one: the
+# 2/1 was 11+, so game is there.
+after 1y (P) 2x (P) 2N (P) when x is not y
+  3N  "Game: the two-over-one was 11+"     shows points>=11
+  P   "Nothing: a minimum two-over-one"    priority -5
+after 1y (P) 2x (P) 3y (P) when x is not y
+  3N  "Game, no fit"                       shows points>=11, y<=1 | y is C | y is D
+                                           # the jump rebid is six: two is a fit
+  P   "Nothing: a minimum two-over-one"    priority -5
+
 after 1M (P) 3M (P) 3N (P)
   4M  "Prefers the major: four trumps"     shows M>=4
 

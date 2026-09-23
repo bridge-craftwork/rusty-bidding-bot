@@ -58,3 +58,16 @@ N QT.J65.Q965.KQ43      | 1D P 1NT P 2H P  | 3NT    | 10: game
 N 43.KJ86.9542.K98      | 1D P 1NT P 2H P  | 3H     | four hearts: raise the second suit
 # A second suit below the first is not a reverse, and may be passed.
 N 43.K86.9542.K986      | 1S P 1NT P 2H P  | 2S     | not a reverse: a simple preference, no force
+
+# ── After a two-over-one: opener's suit may be a minor
+N A854.Q7.K7.QT984      | 1D P 2C P 2D P      | 2NT    | 11: invitational, no fit
+N K42.Q43.974.AKJ4      | 1D P 2C P 2D P      | 3NT    | 13: game
+N J8.AQ72.T32.A762      | 1S P 2C P 2NT P     | 3NT    | the two-over-one was 11+: game
+N T4.AT943.K5.KJ76      | 1S P 2H P 2S P      | 2NT    | 11 with two spades: invitational
+# The two-over-one is measured in suit points, so its follow-ups are too:
+# this 10-count bid 2♣ on shape and has a spade fit.
+N KJ74.Q95.9.KJ762      | 1S P 2C P 2D P      | 4S     | four spades and a singleton: game
+N A84.AKT94.J6.T96      | 1S P 2H P 2S P      | 4S     | three spades opposite six: game
+
+# ── Maximum for the 1NT response, when opener rebids his suit
+N A76.Q4.QT52.JT64      | 1D P 1NT P 2D P     | 3D     | 10 with four diamonds: invites
