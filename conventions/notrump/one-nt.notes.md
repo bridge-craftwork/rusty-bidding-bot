@@ -367,3 +367,27 @@ up; four-four in the minors counts down; honours in the majors count up.
 Open, for Rick: which quantities to vary next. The grid tool makes each
 question a spec file and half a second (probes/*.toml); gen_hands.py
 makes bulk sets.
+
+### Why a heart honour and a spade honour differ: what 1NT contains (2026-09-24)
+
+The pass/2NT line (7 HCP = AQJ + two tens, every placement,
+probes/nt-7count-placements-AQJTT.toml) depends on where the honours sit,
+across suits, and the pattern follows suit *length*: in 3-3-4-3 the pass
+cells involve the three-card clubs, in 3-3-3-4 the same cells with clubs
+and diamonds exchanged. It is identical under Basic-Bridge, 21GF-DEFAULT,
+bare 2/1 and bare SAYC cards and with the 1NT shape switches flipped: if
+BBA values responder's honours against what 1NT is likely to hold, the
+model is fixed, not rebuilt from the card.
+
+Rick's explanation: responder's honours are worth what they are likely to
+mesh with, and what opener holds depends on which hands open 1NT. Tested
+on the opening itself (probes/open-15-5422-major-mirror.toml, 15 HCP
+5-4-2-2 with a five-card minor and a four-card major, each hand beside its
+spade/heart mirror, "1NT opening shape 5422" on): BBA opens 1NT with four
+hearts when both doubletons are headed by the ace or king (65 of 65), with
+one such doubleton a third of the time (61 of 183), never with neither --
+and never with four spades (0 of 300): with spades opener rebids 1S over
+1H; with hearts he has no good rebid over 1S. With the switch off every
+hand opens its minor. So a 1NT opener holds four hearts more often than
+four spades, and responder's heart and spade honours are not worth the
+same.
