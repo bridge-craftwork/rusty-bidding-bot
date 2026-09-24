@@ -179,7 +179,7 @@ pub fn card_text(spec: &str, pbs: &Path, edits: &[(String, i64)]) -> Result<Stri
 /// Small deterministic generator for filling in the other hands.
 pub(crate) struct Rng(pub(crate) u64);
 impl Rng {
-    fn next(&mut self) -> u64 {
+    pub(crate) fn next(&mut self) -> u64 {
         self.0 ^= self.0 >> 12;
         self.0 ^= self.0 << 25;
         self.0 ^= self.0 >> 27;

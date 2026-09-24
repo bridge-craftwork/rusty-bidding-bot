@@ -38,6 +38,9 @@ pub struct Spec {
     /// the variant is used.
     #[serde(default)]
     pub partner: Vec<String>,
+    /// When no listed partner fits, deal one: balanced, HCP in this range
+    /// (e.g. [15, 17] for a 1NT opener), from the cards left.
+    pub partner_auto: Option<[u32; 2]>,
     /// Card changes for our engine only, e.g. "general.style=bba".
     #[serde(default)]
     pub our: Vec<String>,
@@ -138,22 +141,59 @@ fn deal_for(
     label: &str,
     seat: Direction,
     partners: &[Hand],
+    auto: Option<[u32; 2]>,
+    avoid: &[&Hand],
     rng: &mut Rng,
 ) -> Result<Deal, String> {
     let mut fixed = vec![(seat, variant.clone())];
-    if !partners.is_empty() {
-        let p = partners
-            .iter()
-            .find(|p| !overlaps(p, variant))
-            .ok_or_else(|| {
-                format!(
-                    "{label} ({}): every partner hand shares a card with it; add one to `partner`",
-                    variant.to_pbn()
-                )
-            })?;
-        fixed.push((seat.partner(), p.clone()));
+    let clear = |p: &Hand| !overlaps(p, variant) && avoid.iter().all(|a| !overlaps(p, a));
+    match (partners.iter().find(|p| clear(p)), auto) {
+        (Some(p), _) => fixed.push((seat.partner(), p.clone())),
+        (None, Some([lo, hi])) => fixed.push((seat.partner(), auto_partner(variant, avoid, lo, hi, rng)?)),
+        (None, None) if partners.is_empty() => {}
+        (None, None) => {
+            return Err(format!(
+                "{label} ({}): every partner hand shares a card with it; add one to `partner` or set `partner_auto`",
+                variant.to_pbn()
+            ))
+        }
     }
     probe::fill(&fixed, rng)
+}
+
+/// A balanced hand with `lo..=hi` HCP from the cards not in `variant` or
+/// `avoid`.
+fn auto_partner(
+    variant: &Hand,
+    avoid: &[&Hand],
+    lo: u32,
+    hi: u32,
+    rng: &mut Rng,
+) -> Result<Hand, String> {
+    use bridge_types::Card as PlayingCard;
+    let used = |c: &PlayingCard| {
+        variant.cards().contains(c) || avoid.iter().any(|a| a.cards().contains(c))
+    };
+    let rest: Vec<PlayingCard> = (0..52u8)
+        .filter_map(PlayingCard::from_index)
+        .filter(|c| !used(c))
+        .collect();
+    for _ in 0..200_000 {
+        let mut pool = rest.clone();
+        for i in (1..pool.len()).rev() {
+            let j = (rng.next() % (i as u64 + 1)) as usize;
+            pool.swap(i, j);
+        }
+        let h = Hand::from_cards(pool.into_iter().take(13).collect());
+        let f = rbb_engine::Facts::new(&h);
+        if (lo as i32..=hi as i32).contains(&f.hcp) && f.balanced {
+            return Ok(h);
+        }
+    }
+    Err(format!(
+        "no balanced {lo}-{hi} partner found for {}",
+        variant.to_pbn()
+    ))
 }
 
 pub fn read_spec(path: &Path) -> Result<Spec, String> {
@@ -211,11 +251,29 @@ pub fn run(spec: &Spec, env: &Env) -> Result<Grid, String> {
     let mut rng = Rng(spec.seed | 1);
     let (mode, deals) = match (&spec.survey, &spec.morph, spec.hands.is_empty()) {
         (Some(h), None, true) => {
-            let base = deal_for(&hand(h, "survey")?, "survey", seat, &partners, &mut rng)?;
+            let base = deal_for(
+                &hand(h, "survey")?,
+                "survey",
+                seat,
+                &partners,
+                spec.partner_auto,
+                &[],
+                &mut rng,
+            )?;
             (Mode::Survey, probe::survey(&base, seat))
         }
         (None, Some([a, b]), true) => {
-            let base = deal_for(&hand(a, "morph")?, "morph", seat, &partners, &mut rng)?;
+            // A partner clear of both ends of the morph.
+            let target = hand(b, "morph target")?;
+            let base = deal_for(
+                &hand(a, "morph")?,
+                "morph",
+                seat,
+                &partners,
+                spec.partner_auto,
+                &[&target],
+                &mut rng,
+            )?;
             let fixed: Vec<Direction> = if partners.is_empty() {
                 vec![]
             } else {
@@ -238,7 +296,10 @@ pub fn run(spec: &Spec, env: &Env) -> Result<Grid, String> {
                 };
                 let v = hand(h, &label)?;
                 let ps = own.map_or_else(|| partners.clone(), |p| vec![p]);
-                out.push((label.clone(), deal_for(&v, &label, seat, &ps, &mut rng)?));
+                out.push((
+                    label.clone(),
+                    deal_for(&v, &label, seat, &ps, spec.partner_auto, &[], &mut rng)?,
+                ));
             }
             (Mode::List, out)
         }
@@ -467,11 +528,20 @@ hands = ["C QT | A5.K86.9764.QT85", "D KT | A5.Q86.KT64.9875"]
         let mut rng = Rng(1);
         // D KT clashes with the first partner's diamond king: the second is used.
         let v = hand("A5.Q86.KT64.9875", "v").unwrap();
-        let d = deal_for(&v, "D KT", Direction::North, &partners, &mut rng).unwrap();
+        let d = deal_for(&v, "D KT", Direction::North, &partners, None, &[], &mut rng).unwrap();
         assert_eq!(d.hand(Direction::South), &partners[1]);
         assert_eq!(d.hand(Direction::North), &v);
         // No partner fits: an error naming the variant.
-        let err = deal_for(&v, "D KT", Direction::North, &partners[..1], &mut rng).unwrap_err();
+        let err = deal_for(
+            &v,
+            "D KT",
+            Direction::North,
+            &partners[..1],
+            None,
+            &[],
+            &mut rng,
+        )
+        .unwrap_err();
         assert!(err.contains("D KT"), "{err}");
         assert!(toml::from_str::<Spec>("card = \"x\"\ndealer = \"S\"\nbogus = 1").is_err());
     }
