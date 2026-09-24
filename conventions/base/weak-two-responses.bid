@@ -11,11 +11,15 @@ module weak-two-responses "Responses to a weak two"
   param  two_c  = two_level.two_clubs.meaning default strong
   param  style  = general.style
 
+# Standard responder (the default until 2026-09-24): 2NT from 15, raises
+# with four. The default is now BBA's, below: par preferred it (+453 IMPs
+# on the corpus, +78 on Basic_*).
+#
 # The weak twos are 2♦, 2♥ and 2♠: 2♣ is the strong opening unless the
 # card says it is natural. Without the guard, responder's 2NT over a
 # strong 2♣ was read as the weak-two ask and opener answered with a
 # feature (95 boards in the Basic_* scenarios, -478 IMPs).
-after 2x (P) when x is not N, x is not C | two_c is natural, style is not bba
+after 2x (P) when x is not N, x is not C | two_c is natural, style is standard
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=15
       sets  forcing=round, ask=weak_two(x)
@@ -26,7 +30,7 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is not bba
   P   "No interest"                            shows hcp<=14
       priority -5
 
-# bba (probed 2026-09-24, weak-two-responses.notes.md). BBA reads a weak
+# The default, and bba (probed 2026-09-24, weak-two-responses.notes.md). BBA reads a weak
 # two as lighter when we are not vulnerable, and lightest at favourable:
 # game with three-card support from 15 vulnerable, 16 at equal
 # vulnerability not vulnerable (15 with four), 18 at favourable, 13 with
@@ -37,13 +41,19 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is not bba
 # preemptive raise stops at 11. A new major is natural and forcing: over
 # 2D six cards from 13, five with exactly 14; over 2H five
 # spades from 13 with at most one heart (with two, 2NT).
-after 2x (P) when x is not N, x is not C | two_c is natural, style is bba
+after 2x (P) when x is not N, x is not C | two_c is natural, style is not standard
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=13
       when  hcp>=20 | (x>=2, hcp>=15) | (x<=1, hcp>=18) | (x is H | x is S, x=2, hcp>=14, vul | !they.vul) | (x is H | x is S, x>=3, vul) | (x is H | x is S, x>=4, !they.vul)
       sets  forcing=round, ask=weak_two(x)
       artificial
-  3x  "Preemptive raise: four-card support, up to 11"    shows x>=4, hcp<=11
+  # Probed 2026-09-24 (notes): flat 0-4 with four trumps raises only at
+  # love all; with a singleton and four trumps, game unless vulnerable.
+  3x  "Preemptive raise: four-card support, up to 11"    shows x>=4, hcp<=11, hcp>=5 | shortest<=1
+  3x  "Preemptive raise: four-card support, weak (love all)"   shows x>=4, hcp<=4
+      when  !vul, !they.vul
+  4x  "Preemptive game raise: four trumps and a singleton"   shows x>=4, shortest<=1, hcp<=9
+      when  !vul
   4x  "Game in the fit"                        shows x>=3, hcp=15..19
       when  x is H | x is S
       when  vul | (!they.vul, hcp>=16 | x>=4) | hcp>=18
@@ -63,8 +73,8 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is bba
   P   "No interest"                            shows hcp<=19
       priority -5
 
-# bba: opener after a new suit. Raise with three, else rebid the suit.
-after 2x (P) 2y (P) when x is not C | two_c is natural, style is bba
+# Opener after a new suit (default and bba). Raise with three, else rebid the suit.
+after 2x (P) 2y (P) when x is not C | two_c is natural, style is not standard
   4y  "Three-card support and a maximum"   shows y>=3, hcp>=9
       when  y is H | y is S
   3y  "Three-card support"                 shows y>=3

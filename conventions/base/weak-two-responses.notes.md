@@ -179,3 +179,44 @@ With four trumps and a singleton BBA preempts to game unless we are
 vulnerable. The flat 1-count raising at love all and passing at
 favourable is one probe and odd; to be checked with more hands before
 the bba rules use it.
+
+## Weak preemptive raises, more probes; BBA's responses become the default (2026-09-24)
+
+Rick found the flat 1-count strange; nine more flat four-trump hands, 0-4
+HCP, over the same 2H:
+
+| North (four hearts, flat) | HCP | love all | we vul | favourable | both vul |
+|---|---|---|---|---|---|
+| 985.T875.J642.98 | 1 | 3H | P | P | P |
+| 986.T875.9642.98 | 0 | 3H | P | P | P |
+| 9865.T875.964.98 | 0 | 3H | P | P | P |
+| 986.T875.J64.985 (4-3-3-3) | 1 | P | P | P | P |
+| Q86.T875.964.985 (4-3-3-3) | 2 | P | P | P | P |
+| 986.T875.Q964.J8 | 3 | 3H | P | P | P |
+| K86.T875.964.985 (4-3-3-3) | 3 | 3H | P | P | P |
+| 9865.T875.J64.98 | 1 | 3H | P | P | P |
+| 986.A875.964.985 (4-3-3-3) | 4 | 3H | P | P | P |
+
+and with shortness:
+
+| North | HCP | love all | we vul | favourable | both vul |
+|---|---|---|---|---|---|
+| 9.T875.KQ64.J985 (4, singleton) | 6 | 4H | 3H | 4H | 4H |
+| 9.AT875.9642.985 (5, singleton) | 4 | 4H | 3H | 4H | 3H |
+| 9.T8752.K642.985 (5, singleton) | 3 | 3H | P | 3H | P |
+| 9.T875.9642.J985 (4, singleton) | 1 | 4H | 3H | 3H | 3H |
+| 98.T875.9642.J98 (4, doubleton) | 1 | P | P | P | P |
+
+It is real: flat four-trump weak hands raise only at love all (4-3-3-3
+with 1-2 HCP excepted), and pass at every other vulnerability, even
+favourable. A singleton with four trumps always raises; the level is
+not a clean function of HCP and vulnerability. Modelled simply: flat
+0-4 raises at love all; a singleton and four trumps, up to 9 HCP, goes
+to game unless vulnerable; 5+ HCP with four trumps raises to three as
+before. Few corpus hands are affected (+1 IMP).
+
+**Par test of BBA's responses as the default** (the 2NT ask, raises and
+game by vulnerability, forcing new suits; opener's answers stay the
+standard feature ones): corpus -168,198 -> -167,745 (+453), Basic_* +78,
+uncontested +75, Basic_Weak_2 -439 -> -361. Adopted; the previous
+responses (2NT from 15, raises with four) are the `standard` treatment.

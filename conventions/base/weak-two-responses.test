@@ -55,3 +55,17 @@ S KQJ964.73.Q53.72      | 2S P 2NT P | 3D     | maximum, no side ace or king: th
 S AKT964.73.J53.72      | 2S P 2NT P | 3D     | maximum, AK of spades and the diamond jack
 S AQJT64.73.J53.72      | 2S P 2NT P | 3S     | a side jack without AK of the suit: rebid the suit
 S KJ9864.73.853.72      | 2S P 2NT P | 3S     | minimum
+
+# ── Responses to a weak two: BBA's, now the default (par +453, 2026-09-24).
+# Preemptive raises by vulnerability, from probes (South 73.KQJ964.853.72).
+card    Basic-Bridge
+dealer  S
+vul     None
+N 985.T875.J642.98      | 2H P       | 3H     | love all: four trumps, flat, 1 HCP: raise
+N 9.T875.KQ64.J985      | 2H P       | 4H     | four trumps and a singleton, not vulnerable: game
+vul     NS
+N 985.T875.J642.98      | 2H P       | P      | vulnerable: the flat 1-count passes
+N 9.T875.KQ64.J985      | 2H P       | 3H     | vulnerable: the singleton hand raises to three
+vul     EW
+N 985.T875.J642.98      | 2H P       | P      | favourable: the flat 1-count passes
+N 9.T875.KQ64.J985      | 2H P       | 4H     | favourable: game with the singleton
