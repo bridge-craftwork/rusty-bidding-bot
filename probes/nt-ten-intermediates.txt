@@ -1,0 +1,10 @@
+# Responder after 1NT, 9 HCP, 2-3-4-4. Does a ten need an 8 or 9 beside it?
+# South: K92.A7.KJ532.A43.
+D QT64 (2NT before)   | A5.K86.QT64.9875
+D QT84                | A5.K86.QT84.9765
+D QT94                | A5.K86.QT94.8765
+D QT98                | A5.K86.QT98.7652
+C QT85 (3NT before)   | A5.K86.9764.QT85
+C QT65                | A5.K86.9874.QT65
+C QT95                | A5.K86.8764.QT95
+C QT76                | A5.K86.9874.QT76

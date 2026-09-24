@@ -1,0 +1,16 @@
+# Responder after 1NT (15-17), 9 HCP, 2-3-4-4, no four-card major.
+# South: K92.A7.KJ532.A43. Varies: major stoppers x honoured ten x bare ten.
+# rbb probe --hand N=A5.K86.Q764.9865 --hand S=K92.A7.KJ532.A43 \
+#   --variants probes/nt-tens-stoppers.txt --prefix "1NT Pass" --dealer S \
+#   --ns-card Basic-Bridge --ew-card Basic-Bridge --our-set general.style=bba
+both stopped, no ten          | A5.K86.Q764.9865
+both stopped, bare ten        | A5.K86.Q764.T865
+both stopped, honoured ten    | A5.K86.QT64.9865
+one stopped, no ten           | A5.986.Q764.K875
+one stopped, bare ten (H)     | A5.T86.Q764.K875
+one stopped, honoured ten (D) | A5.986.QT64.K875
+one stopped, honoured ten (C) | A5.986.Q764.KT75
+none stopped, no ten          | 65.986.AQ64.K875
+none stopped, bare ten (H)    | 65.T86.AQ64.K875
+none stopped, honoured ten    | 65.986.AQ64.KT75
+none stopped, two honoured    | 65.986.AQT4.KT75

@@ -15,6 +15,8 @@ struct Cli {
 }
 
 #[derive(Subcommand)]
+// Parsed once at startup; the probe command's many options make it large.
+#[allow(clippy::large_enum_variant)]
 enum Command {
     /// Convention card tools.
     #[command(subcommand)]
@@ -96,6 +98,18 @@ enum Command {
         /// e.g. `general.style=bba`.
         #[arg(long = "our-set")]
         our_set: Vec<String>,
+        /// Probe these holdings (S.H.D.C) in place of the first --hand, each
+        /// as its own board (repeatable). Other --hand seats stay fixed.
+        #[arg(long = "variant", conflicts_with_all = ["vary_tens", "survey", "morph_to"])]
+        variants: Vec<String>,
+        /// A file of holdings for the first seat, one per line: `S.H.D.C`
+        /// or `label | S.H.D.C` (# comments).
+        #[arg(long = "variants", conflicts_with_all = ["vary_tens", "survey", "morph_to"])]
+        variants_file: Option<PathBuf>,
+        /// Bid every deal at each of these vulnerabilities, e.g.
+        /// None,NS,EW,All (overrides --vul).
+        #[arg(long, value_delimiter = ',')]
+        vuls: Vec<String>,
         /// Random layouts of the other hands per holding.
         #[arg(long, default_value_t = 1)]
         layouts: usize,
@@ -293,6 +307,9 @@ fn run(cli: Cli) -> Result<()> {
             survey,
             morph_to,
             our_set,
+            variants,
+            variants_file,
+            vuls,
             layouts,
             script,
             count,
@@ -353,13 +370,43 @@ fn run(cli: Cli) -> Result<()> {
                 },
                 (None, false) => Deals::Fixed {
                     hands: fixed,
-                    variation: match (&morph_to, survey, vary_tens) {
-                        (Some(h), _, _) => rbb_compare::probe::Variation::MorphTo(
-                            Hand::from_pbn(h).ok_or_else(|| format!("bad --morph-to {h:?}"))?,
-                        ),
-                        (None, true, _) => rbb_compare::probe::Variation::Survey,
-                        (None, false, true) => rbb_compare::probe::Variation::Tens,
-                        _ => rbb_compare::probe::Variation::None,
+                    variation: if !variants.is_empty() || variants_file.is_some() {
+                        let mut list = Vec::new();
+                        for v in &variants {
+                            list.push((v.clone(), v.clone()));
+                        }
+                        if let Some(f) = &variants_file {
+                            for line in read(f)?.lines() {
+                                let line = line.split('#').next().unwrap_or("").trim();
+                                if line.is_empty() {
+                                    continue;
+                                }
+                                let (label, hand) = match line.split_once('|') {
+                                    Some((l, h)) => (l.trim().to_string(), h.trim().to_string()),
+                                    None => (line.to_string(), line.to_string()),
+                                };
+                                list.push((label, hand));
+                            }
+                        }
+                        rbb_compare::probe::Variation::List(
+                            list.into_iter()
+                                .map(|(l, h)| {
+                                    Hand::from_pbn(&h)
+                                        .filter(|x| x.len() == 13)
+                                        .map(|x| (l.clone(), x))
+                                        .ok_or_else(|| format!("variant {l:?}: bad hand {h:?}"))
+                                })
+                                .collect::<std::result::Result<_, _>>()?,
+                        )
+                    } else {
+                        match (&morph_to, survey, vary_tens) {
+                            (Some(h), _, _) => rbb_compare::probe::Variation::MorphTo(
+                                Hand::from_pbn(h).ok_or_else(|| format!("bad --morph-to {h:?}"))?,
+                            ),
+                            (None, true, _) => rbb_compare::probe::Variation::Survey,
+                            (None, false, true) => rbb_compare::probe::Variation::Tens,
+                            _ => rbb_compare::probe::Variation::None,
+                        }
                     },
                     layouts,
                 },
@@ -386,6 +433,13 @@ fn run(cli: Cli) -> Result<()> {
                 out_dir: out,
                 seed,
                 our_changes: our_set,
+                vuls: vuls
+                    .iter()
+                    .map(|v| {
+                        Vulnerability::from_pbn(v)
+                            .ok_or_else(|| format!("bad vulnerability {v:?}: None, NS, EW or All"))
+                    })
+                    .collect::<std::result::Result<_, _>>()?,
             };
             probe(&opts)
         }
@@ -437,10 +491,16 @@ fn probe(opts: &rbb_compare::probe::ProbeOptions) -> Result<()> {
     }
     let labelled = report.rows.iter().any(|r| r.label.is_some());
     let survey = report.rows.first().and_then(|r| r.label.as_deref()) == Some("base");
+    let by_vul = !opts.vuls.is_empty();
     println!(
-        "\n  {}seat {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}",
+        "\n  {}{}seat {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}",
         if labelled {
             format!("{:22} ", "change")
+        } else {
+            String::new()
+        },
+        if by_vul {
+            format!("{:5} ", "vul")
         } else {
             String::new()
         },
@@ -469,8 +529,13 @@ fn probe(opts: &rbb_compare::probe::ProbeOptions) -> Result<()> {
         } else {
             String::new()
         };
+        let vul = if by_vul {
+            format!("{:5} ", r.board.vul.to_pbn())
+        } else {
+            String::new()
+        };
         println!(
-            "  {label}{:4} {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}{mark}",
+            "  {label}{vul}{:4} {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}{mark}",
             r.seat.to_char(),
             r.hand,
             r.hcp,

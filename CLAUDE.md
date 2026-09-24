@@ -72,7 +72,10 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   `--survey` tries every single-card exchange between the first hand and
   its opponents (partner's hand stays) and lists the ones that change
   BBA's call; `--morph-to S.H.D.C` walks from the first hand to another a
-  card at a time and tries each exchange alone. `--our-set
+  card at a time and tries each exchange alone; `--variants FILE` (lines
+  `label | S.H.D.C`) or `--variant S.H.D.C` probes a list of hands in one
+  run, and `--vuls None,NS,EW,All` bids each at every vulnerability. Keep
+  the variant files in `probes/` and cite them from the notes. `--our-set
   general.style=bba` sets our engine's side only. Corpus tables mix cards
   (1NT ranges, transfer structures): restrict them to one card.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over

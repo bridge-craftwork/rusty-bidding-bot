@@ -57,6 +57,9 @@ pub enum Variation {
     /// From the holding to this one a card at a time, and each of those
     /// exchanges alone.
     MorphTo(Hand),
+    /// These holdings in place of the first, each with a label; the other
+    /// fixed hands stay, the rest of the cards go to the open seats.
+    List(Vec<(String, Hand)>),
 }
 
 #[derive(Debug, Clone)]
@@ -82,6 +85,8 @@ pub struct ProbeOptions {
     /// Card changes (`path=value`) for our engine's side of the comparison,
     /// e.g. `general.style=bba`; bba-cli never sees them.
     pub our_changes: Vec<String>,
+    /// Bid every deal at each of these vulnerabilities (empty: `vul` only).
+    pub vuls: Vec<Vulnerability>,
 }
 
 /// One board of a probe, from the decision after the prefix on.
@@ -214,7 +219,7 @@ fn fill(fixed: &[(Direction, Hand)], rng: &mut Rng) -> Result<Deal, String> {
         for c in hand.cards() {
             let i = c.to_index() as usize;
             if used[i] {
-                return Err(format!("{} is in two hands", c.to_index()));
+                return Err(format!("{} is in two hands", card_name(c)));
             }
             used[i] = true;
         }
@@ -386,6 +391,17 @@ fn make_deals(opts: &ProbeOptions) -> Result<Vec<(Option<String>, Deal)>, String
                     };
                     Ok(v.into_iter().map(|(l, d)| (Some(l), d)).collect())
                 }
+                Variation::List(list) => {
+                    let mut out = Vec::new();
+                    for (label, hand) in list {
+                        let mut fixed = vec![(first.0, hand.clone())];
+                        fixed.extend(others.iter().cloned());
+                        let deal = fill(&fixed, &mut rng)
+                            .map_err(|e| format!("variant {label:?} ({}): {e}", hand.to_pbn()))?;
+                        out.push((Some(label.clone()), deal));
+                    }
+                    Ok(out)
+                }
                 Variation::None | Variation::Tens => {
                     let variants = if matches!(variation, Variation::Tens) {
                         ten_variants(&first.1)
@@ -457,18 +473,26 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
     write(&ew_path, &ew_text)?;
 
     let deals = make_deals(opts)?;
-    let labels: Vec<Option<String>> = deals.iter().map(|(l, _)| l.clone()).collect();
-    let boards: Vec<Board> = deals
-        .into_iter()
-        .enumerate()
-        .map(|(i, (_, d))| {
-            Board::new()
-                .with_number(i as u32 + 1)
-                .with_dealer(opts.dealer)
-                .with_vulnerability(opts.vul)
-                .with_deal(d)
-        })
-        .collect();
+    let vuls = if opts.vuls.is_empty() {
+        vec![opts.vul]
+    } else {
+        opts.vuls.clone()
+    };
+    // Every deal at every vulnerability, the vulnerabilities innermost.
+    let mut labels: Vec<Option<String>> = Vec::new();
+    let mut boards: Vec<Board> = Vec::new();
+    for (label, d) in deals {
+        for v in &vuls {
+            labels.push(label.clone());
+            boards.push(
+                Board::new()
+                    .with_number(boards.len() as u32 + 1)
+                    .with_dealer(opts.dealer)
+                    .with_vulnerability(*v)
+                    .with_deal(d.clone()),
+            );
+        }
+    }
     let input = opts.out_dir.join("deals.pbn");
     let output = opts.out_dir.join("bba.pbn");
     write(&input, &bridge_encodings::pbn::write_pbn(&boards))?;
@@ -624,6 +648,52 @@ mod tests {
         // A card in partner's fixed hand cannot move.
         let t = Hand::from_pbn("A5.K43.T764.QJT5").unwrap();
         assert!(morph(&base, Direction::North, &t, &[Direction::South]).is_err());
+    }
+
+    #[test]
+    fn a_variant_list_keeps_partner_and_rejects_clashes() {
+        let south = (
+            Direction::South,
+            Hand::from_pbn("K92.A7.KJ532.A43").unwrap(),
+        );
+        let opts = |list: Vec<(String, Hand)>| ProbeOptions {
+            deals: Deals::Fixed {
+                hands: vec![
+                    (
+                        Direction::North,
+                        Hand::from_pbn("A5.K86.Q764.9865").unwrap(),
+                    ),
+                    south.clone(),
+                ],
+                variation: Variation::List(list),
+                layouts: 1,
+            },
+            dealer: Direction::South,
+            vul: Vulnerability::None,
+            scoring: ScoringMethod::Matchpoints,
+            prefix: vec![],
+            ns_card: String::new(),
+            ew_card: String::new(),
+            ns_set: vec![],
+            ew_set: vec![],
+            pbs: PathBuf::new(),
+            rules: PathBuf::new(),
+            bba_cli: PathBuf::new(),
+            out_dir: PathBuf::new(),
+            seed: 1,
+            our_changes: vec![],
+            vuls: vec![],
+        };
+        let v = Hand::from_pbn("A5.K86.9764.QT85").unwrap();
+        let deals = make_deals(&opts(vec![("C QT".into(), v.clone())])).unwrap();
+        assert_eq!(deals.len(), 1);
+        assert_eq!(deals[0].0.as_deref(), Some("C QT"));
+        assert_eq!(deals[0].1.hand(Direction::North), &v);
+        assert_eq!(deals[0].1.hand(Direction::South), &south.1);
+        // The diamond king is South's: the variant is refused, by name.
+        let bad = Hand::from_pbn("A5.Q86.KT64.9875").unwrap();
+        let err = make_deals(&opts(vec![("D KT".into(), bad)])).unwrap_err();
+        assert!(err.contains("D KT") && err.contains("♦K"), "{err}");
     }
 
     #[test]
