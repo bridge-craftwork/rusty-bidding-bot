@@ -4,6 +4,7 @@
 //! is closer to double-dummy par.
 
 mod board;
+pub mod grid;
 pub mod par;
 pub mod probe;
 mod report;

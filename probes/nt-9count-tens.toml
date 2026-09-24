@@ -1,0 +1,23 @@
+# Responder after a 15-17 1NT, 9 HCP, no four-card major: where does a ten
+# count? (Basic_NT board 2; one-nt.notes.md, "Tens".)
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass"
+vuls    = ["None", "NS"]
+scoring = ["MP", "IMP"]
+partner = ["K92.A7.KJ532.A43", "K93.A7.AKJ4.J432", "K92.A7.J532.AKJ4", "K92.A7.AKJ5.J432"]
+our     = ["general.style=bba"]
+hands = [
+  "board 2                   | A5.K43.T764.QT65",
+  "2-3-4-4 no ten            | A5.K86.Q764.9875",
+  "2-3-4-4 C QT              | A5.K86.9764.QT85",
+  "2-3-4-4 D QT              | A5.K86.QT64.9875",
+  "2-3-4-4 C KT              | A5.Q86.9764.KT85",
+  "2-3-4-4 D KT              | A5.Q86.KT64.9875",
+  "2-3-4-4 H KT              | A5.KT6.9764.Q875",
+  "2-3-4-4 S AT              | AT.K86.9764.Q875",
+  "3-3-3-4 C4 QT             | A52.K86.976.QT85",
+  "3-3-3-4 D3 QT             | A52.K86.QT6.9875",
+  "3-3-4-3 C3 QT             | A52.K86.9765.QT8",
+  "3-3-4-3 D4 QT             | A52.K86.QT65.987",
+]

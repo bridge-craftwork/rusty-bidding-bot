@@ -2862,6 +2862,7 @@ dependencies = [
  "rbb-engine",
  "serde",
  "serde_json",
+ "toml",
 ]
 
 [[package]]

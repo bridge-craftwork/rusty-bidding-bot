@@ -41,6 +41,8 @@ pub enum Deals {
     },
     /// `count` random deals.
     Random { count: usize },
+    /// Complete deals, each with a label (built by `grid`).
+    Explicit(Vec<(String, Deal)>),
 }
 
 /// How the first fixed holding is varied, to find what BBA's decision
@@ -175,7 +177,7 @@ pub fn card_text(spec: &str, pbs: &Path, edits: &[(String, i64)]) -> Result<Stri
 }
 
 /// Small deterministic generator for filling in the other hands.
-struct Rng(u64);
+pub(crate) struct Rng(pub(crate) u64);
 impl Rng {
     fn next(&mut self) -> u64 {
         self.0 ^= self.0 >> 12;
@@ -209,7 +211,7 @@ pub fn ten_variants(hand: &Hand) -> Vec<Hand> {
     out
 }
 
-fn fill(fixed: &[(Direction, Hand)], rng: &mut Rng) -> Result<Deal, String> {
+pub(crate) fn fill(fixed: &[(Direction, Hand)], rng: &mut Rng) -> Result<Deal, String> {
     let mut used = [false; 52];
     let mut deal = Deal::new();
     for (seat, hand) in fixed {
@@ -247,7 +249,7 @@ fn fill(fixed: &[(Direction, Hand)], rng: &mut Rng) -> Result<Deal, String> {
     Ok(deal)
 }
 
-fn card_name(c: &PlayingCard) -> String {
+pub(crate) fn card_name(c: &PlayingCard) -> String {
     format!("{}{}", c.suit.symbol(), c.rank.to_char())
 }
 
@@ -278,7 +280,7 @@ fn exchange(deal: &Deal, seat: Direction, drop: PlayingCard, add: PlayingCard) -
 }
 
 /// Every single-card exchange between `seat` and its two opponents.
-fn survey(base: &Deal, seat: Direction) -> Vec<(String, Deal)> {
+pub(crate) fn survey(base: &Deal, seat: Direction) -> Vec<(String, Deal)> {
     let mut out = vec![("base".to_string(), base.clone())];
     let opponents = [seat.next(), seat.next().next().next()];
     let mut mine: Vec<PlayingCard> = base.hand(seat).cards().to_vec();
@@ -302,7 +304,7 @@ fn survey(base: &Deal, seat: Direction) -> Vec<(String, Deal)> {
 /// From `seat`'s hand to `target` a card at a time (same-suit exchanges
 /// first), then each exchange alone. The `fixed` seats (partner, when his
 /// hand is given) may not give up cards.
-fn morph(
+pub(crate) fn morph(
     base: &Deal,
     seat: Direction,
     target: &Hand,
@@ -420,6 +422,10 @@ fn make_deals(opts: &ProbeOptions) -> Result<Vec<(Option<String>, Deal)>, String
                 }
             }
         }
+        Deals::Explicit(list) => Ok(list
+            .iter()
+            .map(|(l, d)| (Some(l.clone()), d.clone()))
+            .collect()),
         Deals::Random { count } => (0..*count)
             .map(|_| fill(&[], &mut rng).map(|d| (None, d)))
             .collect(),

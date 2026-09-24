@@ -67,17 +67,18 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
   **Find what a decision turns on by making hands, not by searching the
-  corpus** (Rick, 2026-09-24): fix all four hands (`--hand` for each seat;
-  a card in two hands is an error, so check the output), then
-  `--survey` tries every single-card exchange between the first hand and
-  its opponents (partner's hand stays) and lists the ones that change
-  BBA's call; `--morph-to S.H.D.C` walks from the first hand to another a
-  card at a time and tries each exchange alone; `--variants FILE` (lines
-  `label | S.H.D.C`) or `--variant S.H.D.C` probes a list of hands in one
-  run, and `--vuls None,NS,EW,All` bids each at every vulnerability. Keep
-  the variant files in `probes/` and cite them from the notes. `--our-set
-  general.style=bba` sets our engine's side only. Corpus tables mix cards
-  (1NT ranges, transfer structures): restrict them to one card.
+  corpus** (Rick, 2026-09-24), with `rbb grid probes/<name>.toml` (half a
+  second): a spec gives the card, dealer, the forced `prefix`, `vuls`,
+  `scoring`, a list of `partner` hands (the first that shares no card
+  with a variant is used: partner's cards do not change the decision),
+  `our = ["general.style=bba"]`, and one of `hands = ["label | S.H.D.C",
+  ...]`, `survey = "S.H.D.C"` (every single-card exchange with the
+  opponents; prints a summary and the changes) or `morph = [from, to]`.
+  It prints one row per hand and one column per vulnerability/scoring
+  (BBA's call, and ours after ≠ when it differs), and writes grid.tsv and
+  grid.json. Keep the specs in probes/ and cite them from the notes.
+  Corpus tables mix cards (1NT ranges, transfer structures): restrict
+  them to one card.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).

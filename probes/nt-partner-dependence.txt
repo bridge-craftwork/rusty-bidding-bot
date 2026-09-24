@@ -1,7 +1,0 @@
-# Does responder's call depend on opener's actual cards? North fixed
-# A5.K86.9764.QT85 (9 HCP, CQT); South varied, all balanced 15-17, 1NT forced.
-S1 KJ532 diamonds   | K92.A7.KJ532.A43
-S2 flat 15          | KQ3.AJ7.A32.J432
-S3 flat 15, 4 clubs | QJ3.AQ4.AJ5.J642
-S4 17               | KJ2.QJ3.AK3.K643
-S5 KJ643 clubs      | K92.A7.A32.KJ643

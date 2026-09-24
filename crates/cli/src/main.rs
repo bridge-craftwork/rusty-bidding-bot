@@ -154,6 +154,27 @@ enum Command {
         #[arg(long, default_value_t = 1)]
         seed: u64,
     },
+    /// Probe one decision over a list of hands, a survey or a morph, from
+    /// a spec file (see probes/*.toml), and print BBA's calls as a table:
+    /// one row per hand, one column per vulnerability and scoring.
+    Grid {
+        /// The spec (TOML): card, dealer, prefix, vuls, scoring, partner,
+        /// our, and one of hands / survey / morph.
+        spec: PathBuf,
+        /// A survey prints only the exchanges that change BBA's call; show
+        /// every row.
+        #[arg(long)]
+        all: bool,
+        #[arg(long, default_value = "../Practice-Bidding-Scenarios")]
+        pbs: PathBuf,
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        #[arg(long, default_value = rbb_compare::probe::DEFAULT_BBA_CLI)]
+        bba_cli: PathBuf,
+        /// Output directory (default .rbb-cache/grids/<spec name>).
+        #[arg(long)]
+        out: Option<PathBuf>,
+    },
     /// Choose a call for a hand and show why.
     Call {
         /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
@@ -442,6 +463,59 @@ fn run(cli: Cli) -> Result<()> {
                     .collect::<std::result::Result<_, _>>()?,
             };
             probe(&opts)
+        }
+        Command::Grid {
+            spec,
+            all,
+            pbs,
+            rules,
+            bba_cli,
+            out,
+        } => {
+            use rbb_compare::grid;
+            let s = grid::read_spec(&spec)?;
+            let name = spec
+                .file_stem()
+                .map(|n| n.to_string_lossy().to_string())
+                .unwrap_or_else(|| "grid".into());
+            let env = grid::Env {
+                pbs,
+                rules,
+                bba_cli,
+                out_dir: out.unwrap_or_else(|| PathBuf::from(".rbb-cache/grids").join(&name)),
+            };
+            let g = grid::run(&s, &env)?;
+            println!(
+                "{}: {} {:?}, {} decides after `{}`; card {}{}",
+                spec.display(),
+                g.rows.len(),
+                g.mode,
+                g.seat.to_char(),
+                s.prefix,
+                s.card,
+                if s.our.is_empty() {
+                    String::new()
+                } else {
+                    format!("; ours with {}", s.our.join(" "))
+                }
+            );
+            if g.mode == grid::Mode::Survey && !all {
+                let changed = g.changes_from_first();
+                print!("\n{}", g.survey_summary());
+                println!(
+                    "\n{} of {} exchanges change BBA's call:",
+                    changed.len(),
+                    g.rows.len() - 1
+                );
+                let mut shown = vec![&g.rows[0]];
+                shown.extend(changed);
+                print!("{}", g.table(&shown));
+            } else {
+                println!();
+                print!("{}", g.table(&g.rows.iter().collect::<Vec<_>>()));
+            }
+            println!("\n(table in {}/grid.tsv)", g.out_dir.display());
+            Ok(())
         }
         Command::Call {
             hand,

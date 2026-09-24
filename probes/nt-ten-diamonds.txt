@@ -1,4 +1,0 @@
-# Honoured ten in diamonds; South K92.A7.J532.AKJ4 (partner's cards do not matter)
-D KT            | A5.Q86.KT64.9875
-D AT + C Q      | 65.K86.AT64.Q875
-D QT            | A5.K86.QT64.9875
