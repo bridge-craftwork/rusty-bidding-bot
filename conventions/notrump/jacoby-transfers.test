@@ -66,3 +66,10 @@ S J8.KQ84.AK9.Q753      | 1NT P 2D P 2H P 2S P | 4H | bba: four hearts: game (Ba
 N Q653.KJ874.K2.84      | 1NT P 2D P 2H P 2S P 3H P | 4H | bba: 9, the top of the invitation
 N Q653.KJ874.Q2.84      | 1NT P 2D P 2H P 2S P 3H P | P  | bba: 8 passes
 N AQ542.98743.72.3      | 1NT P          | 2H     | bba: 5-5 in the majors transfers to spades first
+
+# ── 5 hearts, 4 spades, 7-9: transfer, then 2S (BBA's; our default, Rick 2026-09-24)
+card    Basic-Bridge
+dealer  S
+N K873.QJ975.84.J3      | 1NT P               | 2D     | 5-4 majors, invitational: transfer, not Stayman
+N K873.QJ975.84.J3      | 1NT P 2D P 2H P     | 2S     | then show the spades, not forcing
+S AQ6.K2.KJ53.Q962      | 1NT P 2D P 2H P 2S P | P     | three spades, two hearts: play 2S

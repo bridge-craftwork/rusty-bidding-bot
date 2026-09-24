@@ -66,3 +66,9 @@ scoring IMP
 N 54.K876.K862.K62      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 9 in the fit is game
 N 5.K876.K862.Q652      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 8 and a singleton is game
 N K876.5.K862.Q652      | 1NT P 2C P 2S P     | 4S     | bba at IMPs: the same in spades
+
+# ── No fit, balanced 16-17: as over 1NT (Rick, 2026-09-24)
+card    Basic-Bridge
+dealer  S
+N K842.KQ5.AQ.QJ82      | 1NT P 2C P 2D P     | 6NT    | 17, no fit: slam (Basic_What_To_Open 204)
+N K842.KQ5.AJ.QJ82      | 1NT P 2C P 2D P     | 4NT    | 16, no fit: quantitative

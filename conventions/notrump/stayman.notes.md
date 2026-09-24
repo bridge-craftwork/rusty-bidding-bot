@@ -305,3 +305,17 @@ boards bids the same auction as before (ours and the replay).
 reads the no-fit 2NT/3NT denials from negative inference. It also has
 the 16–17 gap after 2♦ noted above: a question for Rick (4NT with 16,
 6NT with 17, as over 1NT?).
+
+## Rick, 2026-09-24: 16-17 with no fit; 5-4 majors transfer
+
+- After 1NT-2C-2D (or a major that does not fit) a balanced 16 bids a
+  quantitative 4NT and 17 bids 6NT, as directly over 1NT (32 combined
+  opposite a minimum). Before, the default had only 6NT at 18 total
+  points, and 16-17 passed (Basic_What_To_Open 204).
+- Five hearts and four spades below game values transfer and then bid a
+  non-forcing 2S (BBA's treatment, now the default; jacoby-transfers.bid).
+  Stayman keeps the other 5-4 hands.
+- Passing 2NT with 4 HCP or less (BBA) is not adopted (-66 IMPs).
+
+Together: -172,716 -> -168,198 IMPs against par on the corpus (+4,518),
+Basic_* +13, uncontested +18.

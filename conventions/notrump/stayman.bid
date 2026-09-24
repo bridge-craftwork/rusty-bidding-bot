@@ -11,10 +11,12 @@ module stayman "Stayman"
 
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
-      shows strength>=invite, H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
+      shows strength>=invite, H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5), H<=4 | S<=3 | strength>=game
       when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite)
       when  style is not bba
-      # 5-4 in the majors included (Smolen). 4-3-3-3 just bids notrump, except
+      # 5 hearts and 4 spades below game transfers, then bids 2S
+      # (jacoby-transfers.bid; BBA's treatment, Rick 2026-09-24).
+      # Other 5-4 in the majors included (Smolen). 4-3-3-3 just bids notrump, except
       # with four-way transfers, where 2NT is not natural: invitational hands
       # go through Stayman, with or without a major, and bid 2NT next. A
       # six-card minor transfers instead (minor-transfers.bid): opposite
@@ -69,7 +71,15 @@ when answered majors
       when  partner.S>=4, strength<=invite
       when  style is not bba
       priority 1
-  6N  "Slam: {slam} total points, no fit found"   shows strength=slam
+  # Rick, 2026-09-24: balanced 16-17 with no fit, as over 1NT: 4NT with
+  # 16, 6NT with 17 (32 combined opposite a minimum).
+  6N  "Slam: 17 or more, no fit found"           shows points>=32-partner.hcp.min
+      when  style is not bba
+      priority -1
+  4N  "Quantitative, no fit found"               shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  style is not bba
+      sets  ask=quant
+      priority -1
   3N  "Game: {game} total points, no fit found"   shows strength=game         sets ask=choice
       when  style is not bba
       priority -1                                 # a known major fit first

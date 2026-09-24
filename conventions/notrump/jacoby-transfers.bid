@@ -102,16 +102,16 @@ when asked slam_try(M)
       artificial
   P   "No slam: plays game"
 
-# The BBA treatment (probed 2026-09-24, jacoby-transfers.notes.md): with
-# five hearts, four spades and 7-9 HCP BBA transfers rather than bid
-# Stayman, then shows the spades. The 2S is not forcing: opener passes
+# BBA's treatment (probed 2026-09-24, jacoby-transfers.notes.md), our
+# default since Rick's ruling the same day: with five hearts, four spades
+# and 7-9 HCP transfer rather than bid Stayman, then show the spades. The 2S is not forcing: opener passes
 # with three spades and two hearts. He prefers hearts: game with four,
 # or with three and 17; with four spades (two hearts) game from 16.
-after 1N (P) 2D (P) 2H (P) when style is bba
+after 1N (P) 2D (P) 2H (P)
   2S  "5 hearts and 4 spades, invitational, not forcing"
       shows H=5, S=4, hcp>=24-partner.hcp.max, hcp<=24-partner.hcp.min
 
-after 1N (P) 2D (P) 2H (P) 2S (P) when style is bba
+after 1N (P) 2D (P) 2H (P) 2S (P)
   4H  "Accepts, in the heart fit"      shows H>=4 | (H=3, points>=24-partner.hcp.min)
   3H  "Declines, in the heart fit"     shows H=3, points<=23-partner.hcp.min
   4S  "Accepts, in the spade fit"      shows S>=4, H<=2, points>=23-partner.hcp.min
@@ -119,10 +119,10 @@ after 1N (P) 2D (P) 2H (P) 2S (P) when style is bba
   P   "No eight-card fit: play 2S"     shows H<=2, S<=3
 
 # Responder bids game over the decline with the top of the range.
-after 1N (P) 2D (P) 2H (P) 2S (P) 3H (P) when style is bba
+after 1N (P) 2D (P) 2H (P) 2S (P) 3H (P)
   4H  "Game: the top of the invitation"  shows hcp>=25-partner.hcp.max
   P   "Minimum: play 3H"                 shows hcp<=24-partner.hcp.max
-after 1N (P) 2D (P) 2H (P) 2S (P) 3S (P) when style is bba
+after 1N (P) 2D (P) 2H (P) 2S (P) 3S (P)
   4S  "Game: the top of the invitation"  shows hcp>=25-partner.hcp.max
   P   "Minimum: play 3S"                 shows hcp<=24-partner.hcp.max
 
