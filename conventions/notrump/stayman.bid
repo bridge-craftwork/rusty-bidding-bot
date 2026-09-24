@@ -23,11 +23,12 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       artificial
       priority 1                           # ahead of transfers with 5-4 majors
   2C  "Stayman: asks for a 4-card major"  alert
-      shows (strength>=invite | (hcp>=24-partner.hcp.max, H=4 | S=4)), H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
-      when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite) | (strength<=signoff, H=4 | S=4)
+      shows hcp>=24-partner.hcp.max, (H=4 | S=4, H<=5, S<=5, H<=4 | hcp>=25-partner.hcp.min) | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
       when  style is bba
-      # BBA (probed 2026-09-24): with a four-card major, 7 HCP is enough,
-      # whatever the shape or tens; 2NT next shows 7-9 (stayman.notes.md).
+      # BBA (probed 2026-09-24): a four-card major and 7 HCP, whatever the
+      # shape (4-3-3-3 too) or the tens; 2NT next shows 7-9. A six-card
+      # major transfers, and so does 5 hearts and 4 spades below game
+      # values (2D, then 2S: jacoby-transfers.bid). stayman.notes.md.
       sets  forcing=round, ask=majors
       artificial
       priority 1
@@ -50,11 +51,11 @@ after 1N (P) 2C (P) | (1x) 1N (P) 2C (P) | (1x) P (P) 1N (P) 2C (P)
 when answered majors
   6H  "Slam in the heart fit"                     shows H>=4, strength=slam   when partner.H>=4
   6S  "Slam in the spade fit"                     shows S>=4, strength=slam   when partner.S>=4
-  4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4
-  3H  "Invitational raise in hearts"              shows H>=4, strength=invite when partner.H>=4
+  4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4, style is not bba
+  3H  "Invitational raise in hearts"              shows H>=4, strength=invite when partner.H>=4, style is not bba
       sets ask=invite(H)
-  4S  "Game in the spade fit"                     shows S>=4, strength>=game  when partner.S>=4
-  3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4
+  4S  "Game in the spade fit"                     shows S>=4, strength>=game  when partner.S>=4, style is not bba
+  3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4, style is not bba
       sets ask=invite(S)
   6H  "Slam in the heart fit, counting shortness"  shows H>=4, tp(H)>=33-partner.points.min
       when  partner.H>=4
@@ -62,27 +63,113 @@ when answered majors
       when  partner.S>=4
   4H  "Game in the heart fit, counting shortness"  shows H>=4, tp(H)>=25-partner.points.min
       when  partner.H>=4, strength<=invite
+      when  style is not bba
       priority 1                                  # support points raise an invitation to game
   4S  "Game in the spade fit, counting shortness"  shows S>=4, tp(S)>=25-partner.points.min
       when  partner.S>=4, strength<=invite
+      when  style is not bba
       priority 1
   6N  "Slam: {slam} total points, no fit found"   shows strength=slam
   3N  "Game: {game} total points, no fit found"   shows strength=game         sets ask=choice
+      when  style is not bba
       priority -1                                 # a known major fit first
   2N  "Invitational: {invite} total points, no fit found"
       shows strength=invite
       when  style is not bba
       sets  ask=nt_invite
       priority -1                                 # a known major fit first
-  2N  "Invitational, no fit found"
-      shows points>=24-partner.hcp.max, strength<=invite
+
+# The BBA treatment (probed 2026-09-24, stayman.notes.md). In the fit BBA
+# counts HCP, not tens, less 1 for 4-3-3-3, plus 2 for a void: game with
+# 10 opposite 15-17, invite with 8-9, pass with less. A singleton is worth
+# about half a point: it makes 7 an invitation but not 9 a game. At IMPs
+# game comes a point earlier (9, the singleton counting 1). The bands are
+# written out in HCP by shape, against opener's range.
+#
+# Without a fit 2NT shows 7-9 total points (opener needs 18) and 3NT game;
+# each says which major it denies, since the fit rules above no longer
+# give that by negative inference.
+  4H  "Game in the heart fit"  shows H>=4, (hcp>=25-partner.hcp.min, !shape 4333) | hcp>=26-partner.hcp.min | (hcp>=24-partner.hcp.min, shortest<=0)
+      when  partner.H>=4, matchpoints
+      when  style is bba
+  4H  "Game in the heart fit"  shows H>=4, (hcp>=24-partner.hcp.min, !shape 4333) | hcp>=25-partner.hcp.min | (hcp>=23-partner.hcp.min, shortest<=1) | (hcp>=22-partner.hcp.min, shortest<=0)
+      when  partner.H>=4, imps
+      when  style is bba                          # at IMPs a point bolder
+  3H  "Invitational raise in hearts"  shows H>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=24-partner.hcp.min, shortest>=1) | (hcp<=25-partner.hcp.min, shape 4333) | hcp<=23-partner.hcp.min
+      when  partner.H>=4, matchpoints
+      when  style is bba
+      sets  ask=fit_invite(H)
+  3H  "Invitational raise in hearts"  shows H>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=23-partner.hcp.min, shortest>=2) | (hcp<=24-partner.hcp.min, shape 4333) | (hcp<=22-partner.hcp.min, shortest=1) | hcp<=21-partner.hcp.min
+      when  partner.H>=4, imps
+      when  style is bba
+      sets  ask=fit_invite(H)
+  P   "Weak with the heart fit: play here"  shows H>=4, (hcp<=24-partner.hcp.max, shortest>=2) | (hcp<=25-partner.hcp.max, shape 4333) | (hcp<=23-partner.hcp.max, shortest=1) | hcp<=22-partner.hcp.max
+      when  partner.H>=4
+      when  style is bba
+  4S  "Game in the spade fit"  shows S>=4, (hcp>=25-partner.hcp.min, !shape 4333) | hcp>=26-partner.hcp.min | (hcp>=24-partner.hcp.min, shortest<=0)
+      when  partner.S>=4, matchpoints
+      when  style is bba
+  4S  "Game in the spade fit"  shows S>=4, (hcp>=24-partner.hcp.min, !shape 4333) | hcp>=25-partner.hcp.min | (hcp>=23-partner.hcp.min, shortest<=1) | (hcp>=22-partner.hcp.min, shortest<=0)
+      when  partner.S>=4, imps
+      when  style is bba                          # at IMPs a point bolder
+  3S  "Invitational raise in spades"  shows S>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=24-partner.hcp.min, shortest>=1) | (hcp<=25-partner.hcp.min, shape 4333) | hcp<=23-partner.hcp.min
+      when  partner.S>=4, matchpoints
+      when  style is bba
+      sets  ask=fit_invite(S)
+  3S  "Invitational raise in spades"  shows S>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=23-partner.hcp.min, shortest>=2) | (hcp<=24-partner.hcp.min, shape 4333) | (hcp<=22-partner.hcp.min, shortest=1) | hcp<=21-partner.hcp.min
+      when  partner.S>=4, imps
+      when  style is bba
+      sets  ask=fit_invite(S)
+  P   "Weak with the spade fit: play here"  shows S>=4, (hcp<=24-partner.hcp.max, shortest>=2) | (hcp<=25-partner.hcp.max, shape 4333) | (hcp<=23-partner.hcp.max, shortest=1) | hcp<=22-partner.hcp.max
+      when  partner.S>=4
+      when  style is bba
+  6N  "Slam: 17 or more, no fit found"  shows points>=32-partner.hcp.min
+      when  style is bba                          # as over 1NT: 17 bids the slam
+      priority -1
+  4N  "Quantitative, no fit found"      shows balanced, strength=slam_invite, hcp>=33-partner.hcp.max, points<=31-partner.hcp.min
+      when  style is bba
+      sets  ask=quant
+      priority -1
+  3N  "Game: {game} total points, no heart fit"  shows strength=game, H<=3   sets ask=choice
+      when  partner.H>=4
+      when  style is bba
+      priority -1
+  3N  "Game: {game} total points, no spade fit"  shows strength=game, S<=3   sets ask=choice
+      when  partner.S>=4
+      when  style is bba
+      priority -1
+  3N  "Game: {game} total points, no major fit"  shows strength=game         sets ask=choice
+      when  partner.H<=3, partner.S<=3
+      when  style is bba
+      priority -1
+  2N  "Invitational, no heart fit"  shows points>=24-partner.hcp.max, strength<=invite, H<=3
+      when  partner.H>=4
       when  style is bba                          # 7-9: opener needs 18 to accept
       sets  ask=nt_invite
       priority -1
-  P   "Light invitation, the heart fit found: play here"  shows H>=4, points<=22-partner.hcp.min
-      when  partner.H>=4, style is bba
-  P   "Light invitation, the spade fit found: play here"  shows S>=4, points<=22-partner.hcp.min
-      when  partner.S>=4, style is bba
+  2N  "Invitational, no spade fit"  shows points>=24-partner.hcp.max, strength<=invite, S<=3
+      when  partner.S>=4
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+  2N  "Invitational, no major fit"  shows points>=24-partner.hcp.max, strength<=invite
+      when  partner.H<=3, partner.S<=3
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+
+# BBA: opener answers the raise in the fit with a maximum (17 counting
+# tens opposite 15-17), or one less with a fifth trump. Partner's range
+# is no guide: the raise is in HCP by shape.
+when asked fit_invite(M)
+  4M  "Accepts: a maximum"             shows points>=shown.hcp.max | (M>=5, points>=shown.hcp.max-1)
+  P   "Declines: not a maximum"        shows points<=shown.hcp.max-1, M<=4 | points<=shown.hcp.max-2
+
+# BBA: after 2NT opener shows his four spades with 3S when he declines;
+# responder, who has them too, bids game with 9 (probed 2026-09-24).
+after 1N (P) 2C (P) 2H (P) 2N (P) 3S (P) when style is bba
+  4S  "Game in the spade fit: the top of the invitation"  shows S>=4, hcp>=26-partner.hcp.max
+  P   "Minimum: play 3S"                                  shows hcp<=25-partner.hcp.max
 
 # ── Under interference ───────────────────────────────────────────────
 # Two card switches say the 1NT structure survives RHO's action:

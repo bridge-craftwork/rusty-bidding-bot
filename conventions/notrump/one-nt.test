@@ -24,3 +24,21 @@ N Q.K9.AQJ843.KQ87      | 1NT P          | 3D     | 17 with six diamonds
 N QT7.8.KQ72.AKQT6      | 1NT P          | 3NT    | 16 with 5-4 in the minors: no better call
 N KQ2.Q8.KQ72.A874      | 1NT P          | 4NT    | 16 balanced: quantitative
 N 54.A2.KQ6.Q98654      | 1NT P          | 3NT    | 11 with six clubs: game values, play 3NT
+
+# ── The BBA treatment (probed 2026-09-24, one-nt.notes.md) ─────────
+card    Basic-Bridge general.style=bba
+dealer  S
+N 542.Q76.K82.K862      | 1NT P          | P      | bba: 8 HCP 4-3-3-3 without a ten passes
+N T42.Q76.K82.K862      | 1NT P          | 2NT    | bba: the same with a ten invites
+N 542.K76.K82.A862      | 1NT P          | 3NT    | bba: 10 HCP, game
+N 54.K76.K862.K862      | 1NT P          | 2NT    | bba: 9 HCP, both minors: invite
+N T4.KT6.KT82.K862      | 1NT P          | 2NT    | bba: with 4-4 in the minors the tens do not count (corpus; this probe bid 3NT)
+N AKT.QT.J963.AJT5      | 1NT P          | 3NT    | bba: 15 and three tens: no slam invitation (Basic_NT board 400)
+N K96.Q5.AKQ6.QT73      | 1NT P          | 4NT    | bba: 16 invites
+S AQT.KJT2.A95.Q83      | 1NT P 2NT P    | 3NT    | bba: 16 and two tens accepts (17)
+S AQT.KJ72.A95.Q83      | 1NT P 2NT P    | P      | bba: 16 and one ten declines
+S A832.KQ4.AT.KT32      | 1NT P 4NT P    | P      | bba: 16 declines 4NT, tens or not (1N_Balanced_Raise board 159)
+S KJ2.K732.AQ4.AT4      | 1NT P 4NT P    | 6NT    | bba: 17 accepts
+scoring IMP
+N 54.K76.K862.K862      | 1NT P          | 3NT    | bba at IMPs: game from 9
+N 542.K76.K82.K862      | 1NT P          | 3NT    | bba at IMPs: 9 HCP 4-3-3-3 (BBA 2NT: IMPs is a tendency)

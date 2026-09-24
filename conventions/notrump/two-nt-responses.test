@@ -15,3 +15,17 @@ S AQ3.KJ8.AQ542.K9      | 2NT P 3C P     | 3D     | no four-card major
 S AQ3.KJ84.AQ54.K9      | 2NT P 3D P     | 3H     | completes the transfer
 N KJ54.Q762.93.874      | 2NT P 3C P 3H P | 4H    | the heart fit: game
 N KJ8542.Q72.93.87      | 2NT P 3H P 3S P | 4S    | six spades opposite 20-21: game
+
+# ── The BBA treatment (probed 2026-09-24) ───────────────────────────
+card    Basic-Bridge general.style=bba
+dealer  S
+N K432.7632.96.972      | 2NT P          | P      | bba: 3 HCP passes, four-card majors or not
+N K432.Q632.96.972      | 2NT P          | 3C     | bba: 5 HCP and a major: Stayman
+N K32.Q632.962.972      | 2NT P          | 3C     | bba: 4-3-3-3 too
+N 432.J72.K962.972      | 2NT P          | P      | bba: 4 HCP passes
+N 432.Q72.K962.972      | 2NT P          | 3NT    | bba: 5 HCP: game
+N T32.KT2.AT62.K72      | 2NT P          | 3NT    | bba: 10 and three tens: still 3NT
+N 432.K72.A962.A72      | 2NT P          | 4NT    | bba: 11: quantitative
+N 432.KT2.AT62.A72      | 2NT P          | 6NT    | bba: 11 and two tens: slam
+N 432.K72.A962.AJ2      | 2NT P          | 6NT    | bba: 12: slam
+N AQ542.98743.72.3      | 2NT P          | 3H     | bba: 5-5 in the majors: spades first

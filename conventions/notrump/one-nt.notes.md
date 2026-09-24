@@ -207,3 +207,119 @@ Also measured, not adopted: accepting 1NT–2NT with **16** (+7 IMPs on the
 corpus, +29 on Basic_*, but BBA declines, Basic_NT board 51, and the gain
 is within noise). With a *fit* opener does accept with 16
 (`jacoby-transfers.notes.md`).
+
+## BBA treatment (2026-09-24)
+
+`general.style = bba` plays a probed model of BBA's natural responses to
+1NT and its answer to 4NT. The default is unchanged (checked board by
+board over the whole corpus).
+
+**The corpus first.** Every `1NT P` decision with a balanced hand and no
+four-card major (Basic-Bridge, 21GF-DEFAULT and 21GF-GIB, 15-17 each).
+A logistic fit of BBA's call on the honours, spot cards and shape gives,
+per honour relative to a king at 3: A 3.9, Q 1.9–2.0, J 0.9–1.0, ten
+0.4, nine and eight 0; 4-3-3-3 +0.2 to +0.5 against 4-4-3-2 (BBA does
+not downgrade it); thresholds 8.0 for an invitation and 10.0 for game.
+So HCP + ½ per ten (the `bba` valuation) is BBA's centre. The rest is
+not in any feature we have: the same HCP and tens split both ways, and
+changing a king to an ace turned 3NT into 2NT once (below). There is no
+vulnerability effect (every corpus board is love all; probes at all four
+vulnerabilities agree), and the corpus is all matchpoints.
+
+By shape, % of BBA's calls, all three cards:
+
+| points | 4-3-3-3 | 4-4-3-2 (4-4 minors) | 5-3-3-2 |
+|---|---|---|---|
+| 7½ | P 100% | P 100% | P 95% |
+| 8 | P 62% | 2NT 59% | 2NT 63% |
+| 8½ | 2NT 83% | 2NT 61% | 2NT 79% |
+| 9½ | 2NT 75% | 2NT 80% | 2NT 72% |
+| 10 | 3NT 83% | 2NT 55% | 3NT 67% |
+
+Two exceptions stand out and are modelled:
+
+- **8 HCP 4-3-3-3 without a ten passes** (P 81% of 52; with one ten 2NT
+  83% of 83; 7 HCP and two tens 2NT 82%).
+- **With 4-4 in the minors the tens do not count**: 9 HCP and two tens
+  2NT 64% (3NT 36%), three tens 2NT 61%; 10 HCP 3NT 59–88%; 8 HCP 2NT
+  about 60% with none to two tens.
+
+**Probes** (`rbb probe`, Basic-Bridge both sides, dealer S, responder
+North after a forced `1NT Pass`; MP and IMP at love all, and IMP all
+vulnerable; `probes/ntb`, `probes/nt1`):
+
+| North | HCP+tens | MP | IMP (None = All) |
+|---|---|---|---|
+| 542.Q76.K82.Q862 (4-3-3-3) | 7 | P | P |
+| T42.Q76.K82.Q862 | 7+1 | P | P |
+| T42.QT6.K82.Q862 | 7+2 | 2NT | 2NT |
+| 542.Q76.K82.K862 | 8 | **P** | P |
+| T42.Q76.K82.K862 | 8+1 | 2NT | 2NT |
+| T42.QT6.K82.K862 | 8+2 | 2NT | **3NT** |
+| T42.QT6.KT8.K862 | 8+3 | 3NT | 3NT |
+| 542.K76.K82.K862 | 9 | 2NT | 2NT |
+| T42.K76.K82.K862 | 9+1 | 2NT | 2NT |
+| T42.KT6.K82.K862 | 9+2 | 3NT | 3NT |
+| 542.K76.K82.A862 | 10 | 3NT | 3NT |
+| 54.Q76.K862.K862 (4-4 minors) | 8, 8+1..3 | P | P |
+| 54.K76.K862.K862 | 9 | 2NT | **3NT** |
+| T4.K76.K862.K862 | 9+1 | 2NT | **3NT** |
+| T4.KT6.K862.K862 | 9+2 | 3NT | 3NT |
+| 54.K76.K862.A862 | 10 | 2NT | 2NT |
+| T4.KT6.K862.A862 | 10+2 | 2NT | **3NT** |
+| 542.Q76.K8.Q8652 (5-3-3-2) | 7, 7+1 | P | P |
+| T42.QT6.K8.Q8652 | 7+2 | 2NT | 2NT |
+| 542.Q76.K8.K8652 | 8, 8+1 | 2NT | 2NT |
+| T42.QT6.K8.K8652 | 8+2 | 2NT | **3NT** |
+| 542.K76.K8.K8652 | 9, 9+1 | 2NT | **3NT** |
+| 542.K76.A8.K8652 | 10 | 3NT | 3NT |
+| 542.J7.AK82.8642 (4-4 minors) | 8 | P | **2NT** |
+| JT3.T8.KJ73.A864 (4-4 minors) | 9+2 | 2NT | **3NT** |
+
+Vulnerability changed nothing (all four tried on the first set).
+**At IMPs BBA is bolder by about a point**: game from 9 in most shapes
+(not 9 or 9+1 with 4-3-3-3). The 4-4-minor rows show the noise: 8 HCP
+with three tens passes, 10 HCP with an ace (for a king) invites.
+
+The slam zone (Basic-Bridge corpus, balanced, no major): 15 HCP with any
+tens 3NT (22 of 22), 16 4NT 96% without a ten, 71% with one, 6NT 67%
+with two; 17 6NT ~72%; 18+ 6NT. Opener facing 4NT: 15 passes (36 of
+36), 16 passes 10 of 13 whatever the tens, 17 with a ten bids 6NT (4 of
+4), 17 flat passed twice.
+
+Opener facing 1NT–2NT (all three cards): 16 HCP P 95% with 0–1 tens,
+3NT 51% with two; 17 3NT 83–90%. No change by scoring or vulnerability
+(probe `AQ5.KJ72.A95.J83` with 0–2 tens, 15–17: accepts from 16+2 tens,
+MP = IMP, None = All). Already what `bba` valuation gives, so not
+touched.
+
+**What the rules model** (`one-nt.bid`, rules under `when style is
+bba`, the default ones now `when style is not bba`):
+
+- 2NT: 8–9 total points (HCP + ½ per ten), 4-4 minors 8–9 HCP; not 8
+  HCP 4-3-3-3 without a ten (`has(T,x)` in each suit).
+- 3NT: 10–15 total points, 4-4 minors 10+ HCP. At IMPs one point lower
+  (a matchpoints and an IMPs pair of rules).
+- Pass: the complement, including the flat 8.
+- 4NT needs 16 HCP as well as 16 points: 15 and three tens bids 3NT
+  (Basic_NT 105, 400).
+- Opener's answer to 4NT over his 1NT: **17 HCP** accepts, tens or not
+  (`hcp>=33-partner.hcp.min`); over 2NT the default answer stays. A
+  points version (17 counting tens) agreed on 48 of 57 corpus boards, the
+  HCP version on 52.
+
+**Measured** (whole corpus, calls agreeing at the decision, bba style,
+this module with the Stayman changes that share `1NT P`): `1NT P` 73.1%
+→ 79.8% (27,704 decisions; Basic-Bridge 87.5% → 92.1%), most of it
+Stayman with 4-3-3-3 (`stayman.notes.md`); the 4-4-minors exception alone
++1 call corpus-wide, +5 on Basic-Bridge; `1NT P 4NT P` 66.7% → 91.2%.
+Totals for all the notrump work are in `stayman.notes.md`.
+
+**Where our default differs, and why.** The default counts length
+(Rick, 2026-09-23) and invites flat 8-counts: par preferred it. The flat-8
+pass and the minors exception are BBA's judgement, not measured as
+defaults. The default accepts 4NT with 16 (Rick: 32 combined).
+
+**Open question.** BBA's residual (same features, different calls) looks
+like its own evaluation, possibly simulation. More features will not
+close it.

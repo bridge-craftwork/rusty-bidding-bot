@@ -52,3 +52,17 @@ S AJ5.J74.KQ82.K93      | 1NT P 2D P 2H P 4H P  | P     | a minimum: game
 dealer  E
 N 82.QJ973.K94.J83      | 1C 1NT P         | 2D     | transfer over partner's 1NT overcall
 S AK5.KJ7.Q942.K83      | 1C 1NT P 2D P    | 2H     | completes the transfer
+
+# ── The BBA treatment (probed 2026-09-24): 5 hearts and 4 spades ────
+card    Basic-Bridge general.style=bba
+dealer  S
+N Q653.KJ874.K2.84      | 1NT P          | 2D     | bba: 5-4 with 9 HCP transfers, no Stayman
+N Q653.KJ874.K2.84      | 1NT P 2D P 2H P | 2S    | bba: then shows the spades, not forcing
+N Q653.KJ874.K2.A4      | 1NT P          | 2C     | bba: with game values, Stayman
+S AK7.Q52.AQ53.J92      | 1NT P 2D P 2H P 2S P | 3H | bba: three hearts, not a maximum
+S AK7.Q52.AQ53.K92      | 1NT P 2D P 2H P 2S P | 4H | bba: three hearts and 17
+S AK7.Q2.AQ53.J952      | 1NT P 2D P 2H P 2S P | P  | bba: no eight-card fit: play 2S
+S J8.KQ84.AK9.Q753      | 1NT P 2D P 2H P 2S P | 4H | bba: four hearts: game (Basic_Openers_Rebid board 54)
+N Q653.KJ874.K2.84      | 1NT P 2D P 2H P 2S P 3H P | 4H | bba: 9, the top of the invitation
+N Q653.KJ874.Q2.84      | 1NT P 2D P 2H P 2S P 3H P | P  | bba: 8 passes
+N AQ542.98743.72.3      | 1NT P          | 2H     | bba: 5-5 in the majors transfers to spades first

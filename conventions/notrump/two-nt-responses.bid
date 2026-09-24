@@ -18,11 +18,13 @@ module two-nt-responses "Responses to a 2NT opening"
   param  stayman = notrump.stayman.play default true
   param  jacoby  = notrump.transfers.jacoby default true
   param  puppet  = notrump.two_nt.puppet default false
+  param  style   = general.style
 
 after 2N (P)
   3C  "Stayman: asks for a four-card major"  alert
       shows H=4 | S=4
       when  stayman, !puppet, !shape 4333
+      when  style is not bba
       sets  forcing=round, ask=majors
       artificial
       priority 1                           # ahead of a transfer with 5-4
@@ -37,11 +39,44 @@ after 2N (P)
       sets  forcing=round, ask=transfer(S)
       artificial
   3N  "To play: {game} total points"       shows strength>=game, H<=4, S<=4
+      when  style is not bba
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
       shows balanced, strength=slam_invite
+      when  style is not bba
       sets  ask=quant
   6N  "Slam: {slam} total points"          shows balanced, strength=slam
+      when  style is not bba
   P   "Nothing: {signoff} total points"    shows strength=signoff
+      when  style is not bba
+      priority -10
+
+  # The BBA treatment (probed 2026-09-24, two-nt-responses.notes.md): in
+  # HCP, tens aside. Pass with 4 or less, even with a four-card major;
+  # from 5 Stayman (4-3-3-3 too) or 3NT; 4NT with 11, 6NT with 12 (or 11
+  # and two tens). With 5-5 in the majors, transfer to spades first.
+  3C  "Stayman: asks for a four-card major"  alert
+      shows hcp>=25-partner.hcp.min, H=4 | S=4
+      when  stayman, !puppet
+      when  style is bba
+      sets  forcing=round, ask=majors
+      artificial
+      priority 1
+  3H  "Transfer to spades, 5-5 in the majors"  announce "Transfer"
+      shows S>=5, H>=5
+      when  jacoby
+      when  style is bba
+      sets  forcing=round, ask=transfer(S)
+      artificial
+  3N  "To play: game values"               shows hcp>=25-partner.hcp.min, H<=4, S<=4
+      when  style is bba
+  4N  "Quantitative: invites 6NT"
+      shows balanced, hcp>=32-partner.hcp.max, points<=31-partner.hcp.min, H<=4, S<=4   # with five, transfer first
+      when  style is bba
+      sets  ask=quant
+  6N  "Slam"                               shows balanced, points>=32-partner.hcp.min, H<=4, S<=4
+      when  style is bba
+  P   "Nothing: 4 HCP or less"             shows hcp<=24-partner.hcp.min
+      when  style is bba
       priority -10
 
 # Opener answers Stayman. 3♦ is the negative, as over 1NT.

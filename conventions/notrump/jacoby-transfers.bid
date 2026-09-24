@@ -7,12 +7,17 @@ module jacoby-transfers "Jacoby Transfers"
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c = notrump.transfers.vs_2c default false
+  param  style = general.style
 
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)  artificial
   2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)  artificial
+  2H  "Transfer to spades, 5-5 in the majors"  announce "Transfer"  shows S>=5, H>=5
+      when  style is bba                  # BBA transfers to spades first with 5-5
+      sets  forcing=round, ask=transfer(S)
+      artificial
 
 # Opener completes the transfer. Super-accepts are separate modules
 # (super-accept.bid, superaccept-doubleton.bid), switched on by the card.
@@ -96,6 +101,30 @@ when asked slam_try(M)
       sets ask=keycards(M)
       artificial
   P   "No slam: plays game"
+
+# The BBA treatment (probed 2026-09-24, jacoby-transfers.notes.md): with
+# five hearts, four spades and 7-9 HCP BBA transfers rather than bid
+# Stayman, then shows the spades. The 2S is not forcing: opener passes
+# with three spades and two hearts. He prefers hearts: game with four,
+# or with three and 17; with four spades (two hearts) game from 16.
+after 1N (P) 2D (P) 2H (P) when style is bba
+  2S  "5 hearts and 4 spades, invitational, not forcing"
+      shows H=5, S=4, hcp>=24-partner.hcp.max, hcp<=24-partner.hcp.min
+
+after 1N (P) 2D (P) 2H (P) 2S (P) when style is bba
+  4H  "Accepts, in the heart fit"      shows H>=4 | (H=3, points>=24-partner.hcp.min)
+  3H  "Declines, in the heart fit"     shows H=3, points<=23-partner.hcp.min
+  4S  "Accepts, in the spade fit"      shows S>=4, H<=2, points>=23-partner.hcp.min
+  3S  "Declines, in the spade fit"     shows S>=4, H<=2, points<=22-partner.hcp.min
+  P   "No eight-card fit: play 2S"     shows H<=2, S<=3
+
+# Responder bids game over the decline with the top of the range.
+after 1N (P) 2D (P) 2H (P) 2S (P) 3H (P) when style is bba
+  4H  "Game: the top of the invitation"  shows hcp>=25-partner.hcp.max
+  P   "Minimum: play 3H"                 shows hcp<=24-partner.hcp.max
+after 1N (P) 2D (P) 2H (P) 2S (P) 3S (P) when style is bba
+  4S  "Game: the top of the invitation"  shows hcp>=25-partner.hcp.max
+  P   "Minimum: play 3S"                 shows hcp<=24-partner.hcp.max
 
 # ── Under interference ───────────────────────────────────────────────
 # `transfers.vs_double` and `transfers.vs_2c` say the transfers survive

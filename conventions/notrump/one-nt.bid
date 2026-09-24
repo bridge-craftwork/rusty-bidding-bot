@@ -10,6 +10,7 @@ module notrump-base "1NT opening and natural responses"
   param  three_d  = notrump.three_d_response default natural
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_2c   = notrump.transfers.vs_2c default false
+  param  style   = general.style
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -28,14 +29,16 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: invites 6NT"
       shows balanced, strength=slam_invite, points<=31-partner.hcp.min, H<=4, S<=4   # with five, transfer first
+      when  style is not bba
       sets  ask=quant
       # Rick: 17 opposite 15-17 jumps to 6NT (BBA: 10 of 12 hands; 16
       # mostly invites). BBA's choices at 16-17 do not follow controls.
   3N  "To play: {game} total points"
       shows strength=game, H<=4, S<=4                   # with five, transfer first
+      when  style is not bba
   2N  "Invitational: {invite} total points"
       shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
-      when  minors is not four_way, minors is not four_way_reversed   # 2NT is a transfer
+      when  minors is not four_way, minors is not four_way_reversed, style is not bba   # 2NT is a transfer
       sets  ask=nt_invite
   2N  "Invitational: {invite} total points, a long minor"
       shows strength=invite, H<=4, S<=4, (C>=6 | D>=6)
@@ -52,7 +55,40 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       priority -5                      # a strong hand never passes 1NT
   P   "No game interest: {signoff} total points"
       shows strength=signoff
+      when  style is not bba
       priority -10                     # only if nothing else fits
+
+  # The BBA treatment (probed 2026-09-24, one-nt.notes.md). Total points
+  # are HCP + ½ per ten (the `bba` valuation), with two exceptions: with
+  # 4-4 in the minors the tens do not count, and 8 HCP 4-3-3-3 without a
+  # ten passes. At IMPs game comes a point earlier (9 opposite 15-17).
+  # The slam invitation needs 16 HCP: 15 and tens bids 3NT.
+  4N  "Quantitative: invites 6NT"
+      shows balanced, strength=slam_invite, hcp>=33-partner.hcp.max, points<=31-partner.hcp.min, H<=4, S<=4
+      when  style is bba
+      sets  ask=quant
+  3N  "To play: {game} total points"
+      shows H<=4, S<=4, (strength=game, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=25-partner.hcp.min, hcp<=32-partner.hcp.max)
+      when  matchpoints
+      when  style is bba
+  3N  "To play: game values"
+      shows H<=4, S<=4, (points>=24-partner.hcp.min, points<=32-partner.hcp.max, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=24-partner.hcp.min, hcp<=32-partner.hcp.max)
+      when  imps
+      when  style is bba
+  2N  "Invitational: {invite} total points"
+      shows H<=4, S<=4, C<=5, D<=5, (strength=invite, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=24-partner.hcp.min)
+      when  minors is not four_way, minors is not four_way_reversed, matchpoints
+      when  style is bba
+      sets  ask=nt_invite
+  2N  "Invitational"
+      shows H<=4, S<=4, C<=5, D<=5, (points>=25-partner.hcp.max, points<=23-partner.hcp.min, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=23-partner.hcp.min)
+      when  minors is not four_way, minors is not four_way_reversed, imps
+      when  style is bba
+      sets  ask=nt_invite
+  P   "No game interest"
+      shows (strength=signoff, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp<=24-partner.hcp.max) | (shape 4333, hcp>=25-partner.hcp.max, hcp<=25-partner.hcp.max, !has(T,S), !has(T,H), !has(T,D), !has(T,C))
+      when  style is bba
+      priority -10
 
 # Opener answers the invitation: accept only when game is certain (17
 # opposite 8-9). With a 4-4 major fit found through Stayman, play there.
@@ -67,7 +103,15 @@ when asked nt_invite
 # Opener answers the quantitative 4NT: slam with 32 combined.
 when asked quant
   6N  "Accepts the slam invitation"     shows points>=32-partner.points.min
+      when  style is not bba | shown.hcp.min>=nt_max+1
   P   "Declines: not enough for slam"   shows points<=31-partner.points.min
+      when  style is not bba | shown.hcp.min>=nt_max+1
+  # BBA, over its 1NT: 17 HCP accepts, 16 declines whatever its tens
+  # (1N_Balanced_Raise, Basic_NT).
+  6N  "Accepts the slam invitation"     shows hcp>=33-partner.hcp.min
+      when  style is bba, shown.hcp.max<=nt_max
+  P   "Declines: not enough for slam"   shows hcp<=32-partner.hcp.min
+      when  style is bba, shown.hcp.max<=nt_max
 
 # Responder over a 2♣ overcall of our 1NT, when the card keeps the
 # structure on (`notrump.transfers.vs_2c`). The natural notrump calls

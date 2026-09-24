@@ -138,3 +138,170 @@ invitation's wins are games), or with 8 and inviting with 9 (-227).
 **Kept as the BBA treatment** (`general.style = bba`): the light Stayman,
 2NT 7-9 and the pass with the fit. Our default stays Stayman from 8 total
 points with 2NT 8-9, because par prefers it.
+
+## BBA treatment (2026-09-24)
+
+Extends "BBA's Stayman, probed" above. Evidence: the corpus boards of
+Basic-Bridge, 21GF-DEFAULT and 21GF-GIB (15-17 1NT, Stayman, Jacoby; all
+love all, matchpoints), and `rbb probe` with Basic-Bridge both sides,
+dealer S, the auction forced up to the decision, MP and IMP at love all
+and all vulnerable (NS vulnerable, EW vulnerable on some). Probe output is
+under `probes/` in the work sandbox (`fit`, `fitS`, `acc`, `nf`, `st`,
+`t54`).
+
+**Who bids Stayman.** Corpus, responder with a four-card major and no
+six-card one, % 2♣:
+
+| HCP | 4-3-3-3 | 4-4-3-2 | 4-4-4-1 | with a long minor |
+|---|---|---|---|---|
+| 4–6 | 0% | 0% | 0% | P 66–86% |
+| 7 | 100% (42) | 100% (139) | 100% (165) | 100% (97) |
+| 8–17 | 96–100% | 98–100% | 2♣ or a splinter (21GF cards) | 68–100% |
+
+Tens do not move it: 6 HCP with tens passes, 7 HCP flat bids 2♣ (probe
+`942.A983.964.K87` 2♣ at MP and IMP, love all and all vulnerable;
+`942.A983.964.Q87` and `T42.AT83.T64.Q87` pass). **4-3-3-3 uses Stayman**
+(12 Basic_Openers_Rebid boards and one Basic_What_To_Open where the
+earlier bba rule bid 2NT or 3NT).
+
+With **5-4 in the majors**: 5♠-4♥ bids 2♣ from 7 HCP (transfer below);
+5♥-4♠ transfers with up to 9 HCP (2♦ 100% at 7, 8 and 9, 2♣ from 10),
+then bids 2♠ (`jacoby-transfers.notes.md`). A six-card major transfers
+(Basic-Bridge; the 21GF cards use Texas). 5-5 transfers to spades.
+
+**The raise once the fit is found** (corpus, responder with four of
+opener's major; % of BBA's calls):
+
+| HCP | 4-3-3-3 | 4-4-3-2 | 4-4-4-1 | 5-4-3-1 (5 minor) |
+|---|---|---|---|---|
+| 7 | P 100% | P 100% | invite 76% | invite 72% |
+| 8 | P 100% | invite 89% | invite 93% | invite 94% |
+| 9 | P 44%, invite 56% | invite 94% | invite 54%, game 46% | invite 59% |
+| 10 | invite 82% | game 84% | game 100% | game 92% |
+| 11 | game 80% | game 97% | game 94% | game 100% |
+
+Tens: 7 HCP with two tens passes 70%, 8 HCP passes 13–28% whatever the
+tens: **tens do not count in the fit**. A logistic fit (907 and 1,170
+boards)
+gives, relative to a king at 3: A 4.0–4.2, Q 2.0, J 0.7–0.9, ten 0,
+singleton +0.6–0.7, void +1.7–1.8, 4-3-3-3 −0.7 to −1.5, spades against
+hearts +0.1; thresholds 7.5 (invite) and 9.7 (game).
+
+Probes over 2♥ (the same over 2♠ where tried):
+
+| North | HCP | MP | IMP |
+|---|---|---|---|
+| 542.Q876.K82.Q62 (4-3-3-3) | 7 | P | P |
+| 542.K876.K82.Q62 | 8 | P | P |
+| 542.K876.K82.K62 | 9 | 3♥ | 3♥ |
+| 542.K876.A82.K62 | 10 | 3♥ | **4♥** |
+| 542.A876.A82.K62 | 11 | 4♥ | 4♥ |
+| 54.Q876.K862.Q62 (4-4-3-2) | 7 | P | P |
+| 54.K876.K862.Q62 | 8 | 3♥ | 3♥ |
+| 54.K876.K862.K62 | 9 | 3♥ | **4♥** |
+| 54.K876.A862.K62 | 10 | 4♥ | 4♥ |
+| 5.Q876.K862.Q652 (4-4-4-1) | 7 | 3♥ | 3♥ |
+| 5.K876.K862.Q652 | 8 | 3♥ | **4♥** |
+| 5.K876.K862.K652 | 9 | 4♥ | 4♥ |
+| 5.K876.K82.Q8652 (1-4-3-5) | 8 | 3♥ | **4♥** |
+| 5.K876.K82.K8652 | 9 | 4♥ | 4♥ |
+| T4.QT76.K862.Q62 | 7+2 tens | P | P |
+| T4.KT76.KT62.Q62 | 8+3 tens | 3♥ | 3♥ |
+| K876.5.K862.Q652, over 2♠ | 8 | 3♠ | **4♠** |
+| K876.5.K862.K652, over 2♠ | 9 | 4♠ | 4♠ |
+| QJ85.6.Q982.KJ64, over 2♠ | 9 | 3♠ | **4♠** |
+| 6.QJ85.Q982.KJ64, over 2♥ | 9 | 4♥ | 4♥ |
+| K876.542.K82.Q62, over 2♠ | 8 | P | **3♠** |
+
+Over 2♥ all vulnerable gave the same as love all at both scorings (over
+2♠ only love all was tried). So: HCP, not
+tens; 4-3-3-3 a point less; a singleton about half a point (it makes 7
+an invitation, and 9 a game only sometimes: the same 9-count bid 4♥ with
+hearts and 3♠ with spades); **at IMPs game a point earlier**, the
+singleton then counting a full point.
+
+**Opener's answer to the raise.** Corpus, by trump length: with four,
+15 passes (99–100%), 16 accepts about half the time, 17 61–80%; with
+five, 15 accepts 46–50%, 16 62–73%, 17 95–100%. Probe (South
+AQ5.KJ72.A95.J83 family over `1NT P 2C P 2H P 3H P`): 15 and 16 with 0–2
+tens pass, 17 bids 4♥; MP = IMP, love all = all vulnerable.
+
+**After 2♥–2NT opener shows four spades** (corpus): with four spades
+3♠ on 52 of 56 boards (15–17), pass on the rest, 4♠ never; without
+them pass, except three 17-counts with two or three tens (3NT). Our bba 2NT used to leave responder's
+spades unknown (opener passed: 8 Basic boards). Responder over the 3♠:
+9 HCP 4♠ 62–73%, 8 about half, 7 pass.
+
+**No fit after 2♦**, probes (North K542 with three hearts): 7, 8, 9,
+8+2 tens and 9+1 ten bid 2NT at MP; 9+2 tens 3NT. At IMPs 8+2 tens
+(4-3-3-3) and one of two 9-counts with a doubleton (4-3-2-4) bid 3NT;
+the flat 9 and 9+1 ten still 2NT. Not modelled at IMPs (the
+corpus has none, and one rule per answer and scoring would be needed).
+Over 2♥ BBA sometimes passes with three hearts and 8 HCP (probe
+`K542.Q76.K82.862`, and 20% of 8-count 4-3-3-3 in the corpus): not
+modelled.
+
+**What the rules model** (`stayman.bid`, rules under `when style is
+bba`, the default ones `style is not bba`):
+
+- 2♣: 7+ HCP (`hcp>=24-partner.hcp.max`) and a four-card major, any
+  shape; not with a six-card major; with 5♥-4♠ only from 10 HCP.
+- In the fit, fit points in HCP by shape against opener's range: game 10
+  (9 with a void; 11 with 4-3-3-3), invite from 8 (7 with a singleton, 9
+  with 4-3-3-3), pass below. At IMPs game from 9, the singleton counting
+  1. Opener answers with a maximum (points ≥ `shown.hcp.max`, 17), or
+  16 with a fifth trump (`ask=fit_invite(M)`).
+- No fit: 2NT 7–9, 3NT game, **each rule for one answer** so that it
+  denies the major it did not raise (the knowledge the default gets from
+  negative inference). 4NT 16 HCP, 6NT 17 (before, 16–17 had no rule
+  after 2♦ and passed: `K842.KQ5.AQ.QJ82`, Basic_What_To_Open 204; our
+  default has the same gap).
+- `1NT P 2C P 2H P 2NT P 3S P`: 4♠ with 9, else pass.
+
+**Engine note: a `when` with a hand term leaks, on its own line too.**
+The engine ANDs every `when` line of a rule into one condition, and in
+interpretation keeps the rule possible whenever any part of it depends on
+the caller's hand (`hand_dependent` in `eval.rs`). So `when !shape 4333
+| ...` on one line and `when style is bba` on the next still made the
+old bba 2♣ part of what 2♣ means under the default style: the default's
+2♣ read as `(points>=8, ...) | (points>=8 | (hcp>=7, H=4 | S=4), ...)`.
+It changed no call (the whole corpus is identical with and without the
+rule), but the knowledge was wrong. The new rule has only `when style is
+bba`, and the default 2♣ now reads as before. The reverse still holds:
+default rules with hand terms in `when` (2♣'s `!shape 4333`, the 3♣ over
+2NT, the support-point 4M's `strength<=invite`) widen what those calls
+mean under `bba`: after 2♣ the bba side does not know responder has 7+
+HCP. The fit answers are therefore keyed to opener's own maximum, not to
+responder's range.
+
+**Measured** (bba style, calls agreeing at the decision over the whole
+corpus / Basic-Bridge boards only):
+
+| decision | before | after |
+|---|---|---|
+| `1NT P` | 73.1% / 87.5% | 79.8% / 92.1% |
+| `1NT P 2C P 2H P` | 59.5% / 70.6% | 73.0% / 88.2% |
+| `1NT P 2C P 2S P` | 62.1% / 70.6% | 73.6% / 81.0% |
+| `1NT P 2C P 2D P` | 50.2% / 76.2% | 55.6% / 77.8% |
+| `1NT P 2C P 2H P 2NT P` | 81.0% / 52.4% | 98.4% / 100% |
+| `1NT P 2C P 2H P 3H P` | 72.9% / 65.9% | 85.4% / 68.2% |
+| `1NT P 2C P 2S P 3S P` | 71.8% / 61.8% | 78.0% / 65.8% |
+
+Totals, all the notrump bba work (`measure2.sh --set general.style=bba`;
+calls / identical auctions / same contract, par net IMPs):
+
+| | before | after |
+|---|---|---|
+| corpus | 75.9% / 17.1% / 32.1% | 76.1% / 18.2% / 33.0%, par −181,088 |
+| Basic_* | 85.4% / 43.0% / 50.7% | 85.7% / 44.5% / 51.9%, par −1,965 |
+| Basic_* NS uncontested | 92.2% / 61.0% / 67.4% | 92.6% / 63.3% / 69.2%, par −967 |
+
+Default (no `--set`): corpus 75.5% / 14.7% / 31.0%, par −172,679;
+Basic_* −1,893; Basic_* NS −820, and every one of the 170,161 corpus
+boards bids the same auction as before (ours and the replay).
+
+**Where the default differs.** The default keeps 4-3-3-3 out of Stayman
+(Rick, 2026-09-21), counts support points (shortness) in the fit, and
+reads the no-fit 2NT/3NT denials from negative inference. It also has
+the 16–17 gap after 2♦ noted above: a question for Rick (4NT with 16,
+6NT with 17, as over 1NT?).

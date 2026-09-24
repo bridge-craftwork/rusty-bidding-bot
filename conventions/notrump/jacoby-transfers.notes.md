@@ -132,3 +132,47 @@ point at notrump.
 - Support points (shortness) for the six-card game decision: corpus
   +251, Basic_* 0, uncontested −6, and the extra 4M rule took over the
   reading of 4M as the mild slam try. Not kept.
+
+## BBA treatment (2026-09-24)
+
+**Five hearts and four spades, 7–9 HCP.** BBA transfers (all three 15-17
+cards: 2♦ on every such hand from 0 to 9 HCP; 2♣ from 10), then bids 2♠
+with 7–9 (7: 9 of 9; 8: 132 of 132; 9: 88%) and passes with less. The
+2♠ is **not forcing**. Opener, corpus:
+
+| opener ♠-♥ | 15 | 16 | 17 |
+|---|---|---|---|
+| 3-2, 2-2 | P | P | P 96% |
+| 2-3, 3-3 | 3♥ | 3♥ 93–96% | 4♥ 76–83% |
+| x-4 | 4♥ | 4♥ | 4♥ (one 3♥) |
+| 4-2 | 3♠ / 4♠ | 3♠ / 4♠ | |
+| 4-3 | 3♥ 80% | 4♥ 67% | 4♥ |
+
+Responder over 3♥: 9 HCP 4♥ 64–100%, 8 HCP mostly pass.
+
+Probes (Basic-Bridge, dealer S; responder at MP and IMP, love all and
+all vulnerable; opener at MP and IMP, love all):
+`Q653.KJ874.K2.84` (9) 2♦ then 2♠; with 8 and 7 HCP 2♦ as well; with 11
+(`...K2.Q4`) and 13 2♣, then 3♥ over 2♦. Opener after 2♠: `AK7.Q52.AQ53.J92`
+(16) 3♥, `AK7.Q52.AQ53.K92` (17) 4♥, `AK7.Q2.AQ53.J952` pass. MP = IMP.
+The mirror, `KJ874.Q653.K2.84` (5♠-4♥, 9), bids 2♣ and over 2♥ 3♥ at MP,
+4♥ at IMPs (`stayman.notes.md`).
+
+With **5-5 in the majors** BBA transfers to spades (2♥), 100% at every
+strength on all three cards.
+
+**What the rules model** (`jacoby-transfers.bid`, contexts `after 1N (P)
+2D (P) 2H (P) ... when style is bba`): 2♠ `H=5, S=4`, 7–9 HCP; opener 4♥
+with four hearts or three and 17, 3♥ with three, 4♠ with four spades (and
+two hearts) and 16, 3♠ less, pass otherwise; responder over 3♥/3♠ game
+with 9. 2♥ with 5-5. Stayman's side of it (no 2♣ with 5♥-4♠ below 10) is
+in `stayman.bid`.
+
+**Measured** (whole corpus, bba style): `1NT P 2D P 2H P` 70.6% → 82.6%
+(2,238 decisions), `1NT P 2D P 2H P 2S P` 30.1% → 89.0% (272).
+
+**Tried as our default** (scratch copy: 5♥-4♠ invitational transfers and
+bids 2♠, 8–9 total points, the same answers): corpus par +156 IMPs,
+Basic_* −5, Basic_* uncontested 0. **Question for Rick**: within noise;
+is the non-forcing 2♠ worth adopting for its own sake (it finds the 4-4
+spade fit and the 5-3 heart fit at the two or three level)?

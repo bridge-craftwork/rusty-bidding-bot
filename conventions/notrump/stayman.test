@@ -38,3 +38,31 @@ N 942.A983.964.K87      | 1NT P 2C P 2H P     | P      | bba: the fit is found, 
 N 942.A983.964.Q87      | 1NT P               | P      | bba: 6 HCP is not enough
 S AKT5.Q72.AJ3.QJ2      | 1NT P 2C P 2S P 2NT P | P    | bba: 17 and one ten declines opposite 7-9
 S AKT5.QT2.AJ3.QJ2      | 1NT P 2C P 2S P 2NT P | 3NT  | bba: 17 and two tens accepts (18)
+
+# ── BBA treatment, more probes (2026-09-24) ─────────────────────────
+card    Basic-Bridge general.style=bba
+dealer  S
+N 542.KQ76.K82.862      | 1NT P               | 2C     | bba: 4-3-3-3 with four hearts uses Stayman
+N Q9642.J743.97.62      | 1NT P               | 2H     | bba: 5-4 in the majors below 7 HCP transfers
+N 542.K876.K82.Q62      | 1NT P 2C P 2H P     | P      | bba: 8 HCP 4-3-3-3 counts 7 in the fit: pass
+N 542.K876.K82.K62      | 1NT P 2C P 2H P     | 3H     | bba: 9 HCP 4-3-3-3 invites
+N 542.K876.A82.K62      | 1NT P 2C P 2H P     | 3H     | bba: 10 HCP 4-3-3-3 still invites
+N 54.K876.K862.Q62      | 1NT P 2C P 2H P     | 3H     | bba: 8 HCP 4-4-3-2 invites
+N 54.K876.A862.K62      | 1NT P 2C P 2H P     | 4H     | bba: 10 HCP, game
+N T4.QT76.K862.Q62      | 1NT P 2C P 2H P     | P      | bba: tens do not count in the fit
+N 5.Q876.K862.Q652      | 1NT P 2C P 2H P     | 3H     | bba: 7 HCP and a singleton invites
+N K876.5.K862.K652      | 1NT P 2C P 2S P     | 3S     | bba: 9 HCP and a singleton only invites (the heart twin of this hand bid 4H)
+N K876.5.A862.K652      | 1NT P 2C P 2S P     | 4S     | bba: 10 HCP and a singleton: game
+N K542.Q76.K82.862      | 1NT P 2C P 2D P     | 2NT    | bba: no fit, 8 HCP
+N K542.QT6.KT2.J62      | 1NT P 2C P 2D P     | 3NT    | bba: no fit, 9 and two tens: game
+N K842.KQ5.AQ.QJ82      | 1NT P 2C P 2D P     | 6NT    | bba: 17, no fit: slam (Basic_What_To_Open board 204)
+S AK73.A732.86.KJ3      | 1NT P 2C P 2H P 2NT P | 3S   | bba: four spades too, declining
+N K542.Q76.K82.J62      | 1NT P 2C P 2H P 2NT P 3S P | 4S | bba: 9, the top of the invitation
+N K542.Q76.K82.862      | 1NT P 2C P 2H P 2NT P 3S P | P  | bba: 8 passes
+S AQ52.KJ7.A95.Q83      | 1NT P 2C P 2S P 3S P  | P    | bba: 16 declines the raise
+S AQ52.KJ7.A95.K83      | 1NT P 2C P 2S P 3S P  | 4S   | bba: 17 accepts
+S AQ952.KJ7.A95.Q8      | 1NT P 2C P 2S P 3S P  | 4S   | bba: 16 with a fifth trump accepts
+scoring IMP
+N 54.K876.K862.K62      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 9 in the fit is game
+N 5.K876.K862.Q652      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 8 and a singleton is game
+N K876.5.K862.Q652      | 1NT P 2C P 2S P     | 4S     | bba at IMPs: the same in spades
