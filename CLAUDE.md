@@ -66,6 +66,15 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
+  **Find what a decision turns on by making hands, not by searching the
+  corpus** (Rick, 2026-09-24): fix all four hands (`--hand` for each seat;
+  a card in two hands is an error, so check the output), then
+  `--survey` tries every single-card exchange between the first hand and
+  its opponents (partner's hand stays) and lists the ones that change
+  BBA's call; `--morph-to S.H.D.C` walks from the first hand to another a
+  card at a time and tries each exchange alone. `--our-set
+  general.style=bba` sets our engine's side only. Corpus tables mix cards
+  (1NT ranges, transfer structures): restrict them to one card.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).

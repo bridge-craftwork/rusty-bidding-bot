@@ -83,6 +83,19 @@ enum Command {
         /// and shape).
         #[arg(long)]
         vary_tens: bool,
+        /// Every single-card exchange between the first holding and its two
+        /// opponents (partner's hand stays), one deal: which changes flip
+        /// BBA's call?
+        #[arg(long, conflicts_with_all = ["vary_tens", "morph_to"])]
+        survey: bool,
+        /// Walk from the first holding to this one (S.H.D.C) a card at a
+        /// time, then try each exchange alone: where does BBA's call flip?
+        #[arg(long, conflicts_with = "vary_tens")]
+        morph_to: Option<String>,
+        /// A card change for our engine only, `path=value` (repeatable),
+        /// e.g. `general.style=bba`.
+        #[arg(long = "our-set")]
+        our_set: Vec<String>,
         /// Random layouts of the other hands per holding.
         #[arg(long, default_value_t = 1)]
         layouts: usize,
@@ -277,6 +290,9 @@ fn run(cli: Cli) -> Result<()> {
         Command::Probe {
             hands,
             vary_tens,
+            survey,
+            morph_to,
+            our_set,
             layouts,
             script,
             count,
@@ -337,7 +353,14 @@ fn run(cli: Cli) -> Result<()> {
                 },
                 (None, false) => Deals::Fixed {
                     hands: fixed,
-                    vary_tens,
+                    variation: match (&morph_to, survey, vary_tens) {
+                        (Some(h), _, _) => rbb_compare::probe::Variation::MorphTo(
+                            Hand::from_pbn(h).ok_or_else(|| format!("bad --morph-to {h:?}"))?,
+                        ),
+                        (None, true, _) => rbb_compare::probe::Variation::Survey,
+                        (None, false, true) => rbb_compare::probe::Variation::Tens,
+                        _ => rbb_compare::probe::Variation::None,
+                    },
                     layouts,
                 },
                 (None, true) => Deals::Random { count },
@@ -362,6 +385,7 @@ fn run(cli: Cli) -> Result<()> {
                 bba_cli,
                 out_dir: out,
                 seed,
+                our_changes: our_set,
             };
             probe(&opts)
         }
@@ -408,16 +432,45 @@ fn probe(opts: &rbb_compare::probe::ProbeOptions) -> Result<()> {
         "NS card {} {:?}   EW card {} {:?}",
         opts.ns_card, opts.ns_set, opts.ew_card, opts.ew_set
     );
+    if !opts.our_changes.is_empty() {
+        println!("our engine with {:?}", opts.our_changes);
+    }
+    let labelled = report.rows.iter().any(|r| r.label.is_some());
+    let survey = report.rows.first().and_then(|r| r.label.as_deref()) == Some("base");
     println!(
-        "\n  seat {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}",
-        "hand", "HCP", "tens", "NT pts", "suit", "BBA", "ours"
+        "\n  {}seat {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}",
+        if labelled {
+            format!("{:22} ", "change")
+        } else {
+            String::new()
+        },
+        "hand",
+        "HCP",
+        "tens",
+        "NT pts",
+        "suit",
+        "BBA",
+        "ours"
     );
     let call = |c: &Option<bridge_types::Call>| c.as_ref().map_or("-".into(), rbb_compare::short);
-    for r in &report.rows {
+    let base_call = report.rows.first().and_then(|r| r.reference.clone());
+    let mut flips = 0;
+    for (i, r) in report.rows.iter().enumerate() {
+        // A survey lists the base and the changes that flip BBA's call.
+        let flipped = r.reference != base_call;
+        flips += (i > 0 && flipped) as usize;
+        if survey && i > 0 && !flipped {
+            continue;
+        }
         let quarters = |q: i32| format!("{}{}", q / 4, ["", "¼", "½", "¾"][(q % 4) as usize]);
         let mark = if r.reference == r.ours { "" } else { "  ≠" };
+        let label = if labelled {
+            format!("{:22} ", r.label.as_deref().unwrap_or(""))
+        } else {
+            String::new()
+        };
         println!(
-            "  {:4} {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}{mark}",
+            "  {label}{:4} {:18} {:>3} {:>4} {:>6} {:>6}  {:>5} {:>5}{mark}",
             r.seat.to_char(),
             r.hand,
             r.hcp,
@@ -426,6 +479,13 @@ fn probe(opts: &rbb_compare::probe::ProbeOptions) -> Result<()> {
             quarters(r.suit_points_q),
             call(&r.reference),
             call(&r.ours)
+        );
+    }
+    if survey {
+        println!(
+            "\n{flips} of {} single-card exchanges change BBA's call from {}",
+            report.rows.len() - 1,
+            call(&base_call)
         );
     }
     let (agree, of) = report.agreement();

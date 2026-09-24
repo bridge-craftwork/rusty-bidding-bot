@@ -27,9 +27,10 @@ pub const DEFAULT_BBA_CLI: &str = "/Applications/Bridge Utilities/bba-cli";
 #[derive(Debug, Clone)]
 pub enum Deals {
     /// These holdings for these seats; the other seats are dealt at random.
+    /// The first holding is the one `variation` changes.
     Fixed {
         hands: Vec<(Direction, Hand)>,
-        vary_tens: bool,
+        variation: Variation,
         layouts: usize,
     },
     /// A dealer3 script, producing `count` deals.
@@ -40,6 +41,22 @@ pub enum Deals {
     },
     /// `count` random deals.
     Random { count: usize },
+}
+
+/// How the first fixed holding is varied, to find what BBA's decision
+/// turns on without depending on hands in the corpus.
+#[derive(Debug, Clone)]
+pub enum Variation {
+    /// The holding as given.
+    None,
+    /// The same holding with 0-4 tens (same HCP and shape).
+    Tens,
+    /// Every single-card exchange with the two opponents' hands (partner's
+    /// hand never changes): 13 x 26 variants of one fixed deal.
+    Survey,
+    /// From the holding to this one a card at a time, and each of those
+    /// exchanges alone.
+    MorphTo(Hand),
 }
 
 #[derive(Debug, Clone)]
@@ -62,11 +79,17 @@ pub struct ProbeOptions {
     pub bba_cli: PathBuf,
     pub out_dir: PathBuf,
     pub seed: u64,
+    /// Card changes (`path=value`) for our engine's side of the comparison,
+    /// e.g. `general.style=bba`; bba-cli never sees them.
+    pub our_changes: Vec<String>,
 }
 
 /// One board of a probe, from the decision after the prefix on.
 #[derive(Debug, Clone, Serialize)]
 pub struct ProbeRow {
+    /// What this variant changed ("base", "♥T for ♦Q", "step 2: ..."),
+    /// for surveys and morphs.
+    pub label: Option<String>,
     /// The seat whose decision is probed (first to call after the prefix).
     pub seat: Direction,
     pub hand: String,
@@ -219,32 +242,171 @@ fn fill(fixed: &[(Direction, Hand)], rng: &mut Rng) -> Result<Deal, String> {
     Ok(deal)
 }
 
-fn make_deals(opts: &ProbeOptions) -> Result<Vec<Deal>, String> {
+fn card_name(c: &PlayingCard) -> String {
+    format!("{}{}", c.suit.symbol(), c.rank.to_char())
+}
+
+/// Give `seat` the card `add` in place of `drop`: the seat holding `add`
+/// takes `drop`.
+fn exchange(deal: &Deal, seat: Direction, drop: PlayingCard, add: PlayingCard) -> Deal {
+    let mut d = deal.clone();
+    let holder = [
+        Direction::North,
+        Direction::East,
+        Direction::South,
+        Direction::West,
+    ]
+    .into_iter()
+    .find(|s| deal.hand(*s).cards().contains(&add))
+    .expect("every card is in some hand");
+    let swap = |h: &Hand, out: PlayingCard, inn: PlayingCard| {
+        Hand::from_cards(
+            h.cards()
+                .iter()
+                .map(|c| if *c == out { inn } else { *c })
+                .collect(),
+        )
+    };
+    d.set_hand(seat, swap(deal.hand(seat), drop, add));
+    d.set_hand(holder, swap(deal.hand(holder), add, drop));
+    d
+}
+
+/// Every single-card exchange between `seat` and its two opponents.
+fn survey(base: &Deal, seat: Direction) -> Vec<(String, Deal)> {
+    let mut out = vec![("base".to_string(), base.clone())];
+    let opponents = [seat.next(), seat.next().next().next()];
+    let mut mine: Vec<PlayingCard> = base.hand(seat).cards().to_vec();
+    mine.sort_by_key(|c| std::cmp::Reverse(c.to_index()));
+    for drop in &mine {
+        let mut theirs: Vec<PlayingCard> = opponents
+            .iter()
+            .flat_map(|s| base.hand(*s).cards().to_vec())
+            .collect();
+        theirs.sort_by_key(|c| std::cmp::Reverse(c.to_index()));
+        for add in theirs {
+            out.push((
+                format!("{} for {}", card_name(&add), card_name(drop)),
+                exchange(base, seat, *drop, add),
+            ));
+        }
+    }
+    out
+}
+
+/// From `seat`'s hand to `target` a card at a time (same-suit exchanges
+/// first), then each exchange alone. The `fixed` seats (partner, when his
+/// hand is given) may not give up cards.
+fn morph(
+    base: &Deal,
+    seat: Direction,
+    target: &Hand,
+    fixed: &[Direction],
+) -> Result<Vec<(String, Deal)>, String> {
+    let from = base.hand(seat).cards().to_vec();
+    let to = target.cards().to_vec();
+    let mut outs: Vec<PlayingCard> = from.iter().filter(|c| !to.contains(c)).copied().collect();
+    let mut ins: Vec<PlayingCard> = to.iter().filter(|c| !from.contains(c)).copied().collect();
+    for c in &ins {
+        let holder = [
+            Direction::North,
+            Direction::East,
+            Direction::South,
+            Direction::West,
+        ]
+        .into_iter()
+        .find(|s| base.hand(*s).cards().contains(c))
+        .expect("every card is in some hand");
+        if holder != seat && fixed.contains(&holder) {
+            return Err(format!(
+                "{} is in {holder:?}'s fixed hand: it cannot move to {seat:?}",
+                card_name(c)
+            ));
+        }
+    }
+    // Pair the exchanges: the same suit first, highest cards first.
+    outs.sort_by_key(|c| std::cmp::Reverse(c.to_index()));
+    ins.sort_by_key(|c| std::cmp::Reverse(c.to_index()));
+    let mut pairs = Vec::new();
+    let mut rest_in = Vec::new();
+    for i in ins {
+        if let Some(k) = outs.iter().position(|o| o.suit == i.suit) {
+            pairs.push((outs.remove(k), i));
+        } else {
+            rest_in.push(i);
+        }
+    }
+    pairs.extend(outs.into_iter().zip(rest_in));
+    let mut out = vec![("from".to_string(), base.clone())];
+    let mut cur = base.clone();
+    for (n, (o, i)) in pairs.iter().enumerate() {
+        cur = exchange(&cur, seat, *o, *i);
+        out.push((
+            format!("step {}: {} for {}", n + 1, card_name(i), card_name(o)),
+            cur.clone(),
+        ));
+    }
+    if pairs.len() > 1 {
+        for (o, i) in &pairs {
+            out.push((
+                format!("only {} for {}", card_name(i), card_name(o)),
+                exchange(base, seat, *o, *i),
+            ));
+        }
+    }
+    Ok(out)
+}
+
+fn make_deals(opts: &ProbeOptions) -> Result<Vec<(Option<String>, Deal)>, String> {
     let mut rng = Rng(opts.seed | 1);
     match &opts.deals {
         Deals::Fixed {
             hands,
-            vary_tens,
+            variation,
             layouts,
         } => {
             // Vary the first holding; keep any others as given.
             let (first, others) = hands.split_first().ok_or("no --hand given")?;
-            let variants = if *vary_tens {
-                ten_variants(&first.1)
-            } else {
-                vec![first.1.clone()]
-            };
-            let mut out = Vec::new();
-            for v in variants {
-                for _ in 0..(*layouts).max(1) {
-                    let mut fixed = vec![(first.0, v.clone())];
-                    fixed.extend(others.iter().cloned());
-                    out.push(fill(&fixed, &mut rng)?);
+            // Opponents trade cards with the varied hand; a fixed partner
+            // never does.
+            let partner = first.0.partner();
+            let fixed_seats: Vec<Direction> = hands
+                .iter()
+                .map(|(s, _)| *s)
+                .filter(|s| *s == partner)
+                .collect();
+            match variation {
+                Variation::Survey | Variation::MorphTo(_) => {
+                    // One deal, varied card by card.
+                    let base = fill(hands, &mut rng)?;
+                    let v = match variation {
+                        Variation::Survey => survey(&base, first.0),
+                        Variation::MorphTo(t) => morph(&base, first.0, t, &fixed_seats)?,
+                        _ => unreachable!(),
+                    };
+                    Ok(v.into_iter().map(|(l, d)| (Some(l), d)).collect())
+                }
+                Variation::None | Variation::Tens => {
+                    let variants = if matches!(variation, Variation::Tens) {
+                        ten_variants(&first.1)
+                    } else {
+                        vec![first.1.clone()]
+                    };
+                    let mut out = Vec::new();
+                    for v in variants {
+                        for _ in 0..(*layouts).max(1) {
+                            let mut fixed = vec![(first.0, v.clone())];
+                            fixed.extend(others.iter().cloned());
+                            out.push((None, fill(&fixed, &mut rng)?));
+                        }
+                    }
+                    Ok(out)
                 }
             }
-            Ok(out)
         }
-        Deals::Random { count } => (0..*count).map(|_| fill(&[], &mut rng)).collect(),
+        Deals::Random { count } => (0..*count)
+            .map(|_| fill(&[], &mut rng).map(|d| (None, d)))
+            .collect(),
         Deals::Script {
             script,
             count,
@@ -270,7 +432,7 @@ fn make_deals(opts: &ProbeOptions) -> Result<Vec<Deal>, String> {
             }
             let text = String::from_utf8_lossy(&output.stdout);
             let boards = bridge_encodings::pbn::read_pbn(&text).map_err(|e| e.to_string())?;
-            Ok(boards.into_iter().map(|b| b.deal).collect())
+            Ok(boards.into_iter().map(|b| (None, b.deal)).collect())
         }
     }
 }
@@ -295,10 +457,11 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
     write(&ew_path, &ew_text)?;
 
     let deals = make_deals(opts)?;
+    let labels: Vec<Option<String>> = deals.iter().map(|(l, _)| l.clone()).collect();
     let boards: Vec<Board> = deals
         .into_iter()
         .enumerate()
-        .map(|(i, d)| {
+        .map(|(i, (_, d))| {
             Board::new()
                 .with_number(i as u32 + 1)
                 .with_dealer(opts.dealer)
@@ -332,8 +495,24 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
         ));
     }
 
-    let (ns_card, _) = bbsa::import(&ns_text, Some("ns")).map_err(|e| e.to_string())?;
-    let (ew_card, _) = bbsa::import(&ew_text, Some("ew")).map_err(|e| e.to_string())?;
+    let (mut ns_card, _) = bbsa::import(&ns_text, Some("ns")).map_err(|e| e.to_string())?;
+    let (mut ew_card, _) = bbsa::import(&ew_text, Some("ew")).map_err(|e| e.to_string())?;
+    for change in &opts.our_changes {
+        let (path, value) = change
+            .split_once('=')
+            .ok_or_else(|| format!("{change:?}: expected path=value"))?;
+        let value = match value {
+            "true" => Value::Bool(true),
+            "false" => Value::Bool(false),
+            v => v
+                .parse::<i64>()
+                .map(Value::Int)
+                .unwrap_or_else(|_| Value::Text(v.to_string())),
+        };
+        for card in [&mut ns_card, &mut ew_card] {
+            card.set(path, value.clone()).map_err(|e| e.to_string())?;
+        }
+    }
     let modules = rbb_engine::load_modules(&opts.rules).map_err(|d| {
         d.iter()
             .map(|d| d.to_string())
@@ -341,7 +520,7 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
             .join("\n")
     })?;
     let engine = Engine::new(&ns_card, &ew_card, &modules);
-    let valuation = rbb_engine::Valuation::default();
+    let valuation = rbb_engine::Valuation::for_card(&ns_card);
 
     let bba_boards = bridge_encodings::pbn::read_pbn_file(&output).map_err(|e| e.to_string())?;
     let k = opts.prefix.len();
@@ -358,7 +537,11 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
         let seat = (0..k).fold(r.dealer, |d, _| d.next());
         let hand = b.deal.hand(seat);
         let facts = rbb_engine::Facts::new(hand);
+        let label = b
+            .number
+            .and_then(|n| labels.get(n as usize - 1).cloned().flatten());
         rows.push(ProbeRow {
+            label,
             seat,
             hand: hand.to_pbn(),
             hcp: facts.hcp,
@@ -395,6 +578,52 @@ mod tests {
             assert_eq!(rbb_engine::Facts::new(x).tens, i as i32);
         }
         assert_eq!(v[4].to_pbn(), "AKT5.KQT7.AT9.JT");
+    }
+
+    fn board2() -> Deal {
+        Deal::from_pbn("N:A5.K43.T764.QT65 T8763.Q95.AQ52.2 K92.AT.KJ983.AJ8 QJ4.J8762..K9743")
+            .unwrap()
+    }
+
+    #[test]
+    fn survey_changes_one_card_and_never_partners_hand() {
+        let base = board2();
+        let v = survey(&base, Direction::North);
+        assert_eq!(v.len(), 1 + 13 * 26);
+        for (label, d) in &v[1..] {
+            let before = base.hand(Direction::North).cards();
+            let after = d.hand(Direction::North).cards();
+            let changed = after.iter().filter(|c| !before.contains(c)).count();
+            assert_eq!(changed, 1, "{label}");
+            assert_eq!(
+                d.hand(Direction::South),
+                base.hand(Direction::South),
+                "{label}"
+            );
+        }
+    }
+
+    #[test]
+    fn morph_walks_to_the_target_a_card_at_a_time() {
+        let base = board2();
+        let target = Hand::from_pbn("A5.K43.7654.Q965").unwrap();
+        let v = morph(&base, Direction::North, &target, &[Direction::South]).unwrap();
+        // from, 2 steps, and the 2 exchanges alone
+        assert_eq!(
+            v.len(),
+            5,
+            "{:?}",
+            v.iter().map(|(l, _)| l).collect::<Vec<_>>()
+        );
+        let last = &v[2].1;
+        let mut a = last.hand(Direction::North).cards().to_vec();
+        let mut b = target.cards().to_vec();
+        a.sort_by_key(|c| c.to_index());
+        b.sort_by_key(|c| c.to_index());
+        assert_eq!(a, b);
+        // A card in partner's fixed hand cannot move.
+        let t = Hand::from_pbn("A5.K43.T764.QJT5").unwrap();
+        assert!(morph(&base, Direction::North, &t, &[Direction::South]).is_err());
     }
 
     #[test]
