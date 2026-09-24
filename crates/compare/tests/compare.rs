@@ -17,6 +17,7 @@ fn options_for(scenario: &str) -> Options {
         rules: here.join("../../conventions"),
         par: false,
         dd_cache: std::env::temp_dir().join("rbb-compare-test-dd.jsonl"),
+        card_changes: vec![],
     }
 }
 

@@ -26,3 +26,15 @@ N KJ82.Q7.K943.J83      | 1C 1NT P 2C P 2S P | 4S   | the spade fit, game
 dealer  S
 S KQ5.KJ72.AQ5.J52      | 1NT P 2C P 2H P 3H P | 4H | 16 in the eight-card fit: accept (par)
 S KQ5.KJ72.AQ5.T52      | 1NT P 2C P 2H P 3H P | P  | 15: decline
+
+# ── Light Stayman: our default against the BBA treatment (probed 2026-09-24)
+card    Basic-Bridge
+dealer  S
+N 942.A983.964.K87      | 1NT P               | P      | 7 HCP 4-3-3-3: no game interest (default)
+card    Basic-Bridge general.style=bba
+N 942.A983.964.K87      | 1NT P               | 2C     | bba: 7 HCP and four hearts is enough for Stayman
+N 942.A983.964.K87      | 1NT P 2C P 2S P     | 2NT    | bba: no fit, invite; 2NT shows 7-9
+N 942.A983.964.K87      | 1NT P 2C P 2H P     | P      | bba: the fit is found, play there
+N 942.A983.964.Q87      | 1NT P               | P      | bba: 6 HCP is not enough
+S AKT5.Q72.AJ3.QJ2      | 1NT P 2C P 2S P 2NT P | P    | bba: 17 and one ten declines opposite 7-9
+S AKT5.QT2.AJ3.QJ2      | 1NT P 2C P 2S P 2NT P | 3NT  | bba: 17 and two tens accepts (18)

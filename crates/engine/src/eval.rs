@@ -235,6 +235,8 @@ impl<'a> Ctx<'a> {
                     ("notrump", Val::Strain(s)) => *s == Strain::NoTrump,
                     ("none", Val::Nothing) => true,
                     ("suit" | "notrump" | "none", _) => false,
+                    // An unset card option is none of its values.
+                    (_, Val::Nothing) => false,
                     // Any other name is a suit: do both name the same one?
                     (name, _) => {
                         let other = self.eval(&path_expr(name), b)?;

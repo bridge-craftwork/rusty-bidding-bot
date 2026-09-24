@@ -42,6 +42,21 @@ impl Default for Valuation {
     }
 }
 
+impl Valuation {
+    /// The valuation a card asks for: `general.style = bba` counts as BBA
+    /// does, tens and no length at notrump (docs/LANGUAGE.md, "Points").
+    pub fn for_card(card: &bridge_card::Card) -> Valuation {
+        let bba = matches!(
+            card.effective("general.style"),
+            Some(bridge_card::Value::Text(s)) if s == "bba"
+        );
+        Valuation {
+            nt_length: if bba { 0 } else { 4 },
+            ..Valuation::default()
+        }
+    }
+}
+
 pub const ACE: u8 = 14;
 pub const KING: u8 = 13;
 pub const QUEEN: u8 = 12;

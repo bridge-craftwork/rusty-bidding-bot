@@ -7,11 +7,13 @@ module stayman "Stayman"
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c = notrump.transfers.vs_2c default false
+  param  style = general.style
 
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
       shows strength>=invite, H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
       when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite)
+      when  style is not bba
       # 5-4 in the majors included (Smolen). 4-3-3-3 just bids notrump, except
       # with four-way transfers, where 2NT is not natural: invitational hands
       # go through Stayman, with or without a major, and bid 2NT next. A
@@ -20,6 +22,15 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       sets  forcing=round, ask=majors
       artificial
       priority 1                           # ahead of transfers with 5-4 majors
+  2C  "Stayman: asks for a 4-card major"  alert
+      shows (strength>=invite | (hcp>=24-partner.hcp.max, H=4 | S=4)), H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
+      when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite) | (strength<=signoff, H=4 | S=4)
+      when  style is bba
+      # BBA (probed 2026-09-24): with a four-card major, 7 HCP is enough,
+      # whatever the shape or tens; 2NT next shows 7-9 (stayman.notes.md).
+      sets  forcing=round, ask=majors
+      artificial
+      priority 1
 
 # Opener. With both majors the first rule that fits (2H) wins.
 after 1N (P) 2C (P) | (1x) 1N (P) 2C (P) | (1x) P (P) 1N (P) 2C (P)
@@ -60,8 +71,18 @@ when answered majors
       priority -1                                 # a known major fit first
   2N  "Invitational: {invite} total points, no fit found"
       shows strength=invite
+      when  style is not bba
       sets  ask=nt_invite
       priority -1                                 # a known major fit first
+  2N  "Invitational, no fit found"
+      shows points>=24-partner.hcp.max, strength<=invite
+      when  style is bba                          # 7-9: opener needs 18 to accept
+      sets  ask=nt_invite
+      priority -1
+  P   "Light invitation, the heart fit found: play here"  shows H>=4, points<=22-partner.hcp.min
+      when  partner.H>=4, style is bba
+  P   "Light invitation, the spade fit found: play here"  shows S>=4, points<=22-partner.hcp.min
+      when  partner.S>=4, style is bba
 
 # ── Under interference ───────────────────────────────────────────────
 # Two card switches say the 1NT structure survives RHO's action:

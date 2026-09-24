@@ -33,6 +33,10 @@ struct Args {
     /// Command to open a rule in an editor; {file} and {line} are replaced.
     #[arg(long, default_value = "code -g {file}:{line}")]
     editor: String,
+    /// A card change for both sides, `path=value` (repeatable), e.g.
+    /// `--set general.style=bba` to compare BBA's treatments.
+    #[arg(long)]
+    set: Vec<String>,
 }
 
 fn main() -> eframe::Result {
@@ -44,6 +48,7 @@ fn main() -> eframe::Result {
         rules: args.rules,
         par: false,
         dd_cache: PathBuf::from(".rbb-cache/dd.jsonl"),
+        card_changes: args.set,
     };
     let native = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()

@@ -544,6 +544,7 @@ mod tests {
             rules: here.join("../../conventions"),
             par: false,
             dd_cache: std::env::temp_dir().join("rbb-workbench-test-dd.jsonl"),
+            card_changes: vec![],
         };
         let engines = Engines::new(&opts.pbs, &opts.rules).unwrap();
         let report = rbb_compare::run_with(&opts, &engines, &|_, _| {}).unwrap();

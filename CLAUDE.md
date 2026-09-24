@@ -57,6 +57,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   to the `.btn`.
   `--by-imps` orders the divergence points by what they cost against par
   instead of by how often they happen.
+  `--set general.style=bba` plays BBA's treatments where we have them
+  (docs/DESIGN.md, "Treatments"), for A/B tests; `--set path=value` works
+  for any card field, on both sides.
   `--auctions ns|ew|competitive` keeps only the boards where, in BBA's
   auction, one side bid alone or both sides bid (the workbench has the same
   filter in its toolbar).

@@ -103,9 +103,9 @@ impl System {
                     .effective(&p.path)
                     .map(to_val)
                     .or_else(|| p.default.as_ref().map(|d| to_val(&literal_value(d))));
-                if let Some(v) = v {
-                    params.insert(p.name.clone(), v);
-                }
+                // A param the card leaves unset, with no default, is Nothing:
+                // `style is bba` is then simply false.
+                params.insert(p.name.clone(), v.unwrap_or(Val::Nothing));
             }
             sys.params.push(params);
             for ctx in &m.contexts {

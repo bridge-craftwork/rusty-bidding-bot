@@ -151,3 +151,15 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 
 - 2026-09-23: two-level new suit on 10 HCP and a five-card suit when a
   one-level major is available (see "Total points count length").
+
+## Treatments (2026-09-24)
+
+The default is Rick's raise structure (above). `general.style = bba` keeps
+the structure the rules had before his ruling, which was tuned to agree
+with BBA: 2M on 6-9 support points, 3M on 10-12 with three or four trumps
+(with three hearts and four spades, 1♠ first), 1♠ over 1♥ with 10+
+support points. It is not a probed model of BBA: on Basic_Major boards 45
+and 65 BBA raised to 2♥ with 10. On Basic_*, with the BBA style, it adds
+0.9 points of identical auctions and 0.2 of same contract against the
+default raises. The default stands because it is Rick's ruling; against
+par it cost 116 IMPs on the corpus (see above).

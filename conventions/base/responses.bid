@@ -15,6 +15,7 @@ module responses "Responses to one-level suit openings"
   param  inv_js      = general.jump_shifts.invitational default false
   param  over_1c     = minor_openings.one_club_responses default up_the_line
   param  nt2         = minor_openings.two_nt_response default invitational
+  param  style       = general.style
 
 # ── Over 1♣ / 1♦ ───────────────────────────────────────────────────────
 after 1C (P) when over_1c is up_the_line
@@ -86,21 +87,25 @@ after 1C (P) when nt2 is game_forcing
 # ── Over 1♥ / 1♠ ───────────────────────────────────────────────────────
 after 1H (P)
   1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6
-      when  H<=2 | (H=3, tp(H)>=11) | tp(H)>=13 | !limit_raise, hcp<=10 | (S>=C, S>=D)
+      when  H<=2 | (H=3, tp(H)>=11) | tp(H)>=13 | !limit_raise | (style is bba, tp(H)>=10), hcp<=10 | (S>=C, S>=D)
       # 6-10 with 3+ hearts: raise; 11-12 with 4+: limit raise; 11+ with a longer minor: 2m first
+      # (bba: a limit raise takes three hearts too, from 10, so 1S is left for 10+ hands)
       sets forcing=round
   1N  "6-10 HCP, no heart fit, no 4 spades"   shows hcp=6..10, H<=2, S<=3
   2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, points>=15  when strong_js, !passed_hand
       sets forcing=game
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (H>=3, tp(H)>=11), suit_points>=10, C>=D, S<=3 | C>S
-      when  H<=3 | tp(H)>=13           # 4 hearts and limit values: raise first
+      when  H<=2 | (style is not bba, H=3) | tp(H)>=13   # limit values and a fit: raise first
       sets forcing=round               # with 4 spades and no longer minor: 1S first
   2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6 | (H>=3, tp(H)>=11), suit_points>=10, D>C, S<=3 | D>S
-      when  H<=3 | tp(H)>=13
+      when  H<=2 | (style is not bba, H=3) | tp(H)>=13
       sets forcing=round
   3H  "Limit raise: 11-12 support points, 3+ hearts"  shows H>=3, tp(H)=11..12, hcp<=12
-      when limit_raise, H>=4 | S<=3
+      when limit_raise, H>=4 | S<=3, style is not bba
       priority -1                      # 3 hearts: a new suit, then a jump raise, when there is one
+      sets trump=H
+  3H  "Limit raise: 10-12 support points, 3+ hearts"  shows H>=3, tp(H)=10..12, hcp<=12, H>=4 | S<=3
+      when limit_raise, style is bba   # 3 hearts and 4 spades: 1S first
       sets trump=H
   3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js
   3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js
@@ -108,17 +113,20 @@ after 1H (P)
 after 1S (P)
   1N  "6-10 HCP, no spade fit"             shows hcp=6..10, S<=2
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (S>=3, tp(S)>=11), suit_points>=10, C>=D, C>=H
-      when  S<=3 | tp(S)>=13           # 4 spades and limit values: raise first
+      when  S<=2 | (style is not bba, S=3) | tp(S)>=13   # limit values and a fit: raise first
       sets forcing=round
   2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6 | (S>=3, tp(S)>=11), suit_points>=10, D>C, D>=H
-      when  S<=3 | tp(S)>=13
+      when  S<=2 | (style is not bba, S=3) | tp(S)>=13
       sets forcing=round
   2H  "11+ points, 5+ hearts"          shows H>=5, points>=11 | H>=6 | (S>=3, tp(S)>=11), suit_points>=10
-      when  S<=3 | tp(S)>=13
+      when  S<=2 | (style is not bba, S=3) | tp(S)>=13
       sets forcing=round
   3S  "Limit raise: 11-12 support points, 3+ spades"  shows S>=3, tp(S)=11..12, hcp<=12
-      when limit_raise
+      when limit_raise, style is not bba
       priority -1                      # 3 spades: a new suit, then a jump raise, when there is one
+      sets trump=S
+  3S  "Limit raise: 10-12 support points, 3+ spades"  shows S>=3, tp(S)=10..12, hcp<=12
+      when limit_raise, style is bba
       sets trump=S
   3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, S<=2  when inv_js
   3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, S<=2  when inv_js
@@ -126,6 +134,10 @@ after 1S (P)
 
 after 1M (P)
   2M  "Raise: 6-10 support points, 3+ {M}"  shows M>=3, tp(M)=6..10, hcp>=6
+      when  style is not bba
+      sets trump=M
+  2M  "Raise: 6-9 support points, 3+ {M}"  shows M>=3, tp(M)=6..9, hcp=6..9
+      when  style is bba
       sets trump=M
   4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9
       sets trump=M

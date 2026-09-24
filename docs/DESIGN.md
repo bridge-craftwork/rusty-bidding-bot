@@ -319,6 +319,20 @@ For each scenario and in total:
   - notrump under interference: +1,991 calls agreeing, −973 IMPs against par
     (−0.006 a board), taken because passing out their 1NT overcall with no
     rule at all was the worse bridge.
+- **Treatments: default, standard, bba** (Rick, 2026-09-24). A bidding
+  situation can have up to three treatments. Our default is the modern
+  one where we have one, else the standard one, and it is not named:
+  rules test only the alternatives, through the card field
+  `general.style` (`standard`, `bba`; unset means the default).
+  `standard` is the textbook treatment where our default is modern; `bba`
+  is what BBA does, as far as probes and the corpus show, and exists for
+  A/B tests: `rbb compare --set general.style=bba` (the workbench takes
+  the same `--set`). A situation need not have all three. Each module's
+  notes say what is known about BBA's treatment and why the default was
+  chosen. The style also sets the valuation per side: `bba` counts tens
+  and no length at notrump, as BBA does. Treatments so far: the
+  valuation, raises of a major, Stayman, weak twos. The point is also to
+  learn how BBA values hands in general, which should speed up the rest.
 - **Card coverage**: a card is a few hundred switches and the rules read a few
   dozen; `rbb card coverage` splits what a card switches on into read,
   ignored, and play-only (carding and leads cannot change a call), and counts

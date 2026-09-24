@@ -227,7 +227,7 @@ impl App {
         std::thread::spawn(move || {
             let files = rbb_engine::cases::find(&opts.rules);
             let cases = rbb_engine::cases::run(&files, &opts.rules, &cards);
-            let outcome = Engines::new(&opts.pbs, &opts.rules).and_then(|engines| {
+            let outcome = Engines::for_options(&opts).and_then(|engines| {
                 let engines = Arc::new(engines);
                 rbb_compare::run_with(&opts, &engines, &|n, of| {
                     d.store(n, Ordering::Relaxed);

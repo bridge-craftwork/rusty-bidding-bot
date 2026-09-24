@@ -90,3 +90,51 @@ corpus par **+2,478 IMPs**, Basic_* +2, uncontested −3 (noise).
 
 Also: opener's answer to the raise (`when asked invite(M)` in
 `jacoby-transfers.bid`) accepts with 16 in the fit, see its notes.
+
+## BBA's Stayman, probed (2026-09-24)
+
+Rick asked how BBA treats a light hand with a four-card major. Probes on
+Basic_Openers_Rebid board 47 and variants, bba-cli with the Basic-Bridge
+card, all four hands fixed (`rbb probe`):
+
+| North (responder) | HCP | tens | BBA |
+|---|---|---|---|
+| 94.AT83.94.K9876 (the board, South 4-3-4-2) | 7 | 1 | 2♣, then 2NT over 2♠ |
+| 94.AT83.964.K987 (2-4-3-4) | 7 | 1 | 2♣; passes 2♥, 2NT over 2♠ |
+| 94.A983.964.K987 (♥10 → ♥9) | 7 | 0 | 2♣, then 2NT |
+| 942.A983.964.K87 (4-3-3-3) | 7 | 0 | 2♣, then 2NT |
+| 942.AT83.964.K87 | 7 | 1 | 2♣, then 2NT |
+| T42.AT83.964.K87 | 7 | 2 | 2♣, then 2NT |
+| 942.A983.964.Q87 | 6 | 0 | Pass |
+
+With a four-card major BBA bids Stayman on 7 HCP whatever the shape and
+tens, passes a fitting answer, and otherwise bids 2NT. Without a major it
+passes 1NT on 7 HCP 4-3-3-3 without a ten (10 of 10 corpus hands).
+
+Opener facing that 2NT (North 942.A983.964.K87):
+
+| South | HCP | tens | BBA |
+|---|---|---|---|
+| AK65.QJ7.AQ3.J32 | 17 | 0 | Pass |
+| AK65.Q72.AJ3.QJ2 | 17 | 0 | Pass |
+| AKT5.Q72.AJ3.QJ2 | 17 | 1 | Pass |
+| AKT5.QT2.AJ3.QJ2 | 17 | 2 | 3NT |
+| AKT5.QT2.AJT.QJ2 | 17 | 3 | 3NT |
+
+So 2NT after Stayman is 7-8 to BBA and opener needs 18 counting tens,
+where after a direct 1NT-2NT (8-9) it accepts with 17. Both sides move a
+point; the target stays 25.
+
+**Measured as our default and rejected on par** (corpus, net IMPs vs BBA):
+Stayman from 7 with a major, 2NT 7-9, pass with 7 once the fit is found:
+-1,001 (Basic -18). Nearly all of it is opener declining ordinary 8-9
+invitations once 2NT can be 7 (1NT-2C-2D-2NT alone: -446 on 232 boards).
+Without the pass once the fit is found: -1,078.
+
+Also rejected: passing 2M after the fit is found with any invitational
+hand (-113; pass better on 135 boards, the invitation on 123, but the
+invitation's wins are games), or with 8 and inviting with 9 (-227).
+
+**Kept as the BBA treatment** (`general.style = bba`): the light Stayman,
+2NT 7-9 and the pass with the fit. Our default stays Stayman from 8 total
+points with 2NT 8-9, because par prefers it.

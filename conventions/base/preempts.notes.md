@@ -63,3 +63,13 @@ whether a different quality test is worth trying.
 - Weak jump overcalls and preempts in competition; defences to preempts.
 - Responder's continuations after a preempt above the two level.
 - Lebensohl over a weak two (card field exists).
+
+## Treatments (2026-09-24)
+
+`general.style = bba`: every weak two goes to 10 HCP, and a side
+four-card major does not stop one (Basic_Weak_2: BBA opened about 110
+ten-counts with six cards at the two level, and 15 weak twos held a side
+four-card major, junk ones included). With the BBA style it adds 0.2
+points of identical auctions on Basic_* and costs 0.1 of same contract.
+Our default keeps diamonds to 4-9 and no side major, both on par (+29 for
+1♦ on the ten-counts; the side major cost 75).

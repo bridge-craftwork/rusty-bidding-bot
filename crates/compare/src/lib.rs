@@ -14,7 +14,7 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
-use bridge_card::{bbsa, Card};
+use bridge_card::{bbsa, Card, Value};
 use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
@@ -40,6 +40,9 @@ pub struct Options {
     pub par: bool,
     /// Where solved double-dummy tables are kept.
     pub dd_cache: PathBuf,
+    /// Card changes applied to both sides' cards, `path=value`
+    /// (e.g. `general.style=bba` for an A/B run against BBA's treatments).
+    pub card_changes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -48,22 +51,46 @@ pub struct Report {
     pub boards: Vec<BoardResult>,
 }
 
-fn load_card(pbs: &std::path::Path, name: &str) -> Result<Card, String> {
+fn load_card(pbs: &std::path::Path, name: &str, changes: &[String]) -> Result<Card, String> {
     let path = pbs.join("bbsa").join(format!("{name}.bbsa"));
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    bbsa::import(&text, Some(name))
+    let mut card = bbsa::import(&text, Some(name))
         .map(|(c, _)| c)
-        .map_err(|e| e.to_string())
+        .map_err(|e| e.to_string())?;
+    for change in changes {
+        let (path, value) = change
+            .split_once('=')
+            .ok_or_else(|| format!("card change {change:?}: expected path=value"))?;
+        let value = match value {
+            "true" => Value::Bool(true),
+            "false" => Value::Bool(false),
+            v => v
+                .parse::<i64>()
+                .map(Value::Int)
+                .unwrap_or_else(|_| Value::Text(v.to_string())),
+        };
+        card.set(path, value)
+            .map_err(|e| format!("card change {change:?}: {e}"))?;
+    }
+    Ok(card)
 }
 
 /// Compiled rules plus one engine per pair of cards, built on first use.
 pub struct Engines {
     pbs: PathBuf,
+    changes: Vec<String>,
     modules: Vec<bidspec::Module>,
     cache: Mutex<HashMap<(String, String), Arc<Engine>>>,
 }
 
 impl Engines {
+    /// The engines `opts` asks for: its rules, its cards, its card changes.
+    pub fn for_options(opts: &Options) -> Result<Engines, String> {
+        let mut e = Engines::new(&opts.pbs, &opts.rules)?;
+        e.changes = opts.card_changes.clone();
+        Ok(e)
+    }
+
     /// Compile the rules in `rules`; cards are read from `pbs/bbsa`.
     pub fn new(pbs: &std::path::Path, rules: &std::path::Path) -> Result<Engines, String> {
         let modules = rbb_engine::load_modules(rules).map_err(|d| {
@@ -74,6 +101,7 @@ impl Engines {
         })?;
         Ok(Engines {
             pbs: pbs.to_path_buf(),
+            changes: Vec::new(),
             modules,
             cache: Mutex::new(HashMap::new()),
         })
@@ -86,8 +114,8 @@ impl Engines {
             return Ok(e.clone());
         }
         let engine = Arc::new(Engine::new(
-            &load_card(&self.pbs, ns)?,
-            &load_card(&self.pbs, ew)?,
+            &load_card(&self.pbs, ns, &self.changes)?,
+            &load_card(&self.pbs, ew, &self.changes)?,
             &self.modules,
         ));
         self.cache.lock().unwrap().insert(key, engine.clone());
@@ -105,7 +133,7 @@ impl Report {
 
 /// Run the comparison. `progress` is called with (boards done, total).
 pub fn run(opts: &Options, progress: &(dyn Fn(usize, usize) + Sync)) -> Result<Report, String> {
-    let engines = Engines::new(&opts.pbs, &opts.rules)?;
+    let engines = Engines::for_options(opts)?;
     run_with(opts, &engines, progress)
 }
 

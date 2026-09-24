@@ -55,6 +55,10 @@ enum Command {
         /// as a percentage (see `card coverage`). Both sides must pass.
         #[arg(long)]
         min_coverage: Option<f64>,
+        /// A card change for both sides, `path=value` (repeatable), e.g.
+        /// `--set general.style=bba` to run BBA's treatments for an A/B test.
+        #[arg(long = "set")]
+        card_changes: Vec<String>,
         /// Only boards where, in BBA's auction, one side bid alone
         /// (`ns`, `ew`) or both sides bid (`competitive`).
         #[arg(long, value_parser = ["all", "ns", "ew", "competitive"], default_value = "all")]
@@ -245,6 +249,7 @@ fn run(cli: Cli) -> Result<()> {
             top,
             by_imps,
             min_coverage,
+            card_changes,
             auctions,
             worst,
             json,
@@ -262,6 +267,7 @@ fn run(cli: Cli) -> Result<()> {
                 rules,
                 par,
                 dd_cache,
+                card_changes,
             };
             if let Some(min) = min_coverage {
                 opts.scenarios = covered_scenarios(&opts, min)?;

@@ -25,3 +25,12 @@ N J8764.32.54.KJ32      | P P     | P      | third seat: a poor five-card suit i
 # Fourth seat has no weak two: 2S is a sound opening.
 E KQJ976.K3.A42.83      | P P P   | 2S     | fourth seat: six spades and opening values
 E KQJ976.32.54.J43      | P P P   | P      | fourth seat: no weak two with 6 HCP
+
+# ── The BBA weak-two treatment (general.style=bba): 10 HCP in diamonds too,
+# and a side four-card major allowed
+card    Basic-Bridge general.style=bba
+dealer  S
+S J8.6.AQ9543.K762      |            | 2D     | bba: 10 HCP six diamonds (Basic_Weak_2)
+S 8752.AKQT73.T.T6      |            | 2H     | bba: a side four-card spade suit does not stop it
+card    Basic-Bridge
+S J8.6.AQ9543.K762      |            | 1D     | default: 10 HCP and six diamonds opens 1D

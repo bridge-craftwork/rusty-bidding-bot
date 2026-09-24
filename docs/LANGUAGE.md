@@ -233,7 +233,8 @@ notrump. We count length anyway (Rick, 2026-09-23: "total points should
 include length points"). Against double-dummy par, over the whole corpus:
 ½ a point a card gained 6,526 IMPs, 1 a point gained 9,718; counting a full
 point in `suit_points` as well gained another 2,957 but needs its bands
-reset first. Two variants were tried and rejected on par: a ten only with a
+reset first. With `general.style = bba` a side counts as BBA does: tens,
+and no length. Two variants were tried and rejected on par: a ten only with a
 neighbouring honour (KT, QT, JT; −1,647), and ½ or 1 point off a 4-3-3-3
 (−2,543 / −5,670). The weights are engine settings (`Valuation`).
 

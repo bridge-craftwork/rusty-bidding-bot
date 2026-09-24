@@ -103,7 +103,8 @@ type IndexCache = HashMap<String, Arc<Vec<u32>>>;
 pub struct Engine {
     /// By side: 0 = North-South, 1 = East-West.
     systems: [System; 2],
-    valuation: Valuation,
+    /// By side: how each side counts points (its card's `general.style`).
+    valuation: [Valuation; 2],
     pool: Vec<Facts>,
     consistent: Mutex<IndexCache>,
     descriptiveness: Mutex<HashMap<String, f64>>,
@@ -115,7 +116,7 @@ impl Engine {
     pub fn new(ns: &Card, ew: &Card, modules: &[bidspec::Module]) -> Engine {
         Engine {
             systems: [System::new(ns, modules), System::new(ew, modules)],
-            valuation: Valuation::default(),
+            valuation: [Valuation::for_card(ns), Valuation::for_card(ew)],
             pool: sample::pool(),
             consistent: Mutex::new(HashMap::new()),
             descriptiveness: Mutex::new(HashMap::new()),
@@ -124,7 +125,7 @@ impl Engine {
 
     /// Count total points differently (weights in quarter points).
     pub fn with_valuation(mut self, valuation: Valuation) -> Engine {
-        self.valuation = valuation;
+        self.valuation = [valuation; 2];
         self.descriptiveness.lock().unwrap().clear();
         self.consistent.lock().unwrap().clear();
         self
@@ -146,7 +147,7 @@ impl Engine {
             actor,
             hand,
             params: &self.systems[side(actor)].params[entry.module],
-            valuation: self.valuation,
+            valuation: self.valuation[side(actor)],
         }
     }
 
@@ -236,7 +237,8 @@ impl Engine {
             .iter()
             .enumerate()
             .filter(|(_, f)| {
-                let q = [f.points_q(self.valuation), f.suit_points_q(self.valuation)];
+                let v = self.valuation[side(actor)];
+                let q = [f.points_q(v), f.suit_points_q(v)];
                 if !(k.hcp.lo <= f.hcp && f.hcp <= k.hcp.hi)
                     || (0..2).any(|i| !(k.pts[i].lo <= q[i] && q[i] <= k.pts[i].hi))
                     || (0..4).any(|s| !(k.len[s].lo <= f.len[s] && f.len[s] <= k.len[s].hi))
@@ -248,7 +250,7 @@ impl Engine {
                     actor,
                     hand: Some(f),
                     params: &params,
-                    valuation: self.valuation,
+                    valuation: v,
                 };
                 k.constraints
                     .iter()

@@ -66,3 +66,10 @@ card    Basic-Bridge minor_openings.two_nt_response=game_forcing
 N K73.QJ5.AQ93.K32      | 1D P    | 2NT    | 15, balanced, no major: game forcing 2NT
 N K73.QJ5.AQ93.KQ2      | 1D P    | 3NT    | 17, balanced: 3NT is 16-17 in this treatment
 N K73.QJ5.AQ93.732      | 1D P    | 2C     | 12, balanced: a new suit first, then 2NT
+
+# ── The BBA raise treatment (general.style=bba): 6-9 raise, 10-12 limit
+# raise with three or four trumps
+card    Basic-Bridge general.style=bba
+N 932.854.62.AKQJ2      | 1H P    | 3H     | bba: 10 + doubleton = 11 support points, three hearts: limit raise
+N T987.QT2.A52.A84      | 1S P    | 3S     | bba: 10 support points, four spades: limit raise
+N KT52.J86.KJ4.942      | 1H P    | 2H     | bba: 8 with three hearts: raise
