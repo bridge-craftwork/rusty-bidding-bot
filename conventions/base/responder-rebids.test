@@ -90,3 +90,7 @@ N 85.J872.AKT.9874      | 1C 1D 1H P 1S P     | 1NT    | 6-10 with no fit for op
 N J97632.Q84.AT.53      | 1D 1H 1S P 2C P     | 2S     | six spades, weak
 N AK984.32.J85.K65      | 1D 1H 1S P 2C P     | 2D     | preference back to opener's first suit
 N T98653.92.A83.A7      | 1C 1D 1S 2D P P     | 2S     | six spades: worth one more when they compete
+
+# ── Rick: 11-12 with three trumps bids a new suit, then jumps in opener's major
+N AQ94.K62.863.QJ6      | 1H P 1S P 1NT P  | 3H     | 11-12, three hearts: invitational jump raise
+N AQ94.K62.863.QJ6      | 1H P 1S P 2C P   | 3H     | 11-12, three hearts: invitational jump raise

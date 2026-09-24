@@ -29,6 +29,8 @@ after 1x (P) 1y (P) 1N (P)
   2x  "Weak: 5+ {x}"                       shows x>=5, points<=10   sets ask=signoff
 after 1x (P) 1M (P) 1N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, suit_points>=13
+after 1M (P) 1y (P) 1N (P)
+  3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets ask=invite(M)
 
 # New suits after 1NT: below responder's suit, natural and not forcing
 # (5-4, weak); above it, a responder's reverse (game forcing).

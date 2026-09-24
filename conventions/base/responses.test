@@ -29,8 +29,14 @@ N KQT842..Q762.AJ7      | 1H P    | 1S     | six spades
 N T54.K9.542.AKJ32      | 1H P    | 2C     | 11 with five clubs
 N Q85.A5.KJ952.J73      | 1H P    | 2D     | 11 with five diamonds
 N KT52.J86.KJ4.942      | 1H P    | 2H     | 8 with three hearts: raise before 1S
-N 932.854.62.AKQJ2      | 1H P    | 3H     | 10 + doubleton = 11 support points: limit raise
+N 932.854.62.AKQJ2      | 1H P    | 2C     | 10 + doubleton = 11 support points, three hearts: new suit, then a jump raise (Rick)
 N 87.A96542.42.K64      | 1H P    | 4H     | 7 with six hearts: preemptive raise
+# Rick: 6-10 support points raise to 2M before any new suit; 11-12 with
+# four trumps is a limit raise; 11-12 with three is a new suit, then a jump.
+N AJT94.K62.863.J6      | 1H P    | 2H     | 10 support points, three hearts: raise, not 1S (Basic_Major 45)
+N AJ43.J42.A98.T98      | 1H P    | 2H     | flat 10, three hearts: raise, not 1S (Basic_Major 65)
+N A8.K862.Q863.J62      | 1H P    | 3H     | 11 support points, four hearts: limit raise
+N KQ75.K62.863.AJ6      | 1H P    | 1S     | 13, three hearts: a new suit first
 N AT752.Q3.AK.A932      | 1H P    | 2S     | 17 with five spades: strong jump shift
 N AK85.8.QT9862.K3      | 1H P    | 3D     | 12 with six diamonds: invitational jump shift
 N 64.JT3.KT76.9854      | 1H P    | P      | 4 HCP
@@ -40,7 +46,7 @@ N J8.AQ72.T32.A762      | 1S P    | 2C     | 11 with four clubs
 N T7.J6.KQ875.AJ62      | 1S P    | 2D     | 11, longer diamonds first
 N .KT9763.AQ98.432      | 1S P    | 2H     | 9 with six hearts
 N QJ52.K87.T53.J85      | 1S P    | 2S     | 7 with four spades: raise
-N T987.QT2.A52.A84      | 1S P    | 3S     | 10 with four spades: limit raise
+N T987.QT2.A52.A84      | 1S P    | 2S     | 10 support points: raise (Rick: 2M is 6-10)
 N AQ962.732.QJ83.6      | 1S P    | 4S     | 9 with five spades and a singleton: preemptive raise
 N T.AKT542.87.A953      | 1S P    | 3H     | 11 with six hearts: invitational jump shift
 N 2.84.76543.J8653      | 1S P    | P      | 1 HCP

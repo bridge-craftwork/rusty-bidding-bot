@@ -50,6 +50,30 @@ and with only three trumps void 3, singleton 2, doubleton 1. Bands: 2M 6-9,
 3M 10-12, and game (a new suit, 3NT, or 4M) 13+. With a fit and limit
 values responder raises before bidding a new suit.
 
+**Rick's raise structure over 1M (2026-09-23)**, replacing the bands above:
+
+- 6-10 support points and 3+ trumps: raise to 2M, ahead of any new suit
+  (not 1♠ then a heart preference, not 1♠ then notrump).
+- 11-12 with four trumps: 3M at once.
+- 11-12 with three trumps: a new suit, then a jump raise
+  (1♥-1♠-1NT-3♥, 1♥-1♠-2♣-3♥). Read "then jump to 2H" in his message as
+  the jump raise to 3M; **to confirm**.
+- Where three trumps and 11-12 leave no new suit to bid (over 1♠: 3♠-4♥
+  with 3-3 minors; or 11 support points from shortness with a suit too
+  weak for the two level), 3M stays as a fallback (`priority -1`). Without
+  it 445 hands passed 1♠ (−2,404 IMPs).
+- A 2-level new suit counts support points: with three trumps and 11+
+  support points it is allowed below 11 notrump points (`932.854.62.AKQJ2`).
+
+Measured against the previous bands, whole corpus: calls agreeing 75.6%
+unchanged, same contract 30.5%, −116 IMPs vs par (of −196,305). Basic_*
+uncontested NS: roughly flat. The costs are what the ruling asks for:
+10-point raises to 2♠ where BBA bids 3♠ (1,120 boards, −223), and the new
+suit before a three-card limit raise (about −500 over 1♥ and 1♠). Taken
+as Rick's ruling. Follow-up: after 1M-2M, opener with 23+ now blasts
+4NT because the raise can hold 10 (130 boards, −140); that belongs to a
+slam try, not keycard.
+
 Which suit to bid first at the one level: the longest; with two four-card
 suits the cheaper, up the line (1♦ over 1♣ with four diamonds and a
 four-card major: BBA always does, 76 of 76); with two five-card suits the
@@ -64,8 +88,8 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 
 ## Accepted differences from BBA
 
-- Where exactly 2M becomes 3M (18 boards like `J52.632.KQ98.A64`: BBA 2♠
-  with a flat 10-count, we 3♠).
+- Where exactly 2M becomes 3M: BBA makes a limit raise with some 10
+  support points; we raise to 2M (Rick: 6-10).
 - BBA's preemptive 4M with 8-10 HCP, four trumps and a singleton (it counts
   these as game hands); we make a limit raise.
 - Some 6-counts BBA passes (for example `65.K8654.KT43.86`).
