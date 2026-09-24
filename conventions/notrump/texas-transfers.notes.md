@@ -90,10 +90,22 @@ completions, and adds one that only exists under interference:
 - **Texas as a preempt.** With **seven** cards in a major and no values
   BBA transfers straight to game rather than to the two level, taking
   the auction away from them: `A9.JT87432.2.T65` (5 HCP) bids 4♦ over
-  their 2♣. Written as `shows H>=7, hcp>=4, strength=signoff`.
+  their 2♣. Written as `shows H>=7, hcp>=4, suit_strength=signoff`
+  (it was `strength=signoff`; with length counted in total points that
+  hand became 8 and lost the preempt, 2026-09-23).
 
 Nothing is written over a double: 4♦ and 4♥ are still available there,
 but BBA does not use them, and with `vs_double` off the two-level
 escapes are the whole structure.
 
 Evidence and numbers: `nt-interference.notes.md`.
+
+## Support points (2026-09-23)
+
+With six trumps the fit is certain, so **slam values** may also be
+counted in support points: Texas and the keycard ask after it now also
+fire with `tp(M)>=33-partner.points.min` (HCP + shortness), beside the
+suit-point rule. `8.AQ9732.K94.AQ8` (15 HCP + 3 for the singleton = 18)
+now Texases and asks for keycards; without the singleton
+(`82.AQ9732.K94.AQ`, 17 support points) it is still mild slam interest
+via Jacoby. Corpus par **+985 IMPs**, Basic_* 0.

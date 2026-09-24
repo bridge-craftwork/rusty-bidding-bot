@@ -69,3 +69,22 @@ and passes, which is what BBA does. A card with both on would want
 these rules here too.
 
 Evidence and numbers: `nt-interference.notes.md`.
+
+## Length points (2026-09-23)
+
+With `points` counting length a six-card minor adds two points, so
+`5.K73.QJ9542.J83` (7 HCP) is 9 — invitational, no longer weak:
+
+- **relay / none**: the relay stays for weak hands (0–7 total points);
+  invitational hands with a long minor bid the natural 2NT
+  (`one-nt.bid`, see its notes). Before, this hand had no rule at all.
+  9 HCP and six diamonds (11) bids 3NT.
+- **four_way**: Stayman's "invitational without a major" clause (for
+  2NT) now excludes a six-card minor, `C<=5, D<=5`: that hand transfers,
+  as designed, and bids 3NT opposite good support.
+- Test hands for the weak sequences were changed to genuinely weak ones
+  (`5.J73.QJ9542.832`); the 8-HCP `5.Q73.J83.AQ9542` is now 10 and bids
+  3NT directly.
+
+The corpus has no `relay` or `four_way` card, so these are measured only
+through the `none` cards, where every option was within 10 IMPs.

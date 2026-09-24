@@ -12,6 +12,9 @@ N K96.Q5.AKQ6.QT73      | 1NT P          | 4NT    | 16: invites 6NT
 N A3.K98.KJT7.AQ87      | 1NT P          | 6NT    | 17: 32 opposite a minimum is enough (Rick; Basic_NT board 29)
 S KQJ.KJ73.AK5.T52      | 1NT P 2NT P    | 3NT    | 17 opposite 8-9: game is certain
 S KQJ.KJ73.AQ5.T52      | 1NT P 2NT P    | P      | 16 declines (BBA too, Basic_NT board 51)
+S AK5.KJ7.Q942.K83      | 1NT P 4NT P    | 6NT    | 16 opposite 16: 32 is enough, as for the direct 6NT
+S AK5.QJ7.Q942.K83      | 1NT P 4NT P    | P      | 15: declines
+N Q65.AK653.J3.KQ5      | 1NT P          | 2D     | 15 HCP + 1 length = 16 with five hearts: transfer first, then 4NT
 
 # A strong responder never passes 1NT. Too strong for 3NT with a long
 # minor, he bids it; otherwise 3NT is the fallback.

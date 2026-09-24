@@ -66,3 +66,27 @@ major first, so Smolen's priority does not apply here. Opener's answers
 are the same three calls, written once per context.
 
 Evidence and numbers: `nt-interference.notes.md`.
+
+## Support points and length points (2026-09-23)
+
+Rick: "our rules should have HCP, total points and support points, and
+decide which to use under which circumstances". Once opener's answer
+shows the fit, responder also counts **support points**, `tp(x)`: HCP
+plus shortness (doubleton 1, singleton 3, void 5, capped by the trumps).
+
+- **6M with 33 support points** opposite opener's minimum
+  (`AQ82.K.KQ943.J83`, 15 HCP + 3 = 18 opposite 15–17). This is most of
+  the gain: 1NT–2♣–2♥ → 6♥ and 1NT–2♣–2♠ → 6♠ (and the same after
+  2NT–3♣) where we bid game.
+- **4M with 25 support points** when the total-point count says invite
+  (`KJ82.Q7.Q943.J83`: 9 HCP + 1 = 10, game).
+
+These are **extra** rules beside the total-point ones, not replacements.
+Replacing the bands with `tp` outright gained less (+1,896) because
+partner can no longer read a negative inference from a `tp` rule: after
+1NT–2♣–2♥–3NT opener stopped knowing that responder has four spades
+(157 boards of 1N lost the 4♠ correction, −392 IMPs). Kept as extras,
+corpus par **+2,478 IMPs**, Basic_* +2, uncontested −3 (noise).
+
+Also: opener's answer to the raise (`when asked invite(M)` in
+`jacoby-transfers.bid`) accepts with 16 in the fit, see its notes.

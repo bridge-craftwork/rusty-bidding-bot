@@ -5,11 +5,17 @@ dealer  S
 # ── relay (the default): 2S relays to 3C; pass or correct to 3D.
 card    21GF-DEFAULT notrump.minor_transfers=relay
 # seat hand             | auction          | expect | why
-N 5.K73.QJ9542.J83      | 1NT P            | 2S     | weak with six diamonds: relay
+N 5.J73.QJ9542.832      | 1NT P            | 2S     | weak with six diamonds (4 HCP + 2 length): relay
 S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 3C     | the relay is forced
-N 5.K73.QJ9542.J83      | 1NT P 2S P 3C P  | 3D     | diamonds: correct
-N 5.K73.J83.QJ9542      | 1NT P 2S P 3C P  | P      | clubs: play 3C
-N 5.K73.QJ9542.K83      | 1NT P            | 2NT    | 9: invitational hands bid a natural 2NT
+N 5.J73.QJ9542.832      | 1NT P 2S P 3C P  | 3D     | diamonds: correct
+N 5.J73.832.QJ9542      | 1NT P 2S P 3C P  | P      | clubs: play 3C
+N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | 7 HCP + 2 length = 9: invitational hands bid a natural 2NT
+N 5.K73.QJ9542.K83      | 1NT P            | 3NT    | 9 HCP + 2 length = 11: game
+
+# ── none: no minor-suit route, so a long minor invites with 2NT.
+card    21GF-DEFAULT notrump.minor_transfers=none
+N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | 7 HCP + 2 length = 9: invite
+N 5.J73.QJ9542.832      | 1NT P            | P      | 6: nothing to say
 
 # ── four_way: 2S clubs, 2NT diamonds; the step below the suit is good support.
 card    21GF-DEFAULT notrump.minor_transfers=four_way
@@ -19,10 +25,12 @@ S AK5.KJ7.Q94.K832      | 1NT P 2S P       | 2NT    | Kxxx in clubs: good suppor
 S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 3C     | QJx: not good support
 S AK5.KJ72.QJ3.A94      | 1NT P 2NT P      | 3D     | QJx in diamonds: not good support
 S AK5.KJ72.A94.QJ3      | 1NT P 2NT P      | 3C     | Axx in diamonds: good support
-N 5.K73.J83.QJ9542      | 1NT P 2S P 2NT P | 3C     | weak: sign off
-N 5.K73.J83.QJ9542      | 1NT P 2S P 3C P  | P      | weak: play here
-N 5.Q73.J83.AQ9542      | 1NT P 2S P 2NT P | 3NT    | 9 opposite good support: the clubs should run
-N 5.Q73.J83.AQ9542      | 1NT P 2S P 3C P  | P      | 9 without good support: play 3C
+N 5.J73.832.QJ9542      | 1NT P            | 2S     | weak with six clubs
+N 5.J73.832.QJ9542      | 1NT P 2S P 2NT P | 3C     | weak: sign off
+N 5.J73.832.QJ9542      | 1NT P 2S P 3C P  | P      | weak: play here
+N 5.K73.J83.QJ9542      | 1NT P 2S P 2NT P | 3NT    | 7 HCP + 2 length = 9 opposite good support: the clubs should run
+N 5.K73.J83.QJ9542      | 1NT P 2S P 3C P  | P      | 9 without good support: play 3C
+N 5.Q73.J83.AQ9542      | 1NT P            | 3NT    | 8 HCP + 2 length = 10: game, no transfer
 N Q82.K73.J83.K954      | 1NT P            | 2C     | invitational, no major: Stayman, then 2NT
 N Q82.K73.J83.K954      | 1NT P 2C P 2D P  | 2NT    | the invitation
 

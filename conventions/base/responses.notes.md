@@ -80,6 +80,49 @@ four-card major: BBA always does, 76 of 76); with two five-card suits the
 higher. Over 1♥ a weak hand with three hearts raises rather than bid 1♠.
 With 11+ and a longer minor, 2m comes before a four-card major.
 
+## Total points count length (2026-09-23)
+
+`points` now adds 1 for each card beyond four (Rick: "total points should
+include length points"). Each band here was re-chosen for the measure that
+fits its decision, and measured against par (net IMPs vs BBA; less negative
+is better). Baseline after the engine change, before these rules moved:
+corpus −182,498, Basic_* −2,153, Basic_* uncontested NS −1,030.
+
+- **1NT response: 6-10 HCP** (was total points). A five-card minor is not a
+  reason to leave 1NT: `K3.Q84.KJ852.J62` bids 1♠-1NT. With total points,
+  10 HCP and a five-card suit could not bid 1NT at all.
+- **1♦-1M "11+ with longer clubs: 2♣ first"** and **1♥-1♠ "11+ with a
+  longer minor: 2m first"**: the threshold is HCP. With 10 HCP and 5-4 the
+  major comes first (previously some such hands passed 1♦).
+- **Walsh 1♣-1♦ "game forcing"**: 12+ HCP (Rick's "12+"). With total
+  points 11 HCP and 5-4 (`KQ2.JT63.KQ742.8`) became game forcing and bid
+  1♦ over the major. Not in the corpus (no card plays Walsh), so unmeasured.
+- **Kept on total points**: the two-level new suit (11+) and the
+  invitational jump shift (10-12). Moving the two-level new suit to HCP
+  cost 930 IMPs over the corpus on its own; moving the jump shift to HCP
+  cost 701 (11-12 HCP six-card suits are worth forcing, and 9-10 HCP ones
+  inviting, which total points gets right on both sides). So four `.test`
+  cases now differ from BBA, taken on par: `A8.94.532.AK8632` 1♦-2♣ (BBA
+  3♣), `AK85.8.QT9862.K3` 1♥-2♦ (BBA 3♦), `T.AKT542.87.A953` 1♠-2♥ (BBA
+  3♥), `.KT9763.AQ98.432` 1♠-3♥ (BBA 2♥).
+
+| Variant | corpus | Basic_* | Basic_* NS |
+|---|---|---|---|
+| baseline (all bands on total points) | −182,498 | −2,153 | −1,030 |
+| jump shifts on HCP | −183,199 | −2,204 | −1,081 |
+| two-level new suit on HCP | −183,428 | −2,224 | −1,087 |
+| 1NT and two-level on HCP, 1♦-1M guard on HCP | −181,766 | −2,138 | −1,014 |
+| 1NT on HCP | −182,051 | −2,097 | −983 |
+| 1NT and 1♦-1M guard on HCP | −181,903 | −2,073 | −959 |
+| **+ 1♥-1♠ guard on HCP (kept)** | **−181,873** | **−2,066** | **−952** |
+
+Question for Rick: with 10 HCP and a five-card suit both 1NT (6-10 HCP) and
+a two-level new suit (11+ total) are allowed; 1NT wins over 1M, but over 1♦
+`K843.Q3.J6.KJ852` bids 2♣ rather than 1♠. Should a two-level new suit
+need 11 HCP when a one-level major or 1NT is available? Moving the whole
+two-level band to HCP measured worse (−930), so it stays on total points
+until you rule.
+
 ## Evidence
 
 Basic_* responses (2,069 positions after `1x P`): 89.3% agree with BBA.
@@ -106,4 +149,5 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 
 ## Questions
 
-None open.
+- 2026-09-23: two-level new suit on 10 HCP and a five-card suit when a
+  one-level major is available (see "Total points count length").

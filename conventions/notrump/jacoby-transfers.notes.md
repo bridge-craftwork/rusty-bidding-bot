@@ -8,9 +8,9 @@ super-accepts are separate modules. Cases: `jacoby-transfers.test`.
 
 - The transfer is forcing; opener completes (or super-accepts).
 - Responder's second call is one `when answered transfer(M)` block, with
-  no auction patterns. Notrump decisions (2NT, 3NT) use notrump points (HCP
-  + ½ per ten). Decisions to play in the major use **suit points: HCP + ½
-  per card beyond four**.
+  no auction patterns. Notrump decisions (2NT, 3NT) use total points (HCP
+  + ½ per ten + 1 per card beyond four, since 2026-09-23). Decisions to
+  play in the major use **suit points: HCP + ½ per card beyond four**.
 - **8 HCP with a six-card major invites** (transfer, then 3M): 8 HCP + 1 for
   length is 9 suit points.
 - 3NT with exactly five offers a choice; opener corrects to 4M with three
@@ -22,8 +22,9 @@ super-accepts are separate modules. Cases: `jacoby-transfers.test`.
 - **Responder's new suit (3m) is game forcing** (Rick, 2026-09-21). Opener
   rebids the major with three-card support, which agrees it below game so
   responder can look for slam; otherwise 3NT.
-- Opener accepts an invitation only when game is certain, and plays in the
-  major with an eight-card fit: three opposite five, two opposite six.
+- Opener plays in the major with an eight-card fit: three opposite five,
+  two opposite six. Without a fit he accepts only when game is certain
+  (17 opposite 8–9); with the fit, 16 is enough (2026-09-23, below).
 - After a super-accept (a known fit of nine or more) responder counts suit
   points. Opposite that maximum, invitational values bid game: the
   super-accept exists to reach thin games.
@@ -96,3 +97,38 @@ rules:
 
 The super-accepts are not written for these auctions: opener simply
 completes. Evidence and numbers: `nt-interference.notes.md`.
+
+## Length points (2026-09-23)
+
+`points` counts length now, so the fifth card of the major is worth a
+point at notrump.
+
+- **Responder's 2NT / 3NT after the completion** move one point:
+  `82.QJ973.K94.J83` (7 HCP) invites, `82.KJ973.K94.Q83` (9 HCP) bids
+  3NT. BBA invites with the 9 (probe table above), so this departs from
+  it. Counting the old way (the fifth card not counted for these two
+  calls only) cost 71 IMPs on the corpus and 14 on Basic_*: kept.
+- **Opener accepts with 16 in the fit.** `when asked invite(M)` now bids
+  4M with an eight-card fit and 16 opposite 8–9 (`points>=24-...`), and
+  3NT without a fit still needs 17. The rule also answers the Stayman
+  raise (`1NT 2C 2H 3H`) and other modules' suit invitations. Corpus par
+  **+1,309 IMPs**, Basic_* +62. Accepting 3NT at 16 without a fit as well
+  measured −18 on its own, so it stays at 17.
+- **No pass of an artificial super-accept.** `P "Weak: play here"` could
+  pass opener's 2♠ or 2NT super-accept (`Q8542.T86.43.A65` passed 2NT in
+  1N board 284); it now needs the fit to be unknown, or opener's call to
+  be 3M. Corpus par **+432 IMPs**.
+- **Opener answers the quantitative 4NT with five** (`sets
+  ask=quant_major(M)`): 6M with three trumps, 6NT with two, at 32
+  combined, as over 1NT.
+
+**Tried, not adopted** — question for Rick:
+
+- The six-card major's invite / game (3M, 4M, and Texas for game) on
+  **total points** (8 HCP + 2 = 10: game) instead of suit points: corpus
+  +225 (with Texas as well, +510), but Basic_* −13 and it contradicts
+  "8 HCP with a six-card major invites". Should the six-card decisions
+  count the full length point, or stay at ½?
+- Support points (shortness) for the six-card game decision: corpus
+  +251, Basic_* 0, uncontested −6, and the extra 4M rule took over the
+  reading of 4M as the mild slam try. Not kept.

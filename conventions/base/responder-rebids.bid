@@ -6,7 +6,8 @@
 # after opener's 1NT is not forcing unless it is a responder's reverse (with
 # New Minor Forcing on, 2 of the other minor is artificial instead:
 # new-minor-forcing.bid). Ranges: weak 6-10, invitational 11-12, game 13+
-# opposite a minimum rebid. See responder-rebids.notes.md.
+# opposite a minimum rebid, in total points, which count length (a six-card
+# suit adds two). See responder-rebids.notes.md.
 #
 # Every call here that says "play here" sets `ask=signoff`, and every
 # invitation sets `ask=invite(suit)` or `ask=nt_invite`. Opener answers
@@ -25,10 +26,10 @@ after 1x (P) 1y (P) 1N (P)
       when  y is H | y is S                # a weak minor passes 1NT
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   2N  "Invitational: 11-12"                shows points=11..12, y<=5   sets ask=nt_invite
-  3N  "Game: 13+"                          shows points>=13, y<=5
+  3N  "Game: 13+"                          shows points>=13, y<=5 | y is C | y is D
   2x  "Weak: 5+ {x}"                       shows x>=5, points<=10   sets ask=signoff
 after 1x (P) 1M (P) 1N (P)
-  4M  "Game: 6+ {M}"                       shows M>=6, suit_points>=13
+  4M  "Game: 6+ {M}"                       shows M>=6, points>=13
 after 1M (P) 1y (P) 1N (P)
   3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets ask=invite(M)
 
@@ -60,8 +61,8 @@ after 1x (P) 1y (P) 2x (P)
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   3x  "Raise: 2+ {x}, 10-12"              shows x>=2, points=10..12   sets ask=invite(x)
-  2N  "Invitational: 11-12"                shows points=11..12, x<=1 | x=2, y<=5  sets ask=nt_invite
-  3N  "Game: 13+"                          shows points>=13, x<=2
+  2N  "Invitational: 11-12"                shows points=11..12, x<=1, y<=5  sets ask=nt_invite
+  3N  "Game: 13+"                          shows points>=13, x<=2 | x is C | x is D
 after 1M (P) 1y (P) 2M (P)
   4M  "Game: 2+ {M}, 13+"                  shows M>=2, suit_points>=13
 
@@ -103,7 +104,7 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
   3z  "Invitational raise: 4+ {z}"         shows z>=4, points=11..12   sets ask=invite(z)
   3x  "Invitational: 3+ {x}"               shows x>=3, points=11..12   sets ask=invite(x)
   2N  "Invitational: 11-12"                shows points=11..12, z<=3   sets ask=nt_invite
-  3N  "Game: 13+"                          shows points>=13, z<=3
+  3N  "Game: 13+"                          shows points>=13, z<=3 | z is C | z is D
   2N  "Forced to bid: minimum, no fit"     shows points<=10
       when  we.forcing = round             # after a reverse
       priority -4

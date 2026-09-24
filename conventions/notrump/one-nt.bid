@@ -27,7 +27,8 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   6N  "To play: slam values"
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: invites 6NT"
-      shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      shows balanced, strength=slam_invite, points<=31-partner.hcp.min, H<=4, S<=4   # with five, transfer first
+      sets  ask=quant
       # Rick: 17 opposite 15-17 jumps to 6NT (BBA: 10 of 12 hands; 16
       # mostly invites). BBA's choices at 16-17 do not follow controls.
   3N  "To play: {game} total points"
@@ -35,6 +36,10 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
   2N  "Invitational: {invite} total points"
       shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
       when  minors is not four_way, minors is not four_way_reversed   # 2NT is a transfer
+      sets  ask=nt_invite
+  2N  "Invitational: {invite} total points, a long minor"
+      shows strength=invite, H<=4, S<=4, (C>=6 | D>=6)
+      when  minors is relay | minors is none         # no minor route for invitations
       sets  ask=nt_invite
   3C  "Too strong for 3NT, with six or more clubs"
       shows C>=6, strength>=slam_invite, H<=4, S<=4
@@ -59,6 +64,11 @@ when asked nt_invite
   3N  "Accepts the invitation"          shows strength>=game
   P   "Declines: not a maximum"         shows strength<=invite
 
+# Opener answers the quantitative 4NT: slam with 32 combined.
+when asked quant
+  6N  "Accepts the slam invitation"     shows points>=32-partner.points.min
+  P   "Declines: not enough for slam"   shows points<=31-partner.points.min
+
 # Responder over a 2♣ overcall of our 1NT, when the card keeps the
 # structure on (`notrump.transfers.vs_2c`). The natural notrump calls
 # are unchanged — 2♣ takes nothing away from them — and the double
@@ -69,6 +79,7 @@ after 1N (2C) when vs_2c
       shows balanced, strength=slam, H<=4, S<=4
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
       shows balanced, strength=slam_invite
+      sets  ask=quant
   3N  "To play: {game} total points"
       shows strength=game, H<=4, S<=4                   # with five, transfer first
   2N  "Invitational: {invite} total points"

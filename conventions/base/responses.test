@@ -1,5 +1,5 @@
 # Responses to one-level suit openings (SAYC, BBA's Basic-Bridge card).
-# Every hand is a Basic_* corpus deal where we and BBA agree.
+# Every hand is a Basic_* corpus deal; where we differ from BBA the why says so.
 card    Basic-Bridge
 dealer  S
 
@@ -21,7 +21,7 @@ N A854.Q7.K7.QT984      | 1D P    | 2C     | 11+ with longer clubs: 2C before 1S
 N A86.T93.T6432.K2      | 1D P    | 2D     | 7 with five diamonds: raise
 N 643.3.AKT98.KJ94      | 1D P    | 3D     | 11 with five diamonds: limit raise
 N K73.QJ5.AQ93.732      | 1D P    | 2NT    | 12, balanced, no four-card major
-N A8.94.532.AK8632      | 1D P    | 3C     | 11 with six clubs: invitational jump shift
+N A8.94.532.AK8632      | 1D P    | 2C     | 11 HCP + 2 length = 13 total: forcing 2C, too good to invite (BBA 3C; par)
 N 8754.T6.765.KJT5      | 1D P    | P      | 4 HCP
 # ── over 1♥
 N KQ4.84.JT865.K54      | 1H P    | 1NT    | 9, no heart fit, no four spades
@@ -38,17 +38,18 @@ N AJ43.J42.A98.T98      | 1H P    | 2H     | flat 10, three hearts: raise, not 1
 N A8.K862.Q863.J62      | 1H P    | 3H     | 11 support points, four hearts: limit raise
 N KQ75.K62.863.AJ6      | 1H P    | 1S     | 13, three hearts: a new suit first
 N AT752.Q3.AK.A932      | 1H P    | 2S     | 17 with five spades: strong jump shift
-N AK85.8.QT9862.K3      | 1H P    | 3D     | 12 with six diamonds: invitational jump shift
+N AK85.8.QT9862.K3      | 1H P    | 2D     | 12 HCP + 2 length = 14 total: forcing 2D, not an invitation (BBA 3D; par)
 N 64.JT3.KT76.9854      | 1H P    | P      | 4 HCP
 # ── over 1♠
 N Q8.JT8.A982.K852      | 1S P    | 1NT    | 10: 1NT, not a 2/1 on a four-card suit
+N K3.Q84.KJ852.J62      | 1S P    | 1NT    | 10 HCP and five diamonds: 1NT is 6-10 HCP, length does not count (par; constructed hand)
 N J8.AQ72.T32.A762      | 1S P    | 2C     | 11 with four clubs
 N T7.J6.KQ875.AJ62      | 1S P    | 2D     | 11, longer diamonds first
-N .KT9763.AQ98.432      | 1S P    | 2H     | 9 with six hearts
+N .KT9763.AQ98.432      | 1S P    | 3H     | 9 HCP + ten + 2 length = 11 total, six hearts: invitational jump shift (BBA 2H; par)
 N QJ52.K87.T53.J85      | 1S P    | 2S     | 7 with four spades: raise
 N T987.QT2.A52.A84      | 1S P    | 2S     | 10 support points: raise (Rick: 2M is 6-10)
 N AQ962.732.QJ83.6      | 1S P    | 4S     | 9 with five spades and a singleton: preemptive raise
-N T.AKT542.87.A953      | 1S P    | 3H     | 11 with six hearts: invitational jump shift
+N T.AKT542.87.A953      | 1S P    | 2H     | 11 HCP + tens + 2 length = 14 total: forcing 2H (BBA 3H; par)
 N 2.84.76543.J8653      | 1S P    | P      | 1 HCP
 
 # ── Game values with a fit and no side suit: a three-card minor first (BBA)

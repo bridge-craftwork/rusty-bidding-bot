@@ -190,3 +190,79 @@ and corpus-wide they closed `1x (1y) X (P) 2x (P)` (1,235 boards),
   answer, which may be his own suit repeated. A repeat shows six, so
   raising it with four is an eleven-card fit and the rule is generous
   about the level. BBA's sample here is three hands.
+
+## Total points count length (2026-09-23)
+
+Rick: "our rules should have HCP, total points and support points, and
+decide which to use under which circumstances, but total points should
+include length points." `points` is now HCP + ½ per ten + 1 per card
+beyond four, so every band here moved: a six-card suit adds two, and the
+bands (weak to 10, invitational 11-12, game 13+) now read as total
+points. Measured against the old count on this module alone (every
+`points` written as `points-length_points`), the new count is worth
+**+9,968 IMPs** over the corpus: responder's games after 1m-1x-1NT and
+over opener's 2m rebid and new suit, with length counted, are where par
+gains most. So the bands stay in total points and the expectations moved
+with them.
+
+### Rule changes
+
+- **Gaps the new count opened.** With 13+ total points and a long suit
+  some hands matched no rule and passed:
+  - after opener's 1NT, `4M` with six was measured in `suit_points>=13`
+    (HCP + ½ per extra card), so 11 HCP with six hearts (13 total) was
+    too strong for the invitation and too weak for game. It is now
+    `points>=13`, the same measure as the band below it.
+  - 3NT after opener's 1NT, 2m rebid, or second suit at the two level
+    required shortness in a minor (`y<=5`, `x<=2`, `z<=3`). With a minor
+    that is where the game is anyway, so the shape limit now applies only
+    to majors (`| y is C | y is D` and the like).
+  Together +2,040 IMPs (741 boards changed, none of the groups worse by
+  more than 5).
+- **1M-1y-2M: 2NT needs a singleton in opener's suit.** With a doubleton
+  facing six, the raise to three (10-12) is the invitation: an eight-card
+  fit is safer than notrump. +47 IMPs (240 boards).
+
+### Expectations changed (the new call is sound, par agrees)
+
+- `J65.KJ9643.A5.Q7`, 1♣-1♥-1NT: 4♥ (13 total), was 3♥.
+- `AKJ73.Q942.Q.T72`, 1♣-1♠-1NT: 3NT (13½), was 2♥. 2♥ is not forcing;
+  with 13 facing 12-14 game has to be bid. (No forcing way to show the
+  hearts on this card.)
+- `KJT865.J3.J52.A4`, 1♣-1♠-1NT: 3♠ (12½), was 2♠.
+- `A742.KQ9765.73.T`, 1♣-1♥-2♣: 3♥ (11), was 2♥. Measured: keeping this
+  block's own-suit bands in the old count costs 208 IMPs.
+- `87.KQT763.QJ8.A2`, 1♣-1♥-1♠: 3NT (14½), was 3♥.
+- `A85.QJ975..QJ542`, 1♦-1♥-1♠: 2NT (12), was 2♣. See below.
+- `Q843.J6.KT.A9532`, 1♥-1♠-2♦: 2NT (11½), was 2♥.
+- `3.85.QT97.AQ9642`, 1♠-1NT-3♠: 3NT (10½), was pass. Measured: the old
+  count for this 3NT costs 48 IMPs.
+- `T4.AT943.K5.KJ76`, 1♠-2♥-2♠: 3NT (13), was 2NT.
+- `KQ83.K9.Q8763.95`, 1♥-1♠-2♥: still 3♥, now because of the 2NT change.
+
+New cases for the gaps: 1♣-1♦-1NT with six diamonds, 1♣-1♠-2♣ with three
+clubs, 1♦-1♥-2♣ with four clubs, all 13 total: 3NT.
+
+### Tried and rejected
+
+- 2NT over opener's one-level second suit only without a singleton or
+  void (`shortest>=2`), with 2♣ after 1♦-1♥-1♠ widened to 8-12: -326
+  IMPs. Most such hands then passed, and par prefers the invitation.
+- Only a void in opener's first suit barred from that 2NT, 2♣ widened to
+  8-12: -26 IMPs on 16 boards. So `A85.QJ975..QJ542` bids 2NT.
+
+### Numbers
+
+`measure.sh` (corpus / Basic_* / Basic_* uncontested NS), par net IMPs
+against BBA: -182,498 / -2,153 / -1,030 → -180,411 / -2,104 / -993.
+Now: calls 75.3% / 83.3% / 89.1%, identical auctions 14.4% / 32.8% /
+45.8%, same contract 30.5% / 44.1% / 57.4%.
+
+### Open questions
+
+- 2NT with a void in opener's first suit (1♦-1♥-1♠-2NT holding
+  3-5-0-5): par slightly prefers it to a natural 2♣ over 16 boards. Is
+  that a sample accident, or should the 5-5 hand have a forcing call?
+- 5-4 majors with game values after 1♣-1♠-1NT: 3NT now, because 2♥ is
+  not forcing and the Basic card has no checkback. Should a jump to 3♥
+  be natural and forcing there?

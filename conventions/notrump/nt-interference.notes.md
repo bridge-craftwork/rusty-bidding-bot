@@ -126,3 +126,15 @@ an action over 1NT.
   a 1NT opening, so the engine does not know it shows 15+ (BBA calls it
   "Cappelletti, strong" on these cards). The redouble's 6-HCP floor is
   therefore a flat number rather than a count of the deck.
+
+## Length points (2026-09-23)
+
+- `AT9.J6.K2.976532` over their 2♣ (Cappelletti, any six-card suit;
+  Opps_Double_1_NT) is now 8 HCP + ½ + 2 = 10½, game, and bids 3NT; BBA
+  transfers to clubs (2♠). Accepted: by Rick's count it is a game hand.
+  On that one board 3NT takes 7 tricks double-dummy, and BBA's auction
+  ended in 3♦X by West, one down — a single board, not evidence either
+  way. The minor transfer case moved to
+  `AT9.J6.Q2.976532` (9½).
+- The Texas preempt over 2♣ (`A9.JT87432.2.T65`) now reads
+  `suit_strength=signoff`, see `texas-transfers.notes.md`.

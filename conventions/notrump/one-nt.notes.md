@@ -9,12 +9,16 @@ The 1NT opening, responder's natural notrump raises, and opener's answer to
   do not move the range. The card option "1NT may be 1 HCP light"
   (`notrump.one_nt.allow_one_less`) opens a 14 whose extras bring it to 15
   total points.
-- Responder's strength is in **notrump points: HCP + ½ per ten**. A fifth
-  card in a suit does not count at notrump.
+- Responder's strength is in **total points: HCP + ½ per ten + 1 per card
+  beyond four** (Rick, 2026-09-23: "usually the NT opener doesn't count
+  length points, but responder does"). Until 2026-09-23 it was HCP + ½
+  per ten, and a fifth card did not count.
 - Bands are measured against opener's range. Opposite 15–17: sign off 0–7,
   invite 8–9, game 10–15, slam invite (4NT) 16–17, slam (6NT) 18+.
-- Opener accepts 2NT **only when game is certain**: 17 opposite 8–9. That is
-  17 notrump points, so 15 HCP with four tens accepts.
+- Opener accepts 2NT **only when game is certain**: 17 opposite 8–9, in
+  total points (so 15 HCP with four tens accepts, and so does 16 with a
+  five-card suit; see "Length points" below for why opener counts length
+  too).
 - Differences in where a point boundary falls are acceptable; mistakes are
   not. **We do not model BBA's finer valuation: the aim is defensible bids**
   (Rick, 2026-09-21).
@@ -163,3 +167,43 @@ ten it invites on 29 of 34 4-3-3-3 but 19 of 31 4-4-3-2 (at 8 HCP and no
 ten the other way: 6 of 26 against 10 of 16). **Question for Rick**: a
 narrower version (only responder's invite decision, only without tens) is
 possible if he wants it tried.
+
+## Length points (2026-09-23)
+
+`points` now counts length (+1 a card beyond four). What changed here:
+
+- **A long minor with invitational values** (7 HCP and six diamonds is 9
+  total points) had no call once the natural 2NT required `C<=5, D<=5`:
+  the relay is for weak hands only and the `none` treatment has no
+  minor route. With `relay` or `none`, such a hand now bids the natural
+  2NT (`5.K73.QJ9542.J83`). Par cannot choose here — the corpus has no
+  `relay` card, and on the `none` cards 2NT, 3NT and signing off all
+  measured within 10 IMPs of each other — so this is the old design (the
+  natural 2NT) restored for the styles that have nothing else.
+- **Opener answers the quantitative 4NT** (there was no rule: opener
+  passed every 4NT). 4NT shows exactly 16 opposite 15–17, and opener bids
+  6NT with **32 combined**, the same line Rick drew for the direct 6NT: 16
+  or more accepts. The same answer serves the 4NT over our 1NT after a 2♣
+  overcall and over a 2NT opening (`sets ask=quant`). 4NT now also says
+  `H<=4, S<=4`: with five in a major, transfer first and then 4NT
+  (`jacoby-transfers.bid`). Corpus par **+1,303 IMPs**, Basic_* +43;
+  33 combined instead gained 52 less on the corpus and 19 less on Basic_*.
+
+**Opener's count.** Rick expected the 1NT opener not to count length in
+his later decisions. Measured on the invitation answers (1NT–2NT, and
+`asked invite(M)` after a transfer or a Stayman raise), against keeping
+total points:
+
+| opener's count when accepting | corpus par | Basic_* |
+|---|---|---|
+| total points (kept) | — | — |
+| HCP + ½ per ten, no length | −1,269 | −97 |
+| plain HCP | −2,881 | −166 |
+
+So opener keeps total points. **Question for Rick**: is that acceptable,
+or does he want the no-length count for opener regardless?
+
+Also measured, not adopted: accepting 1NT–2NT with **16** (+7 IMPs on the
+corpus, +29 on Basic_*, but BBA declines, Basic_NT board 51, and the gain
+is within noise). With a *fit* opener does accept with 16
+(`jacoby-transfers.notes.md`).

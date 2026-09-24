@@ -8,7 +8,9 @@ module texas-transfers "Texas Transfers"
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
-# points or more even opposite opener's minimum, so 18+ opposite 15-17. With
+# points or more even opposite opener's minimum, so 18+ opposite 15-17,
+# in suit points or in support points (HCP + shortness, the fit being
+# certain with six trumps). With
 # mild slam interest responder transfers at the two level and jumps to game
 # instead (jacoby-transfers.bid), which lets opener bid on.
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
@@ -29,6 +31,15 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       sets  ask=texas(S)
       artificial
 
+  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, tp(H)>=33-partner.points.min
+      sets  ask=texas(H)
+      artificial
+  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, tp(S)>=33-partner.points.min
+      sets  ask=texas(S)
+      artificial
+
 after 1N (P) 4D (P) | (1x) 1N (P) 4D (P) | (1x) P (P) 1N (P) 4D (P)
   4H  "Completes the transfer"
 after 1N (P) 4H (P) | (1x) 1N (P) 4H (P) | (1x) P (P) 1N (P) 4H (P)
@@ -36,6 +47,7 @@ after 1N (P) 4H (P) | (1x) 1N (P) 4H (P) | (1x) P (P) 1N (P) 4H (P)
 
 when answered texas(M)
   4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
+  4N  "Keycard ask in {M}"   shows tp(M)>=33-partner.points.min   sets ask=keycards(M)  artificial
   P   "Game reached"
 
 # Texas over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`).
@@ -60,11 +72,11 @@ after 1N (2C) when vs_2c
   # no values BBA transfers straight to game rather than to the two
   # level, and takes the auction away from them.
   4D  "Preemptive: seven or more hearts, no values"  announce "Transfer"
-      shows H>=7, hcp>=4, strength=signoff
+      shows H>=7, hcp>=4, suit_strength=signoff
       sets  ask=texas(H)
       artificial
   4H  "Preemptive: seven or more spades, no values"  announce "Transfer"
-      shows S>=7, hcp>=4, strength=signoff
+      shows S>=7, hcp>=4, suit_strength=signoff
       sets  ask=texas(S)
       artificial
 

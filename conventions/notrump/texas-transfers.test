@@ -9,5 +9,7 @@ N 8.KQ9732.K94.Q83      | 1NT P            | 4D     | game only (12 suit points)
 N 8.KQ9732.K94.Q83      | 1NT P 4D P 4H P  | P      | game only: pass the completion
 N 8.AQ9732.K94.AKJ      | 1NT P            | 4D     | slam values: 18 suit points, 33 even opposite 15
 N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P  | 4NT    | slam values: keycard
-N 8.AQ9732.K94.AQ8      | 1NT P            | 2D     | 16 suit points: mild slam interest, not Texas
-N 8.AQ9732.K94.AQ8      | 1NT P 2D P 2H P  | 4H     | then jump to game; opener may bid on
+N 82.AQ9732.K94.AQ      | 1NT P            | 2D     | 16 suit points, 17 support points: mild slam interest, not Texas
+N 82.AQ9732.K94.AQ      | 1NT P 2D P 2H P  | 4H     | then jump to game; opener may bid on
+N 8.AQ9732.K94.AQ8      | 1NT P            | 4D     | 15 HCP + 3 for the singleton = 18 support points: slam values
+N 8.AQ9732.K94.AQ8      | 1NT P 4D P 4H P  | 4NT    | then keycard

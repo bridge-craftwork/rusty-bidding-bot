@@ -29,14 +29,16 @@ after 1N (P) 2H (P) | (1x) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2H (P)
 # `strength` bands are measured against what opener has shown: after a
 # 15-17 1NT, invite is 8-9 and game 10-15; after a maximum super-accept the
 # invitational band shrinks, so invitational hands bid game. Notrump
-# decisions use `strength` (HCP + ½ per ten); playing in the major uses
-# `suit_strength` (HCP + ½ per card beyond four).
+# decisions use `strength`, total points (HCP + ½ per ten + 1 per card
+# beyond four, so the fifth card of the major counts); playing in the major
+# uses `suit_strength` (HCP + ½ per card beyond four).
 when answered transfer(M)
   3M  "Sign off in the known fit"              shows suit_strength=signoff
       when partner.M>=4                        # after a 2S or 2NT super-accept
   4M  "Game in the known fit, opposite a maximum"  shows suit_strength=invite
       when partner.M>=4                        # the super-accept is for thin games
   P   "Weak: play here ({signoff} total points)"  shows strength=signoff
+      when maybe partner.M<=3 | partner.last=3{M}   # never pass an artificial super-accept (2S, 2NT)
   2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced, strength=invite
       sets ask=invite(M)
   3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, suit_strength=invite
@@ -58,16 +60,27 @@ when answered transfer(M)
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
       sets forcing=game, ask=new_suit(M)
   4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
+      sets ask=quant_major(M)
   6N  "Slam: {slam} total points, 5 {M}"       shows M=5, balanced, strength=slam
 
-# Opener answers the invitation (2NT with five, 3M with six). Accept only
-# when game is certain; play in the major with an eight-card fit, which is
-# 3+ cards opposite five and 2+ opposite six.
+# Opener answers the invitation (2NT with five, 3M with six; also a raise
+# after Stayman, and other modules' invitations in a suit). Play in the
+# major with an eight-card fit, which is 3+ cards opposite five and 2+
+# opposite six. Without a fit accept only when game is certain (17
+# opposite 8-9); with the fit one point less is enough (16), which par
+# prefers by 1,300 IMPs over the corpus.
 when asked invite(M)
-  4M  "Accepts, in the fit"             shows M>=8-partner.M.min, strength>=game
+  4M  "Accepts, in the fit"             shows M>=8-partner.M.min, points>=24-partner.points.min
   3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
-  3M  "Declines, in the fit"            shows M>=8-partner.M.min, strength<=invite
-  P   "Declines"                        shows strength<=invite
+  3M  "Declines, in the fit"            shows M>=8-partner.M.min, points<=23-partner.points.min
+  P   "Declines"                        shows strength<=invite, (M<8-partner.M.min | points<=23-partner.points.min)
+
+# Opener answers the quantitative 4NT with five in the major: slam with
+# 32 combined, in the major with three-card support.
+when asked quant_major(M)
+  6M  "Accepts, in the fit"             shows M>=3, points>=32-partner.points.min
+  6N  "Accepts, no fit"                 shows M<=2, points>=32-partner.points.min
+  P   "Declines"                        shows points<=31-partner.points.min
 
 # Opener after responder's second suit (game forcing): rebid the major with
 # three-card support, which agrees it below game so that responder can look

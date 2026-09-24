@@ -9,7 +9,9 @@ S AK5.KJ72.Q94.K83      | 1NT P 2C P       | 2H     | four hearts
 S AK52.KJ7.Q94.K83      | 1NT P 2C P       | 2S     | four spades, not four hearts
 S AK5.KJ7.Q942.K83      | 1NT P 2C P       | 2D     | no four-card major
 N KJ82.Q7.K943.J83      | 1NT P 2C P 2S P  | 4S     | 10: game in the fit
-N KJ82.Q7.Q943.J83      | 1NT P 2C P 2S P  | 3S     | 9: invite in the fit
+N KJ82.Q7.Q943.J83      | 1NT P 2C P 2S P  | 4S     | 9 HCP + 1 for the doubleton = 10 support points: game
+N KJ82.Q7.Q943.T83      | 1NT P 2C P 2S P  | 3S     | 8½ total, 9 support points: invite in the fit
+N AQ82.K.KQ943.J83      | 1NT P 2C P 2S P  | 6S     | 15 HCP + 3 for the singleton = 18 support points: slam
 N KJ82.Q7.K943.J83      | 1NT P 2C P 2H P  | 3NT    | four spades, no heart fit: game
 N A852.AT8.KQT.KQ3      | 1NT P 2C P 2S P  | 6S     | 18 in the fit: slam
 N A852.AT8.KQT.KQ3      | 1NT P 2C P 2D P  | 6NT    | 18, no fit: slam in notrump
@@ -19,3 +21,8 @@ dealer  E
 N KJ82.Q7.K943.J83      | 1C 1NT P         | 2C     | Stayman over partner's 1NT overcall
 S AK5.KJ72.Q94.K83      | 1C 1NT P 2C P    | 2H     | four hearts, as over a 1NT opening
 N KJ82.Q7.K943.J83      | 1C 1NT P 2C P 2S P | 4S   | the spade fit, game
+
+# Opener answers the raise: with the four-four fit found, 16 accepts.
+dealer  S
+S KQ5.KJ72.AQ5.J52      | 1NT P 2C P 2H P 3H P | 4H | 16 in the eight-card fit: accept (par)
+S KQ5.KJ72.AQ5.T52      | 1NT P 2C P 2H P 3H P | P  | 15: decline

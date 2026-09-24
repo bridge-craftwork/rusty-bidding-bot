@@ -39,6 +39,7 @@ after 2N (P)
   3N  "To play: {game} total points"       shows strength>=game, H<=4, S<=4
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
       shows balanced, strength=slam_invite
+      sets  ask=quant
   6N  "Slam: {slam} total points"          shows balanced, strength=slam
   P   "Nothing: {signoff} total points"    shows strength=signoff
       priority -10
