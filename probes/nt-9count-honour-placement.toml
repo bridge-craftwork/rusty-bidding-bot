@@ -1,0 +1,19 @@
+# 1NT (15-17) Pass ?: 9 HCP 2-3-4-4 = AT in spades + a king + a queen.
+# Where must the king and queen be for BBA to bid 3NT?
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass"
+scoring = ["MP", "IMP"]
+partner = ["K92.A7.KJ532.A43", "K93.A7.AKJ4.J432", "K92.A7.J532.AKJ4", "K92.A7.AKJ5.J432", "K92.AQ7.AK6.J765", "K93.AJ7.AJ53.K42"]
+our     = ["general.style=bba"]
+hands = [
+  "K hearts, Q clubs    | AT.K86.9764.Q875",
+  "K hearts, Q diamonds | AT.K86.Q764.9875",
+  "K hearts, Q hearts   | AT.KQ6.9764.9875",
+  "K clubs, Q hearts    | AT.Q86.9764.K875",
+  "K diamonds, Q hearts | AT.Q86.K764.9875",
+  "K clubs, Q diamonds  | AT.986.Q764.K875",
+  "K diamonds, Q clubs  | AT.986.K764.Q875",
+  "K clubs, Q clubs     | AT.986.9764.KQ75",
+  "K diamonds, Q diamonds | AT.986.KQ64.9875",
+]

@@ -1,0 +1,7 @@
+# Survey of a 9-count 2-3-4-4 with the minor queen in diamonds, no ten (BBA 2NT at MP).
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass"
+partner = ["K92.A7.KJ532.A43", "K93.A7.AKJ4.J432", "K92.A7.J532.AKJ4", "K92.A7.AKJ5.J432"]
+our     = ["general.style=bba"]
+survey  = "A5.K86.Q764.9875"
