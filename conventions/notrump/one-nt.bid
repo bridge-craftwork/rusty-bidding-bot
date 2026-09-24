@@ -31,9 +31,9 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       # Rick: 17 opposite 15-17 jumps to 6NT (BBA: 10 of 12 hands; 16
       # mostly invites). BBA's choices at 16-17 do not follow controls.
   3N  "To play: {game} total points"
-      shows strength=game
+      shows strength=game, H<=4, S<=4                   # with five, transfer first
   2N  "Invitational: {invite} total points"
-      shows strength=invite
+      shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
       when  minors is not four_way, minors is not four_way_reversed   # 2NT is a transfer
       sets  ask=nt_invite
   3C  "Too strong for 3NT, with six or more clubs"
@@ -70,9 +70,9 @@ after 1N (2C) when vs_2c
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
       shows balanced, strength=slam_invite
   3N  "To play: {game} total points"
-      shows strength=game
+      shows strength=game, H<=4, S<=4                   # with five, transfer first
   2N  "Invitational: {invite} total points"
-      shows strength=invite
+      shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
       when  minors is not four_way, minors is not four_way_reversed
       sets  ask=nt_invite
   3N  "No better call: {game} total points or more"

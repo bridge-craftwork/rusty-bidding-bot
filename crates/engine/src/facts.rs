@@ -18,19 +18,27 @@ pub struct Facts {
     pub excess: i32,
 }
 
-/// How total points are counted, in quarter points. There are two measures:
-/// for notrump, HCP plus `ten` per ten; for a suit contract, HCP plus
-/// `length` per card beyond four in a suit. The defaults (½ each) are what
-/// BBA does when probed hand by hand (see docs/LANGUAGE.md, "Points").
+/// How points are counted, in quarter points. Two measures: total points
+/// (`points`), HCP plus `ten` per ten plus `nt_length` per card beyond four
+/// in a suit; and `suit_points`, HCP plus `length` per card beyond four.
+/// Tens at ½ are what BBA does when probed hand by hand (see
+/// docs/LANGUAGE.md, "Points"). Total points count a full point of length
+/// (Rick, 2026-09-23: total points include length points; +9,718 IMPs
+/// against par over the corpus, where BBA's own count leaves length out).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Valuation {
     pub ten: i32,
     pub length: i32,
+    pub nt_length: i32,
 }
 
 impl Default for Valuation {
     fn default() -> Self {
-        Valuation { ten: 2, length: 2 }
+        Valuation {
+            ten: 2,
+            length: 2,
+            nt_length: 4,
+        }
     }
 }
 
@@ -67,9 +75,9 @@ impl Facts {
         }
     }
 
-    /// Notrump points in quarters: HCP plus tens.
+    /// Total points in quarters: HCP plus tens plus length.
     pub fn points_q(&self, v: Valuation) -> i32 {
-        4 * self.hcp + v.ten * self.tens
+        4 * self.hcp + v.ten * self.tens + v.nt_length * self.excess
     }
 
     /// Suit points in quarters: HCP plus length beyond four.

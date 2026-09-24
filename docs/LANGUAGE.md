@@ -212,21 +212,33 @@ Their values are **ranges**, so a comparison means "known to be true":
 **Partnership totals**, `we.hcp` and `we.keycards(x)`, combine my exact hand
 with partner's range. Example: `we.hcp.min >= 25`.
 
-**Points.** Two measures, kept in quarter points and compared by their
-whole part (`points=8..9` means 8 up to 9¾):
+**Points.** Kept in quarter points and compared by their whole part
+(`points=8..9` means 8 up to 9¾). Rick's model is three measures, with each
+rule choosing the one that fits its decision: HCP, total points, and
+support points.
 
-- `points`, for notrump: HCP plus ½ for each ten.
-- `suit_points`, for a suit contract: HCP plus ½ for each card beyond four.
+- `hcp`: pure HCP. The 1NT opening uses it (15-17 HCP exactly, whatever
+  the tens or length), and so can any rule where length should not count.
+- `points`, total points: HCP plus ½ for each ten plus 1 for each card
+  beyond four. `strength` bands use it.
+- `tp(x)`, support points once a fit in `x` is known (shortness, capped by
+  the trumps held).
+- `suit_points` (HCP plus ½ for each card beyond four) and
+  `hcp+length_points` (HCP plus 1 a card beyond four) remain from earlier
+  rules.
 
-This is what BBA does, found by probing it hand by hand with `rbb probe`
-(the same hand with 0-4 tens; with and without a long suit): tens count at
-notrump and not in a suit contract; length counts in a suit contract and not
-at notrump. Nines and eights showed no effect. The weights are engine
-settings (`Valuation`). `hcp` stays pure HCP: BBA's 1NT is 15-17 HCP
-exactly, whatever the tens or length.
+Probing BBA hand by hand (`rbb probe`: the same hand with 0-4 tens, with
+and without a long suit) showed that it counts tens and not length at
+notrump. We count length anyway (Rick, 2026-09-23: "total points should
+include length points"). Against double-dummy par, over the whole corpus:
+½ a point a card gained 6,526 IMPs, 1 a point gained 9,718; counting a full
+point in `suit_points` as well gained another 2,957 but needs its bands
+reset first. Two variants were tried and rejected on par: a ten only with a
+neighbouring honour (KT, QT, JT; −1,647), and ½ or 1 point off a 4-3-3-3
+(−2,543 / −5,670). The weights are engine settings (`Valuation`).
 
 **Strength** compares with a band: `strength=invite`, `strength>=game`
-(notrump points), or `suit_strength=invite` (suit points). Bands,
+(total points), or `suit_strength=invite` (suit points). Bands,
 weakest first: `signoff`, `invite`, `game`, `slam_invite`, `slam`. Each is my
 total points given partner's range p in whole points (partner's points when
 a call showed points, else partner's HCP), for 25 combined for game and 33
