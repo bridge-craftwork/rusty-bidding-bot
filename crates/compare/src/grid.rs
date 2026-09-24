@@ -44,7 +44,8 @@ pub struct Spec {
     /// `.bbsa` key edits for both sides' cards, "Key=value".
     #[serde(default)]
     pub set: Vec<String>,
-    /// "label | S.H.D.C", or just "S.H.D.C".
+    /// "label | S.H.D.C", or just "S.H.D.C"; "label | hand | partner"
+    /// gives that hand its own partner.
     #[serde(default)]
     pub hands: Vec<String>,
     /// Every single-card exchange between this hand and its opponents.
@@ -228,15 +229,16 @@ pub fn run(spec: &Spec, env: &Env) -> Result<Grid, String> {
         (None, None, false) => {
             let mut out = Vec::new();
             for line in &spec.hands {
-                let (label, h) = match line.split_once('|') {
-                    Some((l, h)) => (l.trim().to_string(), h.trim().to_string()),
-                    None => (line.trim().to_string(), line.trim().to_string()),
+                let parts: Vec<&str> = line.split('|').map(str::trim).collect();
+                let (label, h, own) = match parts.as_slice() {
+                    [h] => (h.to_string(), *h, None),
+                    [l, h] => (l.to_string(), *h, None),
+                    [l, h, p] => (l.to_string(), *h, Some(hand(p, "partner")?)),
+                    _ => return Err(format!("{line:?}: expected label | hand [| partner]")),
                 };
-                let v = hand(&h, &label)?;
-                out.push((
-                    label.clone(),
-                    deal_for(&v, &label, seat, &partners, &mut rng)?,
-                ));
+                let v = hand(h, &label)?;
+                let ps = own.map_or_else(|| partners.clone(), |p| vec![p]);
+                out.push((label.clone(), deal_for(&v, &label, seat, &ps, &mut rng)?));
             }
             (Mode::List, out)
         }

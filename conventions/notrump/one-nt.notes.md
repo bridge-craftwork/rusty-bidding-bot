@@ -323,3 +323,47 @@ defaults. The default accepts 4NT with 16 (Rick: 32 combined).
 **Open question.** BBA's residual (same features, different calls) looks
 like its own evaluation, possibly simulation. More features will not
 close it.
+
+## How BBA values a 9-count opposite 1NT: probing to the bottom (2026-09-24)
+
+Auction: 1NT (15-17, Basic-Bridge) - Pass - ? Responder balanced or
+semi-balanced, no four-card major, 9 HCP: Pass, 2NT or 3NT. Started from
+Basic_NT board 2 (A5.K43.T764.QT65: BBA 3NT, our BBA style 2NT). Rick:
+track it down to 100%, since it shows how BBA values hands generally.
+
+Settled:
+- **Deterministic in responder's 13 cards.** 400 hands, each bid with
+  three different partners and opponents: the same call every time
+  (probes/gen_hands.py, .rbb-cache). Partner's cards, the opponents' cards
+  and vulnerability do not matter.
+- **Low spot cards (7-2) do not matter**: a model with all 52 cards is no
+  better than one with A-8 and lengths.
+- **Suit identity matters.** 2,000 hands bid beside their mirror (diamonds
+  and clubs exchanged): 198 of 2,000 pairs differ at MP, 361 at IMPs.
+  E.g. CQ432 with D9875 bids 3NT, DQ432 with C9875 2NT
+  (probes/nt-9count-queen-spots.toml).
+- **Scoring matters.** At IMPs every 9-count 4-4-3-2 in the small grids
+  bid 3NT and every 4-3-3-3 2NT; at MP the tens decide
+  (probes/nt-9count-tens.toml).
+- On 25,000 random 9-counts at MP (26% game): no ten 7% game, one ten
+  15-16% (bare or honoured alike), two tens 55-79%.
+
+What BBA's rule is not:
+- not HCP + 1/2 per ten with a threshold (the corpus-best simple rule);
+- not additive over suits: a model giving every suit holding (length and
+  A-9, suit by suit) its own value fits 85%, and adding the exact shape
+  does not help;
+- not losing tricks, quick tricks, stoppers, short honours or spot
+  intermediates (none adds anything to the fit).
+
+A flexible model (gradient boosting on each suit's length and A-8) fits
+94.5-95% and rises with data, so the rule is in those features but
+combines suits non-additively: it behaves like several conditions
+together (e.g. enough value *and* the suits the defence will attack held).
+Readable fragments from trees: with two tens, at most seven minor cards,
+a heart honour and at most one jack, 1,049 of 1,055 bid game; nines count
+up; four-four in the minors counts down; honours in the majors count up.
+
+Open, for Rick: which quantities to vary next. The grid tool makes each
+question a spec file and half a second (probes/*.toml); gen_hands.py
+makes bulk sets.
