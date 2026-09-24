@@ -9,6 +9,7 @@
 
 module base "Natural opening bids"
   param  min_open = general.min_hcp_open default 12
+  param  style = general.style
 
 # An opening needs 12 total points: HCP plus one for each card beyond four
 # in every suit (12 flat, 11 with a five-card suit, 10 with a six-card one).
@@ -17,17 +18,43 @@ module base "Natural opening bids"
 # than it passes them: it cost 2,939 agreeing calls and gained 225, so we
 # keep the 12 total points alone.
 # That leaves no gap between a weak two and a one-level opening.
+#
+# bba (probed 2026-09-24, preempts.notes.md): a ten-count with a six-card
+# suit opens at the one level only when the weak two is out (two aces, a
+# major with the ace-king, or a side four-card major with an honour), and
+# then, with the side major, only with two aces or kings among its honours
+# (controls 3+, or two kings). Six clubs and ten HCP pass.
 when opening
   1S  "5+ spades"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, S>=5, S>=H, S>=D, S>=C
+      when  style is not bba
   1H  "5+ hearts"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, H>=5, H>S, H>=D, H>=C
+      when  style is not bba
   1D  "3+ diamonds"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D
+      when  style is not bba
   1C  "3+ clubs"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C
+      when  style is not bba
+  1S  "5+ spades"
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, S>=5, S>=H, S>=D, S>=C, hcp>=11 | S<=5 | H<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
+      when  style is bba
+  1H  "5+ hearts"
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, H>=5, H>S, H>=D, H>=C, hcp>=11 | H<=5 | S<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
+      when  style is bba
+  1D  "3+ diamonds"
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D, hcp>=11 | D<=5 | (H<=3, S<=3) | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
+      when  style is bba
+  1C  "3+ clubs"
+      shows hcp>=10, hcp+length_points>=min_open, hcp<=21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C, hcp>=11 | C<=5
+      when  style is bba
   P   "No opening bid"
       shows hcp<=min_open-1, hcp+length_points<=min_open-1 | hcp<=9
+      priority -10
+  P   "No opening bid: ten HCP and a six-card suit that does not open"
+      shows hcp=10, longest=6
+      when  style is bba
       priority -10
 
 # Third seat may open light with a good four-card major; fourth seat opens

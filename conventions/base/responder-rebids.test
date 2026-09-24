@@ -98,3 +98,12 @@ N T98653.92.A83.A7      | 1C 1D 1S 2D P P     | 2S     | six spades: worth one m
 # ── Rick: 11-12 with three trumps bids a new suit, then jumps in opener's major
 N AQ94.K62.863.QJ6      | 1H P 1S P 1NT P  | 3H     | 11-12, three hearts: invitational jump raise
 N AQ94.K62.863.QJ6      | 1H P 1S P 2C P   | 3H     | 11-12, three hearts: invitational jump raise
+
+# ── The BBA treatment (general.style=bba): see responder-rebids.notes.md,
+# "BBA treatment (2026-09-24)"
+card    Basic-Bridge general.style=bba
+dealer  S
+N A84.K98.T32.K853      | 1S P 2S P 3S P   | 4S     | bba: 10 HCP: accepts the game try (Basic_Major 187)
+N J72.A52.J86.K876      | 1S P 2S P 3S P   | P      | bba: flat 9: declines (Basic_Responses 402)
+N T865.4.QT4.A9765      | 1S P 2S P 3S P   | 4S     | bba: four trumps and a singleton: accepts (Basic_Major 347)
+N 62.T863.963.AKT2      | 1D P 1H P 2D P   | 3D     | bba: 7 and three diamonds: raises opener's six (Basic_Openers_Rebid 441)

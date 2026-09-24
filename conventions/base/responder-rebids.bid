@@ -17,6 +17,7 @@
 module responder-rebids "Responder's second call"
   needs  rebids
   param  nmf = other_conventions.new_minor_forcing.play default false
+  param  style = general.style
 
 # ── Opener rebid 1NT (12-14) ─────────────────────────────────────────
 after 1x (P) 1y (P) 1N (P)
@@ -61,6 +62,8 @@ after 1x (P) 1y (P) 2x (P)
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
   3x  "Raise: 2+ {x}, 10-12"              shows x>=2, points=10..12   sets ask=invite(x)
+  3x  "Raise (BBA): 3+ {x}, 7-9, to compete"  shows x>=3, points=7..9   sets ask=signoff
+      when  style is bba, x is C | x is D  # BBA raises opener's six-card minor on 7
   2N  "Invitational: 11-12"                shows points=11..12, x<=1, y<=5  sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, x<=2 | x is C | x is D
 after 1M (P) 1y (P) 2M (P)
@@ -208,7 +211,17 @@ after 1M (P) 3M (P) 3N (P)
 # ── After opener's invitation over a raise ───────────────────────────
 after 1M (P) 2M (P) 3M (P)
   4M  "Accepts: top of the raise"          shows tp(M)>=9
+      when  style is not bba
   P   "Declines"                           shows tp(M)<=8
+      when  style is not bba
+  # BBA accepts with 10 HCP, or four trumps and a singleton; a flat 9
+  # usually declines.
+  4M  "Accepts (BBA): 10 HCP, or four trumps and a singleton"
+      shows hcp>=10 | (M>=4, shortest<=1)
+      when  style is bba
+  P   "Declines (BBA)"
+      when  style is bba
+      priority -5
 
 # ── After a two-over-one and opener's jump rebid (6+, 16-18) ─────────
 after 1M (P) 2x (P) 3M (P) when x is not M

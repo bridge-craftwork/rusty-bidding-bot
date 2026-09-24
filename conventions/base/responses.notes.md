@@ -152,14 +152,96 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 - 2026-09-23: two-level new suit on 10 HCP and a five-card suit when a
   one-level major is available (see "Total points count length").
 
-## Treatments (2026-09-24)
+## BBA treatment (2026-09-24)
 
-The default is Rick's raise structure (above). `general.style = bba` keeps
-the structure the rules had before his ruling, which was tuned to agree
-with BBA: 2M on 6-9 support points, 3M on 10-12 with three or four trumps
-(with three hearts and four spades, 1♠ first), 1♠ over 1♥ with 10+
-support points. It is not a probed model of BBA: on Basic_Major boards 45
-and 65 BBA raised to 2♥ with 10. On Basic_*, with the BBA style, it adds
-0.9 points of identical auctions and 0.2 of same contract against the
-default raises. The default stands because it is Rick's ruling; against
-par it cost 116 IMPs on the corpus (see above).
+The default is Rick's raise structure (above) and stays. `general.style =
+bba` now plays a probed model of BBA's responses to 1M; it replaces the
+first `bba` treatment, which was the pre-ruling structure tuned for
+agreement and never probed (BBA raised to 2♥ with 10 on Basic_Major 45 and
+65, which that model bid 1♠).
+
+**Probes** (`rbb probe`, Basic-Bridge both sides, dealer S, None, MP;
+responder North after `1S Pass` or `1H Pass`; honours placed as A♣, K♥,
+Q♦, K♠, ... so each row adds one honour; no tens):
+
+| Shape (♠-♥-♦-♣) over 1♠ | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|---|---|---|---|---|---|---|---|
+| 3-3-3-4 (3 trumps, flat) | 2♠ | 2♠ | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ |
+| 3-4-2-4 (doubleton Qx) | Pass | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ | 2♣ |
+| 3-4-1-5 | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ | 3♠ | 2♣ |
+| 4-3-3-3 | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ | 3♠ | 2♣ |
+| 4-3-2-4 | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ | 3♠ | 2♣ |
+| 4-4-1-4 | 2♠ | 2♠ | 4♠ | 4♠ | 4♠ | 4♠ | 2♣ |
+| 5-3-3-2 | 2♠ | 2♠ | 2♠ | 3♠ | 3♠ | 2♦ | |
+| 5-3-4-1 | 4♠ | 4♠ | 4♠ | 4♠ | 4♠ | 2♦ | |
+| 5-4-4-0 (from 4) | 4♠ | 4♠ | 4♠ | 4♠ | 4♠ | 2♦ | |
+
+Over 1♥ the same shapes give the same answers (3-4-1-5: 4♥ from 7 with
+the five-card club suit). With three hearts and four spades: 2♥ up to 9-10,
+3♥ on 10 with a doubleton, 1♠ from 11 (from 10 with five spades); with
+four hearts BBA never bids 1♠, and with 12 it bids a three-card minor.
+
+- **Tens count for nothing** in a raise: `432.K32.QJ2.AT32` and the same
+  hand with three tens both bid 2♠; 8-counts with one to three tens all 2♠.
+- **Honour placement matters** and is not modelled: a queen or jack in
+  trumps upgrades (`J432.K32.Q2.A432` 10 → 4♠, `Q432.K32.Q2.A432` 11 →
+  2♣, but `K432.Q32.Q2.A432` 11 → 3♠); an ace in a short side suit
+  upgrades (`K972.86.A65.K874` 4♠, `K972.86.K65.A874` 3♠); an honour in
+  the doubleton does not count as shortness (`432.K432.Q2.A432` 9 → 2♠,
+  where the corpus hands with a small doubleton and 9 bid 3♠).
+- BBA's 4♠ is labelled "preemptive, 4 to 8 total points" by
+  `--all-meanings`, but it is bid on 8-10 HCP with four trumps and a
+  singleton: a hand worth game that is short of the HCP to force.
+
+**Corpus** (Basic_*, raises with 3+ trumps, 10-12 HCP): with four trumps
+and 11 HCP BBA bids a new suit (5 of 5 over 1♠, 7 of 12 over 1♥), not the
+limit raise the probes gave for honour-light hands; with three trumps and
+11 it is half and half (7 new suit, 7 3♠).
+
+**The model** (`responses.bid`, rules under `when style is bba`):
+
+- 2M: three trumps and 6-10 HCP flat, or 6-8 with a doubleton or
+  shorter; four trumps and 5-8 HCP (without the shortness that makes 4M).
+- 3M: three trumps and 11-12 flat, or 9-11 with a doubleton or shorter;
+  four trumps and 9-10 (not the 4M hands below).
+- 4M: four trumps and a singleton or void with at most 10 HCP (`tp(M) +
+  M >= 15`: 8 HCP with four trumps, 7 with five); or 9-10 with a doubleton
+  and four controls or a five-card suit.
+- A new suit, forcing: 11 HCP with four trumps, 12 with three and a
+  doubleton or shorter, else 13 (the three-card minor as before). Over
+  1♥ with three hearts and four spades: 1♠ from 11, from 10 with five
+  spades or a doubleton, and with six spades; 3♥ below that.
+- 1♠-2♥ on 10 HCP and five hearts (probes: 10 HCP five hearts bids 2♥
+  over 1♠ whatever the shape; a minor needs 11, `2.KJ2.K5432.K432` 1NT).
+- The default's preemptive 4M (5+ trumps, 5-9) is off under `bba`.
+
+**Measured** (`--set general.style=bba`; before = the old `bba`
+treatment, after = this one plus the rebid treatments in rebids.bid and
+responder-rebids.bid):
+
+| | calls | identical auctions | same contract | par (IMPs vs BBA) |
+|---|---|---|---|---|
+| corpus, before | 75.7% | 16.0% | 31.2% | −185,676 |
+| corpus, after | 75.8% | 16.8% | 31.8% | −187,508 |
+| Basic_*, before | 84.1% | 37.3% | 46.8% | −2,298 |
+| Basic_*, after | 84.6% | 40.4% | 48.6% | −2,193 |
+| Basic_* NS, before | 90.5% | 52.6% | 61.6% | −1,243 |
+| Basic_* NS, after | 91.2% | 57.1% | 64.4% | −1,162 |
+
+Responder's first call on Basic_* uncontested NS: after 1♠ 462 → 496 of
+538 agree (85.9% → 92.2%), after 1♥ 334 → 356 of 396 (84.3% → 89.9%).
+The divergences named for this work: 1♠-2♠/3♠ 14 → 2, 1♠-4♠/3♠ 11 → 1,
+1♥-2♥/1♠ 8 → 0, 1♥-4♥/3♥ 7 → 2, 1♠-2♥/1NT 5 → 0. The default is
+unchanged: every one of the 170,161 corpus boards bids the same with and
+without these rules (corpus −173,271, Basic_* −1,926, Basic_* NS −838).
+
+**Where BBA still differs under `bba`** (each a handful of boards):
+three trumps and 9 with an honour doubleton (`AJT94.K62.863.J6`, Basic_Major
+45: BBA 2♥, the model 3♥); the honour-placement cases above; 4♠ on
+three trumps and a seven-card side suit (`A75.AT98643.73.2`); 11 HCP
+three-trump hands that BBA sends through a new suit.
+
+**Where our default differs and why**: Rick's ruling of 2026-09-23 (2M
+6-10 support points, a limit raise only with four trumps) is the default.
+BBA's 3♠ with a flat 9 and four trumps, and its 4♠ on 8-10 with a
+singleton, are not in it.

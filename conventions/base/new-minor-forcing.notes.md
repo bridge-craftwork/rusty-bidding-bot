@@ -22,3 +22,10 @@ minimum 2NT with an invitation. NMF outranks a natural 2NT or 3NT.
 - Opener's jump answers with a maximum and a fit (3M), and 2 of opener's
   minor as a minimum with five.
 - Two-way NMF and NMF after a 2NT rebid (their own card fields).
+
+## BBA treatment (2026-09-24)
+
+No `bba` rules. On Basic_* uncontested NS under `--set general.style=bba`
+no divergence after `1x P 1y P 1NT P` involves the new-minor ask (the
+largest there are 1♦-1♠-1NT: BBA 2♠ where we pass, 3 of 44; BBA pass or
+2♣ where we bid 2♣ or 2NT, 2 each), so there was nothing to model.

@@ -67,9 +67,27 @@ N K73.QJ5.AQ93.K32      | 1D P    | 2NT    | 15, balanced, no major: game forcin
 N K73.QJ5.AQ93.KQ2      | 1D P    | 3NT    | 17, balanced: 3NT is 16-17 in this treatment
 N K73.QJ5.AQ93.732      | 1D P    | 2C     | 12, balanced: a new suit first, then 2NT
 
-# ── The BBA raise treatment (general.style=bba): 6-9 raise, 10-12 limit
-# raise with three or four trumps
+# ── The BBA treatment (general.style=bba), probed with bba-cli (see
+# responses.notes.md, "BBA treatment (2026-09-24)"). Constructed hands
+# are probes; the others are Basic_* deals where BBA bids the same.
 card    Basic-Bridge general.style=bba
-N 932.854.62.AKQJ2      | 1H P    | 3H     | bba: 10 + doubleton = 11 support points, three hearts: limit raise
-N T987.QT2.A52.A84      | 1S P    | 3S     | bba: 10 support points, four spades: limit raise
+dealer  S
+# three trumps: 2M up to 10 flat, 3M 11-12 flat or 9-11 with shortness
+N 432.K32.QJ2.A432      | 1S P    | 2S     | bba: three trumps, flat 10: raise (probe)
+N 432.KQ2.Q32.A432      | 1S P    | 3S     | bba: three trumps, flat 11: limit raise (probe)
+N 962.Q43.AQJ97.53      | 1S P    | 3S     | bba: three trumps, 9 and a doubleton: limit raise (Basic_Responses 28)
+N 932.854.62.AKQJ2      | 1H P    | 3H     | bba: three trumps, 10 and a doubleton: limit raise
 N KT52.J86.KJ4.942      | 1H P    | 2H     | bba: 8 with three hearts: raise
+# four trumps: 2M up to 8, 3M 9-10, 4M with a singleton, a new suit from 11
+N 5432.K32.J32.A32      | 1S P    | 2S     | bba: four trumps, 8: raise (probe)
+N 5432.K32.Q32.A32      | 1S P    | 3S     | bba: four trumps, 9: limit raise (probe)
+N T987.QT2.A52.A84      | 1S P    | 3S     | bba: four trumps, 10: limit raise (Basic_Major 23)
+N 5432.K432.J.A432      | 1S P    | 4S     | bba: four trumps, singleton, 8: game (probe)
+N 5432.K432.2.A432      | 1S P    | 2S     | bba: four trumps, singleton, 7: raise (probe)
+N 9743.J5.KQ8.AJT2      | 1S P    | 2C     | bba: four trumps and 11: a new suit (Basic_Major 185)
+# over 1H with three hearts and four spades: 1S from 11, or 10 and a doubleton
+N K32.5432.J32.A32      | 1H P    | 2H     | bba: 8, three spades and four hearts: raise (probe)
+N AJ43.J42.A98.T98      | 1H P    | 2H     | bba: flat 10, three hearts: raise, not 1S (Basic_Major 65)
+N KQ32.432.Q32.A32      | 1H P    | 1S     | bba: 11 with three hearts: 1S first (probe)
+# a two-level new suit: ten HCP and five hearts are enough over 1S
+N Q.K9653.KQT9.964      | 1S P    | 2H     | bba: 10 HCP, five hearts: 2H, not 1NT (Basic_Responses 178)

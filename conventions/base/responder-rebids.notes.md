@@ -266,3 +266,26 @@ Now: calls 75.3% / 83.3% / 89.1%, identical auctions 14.4% / 32.8% /
 - 5-4 majors with game values after 1♣-1♠-1NT: 3NT now, because 2♥ is
   not forcing and the Basic card has no checkback. Should a jump to 3♥
   be natural and forcing there?
+
+## BBA treatment (2026-09-24)
+
+Two rules under `when style is bba` (module param `style =
+general.style`); the default is unchanged.
+
+- **Accepting opener's 3M game try** (1M-2M-3M): BBA accepts with 10 HCP
+  or with four trumps and a singleton, and declines a flat 9 (Basic_*
+  uncontested: `A84.K98.T32.K853` 4♠, `875.QJ8.Q64.A752` 4♠,
+  `J72.A52.J86.K876` and `953.986.J86.AKJ2` pass, `T865.4.QT4.A9765` and
+  `9732.KJ7.J.QJ952` 4♠, `Q65.2.K943.KT632` three trumps pass). Rule: 4M
+  with `hcp>=10 | (M>=4, shortest<=1)`, else pass. 1♠-2♠-3♠: 8 → 12 of 13
+  agree.
+- **Raising opener's rebid minor** (1♦-1♥-2♦): BBA raises to 3♦ with 7-9
+  and three or more diamonds (4 of 7 such hands; the passes had two
+  diamonds or 6 HCP). Rule: 3x with 3+ and 7-9 points, `ask=signoff`.
+
+Responder's second call overall (Basic_* uncontested NS): 72.2% → 72.6%
+(1,560 positions). What is left is spread thin (no divergence above 5
+boards): 1♠-2♥-2♠ BBA 3♠ with 13-15 where we bid 4♠ (4 of 20; BBA's 3♠
+is forcing, and opener has no rule after it, so it is not modelled);
+1♥-1♠-3♥ BBA pass where we bid 3NT (3 of 17); 1♥-1♠-2♦ BBA 4♥ where we
+bid 3♥ (3 of 24).

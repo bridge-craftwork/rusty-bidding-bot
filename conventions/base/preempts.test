@@ -34,3 +34,24 @@ S J8.6.AQ9543.K762      |            | 2D     | bba: 10 HCP six diamonds (Basic_
 S 8752.AKQT73.T.T6      |            | 2H     | bba: a side four-card spade suit does not stop it
 card    Basic-Bridge
 S J8.6.AQ9543.K762      |            | 1D     | default: 10 HCP and six diamonds opens 1D
+
+# ── BBA's ten-counts and side majors (probed 2026-09-24, preempts.notes.md)
+card    Basic-Bridge general.style=bba
+dealer  S
+vul     None
+S Q2.AKJ862.T95.93      |            | 1H     | bba: ten with the heart ace-king opens at the one level
+S K2.AQJ862.T95.93      |            | 2H     | bba: ten without the ace-king is a weak two
+S 92.AQ8762.A95.93      |            | 1H     | bba: two aces open at the one level
+S AK2.QJ8762.95.93      |            | 2H     | bba: a side ace-king does not count
+S 92.Q2.AKJ862.T93      |            | 2D     | bba: the diamond ace-king is still a weak two
+S A2.92.AQ8762.T93      |            | 1D     | bba: two aces open 1D
+S 9.KJ82.AQ8762.93      |            | 1D     | bba: honoured side major, an ace and a king: 1D
+S 9.QJ82.AQ8762.J3      |            | P      | bba: honoured side major, one ace and no king: pass
+S 9.9832.AQ8762.KJ      |            | 2D     | bba: a side major without an honour is no bar
+S 9.J982.AQ8762.Q3      |            | P      | bba: nine with a jack in the side major: no weak two
+S 9.K982.93.AK8762      |            | P      | bba: ten with six clubs passes
+S 9.84.AQT654.8642      |            | 3D     | bba: six-four in the minors, not vulnerable: 3D
+S 9.84.8642.AQT654      |            | 3C     | bba: six clubs and four diamonds: 3C
+S 9.84.AQT654.K642      |            | 2D     | bba: nine with six-four: 2D
+vul     All
+S 9.84.AQT654.8642      |            | 2D     | bba: vulnerable, six-four opens 2D

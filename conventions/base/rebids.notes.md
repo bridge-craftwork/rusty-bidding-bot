@@ -409,3 +409,111 @@ four, as the opening does (`hcp+length_points`), not the half point of
 `suit_points`: BBA's jumps in Basic_* are 13-17 HCP with six or seven
 hearts. Measured: +239 IMPs vs par on the corpus, +15 on Basic_*. One
 case changed: `T32.AKQ732.A7.A4` after 1♥-2♣ now bids 4♥, not 3♥.
+
+## BBA treatment (2026-09-24)
+
+Rules under `when style is bba` (module param `style = general.style`);
+the default is unchanged (every corpus board bids the same with and
+without them). Probes: `rbb probe`, Basic-Bridge both sides, dealer S,
+None, MP, opener South with the auction forced up to his rebid; honours
+added one at a time, no tens.
+
+**Raising responder's major** (`1♦-1♥`, four hearts):
+
+| Opener (♠-♥-♦-♣) | 13 | 14 | 15 | 16 | 17 | 18 |
+|---|---|---|---|---|---|---|
+| 1-4-5-3 (small singleton ♠) | 2♥ | 2♥ | 4♥ | 4♥ | 4♥ | 4♥ |
+| 2-4-5-2 | 2♥ | 2♥ | 3♥ | 3♥ | 4♥ | 4♥ |
+| 3-4-5-1 (singleton ♣K) | 2♥ | 3♥ | 3♥ | 3♥ | 3♥ | 4♥ |
+| 3-4-4-2 | 2♥ | 2♥ | 3♥ | 3♥ | 3♥ | 4♥ |
+| 1-4-4-4 (small singleton ♠) | 2♥ | 2♥ | 4♥ | 4♥ | 4♥ | 4♥ |
+
+In the corpus (Basic_*, 1♦-1♥, 1♣-1♥, 1♣-1♠, 1♦-1♠, 1♥-1♠) BBA bids 3M
+with 16-17 and a singleton honour and with 16 and a small singleton about
+as often as 4M (`AJ74.A742.4.AKT8` 3♥, `AK94.KQ94.A983.7` 4♥), and 2♥
+with 13-14 and 4-4-4-1. What fits the corpus best: 2y up to 14 HCP plus a
+point a card beyond four (`hcp+length_points`, no shortness); 3y 15-17 on
+the same count; 4M with 18 HCP, or 17 and 19 support points. The probes'
+jump to game with 15 and a small singleton in the unbid major is not
+modelled (it would gain 3 corpus calls and lose 2).
+
+**Rebidding a six- or seven-card major** (`1♥-1♠`): six hearts 12-14 2♥,
+15-18 3♥; seven hearts 4♥ from 13 (2-7-2-2) or 15 (1-7-3-2). Corpus: six
+hearts, no four-card side suit and 16-18 HCP bids 3♥ 15 times of 15 (we
+bid 4♥ on 17-18, `hcp+length_points >= 19`); seven and 13-15 bids 4♥.
+After 1M-1NT a six-card major and 16-18 bids 3M 19 times of 19. Rules: 3x
+6+ and 15-18 HCP; 4M with seven and 13+, or six and 19+ (after a
+one-level response, a 2/1 and 1NT).
+
+**1♣-1♦** (BBA's 1♦ is "Walsh style", and `--all-meanings` gives opener's
+1NT as "balanced, 11 to 16 total points, 2-4 cards in each major"):
+
+| Opener | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 |
+|---|---|---|---|---|---|---|---|---|
+| 4-3-1-5, 3-4-1-5, 4-2-2-5, 4-1-3-5 | 1NT | 1NT | 1NT | 1NT | 1NT | 1NT | 2M | 2M |
+| 4-3-0-6, 4-1-2-6, 4-2-1-6 | 2♣ | 2♣ | 2♣ | 2♣/3♣ | 3♣ | 3♣ | 2M | 2M |
+| 4-1-4-4 | 1NT | 2♦ | 1NT | 1NT | 3♦ | 3♦ | 2♠ | 2♠ |
+| 1-4-4-4 | 2♦ | 2♦ | 2♦ | 2♦ | 3♦ | 3♦ | 2♥ | 2♥ |
+
+In the corpus BBA's 1♥ here always has both majors (13 of 13), and 1NT
+covers 12-17 with one four-card major (13 hands where we bid the major).
+Rules: 1NT 12-17 with one four-card major, clubs no longer than five and
+no singleton unless clubs are five; 1♥ only with both majors; 1♠ never;
+2M jump shift from 18 HCP.
+
+**1♦-1M with 4-4 in the minors** (balanced, no four-card major): 1NT
+with 12-13 (15 of 15 corpus hands), 2♣ with 14 (20 of 20, with or
+without tens). Rule: 1NT 12-13 balanced with
+four clubs, priority 1 over 2♣.
+
+**After 1M-1NT**: BBA's jump shift into hearts (1♠-1NT-3♥) is 17 HCP with
+5-4 (4 of 4) or 15-17 with 6-4 (4 of 4); with 15-16 and 5-4 it bids 2♥
+(3 of 3). Into a minor it bids 2m with 5-4 and 15-17 (27 of 27 after
+1♠-1NT and 1♥-1NT) and jumps with 18 or more (8 of 8). Rules (priority 1): 3♥ with 17+ suit points, 3♣/3♦ with 18+;
+4♥ with 5-5 in the majors and 16+ (2 hands).
+
+**Opposite a single raise** (1♠-2♠, probes):
+
+| Opener | 13 | 14 | 15 | 16 | 17 | 18 |
+|---|---|---|---|---|---|---|
+| 5-3-3-2 | P | P | P | 3♠ | 2NT | 4♠ |
+| 5-4-2-2 | P | P | P | 3♠ | 4♠ | 4♠ |
+| 5-4-3-1 (singleton ♣K) | P | P | P | 3♠ | 4♠ | 4♠ |
+| 5-3-4-1 (singleton ♣K) | P | P | P | 3♠ | 4♠ | 4♠ |
+| 6-3-2-2 | P | 3♠ | 3♠ | 4♠ | 4♠ | 4♠ |
+
+Corpus: BBA passes every 15-count with five trumps (16 of 16, singletons
+and 5-5 included), where our tp-based try asked with 17-18 support points;
+16 with a small singleton or six trumps bids game. Rules: pass up to 15
+(13 with six trumps), 3M on 16 (14-15 with six), 4M on 17, or 16 with six
+trumps or 19 support points. The 1m-2m rules are unchanged.
+
+**Measured** (Basic_* uncontested NS, `--set general.style=bba`, calls
+agreeing at opener's rebid, before → after):
+
+| Auction | positions | before | after |
+|---|---|---|---|
+| 1♣-1♦ | 143 | 115 (80.4%) | 128 (89.5%) |
+| 1♣-1♥ | 109 | 98 (89.9%) | 100 (91.7%) |
+| 1♣-1♠ | 98 | 87 (88.8%) | 89 (90.8%) |
+| 1♦-1♥ | 241 | 217 (90.0%) | 230 (95.4%) |
+| 1♦-1♠ | 143 | 123 (86.0%) | 131 (91.6%) |
+| 1♥-1♠ | 127 | 100 (78.7%) | 116 (91.3%) |
+| 1♠-1NT | 157 | 132 (84.1%) | 153 (97.5%) |
+| 1♥-1NT | 51 | 43 (84.3%) | 48 (94.1%) |
+| 1♠-2♠ | 80 | 55 (68.8%) | 71 (88.8%) |
+| 1♥-2♥ | 59 | 42 (71.2%) | 53 (89.8%) |
+
+All of opener's rebids after an uncontested one-level response: 79.1% →
+85.5% (1,747 positions). Totals with the response treatment are in
+responses.notes.md.
+
+**Our default against BBA's, by par** (each BBA rule made the default in
+a scratch copy, corpus net IMPs vs BBA, default −173,271; Basic_* −1,926):
+
+- 1♦-1M 1NT with 4-4 minors and 12-13: corpus −172,937 (**+334**),
+  Basic_* −1,904 (+22). **Question for Rick**: adopt it as the default?
+- 1♣-1♦ as BBA (1NT 12-17 with one major, jump shift 18): corpus −173,839
+  (−568), Basic_* −1,901 (+25). Not better.
+- 1M-2M as BBA (pass to 15, 3M on 16): corpus −175,070 (−1,799), Basic_*
+  −1,943 (−17). Our default is better.

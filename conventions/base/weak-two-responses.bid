@@ -9,12 +9,13 @@ module weak-two-responses "Responses to a weak two"
   needs  preempts
   param  ask2nt = two_level.weak_two_2nt_response default feature
   param  two_c  = two_level.two_clubs.meaning default strong
+  param  style  = general.style
 
 # The weak twos are 2♦, 2♥ and 2♠: 2♣ is the strong opening unless the
 # card says it is natural. Without the guard, responder's 2NT over a
 # strong 2♣ was read as the weak-two ask and opener answered with a
 # feature (95 boards in the Basic_* scenarios, -478 IMPs).
-after 2x (P) when x is not N, x is not C | two_c is natural
+after 2x (P) when x is not N, x is not C | two_c is natural, style is not bba
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=15
       sets  forcing=round, ask=weak_two(x)
@@ -25,14 +26,68 @@ after 2x (P) when x is not N, x is not C | two_c is natural
   P   "No interest"                            shows hcp<=14
       priority -5
 
+# bba (probed 2026-09-24, weak-two-responses.notes.md). BBA reads a weak
+# two as lighter when we are not vulnerable, and lightest at favourable:
+# game with three-card support from 15 vulnerable, 16 at equal
+# vulnerability not vulnerable (15 with four), 18 at favourable, 13 with
+# five; 5D with three-card support and 18-20. The 2NT ask: over a major
+# from 13 with support when vulnerable (and with four at love all), from
+# 14 with a doubleton unless at favourable; otherwise from 15 with two or
+# more, 18 with a singleton, and always with 20. The
+# preemptive raise stops at 11. A new major is natural and forcing: over
+# 2D six cards from 13, five with exactly 14; over 2H five
+# spades from 13 with at most one heart (with two, 2NT).
+after 2x (P) when x is not N, x is not C | two_c is natural, style is bba
+  2N  "Asks: how good is the weak two?"   alert
+      shows hcp>=13
+      when  hcp>=20 | (x>=2, hcp>=15) | (x<=1, hcp>=18) | (x is H | x is S, x=2, hcp>=14, vul | !they.vul) | (x is H | x is S, x>=3, vul) | (x is H | x is S, x>=4, !they.vul)
+      sets  forcing=round, ask=weak_two(x)
+      artificial
+  3x  "Preemptive raise: four-card support, up to 11"    shows x>=4, hcp<=11
+  4x  "Game in the fit"                        shows x>=3, hcp=15..19
+      when  x is H | x is S
+      when  vul | (!they.vul, hcp>=16 | x>=4) | hcp>=18
+  4x  "Game with five-card support"            shows x>=5, hcp=13..19
+      when  x is H | x is S
+  5x  "Game in diamonds: three-card support, 18-20"   shows x>=3, hcp=18..20
+      when  x is D
+  2H  "Natural and forcing: six hearts from 13, five from 14"   shows H>=5, hcp>=13
+      when  x is D, H>=6 | hcp=14
+      sets  forcing=round
+  2S  "Natural and forcing: six spades from 13, five from 14"   shows S>=5, hcp>=13
+      when  x is D, S>=6 | hcp=14
+      sets  forcing=round
+  2S  "Natural and forcing: five spades, 13+, at most one heart"   shows S>=5, hcp>=13, H<=1
+      when  x is H
+      sets  forcing=round
+  P   "No interest"                            shows hcp<=19
+      priority -5
+
+# bba: opener after a new suit. Raise with three, else rebid the suit.
+after 2x (P) 2y (P) when x is not C | two_c is natural, style is bba
+  4y  "Three-card support and a maximum"   shows y>=3, hcp>=9
+      when  y is H | y is S
+  3y  "Three-card support"                 shows y>=3
+  3x  "No fit: rebid the suit"             shows y<=2
+
 # ── Opener's answer to 2NT ───────────────────────────────────────────
-when asked weak_two(t), ask2nt is feature
+when asked weak_two(t), ask2nt is feature, style is not bba
   3C  "Feature: the club ace or king, maximum"     shows has(A,C) | has(K,C), hcp>=7   when t is not C
   3D  "Feature: the diamond ace or king, maximum"  shows has(A,D) | has(K,D), hcp>=7   when t is not D
   3H  "Feature: the heart ace or king, maximum"    shows has(A,H) | has(K,H), hcp>=7   when t is not H
   3S  "Feature: the spade ace or king, maximum"    shows has(A,S) | has(K,S), hcp>=7   when t is not S
   3{t}  "No feature to show"                       shows hcp<=10
         priority -1
+
+# bba: a maximum is 8-10; it shows a side ace, king (not singleton) or
+# queen third, and bids 3NT without one. A minimum (5-7) rebids the suit.
+when asked weak_two(t), ask2nt is feature, style is bba
+  3C  "Maximum, 8-10, with a club honour (A, Kx, Qxx)"      shows hcp>=8, has(A,C) | (has(K,C), C>=2) | (has(Q,C), C>=3)   when t is not C
+  3D  "Maximum, 8-10, with a diamond honour (A, Kx, Qxx)"   shows hcp>=8, has(A,D) | (has(K,D), D>=2) | (has(Q,D), D>=3)   when t is not D
+  3H  "Maximum, 8-10, with a heart honour (A, Kx, Qxx)"     shows hcp>=8, has(A,H) | (has(K,H), H>=2) | (has(Q,H), H>=3)   when t is not H
+  3S  "Maximum, 8-10, with a spade honour (A, Kx, Qxx)"     shows hcp>=8, has(A,S) | (has(K,S), S>=2) | (has(Q,S), S>=3)   when t is not S
+  3N  "Maximum, 8-10, no side honour to show"               shows hcp>=8
+  3{t}  "Minimum, 5-7"                                      shows hcp<=7
 
 when asked weak_two(t), ask2nt is ogust
   3C  "Ogust: minimum, poor suit"         shows hcp<=6, quality(t)<=1   artificial
@@ -41,8 +96,30 @@ when asked weak_two(t), ask2nt is ogust
   3S  "Ogust: maximum, good suit"         shows hcp>=7, quality(t)>=2   artificial
   3N  "Ogust: the top three honours"      shows quality(t)=3
 
+after 2x (P) 2N (P) 3N (P) 4x (P) when x is C | x is D, style is bba
+  5x  "A shortness: game in the minor"   shows shortest<=1
+  P   "No shortness: play four"          shows shortest>=2
+
 # ── Responder after the answer: place the contract, never pass an
 # artificial answer.
+# bba: facing a maximum (anything but three of the suit) the 2NT asker
+# bids game: four of a major, 3NT over a minor-suit feature. Over a 3NT
+# answer to 2D it passes with 17+ and bids 4D with 15-16; opener then
+# bids 5D with a singleton or void, and passes without.
+when answered weak_two(t), style is bba, !partner.last=3{t}
+  4{t}  "Game: partner has a maximum"   shows hcp>=13
+        when  t is H | t is S
+        priority 1
+  3N    "Game: partner has a maximum"   shows hcp>=13
+        when  t is C | t is D, !partner.last=3N
+        priority 1
+  P     "Partner's 3NT is game"          shows hcp>=17
+        when  t is C | t is D, partner.last=3N
+        priority 1
+  4{t}  "Doubt about 3NT: 15-16"         shows hcp<=16
+        when  t is C | t is D, partner.last=3N
+        priority 1
+
 when answered weak_two(t)
   4{t}  "Game in the weak two suit"   shows hcp>=17
         when  t is H | t is S

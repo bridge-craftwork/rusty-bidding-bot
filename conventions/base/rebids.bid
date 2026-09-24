@@ -13,18 +13,31 @@
 
 module rebids "Opener's rebid"
   needs  responses
+  param  style = general.style
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
   2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15   sets trump=y
+      when  style is not bba
   3y  "Jump raise: 4+ {y}, 16-18"          shows y>=4, tp(y)=16..18   sets trump=y
-      when  y is H | y is S                  # a major: 19+ jumps to game
+      when  y is H | y is S, style is not bba   # a major: 19+ jumps to game
+  # BBA raises a major on HCP and length, not shortness: 2y up to 14,
+  # 3y 15-17 (HCP + a point a card beyond four), game with 18 HCP or 17
+  # and 19 support points (rebids.notes.md, "BBA treatment").
+  2y  "Raise (BBA): 4+ {y}, minimum"       shows y>=4, hcp+length_points<=14   sets trump=y
+      when  style is bba
+  3y  "Jump raise (BBA): 4+ {y}, 15-17"    shows y>=4, hcp+length_points>=15, hcp<=17, hcp<=16 | tp(y)<=18   sets trump=y
+      when  y is H | y is S, style is bba
   3y  "Jump raise: 4+ {y}, 16+"             shows y>=4, tp(y)>=16   sets trump=y
       when  y is C | y is D                  # a minor: there is no four-level game
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
       priority -1                          # a new suit first
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
+      when  style is not bba
       priority -1                          # a new suit first
+  3x  "Jump rebid (BBA): 6+ {x}, 15-18"    shows x>=6, hcp=15..18
+      when  style is bba
+      priority -1
   2x  "Rebids {x}: five or more, too weak to reverse"
       shows x>=5, suit_points<=18
       when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
@@ -40,18 +53,37 @@ after 1x (P) 1y (P)
       priority -4                          # 1NT would be a lie: the rebid is 12-14
 after 1x (P) 1M (P)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
+      when  style is not bba
+  4M  "Game raise (BBA): 4+ {M}, 18 HCP, or 17 and 19 support points"
+      shows M>=4, hcp>=18 | (hcp>=17, tp(M)>=19)   sets trump=M
+      when  style is bba
 
 # A new suit: at the one level 4+ and up to 18; at the two level below the
 # first suit 4+, not a reverse; a reverse (two level, above the first suit)
 # 17+ with the first suit longer; a jump in a new suit 19+, game forcing.
 after 1C (P) 1D (P)
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14
-      when  H<=3 | S<=3                    # with both majors, 1H
+      when  H<=3 | S<=3, style is not bba  # with both majors, 1H
       priority 2                           # balanced: 1NT even with a major (as BBA)
   1H  "4+ hearts, up to 18"                shows H>=4, suit_points<=18, H>=S
+      when  style is not bba | S>=4
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18, S>H
+      when  style is not bba
   2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+      when  style is not bba
   2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
+      when  style is not bba
+  # BBA (Walsh style: responder bypasses diamonds with a weak hand and a
+  # major) rebids 1NT with 12-17 and one four-card major, even 5-4 with a
+  # singleton; 1H only with both majors; a jump shift from 18.
+  1N  "BBA: 12-17, no six clubs, not both majors"
+      shows hcp=12..17, H<=4, S<=4, H<=3 | S<=3, C<=5, D<=4, shortest>=2 | C=5
+      when  style is bba
+      priority 2
+  2H  "Jump shift (BBA): 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game
+      when  style is bba
+  2S  "Jump shift (BBA): 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game
+      when  style is bba
 after 1C (P) 1H (P)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
@@ -71,11 +103,17 @@ after 1D (P) 1H (P)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
       priority 2                           # four spades: 1S before 1NT
+  1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, H<=3, C=4
+      when  style is bba
+      priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
   2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
 after 1D (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
+  1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, S<=3, C=4
+      when  style is bba
+      priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
       priority 1
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
@@ -96,8 +134,12 @@ after 1x (P) 1N (P)
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
       priority -1
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
+      when  style is not bba
       priority -1
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
+  3x  "Jump rebid (BBA): 6+ {x}, 15-18"    shows x>=6, hcp=15..18
+      when  style is bba
+      priority -1
 after 1S (P) 1N (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2D  "4+ diamonds, up to 18"              shows D>=4, suit_points<=18, D>=C | C<=3
@@ -105,6 +147,20 @@ after 1S (P) 1N (P)
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
   3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+  # BBA jumps sooner: 17 suit points in hearts, 18 in a minor; 5-5 with
+  # 16 bids game in hearts.
+  3H  "Jump shift (BBA): 4+ hearts, 17+"   shows H>=4, suit_points>=17   sets forcing=game
+      when  style is bba
+      priority 1
+  3C  "Jump shift (BBA): 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
+      when  style is bba
+      priority 1
+  3D  "Jump shift (BBA): 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
+      when  style is bba
+      priority 1
+  4H  "5-5 in the majors, 16+ (BBA)"       shows H>=5, hcp>=16   sets trump=H
+      when  style is bba
+      priority 1
 after 1H (P) 1N (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2D  "4+ diamonds, up to 18"              shows D>=4, suit_points<=18, D>=C | C<=3
@@ -112,6 +168,12 @@ after 1H (P) 1N (P)
       priority 1
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
+  3C  "Jump shift (BBA): 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
+      when  style is bba
+      priority 1
+  3D  "Jump shift (BBA): 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
+      when  style is bba
+      priority 1
 after 1D (P) 1N (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
@@ -138,7 +200,10 @@ after 1m (P) 1y (P) | 1m (P) 2y (P)
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
-      when  y is not M
+      when  y is not M, style is not bba
+  4M  "Game (BBA): seven {M} and 13+, or six and 19+"
+      shows M>=6, (M>=7, hcp>=13) | hcp>=19
+      when  y is not M, style is bba
 # The same two rules after a 1NT response. They cannot share the context
 # above: `y` is bound by the other alternatives only, and a `when` that
 # names it can never be decided after 1NT, so the rules never fired.
@@ -148,16 +213,35 @@ after 1m (P) 1N (P)
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
+      when  style is not bba
+  4M  "Game (BBA): seven {M} and 13+, or six and 19+"
+      shows M>=6, (M>=7, hcp>=13) | hcp>=19
+      when  style is bba
 
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a
 # simple raise with 16-18 and a singleton, but passes 14-15 with doubletons.
 after 1x (P) 2x (P)
   P   "Minimum: no game"                   shows tp(x)<=16
+      when  style is not bba | x is C | x is D
       priority -5
   3x  "Invitation: 17-18 with the fit"     shows tp(x)=17..18
+      when  style is not bba | x is C | x is D
 after 1M (P) 2M (P)
   4M  "Game: 19+ with the fit"             shows tp(M)>=19
+      when  style is not bba
+  # BBA opposite a raise: pass up to 15 HCP whatever the shape (13 with
+  # six trumps), invite with 16 (14-15 with six), bid game with 17, or 16
+  # and six trumps or a singleton.
+  P   "Minimum (BBA): up to 15 HCP"        shows hcp<=15, M<=5 | hcp<=13
+      when  style is bba
+      priority -5
+  3M  "Invitation (BBA): 16 HCP, or 14-15 with six trumps"
+      shows (hcp=16, M<=5, tp(M)<=18) | (hcp=14..15, M>=6)
+      when  style is bba
+  4M  "Game (BBA): 17+, or 16 with six trumps or shortness"
+      shows hcp>=17 | (hcp=16, M>=6 | tp(M)>=19)
+      when  style is bba
 after 1m (P) 2m (P)
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
   3N  "20-21 HCP, balanced"                shows balanced, hcp>=20

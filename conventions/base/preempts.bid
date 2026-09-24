@@ -27,15 +27,26 @@ when opening, seat<=2
   2H  "Weak two: six hearts, 4-10"     shows H=6, hcp=4..10, S<=3
       when two_h is weak, !vul | quality(H)>=good | top5(H)>=3, style is not bba
   2S  "Weak two: six spades, 4-10"     shows S=6, hcp=4..10
-      when two_s is weak, !vul | quality(S)>=good | top5(S)>=3
+      when two_s is weak, !vul | quality(S)>=good | top5(S)>=3, style is not bba
 
-# bba: every weak two goes to 10 HCP, and a side four-card major does not
-# stop it (Basic_Weak_2: 112 ten-counts opened 2D/2H/2S, 15 weak twos with
-# a side major; preempts.notes.md).
-  2D  "Weak two: six diamonds, 4-10"   shows D=6, hcp=4..10
-      when two_d is weak, !vul | quality(D)>=good | top5(D)>=3, style is bba
-  2H  "Weak two: six hearts, 4-10"     shows H=6, hcp=4..10
-      when two_h is weak, !vul | quality(H)>=good | top5(H)>=3, style is bba
+# bba (probed 2026-09-24, preempts.notes.md): every weak two goes to 10
+# HCP. A side four-card major stops it only when it holds the jack or
+# better. A ten-count with two aces opens at the one level, and so does a
+# major with the ace-king (base.bid decides between one and pass). The
+# hand conditions are in `shows` and `when` stays public, so that these
+# rules never widen what a weak two shows under the default style.
+  2D  "Weak two: six diamonds, 4-10"   shows D=6, hcp=4..10, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,D) | (!has(A,S), !has(A,H), !has(A,C))
+      when two_d is weak, style is bba, !vul
+  2D  "Weak two: six diamonds, 4-10, a good suit"   shows D=6, hcp=4..10, quality(D)>=good | top5(D)>=3, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,D) | (!has(A,S), !has(A,H), !has(A,C))
+      when two_d is weak, style is bba, vul
+  2H  "Weak two: six hearts, 4-10"     shows H=6, hcp=4..10, S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))
+      when two_h is weak, style is bba, !vul
+  2H  "Weak two: six hearts, 4-10, a good suit"     shows H=6, hcp=4..10, quality(H)>=good | top5(H)>=3, S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))
+      when two_h is weak, style is bba, vul
+  2S  "Weak two: six spades, 4-10"     shows S=6, hcp=4..10, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C))
+      when two_s is weak, style is bba, !vul
+  2S  "Weak two: six spades, 4-10, a good suit"     shows S=6, hcp=4..10, quality(S)>=good | top5(S)>=3, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C))
+      when two_s is weak, style is bba, vul
 
 # ── Third seat: five cards will do, and no quality requirement ───────
 when opening, seat=3
@@ -69,3 +80,10 @@ when opening, seat<=3
   4S  "Preempt: eight spades"          shows S>=8, hcp=4..10
   5C  "Preempt: eight clubs"           shows C>=8, hcp=4..10, H<=3, S<=3
   5D  "Preempt: eight diamonds"        shows D>=8, hcp=4..10, H<=3, S<=3
+
+# bba: not vulnerable, six-four in the minors opens at the three level
+# with 4-8 (9-10 open 2D, and six clubs have no weak two).
+  3D  "Preempt: six diamonds and four clubs, 4-8"  shows D=6, C=4, hcp=4..8
+      when !vul, seat<=2, style is bba
+  3C  "Preempt: six clubs and four diamonds, 4-8"  shows C=6, D=4, hcp=4..8
+      when !vul, seat<=2, style is bba

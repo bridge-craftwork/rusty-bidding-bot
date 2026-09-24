@@ -17,3 +17,30 @@ S KQJ976.32.A4.J43      | 2S P 2NT P | 3S     | Ogust: maximum, good suit
 S J87654.32.A4.KJ3      | 2S P 2NT P | 3H     | Ogust: maximum, poor suit
 S KQJ976.32.54.543      | 2S P 2NT P | 3D     | Ogust: minimum, good suit
 S J87654.32.543.K3      | 2S P 2NT P | 3C     | Ogust: minimum, poor suit
+
+# ── BBA's responses (probed 2026-09-24, weak-two-responses.notes.md)
+card    Basic-Bridge general.style=bba
+dealer  S
+vul     None
+N AQ52.K95.K932.Q6      | 2H P       | P      | bba: 14 with three hearts at love all: pass
+N AQ52.K95.KJ93.Q6      | 2H P       | 2NT    | bba: 15 with three: ask
+N AQ52.K95.KJ93.K6      | 2H P       | 4H     | bba: 16 with three: game
+N AQ5.K952.Q932.Q6      | 2H P       | 2NT    | bba: 13 with four at love all: ask
+N AQ5.K952.J932.Q6      | 2H P       | P      | bba: 12 with four: pass, no preemptive raise
+N AQ52.9.KQ932.KJ6      | 2H P       | P      | bba: 15 with a singleton: pass
+N 652.AQJT974.KT.A      | 2D P       | 2H     | bba: six hearts and 14: natural and forcing
+vul     NS
+N AQ52.K95.Q932.Q6      | 2H P       | 2NT    | bba: vulnerable, 13 with three: ask
+N AQ52.K95.KJ93.Q6      | 2H P       | 4H     | bba: vulnerable, 15 with three: game
+vul     EW
+N AQ52.K95.KQ93.K6      | 2H P       | 2NT    | bba: favourable, 17 with three: ask
+N AQ5.K952.K932.Q6      | 2H P       | P      | bba: favourable, 14 with four: pass
+vul     None
+# Opener's answer: 5-7 rebids the suit, 8-10 shows A, Kx or Qxx, else 3NT
+S 986.Q8.AQ7432.72      | 2D P 2NT P | 3NT    | bba: eight, no side feature
+S Q75.2.KQT843.J63      | 2D P 2NT P | 3S     | bba: eight with spade queen third
+S 97.54.KQJ642.653      | 2D P 2NT P | 3D     | bba: six: minimum
+S 5.AQT762.965.K43      | 2H P 2NT P | 3C     | bba: nine with Kxx of clubs
+S KQT543.3.75.T532      | 2S P 2NT P | 3S     | bba: five: minimum
+S AQ7543.532.87.QT      | 2S P 2NT P | 3NT    | bba: queen doubleton is not a feature
+N AK95.Q83.AK92.76      | 2H P 2NT P 3C P | 4H | bba: partner's maximum: game

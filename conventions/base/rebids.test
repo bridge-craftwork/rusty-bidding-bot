@@ -175,3 +175,33 @@ S 3.Q92.AQ2.AKT873      | 1C 1S 2H 2S  | 4H  | 18+ support points with three hea
 # full point a card, as for opening)
 S T98.AKQJ943..AQ4      | 1H P 1S P        | 4H     | 16 + three length points (Basic_Major board 99)
 S 73.AKT9743.A5.KQ      | 1H P 1S P        | 4H     | 16 + three length points (Basic_Openers_Rebid board 471)
+
+# ── The BBA treatment (general.style=bba), probed with bba-cli (see
+# rebids.notes.md, "BBA treatment (2026-09-24)")
+card    Basic-Bridge general.style=bba
+dealer  S
+# raising partner's major: HCP and length, not shortness
+S 32.K432.AK432.K2      | 1D P 1H P    | 2H     | bba: 13 + a length point: minimum raise (probe)
+S 32.KQ32.AK432.K2      | 1D P 1H P    | 3H     | bba: 15 + a length point: jump raise (probe)
+S 32.KQ32.AKQ32.K2      | 1D P 1H P    | 4H     | bba: 17 and 19 support points: game (probe)
+S AT93.AJ84.A753.K      | 1D P 1H P    | 3H     | bba: 16 with a singleton king: jump raise (Basic_Openers_Rebid 134)
+# rebidding a six-card major: 3M 15-18; seven cards and 13+: game
+S 32.AKJ432.K32.K2      | 1H P 1S P    | 2H     | bba: six hearts, 14 (probe)
+S 32.AKQ432.K32.K2      | 1H P 1S P    | 3H     | bba: six hearts, 15 (probe)
+S A63.AKT984.AQ.87      | 1H P 1S P    | 3H     | bba: six hearts, 17: 3H, not game (Basic_Openers_Rebid 170)
+S 32.AKJ5432.K2.K2      | 1H P 1S P    | 4H     | bba: seven hearts, 14: game (probe)
+# 1C-1D: 1NT with one four-card major, 1H only with both, a jump shift from 18
+S AJ72.763.K.AKJ95      | 1C P 1D P    | 1NT    | bba: 16, four spades and five clubs: 1NT (Basic_Minor 73)
+S AQ64.T872.K7.K92      | 1C P 1D P    | 1H     | bba: both majors: 1H (Basic_Minor 232)
+S KJ32.A32.K.AK432      | 1C P 1D P    | 2S     | bba: 18 with four spades: jump shift (probe)
+# 1D-1M: balanced with four clubs, 1NT on 12-13, 2C on 14
+S K9.AJ6.J652.K643      | 1D P 1S P    | 1NT    | bba: 12, 4-4 in the minors: 1NT (Basic_Minor 161)
+S Q64.92.AQT7.AQ85      | 1D P 1H P    | 2C     | bba: 14, 4-4 in the minors: 2C (Basic_Openers_Rebid 100)
+# after 1NT: a jump shift in hearts from 17 suit points
+S KJT72.AK32.74.AQ      | 1S P 1NT P   | 3H     | bba: 17, 5-4: jump shift (Basic_Responses 196)
+S AJ975.AQT7.2.AJ2      | 1S P 1NT P   | 2H     | bba: 16, 5-4: 2H (Basic_Responses 165)
+# after a single raise: pass to 15, 3M on 16, game on 17
+S A5432.KQ2.K32.K2      | 1S P 2S P    | P      | bba: 15, five trumps: pass (probe)
+S AK432.K32.K32.K2      | 1S P 2S P    | 3S     | bba: 16: game try (probe)
+S AKJ32.K432.K2.K2      | 1S P 2S P    | 4S     | bba: 17: game (probe)
+S AJ5432.K32.K2.K2      | 1S P 2S P    | 3S     | bba: 14 with six trumps: game try (probe)
