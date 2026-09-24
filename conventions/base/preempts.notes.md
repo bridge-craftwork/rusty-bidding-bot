@@ -31,10 +31,29 @@ six-card suit (it rules out 11 HCP with 5-3-3-2). BBA opens those hands far
 more often than it passes them: 2,939 calls lost against 225 gained, so the
 12 total points stand alone.
 
+**Rick, 2026-09-23: a major weak two goes up to 10 HCP** (preemptive
+value), where a 10-count with six cards used to open at the one level (12
+total points). BBA does the same (about 70 Basic_Weak_2 boards). Measured
+against par it costs: −243 IMPs on the corpus over 1,106 changed boards,
+−42 on Basic_*. Most of the first measurement (−515) was a bug it exposed:
+"no feature" over the 2NT ask was capped at 9 HCP, so a 10-count passed a
+forcing 2NT (fixed in weak-two-responses.bid). What remains is the
+preempt's own price: partner passes 2M with hands that would reach game
+after 1M, and par does not reward the preemption here. Kept as Rick's
+ruling; the trade is his to revisit. Diamonds stay 4-9 (par favoured our
+1♦ on those boards, +29).
+
+**A side four-card major** (Rick: modern style allows it, depending on
+the relative suit quality) was tried as "the six-card suit holds more of
+the top five honours than the major": −51 IMPs on the corpus, −26 on
+Basic (−75/−33 with the 2NT fix). Not adopted; **question for Rick**
+whether a different quality test is worth trying.
+
 ## Accepted differences from BBA
 
 - BBA opens weak twos and three-level preempts on hands outside these
-  rules: 10 HCP weak twos, and 3♦ on a six-card suit.
+  rules: 10 HCP diamond weak twos, weak twos with a side four-card
+  major, and 3♦ on a six-card suit.
 - BBA opens 11 HCP with 5-3-3-2 where the rule of 20 says pass; we open
   (12 total points).
 - Fourth seat: BBA opens some hands the rule of 15 passes.

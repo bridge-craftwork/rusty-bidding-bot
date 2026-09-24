@@ -137,7 +137,7 @@ after 1m (P) 1y (P) | 1m (P) 2y (P)
       when  y is not m
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
-      shows M>=6, suit_points>=19
+      shows M>=6, hcp+length_points>=19
       when  y is not M
 # The same two rules after a 1NT response. They cannot share the context
 # above: `y` is bound by the other alternatives only, and a `when` that
@@ -147,7 +147,7 @@ after 1m (P) 1N (P)
       shows m>=6, hcp=18..21
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
-      shows M>=6, suit_points>=19
+      shows M>=6, hcp+length_points>=19
 
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a

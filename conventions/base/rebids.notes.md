@@ -400,3 +400,12 @@ expensive by IMPs, on the subset or corpus-wide.
   the fit" fires for a player who has already denied the length. The
   rule needs a `maybe` on its own shown length, which is
   `rebids.bid`'s to fix in the next pass.
+
+## Opener's jump to 4M (Rick, 2026-09-23)
+
+With six or more of the major and 19-21, opener jumps to game after a new
+suit (1♥-1♠-4♥) or 1NT. The 19 counts a full point for each card beyond
+four, as the opening does (`hcp+length_points`), not the half point of
+`suit_points`: BBA's jumps in Basic_* are 13-17 HCP with six or seven
+hearts. Measured: +239 IMPs vs par on the corpus, +15 on Basic_*. One
+case changed: `T32.AKQ732.A7.A4` after 1♥-2♣ now bids 4♥, not 3♥.

@@ -31,7 +31,7 @@ when asked weak_two(t), ask2nt is feature
   3D  "Feature: the diamond ace or king, maximum"  shows has(A,D) | has(K,D), hcp>=7   when t is not D
   3H  "Feature: the heart ace or king, maximum"    shows has(A,H) | has(K,H), hcp>=7   when t is not H
   3S  "Feature: the spade ace or king, maximum"    shows has(A,S) | has(K,S), hcp>=7   when t is not S
-  3{t}  "No feature to show"                       shows hcp<=9
+  3{t}  "No feature to show"                       shows hcp<=10
         priority -1
 
 when asked weak_two(t), ask2nt is ogust

@@ -2,8 +2,9 @@
 #
 # Weak two-bids and higher preempts (Rick, 2026-09-22):
 #
-# - a weak two is 4-9 HCP with a six-card suit; vulnerable it needs two of
-#   the top three or three of the top five honours;
+# - a weak two is 4-9 HCP with a six-card suit, a major 4-10 (2026-09-23);
+#   vulnerable it needs two of the top three or three of the top five
+#   honours;
 # - third seat is looser: a five-card suit will do, and no suit-quality
 #   requirement;
 # - fourth seat has no weak two: 2 of a suit there shows a six-card suit
@@ -22,9 +23,9 @@ module preempts "Weak two-bids and preempts"
 when opening, seat<=2
   2D  "Weak two: six diamonds, 4-9"    shows D=6, hcp=4..9, H<=3, S<=3
       when two_d is weak, !vul | quality(D)>=good | top5(D)>=3
-  2H  "Weak two: six hearts, 4-9"      shows H=6, hcp=4..9, S<=3
+  2H  "Weak two: six hearts, 4-10"     shows H=6, hcp=4..10, S<=3
       when two_h is weak, !vul | quality(H)>=good | top5(H)>=3
-  2S  "Weak two: six spades, 4-9"      shows S=6, hcp=4..9
+  2S  "Weak two: six spades, 4-10"     shows S=6, hcp=4..10
       when two_s is weak, !vul | quality(S)>=good | top5(S)>=3
 
 # ── Third seat: five cards will do, and no quality requirement ───────

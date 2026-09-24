@@ -140,3 +140,26 @@ balanced 6+ hands instead of bidding notrump, and that rule is in
 
 The full evidence, the two treatments of the double, and the measured
 effect are in `nt-interference.notes.md`.
+
+## Slam jump (Rick, 2026-09-23)
+
+17 opposite 15-17 jumps to 6NT instead of making the quantitative 4NT:
+6NT needs 32 total points combined with opener's minimum, 4NT is left
+with 16. BBA does this on 10 of its 12 17-counts in Basic_*; at 16 it
+invites 7 times of 11. Rick asked whether BBA judges 17 by controls:
+at 16-17 its choice does not follow controls (6NT with 4 controls, 4NT
+with 6), so the rule counts points only. Measured: +2,543 IMPs vs par on
+the corpus, +77 on Basic_*.
+
+## 4-3-3-3 is worth less? (Rick, 2026-09-23) — tried, not adopted
+
+Rick: at the 2NT/3NT boundary, 4-3-3-3 is worse than 4-4-3-2 with the
+same HCP and tens. Tried as a deduction from the notrump point count of
+every 4-3-3-3 hand (engine `Valuation`): −½ point cost 2,543 IMPs vs par
+on the corpus and 35 on Basic_*; −1 point cost 5,670 and 137. BBA does not
+downgrade it either: after 1NT, with no four-card major, 10 HCP and no ten
+bids 3NT on 43 of 44 4-3-3-3 hands but 19 of 33 4-4-3-2; at 8 HCP and one
+ten it invites on 29 of 34 4-3-3-3 but 19 of 31 4-4-3-2 (at 8 HCP and no
+ten the other way: 6 of 26 against 10 of 16). **Question for Rick**: a
+narrower version (only responder's invite decision, only without tens) is
+possible if he wants it tried.

@@ -24,10 +24,12 @@ when opening
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
-  6N  "To play: {slam} total points"
-      shows balanced, strength=slam, H<=4, S<=4   # with five, transfer first
-  4N  "Quantitative: {slam_invite} total points, invites 6NT"
-      shows balanced, strength=slam_invite
+  6N  "To play: slam values"
+      shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
+  4N  "Quantitative: invites 6NT"
+      shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      # Rick: 17 opposite 15-17 jumps to 6NT (BBA: 10 of 12 hands; 16
+      # mostly invites). BBA's choices at 16-17 do not follow controls.
   3N  "To play: {game} total points"
       shows strength=game
   2N  "Invitational: {invite} total points"

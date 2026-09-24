@@ -51,7 +51,7 @@ S AT965.Q.AQT2.KT4      | 1S P 2C P    | 2D     | four diamonds
 S AKQ73.AJ7.Q3.Q42      | 1S P 2D P    | 3NT    | 18-19, balanced
 S AKJ64.Q76.83.QJ6      | 1S P 2H P    | 3H     | three hearts: raise
 S 95.AKQT4.QJ.Q953      | 1H P 2C P    | 3C     | four clubs: raise
-S T32.AKQ732.A7.A4      | 1H P 2C P    | 3H     | six hearts, 16-18: jump rebid
+S T32.AKQ732.A7.A4      | 1H P 2C P    | 4H     | 17 + two length points = 19 opposite a two-level response: game
 
 # ── Too strong for a jump rebid, and the hands with no natural rebid.
 # All of these used to pass a forcing response (rebids.notes.md).
@@ -170,3 +170,8 @@ S AKT5.AK.92.A8754      | 1C 1H 1S 2H  | 4S  | 19+ support points with four spad
 S Q6.K652.AKJ75.J4      | 1D 1S 2H 2S  | 3H  | four hearts for partner's five
 S A74.K63.A932.K83      | 1D 1S 2C 2S  | 3C  | three clubs for partner's five
 S 3.Q92.AQ2.AKT873      | 1C 1S 2H 2S  | 4H  | 18+ support points with three hearts
+
+# Rick: with six or more of the major and 19-21, jump to 4M (length counts a
+# full point a card, as for opening)
+S T98.AKQJ943..AQ4      | 1H P 1S P        | 4H     | 16 + three length points (Basic_Major board 99)
+S 73.AKT9743.A5.KQ      | 1H P 1S P        | 4H     | 16 + three length points (Basic_Openers_Rebid board 471)
