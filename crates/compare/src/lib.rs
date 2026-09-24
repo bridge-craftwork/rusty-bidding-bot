@@ -9,6 +9,7 @@ pub mod par;
 pub mod probe;
 mod report;
 mod scenario;
+pub mod simulate;
 
 use std::collections::HashMap;
 use std::path::PathBuf;

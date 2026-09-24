@@ -397,3 +397,17 @@ off, but its responses were written for a 1NT that includes them --
 otherwise there would be no suit priority at all. So the bba treatment
 should value responder's honours against a 1NT that may hold 5-4-2-2 with
 four hearts (not spades), whatever the card says.
+
+### Are BBA's pass cells statistically right? (2026-09-24)
+
+`rbb simulate probes/nt-7count-placements-AQJTT.toml --pool
+probes/pools/bba-1nt-15-17-with-5422.txt --samples 60`: each responder hand
+against 60 openers drawn from the hands BBA itself opens 1NT (5-4-2-2
+included, in their natural frequency), opponents random, double dummy.
+The 7 placements BBA passes average 7.61 notrump tricks (8+ 55.0%, 9+
+18.6%); the 57 it raises 7.63 (56.7%, 19.8%). A difference of 0.02
+tricks, inside the noise (about 0.07 a placement), and the ranking of
+placements does not follow BBA's passes (HAQ... HCH, a pass cell, is
+among the best). So measured double dummy against what its 1NT contains,
+BBA's suit-dependent passes are not better bridge: a fixed heuristic, not
+a statistical optimum. Not modelled in the bba treatment for now.

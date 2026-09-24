@@ -175,6 +175,23 @@ enum Command {
         #[arg(long)]
         out: Option<PathBuf>,
     },
+    /// Double-dummy yardstick for a grid spec's hands: deal partner from a
+    /// pool of hands that made partner's call, the opponents at random, and
+    /// report how often the partnership makes 8 and 9 tricks in notrump.
+    Simulate {
+        /// A grid spec with a `hands` list.
+        spec: PathBuf,
+        /// Partner hands, one S.H.D.C per line (e.g. the hands BBA opens 1NT).
+        #[arg(long)]
+        pool: PathBuf,
+        #[arg(long, default_value_t = 100)]
+        samples: usize,
+        #[arg(long, default_value_t = 1)]
+        seed: u64,
+        /// Also write the rows as TSV here.
+        #[arg(long)]
+        tsv: Option<PathBuf>,
+    },
     /// Choose a call for a hand and show why.
     Call {
         /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
@@ -515,6 +532,37 @@ fn run(cli: Cli) -> Result<()> {
                 print!("{}", g.table(&g.rows.iter().collect::<Vec<_>>()));
             }
             println!("\n(table in {}/grid.tsv)", g.out_dir.display());
+            Ok(())
+        }
+        Command::Simulate {
+            spec,
+            pool,
+            samples,
+            seed,
+            tsv,
+        } => {
+            let s = rbb_compare::grid::read_spec(&spec)?;
+            let pool = rbb_compare::simulate::read_pool(&pool)?;
+            let rows = rbb_compare::simulate::run(&s, &pool, samples, seed)?;
+            let lw = rows.iter().map(|r| r.label.len()).max().unwrap_or(5).max(5);
+            println!(
+                "{:lw$}  {:18} {:>5} {:>6} {:>6} {:>6}",
+                "", "hand", "n", "tricks", "8+", "9+"
+            );
+            let mut out = String::from("label\thand\tn\ttricks\tmake8\tmake9\n");
+            for r in &rows {
+                println!(
+                    "{:lw$}  {:18} {:>5} {:>6.2} {:>6.2} {:>6.2}",
+                    r.label, r.hand, r.samples, r.mean_tricks, r.make8, r.make9
+                );
+                out += &format!(
+                    "{}\t{}\t{}\t{:.3}\t{:.3}\t{:.3}\n",
+                    r.label, r.hand, r.samples, r.mean_tricks, r.make8, r.make9
+                );
+            }
+            if let Some(p) = tsv {
+                std::fs::write(&p, out)?;
+            }
             Ok(())
         }
         Command::Call {
