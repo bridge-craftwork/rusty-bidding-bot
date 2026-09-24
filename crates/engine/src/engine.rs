@@ -190,17 +190,16 @@ impl Engine {
                 continue;
             }
             for (call, b) in expand(&entry.rule.call, &ctx, b, &auction) {
-                // A `when` that cannot hold for this caller rules the rule out:
-                // known false, or not known true while depending only on public
-                // knowledge (`x is not M` with x = M; `partner.M>=4` before
-                // partner has shown four).
-                // A condition on the caller's own hand is never judged here: the
-                // hand is not known yet (and `.max` of an unknown count means
-                // nothing).
-                let impossible = entry.rule.when.as_ref().is_some_and(|w| {
-                    !crate::eval::hand_dependent(w, &b)
-                        && ctx.cond(w, &mut b.clone()) != Ok(Tri::True)
-                });
+                // A `when` whose public parts cannot hold rules the rule out
+                // (`x is not M` with x = M; `partner.M>=4` before partner has
+                // shown four; `style is bba` under another style), whatever
+                // it also says about the caller's hand, which is never judged
+                // here: it is not known yet (see `publicly_impossible`).
+                let impossible = entry
+                    .rule
+                    .when
+                    .as_ref()
+                    .is_some_and(|w| crate::eval::publicly_impossible(&ctx, w, &b));
                 if auction.is_legal(&call) && !impossible {
                     out.push(Cand {
                         entry: i,
@@ -382,12 +381,12 @@ impl Engine {
             .filter(|c| {
                 let e = &sys.rules[c.entry];
                 let ctx = self.ctx(pos, caller, None, e);
-                // Conditions on the caller's hand stay possible; public ones
-                // were already required to hold (see `candidates`).
-                e.rule.when.as_ref().is_none_or(|w| {
-                    crate::eval::hand_dependent(w, &c.b)
-                        || ctx.cond(w, &mut c.b.clone()) == Ok(Tri::True)
-                })
+                // Conditions on the caller's hand stay possible; the public
+                // parts must hold (see `publicly_impossible`).
+                e.rule
+                    .when
+                    .as_ref()
+                    .is_none_or(|w| !crate::eval::publicly_impossible(&ctx, w, &c.b))
             })
             .collect();
         // Lower-priority rules are fallbacks ("only if nothing better"): they

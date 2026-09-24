@@ -163,3 +163,29 @@ fn keycard_answer_does_not_contradict_what_opener_showed() {
     assert!(answer.warnings.is_empty(), "{:?}", answer.warnings);
     assert_eq!(answer.knowledge.hcp, Range::new(15, 17));
 }
+
+/// A `when` mixing a style check with a condition on the caller's hand is
+/// ruled out by its public part: under the default style, a `bba` rule
+/// must not widen what the call shows.
+#[test]
+fn a_style_check_rules_out_a_mixed_when() {
+    let source = r#"
+module mixed "Mixed when"
+  param  style = general.style
+when opening
+  1C  "Default: 12+"   shows hcp>=12
+      when  style is not bba
+  1C  "BBA: 8+"        shows hcp>=8
+      when  style is bba, C>=4
+"#;
+    let module = bidspec::compile(source, "mixed.bid").unwrap();
+    let card = bridge_card::Card::new();
+    let engine = Engine::new(&card, &card, &[module]);
+    let i = engine.interpret(
+        Direction::South,
+        Vulnerability::None,
+        ScoringMethod::Matchpoints,
+        &calls("1C"),
+    );
+    assert_eq!(i.steps[0].knowledge.hcp.lo, 12, "{:#?}", i.steps[0]);
+}

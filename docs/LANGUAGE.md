@@ -329,10 +329,12 @@ context holds. It does not check the caller's hand, which it cannot see.
   `shows`, and later calls can narrow it. Only the rules of the highest
   `priority` count: a lower-priority rule for the same call is a fallback
   ("only if nothing better") and does not widen the call's meaning.
-- A rule's `when` rules it out if it depends only on public knowledge and is
-  not known true. (`when partner.M>=4` cannot be what the caller relied on
-  before partner has shown four.) A `when` that depends on the caller's own
-  hand (`slam_try`, `shape 4333`, `we.keycards(t)`) stays possible.
+- A rule's `when` rules it out if its public parts are not known true: a
+  conjunction fails when any public part does, a disjunction when every
+  branch does. (`when partner.M>=4` cannot be what the caller relied on
+  before partner has shown four; `when style is bba, C>=4` is ruled out
+  under another style.) Parts about the caller's own hand (`slam_try`,
+  `shape 4333`, `we.keycards(t)`) are not judged and stay possible.
 - **Negative inference.** *Decided:* this is automatic, and the knowledge
   model must support it. The caller would have made any higher-ranked
   candidate its hand satisfied, so a call also says the caller's hand fails

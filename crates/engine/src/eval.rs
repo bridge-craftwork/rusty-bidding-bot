@@ -1007,6 +1007,20 @@ impl<'a> Ctx<'a> {
     }
 }
 
+/// Can `when` be ruled out from public knowledge alone? Its public parts
+/// must be known true: a conjunction is impossible when any part is, a
+/// disjunction when every branch is, and a condition on the caller's own
+/// hand is never impossible (the hand is not known). So `style is bba, H>=4`
+/// is ruled out when the style is not bba, whatever the hand.
+pub fn publicly_impossible(ctx: &Ctx, e: &Expr, b: &Bindings) -> bool {
+    match e {
+        Expr::And { all } => all.iter().any(|x| publicly_impossible(ctx, x, b)),
+        Expr::Or { any } => any.iter().all(|x| publicly_impossible(ctx, x, b)),
+        _ if hand_dependent(e, b) => false,
+        _ => ctx.cond(e, &mut b.clone()) != Ok(Tri::True),
+    }
+}
+
 /// Does the truth of `e` depend on the actor's own hand? (Everything else
 /// in a condition is public: what each seat has shown, and the state.) A
 /// `when` that does not depend on the hand, and is not known true, cannot
