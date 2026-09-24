@@ -44,3 +44,14 @@ S 5.AQT762.965.K43      | 2H P 2NT P | 3C     | bba: nine with Kxx of clubs
 S KQT543.3.75.T532      | 2S P 2NT P | 3S     | bba: five: minimum
 S AQ7543.532.87.QT      | 2S P 2NT P | 3NT    | bba: queen doubleton is not a feature
 N AK95.Q83.AK92.76      | 2H P 2NT P 3C P | 4H | bba: partner's maximum: game
+
+# ── Standard feature answers, the default (Rick, 2026-09-24): an ace or king
+# with a maximum, else a queen, rarely a jack; 3NT is AKQ in the suit
+card    Basic-Bridge
+dealer  S
+S AKQ964.73.853.72      | 2S P 2NT P | 3NT    | AKQ: solid suit
+S KQJ964.A3.853.72      | 2S P 2NT P | 3H     | maximum with the heart ace
+S KQJ964.73.Q53.72      | 2S P 2NT P | 3D     | maximum, no side ace or king: the queen
+S AKT964.73.J53.72      | 2S P 2NT P | 3D     | maximum, AK of spades and the diamond jack
+S AQJT64.73.J53.72      | 2S P 2NT P | 3S     | a side jack without AK of the suit: rebid the suit
+S KJ9864.73.853.72      | 2S P 2NT P | 3S     | minimum

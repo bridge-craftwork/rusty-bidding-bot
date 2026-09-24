@@ -33,7 +33,9 @@ dealer  S
 S J8.6.AQ9543.K762      |            | 2D     | bba: 10 HCP six diamonds (Basic_Weak_2)
 S 8752.AKQT73.T.T6      |            | 2H     | bba: a side four-card spade suit does not stop it
 card    Basic-Bridge
-S J8.6.AQ9543.K762      |            | 1D     | default: 10 HCP and six diamonds opens 1D
+S J8.6.AQ9543.K762      |            | 2D     | default (BBA's opening, Rick 2026-09-24): 10 HCP, one ace: a weak two
+card    Basic-Bridge general.style=standard
+S J8.6.AQ9543.K762      |            | 1D     | standard: 10 HCP and six diamonds opens 1D
 
 # ── BBA's ten-counts and side majors (probed 2026-09-24, preempts.notes.md)
 card    Basic-Bridge general.style=bba

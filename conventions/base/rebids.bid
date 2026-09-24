@@ -62,9 +62,15 @@ after 1x (P) 1M (P)
 # first suit 4+, not a reverse; a reverse (two level, above the first suit)
 # 17+ with the first suit longer; a jump in a new suit 19+, game forcing.
 after 1C (P) 1D (P)
-  1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14
-      when  H<=3 | S<=3, style is not bba  # with both majors, 1H
-      priority 2                           # balanced: 1NT even with a major (as BBA)
+  # Walsh (Rick, 2026-09-24; the modern default): balanced 12-14 rebids
+  # 1NT even with one or both four-card majors. Standard bids a four-card
+  # major up the line, balanced or not.
+  1N  "12-14 HCP, balanced (Walsh: a major may be hidden)"   shows balanced | shape 5-4-2-2, hcp=12..14
+      when  style is not bba, style is not standard
+      priority 2
+  1N  "12-14 HCP, balanced, no four-card major"   shows balanced | shape 5-4-2-2, hcp=12..14, H<=3, S<=3
+      when  style is standard
+      priority 2
   1H  "4+ hearts, up to 18"                shows H>=4, suit_points<=18, H>=S
       when  style is not bba | S>=4
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18, S>H
@@ -103,6 +109,9 @@ after 1D (P) 1H (P)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
       priority 2                           # four spades: 1S before 1NT
+  1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, H<=3
+      when  style is not bba               # Rick: balanced rebids 1NT, not 2C
+      priority 1
   1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, H<=3, C=4
       when  style is bba
       priority 1                           # BBA: 1NT before 2C, but 2C with 14
@@ -111,6 +120,9 @@ after 1D (P) 1H (P)
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
 after 1D (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
+  1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, S<=3
+      when  style is not bba               # Rick: balanced rebids 1NT, not 2C
+      priority 1
   1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, S<=3, C=4
       when  style is bba
       priority 1                           # BBA: 1NT before 2C, but 2C with 14

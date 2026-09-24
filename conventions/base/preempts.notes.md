@@ -246,3 +246,12 @@ on 6-4 in the minors.
 - Should a side four-card major with an honour (J or better) stop a weak
   two in our default too (BBA never opens one)? The earlier trial was a
   quality comparison, not this test.
+
+## Rick, 2026-09-24: the default opens weak twos as BBA does
+
+BBA's opening rules (above) are now the default: a 10-count with six
+cards opens a weak two unless the major has the ace-king or the hand two
+aces; a side four-card major stops a weak two only with the jack or
+better. The previous default (4-9, a major 4-10, no side four-card major,
+a good suit vulnerable) is the `standard` treatment. The 6-4 minor
+preempts stay `bba` only.

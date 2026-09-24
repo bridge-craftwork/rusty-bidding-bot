@@ -12,7 +12,8 @@ S AK5.7.J832.AKQT9      | 1C P 1H P    | 2D     | reverse: 17+, clubs longer tha
 S KQJ4.KJ.A2.AJT63      | 1C P 1H P    | 2S     | jump in a new suit: 19+, game forcing
 
 # ── After a one-level response
-S KT86.AK72.J9.Q87      | 1C P 1D P    | 1H     | both majors: 1H rather than 1NT
+S KT86.AK72.J9.Q87      | 1C P 1D P    | 1NT    | both majors: Walsh 1NT (Rick, 2026-09-24)
+# standard: a four-card major up the line, even balanced
 S AJT53.Q.8.AKT974      | 1C P 1D P    | 1S     | a new suit at the one level
 S J8.AJ.763.AK8654      | 1C P 1D P    | 2C     | six clubs, minimum
 S AT7.AQ.A84.A8743      | 1C P 1D P    | 2NT    | 18-19, balanced
@@ -205,3 +206,12 @@ S A5432.KQ2.K32.K2      | 1S P 2S P    | P      | bba: 15, five trumps: pass (pr
 S AK432.K32.K32.K2      | 1S P 2S P    | 3S     | bba: 16: game try (probe)
 S AKJ32.K432.K2.K2      | 1S P 2S P    | 4S     | bba: 17: game (probe)
 S AJ5432.K32.K2.K2      | 1S P 2S P    | 3S     | bba: 14 with six trumps: game try (probe)
+
+# ── 1C-1D in the standard treatment: majors up the line (Rick, 2026-09-24)
+card    Basic-Bridge general.style=standard
+S KT86.AK72.J9.Q87      | 1C P 1D P        | 1H     | standard: both majors, 1H up the line
+S KT86.A72.K9.Q873      | 1C P 1D P        | 1S     | standard: four spades, balanced, still 1S
+card    Basic-Bridge
+S KT86.A72.K9.Q873      | 1C P 1D P        | 1NT    | Walsh (default): balanced 12-14, 1NT with a major
+S K4.QJ7.AJ84.K984      | 1D P 1H P        | 1NT    | balanced 13 with four clubs: 1NT, not 2C (Rick)
+S K4.QJ7.AJ84.K984      | 1D P 1S P        | 1NT    | the same after 1S

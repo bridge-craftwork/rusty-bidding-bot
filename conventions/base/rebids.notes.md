@@ -517,3 +517,18 @@ a scratch copy, corpus net IMPs vs BBA, default −173,271; Basic_* −1,926):
   (−568), Basic_* −1,901 (+25). Not better.
 - 1M-2M as BBA (pass to 15, 3M on 16): corpus −175,070 (−1,799), Basic_*
   −1,943 (−17). Our default is better.
+
+## Rick, 2026-09-24: Walsh after 1C-1D, 1NT after 1D-1M
+
+- **1C-1D: the Walsh treatment is the (modern) default.** A balanced
+  12-14 rebids 1NT even with one or both four-card majors (responder
+  bypasses diamonds with a major and a weak hand, so opener's majors can
+  wait). `standard`: a four-card major up the line, balanced or not.
+- **1D-1M with a balanced 12-14: 1NT, not 2C**, even with four clubs.
+  BBA does this on 12-13 and bids 2C on 14; measured as a default before
+  the ruling: +334 IMPs on the corpus.
+
+Together with the weak-two opening and the standard feature answers,
+the default went from -173,271 to -172,679 IMPs against par on the
+corpus (+592), Basic_* -1,926 -> -1,893, uncontested -838 -> -820. The
+BBA style is unchanged.

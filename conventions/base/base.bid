@@ -27,34 +27,34 @@ module base "Natural opening bids"
 when opening
   1S  "5+ spades"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, S>=5, S>=H, S>=D, S>=C
-      when  style is not bba
+      when  style is standard
   1H  "5+ hearts"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, H>=5, H>S, H>=D, H>=C
-      when  style is not bba
+      when  style is standard
   1D  "3+ diamonds"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D
-      when  style is not bba
+      when  style is standard
   1C  "3+ clubs"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C
-      when  style is not bba
+      when  style is standard
   1S  "5+ spades"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, S>=5, S>=H, S>=D, S>=C, hcp>=11 | S<=5 | H<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
-      when  style is bba
+      when  style is not standard
   1H  "5+ hearts"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, H>=5, H>S, H>=D, H>=C, hcp>=11 | H<=5 | S<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
-      when  style is bba
+      when  style is not standard
   1D  "3+ diamonds"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D, hcp>=11 | D<=5 | (H<=3, S<=3) | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
-      when  style is bba
+      when  style is not standard
   1C  "3+ clubs"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C, hcp>=11 | C<=5
-      when  style is bba
+      when  style is not standard
   P   "No opening bid"
       shows hcp<=min_open-1, hcp+length_points<=min_open-1 | hcp<=9
       priority -10
   P   "No opening bid: ten HCP and a six-card suit that does not open"
       shows hcp=10, longest=6
-      when  style is bba
+      when  style is not standard
       priority -10
 
 # Third seat may open light with a good four-card major; fourth seat opens

@@ -138,3 +138,44 @@ never share a `when` with it). Board-by-board check in preempts.notes.md.
   and bids game with 15-16 and three trumps, but at favourable needs 18.
   Our default asks from 15 and bids game only with four. Worth a par
   test of the vulnerability split?
+
+## Rick's rulings and more probes (2026-09-24)
+
+**Feature answer, standard (now the default).** With a maximum (8-10 of
+the 4-10 range) show a side ace or king; without one a queen; a jack only
+with AK of the suit. 3NT is kept for AKQ in the suit. A minimum, or a
+maximum with nothing to show, rebids the suit. BBA's "3NT = maximum with
+no side honour" stays as the `bba` treatment. Ogust is the card's other
+choice (`ask2nt`), to be filled in later.
+
+**Vulnerability and scoring**, probed over 2H (South 73.KQJ964.853.72,
+West's pass forced), responder 3-3-4-3 with three hearts:
+
+| North | HCP | love all MP | love all IMP | we vul (MP = IMP) | favourable (MP = IMP) |
+|---|---|---|---|---|---|
+| K94.A85.KQ64.Q93 | 14 | P | P | P | P |
+| K94.A85.KQ64.K93 | 15 | P | 2NT | 2NT | P |
+| A94.A85.KQ64.K93 | 16 | 2NT | 2NT | 4H | 2NT |
+| AQ4.A85.KQ64.K93 | 18 | 2NT | 4H | 4H | 2NT |
+| AQ4.A85.AQ64.K93 | 19 | 4H | 4H | 4H | 4H |
+
+Both the 2NT ask and the raise to game move with vulnerability; at love
+all IMPs make BBA about a point bolder, otherwise MP and IMP agree. The
+corpus is all matchpoints.
+
+**Preemptive raises exist**, and move with vulnerability too (scoring
+matters only on the last hand):
+
+| North | HCP | love all | we vul | favourable |
+|---|---|---|---|---|
+| 9852.T85.KQ64.J9 (3 trumps) | 6 | P | P | 3H |
+| 985.T875.J642.98 (4, flat) | 1 | 3H | P | P |
+| 9.T8752.K642.985 (5, singleton) | 3 | 3H | P | 3H |
+| 9.T875.KQ64.J985 (4, singleton) | 6 | 4H | 3H | 4H |
+| 9.AT875.9642.985 (5, singleton) | 4 | 4H | 3H | 4H |
+| A9.T875.KQ64.J98 (4) | 10 | 3H | 3H | 4H MP / 3H IMP |
+
+With four trumps and a singleton BBA preempts to game unless we are
+vulnerable. The flat 1-count raising at love all and passing at
+favourable is one probe and odd; to be checked with more hands before
+the bba rules use it.

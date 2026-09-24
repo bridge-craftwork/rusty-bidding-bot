@@ -71,13 +71,35 @@ after 2x (P) 2y (P) when x is not C | two_c is natural, style is bba
   3x  "No fit: rebid the suit"             shows y<=2
 
 # ── Opener's answer to 2NT ───────────────────────────────────────────
+# Standard (Rick, 2026-09-24): with a maximum show a feature, an ace or
+# king; without one a queen; a jack only with AK of the suit. 3NT is kept for AKQ in the
+# suit. The minimum, or a maximum with nothing outside, rebids the suit.
+# (bba: 3NT is a maximum with no side honour; below.)
 when asked weak_two(t), ask2nt is feature, style is not bba
-  3C  "Feature: the club ace or king, maximum"     shows has(A,C) | has(K,C), hcp>=7   when t is not C
-  3D  "Feature: the diamond ace or king, maximum"  shows has(A,D) | has(K,D), hcp>=7   when t is not D
-  3H  "Feature: the heart ace or king, maximum"    shows has(A,H) | has(K,H), hcp>=7   when t is not H
-  3S  "Feature: the spade ace or king, maximum"    shows has(A,S) | has(K,S), hcp>=7   when t is not S
-  3{t}  "No feature to show"                       shows hcp<=10
-        priority -1
+  3N  "Solid suit: AKQ"                            shows has(A,t), has(K,t), has(Q,t)
+      priority 1
+  3C  "Feature: the club ace or king, maximum"     shows has(A,C) | has(K,C), hcp>=8   when t is not C
+  3D  "Feature: the diamond ace or king, maximum"  shows has(A,D) | has(K,D), hcp>=8   when t is not D
+  3H  "Feature: the heart ace or king, maximum"    shows has(A,H) | has(K,H), hcp>=8   when t is not H
+  3S  "Feature: the spade ace or king, maximum"    shows has(A,S) | has(K,S), hcp>=8   when t is not S
+  3C  "Maximum: the club queen, no side ace or king"      shows has(Q,C), hcp>=8   when t is not C
+      priority -1
+  3D  "Maximum: the diamond queen, no side ace or king"   shows has(Q,D), hcp>=8   when t is not D
+      priority -1
+  3H  "Maximum: the heart queen, no side ace or king"     shows has(Q,H), hcp>=8   when t is not H
+      priority -1
+  3S  "Maximum: the spade queen, no side ace or king"     shows has(Q,S), hcp>=8   when t is not S
+      priority -1
+  3C  "Maximum: AK of the suit and the club jack"     shows has(A,t), has(K,t), has(J,C), hcp>=8   when t is not C
+      priority -2
+  3D  "Maximum: AK of the suit and the diamond jack"  shows has(A,t), has(K,t), has(J,D), hcp>=8   when t is not D
+      priority -2
+  3H  "Maximum: AK of the suit and the heart jack"    shows has(A,t), has(K,t), has(J,H), hcp>=8   when t is not H
+      priority -2
+  3S  "Maximum: AK of the suit and the spade jack"    shows has(A,t), has(K,t), has(J,S), hcp>=8   when t is not S
+      priority -2
+  3{t}  "Minimum, or nothing outside the suit"     shows hcp<=10
+        priority -3
 
 # bba: a maximum is 8-10; it shows a side ace, king (not singleton) or
 # queen third, and bids 3NT without one. A minimum (5-7) rebids the suit.
