@@ -9,7 +9,7 @@ use std::time::{Duration, Instant, SystemTime};
 
 use egui::{Color32, RichText, Sense};
 use egui_extras::{Column, TableBuilder};
-use rbb_compare::{short, BoardResult, Engines, Options, Report, Stats};
+use rbb_compare::{short, AuctionFilter, BoardResult, Engines, Options, Report, Stats};
 
 use crate::detail::{short_path, Detail};
 
@@ -77,6 +77,7 @@ enum SortBy {
     Calls,
     Auction,
     Contract,
+    Par,
     Name,
 }
 
@@ -133,6 +134,11 @@ pub struct App {
     /// Order the divergence table by what each point costs against par
     /// rather than by how many boards it covers.
     div_by_imps: bool,
+    /// Which boards count, by who bid in BBA's auction.
+    auctions: AuctionFilter,
+    /// The total and per-scenario statistics over the boards `auctions`
+    /// keeps.
+    stats: Option<(Stats, Vec<Stats>)>,
     board: Option<usize>,
     detail: Option<Detail>,
     /// Double-dummy tables, opened on first use (on the solver thread).
@@ -178,6 +184,8 @@ impl App {
             prob: None,
             div_filter: String::new(),
             div_by_imps: false,
+            auctions: AuctionFilter::All,
+            stats: None,
             board: None,
             detail: None,
             dd: Arc::new(OnceLock::new()),
@@ -299,12 +307,27 @@ impl App {
                         .position(|x| x.scenario == s && x.board == b)
                 });
                 self.detail = None;
-                self.rebuild_divs();
+                self.refilter();
                 if let Some(i) = self.board {
                     self.select_board(i);
                 }
             }
         }
+    }
+
+    /// Whether board `b` is in view: the selected scenario's, and kept by
+    /// the auction filter.
+    fn shown(&self, b: &BoardResult) -> bool {
+        self.scenario.as_ref().is_none_or(|s| s == &b.scenario) && self.auctions.keeps(b)
+    }
+
+    /// Recount the statistics and lists after the auction filter changes.
+    fn refilter(&mut self) {
+        self.stats = self
+            .loaded
+            .as_ref()
+            .map(|l| rbb_compare::tally(l.report.boards.iter().filter(|b| self.auctions.keeps(b))));
+        self.rebuild_divs();
     }
 
     fn rebuild_divs(&mut self) {
@@ -318,7 +341,7 @@ impl App {
         let Some(l) = &self.loaded else { return };
         let mut index: HashMap<(String, String, String), usize> = HashMap::new();
         for (i, b) in l.report.boards.iter().enumerate() {
-            if self.scenario.as_ref().is_some_and(|s| s != &b.scenario) {
+            if !self.shown(b) {
                 continue;
             }
             let Some(d) = b.first_divergence else {
@@ -382,7 +405,7 @@ impl App {
         let Some(l) = &self.loaded else { return };
         let mut index: HashMap<(rbb_compare::ProblemKind, String, String), usize> = HashMap::new();
         for (i, b) in l.report.boards.iter().enumerate() {
-            if self.scenario.as_ref().is_some_and(|s| s != &b.scenario) {
+            if !self.shown(b) {
                 continue;
             }
             for p in &b.problems {
@@ -429,7 +452,7 @@ impl App {
             .boards
             .iter()
             .enumerate()
-            .filter(|(_, b)| self.scenario.as_ref().is_none_or(|s| s == &b.scenario))
+            .filter(|(_, b)| self.shown(b))
             .map(|(i, _)| i)
             .collect()
     }
@@ -587,7 +610,7 @@ impl eframe::App for App {
         egui::Panel::top("toolbar").show(ui, |ui| self.toolbar(ui));
         egui::Panel::left("scenarios")
             .resizable(true)
-            .default_size(360.0)
+            .default_size(430.0)
             .show(ui, |ui| self.scenarios(ui));
         egui::Panel::bottom("detail")
             .resizable(true)
@@ -650,6 +673,23 @@ impl App {
             );
             ui.checkbox(&mut self.opts.par, "par (slow first time)");
             ui.separator();
+            let before = self.auctions;
+            egui::ComboBox::from_id_salt("auction-filter")
+                .selected_text(self.auctions.label())
+                .show_ui(ui, |ui| {
+                    for f in AuctionFilter::ALL {
+                        ui.selectable_value(&mut self.auctions, f, f.label());
+                    }
+                })
+                .response
+                .on_hover_text(
+                    "Count only boards where, in BBA's auction, one side bid alone or both sides bid. \
+                     A board BBA bid uncontested stays uncontested when our engine comes in on it.",
+                );
+            if self.auctions != before {
+                self.refilter();
+            }
+            ui.separator();
             ui.label(
                 RichText::new(format!(
                     "rules: {}   PBS: {}",
@@ -670,8 +710,7 @@ impl App {
         if let Some(e) = &self.error {
             ui.label(RichText::new(format!("⚠ {e}")).color(BAD).monospace());
         }
-        if let Some(l) = &self.loaded {
-            let t = &l.report.summary.total;
+        if let (Some(l), Some((t, _))) = (&self.loaded, &self.stats) {
             let calls = t.calls_all();
             ui.horizontal_wrapped(|ui| {
                 ui.label(
@@ -770,7 +809,7 @@ impl App {
 
     fn scenarios(&mut self, ui: &mut egui::Ui) {
         ui.heading("Scenarios");
-        const KEYS: [(SortBy, &str, &str); 4] = [
+        const KEYS: [(SortBy, &str, &str); 5] = [
             (
                 SortBy::Calls,
                 "calls",
@@ -780,6 +819,12 @@ impl App {
             ),
             (SortBy::Auction, "auction", "Share of boards where the engine's whole auction equals BBA's."),
             (SortBy::Contract, "contract", "Share of boards where the final contract equals BBA's."),
+            (
+                SortBy::Par,
+                "par",
+                "IMPs against double-dummy par, ours minus BBA's, summed over the boards where the \
+                 contracts differ. Negative: BBA got closer. This is the number to improve.",
+            ),
             (SortBy::Name, "name", "Scenario name."),
         ];
         let mut action = None;
@@ -799,7 +844,7 @@ impl App {
         if let Some((by, r)) = action.take() {
             self.sort_click(by, &r);
         }
-        let headers: Vec<(SortBy, String, &str)> = [KEYS[3], KEYS[0], KEYS[1], KEYS[2]]
+        let headers: Vec<(SortBy, String, &str)> = [KEYS[4], KEYS[0], KEYS[1], KEYS[2], KEYS[3]]
             .iter()
             .map(|(b, l, h)| {
                 (
@@ -809,12 +854,15 @@ impl App {
                 )
             })
             .collect();
-        let Some(l) = &self.loaded else { return };
-        let mut rows: Vec<&Stats> = l.report.summary.scenarios.iter().collect();
+        let Some((_, scenarios)) = &self.stats else {
+            return;
+        };
+        let mut rows: Vec<&Stats> = scenarios.iter().collect();
         let key = |s: &Stats| match self.sort {
             SortBy::Calls => s.calls_all().rate(),
             SortBy::Auction => s.auction_rate(),
             SortBy::Contract => s.contract_rate(),
+            SortBy::Par => s.par.imps_vs_reference as f64,
             SortBy::Name => 0.0,
         };
         if self.sort == SortBy::Name {
@@ -847,7 +895,7 @@ impl App {
             .striped(true)
             .sense(Sense::click())
             .column(Column::remainder().at_least(140.0).clip(true))
-            .columns(Column::auto(), 3)
+            .columns(Column::auto(), 4)
             .header(20.0, |mut h| {
                 for (by, label, help) in &headers {
                     h.col(|ui| {
@@ -879,6 +927,21 @@ impl App {
                     });
                     row.col(|ui| {
                         ui.label(pct(s.contract_rate()));
+                    });
+                    row.col(|ui| {
+                        let n = s.par.imps_vs_reference;
+                        let text = RichText::new(format!("{n:+}"));
+                        ui.label(if n < 0 {
+                            text.color(BAD)
+                        } else if n > 0 {
+                            text.color(GOOD)
+                        } else {
+                            text
+                        })
+                        .on_hover_text(format!(
+                            "{} boards with differing contracts: ours closer {}, BBA closer {}, equal {}",
+                            s.par.scored, s.par.ours_closer, s.par.reference_closer, s.par.equal
+                        ));
                     });
                     if row.response().clicked() {
                         clicked = Some(s.name.clone());

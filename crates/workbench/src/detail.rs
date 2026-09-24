@@ -1,12 +1,15 @@
 //! Board detail: the deal, both auctions, how the engine read BBA's calls,
 //! and the engine's reasoning at the first difference.
 
-use bridge_types::{Call, DdTable, Deal, Direction, Hand, Suit, DECLARERS, STRAINS};
+use bridge_types::{Call, DdTable, Deal, Direction, Hand, Strain, Suit, STRAINS};
 use egui::{Color32, RichText};
 use rbb_compare::{short, BoardResult, Engines};
 use rbb_engine::{Decision, Interpretation, SeatKnowledge, Tri};
 
 use crate::app::{BAD, GOOD};
+
+/// The colour that marks BBA's call or contract; ours use `BAD`.
+const BBA: Color32 = Color32::from_rgb(90, 140, 220);
 
 const SEATS: [Direction; 4] = [
     Direction::West,
@@ -115,15 +118,9 @@ impl Detail {
         ui.separator();
 
         ui.horizontal_top(|ui| {
-            ui.vertical(|ui| {
-                if let Some(deal) = &self.deal {
-                    compass(ui, deal);
-                }
-                if let Some(dd) = &b.dd {
-                    ui.add_space(8.0);
-                    dd_grid(ui, dd);
-                }
-            });
+            if let Some(deal) = &self.deal {
+                ui.vertical(|ui| compass(ui, deal));
+            }
             ui.add_space(24.0);
             ui.vertical(|ui| {
                 ui.strong("BBA");
@@ -133,7 +130,7 @@ impl Detail {
                     b.dealer,
                     &b.reference,
                     b.first_divergence,
-                    Color32::from_rgb(90, 140, 220),
+                    BBA,
                 );
             });
             ui.add_space(24.0);
@@ -148,6 +145,20 @@ impl Detail {
                     BAD,
                 );
             });
+            if let Some(dd) = &b.dd {
+                ui.add_space(24.0);
+                ui.vertical(|ui| {
+                    dd_grid(
+                        ui,
+                        dd,
+                        b.reference_contract
+                            .as_deref()
+                            .and_then(strain_and_declarer),
+                        b.our_contract.as_deref().and_then(strain_and_declarer),
+                        b.contracts_match(),
+                    )
+                });
+            }
         });
         ui.separator();
 
@@ -350,15 +361,58 @@ fn hand_block(ui: &mut egui::Ui, seat: Direction, hand: &Hand) {
     });
 }
 
+/// The strain and declarer of a contract written `4H S` or `3NX N`.
+fn strain_and_declarer(contract: &str) -> Option<(Strain, Direction)> {
+    let (call, declarer) = contract.split_once(' ')?;
+    let c = call.chars().nth(1)?;
+    let strain = STRAINS.into_iter().find(|s| s.to_char() == c)?;
+    Some((strain, Direction::from_char(declarer.chars().next()?)?))
+}
+
 /// Tricks available to each declarer in each strain, from the reference
-/// file's `OptimumResultTable` or from solving the deal.
-fn dd_grid(ui: &mut egui::Ui, dd: &DdTable) {
+/// file's `OptimumResultTable` or from solving the deal. Notrump first, rows
+/// N S E W, and partners share a row when they take the same tricks in
+/// every strain. The cell of BBA's contract is marked in BBA's colour and
+/// ours in red; green where both contracts are the same.
+fn dd_grid(
+    ui: &mut egui::Ui,
+    dd: &DdTable,
+    reference: Option<(Strain, Direction)>,
+    ours: Option<(Strain, Direction)>,
+    same: bool,
+) {
+    let strains = [
+        Strain::NoTrump,
+        Strain::Spades,
+        Strain::Hearts,
+        Strain::Diamonds,
+        Strain::Clubs,
+    ];
+    let mut rows: Vec<(String, Vec<Direction>)> = vec![];
+    for pair in [
+        [Direction::North, Direction::South],
+        [Direction::East, Direction::West],
+    ] {
+        if strains
+            .iter()
+            .all(|&s| dd.tricks(pair[0], s) == dd.tricks(pair[1], s))
+        {
+            rows.push((
+                format!("{}{}", pair[0].to_char(), pair[1].to_char()),
+                pair.to_vec(),
+            ));
+        } else {
+            for d in pair {
+                rows.push((d.to_char().to_string(), vec![d]));
+            }
+        }
+    }
     ui.label(RichText::new("double dummy").strong());
     egui::Grid::new("dd-table")
         .spacing([10.0, 2.0])
         .show(ui, |ui| {
             ui.label("");
-            for s in STRAINS {
+            for s in strains {
                 let color = if s.is_red() {
                     Color32::from_rgb(200, 60, 60)
                 } else {
@@ -367,12 +421,38 @@ fn dd_grid(ui: &mut egui::Ui, dd: &DdTable) {
                 ui.label(RichText::new(s.symbol()).monospace().color(color));
             }
             ui.end_row();
-            for d in DECLARERS {
-                ui.monospace(d.to_char().to_string());
-                for s in STRAINS {
-                    let n = dd.tricks(d, s);
+            for (name, seats) in &rows {
+                ui.monospace(name);
+                for s in strains {
+                    let n = dd.tricks(seats[0], s);
                     let text = RichText::new(format!("{n:2}")).monospace();
-                    ui.label(if n >= 7 { text } else { text.weak() });
+                    let here = |c: Option<(Strain, Direction)>| {
+                        c.is_some_and(|(cs, cd)| cs == s && seats.contains(&cd))
+                    };
+                    let mark = if same && here(ours) {
+                        Some(GOOD)
+                    } else if here(ours) {
+                        Some(BAD)
+                    } else if here(reference) {
+                        Some(BBA)
+                    } else {
+                        None
+                    };
+                    let r = ui.label(match mark {
+                        Some(c) => text.strong().color(Color32::WHITE).background_color(c),
+                        None if n >= 7 => text,
+                        None => text.weak(),
+                    });
+                    // Different contracts in one cell (3H and 4H by South):
+                    // ours fills it, BBA's frames it.
+                    if !same && here(ours) && here(reference) {
+                        ui.painter().rect_stroke(
+                            r.rect.expand(2.0),
+                            2.0,
+                            egui::Stroke::new(2.0, BBA),
+                            egui::StrokeKind::Outside,
+                        );
+                    }
                 }
                 ui.end_row();
             }

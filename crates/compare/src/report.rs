@@ -203,14 +203,84 @@ pub fn short(c: &Call) -> String {
     }
 }
 
-pub fn summarize(boards: &[BoardResult]) -> Summary {
+/// Who bid in an auction: nobody, one side only, or both.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+pub enum Contest {
+    PassedOut,
+    /// Only North-South made a call other than pass.
+    Ns,
+    /// Only East-West did.
+    Ew,
+    /// Both sides bid, doubled or redoubled.
+    Both,
+}
+
+/// Who bid in `calls`, dealt by `dealer`.
+pub fn contest(dealer: Direction, calls: &[Call]) -> Contest {
+    let mut bid = [false; 2];
+    let mut seat = dealer;
+    for c in calls {
+        if *c != Call::Pass {
+            bid[matches!(seat, Direction::East | Direction::West) as usize] = true;
+        }
+        seat = seat.next();
+    }
+    match bid {
+        [false, false] => Contest::PassedOut,
+        [true, false] => Contest::Ns,
+        [false, true] => Contest::Ew,
+        [true, true] => Contest::Both,
+    }
+}
+
+/// Which boards to count, by who bid in BBA's auction. BBA's auction
+/// defines the board, so a board BBA bid uncontested stays uncontested
+/// when our engine comes in on it.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum AuctionFilter {
+    #[default]
+    All,
+    UncontestedNs,
+    UncontestedEw,
+    Competitive,
+}
+
+impl AuctionFilter {
+    pub const ALL: [AuctionFilter; 4] = [
+        AuctionFilter::All,
+        AuctionFilter::UncontestedNs,
+        AuctionFilter::UncontestedEw,
+        AuctionFilter::Competitive,
+    ];
+
+    pub fn label(self) -> &'static str {
+        match self {
+            AuctionFilter::All => "all auctions",
+            AuctionFilter::UncontestedNs => "uncontested, NS bid",
+            AuctionFilter::UncontestedEw => "uncontested, EW bid",
+            AuctionFilter::Competitive => "competitive",
+        }
+    }
+
+    pub fn keeps(self, b: &BoardResult) -> bool {
+        let c = contest(b.dealer, &b.reference);
+        match self {
+            AuctionFilter::All => true,
+            AuctionFilter::UncontestedNs => c == Contest::Ns,
+            AuctionFilter::UncontestedEw => c == Contest::Ew,
+            AuctionFilter::Competitive => c == Contest::Both,
+        }
+    }
+}
+
+/// Statistics over `boards`: the total, and one per scenario by name.
+pub fn tally<'a>(boards: impl IntoIterator<Item = &'a BoardResult>) -> (Stats, Vec<Stats>) {
     let mut total = Stats {
         name: "ALL".into(),
         ..Stats::default()
     };
     let mut by_scenario: BTreeMap<&str, Stats> = BTreeMap::new();
-    let mut points: HashMap<(String, String, String), Divergence> = HashMap::new();
-    for (i, b) in boards.iter().enumerate() {
+    for b in boards {
         total.add(b);
         by_scenario
             .entry(&b.scenario)
@@ -219,6 +289,14 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
                 ..Stats::default()
             })
             .add(b);
+    }
+    (total, by_scenario.into_values().collect())
+}
+
+pub fn summarize(boards: &[BoardResult]) -> Summary {
+    let (total, scenarios) = tally(boards);
+    let mut points: HashMap<(String, String, String), Divergence> = HashMap::new();
+    for (i, b) in boards.iter().enumerate() {
         if let Some(d) = b.first_divergence {
             let auction = b.reference[..d]
                 .iter()
@@ -283,7 +361,7 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
     divergences.sort_by(|a, b| b.count.cmp(&a.count).then(a.auction.cmp(&b.auction)));
     Summary {
         total,
-        scenarios: by_scenario.into_values().collect(),
+        scenarios,
         divergences,
         problems,
     }

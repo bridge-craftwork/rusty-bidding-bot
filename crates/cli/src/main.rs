@@ -55,6 +55,10 @@ enum Command {
         /// as a percentage (see `card coverage`). Both sides must pass.
         #[arg(long)]
         min_coverage: Option<f64>,
+        /// Only boards where, in BBA's auction, one side bid alone
+        /// (`ns`, `ew`) or both sides bid (`competitive`).
+        #[arg(long, value_parser = ["all", "ns", "ew", "competitive"], default_value = "all")]
+        auctions: String,
         /// How many scenarios to list (worst first).
         #[arg(long, default_value_t = 30)]
         worst: usize,
@@ -241,9 +245,16 @@ fn run(cli: Cli) -> Result<()> {
             top,
             by_imps,
             min_coverage,
+            auctions,
             worst,
             json,
         } => {
+            let filter = match auctions.as_str() {
+                "ns" => rbb_compare::AuctionFilter::UncontestedNs,
+                "ew" => rbb_compare::AuctionFilter::UncontestedEw,
+                "competitive" => rbb_compare::AuctionFilter::Competitive,
+                _ => rbb_compare::AuctionFilter::All,
+            };
             let mut opts = rbb_compare::Options {
                 pbs,
                 scenarios,
@@ -255,7 +266,7 @@ fn run(cli: Cli) -> Result<()> {
             if let Some(min) = min_coverage {
                 opts.scenarios = covered_scenarios(&opts, min)?;
             }
-            compare(&opts, top, by_imps, worst, json.as_deref())
+            compare(&opts, filter, top, by_imps, worst, json.as_deref())
         }
         Command::Probe {
             hands,
@@ -425,15 +436,20 @@ fn pct(x: f64) -> String {
 
 fn compare(
     opts: &rbb_compare::Options,
+    filter: rbb_compare::AuctionFilter,
     top: usize,
     by_imps: bool,
     worst: usize,
     json: Option<&Path>,
 ) -> Result<()> {
     let started = std::time::Instant::now();
-    let report = rbb_compare::run(opts, &|done, total| {
+    let mut report = rbb_compare::run(opts, &|done, total| {
         eprint!("\r{done}/{total} boards");
     })?;
+    if filter != rbb_compare::AuctionFilter::All {
+        report.retain(filter);
+        println!("{} (in BBA's auction)", filter.label());
+    }
     eprintln!("  ({:.1}s)", started.elapsed().as_secs_f64());
     let s = &report.summary;
     let t = &s.total;
@@ -578,17 +594,18 @@ fn compare(
         });
         println!("\nscenarios, lowest call agreement first:");
         println!(
-            "  {:32} {:>6} {:>7} {:>8} {:>9}",
-            "scenario", "boards", "calls", "auction", "contract"
+            "  {:32} {:>6} {:>7} {:>8} {:>9} {:>8}",
+            "scenario", "boards", "calls", "auction", "contract", "par"
         );
         for sc in by.iter().take(worst) {
             println!(
-                "  {:32} {:>6} {:>7} {:>8} {:>9}",
+                "  {:32} {:>6} {:>7} {:>8} {:>9} {:>+8}",
                 sc.name,
                 sc.boards,
                 pct(sc.calls_all().rate()),
                 pct(sc.auction_rate()),
-                pct(sc.contract_rate())
+                pct(sc.contract_rate()),
+                sc.par.imps_vs_reference
             );
         }
     }

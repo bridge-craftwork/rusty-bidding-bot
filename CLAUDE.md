@@ -57,6 +57,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   to the `.btn`.
   `--by-imps` orders the divergence points by what they cost against par
   instead of by how often they happen.
+  `--auctions ns|ew|competitive` keeps only the boards where, in BBA's
+  auction, one side bid alone or both sides bid (the workbench has the same
+  filter in its toolbar).
 - `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
