@@ -391,3 +391,9 @@ and never with four spades (0 of 300): with spades opener rebids 1S over
 hand opens its minor. So a 1NT opener holds four hearts more often than
 four spades, and responder's heart and spade honours are not worth the
 same.
+
+Rick's reading (2026-09-24): BBA supports switching 5-4-2-2 1NT openings
+off, but its responses were written for a 1NT that includes them --
+otherwise there would be no suit priority at all. So the bba treatment
+should value responder's honours against a 1NT that may hold 5-4-2-2 with
+four hearts (not spades), whatever the card says.
