@@ -75,7 +75,7 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is not standa
 
 # Opener after a new suit (default and bba). Raise with three, else rebid the suit.
 after 2x (P) 2y (P) when x is not C | two_c is natural, style is not standard
-  4y  "Three-card support and a maximum"   shows y>=3, hcp>=9
+  4y  "Three-card support: game (BBA, any strength)"   shows y>=3
       when  y is H | y is S
   3y  "Three-card support"                 shows y>=3
   3x  "No fit: rebid the suit"             shows y<=2
