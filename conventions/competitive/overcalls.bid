@@ -28,6 +28,7 @@ module overcalls "Suit and notrump overcalls"
   param  jump    = overcalls.jump default weak
   param  nt_min  = nt_overcalls.direct.range_min default 15
   param  nt_max  = nt_overcalls.direct.range_max default 18
+  param  nt_def  = competitive.defense_vs_strong_nt.convention default other
 
 # ── Simple overcalls at the one level ────────────────────────────────
 # `(1x)` binds x to the suit they opened; the rules below never bid it.
@@ -96,6 +97,29 @@ after (1x) 1N (2x)
   3N  "Game: 9+, {x} held"                    shows hcp>=9, stop(x)
   P   "Nothing to say"                        shows hcp>=0
       priority -5
+
+# ── Over their 1NT, natural (2026-09-25, probes/vs-1N.toml) ───────────
+# No rules existed. BBA on Basic-Bridge (no conventional defence): a
+# five-card suit at the two level with 12+ total points (six cards from
+# about 10 HCP), the longest suit and the higher of two equal; a
+# preemptive three-level bid with seven cards and 4-10. (BBA also doubles
+# with 13+ and 4-3-3-3; neutral, left out.) Judged from the overcalling
+# side: +1,007 IMPs over 237 changed boards (par distance says -825, but
+# par distance counts a successful overcall against us: overcalls.notes.md).
+after (1N) when nt_def is other
+  2S  "Natural: five spades, 12+ total points"    shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=12, hcp<=17
+  2H  "Natural: five hearts, 12+ total points"    shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=12, hcp<=17
+  2D  "Natural: five diamonds, 12+ total points"  shows D>=5, D>S, D>H, D>=C, hcp+length_points>=12, hcp<=17
+  2C  "Natural: five clubs, 12+ total points"     shows C>=5, C>S, C>H, C>D, hcp+length_points>=12, hcp<=17
+  3S  "Preemptive: seven spades, 4-10"            shows S>=7, hcp=4..10
+      priority 1
+  3H  "Preemptive: seven hearts, 4-10"            shows H>=7, hcp=4..10
+      priority 1
+  3D  "Preemptive: seven diamonds, 4-10"          shows D>=7, hcp=4..10
+      priority 1
+  3C  "Preemptive: seven clubs, 4-10"             shows C>=7, hcp=4..10
+      priority 1
+  P   "Nothing to say"                            priority -10
 
 # ── Weak jump overcalls ──────────────────────────────────────────────
 # The weak-two rules of preempts.bid: six cards and 4-10 HCP, and

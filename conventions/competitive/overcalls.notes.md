@@ -126,3 +126,28 @@ The balancing seat is `balancing.bid`; responsive doubles are
   we doubled; BBA overcalls. Capping the overcall at 17 HCP instead of
   17 total points: +229 (-166,858 -> -166,629). The strong any-shape
   double keeps 18 total points: moving it to HCP too cost 971 IMPs.
+
+## Over their 1NT, natural; and judging competitive calls (2026-09-25)
+
+We had no rules over an opposing 1NT. BBA on Basic-Bridge
+(`probes/vs-1N.toml`, 2,500 hands) overcalls naturally:
+- a five-card suit at the two level with 12+ total points;
+- a seven-card preempt at the three level with 4-10.
+
+Our rules now do the same when the card names no conventional defence:
+91% agreement.
+
+**Distance from par is the wrong yardstick here.** The corpus par figure
+treats both sides alike: a competitive call that works (an overcall that
+buys the contract, a preempt that pushes them too high) moves the
+result away from par and counts as a loss. On the 237 boards this
+change touches:
+
+| Measure | IMPs |
+|---|---|
+| Distance from par | -825 |
+| Double-dummy result to the side that overcalled | +1,007 |
+
+`probes/tools/sideimps.py BASE.json VARIANT.json` computes the second.
+Use it for competitive decisions; distance from par stays right for
+uncontested auctions.
