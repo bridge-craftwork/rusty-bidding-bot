@@ -61,3 +61,21 @@ contracts from 5.6% to 7.4%.
   1NT, and the **balancing double**.
 - Advancer's rebid after the cue bid (the cue sets `forcing=game`, so the
   base rule bids game in the agreed suit or 3NT).
+
+## Advancer, probed (2026-09-25, `probes/advance-1S-X.toml`)
+
+2,000 random advancer hands after 1S X P (Basic-Bridge). Agreement
+before: 45%; after: 55%. Corpus: -162,699 -> -162,394 (+305).
+- **3NT with 12+ and their suit stopped** (no four-card unbid major),
+  where we cue-bid. Worth +72 alone. **For Rick:** this overrides "the
+  cue bid is 12+" for hands with a stopper. Test 19 now expects 3NT.
+- **No four-card suit to name** (four of their suit, say): BBA bids the
+  cheapest three-card suit. We had no call.
+- **1NT is 7-10 HCP** with a stopper. Total points put 5-3-3-2 hands
+  with nine or ten out of range, leaving them no call.
+- **Jumps:** BBA does not jump with four cards and 9 HCP. It jumps with
+  five from about 8, or four with 10-11. Four cards and 9 now bid at the
+  cheapest level.
+
+Not done: BBA's penalty pass with long strong trumps; the rest of the
+disagreement is mostly the level with 9-11 (2S cue vs 3H...).

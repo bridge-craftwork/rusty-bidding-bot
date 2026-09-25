@@ -16,7 +16,7 @@ N 76532.Q84.T54.32          | 1D X P  | 1S     | forced: five spades and nothing
 N QJT2.75.JT62.932          | 1D X P  | 1S     | four spades, 3 HCP: the cheapest suit says 0-8
 N K32.QJ54.976.T87          | 1S X P  | 2H     | four hearts, 7 total points
 N KQ32.AJ54.97.T87          | 1S X P  | 3H     | four hearts and 10 HCP: jump to invite
-N K32.Q54.A976.KT7          | 1S X P  | 2S     | 13 HCP: the cue bid is the game force
+N K32.Q54.A976.KT7          | 1S X P  | 3NT    | 13 HCP, a spade stopper: 3NT (BBA; par, 2026-09-25; Rick ruled the cue bid for 12+: to confirm)
 N KJ54.Q72.Q93.T87          | 1S X P  | 1N     | 9 total points, balanced, a spade stopper
 
 # The doubler's rebid: a minimum passes, 18+ bids on.
