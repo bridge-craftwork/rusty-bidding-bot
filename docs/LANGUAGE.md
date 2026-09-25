@@ -198,7 +198,7 @@ The explanation string interpolates the same way: `"Keycard ask in {trump}"`.
 
 | Term | Meaning |
 |---|---|
-| `hcp`, `tp(x)`, `controls`, `losers` | point counts; `tp` = total points with `x` as trump |
+| `hcp`, `tp(x)`, `controls`, `losers`, `tens` | point counts; `tp` = total points with `x` as trump; `tens` = tens held |
 | `S H D C`, `M`, `x` | length of that suit |
 | `balanced`, `semibalanced`, `shape 5-4-x-x`, `shape 4333`, `shortest`, `longest` | shape |
 | `stop(x)`, `quality(x) >= good`, `has(Q, x)` | suit holdings |

@@ -446,3 +446,50 @@ game level and we bid 3NT (99 boards on all cards), 3NT came out +72 IMPs
 ahead. BBA's gains came on slam hands, where the default passes 2D or
 bids 2NT on the 21GF cards. That is worth a look separately: a 3m slam
 try from 12+ opposite 15-17 may pay.
+
+## Six-card minors and the no-fit line after 2H/2S (2026-09-25)
+
+**Six-card minors** (`probes/stay-4m-*.toml`, 1,200 hands per answer):
+- **4m, BBA's slam try:** from 13 HCP at matchpoints, 12 at IMPs, after
+  all three answers. Some 10-12 after 2D bid 4m as well; nothing I tried
+  separates them.
+- **3m below that:** from 9 HCP, even with a diamond stopper after 2D.
+- **Weak, 7-8:** BBA plays the answer. It passes 2D with six diamonds,
+  and passes 2H/2S with three of the major.
+- **Opener over 4m:** 5m, or the other minor with five of it and two of
+  responder's minor (4D over 4C, 5C over 4D). Some 16-17s with a
+  four-card fit ask with 4NT; the 4NT is not modelled.
+- **Responder over 5m:** 6m from 14. The decision fits only ~70% on
+  HCP, shape and controls.
+
+Agreement on the probes, before -> after:
+
+| Answer | Matchpoints | IMPs |
+|---|---|---|
+| 2D | 32% -> 83% | 26% -> 81% |
+| 2H | 53% -> 91% | 46% -> 88% |
+| 2S | 54% -> 90% | 47% -> 86% |
+
+**No fit after 2H/2S opposite 15-17** (`probes/stay-nofit-2H.toml`,
+2S; 1,500 hands each, no five-card minor). Fitted with the same 15
+features as the counts above, the lines come out as HCP with a ten worth
+about half:
+
+| Decision | Matchpoints | IMPs |
+|---|---|---|
+| 3NT | 10 HCP, or 9 with two tens | 9 with a ten or a singleton |
+| Pass with three of the major | 7 without a ten | 7 with at most one ten |
+
+Held-out agreement: 3NT line 97% (MP) and 91% (IMPs); pass line 92-93%.
+IMP agreement overall: 77% -> 85% after 2H, 75% -> 86% after 2S. The
+old rules stay for other opening ranges. A new hand measure, `tens`,
+makes the lines expressible.
+
+**Known miss:** 942.A983.964.K87 after 2S. BBA bids 2NT at matchpoints;
+the count, and its fit, pass.
+
+**Corpus (bba style):**
+- Par: -181,678 -> -181,243.
+- Replay: 133 boards closer to BBA, 8 further.
+- Identical auctions: +45, -5.
+- The default is unchanged.

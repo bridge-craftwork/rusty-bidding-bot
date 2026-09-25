@@ -118,6 +118,7 @@ fn flip(op: CmpOp) -> CmpOp {
 
 const SELF_ATTRS: &[&str] = &[
     "hcp",
+    "tens",
     "points",
     "suit_points",
     "balanced",
@@ -691,6 +692,8 @@ impl<'a> Ctx<'a> {
         }
         Ok(match n {
             "hcp" => Val::Num(k.hcp),
+            // Nobody tracks another hand's tens.
+            "tens" => Val::Num(Range::new(0, 4)),
             "points" => Val::Num(k.whole_points(0)),
             "suit_points" => Val::Num(k.whole_points(1)),
             "balanced" => Val::Bool(k.balanced),
@@ -1140,6 +1143,7 @@ fn cmp3(known_true: bool, known_false: bool) -> Tri {
 fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
     match n {
         "hcp" => Val::Num(Range::point(f.hcp)),
+        "tens" => Val::Num(Range::point(f.tens)),
         // Whole points: 9¾ counts as 9.
         "points" => Val::Num(Range::point(f.points_q(v).div_euclid(4))),
         "suit_points" => Val::Num(Range::point(f.suit_points_q(v).div_euclid(4))),

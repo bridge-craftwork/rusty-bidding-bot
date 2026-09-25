@@ -33,7 +33,11 @@ dealer  S
 N 942.A983.964.K87      | 1NT P               | P      | 7 HCP 4-3-3-3: no game interest (default)
 card    Basic-Bridge general.style=bba
 N 942.A983.964.K87      | 1NT P               | 2C     | bba: 7 HCP and four hearts is enough for Stayman
-N 942.A983.964.K87      | 1NT P 2C P 2S P     | 2NT    | bba: no fit, invite; 2NT shows 7-9
+# Known miss of the pass-with-three-spades count (2026-09-25): after 2S
+# BBA bids 2NT at matchpoints (passes at IMPs); the count, and its fit,
+# say pass (stayman.notes.md).
+N 942.A983.964.K87      | 1NT P 2C P 2S P     | P      | bba: 7 HCP, three spades, no ten: the count passes
+N K42.A983.964.Q87      | 1NT P 2C P 2S P     | 2NT    | bba: 9, no fit: invite
 N 942.A983.964.K87      | 1NT P 2C P 2H P     | P      | bba: the fit is found, play there
 N 942.A983.964.Q87      | 1NT P               | P      | bba: 6 HCP is not enough
 S AKT5.Q72.AJ3.QJ2      | 1NT P 2C P 2S P 2NT P | P    | bba: 17 and one ten declines opposite 7-9

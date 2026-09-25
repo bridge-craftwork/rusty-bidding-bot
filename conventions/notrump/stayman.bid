@@ -188,23 +188,79 @@ when answered majors
       when  style is bba
       sets  ask=nt_invite
       priority -1
-  # No fit after 2H or 2S: the earlier rules (the counts were fitted after
-  # 2D only, and did worse here on the corpus: stayman.notes.md).
+  # Opposite 15-17 (fitted 2026-09-25, probes/stay-nofit-2H.toml, 2S):
+  # HCP with tens worth about half. Matchpoints: 3NT from 10, or 9 with
+  # two tens; with three of opener's major, 7 without a ten passes. IMPs:
+  # 3NT from 9 with a ten or a singleton; 7 with three of the major and
+  # at most one ten passes. Held-out: 91-97%.
+  3N  "Game, no heart fit"  shows H<=3, hcp>=10 | (hcp=9, tens>=2), strength<=game   sets ask=choice
+      when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  2N  "Invitational, no heart fit"  shows H<=3, hcp>=7, hcp<=9, hcp<=8 | tens<=1, H<=2 | hcp>=8 | tens>=1
+      when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+  P   "Weak, three hearts: play here"  shows H=3, hcp<=7, tens=0
+      when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  3N  "Game, no heart fit"  shows H<=3, hcp>=10 | (hcp=9, tens>=1 | shortest<=1), strength<=game   sets ask=choice
+      when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  2N  "Invitational, no heart fit"  shows H<=3, hcp>=7, hcp<=9, hcp<=8 | (tens=0, shortest>=2), H<=2 | hcp>=8 | tens>=2
+      when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+  P   "Weak, three hearts: play here"  shows H=3, hcp<=7, tens<=1
+      when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  3N  "Game, no spade fit"  shows S<=3, hcp>=10 | (hcp=9, tens>=2), strength<=game   sets ask=choice
+      when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  2N  "Invitational, no spade fit"  shows S<=3, hcp>=7, hcp<=9, hcp<=8 | tens<=1, S<=2 | hcp>=8 | tens>=1
+      when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+  P   "Weak, three spades: play here"  shows S=3, hcp<=7, tens=0
+      when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  3N  "Game, no spade fit"  shows S<=3, hcp>=10 | (hcp=9, tens>=1 | shortest<=1), strength<=game   sets ask=choice
+      when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  2N  "Invitational, no spade fit"  shows S<=3, hcp>=7, hcp<=9, hcp<=8 | (tens=0, shortest>=2), S<=2 | hcp>=8 | tens>=2
+      when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      sets  ask=nt_invite
+      priority -1
+  P   "Weak, three spades: play here"  shows S=3, hcp<=7, tens<=1
+      when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority -1
+  # No fit after 2H or 2S opposite any other range: the earlier rules.
   3N  "Game: {game} total points, no heart fit"  shows strength=game, H<=3   sets ask=choice
-      when  partner.H>=4
+      when  partner.H>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
       priority -1
   3N  "Game: {game} total points, no spade fit"  shows strength=game, S<=3   sets ask=choice
-      when  partner.S>=4
+      when  partner.S>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
       priority -1
   2N  "Invitational, no heart fit"  shows points>=24-partner.hcp.max, strength<=invite, H<=3
-      when  partner.H>=4
+      when  partner.H>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba                          # 7-9: opener needs 18 to accept
       sets  ask=nt_invite
       priority -1
   2N  "Invitational, no spade fit"  shows points>=24-partner.hcp.max, strength<=invite, S<=3
-      when  partner.S>=4
+      when  partner.S>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
       sets  ask=nt_invite
       priority -1
@@ -232,24 +288,89 @@ when answered majors
   # minor, 3m rather than 3NT. After 2D: 3m from 9 HCP without a diamond
   # stopper, from 12 with one (3NT and 2NT below that, by the counts).
   # After a major that does not fit: 3m from 10, whatever the stoppers.
-  3C  "Game values, five or more clubs"  shows C>=5, C>=D, (hcp>=9, !stop(D)) | hcp>=12
+  3C  "Game values, five or more clubs"  shows C>=5, C>=D, (hcp>=9, !stop(D) | C>=6) | hcp>=12
       when  partner.H<=3, partner.S<=3, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-  3D  "Game values, five or more diamonds"  shows D>=5, D>C, (hcp>=9, !stop(D)) | hcp>=12
+  3D  "Game values, five or more diamonds"  shows D>=5, D>C, (hcp>=9, !stop(D) | D>=6) | hcp>=12
       when  partner.H<=3, partner.S<=3, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-  3C  "Game values, five or more clubs, no heart fit"  shows C>=5, C>=D, H<=3, hcp>=10
+  3C  "Game values, five or more clubs, no heart fit"  shows C>=5, C>=D, H<=3, hcp>=10 | (C>=6, hcp>=9)
       when  partner.H>=4, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-  3D  "Game values, five or more diamonds, no heart fit"  shows D>=5, D>C, H<=3, hcp>=10
+  3D  "Game values, five or more diamonds, no heart fit"  shows D>=5, D>C, H<=3, hcp>=10 | (D>=6, hcp>=9)
       when  partner.H>=4, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-  3C  "Game values, five or more clubs, no spade fit"  shows C>=5, C>=D, S<=3, hcp>=10
+  3C  "Game values, five or more clubs, no spade fit"  shows C>=5, C>=D, S<=3, hcp>=10 | (C>=6, hcp>=9)
       when  partner.S>=4, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-  3D  "Game values, five or more diamonds, no spade fit"  shows D>=5, D>C, S<=3, hcp>=10
+  3D  "Game values, five or more diamonds, no spade fit"  shows D>=5, D>C, S<=3, hcp>=10 | (D>=6, hcp>=9)
       when  partner.S>=4, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
+
+  # Weak (7-8) with a six-card minor, BBA plays the answer: 2D with six
+  # diamonds, the major with three of it (probes/stay-4m-bulk-*.toml).
+  P   "Six diamonds, weak: play 2D"  shows D>=6, hcp<=8
+      when  partner.H<=3, partner.S<=3, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  P   "Three hearts and a six-card minor, weak: play 2H"  shows H=3, C>=6 | D>=6, hcp<=8
+      when  partner.H>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  P   "Three spades and a six-card minor, weak: play 2S"  shows S=3, C>=6 | D>=6, hcp<=8
+      when  partner.S>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  # A six-card minor with 13 (12 at IMPs) jumps to 4m, BBA's slam try
+  # (probes/stay-4m-bulk-*.toml).
+  4C  "Slam try, six or more clubs"  shows C>=6, C>=D, hcp>=13
+      when  partner.H<=3, partner.S<=3, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds"  shows D>=6, D>C, hcp>=13
+      when  partner.H<=3, partner.S<=3, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4C  "Slam try, six or more clubs"  shows C>=6, C>=D, hcp>=12
+      when  partner.H<=3, partner.S<=3, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds"  shows D>=6, D>C, hcp>=12
+      when  partner.H<=3, partner.S<=3, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4C  "Slam try, six or more clubs, no heart fit"  shows H<=3, C>=6, C>=D, hcp>=13
+      when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds, no heart fit"  shows H<=3, D>=6, D>C, hcp>=13
+      when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4C  "Slam try, six or more clubs, no heart fit"  shows H<=3, C>=6, C>=D, hcp>=12
+      when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds, no heart fit"  shows H<=3, D>=6, D>C, hcp>=12
+      when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4C  "Slam try, six or more clubs, no spade fit"  shows S<=3, C>=6, C>=D, hcp>=13
+      when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds, no spade fit"  shows S<=3, D>=6, D>C, hcp>=13
+      when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4C  "Slam try, six or more clubs, no spade fit"  shows S<=3, C>=6, C>=D, hcp>=12
+      when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
+  4D  "Slam try, six or more diamonds, no spade fit"  shows S<=3, D>=6, D>C, hcp>=12
+      when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+      priority 1
 
 # BBA: opener answers the raise in the fit with a maximum (17 counting
 # tens opposite 15-17), or one less with a fifth trump. Partner's range
@@ -376,3 +497,62 @@ after 1N (P) 2C (P) 2D (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2H (P) 3C (P) 3D (P) | 
 after 1N (P) 2C (P) 2D (P) 3D (P) 4C (P) when style is bba
   4H  "Four hearts"  shows H>=4
   4S  "Four spades"  shows S>=4
+
+# BBA over the 4m slam try: 5m to play, or with two of them the other
+# minor (five cards); responder bids the slam from 14
+# (probes/stay-4m-opener-*.toml, stay-4m-resp-*.toml; the slam decision
+# fits only ~70% on HCP, shape and controls).
+after 1N (P) 2C (P) 2D (P) 4C (P) when style is bba
+  4D  "Five diamonds, two clubs"   shows C<=2, D>=5   priority 1
+  5C  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2D (P) 4D (P) when style is bba
+  5C  "Five clubs, two diamonds"   shows D<=2, C>=5   priority 1
+  5D  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2D (P) 4C (P) 5C (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2D (P) 4D (P) 5D (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2D (P) 4C (P) 4D (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  5C  "Game"            shows hcp<=13
+after 1N (P) 2C (P) 2D (P) 4D (P) 5C (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  5D  "Game"            shows hcp<=13
+after 1N (P) 2C (P) 2H (P) 4C (P) when style is bba
+  4D  "Five diamonds, two clubs"   shows C<=2, D>=5   priority 1
+  5C  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2H (P) 4D (P) when style is bba
+  5C  "Five clubs, two diamonds"   shows D<=2, C>=5   priority 1
+  5D  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2H (P) 4C (P) 5C (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2H (P) 4D (P) 5D (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2H (P) 4C (P) 4D (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  5C  "Game"            shows hcp<=13
+after 1N (P) 2C (P) 2H (P) 4D (P) 5C (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  5D  "Game"            shows hcp<=13
+after 1N (P) 2C (P) 2S (P) 4C (P) when style is bba
+  4D  "Five diamonds, two clubs"   shows C<=2, D>=5   priority 1
+  5C  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2S (P) 4D (P) when style is bba
+  5C  "Five clubs, two diamonds"   shows D<=2, C>=5   priority 1
+  5D  "To play"                    shows hcp>=15
+after 1N (P) 2C (P) 2S (P) 4C (P) 5C (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2S (P) 4D (P) 5D (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  P   "Game is enough"  shows hcp<=13
+after 1N (P) 2C (P) 2S (P) 4C (P) 4D (P) when style is bba
+  6C  "Slam"            shows hcp>=14
+  5C  "Game"            shows hcp<=13
+after 1N (P) 2C (P) 2S (P) 4D (P) 5C (P) when style is bba
+  6D  "Slam"            shows hcp>=14
+  5D  "Game"            shows hcp<=13
