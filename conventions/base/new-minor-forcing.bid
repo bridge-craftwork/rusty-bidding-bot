@@ -37,10 +37,10 @@ when asked nmf
 # Responder places the contract: with a fit, invite (3M) or bid game (4M);
 # without one, 2NT invites and 3NT is game.
 when answered nmf
-  4H  "Game in the heart fit"              shows points>=13   when partner.H>=3
-  3H  "Invitational, heart fit"            shows points=11..12   when partner.H>=3   sets ask=invite(H)
-  4S  "Game in the spade fit"              shows points>=13   when partner.S>=3
-  3S  "Invitational, spade fit"            shows points=11..12   when partner.S>=3   sets ask=invite(S)
+  4H  "Game in the heart fit"              shows points>=13, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3
+  3H  "Invitational, heart fit"            shows points=11..12, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets ask=invite(H)
+  4S  "Game in the spade fit"              shows points>=13, S>=5   when partner.S>=3
+  3S  "Invitational, spade fit"            shows points=11..12, S>=5   when partner.S>=3   sets ask=invite(S)
   3N  "Game, no fit"                       shows points>=13
   2N  "Invitational, no fit"               shows points=11..12   sets ask=nt_invite
   P   "Accepts the notrump game"           when partner.last=3N

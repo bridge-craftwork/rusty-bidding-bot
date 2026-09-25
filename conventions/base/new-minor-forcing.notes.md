@@ -51,3 +51,10 @@ Not changed: NMF is on these cards, and dropping a standard convention
 on a double-dummy count is your call. Worth trying first: opener
 accepts the NMF invitation with 13; responder with a 5-3 fit and a
 flat hand bids 3NT rather than 4M (a known modern choice).
+
+**Found (same day): a bug, not NMF.** After NMF, responder bid game or
+invited "in the fit" whenever opener showed three cards. NMF promises
+only four in responder's major, so four spades opposite three went to
+4S on a 4-3 fit. A fit now needs five cards opposite three (or 4-4
+where opener showed four hearts): +2,574 by distance, +2,850 to the
+bidding side (1,468 boards). NMF against no NMF: see below.
