@@ -81,7 +81,16 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   and cite them from the notes. For bulk random hands,
   `probes/gen_hands.py OUT.toml --hcp 9 14 --where "<python on L, h>"
   --partner-where ... --prefix ...` writes a spec, and
-  `probes/grid_tally.py <name> [--by hcp] [--diff]` tallies the run.
+  `probes/grid_tally.py <name> [--by hcp] [--diff]` tallies the run;
+  `probes/grid_diff.py <name> --key "L[0]" --key h` groups the
+  disagreements.
+- **Judging a change:** the corpus par figure is distance from par, which
+  suits uncontested auctions but counts a successful competitive call
+  as a loss. For competitive changes also run
+  `probes/tools/sideimps.py BASE.json VARIANT.json` on two
+  `compare --json` runs: double-dummy IMPs to the side that made the
+  first differing call. Report both; act where they agree
+  (overcalls.notes.md, "For Rick: which yardstick").
   Corpus tables mix cards (1NT ranges, transfer structures): restrict
   them to one card.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over

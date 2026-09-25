@@ -162,3 +162,22 @@ agreed suit over my control bid, which is the sign-off, so I pass.
 3. **Should the answerer need values to continue the ladder?** BBA's
    answerer signs off in game with a minimum; ours shows any control it
    holds. Measuring says leave it, bridge says otherwise.
+
+## For Rick: control bids stop in game too often (2026-09-25)
+
+A removal screen of the convention modules found control-bids.bid net
+negative: without it, +427 by distance and +890 IMPs to the bidding side
+(451 boards). Almost all of it is game against slam:
+
+| With control bids | Without | Boards | IMPs, for the version without |
+|---|---|---|---|
+| 4H | 6H | 65 | +559 |
+| 4S | 6S | 45 | +307 |
+| 5H | 6H | 17 | +164 |
+
+Some of these stops are right, e.g. 1N_5M_and_6m 84, where 6H goes
+down on the club lead. The rest stop in game with slam making, which
+points at "stop in game if a suit is unprotected in both hands" firing
+too often. Suspects: what counts as bare, and whether a control bid by
+partner is read as covering the suit. Not changed, as it is your
+ruling; worth a look with the examples.
