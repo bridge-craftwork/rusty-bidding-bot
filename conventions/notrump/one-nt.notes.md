@@ -411,3 +411,28 @@ placements does not follow BBA's passes (HAQ... HCH, a pass cell, is
 among the best). So measured double dummy against what its 1NT contains,
 BBA's suit-dependent passes are not better bridge: a fixed heuristic, not
 a statistical optimum. Not modelled in the bba treatment for now.
+
+### BBA's count for pass vs 2NT (2026-09-24): implemented
+
+`bba_nt_points` (engine, Facts): per shape, A/K/Q/J/ten weights, a charge
+for a doubleton major without the ace or king, and a threshold, fitted
+by logistic regression to 37,000 random 7-9 HCP responder hands BBA bid
+(probes/gen_hands.py; Basic-Bridge, MP), and scaled so BBA invites from
+8. The bba style's matchpoint pass and 2NT use it; IMPs, 3NT and the
+default are unchanged.
+
+What BBA counts, across shapes: A about 4, K 3, Q 1.8-2.0, J 0.7-0.95; a
+ten 0.75 in 4-3-3-3, 0.3-0.4 with 3-2-4-4 or five clubs, about 0 with five
+diamonds or 2-3-4-4; a doubleton spade without A or K costs about a point
+in 2-3-4-4 (1/2 in 2-3-5-3), a doubleton heart without them about 1/2 in
+3-2-3-5 and 0.7 in 2-2-4-5; the invitation starts at 6.9-8.25 by shape.
+
+A first count fitted to the placement frames (a few honour sets each)
+did not transfer to real hands and was dropped: frames are for finding
+what matters, random hands for fitting values.
+
+Measured, Basic-Bridge corpus: BBA's own pass/2NT choices predicted
+94.6% (722/763) against 89.8% for HCP + 1/2 a ten from 8; in replay,
+decisions after 1NT P involving pass or 2NT 72.3% -> 74.9% (the rest are
+other boundaries: Stayman, 3NT). BBA style overall: Basic_* identical
+auctions 44.5% -> 44.6%, uncontested same contract 69.2% -> 69.4%.

@@ -75,8 +75,12 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       shows H<=4, S<=4, (points>=24-partner.hcp.min, points<=32-partner.hcp.max, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=24-partner.hcp.min, hcp<=32-partner.hcp.max)
       when  imps
       when  style is bba
+  # At matchpoints BBA's line between pass and 2NT is its own count
+  # (bba_nt_points, fitted to probes: one-nt.notes.md, "BBA's count"):
+  # shape-dependent weights, a ten worth 0-0.9, a doubleton spade without
+  # A or K heavily charged. Calibrated opposite 15-17.
   2N  "Invitational: {invite} total points"
-      shows H<=4, S<=4, C<=5, D<=5, (strength=invite, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=24-partner.hcp.min)
+      shows H<=4, S<=4, C<=5, D<=5, bba_nt_points>=8, points>=25-partner.hcp.max, (strength<=invite, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp<=24-partner.hcp.min)
       when  minors is not four_way, minors is not four_way_reversed, matchpoints
       when  style is bba
       sets  ask=nt_invite
@@ -86,8 +90,11 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       when  style is bba
       sets  ask=nt_invite
   P   "No game interest"
+      shows bba_nt_points<=7
+      when  matchpoints, style is bba
+  P   "No game interest"
       shows (strength=signoff, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp<=24-partner.hcp.max) | (shape 4333, hcp>=25-partner.hcp.max, hcp<=25-partner.hcp.max, !has(T,S), !has(T,H), !has(T,D), !has(T,C))
-      when  style is bba
+      when  imps, style is bba
       priority -10
 
 # Opener answers the invitation: accept only when game is certain (17

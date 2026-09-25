@@ -109,6 +109,50 @@ impl Facts {
         }
     }
 
+    /// BBA's notrump count for responding to a 15-17 1NT at matchpoints,
+    /// fitted per shape to 37,000 random 7-9 HCP hands BBA bid
+    /// (conventions/notrump/one-nt.notes.md, "BBA's count"): a
+    /// weighted honour count whose weights, ten value and threshold depend
+    /// on the shape, with a heavy charge for a doubleton spade without the
+    /// ace or king. Scaled so that BBA invites from 8 in every shape; shapes
+    /// not fitted count HCP + 1/2 a ten against 8.
+    pub fn bba_nt_points(&self) -> i32 {
+        // (spades, hearts, diamonds, clubs) -> A, K, Q, J, ten, charge for a
+        // doubleton spade / heart without A or K, threshold; in hundredths.
+        const TABLE: [([i32; 4], [i32; 8]); 12] = [
+            ([2, 2, 4, 5], [425, 300, 205, 95, 3, 18, 74, 738]),
+            ([2, 2, 5, 4], [421, 300, 207, 94, -1, 13, 53, 767]),
+            ([2, 3, 3, 5], [387, 300, 177, 70, 27, 1, 0, 694]),
+            ([2, 3, 4, 4], [393, 300, 189, 88, 8, 95, 0, 703]),
+            ([2, 3, 5, 3], [433, 300, 194, 95, 0, 52, 0, 767]),
+            ([3, 2, 3, 5], [441, 300, 186, 89, 17, 0, 54, 739]),
+            ([3, 2, 4, 4], [415, 300, 184, 88, 33, 0, 8, 747]),
+            ([3, 2, 5, 3], [401, 300, 190, 87, 7, 0, 11, 740]),
+            ([3, 3, 2, 5], [398, 300, 190, 83, 38, 0, 0, 726]),
+            ([3, 3, 3, 4], [402, 300, 203, 91, 76, 0, 0, 825]),
+            ([3, 3, 4, 3], [400, 300, 200, 88, 74, 0, 0, 822]),
+            ([3, 3, 5, 2], [399, 300, 200, 92, 1, 0, 0, 746]),
+        ];
+        let shape = [self.len[3], self.len[2], self.len[1], self.len[0]];
+        let count = |r: u8| (0..4).filter(|&s| self.has(s, r)).count() as i32;
+        let bare = |s: usize| self.len[s] <= 2 && !self.has(s, ACE) && !self.has(s, KING);
+        let hundredths = match TABLE.iter().find(|(sh, _)| *sh == shape) {
+            Some((_, w)) => {
+                w[0] * count(ACE)
+                    + w[1] * count(KING)
+                    + w[2] * count(QUEEN)
+                    + w[3] * count(JACK)
+                    + w[4] * self.tens
+                    - w[5] * bare(3) as i32
+                    - w[6] * bare(2) as i32
+                    - w[7]
+                    + 800
+            }
+            None => 100 * self.hcp + 50 * self.tens,
+        };
+        hundredths.div_euclid(100)
+    }
+
     pub fn has(&self, suit: usize, rank: u8) -> bool {
         self.ranks[suit] & (1 << rank) != 0
     }
