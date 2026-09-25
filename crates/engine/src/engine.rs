@@ -480,6 +480,7 @@ impl Engine {
                 &ctx,
                 &mut b,
                 caller,
+                (pos, call),
                 &mut warnings,
             );
             pos.sides[side(caller)] = st;
@@ -656,15 +657,43 @@ fn apply_sets(
     ctx: &Ctx,
     b: &mut Bindings,
     caller: Direction,
+    (pos, call): (&Position, &Call),
     warnings: &mut Vec<String>,
 ) {
     for a in sets {
         match a.name.as_str() {
-            "trump" => match ctx.eval(&a.value, b) {
-                Ok(Val::Suit(s)) => st.trump = Some(strain_of_suit(s)),
-                Ok(Val::Strain(s)) => st.trump = Some(s),
-                other => warnings.push(format!("sets trump: {other:?} is not a strain")),
-            },
+            "trump" => {
+                let t = match ctx.eval(&a.value, b) {
+                    Ok(Val::Suit(s)) => Some(strain_of_suit(s)),
+                    Ok(Val::Strain(s)) => Some(s),
+                    other => {
+                        warnings.push(format!("sets trump: {other:?} is not a strain"));
+                        None
+                    }
+                };
+                if let Some(t) = t {
+                    st.trump = Some(t);
+                }
+            }
+            // `sets ladder=control`: a control-bid ladder call. Record the
+            // suits it skipped (not the trump suit) as denied by the caller,
+            // and the suit it names as cued.
+            "ladder" => {
+                let trump = st.trump.and_then(suit_of_strain);
+                let who = caller.to_index();
+                for s in 0..4 {
+                    if Some(s) != trump && pos.would_skip(call, s) {
+                        st.denied[who] |= 1 << s;
+                    }
+                }
+                if let Call::Bid { strain, .. } = call {
+                    if let Some(s) = suit_of_strain(*strain) {
+                        if Some(s) != trump {
+                            st.cued[who] |= 1 << s;
+                        }
+                    }
+                }
+            }
             "forcing" => {
                 let f = match &a.value {
                     Expr::Path { path } => match path[0].name.as_str() {

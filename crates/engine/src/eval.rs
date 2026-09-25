@@ -646,6 +646,48 @@ impl<'a> Ctx<'a> {
     }
 
     fn self_func(&self, n: &str, args: &[Expr], b: &mut Bindings) -> R<Val> {
+        match n {
+            // My own side of the control-bid dialogue (`me.denied(x)`).
+            "denied" | "cued" => {
+                return self.knowledge_attr(
+                    self.self_knowledge(),
+                    self.actor,
+                    &Segment {
+                        name: n.to_string(),
+                        args: Some(args.to_vec()),
+                    },
+                    b,
+                );
+            }
+            // Is the cheapest bid in x still below game in our agreed suit?
+            "under_game" => {
+                let s = self
+                    .suit_arg(args, 0, b)?
+                    .ok_or("under_game(x): x is a suit")?;
+                // Game in the agreed suit: 4H 22, 4S 23, 5C 25, 5D 26; else 3NT.
+                let game = match self.pos.side_state(self.actor).trump {
+                    Some(Strain::Hearts) => 22,
+                    Some(Strain::Spades) => 23,
+                    Some(Strain::Clubs) => 25,
+                    Some(Strain::Diamonds) => 26,
+                    _ => 19,
+                };
+                return Ok(Val::Bool(Tri::from_bool(
+                    self.pos.cheapest_rank(s).is_some_and(|r| r < game),
+                )));
+            }
+            // The cheapest bid in x, as level * 5 + strain (C0 .. S3): for
+            // `prefer 0 - cheapest_rank(x)`, the cheapest of several calls.
+            "cheapest_rank" => {
+                let s = self
+                    .suit_arg(args, 0, b)?
+                    .ok_or("cheapest_rank(x): x is a suit")?;
+                return Ok(Val::Num(Range::point(
+                    self.pos.cheapest_rank(s).unwrap_or(99),
+                )));
+            }
+            _ => {}
+        }
         if !SELF_FUNCS.contains(&n) {
             return Err(format!("unknown function `{n}`"));
         }
@@ -730,6 +772,16 @@ impl<'a> Ctx<'a> {
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
             // `partner.bypassed(x)`: their last bid skipped a bid in x that
             // was available (Position::bypassed). Public, like `last`.
+            // The control-bid dialogue: `denied(x)`, a suit this seat skipped;
+            // `cued(x)`, a suit it has shown a control in.
+            "denied" | "cued" => {
+                let st = &self.pos.sides[crate::position::side(seat)];
+                let mask = if n == "denied" { st.denied } else { st.cued }[seat.to_index()];
+                match self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)? {
+                    Some(s) => Val::Bool(Tri::from_bool(mask & (1 << s) != 0)),
+                    None => Val::Bool(Tri::False),
+                }
+            }
             // An optional second argument, a call, is where the ladder
             // starts: `partner.bypassed(C, 3{trump})`.
             "bypassed" => {

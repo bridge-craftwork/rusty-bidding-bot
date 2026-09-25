@@ -270,6 +270,16 @@ could have been bid are denied: over our 3H, partner's 3S bypasses nothing,
 ladder starts when it starts higher than the previous bid:
 `partner.bypassed(C, 3S)` for control bids that begin above 3S.
 
+**Control-bid dialogue.** A ladder call says so with `sets ladder=control`;
+the engine then records, for the caller, the suits the call skipped
+(`partner.denied(x)`, `me.denied(x)`) and the suit it names
+(`partner.cued(x)`, `me.cued(x)`). Control bids start only once a suit is
+agreed, so an auction holds one dialogue. For writing the ladder:
+`cheapest(x)` is the non-jump bid in `x`; `under_game(x)` says whether it
+is still below game in the agreed suit; `cheapest_rank(x)` is its place in
+the bidding order (level x 5 + C0 D1 H2 S3), so `prefer 0 - cheapest_rank(x)`
+picks the cheapest of several calls.
+
 **Operators:** `!` (not), `|` (or), `,` (and), `a..b` ranges, `in 1|4` sets,
 and arithmetic on numbers and `.min` / `.max`.
 

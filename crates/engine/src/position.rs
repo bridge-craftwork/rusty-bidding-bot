@@ -35,6 +35,13 @@ pub struct SideState {
     pub ask: Option<Ask>,
     /// A question partner has answered; cleared when the asker calls again.
     pub answered: Option<Ask>,
+    /// Control-bid dialogue, by `Direction::to_index`, as suit bitmasks
+    /// (bit 0 clubs .. bit 3 spades): the suits each player has denied by
+    /// skipping them, and those they have shown a control in. Recorded by
+    /// `sets ladder=control`. Control bids start only once a suit is
+    /// agreed, so one auction holds one dialogue.
+    pub denied: [u8; 4],
+    pub cued: [u8; 4],
 }
 
 /// 0 for North-South, 1 for East-West.
@@ -141,6 +148,40 @@ impl Position {
 
     pub fn is_vulnerable(&self, d: Direction) -> bool {
         self.vul.is_vulnerable(d)
+    }
+
+    /// Would `call`, made next, skip a bid in `suit` that was available
+    /// after the last bid? (The rule behind `bypassed`, for a call not yet
+    /// in the auction.)
+    pub fn would_skip(&self, call: &Call, suit: usize) -> bool {
+        let rank = |c: &Call| match c {
+            Call::Bid { level, strain } => Some(*level as i32 * 5 + strain_rank(*strain)),
+            _ => None,
+        };
+        let Some(mine) = rank(call) else {
+            return false;
+        };
+        if mine % 5 == suit as i32 {
+            return false;
+        }
+        let before = self.calls.iter().rev().find_map(rank).unwrap_or(0);
+        (1..=7)
+            .find(|l| l * 5 + suit as i32 > before)
+            .is_some_and(|l| l * 5 + (suit as i32) < mine)
+    }
+
+    /// The cheapest legal bid in `suit` now, as level * 5 + strain rank.
+    pub fn cheapest_rank(&self, suit: usize) -> Option<i32> {
+        let before = self
+            .calls
+            .iter()
+            .rev()
+            .find_map(|c| match c {
+                Call::Bid { level, strain } => Some(*level as i32 * 5 + strain_rank(*strain)),
+                _ => None,
+            })
+            .unwrap_or(0);
+        (1..=7).map(|l| l * 5 + suit as i32).find(|&r| r > before)
     }
 
     /// Did `d`'s last call bypass a bid in `suit` (0 clubs .. 3 spades)?

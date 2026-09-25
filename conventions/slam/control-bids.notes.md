@@ -217,3 +217,46 @@ Against no control bids at all, the gap fell from +427 / +890 to +45 /
 +279 (distance / to the side). What is left is the ladder's own limit:
 a suit below the first control bid of the dialogue can't be shown, so a
 hand that holds it may still stop in game.
+
+## Rewritten to Rick's description (2026-09-25)
+
+Rick: "In a GF and a suit agreed on, new non-jump bids below game are
+control bids. You bid the cheapest control you can show; any you skip
+over you are denying. Partner then shows the cheapest control they
+have. If either player skips (denies) a control in a suit and the other
+continues control bidding, they are promising a control in the skipped
+suit. Standard control bids are aces and voids; first- and second-round
+controls (A, K, singleton, void) are more common now. Control bidding
+past game shows first-round control. We don't normally show a singleton
+or void in partner's suit." Also: control bids start only once a suit is
+agreed.
+
+What the module does now:
+- **Every non-jump new suit below game is on the ladder** (`cheapest(x)`,
+  `under_game(x)`). It no longer starts above three of the trump suit.
+  The cheapest control held is chosen (`prefer 0 - cheapest_rank(x)`).
+- **The engine keeps the dialogue.** Each ladder call records what it
+  skipped (`denied`) and named (`cued`). Continuing promises a control
+  in every suit partner has denied; with no call that keeps the
+  promise, the hand signs off in game. That replaces the old "bare in
+  both hands" rule.
+- **Past game, first-round controls only.**
+- **No shortness control in a suit partner has shown** (four or more).
+- **`style`:** `first_round` or `first_or_second_round` (default), as
+  before.
+- **Order:** a control bid below game; the keycard ask once every side
+  suit is covered (mine, cued by partner, or denied by me and promised
+  by partner); a control bid past game; the sign-off.
+
+Test 25 changed: KJ.AJ864.Q7.AJ72 after 1H-2NT-3H-4D now asks with
+4NT. 4S past game would promise first-round control, and every suit is
+covered.
+
+**Results:**
+
+| Against | Distance from par | IMPs to the bidding side |
+|---|---|---|
+| The bypassed fix (earlier today) | +159 | +236 |
+| No control bids at all | control bids now ahead by 114 | 41 behind (was 427 / 890 behind this morning) |
+
+What is left is mostly spade Jacoby auctions (1S-2NT, 118 boards).

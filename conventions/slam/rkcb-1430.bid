@@ -7,6 +7,7 @@
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
   card   slam.blackwood.rkcb_1430
   needs  base
+  param  style = slam.cue_bids.style default first_or_second_round
 
 # ── The ask ───────────────────────────────────────────────────────────
 #
@@ -80,24 +81,24 @@ when we.trump is suit, !asked, we.forcing = game
 # at priority 20 has already ruled out a suit bare in both hands; below
 # it, any control still to show outranks the ask.
 
-# Partner opened the dialogue and every side suit is covered, by my own
-# control or by the one partner has just shown: ask (2026-09-25). Without
-# this the hand signed off in game, and missed laydown slams after
-# Jacoby 2NT (control-bids.notes.md).
-when we.trump is suit, asked control(t), !answered control
+# In a control-bid dialogue (control-bids.bid): ask once every side suit
+# is covered -- a control of mine, one partner has cued, or one I denied
+# that partner has promised by bidding on. A control bid below game still
+# comes first (priority 12), the ask before one past game (10).
+when we.trump is suit, asked control(t)
   4N  "Keycard ask in {trump}"
-      when  (t is C | !(C>=2, !has(A,C), !has(K,C))), (t is D | !(D>=2, !has(A,D), !has(K,D))), (t is H | trump is H | !(H>=2, !has(A,H), !has(K,H))), (t is S | trump is S | !(S>=2, !has(A,S), !has(K,S)))
+      when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C) | me.denied(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D) | me.denied(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H) | me.denied(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S) | me.denied(S))
       sets  ask=keycards(trump)
       artificial
-      priority 5
+      priority 11
 
-when we.trump is suit, asked control(t), answered control(u)
+when we.trump is suit, answered control(t), partner.last = 4{trump}
   4N  "Keycard ask in {trump}"
+      when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S))
       sets  ask=keycards(trump)
       artificial
-      priority 5
+      priority 15
 
-# The answers (1430: 5C and 5D swapped relative to 0314).
 when asked keycards(t)
   5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
   5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
