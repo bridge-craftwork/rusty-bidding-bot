@@ -1,0 +1,39 @@
+# Responder with a five-card minor and four hearts, after 1NT 2C 2D: does a
+# stopper in the other suits decide 3m vs 3NT? One honour moved between
+# suits. (stayman.notes.md, "BBA's 3C/3D after Stayman")
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass 2C Pass 2D Pass"
+vuls    = ["None"]
+scoring = ["MP", "IMP"]
+partner_auto = [15, 17]
+our     = ["general.style=bba"]
+hands = [
+  "C 2425 Kx S, xx D (10)       | K8.K764.32.AQ975",
+  "C 2425 xx S, Kx D (10)       | 98.K764.K2.AQ975",
+  "C 2425 Qx S, xx D (9)        | Q8.K764.32.AQ975",
+  "C 2425 xx S, Qx D (9)        | 98.K764.Q2.AQ975",
+  "C 2425 Ax S, xx D (11)       | A8.K764.32.AQ975",
+  "C 2425 xx S, Ax D (11)       | 98.K764.A2.AQ975",
+  "C 2425 Qx S, Qx D (11)       | Q8.K764.Q2.AQ975",
+  "C 2425 Kx S, Kx D (13)       | K8.K764.K2.AQ975",
+  "C 2425 xx xx, AKQ97 (12)     | 98.K764.32.AKQ97",
+  "C 2425 Kx S, xx D, Q H (9)   | K8.Q764.32.AQ975",
+  "C 2425 xx S, Kx D, Q H (9)   | 98.Q764.K2.AQ975",
+  "D 2452 Kx S, xx C (10)       | K8.K764.AQ975.32",
+  "D 2452 xx S, Kx C (10)       | 98.K764.AQ975.K2",
+  "D 2452 Ax S, xx C (11)       | A8.K764.AQ975.32",
+  "D 2452 xx S, Ax C (11)       | 98.K764.AQ975.A2",
+  "D 2452 Qx S, Qx C (11)       | Q8.K764.AQ975.Q2",
+  "C 3415 Kxx S, x D (10)       | K84.K764.3.AQ975",
+  "C 3415 xxx S, K D (10)       | 984.K764.K.AQ975",
+  "C 1435 x S, Kxx D (10)       | 9.K764.K32.AQ975",
+  "C 1435 K S, xxx D (10)       | K.K764.832.AQ975",
+  "C 1435 x S, Qxx D (9)        | 9.K764.Q32.AQ975",
+  "C 1435 x S, Axx D (11)       | 9.K764.A32.AQ975",
+  "C 1435 x S, xxx D (11) HA    | 9.A764.832.AQ975",
+  "D 3451 Kxx S, x C (10)       | K84.K764.AQ975.3",
+  "D 3451 xxx S, K C (10)       | 984.K764.AQ975.K",
+  "D 1453 x S, Kxx C (10)       | 9.K764.AQ975.K32",
+  "D 1453 K S, xxx C (10)       | K.K764.AQ975.832",
+]

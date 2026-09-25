@@ -1,0 +1,11 @@
+# Responder 5-card minor, 4-card major, after 1NT 2C 2D: 3m or 3NT?
+# (stayman.notes.md, "BBA's 3C/3D after Stayman")
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass 2C Pass 2D Pass"
+vuls    = ["None"]
+scoring = ["MP", "IMP"]
+partner = ["AK2.K73.KQ85.Q42", "A62.AJ3.KJ75.KJ2", "K92.AQ7.AJ43.K92", "AJ5.KQ2.Q8742.AK"]
+partner_auto = [15, 17]
+our     = ["general.style=bba"]
+survey  = "J973.82.A4.AQ953"

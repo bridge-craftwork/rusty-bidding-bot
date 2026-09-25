@@ -1,0 +1,38 @@
+# As stay-3m-stoppers.toml, around 11 HCP: which holdings in the other
+# suits make 3NT instead of 3m?
+card    = "Basic-Bridge"
+dealer  = "S"
+prefix  = "1NT Pass 2C Pass 2D Pass"
+vuls    = ["None"]
+scoring = ["MP", "IMP"]
+partner_auto = [15, 17]
+our     = ["general.style=bba"]
+hands = [
+  "D 2452 Qx C            | 98.K764.AQ975.Q2",
+  "D 2452 Qx S            | Q8.K764.AQ975.32",
+  "D 2452 Kx C (12)       | 98.K764.AQ975.K2",
+  "D 2452 Jx Jx           | J8.K764.AQ975.J2",
+  "D 2452 QJ C            | 98.K764.AQ975.QJ",
+  "D 2452 QJ S            | QJ.K764.AQ975.32",
+  "D 1453 Qxx C           | 9.K764.AQ975.Q32",
+  "D 1453 Q S             | Q.K764.AQ975.932",
+  "D 1453 KJx C (13)      | 9.K764.AQ975.KJ2",
+  "D 1453 Jxx C (10)      | 9.K764.AQ975.J32",
+  "D 3451 Qxx S           | Q98.K764.AQ975.3",
+  "D 3451 Q C             | 986.K764.AQ975.Q",
+  "D 3451 J J             | J98.K764.AQ975.J",
+  "D 2452 wk Qx C         | 98.AJ64.KJ975.Q2",
+  "D 2452 wk Qx S         | Q8.AJ64.KJ975.32",
+  "D 2452 wk Jx Jx        | J8.AJ64.KJ975.J2",
+  "C 2425 Jx D, Qx S      | Q8.K764.J2.AQ975",
+  "C 2425 QJ D            | 98.K764.QJ.AQ975",
+  "C 2425 Ax D (13)       | 98.K764.A2.AQ975",
+  "C 2425 Kx D            | 98.K764.K2.AQ975",
+  "C 2425 Qx D            | 98.K764.Q2.AQ975",
+  "C 1435 Qxx D           | 9.K764.Q32.AQ975",
+  "C 1435 Jxx D (10)      | 9.K764.J32.AQ975",
+  "C 1435 QJx D (12)      | 9.K764.QJ3.AQ975",
+  "C 1435 Kxx(12)         | 9.K764.K32.AQ975",
+  "C 3415 Q D             | 986.K764.Q.AQ975",
+  "C 3415 K D (12)        | 986.K764.K.AQ975",
+]

@@ -76,7 +76,12 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   opponents; prints a summary and the changes) or `morph = [from, to]`.
   It prints one row per hand and one column per vulnerability/scoring
   (BBA's call, and ours after ≠ when it differs), and writes grid.tsv and
-  grid.json. Keep the specs in probes/ and cite them from the notes.
+  grid.json; each cell also keeps BBA's auction from there (`bba_rest`)
+  and its meaning of the call (`bba_alert`). Keep the specs in probes/
+  and cite them from the notes. For bulk random hands,
+  `probes/gen_hands.py OUT.toml --hcp 9 14 --where "<python on L, h>"
+  --partner-where ... --prefix ...` writes a spec, and
+  `probes/grid_tally.py <name> [--by hcp] [--diff]` tallies the run.
   Corpus tables mix cards (1NT ranges, transfer structures): restrict
   them to one card.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over

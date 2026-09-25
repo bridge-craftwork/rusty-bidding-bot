@@ -5,8 +5,12 @@
         --min-len 2 --max-len 5 --prefix "1NT Pass" --scoring MP IMP
 
 Hands for the deciding seat are random within the constraints; each hand
-gets its own random balanced 15-17 partner from the other 39 cards. Then `rbb grid OUT.toml` and analyse
+gets its own random partner (by default a balanced 15-17) from the other 39 cards. Then `rbb grid OUT.toml` and analyse
 .rbb-cache/grids/<name>/grid.json.
+
+--where and --partner-where are Python expressions over L (lengths, spades
+first) and h (HCP), e.g. --where "max(L[:2]) == 4 and max(L[2:]) >= 5"
+--partner-where "max(L[:2]) <= 3" (an opener who answered 2D).
 """
 import argparse
 import random
@@ -49,22 +53,32 @@ def main():
     ap.add_argument("--vuls", nargs="+", default=["None"])
     ap.add_argument("--partners", type=int, default=40)
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--where", default="True", help="extra test on the hand")
+    ap.add_argument("--partner-where", default="True", help="extra test on partner")
+    ap.add_argument("--partner-hcp", type=int, nargs=2, default=[15, 17])
+    ap.add_argument("--partner-any-shape", action="store_true",
+                    help="partner need not be a balanced 1NT opener (probing opener's rebid)")
     a = ap.parse_args()
     rng = random.Random(a.seed)
+
+    def ok_partner(p):
+        L = lengths(p)
+        S = sorted(L)
+        nt = a.partner_any_shape or (S[0] >= 2 and S[3] <= 5 and S != [2, 2, 4, 5])
+        return (a.partner_hcp[0] <= hcp(p) <= a.partner_hcp[1] and nt
+                and eval(a.partner_where, {}, {"L": L, "h": hcp(p)}))
 
     partners = []
     while len(partners) < a.partners:
         h = deal13(rng)
-        L = sorted(lengths(h))
-        if 15 <= hcp(h) <= 17 and L[0] >= 2 and L[3] <= 5 and L != [2, 2, 4, 5]:
+        if ok_partner(h):
             partners.append(pbn(h))
 
     def partner_for(h):
         # A balanced 15-17 from the other 39 cards.
         for _ in range(100000):
             p = deal13(rng, avoid=set(h))
-            L = sorted(lengths(p))
-            if 15 <= hcp(p) <= 17 and L[0] >= 2 and L[3] <= 5 and L != [2, 2, 4, 5]:
+            if ok_partner(p):
                 return pbn(p)
         raise SystemExit("no partner found")
 
@@ -79,6 +93,8 @@ def main():
         if L[0] > a.max_major or L[1] > a.max_major:
             continue
         if min(L) < a.min_len or max(L) > a.max_len:
+            continue
+        if not eval(a.where, {}, {"L": L, "h": hcp(h)}):
             continue
         p = pbn(h)
         if p not in seen:

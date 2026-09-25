@@ -36,7 +36,8 @@ Choice of games after `1NT P 2C P 2M P 3NT P`: 210 of 211 corpus boards agree.
 ## Gaps (not built yet)
 
 - **5-4 with a minor after 2D**: BBA bids 3C or 3D (for example
-  `A82.QJ98.7.KJ973` bids 3C, then 4C; 16 boards). We bid 3NT.
+  `A82.QJ98.7.KJ973` bids 3C, then 4C). The bba style now does too
+  ("BBA's 3C/3D after Stayman"); the default bids 3NT, which par prefers.
 - **Smolen** (5-4 majors, game force after 2D), **Garbage Stayman** (weak
   hands that pass the answer), and Stayman with interference.
 - **Slam after a fit**: with 18+ and a fit we jump to 6M. Keycard first
@@ -369,5 +370,79 @@ the counts were fitted after 2D only.
 - Replay against the rules before: better on 127 boards, worse on 114.
 - The default is unchanged (-167,558).
 
-**Not modelled yet:** 3C/3D after Stayman (BBA shows a five-card minor),
-and the losses after 2D on the other cards (21GF).
+**Not modelled yet:** the losses after 2D on the other cards (21GF).
+3C/3D: next section.
+
+## BBA's 3C/3D after Stayman (2026-09-24)
+
+Probed with random hands (`probes/stay-3m-*.toml`, 400-2,500 hands each;
+`probes/grid_tally.py <name>` tallies a run). The grid now keeps BBA's
+continuation and the meaning of its call (bba-cli `--all-meanings`), which
+is how the meanings below were read.
+
+**Responder, after 2D.** With a five-card minor and a four-card major,
+BBA's 3C/3D ("9 to 25 total points, 5+ cards") is the game-going call
+unless the hand wants 3NT:
+- **Below 12 HCP:** 3NT with a diamond stopper (A, Kx, Qxx, Jxxx), 3m
+  without one, from 9 HCP. It is the diamond stopper for both minors: five
+  diamonds without an honour bid 3D, and a spade stopper changes nothing.
+  Clubs: 99% of 1,050 hands; diamonds: 96% of 946.
+- **From 12 HCP:** 3m whatever the stoppers (a slam try in effect).
+- **Level:** below the 3m line, pass, 2NT or 3NT come from the counts
+  already fitted (`bba_stay_nt_points`).
+- **Six-card minors:** 4m from about 12 ("slam try"). Not modelled.
+
+**Responder, after 2H/2S without the fit.** 3m from 10 HCP whatever the
+stoppers; 2NT at 8, 9 split. 3NT almost never with a five-card minor.
+
+**Opener over 3m.** A suit is *open* when:
+- the other minor is unstopped; or
+- after 2D only, a major doubleton is unstopped (responder's major is
+  unknown).
+
+An open three-card major is no reason. Opener:
+- raises to 4m with a fit (four clubs, or three at 16+; three diamonds)
+  and a suit open, or with a flat 4-3-3-3 minimum;
+- bids 5m instead with 17;
+- otherwise bids 3NT.
+
+A minimum is 15 counting half a point per ten (two tens make it 3NT).
+With a minimum:
+- after 2D, bid 3D over 3C without four clubs, and 4C over 3D with five
+  clubs;
+- after 2H/2S, bid 3D over 3C with four diamonds;
+- after 2S, bid 3H with a flat hand and three hearts, the 4-3 fit, since
+  responder has four.
+
+Agreement: 83% after 2D, 80-84% after 2H/2S.
+
+**Responder again.**
+- After the raise: 5m from 11 HCP (half the 11s pass), 4NT from about 15.
+  Our rule is 5m from 11, with no Blackwood.
+- After a minimum: 3NT up to 14, and a quantitative 4NT with 15.
+- After 3D-4C (opener's five clubs): BBA bids its four-card major at the
+  four level, into a 4-3 fit at best. Modelled as it stands.
+
+**Agreement on the random hands, bba style, before -> after:**
+
+| Probe | Before | After |
+|---|---|---|
+| Responder after 2D (MP) | 36% | 89% |
+| Responder after 2H (MP) | — | 94% |
+| Responder after 2S (MP) | — | 93% |
+| Opener over 3C/3D | 0% | 83% |
+
+"0%" means we passed 3m. The IMP columns are lower after 2H/2S: at IMPs
+BBA bids 3NT with 8-9 where the earlier no-fit rules bid 2NT. That is a
+gap in the no-fit level line, not in 3m.
+
+**Corpus (bba style):** replayed calls closer to BBA on 399 boards and
+further on 1. 127 auctions became identical to BBA's and none stopped
+being identical. Par: -181,330 -> -181,678 (-348 IMPs). The loss is on
+boards where our 3NT used to beat BBA's 3m auction and now copies it.
+
+**Default: keeps 3NT (par decides).** On the corpus, where BBA bid 3m at
+game level and we bid 3NT (99 boards on all cards), 3NT came out +72 IMPs
+ahead. BBA's gains came on slam hands, where the default passes 2D or
+bids 2NT on the 21GF cards. That is worth a look separately: a 3m slam
+try from 12+ opposite 15-17 may pay.

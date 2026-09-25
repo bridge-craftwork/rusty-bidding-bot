@@ -510,6 +510,9 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
         .arg("--ew-conventions")
         .arg(&ew_path);
     cmd.args(["--event", "probe", "--scoring", scoring_arg(opts.scoring)]);
+    // Every call's meaning in [Note]s, not only the alerts: grid cells
+    // carry the meaning of BBA's call.
+    cmd.arg("--all-meanings");
     if !opts.prefix.is_empty() {
         let prefix: Vec<String> = opts.prefix.iter().map(Call::to_pbn).collect();
         cmd.arg("--auction-prefix").arg(prefix.join(" "));

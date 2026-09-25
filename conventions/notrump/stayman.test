@@ -73,3 +73,27 @@ card    Basic-Bridge
 dealer  S
 N K842.KQ5.AQ.QJ82      | 1NT P 2C P 2D P     | 6NT    | 17, no fit: slam (Basic_What_To_Open 204)
 N K842.KQ5.AJ.QJ82      | 1NT P 2C P 2D P     | 4NT    | 16, no fit: quantitative
+
+# ── BBA's 3C/3D after Stayman (probed 2026-09-24, probes/stay-3m-*.toml)
+card    Basic-Bridge general.style=bba
+scoring MP
+dealer  S
+N 98.K764.Q2.AQ975      | 1NT P 2C P 2D P     | 3C     | bba: 11, no diamond stopper (Qx): 3C
+N 98.Q764.K2.AQ975      | 1NT P 2C P 2D P     | 3NT    | bba: 11 with Kx in diamonds: 3NT
+N J973.82.A4.AQ953      | 1NT P 2C P 2D P     | 3NT    | bba: 11 with a diamond stopper
+N K973.82.A4.AQ953      | 1NT P 2C P 2D P     | 3C     | bba: 13: 3C whatever the stoppers
+N 9.A764.832.AQ975      | 1NT P 2C P 2D P     | 3C     | bba: 10, diamonds unstopped
+N Q8.K764.AQ975.32      | 1NT P 2C P 2D P     | 3NT    | bba: 11, five diamonds with honours
+N KJT7.KT.T8654.KJ      | 1NT P 2C P 2D P     | 3D     | bba: 11, five diamonds without an honour
+N AQ92.K43.7.KJ743      | 1NT P 2C P 2H P     | 3C     | bba: no heart fit, game values, five clubs
+N 4.QJ64.AK984.Q94      | 1NT P 2C P 2S P     | 3D     | bba: no spade fit, game values, five diamonds
+S 932.KJ.KQJ83.AK5      | 1NT P 2C P 2D P 3C P | 3NT   | bba: 17, the suits held
+S A63.T62.KJ3.AQJ6      | 1NT P 2C P 2D P 3C P | 4C    | bba: four clubs, a flat minimum
+S 87.AK2.AQJ.KT965      | 1NT P 2C P 2D P 3C P | 5C    | bba: the fit, spades open, 17
+S J75.K84.AK92.AT3      | 1NT P 2C P 2D P 3C P | 3D    | bba: a minimum with three clubs
+S A83.T62.AJ8.AQ43      | 1NT P 2C P 2D P 3D P | 4D    | bba: three diamonds, a flat minimum
+S A96.K87.KT.KQ652      | 1NT P 2C P 2D P 3D P | 4C    | bba: a minimum with five clubs
+S AK72.K54.QJ7.Q43      | 1NT P 2C P 2S P 3C P | 3H    | bba: flat minimum, three hearts (responder has four)
+N A965.42.K4.QT843      | 1NT P 2C P 2D P 3C P 4C P | P  | bba: 9 passes the raise
+N A98.AJ42.8.A9642      | 1NT P 2C P 2D P 3C P 4C P | 5C | bba: 13 bids the game
+N KQ93.J65.A.QT652      | 1NT P 2C P 2D P 3C P 3D P | 3NT | bba: 3NT over the minimum

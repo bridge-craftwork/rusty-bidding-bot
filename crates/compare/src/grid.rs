@@ -93,6 +93,12 @@ impl Column {
 pub struct Cell {
     pub bba: Option<Call>,
     pub ours: Option<Call>,
+    /// BBA's auction from the decision on, with that board's partner and
+    /// opponents: what the call led to.
+    pub bba_rest: String,
+    /// BBA's alert text for its call, when it wrote one.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bba_alert: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -367,9 +373,13 @@ pub fn run(spec: &Spec, env: &Env) -> Result<Grid, String> {
             ));
         }
         for (i, r) in report.rows.iter().enumerate() {
+            let at = prefix.len();
+            let rest = r.board.reference.iter().skip(at);
             rows[i / vuls.len()].cells.push(Cell {
                 bba: r.reference.clone(),
                 ours: r.ours.clone(),
+                bba_rest: rest.map(|c| c.to_string()).collect::<Vec<_>>().join(" "),
+                bba_alert: r.board.reference_alerts.get(at).cloned().flatten(),
             });
         }
     }

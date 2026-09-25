@@ -227,6 +227,30 @@ when answered majors
       sets  ask=nt_invite
       priority -1
 
+  # BBA (probed 2026-09-24, stayman.notes.md, "BBA's 3C/3D after
+  # Stayman"): with game values (the counts above) and five or more of a
+  # minor, 3m rather than 3NT. After 2D: 3m from 9 HCP without a diamond
+  # stopper, from 12 with one (3NT and 2NT below that, by the counts).
+  # After a major that does not fit: 3m from 10, whatever the stoppers.
+  3C  "Game values, five or more clubs"  shows C>=5, C>=D, (hcp>=9, !stop(D)) | hcp>=12
+      when  partner.H<=3, partner.S<=3, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+  3D  "Game values, five or more diamonds"  shows D>=5, D>C, (hcp>=9, !stop(D)) | hcp>=12
+      when  partner.H<=3, partner.S<=3, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+  3C  "Game values, five or more clubs, no heart fit"  shows C>=5, C>=D, H<=3, hcp>=10
+      when  partner.H>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+  3D  "Game values, five or more diamonds, no heart fit"  shows D>=5, D>C, H<=3, hcp>=10
+      when  partner.H>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+  3C  "Game values, five or more clubs, no spade fit"  shows C>=5, C>=D, S<=3, hcp>=10
+      when  partner.S>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+  3D  "Game values, five or more diamonds, no spade fit"  shows D>=5, D>C, S<=3, hcp>=10
+      when  partner.S>=4, partner.hcp.min>=15, partner.hcp.max<=17
+      when  style is bba
+
 # BBA: opener answers the raise in the fit with a maximum (17 counting
 # tens opposite 15-17), or one less with a fifth trump. Partner's range
 # is no guide: the raise is in HCP by shape.
@@ -277,3 +301,78 @@ after 1N (2C) X (P) when vs_2c
   2H  "4+ hearts"                 shows H>=4
   2S  "4 spades, not 4 hearts"    shows S>=4, H<=3
   2D  "No 4-card major"           shows H<=3, S<=3
+
+# BBA: opener after responder's 3m (probed 2026-09-24,
+# probes/stay-3m-opener*.toml). A suit is open when the other minor is
+# unstopped or, after 2D, a major doubleton is (responder's major is
+# unknown); an open three-card major is no reason. Opener raises with a
+# fit and a suit open, or with a flat minimum; 5m with 17. Otherwise
+# 3NT, except with a minimum (15, counting tens): after 2D, 3D over 3C
+# without four clubs and 4C over 3D with five; after a major, 3D over 3C
+# with four diamonds, and after 2S 3H with a flat 4-3-3-3 (responder has
+# four hearts).
+after 1N (P) 2C (P) 2D (P) 3C (P) when style is bba
+  5C  "Fit, a suit open, a maximum"  shows C>=4, !stop(D) | (S=2, !stop(S)) | (H=2, !stop(H)), points>=17   priority 3
+  4C  "Fit, a suit open"             shows C>=4 | (C=3, points>=16), !stop(D) | (S=2, !stop(S)) | (H=2, !stop(H))   priority 2
+  4C  "Fit, a flat minimum"          shows C>=4, shortest>=3, points<=15   priority 2
+  3D  "Minimum, no club fit"         shows C<=3, points<=15   priority 1
+  3N  "To play"                      shows hcp>=15
+after 1N (P) 2C (P) 2D (P) 3D (P) when style is bba
+  5D  "Fit, a suit open, a maximum"  shows D>=3, !stop(C) | (S=2, !stop(S)) | (H=2, !stop(H)), points>=17   priority 3
+  4D  "Fit, a suit open"             shows D>=4 | D=3, !stop(C) | (S=2, !stop(S)) | (H=2, !stop(H))   priority 2
+  4D  "Fit, a flat minimum"          shows D>=3, shortest>=3, points<=15   priority 2
+  4C  "Minimum, five clubs"          shows D<=2, C>=5, points<=15   priority 1
+  3N  "To play"                      shows hcp>=15
+after 1N (P) 2C (P) 2H (P) 3C (P) when style is bba
+  5C  "Fit, a suit open, a maximum"  shows C>=4, !stop(D), points>=17   priority 3
+  4C  "Fit, a suit open"             shows C>=4 | (C=3, points>=16), !stop(D)   priority 2
+  4C  "Fit, a flat minimum"          shows C>=3, shortest>=3, points<=15   priority 2
+  3D  "Minimum, four diamonds"       shows D>=4, points<=15   priority 1
+  3N  "To play"                      shows hcp>=15
+after 1N (P) 2C (P) 2H (P) 3D (P) when style is bba
+  5D  "Fit, a suit open, a maximum"  shows D>=3, !stop(C), points>=17   priority 3
+  4D  "Fit, a suit open"             shows D>=4 | D=3, !stop(C)   priority 2
+  4D  "Fit, a flat minimum"          shows D>=3, shortest>=3, points<=15   priority 2
+  3N  "To play"                      shows hcp>=15
+after 1N (P) 2C (P) 2S (P) 3C (P) when style is bba
+  5C  "Fit, a suit open, a maximum"  shows C>=4, !stop(D), points>=17   priority 3
+  4C  "Fit, a suit open"             shows C>=4 | (C=3, points>=16), !stop(D)   priority 2
+  4C  "Fit, a flat minimum"          shows C>=3, shortest>=3, points<=15   priority 2
+  3D  "Minimum, four diamonds"       shows D>=4, points<=15   priority 1
+  3H  "Minimum, flat, three hearts"  shows H=3, shortest>=3, points<=15   priority 3
+  3N  "To play"                      shows hcp>=15
+after 1N (P) 2C (P) 2S (P) 3D (P) when style is bba
+  3H  "Minimum, flat, three hearts"  shows H=3, shortest>=3, points<=15   priority 3
+  5D  "Fit, a suit open, a maximum"  shows D>=3, !stop(C), points>=17   priority 3
+  4D  "Fit, a suit open"             shows D>=4 | D=3, !stop(C)   priority 2
+  4D  "Fit, a flat minimum"          shows D>=3, shortest>=3, points<=15   priority 2
+  3N  "To play"                      shows hcp>=15
+
+# Responder after opener's raise: game from 11 (half of the 11s pass).
+after 1N (P) 2C (P) 2D (P) 3C (P) 4C (P) when style is bba
+  5C  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+after 1N (P) 2C (P) 2D (P) 3D (P) 4D (P) when style is bba
+  5D  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+after 1N (P) 2C (P) 2H (P) 3C (P) 4C (P) when style is bba
+  5C  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+after 1N (P) 2C (P) 2H (P) 3D (P) 4D (P) when style is bba
+  5D  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+after 1N (P) 2C (P) 2S (P) 3C (P) 4C (P) when style is bba
+  5C  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+after 1N (P) 2C (P) 2S (P) 3D (P) 4D (P) when style is bba
+  5D  "Game in the minor"  shows hcp>=11
+  P   "Too weak for game"  shows hcp<=10
+
+# After opener's minimum: 3NT, or a quantitative 4NT with 15; over 4C
+# (five clubs) BBA bids its major (probes/stay-3m-resp-*.toml).
+after 1N (P) 2C (P) 2D (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2H (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2S (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2S (P) 3C (P) 3H (P) | 1N (P) 2C (P) 2S (P) 3D (P) 3H (P) when style is bba
+  3N  "To play"                shows hcp>=9, hcp<=14
+  4N  "Quantitative"           shows hcp>=15   sets ask=quant
+after 1N (P) 2C (P) 2D (P) 3D (P) 4C (P) when style is bba
+  4H  "Four hearts"  shows H>=4
+  4S  "Four spades"  shows S>=4
