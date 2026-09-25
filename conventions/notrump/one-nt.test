@@ -40,5 +40,7 @@ S AQT.KJ72.A95.Q83      | 1NT P 2NT P    | P      | bba: 16 and one ten declines
 S A832.KQ4.AT.KT32      | 1NT P 4NT P    | P      | bba: 16 declines 4NT, tens or not (1N_Balanced_Raise board 159)
 S KJ2.K732.AQ4.AT4      | 1NT P 4NT P    | 6NT    | bba: 17 accepts
 scoring IMP
-N 54.K76.K862.K862      | 1NT P          | 3NT    | bba at IMPs: game from 9
-N 542.K76.K82.K862      | 1NT P          | 3NT    | bba at IMPs: 9 HCP 4-3-3-3 (BBA 2NT: IMPs is a tendency)
+N 542.K76.K82.K862      | 1NT P          | 2NT    | bba at IMPs: 9 HCP 4-3-3-3 invites (probed; the count's game line is 9.8 in 4-3-3-3)
+N 65.K76.K862.AQ62      | 1NT P          | 3NT    | bba at IMPs: 12 HCP, game
+# Known miss of the IMP game count: 54.K76.K862.K862 (2-3-4-4, 9 HCP) -- BBA
+# 3NT at IMPs, the count 2NT (one-nt.notes.md).

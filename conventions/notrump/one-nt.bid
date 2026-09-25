@@ -72,7 +72,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       when  matchpoints
       when  style is bba
   3N  "To play: game values"
-      shows H<=4, S<=4, (points>=24-partner.hcp.min, points<=32-partner.hcp.max, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=24-partner.hcp.min, hcp<=32-partner.hcp.max)
+      shows H<=4, S<=4, bba_nt_imp_game_points>=10, strength<=game
       when  imps
       when  style is bba
   # At matchpoints BBA's lines between pass, 2NT and 3NT are its own
@@ -85,15 +85,16 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       when  style is bba
       sets  ask=nt_invite
   2N  "Invitational"
-      shows H<=4, S<=4, C<=5, D<=5, (points>=25-partner.hcp.max, points<=23-partner.hcp.min, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=23-partner.hcp.min)
+      shows H<=4, S<=4, C<=5, D<=5, bba_nt_imp_points>=8, bba_nt_imp_game_points<=9, points>=24-partner.hcp.max
       when  minors is not four_way, minors is not four_way_reversed, imps
       when  style is bba
       sets  ask=nt_invite
   P   "No game interest"
       shows bba_nt_points<=7
       when  matchpoints, style is bba
+      priority -10
   P   "No game interest"
-      shows (strength=signoff, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp<=24-partner.hcp.max) | (shape 4333, hcp>=25-partner.hcp.max, hcp<=25-partner.hcp.max, !has(T,S), !has(T,H), !has(T,D), !has(T,C))
+      shows bba_nt_imp_points<=7
       when  imps, style is bba
       priority -10
 

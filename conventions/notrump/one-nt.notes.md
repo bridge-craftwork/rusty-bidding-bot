@@ -455,3 +455,21 @@ either count, 92.7% with the invitation count, 93.6% with both;
 decisions involving pass, 2NT or 3NT 89.4% -> 90.3% -> 91.8%. BBA style:
 corpus identical auctions 18.2% -> 18.3%, Basic_* uncontested 63.4% ->
 63.6%. Default unchanged.
+
+### The counts at IMPs (2026-09-24)
+
+The same 57,000 hands bid at IMPs, fitted per shape and tested on a
+held-out fifth (the corpus is all matchpoints). Pass vs 2NT hardly moves
+(95.5% held out, against 91.2% for the best simple threshold); 2NT vs 3NT
+does: flat 4-3-3-3 hands still bid game from ~9.8, but with a five-card
+minor or 4-4 minors game comes a point or more earlier (from ~7.5-8.7),
+unless a doubleton major lacks the ace or king, which costs more than at
+matchpoints (1.5 in 2-3-4-4, 1.65 in 3-2-3-5). 88.7% held out, against
+83.8%. `bba_nt_imp_points` and `bba_nt_imp_game_points` drive the bba
+style's IMP pass, 2NT and 3NT.
+
+Checked end to end on 4,000 fresh 7-11 HCP responders (the engine's bba
+style against BBA): MP 82.9% -> 89.0%, IMP 76.9% -> 87.9%. Known miss:
+54.K76.K862.K862 (2-3-4-4) bids 3NT at IMPs, the count 2NT. Also fixed:
+the matchpoint pass rule had lost its `priority -10` in 89d5f9b (no
+effect on the corpus).

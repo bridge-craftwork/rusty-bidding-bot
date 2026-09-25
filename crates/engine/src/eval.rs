@@ -128,6 +128,8 @@ const SELF_ATTRS: &[&str] = &[
     "length_points",
     "bba_nt_points",
     "bba_nt_game_points",
+    "bba_nt_imp_points",
+    "bba_nt_imp_game_points",
     "controls",
     "losers",
 ];
@@ -713,8 +715,15 @@ impl<'a> Ctx<'a> {
                 Some(t) => Val::Num(k.tp[t]),
                 None => Val::Num(k.hcp),
             },
-            "keycards" | "controls" | "losers" | "quality" | "top5" | "bba_nt_points"
-            | "bba_nt_game_points" => Val::Num(Range::new(0, 40)),
+            "keycards"
+            | "controls"
+            | "losers"
+            | "quality"
+            | "top5"
+            | "bba_nt_points"
+            | "bba_nt_game_points"
+            | "bba_nt_imp_points"
+            | "bba_nt_imp_game_points" => Val::Num(Range::new(0, 40)),
             _ => return Err(format!("unknown attribute `{n}`")),
         })
     }
@@ -1137,6 +1146,8 @@ fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
         "length_points" => Val::Num(Range::point(f.length_points())),
         "bba_nt_points" => Val::Num(Range::point(f.bba_nt_points())),
         "bba_nt_game_points" => Val::Num(Range::point(f.bba_nt_game_points())),
+        "bba_nt_imp_points" => Val::Num(Range::point(f.bba_nt_imp_points())),
+        "bba_nt_imp_game_points" => Val::Num(Range::point(f.bba_nt_imp_game_points())),
         "controls" => Val::Num(Range::point(f.controls())),
         "losers" => Val::Num(Range::point(f.losers())),
         _ => unreachable!(),
