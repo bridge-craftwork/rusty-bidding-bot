@@ -29,3 +29,25 @@ No `bba` rules. On Basic_* uncontested NS under `--set general.style=bba`
 no divergence after `1x P 1y P 1NT P` involves the new-minor ask (the
 largest there are 1♦-1♠-1NT: BBA 2♠ where we pass, 3 of 44; BBA pass or
 2♣ where we bid 2♣ or 2NT, 2 each), so there was nothing to model.
+
+## For Rick: our NMF loses to no NMF by double dummy (2026-09-25)
+
+With the module removed on the NMF cards, 2,415 boards change:
+- distance from par +1,644;
+- IMPs to the bidding side +1,891.
+
+Where the difference comes from:
+- **The fit found through NMF, then 4M, against a direct 3NT**
+  (1D-1S-1NT-2C-2S-4S vs 3NT, and the heart versions): 3NT is better
+  double dummy on these deals. Double dummy tends to favour 3NT over a
+  5-3 or 4-4 major fit less than the table does, so part of this may
+  be the yardstick.
+- **Invitations:** NMF with 10-11, then opener's 2NT (minimum), and we
+  pass. The natural 2NT invitation reaches 3NT more often, and makes it.
+  Opener's NMF answer treats 12-13 as a minimum; accepting with 13
+  might recover much of this.
+
+Not changed: NMF is on these cards, and dropping a standard convention
+on a double-dummy count is your call. Worth trying first: opener
+accepts the NMF invitation with 13; responder with a 5-3 fit and a
+flat hand bids 3NT rather than 4M (a known modern choice).
