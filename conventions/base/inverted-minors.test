@@ -1,0 +1,10 @@
+# Inverted minor raises (21GF-DEFAULT plays them).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction          | expect | why
+N 743.AK4.64.QJ752      | 1C P             | 2C     | 11 HCP, five clubs, no major: the inverted raise
+N 52.K86.96.KQJ742      | 1C P             | 3C     | 8 HCP, six clubs: the weak raise
+S AQ5.K83.QJ4.Q982      | 1C P 2C P        | 2NT    | 14 balanced
+S AK5.KQ3.AJ4.K982      | 1C P 2C P        | 3NT    | 19 balanced
+N 743.AK4.64.QJ752      | 1C P 2C P 2NT P  | P      | 11 balanced-ish: 2NT is enough

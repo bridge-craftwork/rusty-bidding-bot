@@ -16,6 +16,7 @@ module responses "Responses to one-level suit openings"
   param  over_1c     = minor_openings.one_club_responses default up_the_line
   param  nt2         = minor_openings.two_nt_response default invitational
   param  style       = general.style
+  param  inverted    = minor_openings.inverted_minors.play default false
 
 # ── Over 1♣ / 1♦ ───────────────────────────────────────────────────────
 after 1C (P) when over_1c is up_the_line
@@ -38,6 +39,7 @@ after 1C (P) when over_1c is walsh
 
 after 1C (P)
   1N  "6-10 HCP, balanced, no 4-card major or diamonds"   shows hcp=6..10, H<=3, S<=3, D<=3
+      when  !inverted | C<=4           # with inverted minors five clubs raise, weak or strong
   2D  "Strong jump shift: 15+, 5+ diamonds"  shows D>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
 
@@ -49,13 +51,22 @@ after 1D (P)
       when  hcp<=10 | S>=C
       sets forcing=round
   1N  "6-10 HCP, no 4-card major"          shows hcp=6..10, H<=3, S<=3
+      when  !inverted | D<=4           # with inverted minors five diamonds raise
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6, suit_points>=10, H<=3 | C>H, S<=3 | C>S
       sets forcing=round
   3C  "Invitational jump shift: 10-12, 6+ clubs"  shows C>=6, points=10..12, H<=3, S<=3  when inv_js
 
 after 1m (P)
   2m  "Raise: 6-9, 5+ {m}, no 4-card major"     shows m>=5, hcp>=6, points<=9, H<=3, S<=3
-  3m  "Limit raise: 10-12, 5+ {m}, no 4-card major"  shows m>=5, points=10..12, H<=3, S<=3
+      when  !inverted
+  3m  "Limit raise: 10-12 HCP, 5+ {m}, no 4-card major"  shows m>=5, hcp=10..12, H<=3, S<=3
+      when  !inverted                  # HCP: six clubs and 10-12 passed on 10-12 total points
+  # With inverted minors the raises are in inverted-minors.bid.
+  # Game values, a fit and no major, without inverted minors: 3NT, as BBA
+  # (probes/minor-resp-std-1C.toml). A fallback below the natural calls.
+  3N  "Game values, no 4-card major"            shows hcp>=13, H<=3, S<=3
+      when  !inverted
+      priority -1
   2N  "11-12, balanced, no 4-card major"        shows balanced, points=11..12, H<=3, S<=3
       when  nt2 is invitational
       priority -1                      # a one-level suit first when there is one
