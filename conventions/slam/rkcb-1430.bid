@@ -80,6 +80,17 @@ when we.trump is suit, !asked, we.forcing = game
 # at priority 20 has already ruled out a suit bare in both hands; below
 # it, any control still to show outranks the ask.
 
+# Partner opened the dialogue and every side suit is covered, by my own
+# control or by the one partner has just shown: ask (2026-09-25). Without
+# this the hand signed off in game, and missed laydown slams after
+# Jacoby 2NT (control-bids.notes.md).
+when we.trump is suit, asked control(t), !answered control
+  4N  "Keycard ask in {trump}"
+      when  (t is C | !(C>=2, !has(A,C), !has(K,C))), (t is D | !(D>=2, !has(A,D), !has(K,D))), (t is H | trump is H | !(H>=2, !has(A,H), !has(K,H))), (t is S | trump is S | !(S>=2, !has(A,S), !has(K,S)))
+      sets  ask=keycards(trump)
+      artificial
+      priority 5
+
 when we.trump is suit, asked control(t), answered control(u)
   4N  "Keycard ask in {trump}"
       sets  ask=keycards(trump)

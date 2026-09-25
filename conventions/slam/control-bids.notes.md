@@ -181,3 +181,39 @@ points at "stop in game if a suit is unprotected in both hands" firing
 too often. Suspects: what counts as bare, and whether a control bid by
 partner is read as covering the suit. Not changed, as it is your
 ruling; worth a look with the examples.
+
+## Fixed: denial by bypassing (2026-09-25, Rick: "that is the actual bridge meaning")
+
+**The cause.** The stop-in-game rule read partner's control bid in `t` as
+denying every side suit below `t`. A control bid denies only the suits
+it bypassed: those a control bid was available in, between the previous
+bid and partner's, on the ladder. Two failures:
+- Over our 3H, partner's 3S denies nothing. We read it as denying both
+  minors (1NT-2D-2H-3C-3H-3S-4H on 18 boards; responder held the
+  minors).
+- After 1S-2NT-3C, 4C bypasses nothing: the ladder starts at 4C when
+  spades are trumps.
+
+**The engine.** New terms: `partner.bypassed(x)`, optionally with the
+ladder's start, `partner.bypassed(x, 3S)`; and `me.last`
+(docs/LANGUAGE.md). The stop rule now asks whether I am bare in a suit
+partner bypassed. 3S is on the ladder only directly over our 3H.
+
+**Two follow-ons:**
+- **Going past game** with a control bid (4S over hearts) needs my own
+  cover in each minor partner has not shown. Without it, 4H lets
+  partner continue. Test 37 keeps its 4H for this reason.
+- **Asking when everything is covered:** when partner opened the
+  dialogue and every side suit is covered, by me or by partner's
+  control bid, ask for keycards (blackwood.bid, rkcb-1430.bid). Before,
+  that hand signed off in game after Jacoby 2NT.
+
+**Results against the rules before** (146 boards):
+- Distance from par: +460.
+- IMPs to the bidding side: +739.
+- Corpus par: -156,610 -> -156,150.
+
+Against no control bids at all, the gap fell from +427 / +890 to +45 /
++279 (distance / to the side). What is left is the ladder's own limit:
+a suit below the first control bid of the dialogue can't be shown, so a
+hand that holds it may still stop in game.

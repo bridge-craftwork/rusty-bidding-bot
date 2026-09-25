@@ -143,6 +143,40 @@ impl Position {
         self.vul.is_vulnerable(d)
     }
 
+    /// Did `d`'s last call bypass a bid in `suit` (0 clubs .. 3 spades)?
+    /// True when that call was a bid in another strain and a bid in
+    /// `suit` was available between the previous bid (anyone's) and it:
+    /// the bridge meaning of skipping a suit on a ladder (control bids,
+    /// stoppers, up the line). A suit below the previous bid's level was
+    /// never available at that level, so it is not bypassed there.
+    pub fn bypassed(&self, d: Direction, suit: usize) -> bool {
+        self.bypassed_above(d, suit, None)
+    }
+
+    /// As `bypassed`, but the ladder starts above `floor` too: a bid in
+    /// `suit` at or below `floor` was never on it (a control-bid ladder
+    /// begins above three of the agreed suit).
+    pub fn bypassed_above(&self, d: Direction, suit: usize, floor: Option<&Call>) -> bool {
+        let rank = |c: &Call| match c {
+            Call::Bid { level, strain } => Some(*level as i32 * 5 + strain_rank(*strain)),
+            _ => None,
+        };
+        let Some(i) = (0..self.calls.len()).rev().find(|&i| self.caller(i) == d) else {
+            return false;
+        };
+        let Some(mine) = rank(&self.calls[i]) else {
+            return false;
+        };
+        if mine % 5 == suit as i32 {
+            return false;
+        }
+        let before = self.calls[..i].iter().rev().find_map(rank).unwrap_or(0);
+        let before = before.max(floor.and_then(rank).unwrap_or(0));
+        // The cheapest bid in `suit` above the previous bid.
+        let level = (1..=7).find(|l| l * 5 + suit as i32 > before);
+        level.is_some_and(|l| l * 5 + (suit as i32) < mine)
+    }
+
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
         match self.auction().last_bid() {
@@ -154,5 +188,53 @@ impl Position {
             // The opponents hold the contract: we are not yet at our game.
             _ => true,
         }
+    }
+}
+
+/// Clubs 0, diamonds 1, hearts 2, spades 3, notrump 4: bidding order.
+fn strain_rank(s: Strain) -> i32 {
+    match s {
+        Strain::Clubs => 0,
+        Strain::Diamonds => 1,
+        Strain::Hearts => 2,
+        Strain::Spades => 3,
+        Strain::NoTrump => 4,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn pos(calls: &str) -> Position {
+        let mut p = Position::new(
+            Direction::South,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
+        for c in calls.split_whitespace() {
+            p.calls.push(Call::from_pbn(c).unwrap());
+        }
+        p
+    }
+
+    #[test]
+    fn bypassed_counts_only_the_suits_that_were_available() {
+        // 1NT P 2D P 2H P 3C P 3H P 3S: North's 3S over 3H skips nothing.
+        let p = pos("1NT Pass 2D Pass 2H Pass 3C Pass 3H Pass 3S");
+        let n = Direction::North;
+        assert!(!p.bypassed(n, 0) && !p.bypassed(n, 1) && !p.bypassed(n, 2));
+        // 4D over 3H skips 3S and 4C, not hearts.
+        let p = pos("1NT Pass 2D Pass 2H Pass 3C Pass 3H Pass 4D");
+        assert!(p.bypassed(n, 3) && p.bypassed(n, 0));
+        assert!(!p.bypassed(n, 2) && !p.bypassed(n, 1));
+        // 4S over 4D skips 4H only.
+        let p = pos("1H Pass 2NT Pass 4D Pass 4S");
+        assert!(p.bypassed(n, 2) && !p.bypassed(n, 0) && !p.bypassed(n, 1));
+        // 1S 2NT 3C 4C: with the ladder starting above 3S, 4C skips nothing.
+        let p = pos("1S Pass 2NT Pass 3C Pass 4C");
+        let floor = Call::from_pbn("3S");
+        assert!(p.bypassed(n, 1) && !p.bypassed_above(n, 1, floor.as_ref()));
+        assert!(!p.bypassed_above(n, 2, floor.as_ref()));
     }
 }

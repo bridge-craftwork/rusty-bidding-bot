@@ -607,6 +607,12 @@ impl<'a> Ctx<'a> {
         }
         Ok(match n {
             "opening" => Val::Bool(Tri::from_bool(self.pos.is_opening())),
+            // `me.last`: my own last call, as `partner.last` is theirs.
+            "last" => self
+                .pos
+                .last_call_of(self.actor)
+                .cloned()
+                .map_or(Val::Nothing, Val::Call),
             "passed_hand" => Val::Bool(Tri::from_bool(self.pos.passed_hand(self.actor))),
             "seat" => {
                 let mut d = self.pos.dealer;
@@ -722,6 +728,28 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
+            // `partner.bypassed(x)`: their last bid skipped a bid in x that
+            // was available (Position::bypassed). Public, like `last`.
+            // An optional second argument, a call, is where the ladder
+            // starts: `partner.bypassed(C, 3{trump})`.
+            "bypassed" => {
+                let args = seg.args.as_deref().unwrap_or(&[]);
+                let floor = match args.get(1) {
+                    Some(e) => match self.eval(e, b)? {
+                        Val::Call(c) => Some(c),
+                        v => return Err(format!("bypassed: `{e}` is not a call ({v:?})")),
+                    },
+                    None => None,
+                };
+                match self.suit_arg(args, 0, b)? {
+                    Some(s) => Val::Bool(Tri::from_bool(self.pos.bypassed_above(
+                        seat,
+                        s,
+                        floor.as_ref(),
+                    ))),
+                    None => Val::Bool(Tri::False),
+                }
+            }
             "has" | "stop" | "semibalanced" => Val::Bool(Tri::Unknown),
             // Support points are known when a raise showed them.
             "tp" => match self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)? {

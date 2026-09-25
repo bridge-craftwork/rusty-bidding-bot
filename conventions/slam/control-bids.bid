@@ -160,29 +160,30 @@ when we.trump is suit, !asked, (trump is H | trump is S), (we.forcing = none | w
 # answer is, so game is the contract. It outranks everything else here.
 #
 # Which suits count as unprotected in partner's hand is what the ladder
-# buys us. Partner's control bid in `t` is partner's *cheapest* control,
-# so partner has denied every side suit below `t` that was there to be
-# bid, and will never bid one of them again. Two cases:
+# buys us: partner's control bid is partner's *cheapest* control, so a
+# suit partner **bypassed** -- one a control bid was available in,
+# between the previous bid and partner's, on the ladder -- is one partner
+# cannot control (`partner.bypassed(x, 3S)`, the engine's reading of the
+# ladder: it starts above 3S, except that 3S itself is a control bid
+# directly over our 3H, hence `me.last = 3H`). A
+# suit that was not available is not denied: over our 3H, partner's 3S
+# says nothing about clubs or diamonds, since 4C or 4D would have gone
+# past 3S. The first version read every suit below `t` as denied, and
+# stopped in game on 105 boards where slam was better
+# (control-bids.notes.md).
 #
-# - **Partner opened the dialogue** (`!answered control`): everything
-#   below `t` was available, so a bare suit of mine below `t` is bare in
-#   both hands, and game is the limit.
-# - **Partner is answering my own control bid in `u`**: only the suits
-#   *between* `u` and `t` were available to partner, and those are the
-#   ones now known to be bare in both. My own bare suits below `u` are
-#   not: partner bid on knowing I had denied them, which promises cover
-#   there. That is why the test is not symmetric.
-#
-# What neither case reaches is a suit below the first control bid of the
-# whole dialogue: nobody can name it, and the keycard ask has to settle
-# it. See slam-catch.notes.md.
+# The same test covers partner answering my own control bid: the
+# previous bid is then mine, so only the suits between it and partner's
+# can be bypassed. A suit below the first control bid of the dialogue is
+# never bypassed; the keycard ask has to settle it. See
+# slam-catch.notes.md.
 
 when we.trump is suit, asked control(t), (trump is H | trump is S)
   4{trump}  "A suit is bare in both hands: game is the limit"
-      when  (!answered control, ((t is D, (C>=2, !has(A,C), !has(K,C))) | (t is H, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D))) | (t is S, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))))) | (answered control(u), ((u is C, t is H, (D>=2, !has(A,D), !has(K,D))) | (u is C, t is S, (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))) | (u is D, t is S, (trump is not H, H>=2, !has(A,H), !has(K,H)))))  # a bare suit partner's control bid has ruled out
+      when  (C>=2, !has(A,C), !has(K,C), partner.bypassed(C, 3S)) | (D>=2, !has(A,D), !has(K,D), partner.bypassed(D, 3S)) | (trump is not H, H>=2, !has(A,H), !has(K,H), partner.bypassed(H, 3S)) | (trump is not S, S>=2, !has(A,S), !has(K,S), partner.bypassed(S, 3S) | (me.last = 3H, partner.bypassed(S)))
       priority 20
   5{trump}  "A suit is bare in both hands: the dialogue is already past game"
-      when  (!answered control, ((t is D, (C>=2, !has(A,C), !has(K,C))) | (t is H, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D))) | (t is S, (C>=2, !has(A,C), !has(K,C)) | (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))))) | (answered control(u), ((u is C, t is H, (D>=2, !has(A,D), !has(K,D))) | (u is C, t is S, (D>=2, !has(A,D), !has(K,D)) | (trump is not H, H>=2, !has(A,H), !has(K,H))) | (u is D, t is S, (trump is not H, H>=2, !has(A,H), !has(K,H)))))  # as above; 4{trump} has gone by
+      when  (C>=2, !has(A,C), !has(K,C), partner.bypassed(C, 3S)) | (D>=2, !has(A,D), !has(K,D), partner.bypassed(D, 3S)) | (trump is not H, H>=2, !has(A,H), !has(K,H), partner.bypassed(H, 3S)) | (trump is not S, S>=2, !has(A,S), !has(K,S), partner.bypassed(S, 3S) | (me.last = 3H, partner.bypassed(S)))
       priority 19
 
   # Otherwise the next control up the line.
@@ -207,6 +208,10 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
   when trump is not S, !game_reached
     4S  "Control bid in ♠: slam interest"  alert
       shows has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
+      # Past 4H: only with cover in each minor partner has not shown
+      # (a minor partner bypassed is the stop rule's). Without it, 4H lets
+      # partner go on.
+      shows t is C | !(C>=2, !has(A,C), !has(K,C)), t is D | !(D>=2, !has(A,D), !has(K,D))
       sets  ask=control(S)
       artificial
       priority 10

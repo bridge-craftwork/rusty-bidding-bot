@@ -259,7 +259,16 @@ prints "Invitational: 8-9 total points" after a 15-17 1NT.
 `partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`,
 `we.keycards(t)` (my keycards plus partner's answer, within the deck limit),
 `imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
-board-a-match).
+board-a-match), `me.last` (my own last call).
+
+**Skipping a suit.** `partner.bypassed(x)` is true when partner's last call
+was a bid in another strain and a bid in `x` was available between the
+previous bid (anyone's) and it: partner went past `x`. That is how a ladder
+(control bids, stoppers, up the line) denies something, and only suits that
+could have been bid are denied: over our 3H, partner's 3S bypasses nothing,
+4D bypasses spades and clubs. A second argument, a call, is where the
+ladder starts when it starts higher than the previous bid:
+`partner.bypassed(C, 3S)` for control bids that begin above 3S.
 
 **Operators:** `!` (not), `|` (or), `,` (and), `a..b` ranges, `in 1|4` sets,
 and arithmetic on numbers and `.min` / `.max`.
