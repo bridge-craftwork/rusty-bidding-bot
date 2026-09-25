@@ -111,3 +111,18 @@ The balancing seat is `balancing.bid`; responsive doubles are
 - Two-suited overcalls (Michaels, unusual notrump) are off on this card
   but the fields exist.
 - Overcalls of a 1NT opening, of a weak two, and of two-level openings.
+
+## Probed over 1C (2026-09-25, `probes/overcall-1C.toml`)
+
+2,500 hands with a five-card or longer suit and 5-17 HCP over 1C
+(Basic-Bridge, default style): 78% agreement before, 82% after.
+- **Light overcalls.** BBA overcalls a five-card suit with 8-10 HCP
+  whatever its quality (KT853, T976 in hearts...). Dropping our quality
+  test, Rick's 2026-09-23 rule, costs **-4,835 IMPs** on the corpus.
+  Rick's rule stands, strongly.
+- **Weak jump overcalls:** BBA jumps with 10 HCP too. 4-10 instead of
+  4-9: +258 (-167,116 -> -166,858).
+- **The ceiling:** a six-card suit with 16 HCP has 18 total points, so
+  we doubled; BBA overcalls. Capping the overcall at 17 HCP instead of
+  17 total points: +229 (-166,858 -> -166,629). The strong any-shape
+  double keeps 18 total points: moving it to HCP too cost 971 IMPs.
