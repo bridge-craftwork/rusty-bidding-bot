@@ -98,17 +98,17 @@ after 1C (P) when nt2 is game_forcing
 # ── Over 1♥ / 1♠ ───────────────────────────────────────────────────────
 after 1H (P)
   1S  "4+ spades, 6+ HCP"           shows S>=4, hcp>=6
-      when  H<=2 | (style is not bba, (H=3, tp(H)>=11) | tp(H)>=13 | !limit_raise) | (style is bba, H=3, hcp>=11 | S>=6 | (hcp>=10, S>=5 | shortest<=2)), hcp<=10 | (S>=C, S>=D)
+      when  H<=2 | (style is not bba, (H=3, tp(H)>=11) | tp(H)>=13 | !limit_raise) | (style is bba, H=3, hcp>=11 | S>=6 | (hcp>=10, S>=5 | shortest<=2)), hcp<=10 | (S>=C, S>=D) | (hcp<=12, C<=5, D<=5)
       # 6-10 with 3+ hearts: raise; 11-12 with 4+: limit raise; 11+ with a longer minor: 2m first
       # (bba: with three hearts 1S from 11 HCP, or 10 with five spades or a doubleton; never with four hearts)
       sets forcing=round
   1N  "6-10 HCP, no heart fit, no 4 spades"   shows hcp=6..10, H<=2, S<=3
   2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
-  2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (H>=3, tp(H)>=11), suit_points>=10, C>=D, S<=3 | C>S
+  2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (H>=3, tp(H)>=11), suit_points>=10, C>=D, S<=3 | (C>S, hcp>=13 | C>=6)
       when  H<=2 | (style is not bba, H=3 | tp(H)>=13) | (style is bba, hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, H>=4))   # limit values and a fit: raise first
       sets forcing=round               # with 4 spades and no longer minor: 1S first
-  2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6 | (H>=3, tp(H)>=11), suit_points>=10, D>C, S<=3 | D>S
+  2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6 | (H>=3, tp(H)>=11), suit_points>=10, D>C, S<=3 | (D>S, hcp>=13 | D>=6)
       when  H<=2 | (style is not bba, H=3 | tp(H)>=13) | (style is bba, hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, H>=4))
       sets forcing=round
   3H  "Limit raise: 11-12 support points, 3+ hearts"  shows H>=3, tp(H)=11..12 | (H>=4, tp(H)=10, shortest<=2), hcp<=12

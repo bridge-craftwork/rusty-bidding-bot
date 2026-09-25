@@ -303,3 +303,10 @@ It lost to our passed-hand limit raise on both measures: -237 by
 distance, -354 to the side (536 boards). Not adopted. A fuller version
 (opener's strong answers, responder's game tries) would be needed to
 beat it.
+
+## Over 1H, 1S before a five-card minor with 11-12 (2026-09-25)
+
+With four spades, a five-card minor and 11-12, BBA responds 1S; we bid
+the minor at the two level. Now 1S, and 2m with four spades needs 13 or
+a six-card minor (test 41 keeps 2D with six). +52 by distance, +71 to
+the bidding side.
