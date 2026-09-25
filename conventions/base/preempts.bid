@@ -114,6 +114,8 @@ after 3H (P)
 after 3S (P)
   4S  "Raise to game"  shows S>=4 | (S=3, tp(S)>=9) | (S=2, hcp>=15)
 after 3C (P)
+  5C  "Game in clubs: 17+ and a doubleton"  shows C>=2, hcp>=17
+      priority 1
   5C  "Game in clubs"  shows C>=4, shortest<=1 | hcp>=12 | (C>=3, hcp>=15, shortest<=1)
       when  !vul
       priority 1
@@ -125,6 +127,8 @@ after 3C (P)
   4C  "Invitational raise"  shows C>=2, hcp=9..14
       when  vul
 after 3D (P)
+  5D  "Game in diamonds: 17+ and a doubleton"  shows D>=2, hcp>=17
+      priority 1
   5D  "Game in diamonds"  shows D>=4, shortest<=1 | hcp>=12 | (D>=3, hcp>=15, shortest<=1)
       when  !vul
       priority 1
