@@ -68,19 +68,19 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       when  style is bba
       sets  ask=quant
   3N  "To play: {game} total points"
-      shows H<=4, S<=4, (strength=game, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=25-partner.hcp.min, hcp<=32-partner.hcp.max)
+      shows H<=4, S<=4, bba_nt_game_points>=10, strength<=game
       when  matchpoints
       when  style is bba
   3N  "To play: game values"
       shows H<=4, S<=4, (points>=24-partner.hcp.min, points<=32-partner.hcp.max, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=24-partner.hcp.min, hcp<=32-partner.hcp.max)
       when  imps
       when  style is bba
-  # At matchpoints BBA's line between pass and 2NT is its own count
-  # (bba_nt_points, fitted to probes: one-nt.notes.md, "BBA's count"):
-  # shape-dependent weights, a ten worth 0-0.9, a doubleton spade without
-  # A or K heavily charged. Calibrated opposite 15-17.
+  # At matchpoints BBA's lines between pass, 2NT and 3NT are its own
+  # counts (bba_nt_points, bba_nt_game_points: one-nt.notes.md, "BBA's
+  # count"): shape-dependent weights, a ten worth 0-0.9, a doubleton major
+  # without A or K charged. Calibrated opposite 15-17.
   2N  "Invitational: {invite} total points"
-      shows H<=4, S<=4, C<=5, D<=5, bba_nt_points>=8, points>=25-partner.hcp.max, (strength<=invite, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp<=24-partner.hcp.min)
+      shows H<=4, S<=4, C<=5, D<=5, bba_nt_points>=8, bba_nt_game_points<=9, points>=25-partner.hcp.max
       when  minors is not four_way, minors is not four_way_reversed, matchpoints
       when  style is bba
       sets  ask=nt_invite

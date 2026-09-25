@@ -109,17 +109,16 @@ impl Facts {
         }
     }
 
-    /// BBA's notrump count for responding to a 15-17 1NT at matchpoints,
-    /// fitted per shape to 37,000 random 7-9 HCP hands BBA bid
-    /// (conventions/notrump/one-nt.notes.md, "BBA's count"): a
-    /// weighted honour count whose weights, ten value and threshold depend
-    /// on the shape, with a heavy charge for a doubleton spade without the
-    /// ace or king. Scaled so that BBA invites from 8 in every shape; shapes
-    /// not fitted count HCP + 1/2 a ten against 8.
+    /// BBA's notrump counts for responding to a 15-17 1NT at matchpoints,
+    /// fitted per shape to random 7-11 HCP hands BBA bid
+    /// (conventions/notrump/one-nt.notes.md, "BBA's count"): weights for
+    /// A, K, Q, J and tens, a charge for a doubleton spade or heart without
+    /// the ace or king, and a threshold. `bba_nt_points` is scaled so BBA
+    /// invites (2NT rather than pass) from 8, `bba_nt_game_points` so it
+    /// bids game (3NT rather than 2NT) from 10. Shapes not fitted count HCP
+    /// + 1/2 a ten.
     pub fn bba_nt_points(&self) -> i32 {
-        // (spades, hearts, diamonds, clubs) -> A, K, Q, J, ten, charge for a
-        // doubleton spade / heart without A or K, threshold; in hundredths.
-        const TABLE: [([i32; 4], [i32; 8]); 12] = [
+        const INVITE: [([i32; 4], [i32; 8]); 12] = [
             ([2, 2, 4, 5], [425, 300, 205, 95, 3, 18, 74, 738]),
             ([2, 2, 5, 4], [421, 300, 207, 94, -1, 13, 53, 767]),
             ([2, 3, 3, 5], [387, 300, 177, 70, 27, 1, 0, 694]),
@@ -133,10 +132,34 @@ impl Facts {
             ([3, 3, 4, 3], [400, 300, 200, 88, 74, 0, 0, 822]),
             ([3, 3, 5, 2], [399, 300, 200, 92, 1, 0, 0, 746]),
         ];
+        self.bba_count(&INVITE, 8)
+    }
+
+    pub fn bba_nt_game_points(&self) -> i32 {
+        const GAME: [([i32; 4], [i32; 8]); 12] = [
+            ([2, 2, 4, 5], [370, 300, 197, 102, 20, 16, 74, 912]),
+            ([2, 2, 5, 4], [378, 300, 194, 104, 26, 20, 43, 921]),
+            ([2, 3, 3, 5], [410, 300, 182, 84, 34, 1, 0, 934]),
+            ([2, 3, 4, 4], [375, 300, 199, 108, 23, 75, 0, 926]),
+            ([2, 3, 5, 3], [389, 300, 201, 102, 25, 50, 0, 928]),
+            ([3, 2, 3, 5], [373, 300, 203, 108, 27, 0, 82, 928]),
+            ([3, 2, 4, 4], [389, 300, 183, 91, 38, 0, 40, 931]),
+            ([3, 2, 5, 3], [410, 300, 195, 86, 35, 0, 2, 942]),
+            ([3, 3, 2, 5], [407, 300, 204, 100, 51, 0, 0, 980]),
+            ([3, 3, 3, 4], [396, 300, 206, 103, 47, 0, 0, 985]),
+            ([3, 3, 4, 3], [397, 300, 209, 104, 46, 0, 0, 989]),
+            ([3, 3, 5, 2], [409, 300, 207, 102, 44, 0, 0, 976]),
+        ];
+        self.bba_count(&GAME, 10)
+    }
+
+    /// A fitted count (see `bba_nt_points`), in whole points, where `at` is
+    /// the fitted threshold.
+    fn bba_count(&self, table: &[([i32; 4], [i32; 8])], at: i32) -> i32 {
         let shape = [self.len[3], self.len[2], self.len[1], self.len[0]];
         let count = |r: u8| (0..4).filter(|&s| self.has(s, r)).count() as i32;
         let bare = |s: usize| self.len[s] <= 2 && !self.has(s, ACE) && !self.has(s, KING);
-        let hundredths = match TABLE.iter().find(|(sh, _)| *sh == shape) {
+        let hundredths = match table.iter().find(|(sh, _)| *sh == shape) {
             Some((_, w)) => {
                 w[0] * count(ACE)
                     + w[1] * count(KING)
@@ -146,7 +169,7 @@ impl Facts {
                     - w[5] * bare(3) as i32
                     - w[6] * bare(2) as i32
                     - w[7]
-                    + 800
+                    + 100 * at
             }
             None => 100 * self.hcp + 50 * self.tens,
         };

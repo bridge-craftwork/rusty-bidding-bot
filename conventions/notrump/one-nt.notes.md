@@ -436,3 +436,22 @@ Measured, Basic-Bridge corpus: BBA's own pass/2NT choices predicted
 decisions after 1NT P involving pass or 2NT 72.3% -> 74.9% (the rest are
 other boundaries: Stayman, 3NT). BBA style overall: Basic_* identical
 auctions 44.5% -> 44.6%, uncontested same contract 69.2% -> 69.4%.
+
+### BBA's count for 2NT vs 3NT (2026-09-24)
+
+Same method: 20,000 more random 10-11 HCP responders (with the 7-9 HCP
+sets, 57,000 hands), a count fitted per shape for 2NT vs 3NT, tested on
+the Basic-Bridge corpus: 93.6% of BBA's 2NT/3NT choices against 92.3% for
+HCP + 1/2 a ten from 10. The flat shapes add nothing (a ten ~0.47, game
+from ~9.85: the simple rule); the gain is in the short-major shapes, with
+the same charges as for the invitation -- a doubleton spade without A or
+K about 3/4 of a point in 2-3-4-4, a doubleton heart about 0.8 in 3-2-3-5
+and 2-2-4-5. At 10 HCP about 7% of hands bid 3D, a third option not
+modelled. `bba_nt_game_points`, scaled so BBA bids game from 10, drives
+the bba style's matchpoint 3NT and caps its 2NT.
+
+Replay, Basic-Bridge boards, all responses after 1NT P: 92.1% before
+either count, 92.7% with the invitation count, 93.6% with both;
+decisions involving pass, 2NT or 3NT 89.4% -> 90.3% -> 91.8%. BBA style:
+corpus identical auctions 18.2% -> 18.3%, Basic_* uncontested 63.4% ->
+63.6%. Default unchanged.
