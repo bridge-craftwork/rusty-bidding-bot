@@ -43,12 +43,14 @@ after 1C (P) 1H (P) 1N (P)
   2D  "4+ diamonds, 5+ hearts, not forcing"  shows D>=4, H>=5, points<=12   when !nmf   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
 after 1C (P) 1S (P) 1N (P)
+  3H  "Four hearts, five spades, game forcing"  shows H>=4, S>=5, points>=13   sets forcing=game
   2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !nmf   sets ask=signoff
   2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1D (P) 1H (P) 1N (P)
   2C  "4+ clubs, 5+ hearts, not forcing"   shows C>=4, H>=5, points<=12   when !nmf   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
 after 1D (P) 1S (P) 1N (P)
+  3H  "Four hearts, five spades, game forcing"  shows H>=4, S>=5, points>=13   sets forcing=game
   2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !nmf   sets ask=signoff
   2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1H (P) 1S (P) 1N (P)
@@ -417,3 +419,9 @@ after 1x (*) X (*) P (P) when they.bid
       sets  ask=signoff
       priority -2
   P   "Partner had nothing to say either"  priority -10
+
+# Opener after 1m-1S-1NT-3H (5-4 in the majors, game forcing): the fit.
+after 1C (P) 1S (P) 1N (P) 3H (P) | 1D (P) 1S (P) 1N (P) 3H (P)
+  4H  "Four hearts"                 shows H>=4
+  4S  "Three spades"                shows S=3, H<=3
+  3N  "Neither fit"                 shows S<=2, H<=3
