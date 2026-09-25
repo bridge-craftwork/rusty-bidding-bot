@@ -289,3 +289,32 @@ boards): 1♠-2♥-2♠ BBA 3♠ with 13-15 where we bid 4♠ (4 of 20; BBA's 3�
 is forcing, and opener has no rule after it, so it is not modelled);
 1♥-1♠-3♥ BBA pass where we bid 3NT (3 of 17); 1♥-1♠-2♦ BBA 4♥ where we
 bid 3♥ (3 of 24).
+
+## A minor fit: stoppers, not control bids (Rick, 2026-09-25)
+
+Rick: "We don't usually use control bids for minors. In an auction
+1S-2D-3D, for example, new suits are usually stoppers, looking for 3NT,
+with 5D as a backup contract."
+
+After 1M-2m-3m (or 1m-2m-3m), responder with game values:
+- **3NT** when every suit is covered: my stopper, one partner has shown,
+  or a suit either of us bid naturally.
+- **Otherwise the cheapest stopper below 3NT.**
+- **Otherwise the cheapest call below 3NT** (often opener's suit), which
+  denies what it skips.
+- **Otherwise five of the minor.**
+
+The same `ladder` record as control bids keeps what each hand showed and
+skipped. Opener answers the same way: 3NT with everything covered, the
+next stopper up the line, else 5m. Before, responder bid 3NT on any
+game-going hand.
+
+Results: +157 by distance, +331 to the bidding side (290 boards).
+Every auction family gained.
+
+**For Rick:** the card field `major_openings.two_over_one.game_force` is
+mapped from `.bbsa` but no rule reads it. Our 2/1 responses and
+continuations are the SAYC ones, one round forcing, even on the 21GF
+cards (e.g. "P: minimum for the two-over-one" after 1y-2x-3x). The
+stopper dialogue sets the game force itself; the 2/1 structure as a
+whole is a bigger job.

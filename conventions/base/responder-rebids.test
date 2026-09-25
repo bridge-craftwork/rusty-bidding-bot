@@ -107,3 +107,12 @@ N A84.K98.T32.K853      | 1S P 2S P 3S P   | 4S     | bba: 10 HCP: accepts the g
 N J72.A52.J86.K876      | 1S P 2S P 3S P   | P      | bba: flat 9: declines (Basic_Responses 402)
 N T865.4.QT4.A9765      | 1S P 2S P 3S P   | 4S     | bba: four trumps and a singleton: accepts (Basic_Major 347)
 N 62.T863.963.AKT2      | 1D P 1H P 2D P   | 3D     | bba: 7 and three diamonds: raises opener's six (Basic_Openers_Rebid 441)
+
+# Minor fit after a two-over-one (Rick, 2026-09-25): no control bids; new
+# suits below 3NT show stoppers, 5m is the backup.
+card    21GF-DEFAULT
+dealer  S
+N Q7.AQ5.KJ982.A43      | 1S P 2D P 3D P          | 3NT    | hearts and clubs stopped
+N K2.765.AQJ97.KQ2      | 1S P 2D P 3D P          | 3S     | no heart stopper: 3S skips 3H, denying it
+S AKJ87.K4.KT32.K4      | 1S P 2D P 3D P 3S P     | 3NT    | hearts and clubs both stopped in this hand
+S AKJ87.K4.KT32.54      | 1S P 2D P 3D P 3H P     | 5D     | clubs stopped by nobody who has said so: 5D

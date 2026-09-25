@@ -189,8 +189,49 @@ after 1y (P) 2x (P) 3x (P) when x is not y
       when  x is H
       priority 1                           # responder's own major fit first
   3N  "Game"                               shows points>=12, y<=2 | y is C | y is D
+      when  x is H | x is S | ((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
   P   "Minimum for the two-over-one"       shows suit_points<=12
       priority -5
+# A minor fit (Rick, 2026-09-25): no control bids with a minor agreed.
+# New suits below 3NT show stoppers, up the line, looking for 3NT with 5m
+# as the backup; a suit skipped is denied (`sets ladder=stopper` keeps
+# the record). A suit is covered by my stopper, one partner has shown, or
+# a suit either of us bid naturally.
+after 1y (P) 2x (P) 3x (P) when x is C | x is D, x is not y
+  cheapest(C)  "Stopper in C, looking for 3NT"
+      when  x is not C, y is not C, cheapest_rank(C) < 19
+      when  points>=12, stop(C), !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      sets  ask=stoppers, ladder=stopper, trump=x, forcing=game
+      prefer 0 - cheapest_rank(C)
+      priority 1
+  cheapest(D)  "Stopper in D, looking for 3NT"
+      when  x is not D, y is not D, cheapest_rank(D) < 19
+      when  points>=12, stop(D), !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      sets  ask=stoppers, ladder=stopper, trump=x, forcing=game
+      prefer 0 - cheapest_rank(D)
+      priority 1
+  cheapest(H)  "Stopper in H, looking for 3NT"
+      when  x is not H, y is not H, cheapest_rank(H) < 19
+      when  points>=12, stop(H), !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      sets  ask=stoppers, ladder=stopper, trump=x, forcing=game
+      prefer 0 - cheapest_rank(H)
+      priority 1
+  cheapest(S)  "Stopper in S, looking for 3NT"
+      when  x is not S, y is not S, cheapest_rank(S) < 19
+      when  points>=12, stop(S), !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      sets  ask=stoppers, ladder=stopper, trump=x, forcing=game
+      prefer 0 - cheapest_rank(S)
+      priority 1
+  cheapest(y)  "No stopper to show below 3NT: over to you"
+      when  cheapest_rank(y) < 19
+      when  points>=12, !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      sets  ask=stoppers, ladder=stopper, trump=x, forcing=game
+      priority -2
+  5x  "Game in the minor: a suit unstopped"
+      shows points>=12
+      when  !((x is C | y is C | stop(C) | partner.cued(C) | partner.C.min>=4 | shown.C.min>=4), (x is D | y is D | stop(D) | partner.cued(D) | partner.D.min>=4 | shown.D.min>=4), (x is H | y is H | stop(H) | partner.cued(H) | partner.H.min>=4 | shown.H.min>=4), (x is S | y is S | stop(S) | partner.cued(S) | partner.S.min>=4 | shown.S.min>=4))
+      priority -3
+
 after 1M (P) 2x (P) 3x (P) when x is not M
   4M  "Game with support"                  shows tp(M)>=11, M>=3
 after 1y (P) 2x (P) 3z (P) when x is not y, z is not y, z is not x
@@ -425,3 +466,30 @@ after 1C (P) 1S (P) 1N (P) 3H (P) | 1D (P) 1S (P) 1N (P) 3H (P)
   4H  "Four hearts"                 shows H>=4
   4S  "Three spades"                shows S=3, H<=3
   3N  "Neither fit"                 shows S<=2, H<=3
+
+# Answering a stopper bid with a minor agreed: 3NT with every suit
+# covered; else the next stopper up the line below 3NT; else five of the
+# minor. A suit partner denied that I cannot stop either is the reason
+# for 5m.
+when asked stoppers, (trump is C | trump is D)
+  3N  "Every suit stopped: 3NT"
+      when  (trump is C | stop(C) | partner.cued(C) | me.cued(C) | partner.C.min>=4 | shown.C.min>=4), (trump is D | stop(D) | partner.cued(D) | me.cued(D) | partner.D.min>=4 | shown.D.min>=4), (trump is H | stop(H) | partner.cued(H) | me.cued(H) | partner.H.min>=4 | shown.H.min>=4), (trump is S | stop(S) | partner.cued(S) | me.cued(S) | partner.S.min>=4 | shown.S.min>=4)
+      priority 1
+  cheapest(C)  "Stopper in C, looking for 3NT"
+      when  trump is not C, cheapest_rank(C) < 19, stop(C), !partner.cued(C), !me.cued(C), !(partner.C.min>=4), !(shown.C.min>=4)
+      sets  ask=stoppers, ladder=stopper
+      prefer 0 - cheapest_rank(C)
+  cheapest(D)  "Stopper in D, looking for 3NT"
+      when  trump is not D, cheapest_rank(D) < 19, stop(D), !partner.cued(D), !me.cued(D), !(partner.D.min>=4), !(shown.D.min>=4)
+      sets  ask=stoppers, ladder=stopper
+      prefer 0 - cheapest_rank(D)
+  cheapest(H)  "Stopper in H, looking for 3NT"
+      when  trump is not H, cheapest_rank(H) < 19, stop(H), !partner.cued(H), !me.cued(H), !(partner.H.min>=4), !(shown.H.min>=4)
+      sets  ask=stoppers, ladder=stopper
+      prefer 0 - cheapest_rank(H)
+  cheapest(S)  "Stopper in S, looking for 3NT"
+      when  trump is not S, cheapest_rank(S) < 19, stop(S), !partner.cued(S), !me.cued(S), !(partner.S.min>=4), !(shown.S.min>=4)
+      sets  ask=stoppers, ladder=stopper
+      prefer 0 - cheapest_rank(S)
+  5{trump}  "A suit unstopped: game in the minor"
+      priority -3
