@@ -549,3 +549,6 @@ or reverse on descriptiveness. Both now outrank the jump shift. 5-4-2-2
 hands still jump, as Rick's tests have them.
 - Distance from par: +220.
 - To the side that bids: +373.
+- Rick's support-point raise ranges (2y up to 15, 3y 16-18, 4M 19+)
+  against BBA's HCP-and-length ranges: BBA's lose 325 by distance and
+  333 to the bidding side (224 boards). Ours stay.
