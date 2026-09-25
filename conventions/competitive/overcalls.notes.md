@@ -169,6 +169,10 @@ variant against the rules as committed:
 | Weak jump overcalls back to 4-9 (from 4-10) | -229 | +312 |
 | One-level overcall cap back to 17 total points | -60 | -620 |
 | Natural overcalls of 1NT (committed) | -825 | +1,007 |
+| Undo "five-card major before the redouble" after (X) | -452 | +654 |
+| Undo "support first over a major" after (X) | -338 | -541 |
+| Undo the doubler's rebid when opener competes | -405 | -860 |
+| Undo the preempt responses' vulnerability split | -57 | -204 |
 
 Neither measure is clean:
 - **Distance from par** counts any move away from par against us,

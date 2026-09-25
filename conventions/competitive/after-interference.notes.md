@@ -176,3 +176,9 @@ Basic_Takeout_Double was the weakest Basic scenario against par (-434).
   (spades), +34 (hearts).
 
 Corpus: -160,381 -> -159,591.
+- **Re-checked from the acting side** (probes/tools/sideimps.py,
+  overcalls.notes.md "For Rick: which yardstick"):
+  - Support first over a major: both measures agree (+338 distance, +541
+    to the side).
+  - Five-card major before the redouble: they disagree. +452 by distance,
+    but the redouble is better for the side that acts by 654. For Rick.
