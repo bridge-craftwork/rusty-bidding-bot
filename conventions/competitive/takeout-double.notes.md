@@ -84,3 +84,20 @@ disagreement is mostly the level with 9-11 (2S cue vs 3H...).
   of their suit (spades over 1S) with no call: 177 corpus boards. The
   guards now read `S<=3 | x is S`. The heart advance says the same about
   spades. Corpus: -162,394 -> -162,157.
+
+## The double itself, probed over 1S (2026-09-25, `probes/tod-1S.toml`)
+
+2,500 hands with three or fewer spades and 9-19 HCP over 1S: 80%
+agreement. BBA's threshold is HCP by shortness. With a singleton in
+their suit it doubles from 10-11 HCP (and prefers the double to a
+two-level minor overcall at 11-14). With a doubleton it doubles from
+12 HCP; 11 with a five-card suit passes, where our total points double.
+Tried against par:
+
+| Change | IMPs |
+|---|---|
+| 12 HCP, or 10 with a singleton | -314 |
+| Our 12 total points, plus 10 HCP with a singleton | -380 |
+| Two-level overcalls on three of the top five honours instead of four | -285 |
+
+Ours stays in all three.
