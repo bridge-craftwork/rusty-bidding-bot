@@ -95,3 +95,43 @@ when opening, seat<=3
       when !vul, seat<=2, style is bba
   3C  "Preempt: six clubs and four diamonds, 4-8"  shows C=6, D=4, hcp=4..8
       when !vul, seat<=2, style is bba
+
+# ── Responder to a three-level preempt ────────────────────────────────
+# Before these rules responder had no call at all after 3x-(P): ~700
+# corpus boards where BBA bid (probes/preempt-resp-3S.toml, 3C). BBA,
+# 2026-09-25:
+# - over 3M, game with four trumps whatever the strength, with three and
+#   9 support points (HCP and shortness), with two and 15 HCP;
+# - over 3m, a preemptive 4m with three trumps and less than 12, and 5m
+#   with four and a singleton or 12+ (15+ with three and a singleton);
+#   strong hands without a fit pass: no 3NT on a preempt. Vulnerable, 4m is
+#   invitational (9-14, two trumps will do), weak hands pass, and 5m wants
+#   15, or 12 with four trumps and a singleton. (BBA follows relative
+#   vulnerability, and is mixed at equal; keying on ours alone scores
+#   best against par: preempts.notes.md.)
+after 3H (P)
+  4H  "Raise to game"  shows H>=4 | (H=3, tp(H)>=9) | (H=2, hcp>=15)
+after 3S (P)
+  4S  "Raise to game"  shows S>=4 | (S=3, tp(S)>=9) | (S=2, hcp>=15)
+after 3C (P)
+  5C  "Game in clubs"  shows C>=4, shortest<=1 | hcp>=12 | (C>=3, hcp>=15, shortest<=1)
+      when  !vul
+      priority 1
+  4C  "Preemptive raise"  shows C>=3, hcp<=11
+      when  !vul
+  5C  "Game in clubs"  shows C>=3, hcp>=15 | (C>=4, hcp>=12, shortest<=1)
+      when  vul
+      priority 1
+  4C  "Invitational raise"  shows C>=2, hcp=9..14
+      when  vul
+after 3D (P)
+  5D  "Game in diamonds"  shows D>=4, shortest<=1 | hcp>=12 | (D>=3, hcp>=15, shortest<=1)
+      when  !vul
+      priority 1
+  4D  "Preemptive raise"  shows D>=3, hcp<=11
+      when  !vul
+  5D  "Game in diamonds"  shows D>=3, hcp>=15 | (D>=4, hcp>=12, shortest<=1)
+      when  vul
+      priority 1
+  4D  "Invitational raise"  shows D>=2, hcp=9..14
+      when  vul

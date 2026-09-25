@@ -255,3 +255,27 @@ aces; a side four-card major stops a weak two only with the jack or
 better. The previous default (4-9, a major 4-10, no side four-card major,
 a good suit vulnerable) is the `standard` treatment. The 6-4 minor
 preempts stay `bba` only.
+
+## Responder to a three-level preempt (2026-09-25)
+
+Responder had no rule at all after 3x-(P): about 700 corpus boards where
+BBA bid, mostly on 21GF-DEFAULT. Probed with 2,000 random hands each
+over 3S and 3C (`probes/preempt-resp-3S.toml`, `3C`):
+- **Over 3M:** BBA raises to game with four trumps at any strength, with
+  three and about 9 support points, and with two and 15 HCP. Agreement
+  with our rules: 77-90%.
+- **Over 3m:** a preemptive 4m with three trumps and under 12 HCP; 5m
+  with four and a singleton, or with 12+. Strong hands without a fit
+  pass: BBA never bids 3NT on a preempt.
+- **Vulnerability:** BBA follows relative vulnerability. At unfavourable
+  it passes weak hands and makes 4m invitational. At favourable it bids
+  5m more. At equal it is mixed.
+
+Corpus par:
+
+| Rules | Par |
+|---|---|
+| None (before) | -165,434 |
+| No split | -163,785 |
+| Relative vulnerability | -163,691 |
+| Split on our vulnerability | -163,528 (adopted) |
