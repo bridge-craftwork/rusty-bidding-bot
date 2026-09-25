@@ -192,6 +192,158 @@ impl Facts {
         self.bba_count(&GAME, 10)
     }
 
+    /// BBA's count after Stayman and no fit (e.g. 1NT-2C-2D): 3NT rather than 2NT, matchpoints; scaled so the higher call starts at 10.
+    pub fn bba_stay_nt_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                394, 300, 195, 87, 31, -170, -18, -1, 4, 0, -3, 87, -3, -13, 11, 942,
+            ],
+            10,
+        )
+    }
+
+    /// BBA's count the same at IMPs; scaled so the higher call starts at 10.
+    pub fn bba_stay_nt_imp_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                393, 300, 195, 87, 35, -220, -31, -213, -82, 0, 0, 71, -82, -169, -213, 699,
+            ],
+            10,
+        )
+    }
+
+    /// BBA's count with the heart fit found: an invitation rather than pass, matchpoints; scaled so the higher call starts at 8.
+    pub fn bba_stay_raise_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                395, 300, 194, 81, -1, -2, 0, -149, -19, 0, 14, -1, 9, 76, 75, 723,
+            ],
+            8,
+        )
+    }
+
+    /// BBA's count the same at IMPs; scaled so the higher call starts at 8.
+    pub fn bba_stay_raise_imp_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                413, 300, 201, 93, 1, -6, 0, -126, -15, 0, 12, 2, 9, 68, 55, 734,
+            ],
+            8,
+        )
+    }
+
+    /// BBA's count with the heart fit found: game rather than an invitation, matchpoints; scaled so the higher call starts at 10.
+    pub fn bba_stay_game_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                396, 300, 192, 67, 3, 13, 0, -167, -57, 0, 20, -4, -17, 25, 179, 862,
+            ],
+            10,
+        )
+    }
+
+    /// BBA's count the same at IMPs; scaled so the higher call starts at 10.
+    pub fn bba_stay_game_imp_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                420, 300, 193, 71, 9, 28, 0, -339, -137, 0, 14, 4, -110, -144, -5, 639,
+            ],
+            10,
+        )
+    }
+
+    /// BBA's count with the spade fit found: an invitation rather than pass, matchpoints; scaled so the higher call starts at 8.
+    pub fn bba_stay_sraise_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                404, 300, 196, 87, 1, 0, -34, -134, 3, 0, 1, 19, 4, 45, 83, 738,
+            ],
+            8,
+        )
+    }
+
+    /// BBA's count the same at IMPs; scaled so the higher call starts at 8.
+    pub fn bba_stay_sraise_imp_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                407, 300, 199, 101, 4, 0, -44, -86, -11, 0, 5, 17, -1, 9, 83, 715,
+            ],
+            8,
+        )
+    }
+
+    /// BBA's count with the spade fit found: game rather than an invitation, matchpoints; scaled so the higher call starts at 10.
+    pub fn bba_stay_sgame_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                412, 300, 194, 67, 2, 0, -21, -116, -36, 0, 9, 14, -17, -3, 129, 874,
+            ],
+            10,
+        )
+    }
+
+    /// BBA's count the same at IMPs; scaled so the higher call starts at 10.
+    pub fn bba_stay_sgame_imp_points(&self) -> i32 {
+        self.bba_linear(
+            &[
+                432, 300, 200, 75, 4, 0, -14, -273, -112, 0, 4, 27, -104, -177, -42, 660,
+            ],
+            10,
+        )
+    }
+
+    /// A fitted BBA count by the name rules use (`bba_nt_points`, ...).
+    pub fn bba_named(&self, name: &str) -> Option<i32> {
+        Some(match name {
+            "bba_nt_points" => self.bba_nt_points(),
+            "bba_nt_game_points" => self.bba_nt_game_points(),
+            "bba_nt_imp_points" => self.bba_nt_imp_points(),
+            "bba_nt_imp_game_points" => self.bba_nt_imp_game_points(),
+            "bba_stay_nt_points" => self.bba_stay_nt_points(),
+            "bba_stay_nt_imp_points" => self.bba_stay_nt_imp_points(),
+            "bba_stay_raise_points" => self.bba_stay_raise_points(),
+            "bba_stay_raise_imp_points" => self.bba_stay_raise_imp_points(),
+            "bba_stay_game_points" => self.bba_stay_game_points(),
+            "bba_stay_game_imp_points" => self.bba_stay_game_imp_points(),
+            "bba_stay_sraise_points" => self.bba_stay_sraise_points(),
+            "bba_stay_sraise_imp_points" => self.bba_stay_sraise_imp_points(),
+            "bba_stay_sgame_points" => self.bba_stay_sgame_points(),
+            "bba_stay_sgame_imp_points" => self.bba_stay_sgame_imp_points(),
+            _ => return None,
+        })
+    }
+
+    /// A fitted linear count after Stayman (conventions/notrump/stayman.notes.md,
+    /// "BBA's counts after Stayman"): weights, in hundredths, for aces,
+    /// kings, queens, jacks, tens, a doubleton spade / heart without A or K,
+    /// the shapes 4-3-3-3, 4-4-3-2, 5-3-3-2, 5-4-2-2, a five-card minor,
+    /// each doubleton, singleton and void; then the threshold. In whole
+    /// points, scaled so the threshold falls at `at`.
+    fn bba_linear(&self, w: &[i32; 16], at: i32) -> i32 {
+        let count = |r: u8| (0..4).filter(|&s| self.has(s, r)).count() as i32;
+        let bare = |s: usize| (self.len[s] <= 2 && !self.has(s, ACE) && !self.has(s, KING)) as i32;
+        let shape = |d: [i32; 4]| (self.dist == d) as i32;
+        let f = [
+            count(ACE),
+            count(KING),
+            count(QUEEN),
+            count(JACK),
+            self.tens,
+            bare(3),
+            bare(2),
+            shape([4, 3, 3, 3]),
+            shape([4, 4, 3, 2]),
+            shape([5, 3, 3, 2]),
+            shape([5, 4, 2, 2]),
+            (self.len[0].max(self.len[1]) >= 5) as i32,
+            self.len.iter().filter(|&&l| l == 2).count() as i32,
+            self.len.iter().filter(|&&l| l == 1).count() as i32,
+            self.len.iter().filter(|&&l| l == 0).count() as i32,
+        ];
+        let sum: i32 = f.iter().zip(w).map(|(x, w)| x * w).sum();
+        (sum - w[15] + 100 * at).div_euclid(100)
+    }
+
     /// A fitted count (see `bba_nt_points`), in whole points, where `at` is
     /// the fitted threshold.
     fn bba_count(&self, table: &[([i32; 4], [i32; 8])], at: i32) -> i32 {

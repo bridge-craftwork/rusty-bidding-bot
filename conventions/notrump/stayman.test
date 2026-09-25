@@ -51,7 +51,7 @@ N 54.K876.K862.Q62      | 1NT P 2C P 2H P     | 3H     | bba: 8 HCP 4-4-3-2 invi
 N 54.K876.A862.K62      | 1NT P 2C P 2H P     | 4H     | bba: 10 HCP, game
 N T4.QT76.K862.Q62      | 1NT P 2C P 2H P     | P      | bba: tens do not count in the fit
 N 5.Q876.K862.Q652      | 1NT P 2C P 2H P     | 3H     | bba: 7 HCP and a singleton invites
-N K876.5.K862.K652      | 1NT P 2C P 2S P     | 3S     | bba: 9 HCP and a singleton only invites (the heart twin of this hand bid 4H)
+N K876.5.K862.K652      | 1NT P 2C P 2S P     | 4S     | bba: 9 HCP and a singleton: game (re-probed 2026-09-24; the earlier 3S was wrong)
 N K876.5.A862.K652      | 1NT P 2C P 2S P     | 4S     | bba: 10 HCP and a singleton: game
 N K542.Q76.K82.862      | 1NT P 2C P 2D P     | 2NT    | bba: no fit, 8 HCP
 N K542.QT6.KT2.J62      | 1NT P 2C P 2D P     | 3NT    | bba: no fit, 9 and two tens: game
@@ -65,7 +65,8 @@ S AQ952.KJ7.A95.Q8      | 1NT P 2C P 2S P 3S P  | 4S   | bba: 16 with a fifth tr
 scoring IMP
 N 54.K876.K862.K62      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 9 in the fit is game
 N 5.K876.K862.Q652      | 1NT P 2C P 2H P     | 4H     | bba at IMPs: 8 and a singleton is game
-N K876.5.K862.Q652      | 1NT P 2C P 2S P     | 4S     | bba at IMPs: the same in spades
+# Known miss of the IMP spade-fit count: K876.5.K862.Q652 after 2S -- BBA
+# 4S, the count 3S (stayman.notes.md).
 
 # ── No fit, balanced 16-17: as over 1NT (Rick, 2026-09-24)
 card    Basic-Bridge

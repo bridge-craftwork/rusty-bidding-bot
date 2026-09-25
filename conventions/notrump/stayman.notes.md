@@ -319,3 +319,55 @@ the 16–17 gap after 2♦ noted above: a question for Rick (4NT with 16,
 
 Together: -172,716 -> -168,198 IMPs against par on the corpus (+4,518),
 Basic_* +13, uncontested +18.
+
+## BBA's counts after Stayman (2026-09-24)
+
+The `bba` style's continuations after 1NT-2C now use counts fitted to BBA's
+answers on random hands, as with pass/2NT/3NT directly over 1NT
+(one-nt.notes.md):
+
+- **After 2D (no major fit):** pass vs 2NT, then 2NT vs 3NT. The measures are
+  `bba_stay_nt_points` and `bba_stay_nt_imp_points`.
+- **After 2H, responder with four hearts:** pass vs 3H, then 3H vs 4H. The
+  measures are `bba_stay_raise_points`, `bba_stay_game_points`, and their
+  `_imp` versions.
+- **After 2S, responder with four spades:** the same, with the
+  `bba_stay_sraise_*` and `bba_stay_sgame_*` measures. Spades need their own
+  weights: the ♠/♥ asymmetry in BBA's 1NT (5-4-2-2 with four hearts, never
+  four spades) carries through.
+
+Each measure is linear, fitted by logistic regression on random hands that
+include singletons and voids. The features are the honour counts, tens, a
+charge for a doubleton ♠ or ♥ without A/K, shape class (4333, 4432, 5332,
+5422), a five-card minor, and doubletons, singletons and voids. The counts
+are scaled so the higher call starts at 8 (invite) or 10 (game).
+Agreement on held-out hands:
+
+| Decision | Agreement |
+|---|---|
+| No fit after 2D | about 91-92% |
+| Heart fit | about 93-94% |
+| Spade fit | 88-95% |
+
+**Known miss:** K876.5.K862.Q652 after 2S at IMPs. BBA bids 4S; the count
+says 3S (stayman.test).
+
+**Gated to 15-17 openers.** The counts were fitted opposite BBA's 15-17
+1NT. Applied elsewhere, they lost boards: after 2NT openings, after our 1NT
+overcall, and after Precision's weaker 1NT. The count rules are therefore
+gated `partner.hcp.min>=15, partner.hcp.max<=17`, and the earlier rules
+stay in force for any other range (`partner.hcp.min<=14 |
+partner.hcp.max>=18`). The first-response counts in one-nt.bid get the
+same gate. No-fit continuations after 2H/2S keep the earlier rules, because
+the counts were fitted after 2D only.
+
+**Corpus (bba style):**
+- Corpus: calls 76.1%, auction/contract 18.3% / 33.0% (unchanged), par
+  -181,410 -> -181,330.
+- Basic_*: 44.7% / 52.0%.
+- Basic_* NS: 63.6% / 69.4%.
+- Replay against the rules before: better on 127 boards, worse on 114.
+- The default is unchanged (-167,558).
+
+**Not modelled yet:** 3C/3D after Stayman (BBA shows a five-card minor),
+and the losses after 2D on the other cards (21GF).

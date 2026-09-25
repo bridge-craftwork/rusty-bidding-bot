@@ -130,6 +130,16 @@ const SELF_ATTRS: &[&str] = &[
     "bba_nt_game_points",
     "bba_nt_imp_points",
     "bba_nt_imp_game_points",
+    "bba_stay_nt_points",
+    "bba_stay_nt_imp_points",
+    "bba_stay_raise_points",
+    "bba_stay_raise_imp_points",
+    "bba_stay_game_points",
+    "bba_stay_game_imp_points",
+    "bba_stay_sraise_points",
+    "bba_stay_sraise_imp_points",
+    "bba_stay_sgame_points",
+    "bba_stay_sgame_imp_points",
     "controls",
     "losers",
 ];
@@ -715,15 +725,10 @@ impl<'a> Ctx<'a> {
                 Some(t) => Val::Num(k.tp[t]),
                 None => Val::Num(k.hcp),
             },
-            "keycards"
-            | "controls"
-            | "losers"
-            | "quality"
-            | "top5"
-            | "bba_nt_points"
-            | "bba_nt_game_points"
-            | "bba_nt_imp_points"
-            | "bba_nt_imp_game_points" => Val::Num(Range::new(0, 40)),
+            "keycards" | "controls" | "losers" | "quality" | "top5" => Val::Num(Range::new(0, 40)),
+            // BBA's fitted counts (Facts::bba_named) are about the actor's
+            // own hand; for anyone else they are unknown.
+            n if n.starts_with("bba_") => Val::Num(Range::new(0, 40)),
             _ => return Err(format!("unknown attribute `{n}`")),
         })
     }
@@ -1144,10 +1149,7 @@ fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
         "longest" => Val::Num(Range::point(f.dist[0])),
         "second_longest" => Val::Num(Range::point(f.second_longest())),
         "length_points" => Val::Num(Range::point(f.length_points())),
-        "bba_nt_points" => Val::Num(Range::point(f.bba_nt_points())),
-        "bba_nt_game_points" => Val::Num(Range::point(f.bba_nt_game_points())),
-        "bba_nt_imp_points" => Val::Num(Range::point(f.bba_nt_imp_points())),
-        "bba_nt_imp_game_points" => Val::Num(Range::point(f.bba_nt_imp_game_points())),
+        n if n.starts_with("bba_") => Val::Num(Range::point(f.bba_named(n).unwrap_or(0))),
         "controls" => Val::Num(Range::point(f.controls())),
         "losers" => Val::Num(Range::point(f.losers())),
         _ => unreachable!(),
