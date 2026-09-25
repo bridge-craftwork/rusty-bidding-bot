@@ -89,3 +89,6 @@ suit; opener with the values asks with 4NT.
 BBA's lighter positive responses (any five-card suit with 7+ total
 points; 2NT with balanced 7+) are left alone: Rick's guidance (8+ and a
 real suit) stands.
+- Opening 1M rather than 2NT with 20-21 and a five-card major, as BBA
+  sometimes does: -1,717 by distance, -3,432 to the bidding side (626
+  boards). Rick's ladder (2NT with 20-21 balanced) stands.
