@@ -97,6 +97,16 @@ after 2C (P) 2D (P)
 # Partner has a real suit and 8+, so the only questions left are the fit
 # and the strain. `y is not D | partner.D>=5` is what tells the 3♦
 # positive from the 2♦ waiting bid, which has its own block above.
+# Responder after a positive and opener's suit: raise with three or more,
+# agreeing the suit for the slam modules (2026-09-25: we bid 3NT with
+# support and missed the slams BBA bid, To_Finesse_Or_Not_To_Finesse).
+after 2C (P) 2N (P) 3S (P) | 2C (P) 3C (P) 3S (P) | 2C (P) 3D (P) 3S (P)
+  4S  "Support for spades: slam values opposite 2C"   shows S>=3   sets trump=S, forcing=game
+      priority 1
+after 2C (P) 2N (P) 3H (P) | 2C (P) 3C (P) 3H (P) | 2C (P) 3D (P) 3H (P)
+  4H  "Support for hearts: slam values opposite 2C"   shows H>=3   sets trump=H, forcing=game
+      priority 1
+
 after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
   cheapest(y) "Raise: three or more {y}"      shows y>=3   sets trump=y
   cheapest(S) "Five or more spades"           shows S>=5   when y is not S

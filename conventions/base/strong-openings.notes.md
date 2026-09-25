@@ -75,3 +75,17 @@ twice). BBA opens that 1♠ and so do we.
 - Opener's second call after the second negative.
 - Slam bidding after a positive: the raise agrees the suit but nothing
   looks for keycards.
+
+## Raising opener's major after a positive (2026-09-25)
+
+To_Finesse_Or_Not_To_Finesse was the corpus's worst covered scenario by
+par (-2,292 over 500 boards). After 2C-2NT-3S (or 3m-3M), responder
+held three trumps and 8-11 and bid 3NT: there was no raise. BBA drives
+to slam. Responder now raises to 4M with three or more, agreeing the
+suit; opener with the values asks with 4NT.
+- Distance from par: +774.
+- To the bidding side: +1,556 (165 boards).
+
+BBA's lighter positive responses (any five-card suit with 7+ total
+points; 2NT with balanced 7+) are left alone: Rick's guidance (8+ and a
+real suit) stands.
