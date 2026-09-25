@@ -44,7 +44,7 @@ when answered transfer(M)
       when partner.M>=4                        # the super-accept is for thin games
   P   "Weak: play here ({signoff} total points)"  shows strength=signoff
       when maybe partner.M<=3 | partner.last=3{M}   # never pass an artificial super-accept (2S, 2NT)
-  2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced, strength=invite
+  2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced | shortest>=2, strength=invite
       sets ask=invite(M)
   3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, suit_strength=invite
       sets ask=invite(M)
