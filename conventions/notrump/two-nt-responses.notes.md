@@ -114,3 +114,12 @@ the 21GF cards: Gerber 4♣, minor-suit transfers, Puppet (gaps above).
 
 **Tried as our default** (scratch copy, 3♣ Stayman and the pass keyed to
 5 HCP): corpus par −66 IMPs, Basic_* 0. Not proposed.
+
+## Responder after the completed transfer (2026-09-25)
+
+The generic transfer rules measure strength bands against opener's
+20-21, and left weak or unbalanced hands with no call after 2NT-3D-3H
+and 2NT-3H-3S: 408 corpus boards. BBA passes with 0-3 HCP. From 4
+(25 combined) it bids 3NT with five of the major, balanced or not, and
+4M with six. Those are now fallbacks under the generic rules.
+Corpus: -166,629 -> -165,434 (+1,195 IMPs).

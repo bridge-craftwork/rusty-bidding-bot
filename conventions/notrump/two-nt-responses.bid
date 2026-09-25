@@ -90,3 +90,25 @@ after 2N (P) 3D (P)
   3H  "Completes transfer"
 after 2N (P) 3H (P)
   3S  "Completes transfer"
+
+# Responder after the completed transfer. The generic rules after a
+# transfer (jacoby-transfers.bid) left weak and unbalanced hands with no
+# call opposite 20-21: 408 boards across the corpus. BBA: pass with 0-3;
+# from 4 (25 combined), 3NT with five of the major, balanced or not, and
+# game in the major with six. Fallbacks under the generic rules.
+after 2N (P) 3D (P) 3H (P)
+  P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
+      priority -1
+  3N  "Game values, five hearts: choose the game"  shows H=5, hcp>=25-partner.hcp.max
+      sets  ask=choice
+      priority -1
+  4H  "Game, six or more hearts"                  shows H>=6, hcp>=25-partner.hcp.max
+      priority -1
+after 2N (P) 3H (P) 3S (P)
+  P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
+      priority -1
+  3N  "Game values, five spades: choose the game"  shows S=5, hcp>=25-partner.hcp.max
+      sets  ask=choice
+      priority -1
+  4S  "Game, six or more spades"                  shows S>=6, hcp>=25-partner.hcp.max
+      priority -1

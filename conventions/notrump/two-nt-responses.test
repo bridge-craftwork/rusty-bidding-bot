@@ -29,3 +29,13 @@ N 432.K72.A962.A72      | 2NT P          | 4NT    | bba: 11: quantitative
 N 432.KT2.AT62.A72      | 2NT P          | 6NT    | bba: 11 and two tens: slam
 N 432.K72.A962.AJ2      | 2NT P          | 6NT    | bba: 12: slam
 N AQ542.98743.72.3      | 2NT P          | 3H     | bba: 5-5 in the majors: spades first
+
+# Responder after the completed transfer (2026-09-25): pass with 0-3,
+# 3NT with five of the major, 4M with six (BBA; 408 corpus boards had no
+# rule here).
+card    21GF-DEFAULT
+dealer  S
+N J65.J98762.75.93      | 2NT P 3D P 3H P    | P      | 2 HCP, six hearts: pass (BBA)
+N T.T9875.QT95.J95      | 2NT P 3D P 3H P    | P      | 3 HCP: pass
+N KT873.653.J876.J      | 2NT P 3H P 3S P    | 3NT    | 5 HCP, five spades: choose the game
+N J74.J9853.7.KJ43      | 2NT P 3D P 3H P    | 3NT    | five hearts, unbalanced: 3NT all the same
