@@ -134,12 +134,14 @@ after 1x (X)
   XX  "Redouble: 10+ total points, we own the hand"
       alert  artificial
       shows hcp+length_points>=10
+      when  S<=4 | x is S | hcp>=12        # BBA: a five-card spade suit with 10-11 bids 1S
+      when  H<=4 | x is H | x is S | hcp>=12   # and five hearts over a minor bid 1H
       priority 1
-  cheapest(S) "6-9 total points, four or more spades"
-      shows S>=4, S>H, hcp+length_points>=6, hcp+length_points<=9
+  cheapest(S) "6-9 total points, four or more spades (10-11 with five)"
+      shows S>=4, S>H, hcp+length_points>=6, hcp+length_points<=9 | (S>=5, hcp<=11)
       when  x is not S
-  cheapest(H) "6-9 total points, four or more hearts"
-      shows H>=4, H>=S, hcp+length_points>=6, hcp+length_points<=9
+  cheapest(H) "6-9 total points, four or more hearts (10-11 with five)"
+      shows H>=4, H>=S, hcp+length_points>=6, hcp+length_points<=9 | (H>=5, hcp<=11)
       when  x is not H, x is not S
   cheapest(D) "6-9 total points, four or more diamonds"
       shows D>=4, S<=3, H<=3, hcp+length_points>=6, hcp+length_points<=9
@@ -147,7 +149,7 @@ after 1x (X)
   2{x} "Raise: 4-9 total points, support for partner's suit"
       shows x>=3, hcp+length_points>=4, hcp+length_points<=9
       when  x is H | x is S | x>=5
-      when  (S<=3 | x is S), (H<=3 | x is H)
+      when  (S<=3 | x is S | x is H), (H<=3 | x is H | x is S)   # over a major, support first (BBA)
   3{x} "Preemptive raise: five-card support for a major, less than 8"
       shows x>=5, hcp+length_points<=7
       when  x is H | x is S

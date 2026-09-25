@@ -163,3 +163,16 @@ know partner really holds it.
   minor. BBA is not consistent about this (it bids 2♦ on one 4-5 minor
   hand and 2♣ on another identical one); the order above is what
   measured best.
+
+## After their takeout double (2026-09-25)
+
+Basic_Takeout_Double was the weakest Basic scenario against par (-434).
+- **Support first over a major.** The raise was blocked by four cards in
+  the other major, so 1S (X) with three spades and four hearts passed:
+  hearts can't be bid at the one level over 1S. BBA raises. +338.
+- **Five-card major with 10-11 bids it.** BBA bids 1S (or 1H over a
+  minor) with five and 10-11; we redoubled. The suit now covers five
+  cards up to 11, and the redouble waits for 12 with such a hand. +418
+  (spades), +34 (hearts).
+
+Corpus: -160,381 -> -159,591.
