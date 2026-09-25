@@ -18,7 +18,8 @@
 # they need different answers — advancer over RHO's 1NT, and the
 # overcaller's reply to the cue-bid raise.
 #
-# Not written yet: advancer's continuations once the overcaller has
+# Not written yet (beyond the rebid after a new suit, at the end):
+# advancer's continuations once the overcaller has
 # rebid, and the support cue bid.
 #
 # Advancing a 1NT overcall needs nothing here: systems are on, and the
@@ -221,3 +222,20 @@ when asked cue_raise(t)
       when  t is C | t is D
   cheapest(t) "Minimum overcall: no game opposite a limit raise"
       priority -1
+
+# ── The overcaller's rebid after a new suit (2026-09-25) ──────────────
+# Advancer's new suit is not forcing. No rules existed (~90 corpus
+# boards where BBA bid). BBA: raise with four, rebid a six-card suit,
+# 1NT with 11-14 balanced and their suit held; otherwise pass.
+after (1x) 1y (P) 1z (P)
+  2{z} "Four-card support"                   shows z>=4
+  2{y} "Six or more {y}"                     shows y>=6, z<=3
+      priority -1
+  1N  "11-14 balanced, {x} held"             shows balanced, hcp>=11, hcp<=14, stop(x), z<=3
+  P   "Nothing more to say"                  priority -5
+after (1x) 1y (P) 2z (P)
+  3{z} "Four-card support"                   shows z>=4, hcp>=11
+  2{y} "Six or more {y}"                     shows y>=6, z<=3
+      when  y is not C
+      priority -1
+  P   "Nothing more to say"                  priority -5
