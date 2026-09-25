@@ -57,4 +57,6 @@ invited "in the fit" whenever opener showed three cards. NMF promises
 only four in responder's major, so four spades opposite three went to
 4S on a 4-3 fit. A fit now needs five cards opposite three (or 4-4
 where opener showed four hearts): +2,574 by distance, +2,850 to the
-bidding side (1,468 boards). NMF against no NMF: see below.
+bidding side (1,468 boards). With the fix, NMF beats no NMF by 930
+IMPs by distance (955 to the bidding side): the finding above was the
+bug.
