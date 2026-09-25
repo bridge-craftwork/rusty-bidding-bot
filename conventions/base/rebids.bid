@@ -140,6 +140,8 @@ after 1H (P) 1S (P)
 after 1x (P) 1N (P)
   P   "Minimum, nothing more to show"      shows suit_points<=15
       priority -5
+  P   "Balanced, no game opposite 6-10"    shows balanced, hcp<=17
+      priority -1                          # BBA passes 5-3-3-2 with 16-17 (major-rebid-1S-1N.toml)
   2x  "Rebids {x}: five or more, too good to pass and no reverse"
       shows x>=5, suit_points=16..18
       priority -2                          # 5-4 with 16-18: a reverse needs 17

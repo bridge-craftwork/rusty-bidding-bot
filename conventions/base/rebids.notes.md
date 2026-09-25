@@ -532,3 +532,10 @@ Together with the weak-two opening and the standard feature answers,
 the default went from -173,271 to -172,679 IMPs against par on the
 corpus (+592), Basic_* -1,926 -> -1,893, uncontested -838 -> -820. The
 BBA style is unchanged.
+
+## Balanced 16-17 passes 1NT (2026-09-25)
+
+After 1M-1NT (not forcing), BBA passes a 5-3-3-2 with 16-17
+(`probes/major-rebid-1S-1N.toml`, 1,500 hands, 87% agreement); we
+rebid the five-card suit. Opposite 6-10 there is no game, so balanced
+hands up to 17 HCP now pass. Corpus: -167,152 -> -167,116 (+36).

@@ -280,3 +280,14 @@ a doubleton or shorter, we now make the limit raise.
   over 11 boards).
 - The same for three trumps with a doubleton lost 636 IMPs overall: not
   adopted.
+
+## Invitational jump shifts: BBA's 10-12 HCP loses to ours (2026-09-25)
+
+BBA's invitational jump shift over 1S (Basic-Bridge, `probes/ijs-1S.toml`,
+800 hands with a six-card minor and no spade fit) is 10-12 HCP. With
+7-9 it bids 1NT; with 13+ it bids 2m. Ours counts total points (10-12,
+so 8-10 HCP with six cards) and bids 2m with 11-12: 26% agreement.
+- BBA's HCP range: 90% agreement but -483 IMPs against par.
+- Widening ours to 10+ points and up to 12 HCP: -409.
+
+Par decides: ours stays. Tests 24, 41, 48 and 52 are Rick's cases for it.
