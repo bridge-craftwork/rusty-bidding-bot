@@ -291,3 +291,15 @@ so 8-10 HCP with six cards) and bids 2m with 11-12: 26% agreement.
 - Widening ours to 10+ points and up to 12 HCP: -409.
 
 Par decides: ours stays. Tests 24, 41, 48 and 52 are Rick's cases for it.
+
+## Drury, tried (2026-09-25)
+
+21GF-DEFAULT plays Reverse Drury and 21GF-GIB plays Drury; we play
+neither. BBA's opener answers (`probes/drury-opener-*.toml`): minimum
+2M/2D, 12-14 the other, and 2NT, 3NT, new suits, splinters or game
+above that. A simple version was tried: 2C with three trumps and 10-12
+support points; opener's minimum, 12-14 or game; responder signs off.
+It lost to our passed-hand limit raise on both measures: -237 by
+distance, -354 to the side (536 boards). Not adopted. A fuller version
+(opener's strong answers, responder's game tries) would be needed to
+beat it.
