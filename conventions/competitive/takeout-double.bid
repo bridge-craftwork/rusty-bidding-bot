@@ -31,17 +31,17 @@ after (1x)
 # The double is forcing: advancer names his suit however weak he is.
 # A suit at the cheapest level says nothing beyond 0-8 total points.
 after (1x) X (P) | (1x) P (P) X (P)
-  1H  "0-8 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points<=8 | (H=4, hcp<=9)
+  1H  "0-8 total points, four or more hearts"   shows H>=4, H>=S | x is S, hcp+length_points<=8 | (H=4, hcp<=9)
       when  x is not H, x is not S
   1S  "0-8 total points, four or more spades"   shows S>=4, S>H, hcp+length_points<=8 | (S=4, hcp<=9)
       when  x is not S
-  1D  "0-8 total points, four or more diamonds" shows D>=4, D>C, S<=3, H<=3, hcp+length_points<=8 | (D=4, hcp<=9)
+  1D  "0-8 total points, four or more diamonds" shows D>=4, D>C, S<=3 | x is S, H<=3 | x is H, hcp+length_points<=8 | (D=4, hcp<=9)
       when  x is not D, x is not H, x is not S
-  2C  "0-8 total points, four or more clubs"    shows C>=4, C>=D, S<=3, H<=3, hcp+length_points<=8 | (C=4, hcp<=9)
+  2C  "0-8 total points, four or more clubs"    shows C>=4, C>=D, S<=3 | x is S, H<=3 | x is H, hcp+length_points<=8 | (C=4, hcp<=9)
       when  x is not C
-  2D  "0-8 total points, four or more diamonds" shows D>=4, D>C, S<=3, H<=3, hcp+length_points<=8 | (D=4, hcp<=9)
+  2D  "0-8 total points, four or more diamonds" shows D>=4, D>C, S<=3 | x is S, H<=3 | x is H, hcp+length_points<=8 | (D=4, hcp<=9)
       when  x is not D, x is not C
-  2H  "0-8 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points<=8 | (H=4, hcp<=9)
+  2H  "0-8 total points, four or more hearts"   shows H>=4, H>=S | x is S, hcp+length_points<=8 | (H=4, hcp<=9)
       when  x is not H, x is not D, x is not C
   1N  "7-10 HCP, balanced, a stopper in {x}"
       shows balanced, hcp>=7, hcp<=10
@@ -49,15 +49,15 @@ after (1x) X (P) | (1x) P (P) X (P)
 
 # Jumps invite: 9-11 total points with the same suits.
 after (1x) X (P) | (1x) P (P) X (P)
-  2H  "9-11 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points=9..11, H>=5 | hcp>=10
+  2H  "9-11 total points, four or more hearts"   shows H>=4, H>=S | x is S, hcp+length_points=9..11, H>=5 | hcp>=10
       when  x is not H, x is not S
   2S  "9-11 total points, four or more spades"   shows S>=4, S>H, hcp+length_points=9..11, S>=5 | hcp>=10
       when  x is not S
-  3C  "9-11 total points, four or more clubs"    shows C>=4, C>=D, S<=3, H<=3, hcp+length_points=9..11, C>=5 | hcp>=10
+  3C  "9-11 total points, four or more clubs"    shows C>=4, C>=D, S<=3 | x is S, H<=3 | x is H, hcp+length_points=9..11, C>=5 | hcp>=10
       when  x is not C
-  3D  "9-11 total points, four or more diamonds" shows D>=4, D>C, S<=3, H<=3, hcp+length_points=9..11, D>=5 | hcp>=10
+  3D  "9-11 total points, four or more diamonds" shows D>=4, D>C, S<=3 | x is S, H<=3 | x is H, hcp+length_points=9..11, D>=5 | hcp>=10
       when  x is not D, x is not C
-  3H  "9-11 total points, four or more hearts"   shows H>=4, H>=S, hcp+length_points=9..11, H>=5 | hcp>=10
+  3H  "9-11 total points, four or more hearts"   shows H>=4, H>=S | x is S, hcp+length_points=9..11, H>=5 | hcp>=10
       when  x is not H, x is not D, x is not C
   2N  "11-12 total points, balanced, a stopper in {x}"
       shows balanced, hcp+length_points=11..12

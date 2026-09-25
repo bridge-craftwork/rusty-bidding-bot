@@ -79,3 +79,8 @@ before: 45%; after: 55%. Corpus: -162,699 -> -162,394 (+305).
 
 Not done: BBA's penalty pass with long strong trumps; the rest of the
 disagreement is mostly the level with 9-11 (2S cue vs 3H...).
+- **Their suit is not an unbid major** (2026-09-25). The advances in a
+  minor said S<=3, H<=3, meant to prefer an unbid major. That left four
+  of their suit (spades over 1S) with no call: 177 corpus boards. The
+  guards now read `S<=3 | x is S`. The heart advance says the same about
+  spades. Corpus: -162,394 -> -162,157.
