@@ -38,7 +38,7 @@ after 1C (P) when over_1c is walsh
 
 after 1C (P)
   1N  "6-10 HCP, balanced, no 4-card major or diamonds"   shows hcp=6..10, H<=3, S<=3, D<=3
-  2D  "Strong jump shift: 15+, 5+ diamonds"  shows D>=5, points>=15  when strong_js, !passed_hand
+  2D  "Strong jump shift: 15+, 5+ diamonds"  shows D>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
 
 after 1D (P)
@@ -69,9 +69,9 @@ after 1m (P)
   3N  "16-17, balanced, no 4-card major"        shows balanced, points=16..17, H<=3, S<=3
       when  nt2 is game_forcing
       priority -1
-  2H  "Strong jump shift: 15+, 5+ hearts"       shows H>=5, points>=15  when strong_js, !passed_hand
+  2H  "Strong jump shift: 15+, 5+ hearts"       shows H>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
-  2S  "Strong jump shift: 15+, 5+ spades"       shows S>=5, points>=15  when strong_js, !passed_hand
+  2S  "Strong jump shift: 15+, 5+ spades"       shows S>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
 
 # With 2NT game forcing, 11-12 balanced bids a new minor first (2NT next).
@@ -92,7 +92,7 @@ after 1H (P)
       # (bba: with three hearts 1S from 11 HCP, or 10 with five spades or a doubleton; never with four hearts)
       sets forcing=round
   1N  "6-10 HCP, no heart fit, no 4 spades"   shows hcp=6..10, H<=2, S<=3
-  2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, points>=15  when strong_js, !passed_hand
+  2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, hcp>=15  when strong_js, !passed_hand
       sets forcing=game
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (H>=3, tp(H)>=11), suit_points>=10, C>=D, S<=3 | C>S
       when  H<=2 | (style is not bba, H=3 | tp(H)>=13) | (style is bba, hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, H>=4))   # limit values and a fit: raise first

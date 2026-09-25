@@ -245,3 +245,17 @@ three-trump hands that BBA sends through a new suit.
 6-10 support points, a limit raise only with four trumps) is the default.
 BBA's 3♠ with a flat 9 and four trumps, and its 4♠ on 8-10 with a
 singleton, are not in it.
+
+## Strong jump shifts count HCP (2026-09-25)
+
+The strong jump shifts said `points>=15`. Total points count half a
+point a ten and a point a card beyond four, so 12 HCP with four tens and
+five spades jumped (AJT74.JT4.QT.AT5 over 1H). BBA
+(`probes/sjs-1H.toml`, 800 hands with 5+ spades over 1H, Basic-Bridge):
+
+| HCP | 12 | 13 | 14 | 15+ |
+|---|---|---|---|---|
+| Jump to 2S | never | ~1% | ~25% | ~94% |
+
+The rules now say `hcp>=15`. Corpus: par -167,558 -> -167,342 (+216 IMPs);
+the 1H P 1S / 2S divergence alone cost 453 IMPs over 261 boards.
