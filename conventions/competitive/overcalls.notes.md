@@ -151,3 +151,33 @@ change touches:
 `probes/tools/sideimps.py BASE.json VARIANT.json` computes the second.
 Use it for competitive decisions; distance from par stays right for
 uncontested auctions.
+
+## For Rick: which yardstick for competitive calls? (2026-09-25)
+
+Today's competitive A/B tests, re-run with both measures. Each row is a
+variant against the rules as committed:
+
+| Variant | Distance from par | IMPs to the side that acted |
+|---|---|---|
+| Reopening takeout double, (1x) X (2x) P P X | -1,741 | -2,478 |
+| Advancer's takeout double after (1x) 1N (2x) | -449 | -555 |
+| Overcaller's takeout double after (1x) 1y (2x) P P | -203 | -497 |
+| Takeout double on 12 HCP (10 with a singleton) | -314 | +232 |
+| Ours plus 10 HCP with a singleton | -380 | +163 |
+| Two-level overcalls on three of the top five honours | -285 | +768 |
+| **One-level overcalls without the quality test (your rule)** | **-4,924** | **+7,429** |
+| Weak jump overcalls back to 4-9 (from 4-10) | -229 | +312 |
+| One-level overcall cap back to 17 total points | -60 | -620 |
+| Natural overcalls of 1NT (committed) | -825 | +1,007 |
+
+Neither measure is clean:
+- **Distance from par** counts any move away from par against us,
+  including a competitive call that gains.
+- **IMPs to the side that acted** plays our engine on both sides. Our
+  engine rarely doubles for penalty, so a light overcall is seldom
+  punished here as it would be at the table. That flatters bidding.
+
+Kept where both measures agree: the three doubles are rejected, and the
+17-HCP cap stays. The rest are for you, above all the quality test on
+one-level overcalls: +7,429 by the second measure, -4,924 by the first.
+A fair test probably needs penalty doubles on the defending side first.
