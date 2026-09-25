@@ -539,3 +539,13 @@ After 1M-1NT (not forcing), BBA passes a 5-3-3-2 with 16-17
 (`probes/major-rebid-1S-1N.toml`, 1,500 hands, 87% agreement); we
 rebid the five-card suit. Opposite 6-10 there is no game, so balanced
 hands up to 17 HCP now pass. Corpus: -167,152 -> -167,116 (+36).
+
+## 2NT and the game raise before a jump shift (2026-09-25)
+
+Probed after 1D-1S and 1C-1H (`probes/rebid-1D-1S.toml`, `1C-1H`;
+2,000 hands each; 86-87% agreement). BBA rebids 2NT with 18-19
+balanced and raises to game with four trumps, where we made a jump shift
+or reverse on descriptiveness. Both now outrank the jump shift. 5-4-2-2
+hands still jump, as Rick's tests have them.
+- Distance from par: +220.
+- To the side that bids: +373.

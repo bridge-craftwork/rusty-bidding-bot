@@ -44,6 +44,8 @@ after 1x (P) 1y (P)
       priority -4
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14, y<=3
   2N  "18+ HCP, balanced"                  shows balanced | shape 5-4-2-2, hcp>=18, y<=3
+  2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19, y<=3
+      priority 1                           # ahead of a jump shift or reverse, as BBA
   1N  "Minimum, no better rebid"           shows hcp<=14, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
   3x  "Jump rebid: 6+ {x}, too good for a simple rebid"
@@ -54,6 +56,7 @@ after 1x (P) 1y (P)
 after 1x (P) 1M (P)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
       when  style is not bba
+      priority 1                           # support first, ahead of a jump shift (BBA)
   4M  "Game raise (BBA): 4+ {M}, 18 HCP, or 17 and 19 support points"
       shows M>=4, hcp>=18 | (hcp>=17, tp(M)>=19)   sets trump=M
       when  style is bba
