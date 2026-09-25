@@ -83,6 +83,20 @@ after (1x)
       shows balanced, hcp>=nt_min, hcp<=nt_max, S<=4, H<=4
       when  stop(x)
 
+# Advancer when their partner raises over our 1NT overcall: nothing was
+# written (~160 corpus boards). BBA, 2026-09-25: a five-card suit at the
+# two level to play; a six-card minor at the three level; 3NT with 9+
+# and their suit held. BBA also doubles for takeout short in their suit;
+# the double cost 449 IMPs against par here, so it is left out.
+after (1x) 1N (2x)
+  2S  "To play: five or more spades"          shows S>=5, hcp<=8
+      when  x is H
+  3C  "To play: six or more clubs"            shows C>=6, hcp<=8, H<=3 | x is H, S<=3 | x is S
+  3D  "To play: six or more diamonds"         shows D>=6, D>C, hcp<=8, H<=3 | x is H, S<=3 | x is S
+  3N  "Game: 9+, {x} held"                    shows hcp>=9, stop(x)
+  P   "Nothing to say"                        shows hcp>=0
+      priority -5
+
 # ── Weak jump overcalls ──────────────────────────────────────────────
 # The weak-two rules of preempts.bid: six cards and 4-10 HCP, and
 # vulnerable two of the top three or three of the top five honours.
