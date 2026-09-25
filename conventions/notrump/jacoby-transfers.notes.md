@@ -176,3 +176,34 @@ bids 2♠, 8–9 total points, the same answers): corpus par +156 IMPs,
 Basic_* −5, Basic_* uncontested 0. **Question for Rick**: within noise;
 is the non-forcing 2♠ worth adopting for its own sake (it finds the 4-4
 spade fit and the 5-3 heart fit at the two or three level)?
+
+## Super-accept needs 16 (2026-09-25)
+
+A screen of every convention module by removal found super-accept.bid
+net harmful: removing it gains +2,487 IMPs to our side (+64 by
+distance). It super-accepted with any four trumps, minimums included.
+
+| Super-accept with four trumps | Distance | IMPs to our side |
+|---|---|---|
+| And 16+ (adopted) | +88 | +1,517 |
+| And 17 | -58 | +1,489 |
+
+Removal would still do better for our side by about 1,000 more. **For
+Rick:** the responder's continuations after a super-accept (4M with
+invitational values) may be the rest of it.
+
+The same screen, IMPs to the bidding side when each module is removed:
+
+| Module | IMPs |
+|---|---|
+| rkcb-1430 | -41,595 |
+| stayman | -38,829 |
+| jacoby-2nt | -30,434 |
+| jacoby-transfers | -29,847 |
+| texas-transfers | -3,415 |
+| blackwood | -2,241 |
+| inverted-minors | -1,946 |
+| responsive-doubles | -996 |
+| new-minor-forcing | -955 |
+| superaccept-doubleton | -738 |
+| control-bids | +890 (removal helps; slam/control-bids.notes.md) |
