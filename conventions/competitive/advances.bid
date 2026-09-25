@@ -239,3 +239,10 @@ after (1x) 1y (P) 2z (P)
       when  y is not C
       priority -1
   P   "Nothing more to say"                  priority -5
+
+# The overcaller again after (1x) 1y (2x) P (P): BBA rebids a six-card
+# suit with 12+ (2026-09-25). It also doubles for takeout with a
+# singleton in their suit and 13+; that double cost IMPs against par.
+after (1x) 1y (2x) P (P)
+  3{y} "Six or more {y}, sound"               shows y>=6, hcp>=12
+  P   "Nothing more"                          priority -5

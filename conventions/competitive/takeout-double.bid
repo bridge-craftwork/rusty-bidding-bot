@@ -128,6 +128,20 @@ after (1x) X (P) 2y (P) | (1x) P (P) X (P) 2y (P)
       priority -5
   3{y} "18+ total points, four-card support"
       shows y>=4, hcp+length_points>=18
+  3{y} "20+ and three-card support"
+      shows y=3, hcp>=20
+  cheapest(S) "18+ total points and a five-card spade suit"
+      shows S>=5, hcp+length_points>=18
+      when  x is not S, y is not S
+  cheapest(H) "18+ total points and a five-card heart suit"
+      shows H>=5, hcp+length_points>=18
+      when  x is not H, y is not H
+  cheapest(D) "18+ total points and a five-card diamond suit"
+      shows D>=5, hcp+length_points>=18
+      when  x is not D, y is not D
+  cheapest(C) "18+ total points and a five-card club suit"
+      shows C>=5, hcp+length_points>=18
+      when  x is not C, y is not C
   2N  "18-19 balanced with a stopper in {x}"
       shows balanced, hcp=18..19
       when  stop(x)
