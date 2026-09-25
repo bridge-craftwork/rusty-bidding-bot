@@ -100,7 +100,7 @@ after 1H (P)
   2D  "11+ points, 4+ diamonds"        shows D>=4, points>=11 | D>=6 | (H>=3, tp(H)>=11), suit_points>=10, D>C, S<=3 | D>S
       when  H<=2 | (style is not bba, H=3 | tp(H)>=13) | (style is bba, hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, H>=4))
       sets forcing=round
-  3H  "Limit raise: 11-12 support points, 3+ hearts"  shows H>=3, tp(H)=11..12, hcp<=12
+  3H  "Limit raise: 11-12 support points, 3+ hearts"  shows H>=3, tp(H)=11..12 | (H>=4, tp(H)=10, shortest<=2), hcp<=12
       when limit_raise, H>=4 | S<=3, style is not bba
       priority -1                      # 3 hearts: a new suit, then a jump raise, when there is one
       sets trump=H
@@ -118,7 +118,7 @@ after 1S (P)
   2H  "11+ points, 5+ hearts"          shows H>=5, points>=11 | H>=6 | (S>=3, tp(S)>=11), suit_points>=10
       when  S<=2 | (style is not bba, S=3 | tp(S)>=13) | (style is bba, hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, S>=4))
       sets forcing=round
-  3S  "Limit raise: 11-12 support points, 3+ spades"  shows S>=3, tp(S)=11..12, hcp<=12
+  3S  "Limit raise: 11-12 support points, 3+ spades"  shows S>=3, tp(S)=11..12 | (S>=4, tp(S)=10, shortest<=2), hcp<=12
       when limit_raise, style is not bba
       priority -1                      # 3 spades: a new suit, then a jump raise, when there is one
       sets trump=S
@@ -130,7 +130,7 @@ after 1S (P)
   3H  "Invitational jump shift: 10-12, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js
 
 after 1M (P)
-  2M  "Raise: 6-10 support points, 3+ {M}"  shows M>=3, tp(M)=6..10, hcp>=6
+  2M  "Raise: 6-10 support points, 3+ {M}"  shows M>=3, tp(M)=6..10, hcp>=6, M=3 | tp(M)<=9 | shortest>=3
       when  style is not bba
       sets trump=M
   4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9

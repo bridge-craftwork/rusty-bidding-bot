@@ -259,3 +259,24 @@ five spades jumped (AJT74.JT4.QT.AT5 over 1H). BBA
 
 The rules now say `hcp>=15`. Corpus: par -167,558 -> -167,342 (+216 IMPs);
 the 1H P 1S / 2S divergence alone cost 453 IMPs over 261 boards.
+
+## The fourth trump with shortness makes a limit raise (2026-09-25)
+
+Corpus, Basic-Bridge, 1S P: BBA's 3S against our 2S cost 276 IMPs (184
+boards); our 3S against BBA's 2S won 435 (138). By responder's hand:
+
+| Trumps | HCP | Shortness | Boards | BBA's call | Ours | IMPs to us |
+|---|---|---|---|---|---|---|
+| 4 | 9 | doubleton | 59 | 3S | 2S | -179 |
+| 3 | 9 | doubleton | 99 | 3S | 2S | -98 |
+| 3 | 8 | singleton | 106 | 2S | 3S | +316 |
+| 4 | 8 | singleton | 25 | 2S | 3S | +115 |
+
+So our shortness count is right, and a fourth trump is worth a point
+when there is shortness to ruff. With four trumps, 10 support points and
+a doubleton or shorter, we now make the limit raise.
+- Corpus: -167,342 -> -167,152.
+- Flat 10s still raise to 2M (Rick: 2M is 6-10; the corpus agrees, +4
+  over 11 boards).
+- The same for three trumps with a doubleton lost 636 IMPs overall: not
+  adopted.
