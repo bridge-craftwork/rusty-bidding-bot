@@ -45,8 +45,9 @@ module control-bids "Control bids before the keycard ask"
 # says whether it is still below game; `prefer 0 - cheapest_rank(x)`
 # picks the cheapest of the controls I hold.
 #
-# Majors only, as with the sign-off in slam-catch.bid: five of a minor is
-# a different conversation.
+# Majors only (Rick, 2026-09-25): "we don't usually use control bids for
+# minors". With a minor agreed, new suits show stoppers on the way to 3NT
+# (responder-rebids.bid).
 #
 # ── Opening the dialogue ──────────────────────────────────────────────
 #
