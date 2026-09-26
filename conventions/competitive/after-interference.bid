@@ -175,21 +175,22 @@ after 1x (X)
 # ── Opener answers a negative double ─────────────────────────────────
 # Partner has shown four or more cards in each unbid major and 6+ total
 # points (8+ over a two-level overcall), so opener names the major he
-# has, bids notrump with a stopper, or rebids his own suit. A negative
+# has (counted in support points, as an uncontested raise is: with a
+# singleton, 16 HCP and four trumps is game, 2026-09-25), bids notrump with a stopper, or rebids his own suit. A negative
 # double is forcing: opener always bids something, and jumps with 16-18.
 # Relative calls keep one set of rules right at every level.
 after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
   cheapest(S) "Four spades for partner's double, minimum"
-      shows S>=4, hcp<=15
+      shows S>=4, tp(S)<=15
       when  x is not S, y is not S
   cheapest(H) "Four hearts for partner's double, minimum"
-      shows H>=4, hcp<=15
+      shows H>=4, tp(H)<=15
       when  x is not H, y is not H
   jump(S) "Four spades, 16-18"
-      shows S>=4, hcp=16..18
+      shows S>=4, tp(S)=16..18
       when  x is not S, y is not S
   jump(H) "Four hearts, 16-18"
-      shows H>=4, hcp=16..18
+      shows H>=4, tp(H)=16..18
       when  x is not H, y is not H
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced, hcp<=14
@@ -205,10 +206,10 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
   # `1D (1S) X (P) 2H` on KQ6.832.KT84.A64. Below the four-card bids and
   # the notrump rebid, above naming a minor.
   4S  "Four spades, 19+: game in the fit partner promised"
-      shows S>=4, hcp>=19
+      shows S>=4, tp(S)>=19
       when  x is not S, y is not S
   4H  "Four hearts, 19+: game in the fit partner promised"
-      shows H>=4, hcp>=19
+      shows H>=4, tp(H)>=19
       when  x is not H, y is not H
   # Where both majors are bid the double showed the minors, and where
   # opener has no major, no stopper and no six-card suit he still has to
@@ -263,16 +264,16 @@ after 1x (2y) 3y (P) | 1x (3y) 4y (P)
 # leave that to the pass below.
 after 1x (1y) X (2z) | 1x (2y) X (3z) when y is not x
   cheapest(S) "Four spades, competing over their bid"
-      shows S>=4, hcp<=15
+      shows S>=4, tp(S)<=15
       when  x is not S, y is not S
   cheapest(H) "Four hearts, competing over their bid"
-      shows H>=4, hcp<=15
+      shows H>=4, tp(H)<=15
       when  x is not H, y is not H
   jump(S) "Four spades, 16-18"
-      shows S>=4, hcp=16..18
+      shows S>=4, tp(S)=16..18
       when  x is not S, y is not S
   jump(H) "Four hearts, 16-18"
-      shows H>=4, hcp=16..18
+      shows H>=4, tp(H)=16..18
       when  x is not H, y is not H
   cheapest(N) "12-15 balanced with a stopper in {y}"
       shows balanced, hcp<=15

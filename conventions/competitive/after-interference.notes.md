@@ -207,3 +207,16 @@ higher-priority `shows` would have made every pass read as a trap.
 
 Full corpus: +82 by par distance, +1,122 to the side that trapped (253
 boards). Basic_* competitive: -3 / +20 (4 boards).
+
+## Opener's answer to the negative double in support points (2026-09-25)
+
+Found while re-running the overcall quality A/B with the trap pass in:
+most of what an overcall "gained" by the side yardstick (1,815 boards,
++3,234) was our opening side bidding worse after it, 839 times
+dropping from game to a partscore. The main cause: opener answered the
+double in HCP (minimum up to 15, jump 16-18, game 19+), so 16 HCP with
+a singleton and four trumps jumped to 2♠ and responder passed, where
+uncontested it raised to 4♠ on 19 support points. The major answers
+now count `tp(M)`, and responder bids game over the jump with 8+
+(responder-rebids.bid, `partner.jumped`). Full corpus +730 by par
+distance, +836 by side (420 boards); Basic_* competitive +8 / -2.

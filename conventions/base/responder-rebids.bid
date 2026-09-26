@@ -321,6 +321,13 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
       shows z>=4, hcp+length_points>=13
       when  partner.z>=3, z is H | z is S
       sets  trump=z
+  # Opener jumped (16-18 support points): game with 8+ (2026-09-25; we
+  # stopped in 2M/3M on hands that reached game uncontested).
+  4{z} "Game opposite opener's jump: 8+ with the fit"
+      shows z>=4, hcp+length_points>=8
+      when  partner.z>=3, z is H | z is S, partner.jumped
+      sets  trump=z
+      priority 1
   cheapest(N) "Invitational: 11-12 balanced"
       shows balanced, hcp+length_points=11..12
       sets  ask=nt_invite

@@ -69,3 +69,7 @@ N KQT9.K3.Q843.K98      | 1H 1S             | P  | four good spades and 12: trap
 S 7.AQJ64.KJ5.A762      | 1H 1S P P         | X  | opener reopens, short in spades
 N KQT9.K3.Q843.K98      | 1H 1S P P X P     | P  | converts for penalty
 N 8753.K3.Q843.K98      | 1H 1S             | !P | four small spades: not a trap
+
+# ── Opener's answer to the negative double in support points (2026-09-25)
+S AQ73.K964.AJ42.Q      | 1D 1H X P        | 4S | 16 HCP, a singleton, four spades: 19 support points
+S AQ73.K964.AJ42.Q      | 1D 2C X P        | 4H/4S | the same over a two-level overcall
