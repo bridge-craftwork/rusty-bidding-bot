@@ -33,6 +33,7 @@ pub fn suit_of(strain: bridge_types::Strain) -> Option<bridge_types::Suit> {
         Strain::NoTrump => None,
     }
 }
+pub use eval::check_terms;
 pub use system::{check_card_refs, RuleRef, System};
 
 /// Compile every `.bid` file under `dir`, sorted by path (which fixes the
@@ -69,6 +70,11 @@ pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Dia
                 message: e.to_string(),
             }),
         }
+    }
+    // A name the engine does not know would otherwise make its condition
+    // false every time it is tried: refuse to load instead.
+    if diags.is_empty() {
+        diags = check_terms(&modules);
     }
     if diags.is_empty() {
         Ok(modules)

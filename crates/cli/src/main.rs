@@ -993,6 +993,10 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 eprintln!("{e}");
                 errors += 1;
             }
+            for d in rbb_engine::check_terms(&modules) {
+                eprintln!("{d}");
+                errors += 1;
+            }
             let mut warnings = 0;
             for m in &modules {
                 for need in &m.needs {

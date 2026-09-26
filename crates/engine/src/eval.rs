@@ -1263,3 +1263,273 @@ pub fn konst(b: bool) -> Expr {
         Expr::Or { any: vec![] }
     }
 }
+
+// ── Checking names before anything runs ─────────────────────────────
+//
+// The evaluator reports an unknown name only when a rule is tried, and a
+// failed `when` just rules the candidate out, so a misspelt term (or a
+// term an older engine does not have) silently switched rules off.
+// `check_terms` walks every condition at load time instead. The lists
+// below are what `name`, `self_func`, `knowledge_attr`, `we_attr` and
+// `they_attr` accept; `terms_match_the_evaluator` keeps them in step.
+
+/// Bare state names (`name`).
+const STATE_TERMS: &[&str] = &[
+    "opening",
+    "last",
+    "passed_hand",
+    "seat",
+    "vul",
+    "game_reached",
+    "imps",
+    "matchpoints",
+    "trump",
+    "slam_try",
+    "grand_try",
+];
+/// Functions of my own hand or position (`self_func`), besides SELF_FUNCS.
+const POSITION_FUNCS: &[&str] = &["denied", "cued", "under_game", "cheapest_rank"];
+/// What `partner.`, `lho.`, `rho.` and `shown.` take (`knowledge_attr`),
+/// besides suits, variables and `bba_*`.
+const SEAT_ATTRS: &[&str] = &[
+    "hcp",
+    "tens",
+    "points",
+    "suit_points",
+    "balanced",
+    "shortest",
+    "longest",
+    "second_longest",
+    "length_points",
+    "last",
+    "opened",
+    "jumped",
+    "denied",
+    "cued",
+    "bypassed",
+    "has",
+    "stop",
+    "semibalanced",
+    "tp",
+    "keycards",
+    "controls",
+    "losers",
+    "quality",
+    "top5",
+];
+const WE_ATTRS: &[&str] = &["trump", "forcing", "gf", "hcp", "tp", "keycards"];
+const THEY_ATTRS: &[&str] = &["bid", "vul"];
+
+/// A suit variable (`x`, `M`, `t`, ...), bound by a pattern or a question.
+fn is_variable(n: &str) -> bool {
+    n == "M" || (n.len() == 1 && n.chars().all(|c| c.is_ascii_lowercase()))
+}
+
+fn bare_name_ok(n: &str, params: &[&str]) -> bool {
+    is_variable(n)
+        || params.contains(&n)
+        || suit_index(n).is_some()
+        || matches!(n, "N" | "NT" | "strength" | "suit_strength")
+        || SELF_ATTRS.contains(&n)
+        || STATE_TERMS.contains(&n)
+        || SYMBOLS.contains(&n)
+}
+
+fn seat_attr_ok(n: &str) -> bool {
+    suit_index(n).is_some() || is_variable(n) || n.starts_with("bba_") || SEAT_ATTRS.contains(&n)
+}
+
+fn check_path(path: &[Segment], params: &[&str], out: &mut Vec<String>) {
+    let first = &path[0];
+    let prefixed = path.len() > 1
+        && matches!(
+            first.name.as_str(),
+            "partner" | "lho" | "rho" | "shown" | "me" | "we" | "they"
+        );
+    let (head, rest) = if prefixed {
+        let seg = &path[1];
+        let n = seg.name.as_str();
+        let ok = match first.name.as_str() {
+            "we" => WE_ATTRS.contains(&n),
+            "they" => THEY_ATTRS.contains(&n),
+            "me" => match &seg.args {
+                Some(_) => SELF_FUNCS.contains(&n) || POSITION_FUNCS.contains(&n),
+                None => bare_name_ok(n, params),
+            },
+            _ => seat_attr_ok(n),
+        };
+        if !ok {
+            out.push(format!("unknown term `{}.{n}`", first.name));
+        }
+        (seg, &path[2..])
+    } else {
+        let n = first.name.as_str();
+        let ok = match &first.args {
+            Some(_) => SELF_FUNCS.contains(&n) || POSITION_FUNCS.contains(&n),
+            None => bare_name_ok(n, params),
+        };
+        if !ok {
+            let what = if first.args.is_some() { "function" } else { "term" };
+            out.push(format!("unknown {what} `{n}`"));
+        }
+        (first, &path[1..])
+    };
+    for a in head.args.iter().flatten() {
+        check_expr(a, params, out);
+    }
+    for seg in rest {
+        if !matches!(seg.name.as_str(), "min" | "max") {
+            out.push(format!("`.{}` is not `.min` or `.max`", seg.name));
+        }
+    }
+}
+
+fn check_expr(e: &Expr, params: &[&str], out: &mut Vec<String>) {
+    match e {
+        Expr::And { all } => all.iter().for_each(|x| check_expr(x, params, out)),
+        Expr::Or { any } => any.iter().for_each(|x| check_expr(x, params, out)),
+        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => {
+            check_expr(expr, params, out)
+        }
+        Expr::InSet { expr, .. } | Expr::Is { expr, .. } => check_expr(expr, params, out),
+        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
+            check_expr(lhs, params, out);
+            check_expr(rhs, params, out);
+        }
+        Expr::InRange { expr, lo, hi } => {
+            check_expr(expr, params, out);
+            check_expr(lo, params, out);
+            check_expr(hi, params, out);
+        }
+        Expr::Path { path } => check_path(path, params, out),
+        // Question kinds are free names (`asked keycards(t)`), shapes and
+        // calls are checked by the parser.
+        Expr::Asked { .. }
+        | Expr::Answered { .. }
+        | Expr::Shape { .. }
+        | Expr::Int { .. }
+        | Expr::Call { .. } => {}
+    }
+}
+
+/// Every name in every condition (`when`, `shows`, `denies`, `prefer`)
+/// is one the engine knows. Errors name the file and line.
+pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
+    fn walk(
+        m: &bidspec::Module,
+        c: &bidspec::ast::Context,
+        params: &[&str],
+        out: &mut Vec<bidspec::Diagnostic>,
+    ) {
+        let mut push = |line: usize, e: Option<&Expr>| {
+            let mut msgs = Vec::new();
+            if let Some(e) = e {
+                check_expr(e, params, &mut msgs);
+            }
+            for message in msgs {
+                out.push(bidspec::Diagnostic {
+                    file: m.file.clone(),
+                    line,
+                    col: 0,
+                    message,
+                });
+            }
+        };
+        push(c.line, c.when.as_ref());
+        for r in &c.rules {
+            for e in [&r.shows, &r.when, &r.denies, &r.prefer] {
+                push(r.line, e.as_ref());
+            }
+        }
+        for inner in &c.contexts {
+            walk(m, inner, params, out);
+        }
+    }
+    let mut out = Vec::new();
+    for m in modules {
+        let params: Vec<&str> = m.params.iter().map(|p| p.name.as_str()).collect();
+        for c in &m.contexts {
+            walk(m, c, &params, &mut out);
+        }
+    }
+    out
+}
+
+#[cfg(test)]
+mod term_tests {
+    use super::*;
+    use bridge_types::{ScoringMethod, Vulnerability};
+
+    fn when_of(expr: &str) -> Expr {
+        let src = format!("module t \"t\"\nwhen {expr}\n  P  \"x\"\n");
+        let m = bidspec::compile(&src, "t.bid").unwrap();
+        m.contexts[0].when.clone().unwrap()
+    }
+
+    fn errors(expr: &str) -> Vec<String> {
+        let mut out = Vec::new();
+        check_expr(&when_of(expr), &["style"], &mut out);
+        out
+    }
+
+    #[test]
+    fn unknown_names_are_reported() {
+        assert!(errors("partner.jumped, me.last=P, hcp>=12, tp(S)>=10").is_empty());
+        assert!(errors("style is bba, we.forcing = game, they.bid").is_empty());
+        assert!(errors("partner.hcp.min>=15, x>=4, M is not x").is_empty());
+        assert_eq!(errors("me.opened"), ["unknown term `me.opened`"]);
+        assert_eq!(errors("opened"), ["unknown term `opened`"]);
+        assert_eq!(errors("partner.hpc>=10"), ["unknown term `partner.hpc`"]);
+        assert_eq!(errors("we.bid"), ["unknown term `we.bid`"]);
+        assert_eq!(errors("stopper(S)"), ["unknown function `stopper`"]);
+        assert_eq!(errors("hcp.low>=3"), ["`.low` is not `.min` or `.max`"]);
+    }
+
+    /// Every name the checker accepts, the evaluator accepts too.
+    #[test]
+    fn terms_match_the_evaluator() {
+        let pos = Position::new(Direction::South, Vulnerability::None, ScoringMethod::Matchpoints);
+        let params = HashMap::new();
+        let ctx = Ctx {
+            pos: &pos,
+            actor: Direction::South,
+            hand: None,
+            params: &params,
+            valuation: Valuation::default(),
+        };
+        let arg = |n: &str| match n {
+            "has" => "(A, S)",
+            "bypassed" | "denied" | "cued" | "tp" | "keycards" | "stop" | "quality" | "top5"
+            | "under_game" | "cheapest_rank" => "(S)",
+            _ => "",
+        };
+        let mut exprs: Vec<String> = Vec::new();
+        for n in STATE_TERMS.iter().chain(SELF_ATTRS) {
+            exprs.push(format!("me.{n}"));
+            exprs.push(n.to_string());
+        }
+        for n in SELF_FUNCS.iter().chain(POSITION_FUNCS) {
+            exprs.push(format!("{n}{}", arg(n)));
+        }
+        for n in SEAT_ATTRS {
+            exprs.push(format!("partner.{n}{}", arg(n)));
+        }
+        for n in WE_ATTRS {
+            exprs.push(format!("we.{n}{}", if *n == "tp" || *n == "keycards" { "(S)" } else { "" }));
+        }
+        for n in THEY_ATTRS {
+            exprs.push(format!("they.{n}"));
+        }
+        for x in exprs {
+            let e = when_of(&format!("{x} = 1 | !{x} = 1"));
+            let Expr::Or { any } = &e else { panic!("{x}") };
+            let mut b = Bindings::new();
+            if let Err(err) = ctx.eval(&any[0], &mut b) {
+                assert!(!err.contains("unknown"), "{x}: {err}");
+            }
+            let mut msgs = Vec::new();
+            check_expr(&e, &[], &mut msgs);
+            assert!(msgs.is_empty(), "{x}: {msgs:?}");
+        }
+    }
+}

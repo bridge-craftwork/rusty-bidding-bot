@@ -436,6 +436,14 @@ These are enforced by `bidspec`, with file:line:column errors:
   current name.
 - `rbb bid check` also checks across files: module names are unique, and a
   `needs` that names no module is a warning.
+- Every name in a condition must be one the engine knows (a term such as
+  `hcp`, `partner.jumped`, `we.forcing`, a function such as `stop(x)`, a
+  suit, a variable or a module `param`). The engine checks this whenever
+  it loads the rules (`rbb bid check`, `rbb call`, `rbb compare`, the
+  workbench, `cargo test`) and refuses to load on an unknown name. Before
+  this check an unknown name made its condition false every time, so a
+  typo, or a rule newer than the running engine, silently switched the
+  rule off.
 
 ## 12. The engine today
 
