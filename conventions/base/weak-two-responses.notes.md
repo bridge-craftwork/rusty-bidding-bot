@@ -220,3 +220,24 @@ game by vulnerability, forcing new suits; opener's answers stay the
 standard feature ones): corpus -168,198 -> -167,745 (+453), Basic_* +78,
 uncontested +75, Basic_Weak_2 -439 -> -361. Adopted; the previous
 responses (2NT from 15, raises with four) are the `standard` treatment.
+
+## Responder after 2x-2M-3x (2026-09-25)
+
+The most frequent "no rule" position in Basic_* N/S auctions (27 of 203
+positions): opener rebid the suit over responder's forcing major, and
+responder had nothing to say. Probed with 300 random responders each
+(5+ in the major, 13-21 HCP; opener six of its suit, at most two of the
+major), at love all and all vulnerable: `probes/w2-2H-2S-3H.toml`,
+`w2-2D-2H-3D.toml`, `w2-2D-2S-3D.toml`.
+
+BBA passes most hands up to 18-19 HCP. It bids game with a seven-card
+major from 13 (and a six-card suit with four of the top five honours
+from about 16), three of the major with six and 19+ (forcing: opener
+bids 4M with a doubleton, 3NT without), and 3NT or four of opener's
+major with 20+. Over 3♦ it sometimes raises to 4♦ with 16-20 and a
+doubleton, which opener mostly passes; not modelled.
+
+Our rules follow that. Agreement with BBA on the grids: 92-95%, the rest
+mostly BBA passing a few 19-counts where we bid. Basic_* N/S: no-rule
+positions 203 -> 176, vs BBA +21 IMPs, +47 to the side that changed its
+call (7 boards).

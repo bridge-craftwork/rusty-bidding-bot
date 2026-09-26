@@ -80,6 +80,26 @@ after 2x (P) 2y (P) when x is not C | two_c is natural, style is not standard
   3y  "Three-card support"                 shows y>=3
   3x  "No fit: rebid the suit"             shows y<=2
 
+# Responder after opener rebids the suit (no three-card support).
+# Probed 2026-09-25 (w2-2H-2S-3H, w2-2D-2H-3D, w2-2D-2S-3D): BBA passes
+# up to about 18 unless it has seven of its major (game from 13), bids
+# three of the major with six and 19+, and 3NT or four of opener's major
+# from 20.
+after 2x (P) 2y (P) 3x (P) when x is not C | two_c is natural, style is not standard, y is H | y is S
+  4y  "Seven-card suit: game facing a doubleton"   shows y>=7
+  4y  "Six-card suit, four top honours: game"      shows y>=6, top5(y)>=4, hcp>=16
+  3y  "Six-card suit, 19+: forcing, asks for a doubleton"   shows y>=6, hcp>=19
+      sets  forcing=round
+  4x  "Game in opener's major: 20+, no fit for mine"   shows hcp>=20
+      when  x is H | x is S
+  3N  "Game in notrump: 20+, no fit"               shows hcp>=20
+      when  x is D
+  P   "No game facing a minimum weak two"          shows hcp<=19
+
+after 2x (P) 2y (P) 3x (P) 3y (P) when x is not C | two_c is natural, style is not standard, y is H | y is S
+  4y  "A doubleton: game in partner's suit"        shows y>=2
+  3N  "A singleton or void: 3NT"                   shows y<=1
+
 # ── Opener's answer to 2NT ───────────────────────────────────────────
 # Standard (Rick, 2026-09-24): with a maximum show a feature, an ace or
 # king; without one a queen; a jack only with AK of the suit. 3NT is kept for AKQ in the
