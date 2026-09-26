@@ -29,3 +29,8 @@ N KQ532.Q84.T5.T32          | 1D X 1H | 1S     | 8 HCP and five spades: a free b
 N KQ5.Q84.T54.T932          | 1D X 1H | P      | no suit and no stopper: pass
 N K32.QJ54.A97.KT7          | 1D X 1H | 2D     | 15 HCP: the cue bid
 N QJT2.75.JT62.932          | 1D X XX | 1S     | partner still wants a suit
+
+# ── The doubler after their responder bid and opener rebid (2026-09-25)
+card    Basic-Bridge
+dealer  E
+S AK.85.AKQJ862.76      | 1H X 1S P 1NT    | 2D  | 18+ with six diamonds: shows the suit now

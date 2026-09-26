@@ -373,7 +373,7 @@ after 1x (P) 1y (P) 1z (P) 1M (P)
 # whatever the auction was, so it is written once against the ask rather
 # than as the dozen eight-call patterns it would otherwise take: pass
 # with a minimum, one more try with 16-18, game with 19+.
-when asked signoff
+when asked signoff, !partner.opened
   P   "Nothing to add: partner is limited"
       priority -5
   2x  "Six or more {x}: a better spot"        shows x>=6, suit_points<=15
@@ -392,6 +392,15 @@ when asked signoff
   4M  "Game: 6+ {M}, 19+"                     shows M>=6, suit_points>=19
   4M  "Game in the fit: 19+"                  shows M>=3, suit_points>=19
       when  partner.M>=4
+
+# The same question put to responder, by opener's minimum rebid in a
+# contested auction. The rules above are opener's: read as responder's,
+# their 3x ("six or more, one more try") took over responder's cue bid
+# and opener raised their suit (2026-09-25). Responder's own
+# continuations are in responder-rebids.bid; this is the pass under them.
+when asked signoff, partner.opened
+  P   "Nothing to add: partner's rebid was a minimum"
+      priority -5
 
 # ── Answering an invitation in a minor ───────────────────────────────
 # Responder's invitational raise or jump sets `ask=invite(x)`. A major
@@ -587,6 +596,30 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x
       shows x>=5
       sets  ask=signoff
       priority -6
+  # Where the free bid is forcing, opener had no call with a four-card
+  # major, a raise with extras, or nothing at all (2026-09-25: 80
+  # no-rule positions such as 1D (1H) 2C (P) on K643.K.KQ32.AJ62).
+  cheapest(S) "Four or more spades"
+      shows S>=4, suit_points<=18
+      when  x is not S, z is not S
+      when  maybe lho.S<=4, maybe rho.S<=4
+      when  we.forcing = round
+      priority -2
+  cheapest(H) "Four or more hearts"
+      shows H>=4, suit_points<=18
+      when  x is not H, z is not H
+      when  maybe lho.H<=4, maybe rho.H<=4
+      when  we.forcing = round
+      priority -2
+  cheapest(z) "Raise with extras: 18+, forcing to game"
+      shows z>=3, tp(z)>=18
+      when  partner.z>=5 | partner.z>=4
+      sets  trump=z, forcing=game
+      when  we.forcing = round
+      priority -1
+  cheapest(x) "Forced to bid: nothing better to say"
+      when  we.forcing = round
+      priority -8
   P   "Nothing to say"  priority -10
 after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y is not x, z is not x, z is not y
   cheapest(N) "Balanced with a stopper in {y}, minimum"

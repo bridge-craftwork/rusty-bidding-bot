@@ -138,3 +138,10 @@ N AJ95.QJ.K9.QT432      | 1C 1D 1S P 2C P  | 3NT | 13 with diamonds held: game
 N AJ95.J2.K9.J9432      | 1C 1D 1S P 2C P  | 2NT/3C | 11: invites, in notrump or clubs
 N AJ95.32.K9.AQT43      | 1C 1H 1S P 2C P  | 2H  | 14, no heart stopper: cue bid, forcing to game
 N KQ95.J3.A92.8743      | 1C 1D 1S P 2S P  | 3S  | 11 with the fit: invites
+
+# ── Two-level free bid, opener's rebid (2026-09-25)
+card    21GF-DEFAULT
+dealer  S
+N 7.Q94.965.AKQJ95      | 1D 1S 2C P 3C P  | 3S  | 14, no spade stopper: cue bid, forcing to game
+N K94.KT.A64.AT984      | 1H 1S 2C P 3C P  | 3NT | 14 with spades held: game
+N 7.Q94.965.KQJ952      | 1D 1S 2C P 3C P  | P   | 9: no game

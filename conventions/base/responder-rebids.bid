@@ -573,3 +573,53 @@ after 1x (1z) 1y (P) 1N (P) when z is not x, z is not y, y is not x
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12
   4y  "Game: 6+ {y}, 13+"                  shows y>=6, points>=13
       when  y is H | y is S
+
+# ── Responder after a two-level free bid and opener's rebid ──────────
+# Where the free bid is forcing (the 21GF cards) opener has to rebid and
+# responder may hold anything from 8 up; where it is not, 8-12. Game
+# with 13+, an invitation with 11-12, a pass with a minimum
+# (2026-09-25: the forcing auctions died in opener's rebid).
+# Opener named a major:
+after 1x (1y) 2z (P) 2M (P) | 1x (1y) 2z (P) 3M (P) | 1x (2y) 2z (P) 2M (P) | 1x (2y) 2z (P) 3M (P) | 1x (2y) 3z (P) 3M (P) when y is not x, z is not x, z is not y, M is not x, M is not y, M is not z
+  4M  "Game: four {M}, 13+"                shows M>=4, points>=13
+  cheapest(M) "Raise: four {M}, 11-12"     shows M>=4, points=11..12
+  3N  "Game: 13+, {y} stopped"             shows points>=13, stop(y), M<=3
+  cheapest(x) "Preference: 11-12"          shows x>=3, points=11..12, M<=3
+      priority -1
+  cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
+      alert  artificial
+      shows points>=13
+      sets  forcing=game
+      priority -2
+  P   "Minimum: no game"                   shows points<=10
+      priority -5
+  cheapest(x) "Preference: two or more {x}"   shows x>=2
+      priority -6
+# Opener rebid his own suit or raised mine:
+after 1x (1y) 2z (P) 2x (P) | 1x (1y) 2z (P) 3x (P) | 1x (2y) 2z (P) 3x (P) | 1x (2y) 3z (P) 3x (P) when y is not x, z is not x, z is not y
+  4x  "Game: 3+ {x}, 13+"                  shows x>=3, points>=13
+      when  x is H | x is S
+  3N  "Game: 13+, {y} stopped"             shows points>=13, stop(y)
+  cheapest(x) "Invitational raise: 3+ {x}, 11-12"   shows x>=3, points=11..12
+  cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
+      alert  artificial
+      shows points>=13
+      sets  forcing=game
+      priority -2
+after 1x (1y) 2z (P) 3z (P) | 1x (2y) 2z (P) 3z (P) when y is not x, z is not x, z is not y
+  4z  "Game in the fit: 13+"               shows points>=13
+      when  z is H | z is S
+  3N  "Game: 13+, {y} stopped"             shows points>=13, stop(y)
+      when  z is C | z is D
+  cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
+      alert  artificial
+      shows points>=13
+      when  z is C | z is D
+      sets  forcing=game
+      priority -2
+# Opener raised a three-level minor to four: no room for a cue bid or
+# 3NT (2026-09-25: the cue bid landed at 4 of their suit).
+after 1x (2y) 3z (P) 4z (P) when y is not x, z is not x, z is not y, z is C | z is D
+  5{z}  "Game in the minor: 13+"           shows points>=13
+  P     "No game"                          shows points<=12
+        priority -5

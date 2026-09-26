@@ -356,3 +356,26 @@ continuations now outrank that pass: after opener's rebid of his suit,
 a raise of responder's, or 1NT, invite with 11-12 and bid game with
 13+; notrump needs their suit stopped, and without it a cue bid forces
 to game. Full corpus +401 by par distance, +280 by side (269 boards).
+
+## Two-level free bids: opener's forced rebid and responder's second call (2026-09-25)
+
+Once the forcing free bids forced (after-interference.notes.md), the
+auction died in opener's rebid: opener had no call with a four-card
+major or extras (rebids.bid), and responder none after it. Added:
+opener's four-card major, a raise with extras forcing to game, a
+forced fallback (only when the auction is forcing); responder game with
+13+ (3NT with their suit held, else a cue bid), an invitation with
+11-12, a pass with a minimum; after opener raises a three-level minor
+to four, 5m with 13+.
+
+**A misread found on the way.** Opener's contested minimum rebids set
+`ask=signoff`, and `when asked signoff` (rebids.bid) holds opener's
+answers to responder's sign-offs. Read as responder's, its 3x ("six or
+more, 16-18, one more try") took over responder's cue bid of their
+suit, and opener raised it: 1♦ (1♠) 2♣ 3♣ 3♠ 4♠. That block is now
+opener's only (`!partner.opened`), with a plain pass for responder.
+The doubler had been bidding on through the same misread; it now has
+its own rebid after their responder bids and opener rebids
+(takeout-double.bid). Together: full corpus +974 by par distance,
++2,252 by side (2,088 boards); Basic_* competitive +1 / +18, N/S
+unchanged.
