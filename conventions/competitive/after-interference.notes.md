@@ -254,3 +254,16 @@ partner passed at his last turn (the raiser after 1♠ (X) 2♠ (3♣) P
 (3NT with 18+ and a stopper, else pass); 1m (3x) 4m: 5m with 16+
 (rebids.bid); and 1NT (3x) (nt-interference.bid). Basic_* competitive
 +18 / +30, full corpus +189 / +262.
+
+## Support first, and forcing free bids at the two level (2026-09-25)
+
+- The negative double's shape clause (`| S>=4 | H>=4`) let a hand with
+  four-card support for opener's major double instead of raising;
+  after opener's rebid of the suit it then passed, missing the fit
+  (1♥ (1♠) X 2♥ with Kxxx). With three or more of opener's major the
+  raise now comes first. Full corpus +179 by par distance, +368 by side
+  (965 boards).
+- Over a one-level overcall, the two-level free bids on cards where a
+  new suit is forcing (the 21GF cards) did not set `forcing=round`, so
+  opener could pass them. Fixed; +4 / +36, but the minor openings lose
+  (1♣ (1♠) 2♦ -89 by side): opener's forced rebids there need work.

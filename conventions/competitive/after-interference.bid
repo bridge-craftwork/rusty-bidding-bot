@@ -34,6 +34,7 @@ after 1x (1y) when neg
       shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
       shows  ((D>=4 | x is D | y is D), (C>=4 | x is C | y is C)) | S>=4 | H>=4
       when   (S<=4 | x is S | y is S), (H<=4 | x is H | y is H | (y is S, hcp<=7))
+      when   x<=2 | x is C | x is D     # support for a major: raise first (2026-09-25)
       priority 1
   # (the y-is-S clause) Five hearts over 1S and too weak for 2H: BBA
   # doubles (probes/free-bid-1D-1S.toml: 12 of 12 with 6 HCP).
@@ -71,12 +72,15 @@ after 1x (1y)
   cheapest(C) "8+ total points, five or more clubs"
       shows C>=5, hcp+length_points>=8
       when  x is not C, y is not C, new_suit_forcing
+      sets  forcing=round
   cheapest(D) "8+ total points, five or more diamonds"
       shows D>=5, hcp+length_points>=8
       when  x is not D, y is not D, new_suit_forcing
+      sets  forcing=round
   2H  "8+ total points, five or more hearts"
       shows H>=5, hcp+length_points>=8
       when  y is S, x is not H, new_suit_forcing
+      sets  forcing=round
   # Not forcing (Basic-Bridge): limited to 12, and 13+ jumps, forcing to
   # game, as over a two-level overcall (below).
   cheapest(C) "8-12 total points, five or more clubs, not forcing"

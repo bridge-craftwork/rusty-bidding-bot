@@ -86,3 +86,7 @@ S AJ8.Q54.KQ76.K83      | 1D 1S 3H P       | 4H  | three hearts: game
 dealer  E
 W KQ62.Q43.8752.76      | 1S X 2S 3C P P  | P   | raised, opener passed: nothing new
 E KJT32.QT6.KJ.KJ7      | 1S 2D P P X P 3C P | P | partner's forced answer: no game
+
+# ── Support first; forcing free bids (2026-09-25)
+dealer  S
+N J6.KQ95.J975.J92      | 1H 1S            | 2H  | four hearts: raise, not the negative double
