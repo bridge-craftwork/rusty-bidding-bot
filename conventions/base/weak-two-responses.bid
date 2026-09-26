@@ -189,3 +189,10 @@ when answered weak_two(t)
         priority -2
   P     "No game"                     shows hcp<=16
         priority -5
+
+# Opener after responder's three of the suit over a higher answer: a
+# sign-off, passed. BBA bid on over 2♦-2NT-3♣-3♦ in four Basic_Weak_2
+# boards (3NT twice, 4♦, 5♦); passing was closer to par in three of them
+# (notes, 2026-09-25).
+after 2x (P) 2N (P) 3y (P) 3x (P) when x is not C | two_c is natural, y is not x
+  P   "Partner signed off in our suit"

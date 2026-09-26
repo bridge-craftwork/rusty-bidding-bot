@@ -241,3 +241,12 @@ Our rules follow that. Agreement with BBA on the grids: 92-95%, the rest
 mostly BBA passing a few 19-counts where we bid. Basic_* N/S: no-rule
 positions 203 -> 176, vs BBA +21 IMPs, +47 to the side that changed its
 call (7 boards).
+
+## Opener after responder signs off following the answer (2026-09-25)
+
+2x-2NT-3y-3x (y above x's three-level) is a sign-off, and opener now
+passes it explicitly (it passed before by default, with no rule). BBA
+bid on over 2♦-2NT-3♣-3♦ in four Basic_Weak_2 boards (73: 5♦, 109 and
+431: 3NT, 282: 4♦); against par, passing 3♦ was better on 109, 282
+and 431 (+370, +210, +330 NS) and worse on 73 (150 against 400). Par
+decides: kept as a sign-off. No-rule positions 176 -> 143.
