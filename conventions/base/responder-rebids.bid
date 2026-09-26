@@ -500,11 +500,21 @@ after 1x (*) X (*) P (P) when they.bid
   cheapest(H) "Five or more hearts and 11+: worth competing"
       shows H>=5, S<=4, points>=11
       sets  ask=signoff
-  cheapest(x) "Preference to partner's suit with 11+"
-      shows x>=3, points>=11
+  cheapest(x) "Preference to partner's suit with 11-12"
+      shows x>=3, points=11..12
       sets  ask=signoff
       priority -2
   P   "Partner had nothing to say either"  priority -10
+# With game values bid it (2026-09-26: 4m with 12-15 opposite a 13-14
+# opener that passed: 97 corpus boards with 25+ HCP and game on). Only
+# where 3NT is still available.
+after 1x (1y) X (1y) P (P) | 1x (1y) X (2y) P (P) | 1x (1y) X (3y) P (P) | 1x (2y) X (3y) P (P) when y is not x
+  3N  "Game: 13+ with a stopper in {y}"     shows points>=13, stop(y)
+  4{x} "Game in partner's major: 13+ with three"   shows x>=3, points>=13
+      when  x is H | x is S
+  5{x} "Game in partner's minor: 13+ with three"   shows x>=3, points>=13
+      when  x is C | x is D
+      priority -1
 
 # Opener after 1m-1S-1NT-3H (5-4 in the majors, game forcing): the fit.
 after 1C (P) 1S (P) 1N (P) 3H (P) | 1D (P) 1S (P) 1N (P) 3H (P)

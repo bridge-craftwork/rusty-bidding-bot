@@ -399,3 +399,7 @@ Same day: when opener passes their runout back (a forcing pass),
 responder with 12+ now bids game (3NT with a stopper, 4M with three,
 else a cue bid) instead of going back to opener's suit, which is now
 10-11. Full corpus +979 by par distance, +913 by side.
+And when they jump over our negative double and opener passes, responder
+with 13+ bids 3NT (their suit held) or game in opener's suit; the
+preference is now 11-12. Full corpus +262 by par distance, +515 by
+side.
