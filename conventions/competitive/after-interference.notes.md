@@ -272,7 +272,7 @@ partner passed at his last turn (the raiser after 1♠ (X) 2♠ (3♣) P
 
 New work queue for the invitational tail: contested boards where our
 opening side stops in a partscore with 25+ HCP between the hands and
-game makes double dummy (scratch script `missed.py`). Top of it, 668
+game makes double dummy (`probes/tools/missed_games.py FILE missed 25 25`). Top of it, 668
 boards: 1m (2x) 3x, opener signing off "no game opposite a limit raise"
 with 16-20, because with a minor he accepted only balanced with a
 stopper. Now 3NT from 14 with their suit held (any shape), else 5m from
