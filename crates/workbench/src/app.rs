@@ -827,10 +827,11 @@ impl App {
             (SortBy::Contract, "contract", "Share of boards where the final contract equals BBA's."),
             (
                 SortBy::Par,
-                "par/bd",
-                "IMPs against double-dummy par per board: ours minus BBA's, summed over the boards \
-                 where the contracts differ and divided by all the scenario's boards (in the current \
-                 filter). Negative: BBA got closer. This is the number to improve.",
+                "bba/bd",
+                "Our score against BBA's, in IMPs per board. Double-dummy par is the measuring \
+                 stick: on each board where the contracts differ, BBA's IMP distance from par minus \
+                 ours; summed and divided by all the scenario's boards (in the current filter). \
+                 Positive: ours was closer to par. This is the number to improve.",
             ),
             (
                 SortBy::NoRule,
