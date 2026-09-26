@@ -196,3 +196,7 @@ when answered weak_two(t)
 # (notes, 2026-09-25).
 after 2x (P) 2N (P) 3y (P) 3x (P) when x is not C | two_c is natural, y is not x
   P   "Partner signed off in our suit"
+
+# Opener after the preemptive raise: pass.
+after 2x (P) 3x (P) when x is not C | two_c is natural
+  P   "Partner's raise is preemptive"

@@ -39,3 +39,10 @@ N J65.J98762.75.93      | 2NT P 3D P 3H P    | P      | 2 HCP, six hearts: pass 
 N T.T9875.QT95.J95      | 2NT P 3D P 3H P    | P      | 3 HCP: pass
 N KT873.653.J876.J      | 2NT P 3H P 3S P    | 3NT    | 5 HCP, five spades: choose the game
 N J74.J9853.7.KJ43      | 2NT P 3D P 3H P    | 3NT    | five hearts, unbalanced: 3NT all the same
+
+# ── Weak hands (2026-09-25): a 4-count has no invitation, and Stayman
+# needs game values
+card    Basic-Bridge
+dealer  S
+N 732.K864.952.J93      | 2NT P | P   | 4 HCP: no game (BBA passes)
+N 732.7654.Q953.J9      | 2NT P | P   | 3 HCP and four hearts: no Stayman

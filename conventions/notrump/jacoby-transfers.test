@@ -73,3 +73,8 @@ dealer  S
 N K873.QJ975.84.J3      | 1NT P               | 2D     | 5-4 majors, invitational: transfer, not Stayman
 N K873.QJ975.84.J3      | 1NT P 2D P 2H P     | 2S     | then show the spades, not forcing
 S AQ6.K2.KJ53.Q962      | 1NT P 2D P 2H P 2S P | P     | three spades, two hearts: play 2S
+
+# ── 5-5 with a singleton, invitational only through length (2026-09-25)
+card    Basic-Bridge
+dealer  S
+N 75.QJ952.3.KT974      | 1NT P 2D P 2H P | P | 6 HCP, 5-5: no natural invitation; BBA passes

@@ -318,3 +318,25 @@ continuations are the SAYC ones, one round forcing, even on the 21GF
 cards (e.g. "P: minimum for the two-over-one" after 1y-2x-3x). The
 stopper dialogue sets the game force itself; the 2/1 structure as a
 whole is a bigger job.
+
+## No-rule gaps after 1NT and after opener's major rebid (2026-09-25)
+
+Found by the no-rule scan of Basic_* N/S auctions:
+
+- **1x-1NT-2x.** The pass read `points<=10`, and a 1NT response is 6-10
+  HCP, so with length points 11-12 and a doubleton there was no call.
+  The pass is now in HCP. BBA raises with a doubleton from 8 HCP
+  (`probes/resp-1H-1N-2H.toml`: 60 of 79 hands with 8-10 and two
+  hearts), an eight-card fit opposite six, so 3M with two and 8+ is
+  now an invitation. Over a minor it lost by the side yardstick
+  (1♦-1NT-2♦, -81 IMPs to the raising side over the corpus though +47 by
+  par distance), so it is majors only.
+- **1x-1NT-2z** with one card in each of opener's suits: 3m with six,
+  to play.
+- **1M-1y-2M**: 4M was measured in `suit_points>=13` and the invitation
+  below it in `points`, so 12 HCP with a fifth card (13 points, 12.5
+  suit points) had no call. 4M is now `points>=13`, the fix made after
+  1NT earlier. BBA bids 4♥ on Basic_Weak_2 420.
+
+Measured together with the 2NT and transfer fixes: Basic_* N/S vs BBA
++18 (+11 by side), full corpus +58 by par distance, +15 by side.

@@ -116,3 +116,12 @@ N Q7.AQ5.KJ982.A43      | 1S P 2D P 3D P          | 3NT    | hearts and clubs st
 N K2.765.AQJ97.KQ2      | 1S P 2D P 3D P          | 3S     | no heart stopper: 3S skips 3H, denying it
 S AKJ87.K4.KT32.K4      | 1S P 2D P 3D P 3S P     | 3NT    | hearts and clubs both stopped in this hand
 S AKJ87.K4.KT32.54      | 1S P 2D P 3D P 3H P     | 5D     | clubs stopped by nobody who has said so: 5D
+
+# ── After 1x-1NT-2x and 1x-1NT-2z: calls that had no rule (2026-09-25)
+card    Basic-Bridge
+dealer  S
+N KJ.J9.72.AT98632      | 1H P 1NT P 2H P | 3H  | a doubleton and 9 HCP: invites (BBA)
+N T75.75.K94.QJ942      | 1H P 1NT P 2H P | P   | a doubleton and 6: no game
+N .Q72.AKT97654.97      | 1S P 1NT P 2S P | P   | 9 HCP and a void: length points no longer leave it without a call
+N 8.6.AKQT86.JT754      | 1S P 1NT P 2H P | 3D  | short in both majors: six diamonds, to play
+N AK653.J53.AT7.86      | 1H P 1S P 2H P  | 4H  | 12 HCP and three hearts: 13 total points is game (BBA 4H)

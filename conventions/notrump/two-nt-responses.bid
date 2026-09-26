@@ -22,7 +22,7 @@ module two-nt-responses "Responses to a 2NT opening"
 
 after 2N (P)
   3C  "Stayman: asks for a four-card major"  alert
-      shows H=4 | S=4
+      shows H=4 | S=4, strength>=game
       when  stayman, !puppet, !shape 4333
       when  style is not bba
       sets  forcing=round, ask=majors
@@ -46,7 +46,9 @@ after 2N (P)
       sets  ask=quant
   6N  "Slam: {slam} total points"          shows balanced, strength=slam
       when  style is not bba
-  P   "Nothing: {signoff} total points"    shows strength=signoff
+  # A 4-count is the invitational band opposite 20-21, and there is no
+  # invitation over 2NT short of 4NT: pass (BBA passes with 4 too).
+  P   "No game: {signoff}-{invite} total points"    shows strength<=invite
       when  style is not bba
       priority -10
 

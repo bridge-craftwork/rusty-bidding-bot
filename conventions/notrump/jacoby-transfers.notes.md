@@ -207,3 +207,11 @@ The same screen, IMPs to the bidding side when each module is removed:
 | new-minor-forcing | -955 |
 | superaccept-doubleton | -738 |
 | control-bids | +890 (removal helps; slam/control-bids.notes.md) |
+
+## 5-5 invitational only through length (2026-09-25)
+
+After 1NT-2♦-2♥, 75.QJ952.3.KT974 is 6 HCP but 8 total points: the
+invitational band, where 2NT needs a balanced hand, 3M six cards, and
+3♣ game. No rule matched (Basic_Openers_Rebid 79 and 395; BBA passes
+both). A pass with five of the major, invitational in total points but
+no more than a signoff in HCP, is now a fallback below the other calls.

@@ -123,3 +123,18 @@ and 2NT-3H-3S: 408 corpus boards. BBA passes with 0-3 HCP. From 4
 (25 combined) it bids 3NT with five of the major, balanced or not, and
 4M with six. Those are now fallbacks under the generic rules.
 Corpus: -166,629 -> -165,434 (+1,195 IMPs).
+
+## Weak hands with no call (2026-09-25)
+
+Two gaps in the default, both seen in Basic_What_To_Open N/S auctions:
+
+- **A 4-count.** Opposite 20-21 the signoff band ends at 3 total points
+  and game starts at 5, so 4 is the invitational band, which has no
+  call over 2NT. The pass now covers `strength<=invite`. BBA passes with
+  4 too (the bba rule's "4 HCP or less").
+- **Stayman with nothing.** The default 3♣ had no floor, so 0-3 counts
+  with a four-card major bid it and then had no rule after the answer
+  (2NT-3♣-3♦ and 2NT-3♣-3♥, 5 boards). It now needs game values, as
+  BBA's does (from 5 HCP).
+
+No-rule positions in Basic_* N/S fell by 10; par effect on Basic_* +1.

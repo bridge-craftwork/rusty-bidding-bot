@@ -69,7 +69,7 @@ after 1x (P) 1y (P) 2x (P)
   2N  "Invitational: 11-12"                shows points=11..12, x<=1, y<=5  sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, x<=2 | x is C | x is D
 after 1M (P) 1y (P) 2M (P)
-  4M  "Game: 2+ {M}, 13+"                  shows M>=2, suit_points>=13
+  4M  "Game: 2+ {M}, 13+"                  shows M>=2, points>=13
 
 # ── Opener raised responder's suit (4+, minimum) ─────────────────────
 after 1x (P) 1y (P) 2y (P)
@@ -141,13 +141,24 @@ after 1x (P) 1M (P) 2N (P)
 after 1x (P) 1N (P) 2z (P) when z is not x
   P   "Passes: {z} at least as long, or a four-card {z}"   shows z>=4 | z>x
       priority -5
+  3m  "Six or more {m}, short in both of opener's suits: to play"   shows m>=6, x<=1, z<=2
+      when  m is not x, m is not z
+      sets  ask=signoff
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
   3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
+# The pass is in HCP: the 1NT response is 6-10 HCP, and with length
+# points a 1NT responder can count 11-12 and had no call. BBA raises
+# with a doubleton from 8 HCP (probes/resp-1H-1N-2H, 2026-09-25: 60 of
+# 79 hands with 8-10 and two hearts); an eight-card fit opposite six.
 after 1x (P) 1N (P) 2x (P)
-  P   "Weak: no game"                      shows points<=10
+  P   "No game"                            shows hcp<=10
       priority -5
   3x  "Raise: 3+ {x}, maximum for the 1NT response"
       shows x>=3, points>=10   sets ask=invite(x)
+  3x  "Raise: 2+ {x}, 8-10: invites game"
+      shows x>=2, hcp>=8   sets ask=invite(x)
+      when  x is H | x is S                # over a minor, 3m rarely reaches game
+      priority -1
 after 1x (P) 1N (P) 3x (P)
   P   "No game"                            shows points<=8
       priority -5
