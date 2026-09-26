@@ -60,6 +60,8 @@ pub struct Stats {
     /// Problems in our own auctions, by kind, and boards with any.
     pub problems: BTreeMap<ProblemKind, usize>,
     pub boards_with_problems: usize,
+    /// Boards where our engine had no rule somewhere in a live auction.
+    pub boards_with_no_rule: usize,
     /// Boards by the reference's scoring and generator.
     pub boards_by_scoring: BTreeMap<String, usize>,
     pub boards_by_generator: BTreeMap<String, usize>,
@@ -72,6 +74,8 @@ impl Stats {
             *self.problems.entry(p.kind).or_default() += 1;
         }
         self.boards_with_problems += (!b.problems.is_empty()) as usize;
+        self.boards_with_no_rule +=
+            b.problems.iter().any(|p| p.kind == ProblemKind::NoRule) as usize;
         let scoring = scoring_name(b);
         *self.boards_by_scoring.entry(scoring.clone()).or_default() += 1;
         *self
@@ -128,6 +132,16 @@ impl Stats {
 
     pub fn auction_rate(&self) -> f64 {
         ratio(self.auctions_match, self.boards)
+    }
+
+    /// Net IMPs against par (ours minus BBA's, boards with differing
+    /// contracts) spread over every board of the scenario.
+    pub fn par_per_board(&self) -> f64 {
+        if self.boards == 0 {
+            0.0
+        } else {
+            self.par.imps_vs_reference as f64 / self.boards as f64
+        }
     }
 
     pub fn contract_rate(&self) -> f64 {

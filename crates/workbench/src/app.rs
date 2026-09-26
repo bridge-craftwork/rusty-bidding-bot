@@ -78,6 +78,7 @@ enum SortBy {
     Auction,
     Contract,
     Par,
+    NoRule,
     Name,
 }
 
@@ -563,6 +564,11 @@ fn pct(x: f64) -> String {
     format!("{:.1}%", 100.0 * x)
 }
 
+/// Whole percentages, for the scenario table.
+fn pct0(x: f64) -> String {
+    format!("{:.0}%", 100.0 * x)
+}
+
 impl eframe::App for App {
     fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if let Some(r) = &self.running {
@@ -809,7 +815,7 @@ impl App {
 
     fn scenarios(&mut self, ui: &mut egui::Ui) {
         ui.heading("Scenarios");
-        const KEYS: [(SortBy, &str, &str); 5] = [
+        const KEYS: [(SortBy, &str, &str); 6] = [
             (
                 SortBy::Calls,
                 "calls",
@@ -821,9 +827,16 @@ impl App {
             (SortBy::Contract, "contract", "Share of boards where the final contract equals BBA's."),
             (
                 SortBy::Par,
-                "par",
-                "IMPs against double-dummy par, ours minus BBA's, summed over the boards where the \
-                 contracts differ. Negative: BBA got closer. This is the number to improve.",
+                "par/bd",
+                "IMPs against double-dummy par per board: ours minus BBA's, summed over the boards \
+                 where the contracts differ and divided by all the scenario's boards (in the current \
+                 filter). Negative: BBA got closer. This is the number to improve.",
+            ),
+            (
+                SortBy::NoRule,
+                "no rule",
+                "Boards where the engine had no rule somewhere in a live auction (its side had \
+                 already bid), so it passed by default.",
             ),
             (SortBy::Name, "name", "Scenario name."),
         ];
@@ -844,16 +857,17 @@ impl App {
         if let Some((by, r)) = action.take() {
             self.sort_click(by, &r);
         }
-        let headers: Vec<(SortBy, String, &str)> = [KEYS[4], KEYS[0], KEYS[1], KEYS[2], KEYS[3]]
-            .iter()
-            .map(|(b, l, h)| {
-                (
-                    *b,
-                    self.sort_label(*b, if *l == "name" { "scenario" } else { l }),
-                    *h,
-                )
-            })
-            .collect();
+        let headers: Vec<(SortBy, String, &str)> =
+            [KEYS[5], KEYS[0], KEYS[1], KEYS[2], KEYS[3], KEYS[4]]
+                .iter()
+                .map(|(b, l, h)| {
+                    (
+                        *b,
+                        self.sort_label(*b, if *l == "name" { "scenario" } else { l }),
+                        *h,
+                    )
+                })
+                .collect();
         let Some((_, scenarios)) = &self.stats else {
             return;
         };
@@ -862,7 +876,8 @@ impl App {
             SortBy::Calls => s.calls_all().rate(),
             SortBy::Auction => s.auction_rate(),
             SortBy::Contract => s.contract_rate(),
-            SortBy::Par => s.par.imps_vs_reference as f64,
+            SortBy::Par => s.par_per_board(),
+            SortBy::NoRule => s.boards_with_no_rule as f64,
             SortBy::Name => 0.0,
         };
         if self.sort == SortBy::Name {
@@ -895,7 +910,7 @@ impl App {
             .striped(true)
             .sense(Sense::click())
             .column(Column::remainder().at_least(140.0).clip(true))
-            .columns(Column::auto(), 4)
+            .columns(Column::auto(), 5)
             .header(20.0, |mut h| {
                 for (by, label, help) in &headers {
                     h.col(|ui| {
@@ -920,27 +935,44 @@ impl App {
                         ui.label(&s.name);
                     });
                     row.col(|ui| {
-                        ui.label(pct(s.calls_all().rate()));
+                        ui.label(pct0(s.calls_all().rate()));
                     });
                     row.col(|ui| {
-                        ui.label(pct(s.auction_rate()));
+                        ui.label(pct0(s.auction_rate()));
                     });
                     row.col(|ui| {
-                        ui.label(pct(s.contract_rate()));
+                        ui.label(pct0(s.contract_rate()));
                     });
                     row.col(|ui| {
-                        let n = s.par.imps_vs_reference;
-                        let text = RichText::new(format!("{n:+}"));
-                        ui.label(if n < 0 {
+                        let n = s.par_per_board();
+                        let text = RichText::new(format!("{n:+.2}"));
+                        ui.label(if n < -0.005 {
                             text.color(BAD)
-                        } else if n > 0 {
+                        } else if n > 0.005 {
                             text.color(GOOD)
                         } else {
                             text
                         })
                         .on_hover_text(format!(
-                            "{} boards with differing contracts: ours closer {}, BBA closer {}, equal {}",
-                            s.par.scored, s.par.ours_closer, s.par.reference_closer, s.par.equal
+                            "{:+} IMPs over {} boards; {} with differing contracts: ours closer {}, BBA closer {}, equal {}",
+                            s.par.imps_vs_reference,
+                            s.boards,
+                            s.par.scored,
+                            s.par.ours_closer,
+                            s.par.reference_closer,
+                            s.par.equal
+                        ));
+                    });
+                    row.col(|ui| {
+                        let n = s.boards_with_no_rule;
+                        let text = RichText::new(n.to_string());
+                        ui.label(if n > 0 { text.color(BAD) } else { text }).on_hover_text(format!(
+                            "{n} of {} boards; {} no-rule positions in all",
+                            s.boards,
+                            s.problems
+                                .get(&rbb_compare::ProblemKind::NoRule)
+                                .copied()
+                                .unwrap_or(0)
                         ));
                     });
                     if row.response().clicked() {
