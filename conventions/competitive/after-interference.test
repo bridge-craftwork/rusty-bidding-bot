@@ -75,3 +75,11 @@ S AQ73.K964.AJ42.Q      | 1D 1H X P        | 4S | 16 HCP, a singleton, four spad
 S AQ73.K964.AJ42.Q      | 1D 2C X P        | 4H/4S | the same over a two-level overcall
 S KJ.AQ432.AKQJ.74      | 1H 1S X P        | 3NT | 20 with a spade stopper: game
 S 64.AKJ43.AKQ2.AQ      | 1H 1S X P        | 2S  | 23, no spade stopper, no fit: cue bid, game forcing
+
+# ── Free bids where a new suit is not forcing (Basic-Bridge; BBA probe
+# free-bid-1D-1S, 2026-09-25)
+N 9.Q9754.K75.JT84      | 1D 1S            | X   | five hearts, 6 HCP: too weak for 2H, doubles
+N Q7.KJ643.752.KJ3      | 1D 1S            | 2H  | five hearts, 10 HCP: the free bid
+N AJ.AJT95.3.KJ432      | 1D 1S            | 3H  | 14 HCP: jumps, forcing to game
+S AJ85.Q.KQ76.K832      | 1D 1S 3H P       | 3NT | no fit, spades stopped
+S AJ8.Q54.KQ76.K83      | 1D 1S 3H P       | 4H  | three hearts: game

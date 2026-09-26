@@ -231,3 +231,17 @@ their suit (game forcing); responder 3NT with a stopper, else the cue
 bid. Only over one- and two-level overcalls: over three-level ones it
 lost (-131 over 1♠ (3♥)). Full corpus +644 by par distance, +875 by
 side (257 boards).
+
+## Free bids where a new suit is not forcing (2026-09-25)
+
+On cards with `1X-(Y)-2Z forcing` off (Basic-Bridge and the 21GF
+cards in the corpus), the free new suit was "10+" (8+ over a one-level
+overcall) with no ceiling, so 14-counts made a non-forcing bid and
+opener passed. BBA on Basic (`probes/free-bid-1D-1S.toml`, 300
+responders with five hearts over 1♦ (1♠)): 2♥ is 8-13 total points,
+not forcing; 3♥ is 13-21, forcing; with five hearts and 6-7 it doubles.
+Now: the free bid up to 12 HCP, a jump with 13+ HCP forcing to game
+(opener raises a major with three, else 3NT with their suit stopped,
+else the game force), and the negative double over 1♠ allows five
+hearts under 8 HCP. Grid agreement 59% -> 69%. Full corpus +139 by par
+distance, +255 by side, in two steps.

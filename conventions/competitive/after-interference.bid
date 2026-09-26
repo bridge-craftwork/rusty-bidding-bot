@@ -33,8 +33,10 @@ after 1x (1y) when neg
       shows  hcp+length_points>=6
       shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
       shows  ((D>=4 | x is D | y is D), (C>=4 | x is C | y is C)) | S>=4 | H>=4
-      when   (S<=4 | x is S | y is S), (H<=4 | x is H | y is H)
+      when   (S<=4 | x is S | y is S), (H<=4 | x is H | y is H | (y is S, hcp<=7))
       priority 1
+  # (the y-is-S clause) Five hearts over 1S and too weak for 2H: BBA
+  # doubles (probes/free-bid-1D-1S.toml: 12 of 12 with 6 HCP).
 
 # ── Trap pass ────────────────────────────────────────────────────────
 # With negative doubles on, responder cannot double their overcall for
@@ -68,13 +70,38 @@ after 1x (1y)
       when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
   cheapest(C) "8+ total points, five or more clubs"
       shows C>=5, hcp+length_points>=8
-      when  x is not C, y is not C
+      when  x is not C, y is not C, new_suit_forcing
   cheapest(D) "8+ total points, five or more diamonds"
       shows D>=5, hcp+length_points>=8
-      when  x is not D, y is not D
+      when  x is not D, y is not D, new_suit_forcing
   2H  "8+ total points, five or more hearts"
       shows H>=5, hcp+length_points>=8
-      when  y is S, x is not H
+      when  y is S, x is not H, new_suit_forcing
+  # Not forcing (Basic-Bridge): limited to 12, and 13+ jumps, forcing to
+  # game, as over a two-level overcall (below).
+  cheapest(C) "8-12 total points, five or more clubs, not forcing"
+      shows C>=5, hcp+length_points>=8, hcp<=12
+      when  x is not C, y is not C, !new_suit_forcing
+  cheapest(D) "8-12 total points, five or more diamonds, not forcing"
+      shows D>=5, hcp+length_points>=8, hcp<=12
+      when  x is not D, y is not D, !new_suit_forcing
+  2H  "8-12 total points, five or more hearts, not forcing"
+      shows H>=5, hcp+length_points>=8, hcp<=12
+      when  y is S, x is not H, !new_suit_forcing
+  jump(C) "13+ total points, five or more clubs: forcing to game"
+      shows C>=5, hcp>=13
+      when  x is not C, y is not C, !new_suit_forcing
+      when  H<=4 | y is not S | x is H     # 5-5 with hearts: the higher suit
+      sets  forcing=game
+  jump(D) "13+ total points, five or more diamonds: forcing to game"
+      shows D>=5, hcp>=13
+      when  x is not D, y is not D, !new_suit_forcing
+      when  H<=4 | y is not S | x is H     # 5-5 with hearts: the higher suit
+      sets  forcing=game
+  3H  "13+ total points, five or more hearts: forcing to game"
+      shows H>=5, hcp>=13
+      when  y is S, x is not H, !new_suit_forcing
+      sets  forcing=game
   P   "Nothing to say over the overcall"  priority -10
 
 # ── They overcalled at the two level or jumped ───────────────────────
@@ -116,20 +143,48 @@ after 1x (2y) | 1x (3y) when y is not x
       sets  forcing=round
 
 # The same bids where the card says a new suit is not forcing
-# (Basic-Bridge sets `1X-(Y)-2Z forcing` off). Only the force differs.
+# (Basic-Bridge sets `1X-(Y)-2Z forcing` off). The free bid is then
+# limited, up to 12 HCP (BBA: 8-13 total points), and with 13+ HCP
+# responder jumps,
+# forcing to game (BBA: 13-21; probes/free-bid-1D-1S.toml, 2026-09-25).
+# Before, a 14-count made the non-forcing bid and was passed.
 after 1x (2y) | 1x (3y) when y is not x, !new_suit_forcing
   cheapest(S) "10+ total points, five or more spades, not forcing"
-      shows S>=5, hcp+length_points>=10
+      shows S>=5, hcp+length_points>=10, hcp<=12
       when  x is not S, y is not S
   cheapest(H) "10+ total points, five or more hearts, not forcing"
-      shows H>=5, S<=4, hcp+length_points>=10
+      shows H>=5, S<=4, hcp+length_points>=10, hcp<=12
       when  x is not H, y is not H
   cheapest(D) "10+ total points, five or more diamonds, not forcing"
-      shows D>=5, S<=4, H<=4, hcp+length_points>=10
+      shows D>=5, S<=4, H<=4, hcp+length_points>=10, hcp<=12
       when  x is not D, y is not D
   cheapest(C) "10+ total points, five or more clubs, not forcing"
-      shows C>=5, S<=4, H<=4, hcp+length_points>=10
+      shows C>=5, S<=4, H<=4, hcp+length_points>=10, hcp<=12
       when  x is not C, y is not C
+  jump(S) "13+ total points, five or more spades: forcing to game"
+      shows S>=5, hcp>=13
+      when  x is not S, y is not S
+      sets  forcing=game
+  jump(H) "13+ total points, five or more hearts: forcing to game"
+      shows H>=5, S<=4, hcp>=13
+      when  x is not H, y is not H
+      sets  forcing=game
+  jump(D) "13+ total points, five or more diamonds: forcing to game"
+      shows D>=5, S<=4, H<=4, hcp>=13
+      when  x is not D, y is not D
+      sets  forcing=game
+  jump(C) "13+ total points, five or more clubs: forcing to game"
+      shows C>=5, S<=4, H<=4, hcp>=13
+      when  x is not C, y is not C
+      sets  forcing=game
+
+# Opener after the forcing jump: game in a major with three-card support,
+# else 3NT with their suit stopped; the game force does the rest.
+after 1x (1y) 2z (P) | 1x (1y) 3z (P) | 1x (2y) 3z (P) when partner.jumped, z is not x, z is not y, we.forcing = game
+  4{z}  "Three-card support: game"         shows z>=3
+        when  z is H | z is S
+  3N    "No fit, a stopper in {y}"         shows stop(y)
+        priority -1
 
 after 1x (2y) | 1x (3y) when y is not x
   2N  "11-12 total points, balanced, a stopper in {y}"
