@@ -363,9 +363,22 @@ after 1x (X) XX (1y) P (P) | 1x (X) XX (2y) P (P) | 1x (X) XX (3y) P (P) when y 
   X   "Penalty: four good {y} behind the bidder"
       shows y>=4
       when  quality(y)>=good | top5(y)>=3
-  cheapest(x) "Back to partner's suit: three or more"
-      shows x>=3
+  cheapest(x) "Back to partner's suit: three or more, 10-11"
+      shows x>=3, hcp<=11
       sets  ask=signoff
+      priority -1
+  # Game values (2026-09-26: 12-13 counts went back to 2x and opener
+  # passed with 14-16).
+  3N  "Game: 12+ with a stopper in {y}"
+      shows hcp>=12, stop(y)
+  4{x} "Game: 12+ with three-card support"
+      shows x>=3, hcp>=12
+      when  x is H | x is S
+  cheapest(y) "Cue bid: 12+, no stopper, forcing to game"
+      alert  artificial
+      shows hcp>=12
+      when  !stop(y), cheapest_rank(y) <= 18
+      sets  forcing=game
       priority -1
   cheapest(S) "Five or more spades"
       shows S>=5

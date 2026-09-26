@@ -395,3 +395,7 @@ redouble, read opener's rebid as a sign-off and passed with 10-13.
 Now: game with 12+ (4M with a doubleton, 3NT with their suit stopped,
 5m from 13), 3x inviting with 10-11. Full corpus +2,025 by par
 distance, +2,568 by side (545 boards, mostly after 1♥/1♠ (X) XX).
+Same day: when opener passes their runout back (a forcing pass),
+responder with 12+ now bids game (3NT with a stopper, 4M with three,
+else a cue bid) instead of going back to opener's suit, which is now
+10-11. Full corpus +979 by par distance, +913 by side.
