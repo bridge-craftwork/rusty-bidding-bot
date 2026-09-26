@@ -343,6 +343,10 @@ after 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when x is C | x is D, y is n
       priority -5
 after 1x (2y) 3y (P) 4x (P) when x is H | x is S
   P   "Game reached"
+after 1x (2y) 3y (P) 3x (P) when x is H | x is S, y is not x
+  4{x} "Game: 13+ opposite the sign-off"  shows hcp+length_points>=13
+  P   "The limit raise: no game"
+      priority -5
 
 # ── Opener when they compete over the negative double ────────────────
 # They have bid again, so the double is no longer forcing and opener may

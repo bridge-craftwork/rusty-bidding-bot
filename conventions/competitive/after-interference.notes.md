@@ -281,3 +281,6 @@ stopper) or 5m (14+) over the sign-off. The first try lost on the
 majors: the forced-rebid rules for free bids (rebids.bid) also matched
 the cue bid, their suit read as partner's; they now need
 `partner.z>=5`. Full corpus +1,006 by par distance, +2,269 by side.
+The same with a major: over opener's sign-off in three, responder with
+13+ bids game (240 boards in the queue). Full corpus +919 by par
+distance, +1,865 by side.
