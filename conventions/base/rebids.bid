@@ -154,6 +154,10 @@ after 1x (P) 1N (P)
       when  style is not bba
       priority -1
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
+  # 4-4-4-1 with 18+ and no suit to reverse into or jump in had no call
+  # (Basic_Minor 78, AQJT.K765.AK72.Q: BBA 3NT).
+  3N  "18+: game, no better description"   shows hcp>=18
+      priority -3
   3x  "Jump rebid (BBA): 6+ {x}, 15-18"    shows x>=6, hcp=15..18
       when  style is bba
       priority -1
@@ -268,6 +272,8 @@ after 1M (P) 3M (P)
   P   "Declines: minimum"                  shows tp(M)<=14
 after 1m (P) 3m (P)
   3N  "Accepts, balanced: 14+"             shows hcp>=14, balanced | semibalanced
+  5m  "Accepts, unbalanced: game in the minor"   shows hcp>=15
+      priority -1
   P   "Declines: minimum"                  shows hcp<=13
       priority -5
 

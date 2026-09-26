@@ -72,6 +72,11 @@ when answered transfer(M)
   P   "Weak in HCP: play here"                 shows M=5, strength=invite, hcp<=24-partner.hcp.max
       when maybe partner.M<=3 | partner.last=3{M}
       priority -1
+  # With a singleton and a real invitation in HCP, BBA bids 2NT anyway
+  # (Basic_Openers_Rebid 172, KT432.Q32.2.QJ93).
+  2N  "Invitational, exactly 5 {M}, a singleton"   shows M=5, strength=invite, hcp>=25-partner.hcp.max
+      sets ask=invite(M)
+      priority -1
 
 # Opener answers the invitation (2NT with five, 3M with six; also a raise
 # after Stayman, and other modules' invitations in a suit). Play in the
@@ -84,6 +89,10 @@ when asked invite(M)
   3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
   3M  "Declines, in the fit"            shows M>=8-partner.M.min, points<=23-partner.points.min
   P   "Declines"                        shows strength<=invite, (M<8-partner.M.min | points<=23-partner.points.min)
+
+# Responder after opener declines in three of the major: pass.
+when answered invite(M), partner.last=3{M}
+  P   "Partner declined: play three of the major"
 
 # Opener answers the quantitative 4NT with five in the major: slam with
 # 32 combined, in the major with three-card support.

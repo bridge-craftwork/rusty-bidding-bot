@@ -133,7 +133,7 @@ after 1x (P) 1M (P) 3M (P)
 after 1x (P) 1y (P) 2N (P)
   P   "Weak: no game"                      shows points<=6
       priority -5
-  3N  "Game: 7+"                           shows points>=7, y<=5
+  3N  "Game: 7+"                           shows points>=7, y<=5 | y is C | y is D
 after 1x (P) 1M (P) 2N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=7
 
@@ -504,3 +504,9 @@ when asked stoppers, (trump is C | trump is D)
       prefer 0 - cheapest_rank(S)
   5{trump}  "A suit unstopped: game in the minor"
       priority -3
+
+# ── Opener's invitational raise of a minor (1m-2m-3m, 17-18) ────────
+after 1m (P) 2m (P) 3m (P)
+  3N  "Accepts: the top of the raise"      shows hcp>=9
+  P   "Declines: 6-8"                      shows hcp<=8
+      priority -5

@@ -340,3 +340,9 @@ Found by the no-rule scan of Basic_* N/S auctions:
 
 Measured together with the 2NT and transfer fixes: Basic_* N/S vs BBA
 +18 (+11 by side), full corpus +58 by par distance, +15 by side.
+
+Also (2026-09-25): over opener's 2NT rebid, 3NT with a six-card minor
+(it needed five or fewer in responder's suit, so Q8.QJT4.JT8754.Q had no
+call; BBA bid 3♥ there, a four-card suit we do not show); and after
+1m-2m-3m (opener's invitation, 17-18 support points) 3NT with 9, pass
+otherwise (9 measured +5 / +18 against 8).

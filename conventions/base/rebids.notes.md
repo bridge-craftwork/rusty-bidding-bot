@@ -568,3 +568,9 @@ Found by the no-rule scan of Basic_* N/S auctions.
 
 Basic_* N/S: vs BBA +30, +44 by side (7 boards). Full corpus: +267 by
 par distance, +327 by side (174 boards).
+
+More gaps closed the same day: 1m-3m with 15+ and an unbalanced hand
+now bids 5m (it had no call; Basic_Minor 35, 5-5 with 16, where BBA
+passed), and after 1x-1NT a 4-4-4-1 18+ with nothing to reverse into
+bids 3NT (Basic_Minor 78, BBA 3NT). Measured with the responder and
+transfer fixes below: full corpus +807 by par distance, +1,168 by side.

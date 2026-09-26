@@ -215,3 +215,8 @@ invitational band, where 2NT needs a balanced hand, 3M six cards, and
 3♣ game. No rule matched (Basic_Openers_Rebid 79 and 395; BBA passes
 both). A pass with five of the major, invitational in total points but
 no more than a signoff in HCP, is now a fallback below the other calls.
+
+The same shape with a real invitation in HCP (8+, KT432.Q32.2.QJ93)
+bids 2NT despite the singleton, as BBA does (Basic_Openers_Rebid 172).
+And after 2NT and opener's decline in three of the major responder
+passes (it had no rule; Basic_Openers_Rebid 225, BBA passes).
