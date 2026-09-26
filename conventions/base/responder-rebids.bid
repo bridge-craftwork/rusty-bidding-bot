@@ -531,3 +531,12 @@ after 1m (P) 2m (P) 3m (P)
   3N  "Accepts: the top of the raise"      shows hcp>=9
   P   "Declines: 6-8"                      shows hcp<=8
       priority -5
+
+# ── Opener reopened with notrump (18-19 balanced, their suit stopped) ─
+# Responder passed their overcall, and had no rule over the reopening
+# (2026-09-25: 9-10 counts with no stopper passed out 1NT that reaches
+# 3NT uncontested). Game from 7.
+after 1x (1y) P (P) 1N (P) | 1x (2y) P (P) 2N (P) when y is not x
+  3N  "Game opposite 18-19: 7+"            shows hcp>=7
+  P   "No game"                            shows hcp<=6
+      priority -5

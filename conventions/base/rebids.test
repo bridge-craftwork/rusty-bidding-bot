@@ -226,3 +226,7 @@ S AKT43.8.AKQJ65.9      | 1D P 1NT P 2S P 3D P | P | 17 and a preference: minimu
 S AKT43.8.AKQJ65.A      | 1D P 1NT P 2S P 3D P | 5D | 21 with six diamonds: game
 S J.A5.QJ764.AQ753      | 1D P 3D P       | 5D  | 14, 5-5 with a singleton: game in the minor
 S AQJT.K765.AK72.Q      | 1D P 1NT P      | 3NT | 19, 4-4-4-1: game (BBA 3NT)
+
+# ── Strong rebids after an overcall (2026-09-25)
+S 9.KQT.AJ54.AKJ43      | 1C 1H 2D P       | 3NT | 18 with hearts held: game
+S AKQJ5.K4.AK852.4      | 1S 2C 2H P       | 3C  | 20, no fit, no club stopper: cue bid

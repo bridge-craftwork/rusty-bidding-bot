@@ -530,6 +530,17 @@ after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
   jump(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19, z<=3
       when  stop(y)
+  # Strong hands with nothing else to bid (2026-09-25: 19-counts repeated
+  # a five-card suit and were passed): 3NT with their suit held, else a
+  # cue bid of their suit, forcing to game.
+  3N  "Game: 19+ with a stopper in {y}"
+      shows hcp>=19, stop(y), z<=3
+      priority -1
+  cheapest(y) "Cue bid: 19+, forcing to game"
+      alert  artificial
+      shows suit_points>=19
+      sets  forcing=game
+      priority -3
 after 1x (X) 1z (P) when z is not x
   cheapest(N) "12-14 balanced"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
@@ -586,6 +597,15 @@ after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y i
   jump(N) "16-18 balanced with a stopper in {y}"
       shows balanced, hcp=16..18, z<=3
       when  stop(y)
+  # Strong hands (2026-09-25): 3NT with their suit held, else a cue bid.
+  3N  "Game: 17+ with a stopper in {y}"
+      shows hcp>=17, stop(y)
+      priority -1
+  cheapest(y) "Cue bid: 18+, forcing to game"
+      alert  artificial
+      shows suit_points>=18
+      sets  forcing=game
+      priority -3
 after 1x (X) 2z (P) when z is not x
   cheapest(N) "Balanced, minimum"
       shows balanced | shape 5-4-2-2, hcp<=15, z<=3

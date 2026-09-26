@@ -574,3 +574,16 @@ now bids 5m from 14, as 3NT does balanced (it had no call; Basic_Minor 35, 5-5 w
 passed), and after 1x-1NT a 4-4-4-1 18+ with nothing to reverse into
 bids 3NT (Basic_Minor 78, BBA 3NT). Measured with the responder and
 transfer fixes below: full corpus +807 by par distance, +1,168 by side.
+
+## Strong rebids after an overcall (2026-09-25)
+
+In the overcall quality A/B, the side yardstick's "gain" for light
+overcalls was mostly our opening side stopping short after them. Two
+contested rebid blocks had no strong call: after a one-level free bid
+opener with 19+ and no fit repeated a five-card suit, and after a
+two-level free bid 17-18 with their suit held did too. Now: 3NT with a
+stopper (19+ over a one-level response, 17+ over a two-level one),
+else a cue bid of their suit, forcing to game. Also responder raises
+opener's reopening notrump (18-19) to 3NT with 7+
+(responder-rebids.bid). Full corpus +257 by par distance, +346 by side
+(131 boards); Basic_* competitive -12 / -18 (13 boards).
