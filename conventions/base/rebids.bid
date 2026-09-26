@@ -321,13 +321,31 @@ after 1D (P) 2C (P)
   2N  "12-14 HCP, balanced"                shows balanced, hcp=12..14
   3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
 
+# ── After a reverse over 1NT and responder's preference at three ─────
+# Responder has 6-10 and two or more of opener's first suit; opener had
+# no third call (Basic_Major 270, 1D-1NT-2S-3D with 20 and 6-5).
+after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
+  4x  "Game in the fit: 19+"               shows suit_points>=19
+      when  x is H | x is S
+  5x  "Game in {x}: 19+ with six"          shows x>=6, suit_points>=20
+      when  x is C | x is D
+  3N  "Game in notrump: 19+"               shows hcp>=19
+      when  x is C | x is D
+  P   "Minimum for the reverse: play three" shows suit_points<=19
+      priority -5
+
 # ── After an invitational jump shift (10-12, six cards) ──────────────
 after 1x (P) 3y (P) when y is not x
   P   "Minimum, no fit"                    shows hcp<=13
       priority -5
-  3N  "Accepts: 14+, to play notrump"      shows hcp>=14, y<=2
+  # With a fit for a minor 3NT is still the game (Basic_Major 44 and 121,
+  # and 1H-3D with four diamonds, had no call).
+  3N  "Accepts: 14+, to play notrump"      shows hcp>=14, y<=2 | y is C | y is D
   4y  "Accepts in the fit: 14+"            shows y>=2, suit_points>=14
       when  y is H | y is S
+  4x  "Accepts in my own suit: seven, or six with four top honours"
+      shows x>=7 | (x>=6, top5(x)>=4), hcp>=14, y<=1 | y is C | y is D
+      when  x is H | x is S
 
 # ── Responder bid a fourth suit at the one level ─────────────────────
 # 1♣-1♦-1♥-1♠ is natural on this card, and opener had no third call at

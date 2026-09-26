@@ -44,3 +44,8 @@ N 542.K76.K82.K862      | 1NT P          | 2NT    | bba at IMPs: 9 HCP 4-3-3-3 i
 N 65.K76.K862.AQ62      | 1NT P          | 3NT    | bba at IMPs: 12 HCP, game
 # Known miss of the IMP game count: 54.K76.K862.K862 (2-3-4-4, 9 HCP) -- BBA
 # 3NT at IMPs, the count 2NT (one-nt.notes.md).
+
+# ── Responder after the invitation is declined in the fit (2026-09-25)
+card    Basic-Bridge
+dealer  S
+N AQ83.82.Q52.T754      | 1NT P 2C P 2H P 2NT P 3S P | P | declined: play 3S

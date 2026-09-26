@@ -215,3 +215,12 @@ card    Basic-Bridge
 S KT86.A72.K9.Q873      | 1C P 1D P        | 1NT    | Walsh (default): balanced 12-14, 1NT with a major
 S K4.QJ7.AJ84.K984      | 1D P 1H P        | 1NT    | balanced 13 with four clubs: 1NT, not 2C (Rick)
 S K4.QJ7.AJ84.K984      | 1D P 1S P        | 1NT    | the same after 1S
+
+# ── Calls that had no rule (2026-09-25)
+card    Basic-Bridge
+dealer  S
+S AQ9762.K4.K5.K83      | 1S P 3C P       | 3NT | 15 with a club fit: 3NT is still the game
+S AKQT862.K.Q.QJ73      | 1S P 3C P       | 4S  | seven good spades: game in them
+S KJ4.KQT95.AKQ5.8      | 1H P 3D P       | 3NT | four diamonds and 18: 3NT
+S AKT43.8.AKQJ65.9      | 1D P 1NT P 2S P 3D P | P | 17 and a preference: minimum for the reverse
+S AKT43.8.AKQJ65.A      | 1D P 1NT P 2S P 3D P | 5D | 21 with six diamonds: game

@@ -133,6 +133,12 @@ when asked nt_invite
   3N  "Accepts the invitation"          shows strength>=game
   P   "Declines: not a maximum"         shows strength<=invite
 
+# Responder after a decline in the fit: the invitation was answered.
+# (bba: over 3S responder bids game with the top of the invitation;
+# stayman.bid.)
+when answered nt_invite, partner.last=3H | partner.last=3S, style is not bba
+  P   "Partner declined: play three of the major"
+
 # Opener answers the quantitative 4NT: slam with 32 combined.
 when asked quant
   6N  "Accepts the slam invitation"     shows points>=32-partner.points.min

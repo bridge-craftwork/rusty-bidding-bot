@@ -473,3 +473,11 @@ style against BBA): MP 82.9% -> 89.0%, IMP 76.9% -> 87.9%. Known miss:
 54.K76.K862.K862 (2-3-4-4) bids 3NT at IMPs, the count 2NT. Also fixed:
 the matchpoint pass rule had lost its `priority -10` in 89d5f9b (no
 effect on the corpus).
+
+## After the invitation is declined in the fit (2026-09-25)
+
+1NT-2♣-2♥-2NT-3♠: opener declines in the spade fit, and responder had
+no rule in the default (only the bba style had one, which bids game with
+the top of the invitation). The default now passes three of the major
+after a decline. BBA passed on 2 of the 3 Basic_* boards and bid 4♠ on
+Basic_Openers_Rebid 218 (8 HCP).

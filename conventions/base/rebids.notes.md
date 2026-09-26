@@ -552,3 +552,19 @@ hands still jump, as Rick's tests have them.
 - Rick's support-point raise ranges (2y up to 15, 3y 16-18, 4M 19+)
   against BBA's HCP-and-length ranges: BBA's lose 325 by distance and
   333 to the bidding side (224 boards). Ours stay.
+
+## No-rule gaps: after a jump shift and after a reverse (2026-09-25)
+
+Found by the no-rule scan of Basic_* N/S auctions.
+
+- **1M-3m (the invitational jump shift on Basic-Bridge).** 3NT needed a
+  doubleton or less in responder's suit, so a 14+ opener with a fit for
+  the minor had no call (Basic_Major 44, 121, 241). 3NT now allows a
+  minor fit, and opener bids game in a seven-card major, or six with
+  four of the top five honours.
+- **1x-1NT-2z (reverse)-3x.** Opener had no third call. 4M with 19+
+  suit points in a major; with a minor 3NT from 19 HCP, 5m with six and
+  20; otherwise pass.
+
+Basic_* N/S: vs BBA +30, +44 by side (7 boards). Full corpus: +267 by
+par distance, +327 by side (174 boards).
