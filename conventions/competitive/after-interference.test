@@ -55,3 +55,9 @@ N 865.AKT6.94.AK84          | 1C 1D X 2D | 2H | four hearts, competing
 N K3.K2.A98752.QJ4          | 1D 1H X 2H | 3D | six diamonds and 13 HCP
 N A75.J642.AK543.Q          | 1D 1H X 2H | P  | a minimum with nothing to add
 N 762.KQ4.AQ85.J97          | 1D 1S X 2S | P  | the three-card fit is not worth the three level
+
+# ── The opening side: a player who passed last time (2026-09-25)
+card    Basic-Bridge
+dealer  S
+N T942.J965.KJ3.T2      | 1C P P X P 2NT        | P | responder passed with 3 HCP: still nothing
+S K3.Q72.A64.KJ763      | 1C P P X P 2NT P P    | P | opener let them have it: pass again

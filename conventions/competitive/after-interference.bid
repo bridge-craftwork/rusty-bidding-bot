@@ -285,3 +285,11 @@ after 1x (1y) X (3z) | 1x (1y) X (4z) | 1x (2y) X (4z) | 1x (3y) X (4z) when y i
       shows balanced, hcp>=13
       when  stop(y)
   P   "They jumped over the double: no room to describe the hand"  priority -10
+
+# ── Fallback: a player on the opening side who passed last time ──────
+# They have come in, and I passed at my last turn: with nothing new to
+# say I pass again. Below every real rule (2026-09-25: six no-rule
+# positions in Basic_* N/S boards, e.g. 1C P P X P 2N and
+# 1D (2C) P (2S) 3D (P), where responder had passed with 0-5 or 8).
+when they.bid, !lho.opened, !rho.opened, me.last=P   # our side opened
+  P   "Passed last time, nothing new to say"  priority -20

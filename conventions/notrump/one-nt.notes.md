@@ -481,3 +481,11 @@ no rule in the default (only the bba style had one, which bids game with
 the top of the invitation). The default now passes three of the major
 after a decline. BBA passed on 2 of the 3 Basic_* boards and bid 4♠ on
 Basic_Openers_Rebid 218 (8 HCP).
+
+## Opener after 1NT-3m, the natural slam try (2026-09-25)
+
+1NT-3♣/3♦ (six of the minor, slam-invite values, when the card plays
+them natural) had no answer. Opener now bids six with three-card support
+and 17, else 3NT. Basic_What_To_Open 320 (the only Basic_* board) +1;
+full corpus +660 by par distance and +2,375 to the side that changed,
+over 248 boards, almost all 1NT-3♦ on cards outside Basic_*.

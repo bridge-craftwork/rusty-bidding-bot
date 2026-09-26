@@ -254,3 +254,13 @@ after (1x) 1y (2x) P (P)
 # over the corpus, par neutral (nt-interference.notes.md).
 after (1N) 2y (*) | (1N) 3y (*)
   P   "Not enough to advance"  priority -10
+
+# ── The defending side once the opening side bids on ─────────────────
+# They opened; we have overcalled, advanced or raised, and they have bid
+# again. Each of us has described his hand once, so with nothing new to
+# say the call is a pass. A fallback below every real rule (2026-09-25:
+# 63 no-rule positions in the Basic_* N/S boards came from here, e.g.
+# 1S (2D) 2S (P) 4S and 1S (2D) X (3D) 3H). Positions where the
+# defending side has more to say need rules of their own above this.
+when lho.opened | rho.opened
+  P   "Defending: nothing more to say"  priority -20

@@ -182,3 +182,12 @@ Corpus: -160,381 -> -159,591.
     to the side).
   - Five-card major before the redouble: they disagree. +452 by distance,
     but the redouble is better for the side that acts by 654. For Rick.
+
+## Fallback: a player on the opening side who passed last time (2026-09-25)
+
+`when they.bid, !lho.opened, !rho.opened, me.last=P`: pass, priority
+-20. Six Basic_* N/S positions had no rule, all a responder who passed
+with 0-5 (or 8) and an opener who had let them have it, facing a
+balancing sequence. No call changes. Written with the negations because
+there is no self form of `opened` (`me.opened` and bare `opened` are
+unknown terms, which evaluate false without an error from `bid check`).

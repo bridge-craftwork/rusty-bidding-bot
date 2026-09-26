@@ -148,3 +148,20 @@ this module and in `after-interference.bid`:
 - **For Rick.** 4M by advancer is 13+ with four-card support over a
   simple overcall (so that 11-12 cues first) but 11+ over a weak jump
   (where there is no cue worth making). The split is a judgment call.
+
+## Fallback: the defending side after they bid on (2026-09-25)
+
+Once our E/W overcalled in boards BBA bid N/S alone, the overcaller and
+advancer had no rule whenever the opening side bid again (63 of the
+remaining no-rule positions in Basic_* N/S). A pass at priority -20
+under `when lho.opened | rho.opened` now closes them: each of us has
+described his hand once. It changes no call (the engine passed anyway)
+but it hides the defending side from the no-rule count, which falls
+from 95,896 to 28,594 over the corpus. **A real gap on the defending
+side (a big fit worth competing on, a second suit) now shows only as a
+divergence from BBA, not as a problem.** A narrower form (partner
+passed last) closed about two thirds as many; say if you want that one
+instead.
+
+Advancer over our E/W's overcall of their 1NT also passes (see
+nt-interference.notes.md for the raises that were tried).
