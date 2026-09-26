@@ -145,3 +145,9 @@ dealer  S
 N 7.Q94.965.AKQJ95      | 1D 1S 2C P 3C P  | 3S  | 14, no spade stopper: cue bid, forcing to game
 N K94.KT.A64.AT984      | 1H 1S 2C P 3C P  | 3NT | 14 with spades held: game
 N 7.Q94.965.KQJ952      | 1D 1S 2C P 3C P  | P   | 9: no game
+
+# ── After our redouble and their runout, opener rebids his suit (2026-09-26)
+card    Basic-Bridge
+dealer  S
+N A94.QJ86.A6.Q743      | 1C X XX 1S 2C P   | 3NT | 13 with spades held: game
+N KT4.Q8.KT87.Q763      | 1D X XX 1H 2D P   | 3D  | 10 with a doubleton: invites

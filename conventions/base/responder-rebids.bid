@@ -633,3 +633,21 @@ after 1x (2y) 3z (P) 4z (P) when y is not x, z is not x, z is not y, z is C | z 
   5{z}  "Game in the minor: 13+"           shows points>=13
   P     "No game"                          shows points<=12
         priority -5
+
+# ── We redoubled, they ran, opener rebid his suit ────────────────────
+# The redouble showed 10+, so the hand is ours: responder does not treat
+# opener's rebid as a sign-off (2026-09-26: 10-13 counts passed 2m and
+# 2M with game on). Game with 12+, an invitation with 10-11.
+after 1x (X) XX (1y) 2x (P) | 1x (X) XX (2y) 2x (P) | 1x (X) XX (1y) 3x (P) | 1x (X) XX (2y) 3x (P) when y is not x
+  4{x} "Game: 12+ with a doubleton or better"   shows x>=2, hcp>=12
+       when  x is H | x is S
+  3N   "Game: 12+ with a stopper in {y}"        shows hcp>=12, stop(y)
+       when  x is C | x is D | x<=1
+  5{x} "Game in the minor: 13+"                 shows x>=2, hcp>=13
+       when  x is C | x is D
+       priority -1
+  3{x} "Invitational: 10-11 with a doubleton"   shows x>=2, hcp=10..11
+       when  partner.last=2{x}
+       sets  ask=invite(x)
+  P    "Minimum for the redouble: no game"
+       priority -5

@@ -386,3 +386,12 @@ Follow-up the same day: responder's contested invitations now set
 requires `cheapest_rank(<their suit>) <= 18`, below 3NT (a cue at 4♣
 over 3♥ had appeared). Full corpus +384 by par distance, +625 by side;
 corpus no-rule positions 4,938 -> 4,661.
+
+## After our redouble, their runout and opener's rebid (2026-09-26)
+
+Second group of the missed-games queue (`probes/tools/missed_games.py`):
+1x (X) XX (runout) 2x, where responder, having shown 10+ with the
+redouble, read opener's rebid as a sign-off and passed with 10-13.
+Now: game with 12+ (4M with a doubleton, 3NT with their suit stopped,
+5m from 13), 3x inviting with 10-11. Full corpus +2,025 by par
+distance, +2,568 by side (545 boards, mostly after 1♥/1♠ (X) XX).
