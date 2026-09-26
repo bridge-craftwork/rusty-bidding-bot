@@ -346,3 +346,13 @@ Also (2026-09-25): over opener's 2NT rebid, 3NT with a six-card minor
 call; BBA bid 3♥ there, a four-card suit we do not show); and after
 1m-2m-3m (opener's invitation, 17-18 support points) 3NT with 9, pass
 otherwise (9 measured +5 / +18 against 8).
+
+## Contested: responder after a one-level response and opener's minimum (2026-09-25)
+
+Opener's contested minimum rebids set `ask=signoff`, and responder
+answered every sign-off with a pass, so 1♣ (1♦) 1♠ 2♣ was passed with
+13 where 1♣-1♠-2♣ goes on to 3NT. Contested versions of the uncontested
+continuations now outrank that pass: after opener's rebid of his suit,
+a raise of responder's, or 1NT, invite with 11-12 and bid game with
+13+; notrump needs their suit stopped, and without it a cue bid forces
+to game. Full corpus +401 by par distance, +280 by side (269 boards).

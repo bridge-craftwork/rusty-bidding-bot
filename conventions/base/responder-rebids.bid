@@ -540,3 +540,36 @@ after 1x (1y) P (P) 1N (P) | 1x (2y) P (P) 2N (P) when y is not x
   3N  "Game opposite 18-19: 7+"            shows hcp>=7
   P   "No game"                            shows hcp<=6
       priority -5
+
+# ── One-level response in a contested auction, opener's minimum rebid ─
+# Opener's contested minimum rebids ask for a sign-off, and responder
+# passed them whatever he held, where uncontested he invites with 11-12
+# and bids game with 13+ (2026-09-25: e.g. 1C (1D) 1H 2C, with 12
+# opposite 17). These outrank the sign-off pass. Notrump needs their
+# suit stopped; without it a cue bid forces to game.
+after 1x (1z) 1y (P) 2x (P) when z is not x, z is not y, y is not x
+  3x  "Invitational: 3+ {x}, 11-12"        shows x>=3, points=11..12
+  4x  "Game: 3+ {x}, 13+"                  shows x>=3, points>=13
+      when  x is H | x is S
+  3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12
+  2N  "Invitational: 11-12, {z} stopped"   shows points=11..12, stop(z), x<=2
+      sets  ask=nt_invite
+  3N  "Game: 13+, {z} stopped"             shows points>=13, stop(z), x<=2 | x is C | x is D
+  cheapest(z) "Cue bid: 13+, no stopper in {z}, forcing to game"
+      alert  artificial
+      shows points>=13
+      sets  forcing=game
+      priority -2
+after 1x (1z) 1y (P) 2y (P) when z is not x, z is not y, y is not x
+  3y  "Invitational: 11-12 with the fit"   shows tp(y)=11..12
+  4y  "Game: 13+ with the fit"             shows tp(y)>=13
+      when  y is H | y is S
+  3N  "Game: 13+, {z} stopped"             shows points>=13, stop(z)
+      when  y is C | y is D
+after 1x (1z) 1y (P) 1N (P) when z is not x, z is not y, y is not x
+  2N  "Invitational: 11-12"                shows points=11..12, y<=5
+      sets  ask=nt_invite
+  3N  "Game: 13+"                          shows points>=13, y<=5 | y is C | y is D
+  3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12
+  4y  "Game: 6+ {y}, 13+"                  shows y>=6, points>=13
+      when  y is H | y is S
