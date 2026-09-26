@@ -379,3 +379,10 @@ its own rebid after their responder bids and opener rebids
 (takeout-double.bid). Together: full corpus +974 by par distance,
 +2,252 by side (2,088 boards); Basic_* competitive +1 / +18, N/S
 unchanged.
+
+Follow-up the same day: responder's contested invitations now set
+`ask=invite(...)`, so opener answers them with the existing rules
+(before, opener had no rule and passed), and every contested cue bid
+requires `cheapest_rank(<their suit>) <= 18`, below 3NT (a cue at 4♣
+over 3♥ had appeared). Full corpus +384 by par distance, +625 by side;
+corpus no-rule positions 4,938 -> 4,661.

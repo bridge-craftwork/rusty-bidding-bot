@@ -549,19 +549,23 @@ after 1x (1y) P (P) 1N (P) | 1x (2y) P (P) 2N (P) when y is not x
 # suit stopped; without it a cue bid forces to game.
 after 1x (1z) 1y (P) 2x (P) when z is not x, z is not y, y is not x
   3x  "Invitational: 3+ {x}, 11-12"        shows x>=3, points=11..12
+      sets  ask=invite(x)
   4x  "Game: 3+ {x}, 13+"                  shows x>=3, points>=13
       when  x is H | x is S
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12
+      sets  ask=invite(y)
   2N  "Invitational: 11-12, {z} stopped"   shows points=11..12, stop(z), x<=2
       sets  ask=nt_invite
   3N  "Game: 13+, {z} stopped"             shows points>=13, stop(z), x<=2 | x is C | x is D
   cheapest(z) "Cue bid: 13+, no stopper in {z}, forcing to game"
       alert  artificial
       shows points>=13
+      when  cheapest_rank(z) <= 18      # below 3NT
       sets  forcing=game
       priority -2
 after 1x (1z) 1y (P) 2y (P) when z is not x, z is not y, y is not x
   3y  "Invitational: 11-12 with the fit"   shows tp(y)=11..12
+      sets  ask=invite(y)
   4y  "Game: 13+ with the fit"             shows tp(y)>=13
       when  y is H | y is S
   3N  "Game: 13+, {z} stopped"             shows points>=13, stop(z)
@@ -571,6 +575,7 @@ after 1x (1z) 1y (P) 1N (P) when z is not x, z is not y, y is not x
       sets  ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, y<=5 | y is C | y is D
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12
+      sets  ask=invite(y)
   4y  "Game: 6+ {y}, 13+"                  shows y>=6, points>=13
       when  y is H | y is S
 
@@ -583,12 +588,15 @@ after 1x (1z) 1y (P) 1N (P) when z is not x, z is not y, y is not x
 after 1x (1y) 2z (P) 2M (P) | 1x (1y) 2z (P) 3M (P) | 1x (2y) 2z (P) 2M (P) | 1x (2y) 2z (P) 3M (P) | 1x (2y) 3z (P) 3M (P) when y is not x, z is not x, z is not y, M is not x, M is not y, M is not z
   4M  "Game: four {M}, 13+"                shows M>=4, points>=13
   cheapest(M) "Raise: four {M}, 11-12"     shows M>=4, points=11..12
+      sets  ask=invite(M)
   3N  "Game: 13+, {y} stopped"             shows points>=13, stop(y), M<=3
   cheapest(x) "Preference: 11-12"          shows x>=3, points=11..12, M<=3
+      sets  ask=invite(x)
       priority -1
   cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
       alert  artificial
       shows points>=13
+      when  cheapest_rank(y) <= 18      # below 3NT
       sets  forcing=game
       priority -2
   P   "Minimum: no game"                   shows points<=10
@@ -601,9 +609,11 @@ after 1x (1y) 2z (P) 2x (P) | 1x (1y) 2z (P) 3x (P) | 1x (2y) 2z (P) 3x (P) | 1x
       when  x is H | x is S
   3N  "Game: 13+, {y} stopped"             shows points>=13, stop(y)
   cheapest(x) "Invitational raise: 3+ {x}, 11-12"   shows x>=3, points=11..12
+      sets  ask=invite(x)
   cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
       alert  artificial
       shows points>=13
+      when  cheapest_rank(y) <= 18      # below 3NT
       sets  forcing=game
       priority -2
 after 1x (1y) 2z (P) 3z (P) | 1x (2y) 2z (P) 3z (P) when y is not x, z is not x, z is not y
@@ -614,7 +624,7 @@ after 1x (1y) 2z (P) 3z (P) | 1x (2y) 2z (P) 3z (P) when y is not x, z is not x,
   cheapest(y) "Cue bid: 13+, no stopper, forcing to game"
       alert  artificial
       shows points>=13
-      when  z is C | z is D
+      when  z is C | z is D, cheapest_rank(y) <= 18
       sets  forcing=game
       priority -2
 # Opener raised a three-level minor to four: no room for a cue bid or
