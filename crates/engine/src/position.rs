@@ -218,6 +218,24 @@ impl Position {
         level.is_some_and(|l| l * 5 + (suit as i32) < mine)
     }
 
+    /// `jumped`: this seat's last call was a bid one or more levels higher
+    /// than the cheapest bid in the same strain after the previous bid
+    /// (anyone's). 1D (1H) X (P) 2S is a jump; 1D (1S) X (P) 2H is not.
+    pub fn jumped(&self, d: Direction) -> bool {
+        let rank = |c: &Call| match c {
+            Call::Bid { level, strain } => Some(*level as i32 * 5 + strain_rank(*strain)),
+            _ => None,
+        };
+        let Some(i) = (0..self.calls.len()).rev().find(|&i| self.caller(i) == d) else {
+            return false;
+        };
+        let Some(mine) = rank(&self.calls[i]) else {
+            return false;
+        };
+        let before = self.calls[..i].iter().rev().find_map(rank).unwrap_or(0);
+        mine - 5 > before
+    }
+
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
         match self.auction().last_bid() {
@@ -277,5 +295,16 @@ mod tests {
         let floor = Call::from_pbn("3S");
         assert!(p.bypassed(n, 1) && !p.bypassed_above(n, 1, floor.as_ref()));
         assert!(!p.bypassed_above(n, 2, floor.as_ref()));
+    }
+
+    #[test]
+    fn jumped_means_a_cheaper_bid_in_the_same_strain_was_available() {
+        let s = Direction::South;
+        assert!(pos("1D 1H X Pass 2S").jumped(s));
+        assert!(!pos("1D 1S X Pass 2H").jumped(s));
+        assert!(pos("1D 2C X Pass 3H").jumped(s));
+        assert!(!pos("1D 2C X Pass 2H").jumped(s));
+        assert!(!pos("1D 1H X Pass Pass").jumped(Direction::West));
+        assert!(!pos("1D 1H X Pass 1S").jumped(s));
     }
 }

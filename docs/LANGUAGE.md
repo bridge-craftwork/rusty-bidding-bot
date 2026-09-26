@@ -274,6 +274,10 @@ could have been bid are denied: over our 3H, partner's 3S bypasses nothing,
 ladder starts when it starts higher than the previous bid:
 `partner.bypassed(C, 3S)` for control bids that begin above 3S.
 
+**Jumps.** `partner.jumped` (and `me.jumped`, `lho.`, `rho.`) is true when
+that seat's last call was a bid at least one level above the cheapest bid
+in the same strain: 1♦ (1♥) X (P) 2♠ is a jump, 1♦ (1♠) X (P) 2♥ is not.
+
 **Control-bid dialogue.** A ladder call says so with `sets ladder=control`;
 the engine then records, for the caller, the suits the call skipped
 (`partner.denied(x)`, `me.denied(x)`) and the suit it names

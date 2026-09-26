@@ -770,6 +770,8 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
+            // `partner.jumped`: their last bid skipped a level in its strain.
+            "jumped" => Val::Bool(Tri::from_bool(self.pos.jumped(seat))),
             // `partner.bypassed(x)`: their last bid skipped a bid in x that
             // was available (Position::bypassed). Public, like `last`.
             // The control-bid dialogue: `denied(x)`, a suit this seat skipped;
