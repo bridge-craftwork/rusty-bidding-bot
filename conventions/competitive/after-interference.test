@@ -61,3 +61,11 @@ card    Basic-Bridge
 dealer  S
 N T942.J965.KJ3.T2      | 1C P P X P 2NT        | P | responder passed with 3 HCP: still nothing
 S K3.Q72.A64.KJ763      | 1C P P X P 2NT P P    | P | opener let them have it: pass again
+
+# ── Trap pass and the penalty route (2026-09-25)
+card    Basic-Bridge
+dealer  S
+N KQT9.K3.Q843.K98      | 1H 1S             | P  | four good spades and 12: trap pass
+S 7.AQJ64.KJ5.A762      | 1H 1S P P         | X  | opener reopens, short in spades
+N KQT9.K3.Q843.K98      | 1H 1S P P X P     | P  | converts for penalty
+N 8753.K3.Q843.K98      | 1H 1S             | !P | four small spades: not a trap

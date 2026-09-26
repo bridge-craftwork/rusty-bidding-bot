@@ -191,3 +191,19 @@ with 0-5 (or 8) and an opener who had let them have it, facing a
 balancing sequence. No call changes. Written with the negations because
 there is no self form of `opened` (`me.opened` and bare `opened` are
 unknown terms, which evaluate false without an error from `bid check`).
+
+## Trap pass (2026-09-25)
+
+Prerequisite for judging the one-level overcall quality test
+(overcalls.notes.md, "For Rick: which yardstick"): our opening side had
+no way to punish a light overcall, so the side yardstick flattered
+overcalling. With negative doubles responder cannot double for penalty.
+He now passes with four or more of their suit, two of the top three or
+three of the top five (Rick's penalty standard), 8+ HCP and at most two
+of opener's suit; opener's reopening double (rebids.bid) and
+responder's pass of it (responder-rebids.bid) already existed. The
+trap condition is a `when`, so a pass still promises nothing: a
+higher-priority `shows` would have made every pass read as a trap.
+
+Full corpus: +82 by par distance, +1,122 to the side that trapped (253
+boards). Basic_* competitive: -3 / +20 (4 boards).
