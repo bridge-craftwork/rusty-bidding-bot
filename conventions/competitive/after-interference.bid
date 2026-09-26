@@ -320,11 +320,29 @@ after 1x (2y) 3y (P) | 1x (3y) 4y (P)
   4{x} "Accepts: game in {x}"
       shows hcp>=16
       when  x is H | x is S
-  3N  "Accepts: 16+ with a stopper in {y}"
-      shows balanced, hcp>=16
+  # With a minor, 3NT is the game: from 14 with their suit held, any
+  # shape, else five of the minor from 16 (2026-09-25: 16-20 counts
+  # signed off, 668 corpus boards with 25+ HCP between us and 3NT on).
+  3N  "Accepts: 14+ with a stopper in {y}"
+      shows hcp>=14
       when  stop(y), x is C | x is D
-  cheapest(x) "No game opposite a limit raise"
+  5{x} "Accepts: 16+, no stopper in {y}"
+      shows hcp>=16
+      when  x is C | x is D
       priority -1
+  cheapest(x) "No game opposite a limit raise"
+      priority -2
+
+# Responder after opener's sign-off: the cue bid was 11+ with no upper
+# limit, so with 13+ responder bids the game himself.
+after 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when x is C | x is D, y is not x
+  3N  "Game: 13+ with a stopper in {y}"   shows hcp+length_points>=13, stop(y)
+  5{x} "Game in the minor: 14+"          shows hcp+length_points>=14
+      priority -1
+  P   "The limit raise: no game"
+      priority -5
+after 1x (2y) 3y (P) 4x (P) when x is H | x is S
+  P   "Game reached"
 
 # ── Opener when they compete over the negative double ────────────────
 # They have bid again, so the double is no longer forcing and opener may

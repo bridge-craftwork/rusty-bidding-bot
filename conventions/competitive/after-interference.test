@@ -90,3 +90,11 @@ E KJT32.QT6.KJ.KJ7      | 1S 2D P P X P 3C P | P | partner's forced answer: no g
 # ── Support first; forcing free bids (2026-09-25)
 dealer  S
 N J6.KQ95.J975.J92      | 1H 1S            | 2H  | four hearts: raise, not the negative double
+
+# ── Opener answers the cue-bid raise of a minor (2026-09-26)
+card    Basic-Bridge
+dealer  S
+S KT75.KJ84.AJT6.A      | 1D 2S 3S P       | 3NT | 16 with spades held: game
+S 72.AJ3.KQ964.AK5      | 1D 2S 3S P       | 5D  | 17, no spade stopper: game in diamonds
+S Q75.KJ84.AJT6.72      | 1D 2S 3S P       | 4D  | 11: no game
+N 3.QT6.AQJ3.AJ874      | 1D 2S 3S P 4D P  | 5D  | 14 opposite the sign-off: game

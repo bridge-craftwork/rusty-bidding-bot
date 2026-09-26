@@ -603,22 +603,21 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x
       shows S>=4, suit_points<=18
       when  x is not S, z is not S
       when  maybe lho.S<=4, maybe rho.S<=4
-      when  we.forcing = round
+      when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
       priority -2
   cheapest(H) "Four or more hearts"
       shows H>=4, suit_points<=18
       when  x is not H, z is not H
       when  maybe lho.H<=4, maybe rho.H<=4
-      when  we.forcing = round
+      when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
       priority -2
   cheapest(z) "Raise with extras: 18+, forcing to game"
       shows z>=3, tp(z)>=18
-      when  partner.z>=5 | partner.z>=4
       sets  trump=z, forcing=game
-      when  we.forcing = round
+      when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
       priority -1
   cheapest(x) "Forced to bid: nothing better to say"
-      when  we.forcing = round
+      when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
       priority -8
   P   "Nothing to say"  priority -10
 after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y is not x, z is not x, z is not y

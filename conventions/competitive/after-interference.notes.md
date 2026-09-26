@@ -267,3 +267,17 @@ partner passed at his last turn (the raiser after 1♠ (X) 2♠ (3♣) P
   new suit is forcing (the 21GF cards) did not set `forcing=round`, so
   opener could pass them. Fixed; +4 / +36, but the minor openings lose
   (1♣ (1♠) 2♦ -89 by side): opener's forced rebids there need work.
+
+## The cue-bid raise of a minor (2026-09-26)
+
+New work queue for the invitational tail: contested boards where our
+opening side stops in a partscore with 25+ HCP between the hands and
+game makes double dummy (scratch script `missed.py`). Top of it, 668
+boards: 1m (2x) 3x, opener signing off "no game opposite a limit raise"
+with 16-20, because with a minor he accepted only balanced with a
+stopper. Now 3NT from 14 with their suit held (any shape), else 5m from
+16; responder, whose cue bid has no upper limit, bids 3NT (13+,
+stopper) or 5m (14+) over the sign-off. The first try lost on the
+majors: the forced-rebid rules for free bids (rebids.bid) also matched
+the cue bid, their suit read as partner's; they now need
+`partner.z>=5`. Full corpus +1,006 by par distance, +2,269 by side.
