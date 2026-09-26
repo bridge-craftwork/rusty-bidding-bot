@@ -220,3 +220,14 @@ uncontested it raised to 4♠ on 19 support points. The major answers
 now count `tp(M)`, and responder bids game over the jump with 8+
 (responder-rebids.bid, `partner.jumped`). Full corpus +730 by par
 distance, +836 by side (420 boards); Basic_* competitive +8 / -2.
+
+## Strong hands after the negative double (2026-09-25)
+
+Opener with 19+ and no fit or balanced notrump rebid his suit as
+"nothing better to say", and responder with 13+ unbalanced had no call
+over a minimum answer; both were passed out in partscores that reach
+game uncontested. Now: opener 3NT with a stopper, else a cue bid of
+their suit (game forcing); responder 3NT with a stopper, else the cue
+bid. Only over one- and two-level overcalls: over three-level ones it
+lost (-131 over 1♠ (3♥)). Full corpus +644 by par distance, +875 by
+side (257 boards).

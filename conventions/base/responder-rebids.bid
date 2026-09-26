@@ -337,6 +337,20 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
       priority -1
   P   "Nothing more to say"  priority -10
 
+# Game values that are not balanced (2026-09-25: A762.T9.6.AKQ863 passed
+# opener's minimum answer). 3NT with their suit held, else a cue bid of
+# their suit, forcing to game. Over one- and two-level overcalls only.
+after 1x (1y) X (P) 1z (P) | 1x (1y) X (P) 2z (P) | 1x (1y) X (P) 3z (P) | 1x (2y) X (P) 2z (P) | 1x (2y) X (P) 3z (P) when y is not x, y is not z
+  3N  "Game: 13+, a stopper in {y}"
+      shows hcp+length_points>=13, stop(y)
+      when  partner.z<=3 | z is C | z is D
+      priority -2
+  cheapest(y) "Cue bid: 13+, no stopper in {y}, forcing to game"
+      alert  artificial
+      shows hcp+length_points>=13
+      sets  forcing=game
+      priority -3
+
 # ── We redoubled and they ran ────────────────────────────────────────
 # The redouble was 10+, so the partnership owns the hand. Opener has
 # passed it back: responder doubles with four **good** cards in their
