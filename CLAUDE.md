@@ -55,8 +55,13 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   shell leaves it alone. The workbench takes the same arguments. The cards
   each side played come from the PBN's own `% CC1/CC2` header, falling back
   to the `.btn`.
-  `--by-imps` orders the divergence points by what they cost against par
+  `--by-imps` orders the divergence points by what they cost against BBA
   instead of by how often they happen.
+  **"vs BBA" / "bba/bd"** (the workbench column too) is our score against
+  BBA's in IMPs, with double-dummy par as the yardstick: on each board
+  where the contracts differ, BBA's IMP distance from par minus ours.
+  Positive means ours was closer. It is not our distance from par. Notes
+  written before 2026-09-25 call it "par".
   `--set general.style=bba` plays BBA's treatments where we have them
   (docs/DESIGN.md, "Treatments"), for A/B tests; `--set path=value` works
   for any card field, on both sides.

@@ -49,8 +49,8 @@ enum Command {
         /// How many divergence points to list.
         #[arg(long, default_value_t = 25)]
         top: usize,
-        /// Order the divergence points by what they cost against par
-        /// rather than by how often they happen.
+        /// Order the divergence points by what they cost against BBA (par
+        /// as the yardstick) rather than by how often they happen.
         #[arg(long)]
         by_imps: bool,
         /// Only scenarios whose cards our rules cover at least this well,
@@ -729,8 +729,13 @@ fn compare(
     }
     if t.par.scored > 0 {
         println!(
-            "differing contracts vs par ({} boards): ours closer {}, BBA closer {}, equal {}; net {:+} IMPs to us",
-            t.par.scored, t.par.ours_closer, t.par.reference_closer, t.par.equal, t.par.imps_vs_reference
+            "vs BBA, par as the yardstick ({} boards with differing contracts): ours closer {}, BBA closer {}, equal {}; net {:+} IMPs to us, {:+.2} per board",
+            t.par.scored,
+            t.par.ours_closer,
+            t.par.reference_closer,
+            t.par.equal,
+            t.par.imps_vs_reference,
+            t.par.imps_vs_reference as f64 / t.boards.max(1) as f64
         );
         let solved = t.boards.saturating_sub(t.dd_tables);
         println!(
@@ -807,7 +812,7 @@ fn compare(
     let mut points: Vec<&rbb_compare::Divergence> = s.divergences.iter().collect();
     if by_imps {
         points.sort_by_key(|d| d.imps);
-        println!("\nmost expensive divergence points (IMPs against par, ours minus BBA's):");
+        println!("\nmost expensive divergence points (IMPs vs BBA, par as the yardstick; + means ours was closer):");
     } else {
         println!("\nmost common divergence points:");
     }
@@ -847,18 +852,19 @@ fn compare(
         });
         println!("\nscenarios, lowest call agreement first:");
         println!(
-            "  {:32} {:>6} {:>7} {:>8} {:>9} {:>8}",
-            "scenario", "boards", "calls", "auction", "contract", "par"
+            "  {:32} {:>6} {:>7} {:>8} {:>9} {:>8} {:>7}",
+            "scenario", "boards", "calls", "auction", "contract", "vs BBA", "bba/bd"
         );
         for sc in by.iter().take(worst) {
             println!(
-                "  {:32} {:>6} {:>7} {:>8} {:>9} {:>+8}",
+                "  {:32} {:>6} {:>7} {:>8} {:>9} {:>+8} {:>+7.2}",
                 sc.name,
                 sc.boards,
                 pct(sc.calls_all().rate()),
                 pct(sc.auction_rate()),
                 pct(sc.contract_rate()),
-                sc.par.imps_vs_reference
+                sc.par.imps_vs_reference,
+                sc.par_per_board()
             );
         }
     }
