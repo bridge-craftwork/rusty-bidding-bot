@@ -409,6 +409,16 @@ fn term(c: &mut Cursor) -> Result<Expr, PError> {
         Some(Tok::Call(..)) => Ok(Expr::Call {
             call: call(c, CallPos::Value)?,
         }),
+        // Pass, double and redouble as values: `partner.last=P`. Without
+        // this they parsed as unknown names and never compared equal.
+        Some(Tok::Word(w))
+            if matches!(w.as_str(), "P" | "Pass" | "X" | "XX")
+                && c.peek_at(1) != Some(&Tok::Dot) =>
+        {
+            Ok(Expr::Call {
+                call: call(c, CallPos::Value)?,
+            })
+        }
         Some(Tok::Word(_)) => path(c),
         Some(Tok::DotDot) => c.err("`..` only follows `=`, as in `hcp=15..17`"),
         _ => c.err("expected a value or condition"),
@@ -494,6 +504,12 @@ mod tests {
             panic!()
         };
         assert!(matches!(**rhs, Expr::Call { .. }));
+        for pass in ["partner.last=P", "me.last=X", "partner.last=XX"] {
+            let Expr::Cmp { rhs, .. } = parse(pass) else {
+                panic!()
+            };
+            assert!(matches!(*rhs, Expr::Call { .. }), "{pass}");
+        }
         let Expr::Cmp { lhs, .. } = &all[1] else {
             panic!()
         };

@@ -255,11 +255,15 @@ prints "Invitational: 8-9 total points" after a 15-17 1NT.
 
 **Auction state:** `opening` (no one has bid yet), `we.trump`, `we.forcing`
 (`none | round | game`), `asked <kind>` (partner's pending question to me),
-`answered <kind>` (partner answered my question), `partner.last`, `opener`,
-`partner.opened`, `they.bid`, `seat`, `passed_hand`, `vul`, `they.vul`,
+`answered <kind>` (partner answered my question), `partner.last`,
+`partner.opened`, `lho.opened`, `rho.opened` (there is no form for my own
+opening: write `!lho.opened, !rho.opened` with `they.bid`), `they.bid`,
+`seat`, `passed_hand`, `vul`, `they.vul`,
 `we.keycards(t)` (my keycards plus partner's answer, within the deck limit),
 `imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
-board-a-match), `me.last` (my own last call).
+board-a-match), `me.last` (my own last call). A last call compares with a
+call: `partner.last=3N`, `partner.last=3{t}`, and `partner.last=P`, `X` or
+`XX` for pass, double and redouble.
 
 **Skipping a suit.** `partner.bypassed(x)` is true when partner's last call
 was a bid in another strain and a bid in `x` was available between the
