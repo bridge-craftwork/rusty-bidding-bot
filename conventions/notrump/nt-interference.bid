@@ -50,3 +50,101 @@ after 1N (X) when !vs_double
 # (stayman.bid), the transfers keep their calls (jacoby-transfers.bid,
 # minor-transfers.bid, texas-transfers.bid) and the natural notrump
 # calls and the pass are in one-nt.bid.
+
+# ── They overcalled 2♦, 2♥ or 2♠ ─────────────────────────────────────
+# Their natural two-level overcall (2026-09-25; nt-interference.notes.md,
+# probes/nt-2D-resp, nt-2H-resp, nt-2S-resp). No Lebensohl on the Basic
+# card, so everything is natural except the double, which BBA plays as
+# negative: four cards in an unbid major and 5+ HCP (over 2♠ five hearts
+# with a weak hand too). A new suit at the two level is weak and to play,
+# a non-jump at the three level forcing to game (BBA bids 3NT rather than
+# jump in a five-card major); 2NT invites with 8-9 and 3NT is game from
+# 10 (BBA does not insist on a stopper); four of a major is six cards
+# and 10+.
+after 1N (2y) when y is not C
+  X   "Negative double: four cards in an unbid major, 5+ HCP"
+      alert  artificial
+      shows  hcp>=5, S>=4 | H>=4
+      when   y is D, S<=4, H<=4
+      priority 1
+  X   "Negative double: four hearts (five with less than 10), 5+ HCP"
+      alert  artificial
+      shows  hcp>=5, H=4 | (H=5, points<=9)
+      when   y is S
+      priority 1
+  X   "Negative double: four spades, 5+ HCP"
+      alert  artificial
+      shows  hcp>=5, S=4
+      when   y is H
+      priority 1
+  2H  "Natural, to play: five or more hearts"   shows H>=5, hcp>=4, points<=9
+      when  y is D
+  2S  "Natural, to play: five or more spades"   shows S>=5, hcp>=4, points<=9
+      when  y is D | y is H
+  cheapest(C) "Natural, forcing to game: five or more clubs"      shows C>=5, points>=10
+      sets  forcing=game
+  cheapest(D) "Natural, forcing to game: five or more diamonds"   shows D>=5, points>=10
+      when  y is not D
+      sets  forcing=game
+  3H  "Natural, forcing to game: five or more hearts"   shows H>=5, points>=10
+      when  y is S
+      sets  forcing=game
+  4H  "Game: six or more hearts"   shows H>=6, hcp>=10
+      when  y is not H
+      priority 1
+  4S  "Game: six or more spades"   shows S>=6, hcp>=10
+      when  y is not S
+      priority 1
+  2N  "Invitational: 8-9 HCP, a stopper in {y}"   shows hcp=8..9, stop(y)
+      sets  ask=nt_invite
+  3N  "Game: 10+ HCP"                           shows hcp>=10
+  P   "Nothing to say over their overcall"
+      priority -10
+
+# Opener answers the negative double: a four-card major at the cheapest
+# level, 2NT with a stopper, a four-card minor, or a pass for penalties
+# with four of their suit.
+after 1N (2y) X (P) when y is not C
+  cheapest(H) "Four hearts for partner's double"   shows H>=4   when y is not H
+  cheapest(S) "Four spades for partner's double"   shows S>=4   when y is not S
+  2N  "No four-card major, a stopper in {y}"       shows stop(y)
+      priority -1
+  P   "Four of their suit: defends"                shows y>=4
+      priority -2
+  cheapest(C) "No major, no stopper: four clubs"   shows C>=4
+      priority -3
+  cheapest(D) "No major, no stopper: four diamonds"   shows D>=4
+      when  y is not D
+      priority -3
+  cheapest(N) "Nothing better to say"
+      priority -5
+
+# Responder after opener's answer: game with 10+, an invitation in the
+# major with 8-9, else pass.
+after 1N (2y) X (P) 2M (P) | 1N (2y) X (P) 3M (P) when y is not C
+  4M  "Game in the fit: 10+"          shows M>=4, points>=10
+  3M  "Invitational in the fit: 8-9"  shows M>=4, points=8..9
+      when  partner.last=2M
+  3N  "Game, no fit: 10+"             shows M<=3, points>=10
+  P   "No game"                       shows points<=9
+      priority -5
+after 1N (2y) X (P) 2N (P) | 1N (2y) X (P) 3C (P) | 1N (2y) X (P) 3D (P) when y is not C
+  3N  "Game: 10+"                     shows points>=10
+  P   "No game"                       shows points<=9
+      priority -5
+
+# Opener after responder's other calls.
+after 1N (2y) 3z (P) when y is not C, z is not y, z is not N
+  4{z}  "Three-card support: game in the major"   shows z>=3
+        when  z is H | z is S
+  3N    "Game in notrump"
+        priority -1
+after 1N (2y) 2z (P) when y is not C, z is not N
+  P   "Partner's suit, to play"
+after 1N (2y) 2N (P) when y is not C
+  3N  "Accepts: a maximum"             shows hcp>=16
+  P   "Declines: a minimum"            shows hcp<=15
+
+# Responder passed their overcall: opener has shown his hand.
+after 1N (2y) P (P)
+  P   "Partner passed: no game, let them play"

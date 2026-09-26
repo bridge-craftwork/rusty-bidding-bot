@@ -46,3 +46,20 @@ N KQ8.KT6.742.T952          | 1NT 2C   | 2NT    | 8 balanced: the natural invita
 N A9.JT87432.2.T65          | 1NT 2C   | 4D     | seven hearts and nothing: Texas as a preempt
 N 942.QJ9854.532.2          | 1NT 2C   | P      | 3 HCP: below the floor for entering at the two level
 N KT852.8732.5.T82          | 1NT 2C   | P      | 3 HCP with five spades
+
+# ── Their natural 2♦/2♥/2♠ overcall (2026-09-25; BBA probes
+# nt-2D-resp, nt-2H-resp, nt-2S-resp)
+card    Basic-Bridge
+dealer  S
+N K75.KQT4.76.Q964      | 1NT 2D | X   | negative: four hearts, 10 HCP (BBA)
+N 53.KJ942.9874.T2      | 1NT 2D | 2H  | five hearts, 4 HCP: to play
+N J8.T432.A743.AT7      | 1NT 2H | P   | 9 HCP, no stopper in hearts: pass
+N K96.A854.KJ6.832      | 1NT 2H | 3NT | 11 HCP, no four spades: game (BBA)
+N AJ92.KQ.J95.K654      | 1NT 2H | X   | negative: four spades
+N 4.A742.K97.AT643      | 1NT 2S | X   | negative: four hearts (BBA)
+N T3.AQT86.KJ7.QT6      | 1NT 2S | 3H  | five hearts and 12: forcing (BBA)
+N Q42.A76.J765.T92      | 1NT 2H | P   | 7 HCP: nothing to say
+S AQ5.K832.QJ9.A64      | 1NT 2S X P | 3H | four hearts for partner's double
+S AQ5.K83.KJ92.A64      | 1NT 2D X P | 2NT | no four-card major, a diamond stopper
+S AQ5.K83.QJ92.A64      | 1NT 2D P P | P   | partner passed: let them play
+N K75.KQT4.76.Q964      | 1NT 2D X P 2H P | 4H | game in the heart fit

@@ -138,3 +138,42 @@ an action over 1NT.
   `AT9.J6.Q2.976532` (9½).
 - The Texas preempt over 2♣ (`A9.JT87432.2.T65`) now reads
   `suit_strength=signoff`, see `texas-transfers.notes.md`.
+
+## Their natural 2♦/2♥/2♠ overcall (2026-09-25)
+
+Since our East-West overcall 1NT naturally (overcalls.bid, "Over their
+1NT, natural"), boards that BBA bid N/S alone now reach 1NT-(2x), and
+three seats had no rule: responder, the advancer, and opener in the
+pass-out seat (20 of the 110 remaining no-rule positions in Basic_* N/S).
+
+**Decision: add simple natural rules** rather than leave the seats
+empty. BBA on the Basic card (`probes/nt-2D-resp.toml`,
+`nt-2H-resp.toml`, `nt-2S-resp.toml`, 250 random responders each):
+
+| call | BBA's meaning (its own `--all-meanings`) |
+|---|---|
+| X | negative: 5+, four cards in an unbid major (over 2♠ 4-6 hearts) |
+| 2♥/2♠ | natural, to play, 4-9 |
+| 3♣/3♦/3♥ (non-jump) | natural, 5+, 9-13, forcing |
+| 2NT | 8-9 |
+| 3NT | 9-15, no stopper required (3NT on a diamond void over 2♦) |
+| 4♥/4♠ | six cards, game |
+| Pass | 0-8 |
+
+Our rules follow that, in HCP where BBA's boundaries are HCP-like; with
+a five-card major and game values over 2♦/2♥ we bid 3NT as BBA does
+rather than jump. Agreement on the grids: 83-87%; most of the rest is
+2NT or 3NT with 9. Opener answers the double with a four-card major,
+2NT with a stopper, a pass with four of their suit, or a four-card
+minor; responder then bids game with 10+, invites with 8-9. Opener
+raises a three-level major with three, else 3NT; passes a two-level
+suit; accepts 2NT with 16-17.
+
+The advancer (partner of the 1NT overcaller) passes. Competitive raises
+(three-card support, 6-10) were tried: -26 IMPs to the advancing side
+over the corpus, par distance neutral, so they were dropped.
+
+**Measured**, both yardsticks, as the competitive-yardstick rule asks:
+full corpus +188 IMPs by par distance and +170 to the side that changed
+its call (74 boards); Basic_* N/S flat (8 boards, -4 / -6). No-rule
+positions in Basic_* N/S 110 -> 87.

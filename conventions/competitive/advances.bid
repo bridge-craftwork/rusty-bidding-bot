@@ -246,3 +246,11 @@ after (1x) 1y (P) 2z (P)
 after (1x) 1y (2x) P (P)
   3{y} "Six or more {y}, sound"               shows y>=6, hcp>=12
   P   "Nothing more"                          priority -5
+
+# ── Advancer after partner's overcall of their 1NT ───────────────────
+# The overcall is five cards and 12+ total points (overcalls.bid); RHO
+# has 15-17. Advancer passes (added 2026-09-25: no rule matched).
+# Competitive raises were tried and lost 26 IMPs to the advancing side
+# over the corpus, par neutral (nt-interference.notes.md).
+after (1N) 2y (*) | (1N) 3y (*)
+  P   "Not enough to advance"  priority -10
