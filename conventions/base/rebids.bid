@@ -272,7 +272,7 @@ after 1M (P) 3M (P)
   P   "Declines: minimum"                  shows tp(M)<=14
 after 1m (P) 3m (P)
   3N  "Accepts, balanced: 14+"             shows hcp>=14, balanced | semibalanced
-  5m  "Accepts, unbalanced: game in the minor"   shows hcp>=15
+  5m  "Accepts, unbalanced: game in the minor"   shows hcp>=14
       priority -1
   P   "Declines: minimum"                  shows hcp<=13
       priority -5
