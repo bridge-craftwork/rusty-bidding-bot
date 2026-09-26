@@ -148,3 +148,33 @@ after 1N (2y) 2N (P) when y is not C
 # Responder passed their overcall: opener has shown his hand.
 after 1N (2y) P (P)
   P   "Partner passed: no game, let them play"
+
+# ── They preempted over our 1NT (a three-level suit) ─────────────────
+# No rule existed (2026-09-25: 1NT (3H) in Basic_NT and What_To_Open).
+# Game in notrump with their suit held, four of a five-card major, a
+# double with game values and no stopper, short in their suit (opener
+# passes it with four of theirs); otherwise pass.
+after 1N (3y) when y is not N
+  3N  "Game: 9+, a stopper in {y}"         shows hcp>=9, stop(y)
+  4H  "Game: five or more hearts, 9+"      shows H>=5, hcp>=9
+      when  y is not H
+  4S  "Game: five or more spades, 9+"      shows S>=5, hcp>=9
+      when  y is not S
+  X   "Takeout: 9+, no stopper in {y}"     shows hcp>=9, y<=2
+      priority -1
+  P   "Nothing to say over their preempt"
+      priority -10
+after 1N (3y) X (P) when y is not N
+  P   "Four of their suit: defends"        shows y>=4
+      priority 1
+  3N  "A stopper in {y}"                   shows stop(y)
+  cheapest(S) "Four or more spades"        shows S>=4   when y is not S
+  cheapest(H) "Four or more hearts"        shows H>=4   when y is not H
+  cheapest(D) "Four or more diamonds"      shows D>=4   when y is not D
+      priority -1
+  cheapest(C) "Four or more clubs"         shows C>=4   when y is not C
+      priority -1
+  3N  "Nothing better: 3NT"
+      priority -5
+after 1N (3y) P (P) when y is not N
+  P   "Partner passed: let them play"

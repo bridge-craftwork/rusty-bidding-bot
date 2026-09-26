@@ -63,3 +63,10 @@ S AQ5.K832.QJ9.A64      | 1NT 2S X P | 3H | four hearts for partner's double
 S AQ5.K83.KJ92.A64      | 1NT 2D X P | 2NT | no four-card major, a diamond stopper
 S AQ5.K83.QJ92.A64      | 1NT 2D P P | P   | partner passed: let them play
 N K75.KQT4.76.Q964      | 1NT 2D X P 2H P | 4H | game in the heart fit
+
+# ── Their preempt over our 1NT (2026-09-25)
+N 974.Q7.QT62.K762      | 1NT 3H          | P   | 7: nothing to say
+N Q74.K7.AT62.K762      | 1NT 3H          | 3NT | 12 with a heart stopper: game
+N K74.7.AT62.KJ762      | 1NT 3H          | X   | 11, no stopper, short hearts: takeout
+S AQ5.KJ83.KQ2.Q64      | 1NT 3H X P      | P   | four hearts: defends
+S AQ5.K8.KQ32.Q642      | 1NT 3H X P      | 3NT | a heart stopper, no four-card major

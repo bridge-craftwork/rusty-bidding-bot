@@ -245,3 +245,12 @@ Now: the free bid up to 12 HCP, a jump with 13+ HCP forcing to game
 else the game force), and the negative double over 1♠ allows five
 hearts under 8 HCP. Grid agreement 59% -> 69%. Full corpus +139 by par
 distance, +255 by side, in two steps.
+
+## More opening-side gaps in competitive auctions (2026-09-25)
+
+Basic_* competitive no-rule positions 103 -> 15: a pass fallback when
+partner passed at his last turn (the raiser after 1♠ (X) 2♠ (3♣) P
+(P)); opener after partner's forced answer to the reopening double
+(3NT with 18+ and a stopper, else pass); 1m (3x) 4m: 5m with 16+
+(rebids.bid); and 1NT (3x) (nt-interference.bid). Basic_* competitive
++18 / +30, full corpus +189 / +262.

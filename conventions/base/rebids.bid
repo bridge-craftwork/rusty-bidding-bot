@@ -640,6 +640,13 @@ after 1x (*) 3x (*) when they.bid
       when  x is H | x is S
       sets  trump=x
   P   "Nothing to add to a preemptive raise"  priority -10
+# Partner raised a minor to four over their preempt (7-10, three-card
+# support): game with 16+ (2026-09-25: no rule; 1C (3S) 4C with 18).
+after 1x (*) 4x (*) when they.bid, x is C | x is D
+  5{x} "Game: 16+ with the fit"             shows hcp>=16
+      sets  trump=x
+  P   "No game"                            shows hcp<=15
+      priority -10
 
 # ── Partner bid notrump over their call ──────────────────────────────
 # 1NT here is 6-10 with a stopper in their suit, so opener passes a

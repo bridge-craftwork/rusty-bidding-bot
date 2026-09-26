@@ -375,3 +375,14 @@ after 1x (1y) X (3z) | 1x (1y) X (4z) | 1x (2y) X (4z) | 1x (3y) X (4z) when y i
 # 1D (2C) P (2S) 3D (P), where responder had passed with 0-5 or 8).
 when they.bid, !lho.opened, !rho.opened, me.last=P   # our side opened
   P   "Passed last time, nothing new to say"  priority -20
+# And when partner passed at his last turn: he has nothing more, and I
+# have described my hand (2026-09-25: 1S (X) 2S (3C) P (P), the raiser).
+when they.bid, !lho.opened, !rho.opened, partner.last=P
+  P   "Partner passed: nothing new to say"  priority -20
+
+# ── Opener after partner answered the reopening double ───────────────
+# Partner was forced to bid; opener goes on only with game values.
+after 1x (1y) P (P) X (P) 2z (P) | 1x (1y) P (P) X (P) 3z (P) | 1x (2y) P (P) X (P) 2z (P) | 1x (2y) P (P) X (P) 3z (P) | 1x (3y) P (P) X (P) 3z (P) | 1x (3y) P (P) X (P) 4z (P) when y is not x, z is not y
+  3N  "Game: 18+ with a stopper in {y}"    shows hcp>=18, stop(y)
+  P   "Partner's forced answer: no game"
+      priority -10

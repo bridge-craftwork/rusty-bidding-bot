@@ -177,3 +177,13 @@ over the corpus, par distance neutral, so they were dropped.
 full corpus +188 IMPs by par distance and +170 to the side that changed
 its call (74 boards); Basic_* N/S flat (8 boards, -4 / -6). No-rule
 positions in Basic_* N/S 110 -> 87.
+
+## Their preempt over our 1NT (2026-09-25)
+
+1NT (3x) had no rules (Basic_NT and Basic_What_To_Open, 7 positions
+with the follow-ups). Now: 3NT with 9+ and a stopper, four of a five-
+card major with 9+, a takeout double with 9+ short in their suit (opener
+defends with four of theirs, else 3NT with a stopper or a four-card
+suit), otherwise pass. BBA's calls in the corpus: pass, 3NT and one
+double. Full corpus: 1NT (3♦) +105, (3♣) +90, (3♥) +80 by side, part of
+a +189 / +262 change with the fallbacks below.
