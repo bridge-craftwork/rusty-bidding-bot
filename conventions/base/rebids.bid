@@ -672,6 +672,17 @@ after 1x (*) 3x (*) when they.bid
       when  x is H | x is S
       sets  trump=x
   P   "Nothing to add to a preemptive raise"  priority -10
+# Over a two-level overcall three of opener's suit is often the cheapest
+# raise, 7-10, not a jump; it was read as preemptive, so 16-21 passed
+# (2026-09-26: 51 corpus boards with 25+ HCP and game on).
+after 1x (2y) 3x (P) when y is not x, !partner.jumped
+  3N  "Game: 16+ with a stopper in {y}"   shows hcp>=16, stop(y)
+      when  x is C | x is D
+  4{x} "Game: 17+ support points"          shows tp(x)>=17
+      when  x is H | x is S
+  5{x} "Game in the minor: 18+"            shows hcp>=18
+      when  x is C | x is D
+      priority -1
 # Partner raised a minor to four over their preempt (7-10, three-card
 # support): game with 16+ (2026-09-25: no rule; 1C (3S) 4C with 18).
 after 1x (*) 4x (*) when they.bid, x is C | x is D

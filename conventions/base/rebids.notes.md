@@ -587,3 +587,11 @@ else a cue bid of their suit, forcing to game. Also responder raises
 opener's reopening notrump (18-19) to 3NT with 7+
 (responder-rebids.bid). Full corpus +257 by par distance, +346 by side
 (131 boards); Basic_* competitive -12 / -18 (13 boards).
+
+## The simple raise at the three level (2026-09-26)
+
+Over a two-level overcall 1♦ (2♠) 3♦ is the cheapest raise (7-10), but
+the contested raise block read every three-level raise as preemptive,
+so opener passed with 16-21. For a non-jump raise (`!partner.jumped`)
+opener now bids 3NT with 16+ and their suit held, 4M with 17 support
+points, 5m with 18. Full corpus +127 by par distance, +303 by side.
