@@ -38,3 +38,34 @@ when answered slam_try(m), partner.last=4N
   6N  "Slam values without the fit: 34+"    shows hcp + partner.hcp.min >= 34
   P   "No fit: 4NT"
       priority -5
+
+# The same count for responder when opener's rebid is a new suit
+# (2026-09-27): responder bid 3NT with 33+ between the hands
+# (1a–1b–2c–3NT, 772 boards short of slam). Counted in points: after a
+# jump shift the HCP floor is only 10 (it shows suit points), the
+# points floor 18. The textbook 33/31 is kept although lower thresholds
+# score better on the slam-rich corpus (notes).
+after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
+  6N  "Slam: 33+ points between us (partner at his minimum)"
+      shows points + partner.points.min >= 33, !shortest<=1
+      priority 1
+  4N  "Quantitative: 31-32 points between us"
+      shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      sets  ask=quant
+      priority 1
+after 1x (P) 1y (P) 1z (P)
+  6N  "Slam: 33+ points between us (partner at his minimum)"
+      shows points + partner.points.min >= 33, !shortest<=1
+      priority 1
+  4N  "Quantitative: 31-32 points between us"
+      shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      sets  ask=quant
+      priority 1
+after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
+  6N  "Slam: 33+ points between us (partner at his minimum)"
+      shows points + partner.points.min >= 33, !shortest<=1
+      priority 1
+  4N  "Quantitative: 31-32 points between us"
+      shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      sets  ask=quant
+      priority 1

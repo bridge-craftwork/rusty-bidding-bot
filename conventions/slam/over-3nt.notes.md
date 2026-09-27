@@ -38,3 +38,37 @@ with six as a slam try (partner bids six with three-card support, else
 
 Counting partner at his minimum, one point above the textbook numbers
 is best.
+
+## Responder after opener's new suit (2026-09-27)
+
+The biggest group short of slam was responder's 3NT after opener's
+second suit: 1a–1b–2c–3NT (772 boards), 1a–1b–1c–3NT (489),
+1a–2b–2c–3NT (556). BBA reaches slam on well over half of them. The
+same 6NT / quantitative 4NT now apply at responder's second call
+after 1x–1y–2z, 1x–1y–1z and 1x–2y–2z (new suits).
+
+It counts **points**, not HCP: a jump shift shows 19+ suit points, which
+leaves opener's HCP floor at 10, so an HCP count never saw it. The
+first try (34/32 HCP, the numbers used over 3NT) changed 10 boards.
+
+| 6NT / 4NT, in points | full corpus (par / side) | boards |
+|---|---|---|
+| 34 / 32 | +189 / +515 | 48 |
+| **33 / 31 (kept)** | **+504 / +1,133** | 108 |
+| 32 / 30 | +993 / +1,892 | 196 |
+| 31 / 29 | +1,624 / +2,886 | 342 |
+
+The lower thresholds keep winning, and I do not trust it: the scenarios
+are dealt for slam (Soloway, Minor_Game_Or_Slam, Fourth_Suit_Forcing).
+On the boards where 6NT fires, at 33 it almost always holds 32+ real
+HCP between the hands, and makes double dummy every time; at 31 it
+fires on 29-31 HCP, where 6NT makes 17-69%. The textbook 33 stays.
+**For Rick:** the rest of the gap is that opener's strength after a
+simple new-suit rebid is 12-18, too wide to count on. BBA gets there by
+exploring (3m, fourth suit, then 4NT); we have no slam try below 3NT
+yet in these auctions.
+
+A first attempt put the rule in one context for every uncontested
+position below game. It overrode the notrump auctions' own slam
+counting (Stayman, transfers, 1NT–4NT): −11,422 par, −14,314 side. The
+contexts are now named auctions.
