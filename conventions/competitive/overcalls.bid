@@ -7,7 +7,8 @@
 #   Rick adopted). No four-card overcalls on this card;
 # - too strong to overcall (18+ total points) is a takeout double first and
 #   the suit afterwards, whatever the shape (takeout-double.bid); the
-#   overcall's own ceiling is 17 HCP (2026-09-25), so a six-card suit with
+#   overcall's own ceiling is 16 HCP (17 from 2026-09-25, 16 from
+#   2026-09-27 so that 17+ is the power double), so a six-card suit with
 #   16 still overcalls, as BBA does;
 # - a jump overcall follows the weak-two rules: six cards, 4-10 HCP (10
 #   as BBA, 2026-09-25), and vulnerable two of the top three or three of
@@ -22,7 +23,7 @@
 module overcalls "Suit and notrump overcalls"
   needs  base
   param  one_min = overcalls.one_level_min default 8
-  param  one_max = overcalls.one_level_max default 17
+  param  one_max = overcalls.one_level_max default 16
   param  two_min = overcalls.two_level_min default 12
   param  two_max = overcalls.two_level_max default 17
   param  jump    = overcalls.jump default weak

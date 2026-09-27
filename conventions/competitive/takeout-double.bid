@@ -5,9 +5,11 @@
 #
 # - a takeout double is 12 total points with three or more cards in every
 #   unbid suit;
-# - it is also the call with 18+ total points and any shape, including a
-#   long strong suit: too strong to overcall is double first, then bid the
-#   suit (overcalls.bid stops at 17 total points);
+# - it is also the call with 17+ HCP and any shape, including a long
+#   strong suit: too strong to overcall is double first, then bid the suit
+#   (overcalls.bid stops at 16 HCP). In HCP since 2026-09-27: BBA's power
+#   doubles step up at 17 HCP (takeout-double.notes.md), and an HCP
+#   threshold lets the deck and the auction rule the power hand out;
 # - advancer answers on the standard ladder: a suit at the cheapest level
 #   is 0-8, a jump 9-11, and the cue bid of their suit 12+;
 # - advancer bids his longest suit, majors first, and the cheaper of two
@@ -19,13 +21,13 @@
 module takeout-double "Takeout doubles"
   needs  base
   needs  overcalls
-  param  oc_max = overcalls.one_level_max default 17
+  param  oc_max = overcalls.one_level_max default 16
 
 # ── The double ───────────────────────────────────────────────────────
 after (1x)
   X   "Takeout: 12+ total points and the unbid suits, or 18+ with any shape"
       shows hcp+length_points>=12
-      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)) | hcp+length_points>=oc_max+1
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)) | hcp>=oc_max+1
 
 # ── Advancer, when RHO passes ────────────────────────────────────────
 # The double is forcing: advancer names his suit however weak he is.

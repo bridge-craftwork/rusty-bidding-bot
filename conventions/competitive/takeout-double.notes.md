@@ -101,3 +101,28 @@ Tried against par:
 | Two-level overcalls on three of the top five honours instead of four | -285 |
 
 Ours stays in all three.
+
+## The power double in HCP (2026-09-27)
+
+Step a of the Law of Total Tricks work (Basic_Takeout_Double 193). The
+double's second meaning was "18+ total points, any shape". Length
+points can add nine to an unknown hand, so no HCP limit could ever rule
+the power hand out, and the double never collapsed to "three or more
+in the unbid suits". BBA (`probes/tools/takeout_shape.py` and a scan
+of 913 auctions where the doubler, free to pass, then bids a new suit
+or notrump): its power double steps up at 17 **HCP** (12-14: 103
+hands, the competitive minimum; 15: 9; 16: 5; 17: 129; 18: 268), and
+counted as HCP plus length the same hands show no step. Rick: treat it
+as a likelihood, accepting the rare distributional power double below
+17 that the inference will misread.
+
+| power branch | full corpus (par / side) | Basic_* competitive |
+|---|---|---|
+| 18+ HCP, overcall to 17 | -937 / -2,176 | -3 / -26 |
+| 17+ HCP, overcall to 17 (overlap) | +13 / -171 | -11 / -11 |
+| 17+ HCP, overcall to 16 | +1 / +154 | -11 / -11 |
+
+Kept: 17+ HCP with the overcall to 16 (`one_level_max` default 16),
+neutral on its own; its value is the inferences it allows. **For
+Rick:** this lowers the overcall ceiling from 17 to 16 HCP; the
+fallback is the overlap version (overcall to 17), -171 by side.
