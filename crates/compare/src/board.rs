@@ -87,6 +87,12 @@ pub struct BoardResult {
     /// The engine's own auction: the reference up to the first difference,
     /// then the engine's calls to the end.
     pub ours: Vec<Call>,
+    /// For each of our calls, the rule that gave it its meaning, as
+    /// `file:line explanation` (None where no rule did). Our own calls
+    /// are read by the rule that chose them. For par attribution
+    /// (`probes/tools/par_blame.py`).
+    #[serde(default)]
+    pub our_rules: Vec<Option<String>>,
     pub first_divergence: Option<usize>,
     pub reference_contract: Option<String>,
     pub our_contract: Option<String>,
@@ -190,6 +196,19 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     let problems = find_problems(
         board, dealer, &ours, &decided, &live, &forced, &steps, runaway,
     );
+    let our_rules = steps
+        .iter()
+        .map(|s| {
+            s.rule.as_ref().map(|r| {
+                format!(
+                    "{}:{} {}",
+                    r.file,
+                    r.line,
+                    s.explanation.as_deref().unwrap_or("")
+                )
+            })
+        })
+        .collect();
 
     let contract_of = |calls: &[Call]| {
         let mut a = Auction::new(dealer);
@@ -221,6 +240,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
         reference,
         replay,
         ours,
+        our_rules,
         first_divergence,
         par: None,
         runaway,
