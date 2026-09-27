@@ -243,8 +243,11 @@ impl Bounds {
         }
         for _ in 0..2 {
             for i in 0..4 {
-                let others_lo: i32 = (0..4).filter(|&j| j != i).map(|j| self.len[j].lo).sum();
-                let others_hi: i32 = (0..4).filter(|&j| j != i).map(|j| self.len[j].hi).sum();
+                // Clamped to the deck first: an open range ends at i32::MAX,
+                // and three of those overflow the sum.
+                let others = (0..4).filter(|&j| j != i);
+                let others_lo: i32 = others.clone().map(|j| self.len[j].lo.clamp(0, 14)).sum();
+                let others_hi: i32 = others.map(|j| self.len[j].hi.clamp(-1, 13)).sum();
                 self.len[i] = self.len[i].intersect(Range::new(13 - others_hi, 13 - others_lo));
             }
         }
