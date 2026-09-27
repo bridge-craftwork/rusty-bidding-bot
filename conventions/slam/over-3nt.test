@@ -1,0 +1,6 @@
+# Slam after partner's 3NT (2026-09-27).
+card    Basic-Bridge
+dealer  S
+# 1NT (15-17) ... responder's 3NT is the simplest way to put a range on partner.
+N AQ4.KJ5.AQJ3.K75      | 1D P 2C P 3N P | 6N/4N | 20 opposite opener's 3NT: slam territory
+N 874.KJ5.Q953.K75      | 1D P 2C P 3N P | P   | 9: no slam

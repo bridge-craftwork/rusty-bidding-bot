@@ -1,0 +1,40 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Slam after partner's 3NT (2026-09-27). The slam work's third group:
+# 1,433 boards where BBA bid slam and our auction stopped in a 3NT that
+# one partner bid with 15-18 balanced while the other, often with 15-17
+# and a long suit, passed. Nothing looked past 3NT.
+#
+# Partner's 3NT has shown a range, and I add my HCP to his minimum: 6NT
+# with 34 or more; a quantitative 4NT with 32-33 (answered by `when asked
+# quant`, one-nt.bid); with a six-card minor and 31+, four of it as a
+# slam try. Counting partner at his minimum, one point above the
+# textbook 33/31 measured best (notes).
+
+module over-3nt "Slam after partner's 3NT"
+  needs  base
+
+when partner.last=3N, !they.bid, we.trump is none
+  6N  "Slam: 34 or more between us (partner at his minimum)"
+      shows hcp + partner.hcp.min >= 34
+      priority -10
+  4N  "Quantitative: 32-33 between us"
+      shows hcp + partner.hcp.min >= 32, hcp + partner.hcp.max <= 35
+      sets  ask=quant
+      priority -10
+  4C  "Slam try: six or more clubs"
+      shows C>=6, hcp + partner.hcp.min >= 31
+      sets  ask=slam_try(C)
+      priority -10
+  4D  "Slam try: six or more diamonds"
+      shows D>=6, hcp + partner.hcp.min >= 31
+      sets  ask=slam_try(D)
+      priority -10
+
+when asked slam_try(m), partner.last=4{m}, we.trump is none
+  6{m}  "A fit: slam"                       shows m>=3
+  4N    "No fit"                            shows m<=2
+when answered slam_try(m), partner.last=4N
+  6N  "Slam values without the fit: 34+"    shows hcp + partner.hcp.min >= 34
+  P   "No fit: 4NT"
+      priority -5
