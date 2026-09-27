@@ -711,6 +711,18 @@ after 1x (*) 1N (*) when they.bid
   4{x} "Game: six or more {x}, 19+"
       shows x>=6, suit_points>=19
       when  x is H | x is S
+  # Partner's 1NT promised their suit stopped, so opener raises notrump
+  # with any shape (2026-09-26: 17-20 counts passed 1NT, 35 corpus boards
+  # with 25+ HCP and game on).
+  cheapest(N) "16-17: invites 3NT"
+      shows hcp=16..17
+      when  !lho.last=X                    # over an overcall: partner holds their suit
+      sets  ask=nt_invite
+      priority -2
+  jump(N) "18+: game opposite 6-10"
+      shows hcp>=18
+      when  !lho.last=X                    # over an overcall: partner holds their suit
+      priority -2
   P   "Nothing to say"  priority -10
 
 # ── Partner redoubled ────────────────────────────────────────────────

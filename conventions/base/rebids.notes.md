@@ -595,3 +595,8 @@ the contested raise block read every three-level raise as preemptive,
 so opener passed with 16-21. For a non-jump raise (`!partner.jumped`)
 opener now bids 3NT with 16+ and their suit held, 4M with 17 support
 points, 5m with 18. Full corpus +127 by par distance, +303 by side.
+
+Over partner's contested 1NT (6-10, their suit stopped) opener now
+invites with 16-17 (2NT) and bids 3NT with 18+, any shape; not after a
+takeout double, where 1NT has no suit to stop (that lost). Full corpus
++95 by par distance, +89 by side.
