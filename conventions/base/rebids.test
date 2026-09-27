@@ -141,13 +141,14 @@ S 9.KQJ986.AT6.Q95      | 1H X XX 1S   | 2H  | six hearts after the redouble
 S KQJ965.K6.KJ3.JT      | 1S X XX 2H   | 2S  | six spades after the redouble
 S AT52.Q7.AJ9432.7      | 1D X XX 2C   | 2D  | six diamonds after the redouble
 
-# Partner passed and they kept bidding: opener needs a real reason.
-S T.96.AKQJT32.KQ6      | 1D 1S P 2S   | 4D  | seven solid diamonds: bid the game
+# Partner passed and they kept bidding: opener needs a real reason, and
+# bidding again at all shows it, so no jumps (Rick, 2026-09-27).
+S T.96.AKQJT32.KQ6      | 1D 1S P 2S   | 3D  | seven solid diamonds: the free bid shows the extras
 S .A753.KJ6.AJ9754      | 1C 1S P 2S   | 3C  | six clubs, worth one more
 S AJ9873.AQ4.632.K      | 1S X P 2H    | 2S  | six spades opposite a silent partner
-S AQJ832.QT86.AK3.      | 1S X P 2H    | 3S  | six spades and 16-18: the jump
-S 96.AKQ9542.AQ98.      | 1H X P 2S    | 4H  | seven hearts and 19+
-S K.K3.AKQJ962.J96      | 1D X P 1S    | 3D  | seven diamonds and 16-18
+S AQJ832.QT86.AK3.      | 1S X P 2H    | 2S  | six spades and 16: bidding at all shows extras, no jump (Rick, 2026-09-27)
+S 96.AKQ9542.AQ98.      | 1H X P 2S    | 3H  | seven hearts and 16: the free bid, not a jump
+S K.K3.AKQJ962.J96      | 1D X P 1S    | 2D  | seven diamonds and 17: the free bid, not a jump
 S Q63.AKQJ963.QT4.      | 1H X P 2H    | 3H  | seven hearts, minimum, over their cue bid
 S KQ93.Q3.AJT984.7      | 1D 1H P 2C   | 2D  | six diamonds, minimum
 S 6.A42.73.AKJ9754      | 1C 1D P 2S   | 3C  | seven clubs, minimum
@@ -236,3 +237,4 @@ S KJ65.A.QJ83.AQ72      | 1D 2H 3D P      | 3NT | 17 with the heart ace: game
 S AKQJ.A2.83.AQJ63      | 1C 2D 3C P      | 5C  | 21, no diamond stopper: game in clubs
 S A4.J6.AQ74.AKQ73      | 1C 1H 1NT P     | 3NT | 20 opposite 6-10 with hearts held: game
 S A52.K6.AQ74.KJ73      | 1C 1H 1NT P     | 2NT | 17: invites
+S KQ84.AKQ973.Q.94      | 1H X P 2H    | 3H  | 16 over their cue bid: 3H, not the 4H jump (Basic_Takeout_Double 193)

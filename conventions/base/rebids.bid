@@ -771,12 +771,15 @@ after 1x (X) XX (*)
 # and BBA passes every one of these. Without the guard opener kept
 # rebidding his six-card suit over their Stayman and lost 157 calls in
 # the five We_Overcall_NT_* scenarios.
+# Opener is not forced here, so bidding again at all shows extras, and
+# there is no need to jump (Rick, 2026-09-27): 1H (X) P (2H) 3H with
+# 16, where a 16-18 jump to 4H was for when partner's forcing response
+# obliges opener to bid. The free rebid is 13-18 suit points; tried
+# (full corpus, par / side): up to 18 -35 / +746, 13-18 +191 / +119,
+# 14-18 +529 / -1,504.
 after 1x (*) P (*) when they.bid, maybe lho.hcp<=14, maybe rho.hcp<=14
-  cheapest(x) "Rebids {x}: six or more"
-      shows x>=6, suit_points<=18
-      priority -1
-  jump(x) "Jump rebid: six or more {x}, 16-18"
-      shows x>=6, suit_points=16..18
+  cheapest(x) "Rebids {x}: six or more, a free bid with extras"
+      shows x>=6, suit_points=13..18
       priority -1
 after 1x (*) P (*) when they.bid
   P   "Partner has nothing: let them have it"  priority -10

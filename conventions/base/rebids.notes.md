@@ -600,3 +600,26 @@ Over partner's contested 1NT (6-10, their suit stopped) opener now
 invites with 16-17 (2NT) and bids 3NT with 18+, any shape; not after a
 takeout double, where 1NT has no suit to stop (that lost). Full corpus
 +95 by par distance, +89 by side.
+
+## No jump when opener is not forced (Rick, 2026-09-27)
+
+Basic_Takeout_Double 193: 1♥ (X) P (2♥), opener KQ84.AKQ973.Q.94 jumped
+to 4♥ ("six or more, 16-18"); BBA bid 3♥. Rick: the 16-18 jump rebid
+is for when partner's response forces opener to bid (1♥-1♠-3♥). When
+partner has passed and they keep bidding, opener is free to pass, so
+bidding again at all shows extras, and there is no need to jump; with
+16 and a singleton queen, 3♥ is the least lie. The block "partner
+passed and they kept bidding" now has one rebid of a six-card suit,
+13-18 suit points, and no jump.
+
+| free rebid | full corpus (par / side) | Basic_* (par / side) |
+|---|---|---|
+| up to 18, jump removed | -35 / +746 | -25 / +57 |
+| 13-18 | +191 / +119 | -16 / +40 |
+| 14-18 | +529 / -1,504 | -12 / +11 |
+
+13-18 kept: the only one where both yardsticks gain on the corpus. Four
+rebids.test cases that expected the jump now expect the free bid. It
+also changes what opener's rebid tells the others: E's 3♥ now reads
+13-18, which is what lets North place the doubler below 18 by deck
+arithmetic (the Law of Total Tricks work that follows).
