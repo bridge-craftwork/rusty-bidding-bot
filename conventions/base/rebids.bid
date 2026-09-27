@@ -14,6 +14,7 @@
 module rebids "Opener's rebid"
   needs  responses
   param  style = general.style
+  param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
@@ -614,7 +615,7 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x
   cheapest(z) "Raise with extras: 18+, forcing to game"
       shows z>=3, tp(z)>=18
       sets  trump=z, forcing=game
-      when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
+      when  partner.z>=5, new_suit_forcing   # a forcing free bid, even if they bid over it
       priority -1
   cheapest(x) "Forced to bid: nothing better to say"
       when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
