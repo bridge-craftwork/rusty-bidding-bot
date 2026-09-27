@@ -1439,6 +1439,75 @@ fn check_expr(e: &Expr, params: &[&str], out: &mut Vec<String>) {
     }
 }
 
+/// Terms in `e` that depend on the chooser's own hand: my HCP, points,
+/// shape, a suit or suit variable compared as a length, `me.hcp`, and
+/// the `we.` sums that add my hand. A context's `when` is checked before
+/// the hand is known, so such a term makes it never true.
+fn hand_terms(e: &Expr, out: &mut Vec<String>) {
+    let length = |x: &Expr, out: &mut Vec<String>| {
+        if let Expr::Path { path } = x {
+            if path.len() == 1 && path[0].args.is_none() {
+                let n = path[0].name.as_str();
+                if suit_index(n).is_some() || is_variable(n) {
+                    out.push(format!("`{n}` (my length)"));
+                }
+            }
+        }
+    };
+    match e {
+        Expr::And { all } => all.iter().for_each(|x| hand_terms(x, out)),
+        Expr::Or { any } => any.iter().for_each(|x| hand_terms(x, out)),
+        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => hand_terms(expr, out),
+        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
+            if matches!(e, Expr::Cmp { .. }) {
+                length(lhs, out);
+                length(rhs, out);
+            }
+            hand_terms(lhs, out);
+            hand_terms(rhs, out);
+        }
+        Expr::InRange { expr, lo, hi } => {
+            length(expr, out);
+            hand_terms(expr, out);
+            hand_terms(lo, out);
+            hand_terms(hi, out);
+        }
+        Expr::InSet { expr, .. } => {
+            length(expr, out);
+            hand_terms(expr, out);
+        }
+        Expr::Shape { pattern } => out.push(format!("`shape {pattern}`")),
+        Expr::Path { path } => {
+            let n = path[0].name.as_str();
+            let self_term = |m: &str, args: bool| {
+                if args {
+                    SELF_FUNCS.contains(&m)
+                } else {
+                    SELF_ATTRS.contains(&m)
+                        || matches!(m, "slam_try" | "grand_try" | "strength" | "suit_strength")
+                }
+            };
+            match (n, path.get(1)) {
+                ("me", Some(seg)) if self_term(&seg.name, seg.args.is_some()) => {
+                    out.push(format!("`me.{}`", seg.name))
+                }
+                ("we", Some(seg))
+                    if matches!(seg.name.as_str(), "hcp" | "keycards" | "points" | "tp") =>
+                {
+                    out.push(format!("`we.{}`", seg.name))
+                }
+                (_, None) if self_term(n, path[0].args.is_some()) => out.push(format!("`{n}`")),
+                _ => {}
+            }
+        }
+        Expr::Is { .. }
+        | Expr::Asked { .. }
+        | Expr::Answered { .. }
+        | Expr::Int { .. }
+        | Expr::Call { .. } => {}
+    }
+}
+
 /// Every name in every condition (`when`, `shows`, `denies`, `prefer`)
 /// is one the engine knows. Errors name the file and line.
 pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
@@ -1448,6 +1517,24 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
         params: &[&str],
         out: &mut Vec<bidspec::Diagnostic>,
     ) {
+        if let Some(w) = &c.when {
+            let mut terms = Vec::new();
+            hand_terms(w, &mut terms);
+            terms.dedup();
+            if !terms.is_empty() {
+                out.push(bidspec::Diagnostic {
+                    file: m.file.clone(),
+                    line: c.line,
+                    col: 0,
+                    message: format!(
+                        "{} in a context's `when` depends on the hand: contexts are \
+                         checked before the hand is known, so it is never true; move it \
+                         to the rules' `when` or `shows`",
+                        terms.join(", ")
+                    ),
+                });
+            }
+        }
         let mut push = |line: usize, e: Option<&Expr>| {
             let mut msgs = Vec::new();
             if let Some(e) = e {
@@ -1553,6 +1640,36 @@ mod term_tests {
         assert_eq!(ctx.cond(&when_of("partner.hcp<=16"), &mut b), Ok(Tri::True));
         // Publicly South is still unknown.
         assert_eq!(pos.knowledge[south].len[3].lo, 0);
+    }
+
+    /// A context's `when` is judged before the hand is known: terms about
+    /// my own hand there are reported, public ones are not.
+    #[test]
+    fn hand_terms_in_a_context_are_reported() {
+        let check = |when: &str| {
+            let src = format!("module t \"t\"\nafter 1x (P)\n  when {when}\n    P  \"x\"\n");
+            let m = bidspec::compile(&src, "t.bid").unwrap();
+            check_terms(&[m]).into_iter().map(|d| d.message).collect::<Vec<_>>()
+        };
+        for ok in [
+            "x is not C, they.bid",
+            "me.last=P, !lho.opened",
+            "partner.hcp.min >= 12, partner.x>=3",
+            "we.forcing = game",
+        ] {
+            assert!(check(ok).is_empty(), "{ok}: {:?}", check(ok));
+        }
+        for (bad, term) in [
+            ("hcp + partner.hcp.min <= 24", "`hcp`"),
+            ("x>=3", "`x` (my length)"),
+            ("stop(S)", "`stop`"),
+            ("shape 4333", "`shape 4333`"),
+            ("we.hcp >= 25", "`we.hcp`"),
+            ("me.points >= 12", "`me.points`"),
+        ] {
+            let msgs = check(bad);
+            assert!(msgs.len() == 1 && msgs[0].starts_with(term), "{bad}: {msgs:?}");
+        }
     }
 
     /// Every name the checker accepts, the evaluator accepts too.

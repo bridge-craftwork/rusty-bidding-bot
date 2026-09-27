@@ -444,6 +444,12 @@ These are enforced by `bidspec`, with file:line:column errors:
   this check an unknown name made its condition false every time, so a
   typo, or a rule newer than the running engine, silently switched the
   rule off.
+- A context's `when` must not depend on the chooser's hand (`hcp`,
+  `points`, `stop(x)`, `shape …`, a suit or suit variable compared as a
+  length, `me.hcp`, `we.hcp`): contexts are checked before the hand is
+  known, so such a condition is never true and the rules under it never
+  fire. The same check reports it; put it in the rules' `when` or
+  `shows`. (`x is not C`, `me.last`, `partner.…` are public and fine.)
 
 ## 12. The engine today
 
