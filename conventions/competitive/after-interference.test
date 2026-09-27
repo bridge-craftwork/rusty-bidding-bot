@@ -109,3 +109,12 @@ N K6.Q63.KJ3.J7543      | 1S 1H            | !2H | two spades: no cue bid
 N AJ6.KJ3.Q65.KJ64      | 1D 1H            | 3NT | 15 balanced with hearts held
 S AQ6.A9763.A6.T83      | 1H 1S 2S P       | 4H  | 14 with a doubleton: accepts the limit raise
 S Q64.A9763.A65.Q3      | 1H 1S 2S P       | 3H  | 12, flat: no game
+
+# ── The cue bid forces only when RHO passes (2026-09-27)
+card    Basic-Bridge
+dealer  S
+S Q75.KJ84.AJT6.72      | 1D 1H 2H 3H      | P   | their raise ends the force: a minimum passes
+S Q64.A9763.A65.Q3      | 1H 1S 2S 3S      | P   | 12, flat: nothing to add over their raise
+S Q7.K84.AJT65.K72      | 1D 1H 2H 3H      | 4D  | five diamonds: nine trumps, compete
+N AQ5.4.KQ98.AJ974      | 1D 1H 2H 3H P P  | 5D  | 16 opposite opener's pass: game in the minor
+N K85.4.KQ98.QJ974      | 1D 1H 2H 3H P P  | P   | 11: the limit raise, they have it

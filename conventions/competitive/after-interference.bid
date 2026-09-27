@@ -134,7 +134,35 @@ after 1x (1y) 2y (3y) when y is not x
        when  x is H | x is S
   3N   "Game: 16+ with a stopper in {y}"       shows hcp>=16, stop(y)
        when  x is C | x is D
+  5{x} "Game: 16+, no stopper in {y}"          shows hcp>=16
+       when  x is C | x is D
+       priority -1
+  # The minor cue bid promised four, so a fifth card is nine trumps:
+  # compete at the four level (2026-09-27: these hands passed once the
+  # round force ended with their raise, -159 IMPs by side on 57 boards).
+  4{x} "Competes: five or more {x}, nine trumps"
+       shows x>=5
+       when  x is C | x is D
+       priority -4
   P    "They competed: no game"
+       priority -5
+
+# Responder once opener has passed their raise, or competed in his
+# minor: the cue bid was 11+ with no upper limit, so with 13+ responder
+# bids the game himself.
+after 1x (1y) 2y (3y) P (P) when y is not x
+  4{x} "Game: 13+ opposite opener's minimum"   shows hcp+length_points>=13
+       when  x is H | x is S
+  3N   "Game: 13+ with a stopper in {y}"       shows hcp+length_points>=13, stop(y)
+       when  x is C | x is D
+  5{x} "Game in the minor: 14+"                shows hcp+length_points>=14
+       when  x is C | x is D
+       priority -1
+  P    "The limit raise: they have bought it"
+       priority -5
+after 1x (1y) 2y (3y) 4x (P) when x is C | x is D, y is not x
+  5{x} "Game in the minor: 13+ opposite the fifth trump"  shows hcp+length_points>=13
+  P    "The limit raise: no game"
        priority -5
 
 # ── They overcalled at the two level or jumped ───────────────────────
