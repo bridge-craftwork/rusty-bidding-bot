@@ -94,9 +94,31 @@ Advancer over our four-level double takes out into five spades over
 Full corpus +781 by par distance, +2,598 by side (930 boards); Basic_*
 unchanged (no four-level preempts there).
 
+## Lebensohl after the double: tried, not kept (2026-09-27)
+
+The 21GF cards set `competitive.lebensohl_weak_twos`. BBA on
+21GF-DEFAULT (`vs-w2-2{H,S}-X-leb.toml`): 2NT is a relay to 3♣ (weak,
+then pass or correct; also game values with their suit stopped, then
+3NT: "slow shows"); a direct suit at the three level is constructive,
+9-12; the cue bid 12+; a direct 3NT. Written as a variant gated on the
+card field, it lost on both yardsticks every time (full corpus, par
+distance / side, against the natural rules on the same cards):
+
+| version | full corpus |
+|---|---|
+| relay, constructive suits, slow-shows 3NT | -653 / -2,256 |
+| + the doubler's natural 2NT accept gated off (it answered the relay with 3NT) | -961 / -1,497 |
+| + a strong doubler breaks the relay (3NT with 19+) | -264 / -669 |
+| + weak 2NT only without a four-card major at two; stopper route from 11 | -736 / -1,013 |
+
+Reverted: the natural structure is used on every card, including those
+that list Lebensohl. **For Rick:** the card says we play Lebensohl
+there, and par says the natural replies (a weak three-level suit
+0-10, 3NT with a stopper, the cue bid) do better in our engine. Keep
+natural, or play the card's convention and accept the cost while the
+Lebensohl continuations mature?
+
 ## Next
 
-Lebensohl after the double on the cards that play it
-(`competitive.lebensohl_weak_twos`, on in the 21GF cards); the weak-two
-side's own continuations over our double (redouble, new suits); 4-level
-preempts.
+The weak-two side's own continuations over our double (redouble, new
+suits).
