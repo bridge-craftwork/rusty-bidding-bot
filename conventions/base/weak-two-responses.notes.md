@@ -250,3 +250,30 @@ bid on over 2♦-2NT-3♣-3♦ in four Basic_Weak_2 boards (73: 5♦, 109 and
 431: 3NT, 282: 4♦); against par, passing 3♦ was better on 109, 282
 and 431 (+370, +210, +330 NS) and worse on 73 (150 against 400). Par
 decides: kept as a sign-off. No-rule positions 176 -> 143.
+
+## 3NT before 5♦ over a weak 2♦ (Rick, 2026-09-27; ticket basic-weak-2-b104)
+
+Basic_Weak_2 board 104: 2♦ P with AK.AK985.JT2.A74 bid 5♦ (the
+BBA-derived "three-card support, 18-20") and went down; 3NT makes ten
+tricks. Rick: over a weak 2♦ strongly prefer 3NT to 5m, with something
+in diamonds and the unbid suits stopped. Now 3NT with 16+, two or more
+diamonds, every side suit stopped and no six-card major, ranked above
+5♦.
+
+| variant | full corpus (par / side) | Basic_* (par / side) |
+|---|---|---|
+| 14+ | +79 / +58 | |
+| 15+ | +138 / +167 | -13 / -10 |
+| 15+, no six-card major | +139 / +181 | +2 / +11 |
+| 16+, no six-card major | +126 / +202 | +10 / +26 |
+| 17+, no six-card major | +59 / +119 | +2 / +18 |
+
+16 kept: better on three of the four figures, 13 IMPs behind 15 by par
+on the corpus. The Basic_* losses at 15 were hands where the 2NT ask
+would have found opener's minimum and stopped in 3♦, and hands with a
+six-card heart suit.
+
+On the same board BBA answered the 2NT ask with 3NT on KQ8764 and Q3:
+BBA's maximum with no side honour (the `bba` treatment), which our
+default reads as AKQ. Our default answer is 3♥, the heart queen with a
+maximum, and responder then bids 3NT. No change needed there.

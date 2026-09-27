@@ -85,3 +85,12 @@ S 72.QJ9864.K52.Q4       | 2H P 2S P 3H P 3S P | 4S  | a doubleton: game in spad
 S KQJ976.32.A4.J43      | 2S P 2NT P 3D P 3S P | P | responder signed off
 S Q8.8.KQ9632.KT42      | 2D P 2NT P 3C P 3D P | P | responder signed off (Basic_Weak_2 431)
 S A63.KQJT54.7.754      | 2H P 3H P | P | the raise is preemptive
+
+# ── 3NT before 5D over 2D (ticket basic-weak-2-b104, 2026-09-27)
+card    Basic-Bridge
+dealer  S
+vul     None
+N AK.AK985.JT2.A74      | 2D P  | 3NT | 19, diamond help, every side suit held: 3NT, not 5D
+N AK.AK985.J2.A742      | 2D P  | 3NT | two diamonds are help enough
+N 64.AK985.JT2.AK4      | 2D P  | !3NT | no spade stopper
+N A6.KT7632.KJT.KJ      | 2D P  | !3NT | six hearts: bid them

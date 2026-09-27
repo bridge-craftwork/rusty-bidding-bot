@@ -59,6 +59,15 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is not standa
       when  vul | (!they.vul, hcp>=16 | x>=4) | hcp>=18
   4x  "Game with five-card support"            shows x>=5, hcp=13..19
       when  x is H | x is S
+  # 3NT before five of the minor (Rick, 2026-09-27, ticket
+  # basic-weak-2-b104): nine tricks instead of eleven, and it scores
+  # more even with an overtrick. Diamond help and the side suits held;
+  # a six-card major is bid instead. From 16: with 15 the 2NT ask finds
+  # the minimum (notes).
+  3N  "To play: 16+, help in diamonds, the side suits stopped"
+      shows hcp>=16, x>=2, stop(S), stop(H), stop(C), H<=5, S<=5
+      when  x is D
+      priority 1
   5x  "Game in diamonds: three-card support, 18-20"   shows x>=3, hcp=18..20
       when  x is D
   2H  "Natural and forcing: six hearts from 13, five from 14"   shows H>=5, hcp>=13
