@@ -331,15 +331,16 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       shows x>=5, hcp<=18
       priority -2
   # Strong hands with no fit and no balanced notrump (2026-09-25: 19-20
-  # counts rebid their suit as "nothing better" and were passed).
+  # counts rebid their suit as "nothing better" and were passed). From
+  # 17 since 2026-09-26: 19/17/16 tried, 17 best (+192 by par distance).
   # Not over a three-level overcall: there it lost (-131 IMPs over 1S (3H)).
-  3N  "Game: 19+ with a stopper in {y}"
-      shows hcp>=19, stop(y)
+  3N  "Game: 17+ with a stopper in {y}"
+      shows hcp>=17, stop(y)
       when  lho.last=1{y} | lho.last=2{y}
       priority -1
-  cheapest(y) "Cue bid: 19+, forcing to game"
+  cheapest(y) "Cue bid: 17+, forcing to game"
       alert  artificial
-      shows hcp>=19
+      shows hcp>=17
       when  lho.last=1{y} | lho.last=2{y}
       sets  forcing=game
       priority -2

@@ -307,3 +307,9 @@ missed-games queue). Now `tp(x)>=14`. Tried: 16 HCP -> 15 HCP +61;
 16 / 15 / 14 support points +519 / +697 / +750 by par distance
 (+1,339 / +1,723 / +1,905 by side). 14 kept, par deciding; it accepts
 12 HCP with a singleton, a normal acceptance.
+
+Opener's strong answers to the negative double (3NT with a stopper,
+else the cue bid) now start at 17 rather than 19: 17 +192 by par
+distance, +278 by side; 16 +158 / +192. A case in the test file that
+recorded BBA's 2♣ on K964.K4.AT.AQJT9 (17, spades held) now expects
+3NT.
