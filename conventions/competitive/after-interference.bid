@@ -136,10 +136,6 @@ after 1x (1y) 2y (3y) when y is not x
        when  x is C | x is D
   P    "They competed: no game"
        priority -5
-  # The engine keeps the cue bid's round force after their raise, so the
-  # pass above is not allowed: compete in our suit instead.
-  cheapest(x) "No game: our suit at the cheapest level"
-       priority -6
 
 # ── They overcalled at the two level or jumped ───────────────────────
 # Rick: over a two-level overcall a new suit is 10+ total points with five
