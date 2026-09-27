@@ -298,3 +298,12 @@ the one-level cue. When they raise over the cue, opener bids game with
 16+ or competes in his suit (the engine keeps the round force, so pass
 is not available). Full corpus +1,100 by par distance, +2,660 by side
 (1,511 boards).
+
+## Accepting the major limit raise in support points (2026-09-26)
+
+Opener accepted the cue-bid raise of a major with 16 HCP, so 14-15
+with a doubleton or singleton stayed in three (52 boards in the
+missed-games queue). Now `tp(x)>=14`. Tried: 16 HCP -> 15 HCP +61;
+16 / 15 / 14 support points +519 / +697 / +750 by par distance
+(+1,339 / +1,723 / +1,905 by side). 14 kept, par deciding; it accepts
+12 HCP with a singleton, a normal acceptance.

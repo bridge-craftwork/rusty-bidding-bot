@@ -107,4 +107,5 @@ dealer  S
 N KT95.K42.KQ4.873      | 1H 1S            | 2S  | 11 with three hearts: cue bid, limit raise or better
 N K6.Q63.KJ3.J7543      | 1S 1H            | !2H | two spades: no cue bid
 N AJ6.KJ3.Q65.KJ64      | 1D 1H            | 3NT | 15 balanced with hearts held
-S AQ6.A9763.A6.T83      | 1H 1S 2S P       | 3H  | 14: no game opposite a limit raise
+S AQ6.A9763.A6.T83      | 1H 1S 2S P       | 4H  | 14 with a doubleton: accepts the limit raise
+S Q64.A9763.A65.Q3      | 1H 1S 2S P       | 3H  | 12, flat: no game

@@ -350,8 +350,10 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
 # The cue bid showed three-card support and 11+ total points, so opener
 # accepts with more than a minimum and signs off otherwise.
 after 1x (1y) 2y (P) | 1x (2y) 3y (P) | 1x (3y) 4y (P)
+  # In support points (2026-09-26): 16 HCP left 14-15 with shortness in
+  # a partscore. 14/15/16 support points: +750/+697/+519 by par distance.
   4{x} "Accepts: game in {x}"
-      shows hcp>=16
+      shows tp(x)>=14
       when  x is H | x is S
   # With a minor, 3NT is the game: from 14 with their suit held, any
   # shape, else five of the minor from 16 (2026-09-25: 16-20 counts
