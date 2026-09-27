@@ -1,0 +1,15 @@
+# Defence against their weak twos (Basic-Bridge card, natural).
+card    Basic-Bridge
+dealer  E
+vul     None
+S AKJ2.8.KQ43.J432      | 2H           | X   | short hearts, the other three: takeout
+S K72.JT6.KQ84.KT3      | 2H           | P   | three hearts, 12: pass (BBA)
+S AQJ974.83.K95.A6      | 2H           | 2S  | six good spades, 14: overcall
+S AQ5.KJ4.QJ83.K73      | 2H           | 2NT | 16 balanced, hearts held
+S 75.AQJ.KJ9832.A3      | 2S           | 3D  | six diamonds, 15
+# Advancer after our double
+N T76.65.A753.AT72      | 2S X P       | 3C/3D | 8, no major: a minor at the cheapest level
+N KJ7.KT842.65.Q93      | 2S X P       | 3H  | five hearts, 9: 3H (a jump would be game)
+N QJ82.A7.765.AK32      | 2S X P       | P   | four good spades and 14: penalty
+N Q73.A4.K42.K8764      | 2S X P       | 3NT | 12 with spades held
+N 43.KQJ75.K2.A843      | 2D X P       | 3D  | 13 with five hearts: the cue bid, forcing to game

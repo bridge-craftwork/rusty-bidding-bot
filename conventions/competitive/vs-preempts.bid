@@ -1,0 +1,175 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Defence against their preempts (2026-09-27). The par attribution
+# (probes/tools/par_blame.py) showed our side passing out their weak twos
+# and three-level preempts: over anything but a one-level opening there
+# were no rules at all.
+#
+# Natural, as the Basic-Bridge card plays it, and as BBA bids it there
+# (probes/vs-w2-2D.toml, vs-w2-2H.toml, vs-w2-2S.toml): the one-level
+# structure a level higher.
+#
+# - a takeout double: 12+ total points, two or fewer of theirs and three
+#   or more in each unbid suit, or 17+ HCP with three or fewer of theirs
+#   (the power double, then bid again);
+# - a new suit: five or more, 12-16 HCP; at the three level 13 total
+#   points; a suit worth bidding (two of the top three, three of the top
+#   five, six cards, or an opening hand of 13 total points);
+# - a jump to three of a major: six or more, 15-16;
+# - 2NT: 15-17 balanced, their suit stopped, no five-card major;
+# - four of a major: seven or more, game;
+# - otherwise pass.
+#
+# A weak two is told from a strong 2C by what the opener has shown: at
+# most 12 HCP.
+
+module vs-preempts "Defence against preempts"
+  needs  base
+
+# ── Direct seat over their weak two ──────────────────────────────────
+after (2x) when x is not N, rho.hcp.max <= 12
+  X   "Takeout: 12+ total points and the unbid suits, or 17+ with any shape"
+      shows hcp+length_points>=12
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C), x<=2) | (hcp>=17, x<=3)
+  cheapest(S) "Overcall: five or more spades, 12-16"
+      shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=12, hcp<=16
+      when  x is not S
+      when  quality(S)>=good | top5(S)>=3 | S>=6 | hcp+length_points>=13
+      when  cheapest_rank(S) <= 13 | hcp+length_points>=13
+  cheapest(H) "Overcall: five or more hearts, 12-16"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=12, hcp<=16
+      when  x is not H
+      when  quality(H)>=good | top5(H)>=3 | H>=6 | hcp+length_points>=13
+      when  cheapest_rank(H) <= 13 | hcp+length_points>=13
+  cheapest(D) "Overcall: five or more diamonds, 12-16"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=12, hcp<=16
+      when  x is not D
+      when  quality(D)>=good | top5(D)>=3 | D>=6 | hcp+length_points>=13
+      when  cheapest_rank(D) <= 13 | hcp+length_points>=13
+  cheapest(C) "Overcall: five or more clubs, 12-16"
+      shows C>=5, C>S, C>H, C>D, hcp+length_points>=12, hcp<=16
+      when  x is not C
+      when  quality(C)>=good | top5(C)>=3 | C>=6 | hcp+length_points>=13
+      when  cheapest_rank(C) <= 13 | hcp+length_points>=13
+  jump(S) "Strong jump overcall: six or more spades, 15-16"
+      shows S>=6, hcp=15..16
+      when  x is not S
+  jump(H) "Strong jump overcall: six or more hearts, 15-16"
+      shows H>=6, H>S, hcp=15..16
+      when  x is not H, x is not S
+  cheapest(N) "15-17 balanced, {x} stopped, no five-card major"
+      shows balanced, hcp=15..17, S<=4, H<=4
+      when  stop(x)
+  4S  "Seven or more spades: game"
+      shows S>=7, hcp+length_points>=13
+      when  x is not S
+  4H  "Seven or more hearts: game"
+      shows H>=7, H>S, hcp+length_points>=13
+      when  x is not H
+  P   "Nothing to say over their weak two"
+      priority -10
+
+# ── Advancer after our double of their weak two ──────────────────────
+# BBA (probes/vs-w2-2H-X-adv.toml, vs-w2-2S-X-adv.toml): the cheapest
+# suit with four, 0-10 (majors first); a jump in a major with five, 8-11;
+# 2NT 11-12 and 3NT 12+ with their suit stopped; the cue bid of their
+# suit, 13+, forcing to game; four of a major with four and game values;
+# a pass with length and strength in their suit.
+after (2x) X (P) when x is not C
+  P   "Penalty: five of their suit with two top honours"
+      shows x>=5, quality(x)>=good | top5(x)>=3
+      priority 1
+  P   "Penalty: four of their suit, a flat hand and 10+"
+      shows x=4, hcp>=10, stop(x), S<=4, H<=4, D<=4, C<=4
+      priority 1
+  cheapest(x) "Cue bid: 13+, forcing to game"
+      alert  artificial
+      shows  hcp+length_points>=13
+      sets   forcing=game
+  4S  "Game: four or more spades, 11+"
+      shows S>=4, S>=H, hcp+length_points=11..12
+      when  x is not S
+  4H  "Game: four or more hearts, 11+"
+      shows H>=4, H>S, hcp+length_points=11..12
+      when  x is not H
+  jump(S) "Invitational: five or more spades, 8-10"
+      shows S>=5, S>=H, hcp+length_points=8..10
+      when  x is not S, cheapest_rank(S) <= 13     # a jump to three, not to game
+  jump(H) "Invitational: five or more hearts, 8-10"
+      shows H>=5, H>S, hcp+length_points=8..10
+      when  x is not H, cheapest_rank(H) <= 13
+  cheapest(N) "11-12 with {x} stopped"
+      shows hcp+length_points=11..12, S<=3 | x is S, H<=3 | x is H
+      when  stop(x), cheapest_rank(x) < 14
+      sets  ask=nt_invite
+  3N  "Game with {x} stopped, no four-card major"
+      shows hcp+length_points>=13 | (hcp+length_points>=11, cheapest_rank(x) >= 14), S<=3 | x is S, H<=3 | x is H
+      when  stop(x)
+  cheapest(S) "Four or more spades, 0-10"
+      shows S>=4, S>=H, hcp+length_points<=10
+      when  x is not S
+  cheapest(H) "Four or more hearts, 0-10"
+      shows H>=4, H>S, hcp+length_points<=10
+      when  x is not H
+  cheapest(D) "Four or more diamonds, 0-10, no four-card major"
+      shows D>=4, D>=C, hcp+length_points<=10, S<=3 | x is S, H<=3 | x is H
+      when  x is not D
+  cheapest(C) "Four or more clubs, 0-10, no four-card major"
+      shows C>=4, C>D | x is D, hcp+length_points<=10, S<=3 | x is S, H<=3 | x is H
+      when  x is not C
+  # Nothing fits: the longest suit that is not theirs, cheapest first.
+  cheapest(S) "Our best suit: spades"   when x is not S, S>=H, S>=D, S>=C
+      priority -5
+  cheapest(H) "Our best suit: hearts"   when x is not H, H>=D, H>=C
+      priority -5
+  cheapest(D) "Our best suit: diamonds" when x is not D, D>=C
+      priority -6
+  cheapest(C) "Our best suit: clubs"    when x is not C
+      priority -7
+
+# ── The doubler's rebid ──────────────────────────────────────────────
+# A pass denies the power double (17+ HCP); the strong hand raises,
+# shows its own suit, or bids notrump.
+after (2x) X (P) 2y (P) | (2x) X (P) 3y (P) when y is not x, x is not C
+  P   "Minimum double: partner has chosen"          shows hcp<=16
+      priority -5
+  4{y} "17+ with four: game in partner's major"      shows y>=4, hcp>=17
+      when  y is H | y is S
+  cheapest(y) "17+ with four: raise"                 shows y>=4, hcp>=17
+      priority -1
+  3N  "18+ with {x} stopped"                         shows hcp>=18, stop(x)
+  cheapest(S) "17+ and five or more spades"          shows S>=5, hcp>=17
+      when  x is not S, y is not S
+  cheapest(H) "17+ and five or more hearts"          shows H>=5, S<=4, hcp>=17
+      when  x is not H, y is not H
+after (2x) X (P) 2N (P) when x is not C
+  3N  "Accepts the invitation: 14+"                  shows hcp>=14
+  P   "Declines"                                     shows hcp<=13
+      priority -5
+
+# ── Advancer after our overcall of their weak two ────────────────────
+after (2x) 2y (P) | (2x) 3y (P) when y is not x, x is not C
+  4{y} "Game: three-card support, 12+"               shows y>=3, hcp+length_points>=12
+      when  y is H | y is S
+  cheapest(y) "Raise: three-card support, 8-11"      shows y>=3, hcp+length_points=8..11
+  3N  "Game: 12+ with {x} stopped"                   shows hcp+length_points>=12, stop(x), y<=2
+  P   "Nothing to add"                               priority -10
+
+# ── Advancer after our 2NT (15-17) ───────────────────────────────────
+after (2x) 2N (P) when x is not C
+  3N  "Game: 9+"                                     shows hcp>=9, S<=5, H<=5
+  4S  "Game: six or more spades, 8+"                 shows S>=6, hcp>=8
+      when  x is not S
+  4H  "Game: six or more hearts, 8+"                 shows H>=6, hcp>=8
+      when  x is not H
+  P   "No game"                                      shows hcp<=8
+      priority -10
+
+# ── Their side after our action over the weak two ───────────────────
+# The weak-two responses assume a pass on the right. Over our double or
+# overcall the responder competes with a fit (total-tricks.bid) or
+# passes; the opener has described his hand.
+after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) when x is not C
+  P   "They came in: nothing to add"                 priority -10
+after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) when x is not C
+  P   "Partner passed: the preempt said it all"      priority -10
