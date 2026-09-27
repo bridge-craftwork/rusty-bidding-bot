@@ -1,0 +1,109 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The Law of Total Tricks (Rick, 2026-09-27; Basic_Takeout_Double 193).
+# When both sides are bidding and the hand is not clearly ours, compete
+# to the level where the tricks needed equal our trumps: eight trumps,
+# the two level; nine, three; ten, four. No higher.
+#
+# Our trumps are my length plus what partner has shown. A takeout double
+# of a major counts as four in the unbid suits once it is known to be the
+# shape double (the power branch collapses when the deck or the auction
+# rules out 17 HCP): BBA's doubler holds four of the other major 68% of
+# the time and four of a minor 73% (probes/tools/takeout_shape.py).
+# Elsewhere partner counts for what he has shown.
+#
+# At unfavourable vulnerability we hedge a trick: one level lower.
+#
+# A fallback: below every rule that describes a hand, above the passes
+# that only say "nothing more to say".
+
+module total-tricks "The Law of Total Tricks"
+  needs  base
+
+# `bonus`: partner's three is a takeout double of their major, counted as four.
+# The hedge: vulnerable against not, one trick fewer.
+when they.bid, !lho.last=P | !rho.last=P      # they are still bidding
+  2x  "Total tricks: eight trumps between us: the two level"
+      shows x + partner.x.min = 8
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  2x  "Total tricks: eight trumps between us, a trick hedged vulnerable: the two level"
+      shows x + partner.x.min - 1 = 8
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  2x  "Total tricks: eight trumps between us, partner's double counted as four: the two level"
+      shows x + partner.x.min + 1 = 8
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  2x  "Total tricks: eight trumps between us, partner's double counted as four, a trick hedged vulnerable: the two level"
+      shows x + partner.x.min + 1 - 1 = 8
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  3x  "Total tricks: nine trumps between us: the three level"
+      shows x + partner.x.min = 9
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  3x  "Total tricks: nine trumps between us, a trick hedged vulnerable: the three level"
+      shows x + partner.x.min - 1 = 9
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  3x  "Total tricks: nine trumps between us, partner's double counted as four: the three level"
+      shows x + partner.x.min + 1 = 9
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  3x  "Total tricks: nine trumps between us, partner's double counted as four, a trick hedged vulnerable: the three level"
+      shows x + partner.x.min + 1 - 1 = 9
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  4x  "Total tricks: ten+ trumps between us: the four level"
+      shows x + partner.x.min >= 10
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  4x  "Total tricks: ten+ trumps between us, a trick hedged vulnerable: the four level"
+      shows x + partner.x.min - 1 >= 10
+      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  4x  "Total tricks: ten+ trumps between us, partner's double counted as four: the four level"
+      shows x + partner.x.min + 1 >= 10
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  !vul | they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
+  4x  "Total tricks: ten+ trumps between us, partner's double counted as four, a trick hedged vulnerable: the four level"
+      shows x + partner.x.min + 1 - 1 >= 10
+      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
+      when  vul, !they.vul
+      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      sets  ask=signoff
+      priority -4
