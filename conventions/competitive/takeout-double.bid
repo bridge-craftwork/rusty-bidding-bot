@@ -99,53 +99,53 @@ after (1x) X (P) | (1x) P (P) X (P)
 # stopper. This is the second half of "double first, then bid the suit".
 after (1x) X (P) 1y (P) | (1x) P (P) X (P) 1y (P)
   P   "Minimum takeout double: partner has chosen"
-      shows hcp+length_points<=17
+      shows hcp<=16
       priority -5
   2{y} "18-19 total points, four-card support"
-      shows y>=4, hcp+length_points=18..19
+      shows y>=4, hcp+length_points=17..19
   3{y} "20-21 total points, four-card support"
       shows y>=4, hcp+length_points=20..21
   4{y} "22+ total points, four-card support for partner's major"
       shows y>=4, hcp+length_points>=22
       when  y is H | y is S
   1N  "18-19 balanced with a stopper in {x}"
-      shows balanced, hcp=18..19
+      shows balanced, hcp=17..19
       when  stop(x)
   cheapest(S) "18+ total points and a five-card spade suit"
-      shows S>=5, hcp+length_points>=18
+      shows S>=5, hcp+length_points>=18 | hcp>=17
       when  x is not S, y is not S
   cheapest(H) "18+ total points and a five-card heart suit"
-      shows H>=5, hcp+length_points>=18
+      shows H>=5, hcp+length_points>=18 | hcp>=17
       when  x is not H, y is not H
   cheapest(D) "18+ total points and a five-card diamond suit"
-      shows D>=5, hcp+length_points>=18
+      shows D>=5, hcp+length_points>=18 | hcp>=17
       when  x is not D, y is not D
   cheapest(C) "18+ total points and a five-card club suit"
-      shows C>=5, hcp+length_points>=18
+      shows C>=5, hcp+length_points>=18 | hcp>=17
       when  x is not C, y is not C
 
 after (1x) X (P) 2y (P) | (1x) P (P) X (P) 2y (P)
   P   "Minimum takeout double: partner has chosen"
-      shows hcp+length_points<=17
+      shows hcp<=16
       priority -5
   3{y} "18+ total points, four-card support"
-      shows y>=4, hcp+length_points>=18
+      shows y>=4, hcp+length_points>=18 | hcp>=17
   3{y} "20+ and three-card support"
       shows y=3, hcp>=20
   cheapest(S) "18+ total points and a five-card spade suit"
-      shows S>=5, hcp+length_points>=18
+      shows S>=5, hcp+length_points>=18 | hcp>=17
       when  x is not S, y is not S
   cheapest(H) "18+ total points and a five-card heart suit"
-      shows H>=5, hcp+length_points>=18
+      shows H>=5, hcp+length_points>=18 | hcp>=17
       when  x is not H, y is not H
   cheapest(D) "18+ total points and a five-card diamond suit"
-      shows D>=5, hcp+length_points>=18
+      shows D>=5, hcp+length_points>=18 | hcp>=17
       when  x is not D, y is not D
   cheapest(C) "18+ total points and a five-card club suit"
-      shows C>=5, hcp+length_points>=18
+      shows C>=5, hcp+length_points>=18 | hcp>=17
       when  x is not C, y is not C
   2N  "18-19 balanced with a stopper in {x}"
-      shows balanced, hcp=18..19
+      shows balanced, hcp=17..19
       when  stop(x)
 
 # The doubler again when they compete (2026-09-25; no rules before). BBA:
@@ -175,17 +175,47 @@ after (1x) X (P) 1y (2x) | (1x) X (P) 2y (2x)
 # long suit passed). The strong double shows its suit now.
 after (1x) X (1y) P (*) | (1x) X (2y) P (*) when y is not x, !rho.last=P
   cheapest(S) "18+ total points and five spades"
-      shows S>=5, hcp+length_points>=18
+      shows S>=5, hcp+length_points>=18 | hcp>=17
       when  x is not S, y is not S
   cheapest(H) "18+ total points and five hearts"
-      shows H>=5, S<=4, hcp+length_points>=18
+      shows H>=5, S<=4, hcp+length_points>=18 | hcp>=17
       when  x is not H, y is not H
   cheapest(D) "18+ total points and five diamonds"
-      shows D>=5, S<=4, H<=4, hcp+length_points>=18
+      shows D>=5, S<=4, H<=4, hcp+length_points>=18 | hcp>=17
       when  x is not D, y is not D
   cheapest(C) "18+ total points and five clubs"
-      shows C>=5, D<=4, S<=4, H<=4, hcp+length_points>=18
+      shows C>=5, D<=4, S<=4, H<=4, hcp+length_points>=18 | hcp>=17
       when  x is not C, y is not C
+
+# The doubler after advancer's cue bid when opener bids again
+# (2026-09-27; Basic_Takeout_Double 193, 1H (X) P (2H) 3H). The cue bid
+# forced to game and asked for a description. The power double (17+
+# HCP) doubles; anything less describes itself, or passes where the
+# force allows it. So not doubling denies the power hand, and partner can
+# count the double's shape (the Law of Total Tricks, total-tricks.bid).
+after (1x) X (P) 2x (*) when !rho.last=P
+  X   "Power double: 17+ HCP"
+      shows hcp>=17
+      priority 1
+  P   "No extras: 16 or less"                   shows hcp<=16
+      priority -5
+  # Below the pass: where the game force rules the pass out, the
+  # minimum describes itself; a pass (BBA's forcing pass) denies only
+  # the power hand, not every four-card suit.
+  cheapest(S) "Four or more spades, no extras"   shows S>=4, hcp<=16
+      when  x is not S
+      priority -6
+  cheapest(H) "Four or more hearts, no extras"   shows H>=4, S<=3, hcp<=16
+      when  x is not H
+      priority -6
+  cheapest(N) "A stopper in {x}, no extras"     shows stop(x), hcp<=16
+      priority -7
+  cheapest(D) "Four or more diamonds, no extras" shows D>=4, hcp<=16
+      when  x is not D
+      priority -8
+  cheapest(C) "Four or more clubs, no extras"    shows C>=4, hcp<=16
+      when  x is not C
+      priority -8
 
 # ── Advancer when RHO does not pass ──────────────────────────────────
 # The double is no longer forcing: advancer passes with nothing and bids

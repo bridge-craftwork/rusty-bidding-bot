@@ -126,3 +126,24 @@ Kept: 17+ HCP with the overcall to 16 (`one_level_max` default 16),
 neutral on its own; its value is the inferences it allows. **For
 Rick:** this lowers the overcall ceiling from 17 to 16 HCP; the
 fallback is the overlap version (overcall to 17), -171 by side.
+
+## Step c: the doubler's pass denies the power double (2026-09-27)
+
+For the double to collapse to its shape, a pass must deny 17+ HCP.
+
+- The doubler's rebids after an advance: the "minimum" pass is now 16
+  HCP or less (was 17 total points); the strong actions are "18 total
+  points, or 17 HCP". Moving the ladder wholly to HCP lost (-38 by par
+  distance, -327 by side: 15-16 counts with a long suit stopped bidding
+  it); the mixed version is neutral (+1 / -58).
+- After advancer's cue bid and opener's rebid (1♥ (X) P (2♥) 3♥, board
+  193) there was no rule. Now: double with 17+; pass with 16 or less
+  (BBA's forcing pass, and ours where the force allows it); where the
+  game force rules the pass out, a four-card suit or notrump. The suit
+  bids rank **below** the pass, so a pass denies only the power hand:
+  ranked above it, the pass also denied every four-card suit and read
+  South as exactly 3-4-3-3. Full corpus +100 / +139, Basic_*
+  competitive +17 / +24.
+
+On board 193, North now reads South's pass as 0-16 HCP with three or
+more spades, diamonds and clubs.

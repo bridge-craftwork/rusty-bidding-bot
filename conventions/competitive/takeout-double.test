@@ -36,3 +36,9 @@ N QJ32.K84.T54.932          | 1H X 2H | P      | four spades and 6 HCP: not a fr
 card    Basic-Bridge
 dealer  E
 S AK.85.AKQJ862.76      | 1H X 1S P 1NT    | 2D  | 18+ with six diamonds: shows the suit now
+
+# ── The doubler after advancer's cue bid and opener's rebid (2026-09-27)
+card    Basic-Bridge
+dealer  E
+S AKJ5.42.AK54.KQ5      | 1H X P 2H 3H   | X   | 19: the power double doubles
+S AJ75.42.K542.A65      | 1H X P 2H 3H   | 3S  | 12 with four spades: forced, shows them (BBA passes, a forcing pass)
