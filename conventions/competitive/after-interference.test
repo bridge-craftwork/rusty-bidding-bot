@@ -100,3 +100,11 @@ S Q75.KJ84.AJT6.72      | 1D 2S 3S P       | 4D  | 11: no game
 N 3.QT6.AQJ3.AJ874      | 1D 2S 3S P 4D P  | 5D  | 14 opposite the sign-off: game
 N A62.KJ74.K63.Q74      | 1H 2D 3D P 3H P  | 4H  | 13 opposite the sign-off: game
 N 862.KJ74.K63.Q74      | 1H 2D 3D P 3H P  | P   | 11: the limit raise
+
+# ── Over a one-level overcall: cue-bid raise and notrump (2026-09-26)
+card    Basic-Bridge
+dealer  S
+N KT95.K42.KQ4.873      | 1H 1S            | 2S  | 11 with three hearts: cue bid, limit raise or better
+N K6.Q63.KJ3.J7543      | 1S 1H            | !2H | two spades: no cue bid
+N AJ6.KJ3.Q65.KJ64      | 1D 1H            | 3NT | 15 balanced with hearts held
+S AQ6.A9763.A6.T83      | 1H 1S 2S P       | 3H  | 14: no game opposite a limit raise

@@ -284,3 +284,17 @@ the cue bid, their suit read as partner's; they now need
 The same with a major: over opener's sign-off in three, responder with
 13+ bids game (240 boards in the queue). Full corpus +919 by par
 distance, +1,865 by side.
+
+## Cue-bid raise and notrump over a one-level overcall (2026-09-26)
+
+Over a one-level overcall responder had the negative double, one-level
+suits, 1NT and a simple raise, but no limit raise and no 2NT/3NT: those
+existed only over two-level overcalls, so 11-16 counts with a fit or a
+stopper passed (1♥ (1♠) P with three hearts and 11-16). Added the cue
+bid (three-card major support or four of a minor, 11+), 2NT 11-12
+(asks the notrump invitation) and 3NT 13+, both balanced with their
+suit stopped; opener's answers and responder's follow-ups now include
+the one-level cue. When they raise over the cue, opener bids game with
+16+ or competes in his suit (the engine keeps the round force, so pass
+is not available). Full corpus +1,100 by par distance, +2,660 by side
+(1,511 boards).

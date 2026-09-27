@@ -106,7 +106,40 @@ after 1x (1y)
       shows H>=5, hcp>=13
       when  y is S, x is not H, !new_suit_forcing
       sets  forcing=game
+  # Limit raise or better, and the notrump responses (2026-09-26: over a
+  # one-level overcall these existed only over two-level ones, so 11-16
+  # counts with a fit or a stopper passed; 40 corpus boards with 25+ HCP
+  # and game on).
+  cheapest(y) "Cue bid: limit raise or better in {x}"
+      alert  artificial
+      shows  x>=3, hcp+length_points>=11
+      when   cue_raise, x is H | x is S | x>=4
+      sets   forcing=round
+      priority 1
+  2N  "11-12 total points, balanced, a stopper in {y}"
+      shows balanced, hcp+length_points>=11, hcp+length_points<=12
+      when  stop(y)
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+      sets  ask=nt_invite
+  3N  "13+ total points, balanced, a stopper in {y}"
+      shows balanced, hcp+length_points>=13
+      when  stop(y)
+      when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
   P   "Nothing to say over the overcall"  priority -10
+
+# Opener when they raise over the one-level cue bid: game in a major
+# with 16+, else let it go (the cue bid is no longer forcing).
+after 1x (1y) 2y (3y) when y is not x
+  4{x} "Game: 16+ opposite the limit raise"   shows hcp>=16
+       when  x is H | x is S
+  3N   "Game: 16+ with a stopper in {y}"       shows hcp>=16, stop(y)
+       when  x is C | x is D
+  P    "They competed: no game"
+       priority -5
+  # The engine keeps the cue bid's round force after their raise, so the
+  # pass above is not allowed: compete in our suit instead.
+  cheapest(x) "No game: our suit at the cheapest level"
+       priority -6
 
 # ── They overcalled at the two level or jumped ───────────────────────
 # Rick: over a two-level overcall a new suit is 10+ total points with five
@@ -316,7 +349,7 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
 # ── Opener answers the cue-bid raise ─────────────────────────────────
 # The cue bid showed three-card support and 11+ total points, so opener
 # accepts with more than a minimum and signs off otherwise.
-after 1x (2y) 3y (P) | 1x (3y) 4y (P)
+after 1x (1y) 2y (P) | 1x (2y) 3y (P) | 1x (3y) 4y (P)
   4{x} "Accepts: game in {x}"
       shows hcp>=16
       when  x is H | x is S
@@ -335,7 +368,7 @@ after 1x (2y) 3y (P) | 1x (3y) 4y (P)
 
 # Responder after opener's sign-off: the cue bid was 11+ with no upper
 # limit, so with 13+ responder bids the game himself.
-after 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when x is C | x is D, y is not x
+after 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when x is C | x is D, y is not x
   3N  "Game: 13+ with a stopper in {y}"   shows hcp+length_points>=13, stop(y)
   5{x} "Game in the minor: 14+"          shows hcp+length_points>=14
       priority -1
@@ -343,7 +376,7 @@ after 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when x is C | x is D, y is n
       priority -5
 after 1x (2y) 3y (P) 4x (P) when x is H | x is S
   P   "Game reached"
-after 1x (2y) 3y (P) 3x (P) when x is H | x is S, y is not x
+after 1x (1y) 2y (P) 2x (P) | 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) when x is H | x is S, y is not x
   4{x} "Game: 13+ opposite the sign-off"  shows hcp+length_points>=13
   P   "The limit raise: no game"
       priority -5
