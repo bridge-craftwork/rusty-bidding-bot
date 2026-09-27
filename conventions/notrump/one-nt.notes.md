@@ -489,3 +489,22 @@ them natural) had no answer. Opener now bids six with three-card support
 and 17, else 3NT. Basic_What_To_Open 320 (the only Basic_* board) +1;
 full corpus +660 by par distance and +2,375 to the side that changed,
 over 248 boards, almost all 1NT-3♦ on cards outside Basic_*.
+
+## Slam in a minor over 1NT (2026-09-27)
+
+First step of the slam work. Over the corpus BBA bids 22,939 slams and
+we bid 9,905; on the 14,834 boards where only BBA bids one it makes 78%
+of the time double dummy. The largest group of those (544 boards) was
+1NT-3NT: responder with 15-18 HCP and a five-card minor, mostly on
+21GF-MSTandMSS (Minor Suit Stayman, which we do not play), where the
+only slam route was the natural 3m, and that needed six cards.
+Calibration from every double-dummy table in the corpus: a small slam
+makes 72% of the time with a nine-card fit at 29 HCP between the hands,
+71% with an eight-card fit at 30, and 6NT 59% at 31 with no fit.
+
+Now: 3♣/3♦ is a slam try with six cards or five in an unbalanced hand
+and slam-invite values; opener bids six with a fit and a maximum, four
+of the minor with a fit and a minimum (forcing; responder bids six from
+17 total points, else five), 3NT without a fit (responder bids 6NT with
+slam values, else passes). Full corpus +1,943 by par distance, +3,630 by
+side (481 boards).

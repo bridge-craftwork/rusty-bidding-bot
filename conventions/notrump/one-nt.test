@@ -21,7 +21,7 @@ N Q65.AK653.J3.KQ5      | 1NT P          | 2D     | 15 HCP + 1 length = 16 with 
 card    Basic-Bridge
 N 54.AQ.KQ6.AQ8654      | 1NT P          | 3C     | 17 with six clubs: too strong for 3NT
 N Q.K9.AQJ843.KQ87      | 1NT P          | 3D     | 17 with six diamonds
-N QT7.8.KQ72.AKQT6      | 1NT P          | 3NT    | 16 with 5-4 in the minors: no better call
+N QT7.8.KQ72.AKQT6      | 1NT P          | 3C  | 16 with 5-4 in the minors: slam try in clubs (2026-09-27)
 N KQ2.Q8.KQ72.A874      | 1NT P          | 4NT    | 16 balanced: quantitative
 N 54.A2.KQ6.Q98654      | 1NT P          | 3NT    | 11 with six clubs: game values, play 3NT
 
@@ -49,5 +49,12 @@ N 65.K76.K862.AQ62      | 1NT P          | 3NT    | bba at IMPs: 12 HCP, game
 card    Basic-Bridge
 dealer  S
 N AQ83.82.Q52.T754      | 1NT P 2C P 2H P 2NT P 3S P | P | declined: play 3S
-S 75.AJT87.AJ9.AQ8      | 1NT P 3D P            | 3NT | 16 with three diamonds: declines the slam try
+S 75.AJT87.AJ9.AQ8      | 1NT P 3D P            | 4D  | 16 with three diamonds: shows the fit, responder decides (2026-09-27)
 S 75.AJT8.AJ9.AKQ8      | 1NT P 3D P            | 6D  | 18 with three diamonds: slam
+
+# The minor slam try over 1NT (2026-09-27)
+card    Basic-Bridge
+dealer  S
+N .AJ2.AQ72.AQ8743      | 1NT P 3C P 4C P  | 6C  | 17 with the club fit known: slam
+N 72.A4.AQ72.KQ874      | 1NT P 3C P 4C P  | 5C  | 15: game in the fit
+N A.AQ2.AQ752.K532      | 1NT P 3D P 3NT P | 6NT | no fit, 19: slam values anyway

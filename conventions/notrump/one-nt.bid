@@ -44,11 +44,15 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       shows strength=invite, H<=4, S<=4, (C>=6 | D>=6)
       when  minors is relay | minors is none         # no minor route for invitations
       sets  ask=nt_invite
-  3C  "Too strong for 3NT, with six or more clubs"
-      shows C>=6, strength>=slam_invite, H<=4, S<=4
+  # A slam try in the minor: six cards, or five in an unbalanced hand
+  # (2026-09-27: 15-18 counts with a five-card minor bid 3NT opposite
+  # 15-17; a nine-card fit makes slam double dummy 72% of the time at 29
+  # HCP between the hands, an eight-card fit 71% at 30).
+  3C  "Slam try: six or more clubs, or five and unbalanced"
+      shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
       when  !three_c_transfer, minors is not bba
-  3D  "Too strong for 3NT, with six or more diamonds"
-      shows D>=6, strength>=slam_invite, H<=4, S<=4
+  3D  "Slam try: six or more diamonds, or five and unbalanced"
+      shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
       when  three_d is natural
   3N  "No better call: {game} total points or more"
       shows strength>=game
@@ -128,10 +132,23 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
 # Basic_What_To_Open 320).
 after 1N (P) 3C (P) when !three_c_transfer, minors is not bba
   6C  "Accepts: a club fit and a maximum"   shows C>=3, hcp>=17
-  3N  "Declines: 3NT"                       shows C<=2 | hcp<=16
+  4C  "A club fit, not a maximum: responder decides"   shows C>=3, hcp<=16
+      sets  trump=C, forcing=game
+  3N  "Declines: no club fit"               shows C<=2
 after 1N (P) 3D (P) when three_d is natural
   6D  "Accepts: a diamond fit and a maximum"   shows D>=3, hcp>=17
-  3N  "Declines: 3NT"                          shows D<=2 | hcp<=16
+  4D  "A diamond fit, not a maximum: responder decides"   shows D>=3, hcp<=16
+      sets  trump=D, forcing=game
+  3N  "Declines: no diamond fit"               shows D<=2
+# Responder after the answer: with the fit known, slam from 17 total
+# points (32+ between the hands); without it, 6NT only with slam values.
+after 1N (P) 3C (P) 4C (P) | 1N (P) 3D (P) 4D (P)
+  6{trump} "Slam in the fit: 17+"          shows points>=17
+  5{trump} "Game in the fit"               shows points<=16
+after 1N (P) 3C (P) 3N (P) | 1N (P) 3D (P) 3N (P)
+  6N  "No fit, but slam values: {slam} total points"   shows strength>=slam
+  P   "No fit: 3NT"
+      priority -5
 
 # Opener answers the invitation: accept only when game is certain (17
 # opposite 8-9). With a 4-4 major fit found through Stayman, play there.
