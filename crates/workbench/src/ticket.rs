@@ -1432,8 +1432,19 @@ pub fn claude_prompt(dir: &Path, c: &Context) -> String {
         .reproduce
         .call
         .as_deref()
-        .map(|r| format!(" Reproduce it with the `rbb call` line in ticket.md ({r})."))
-        .unwrap_or_else(|| " Reproduce it with the commands in ticket.md.".into());
+        .map(|r| {
+            format!(
+                " The ticket and context.json are usually enough to diagnose; run the \
+                 `rbb call` line in ticket.md ({r}) only if the rules have changed since \
+                 the ticket's commit, or to test a fix."
+            )
+        })
+        .unwrap_or_else(|| {
+            " The ticket and context.json are usually enough to diagnose; run the \
+             commands in ticket.md only if the rules have changed since the ticket's \
+             commit, or to test a fix."
+                .into()
+        });
     format!(
         "Work the ticket at {}. Read ticket.md first, then context.json.{repro} \
          Diagnose before changing anything, and judge any change by the house rules in \

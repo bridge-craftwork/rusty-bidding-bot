@@ -113,9 +113,13 @@ commands instead of running them).
 
 - **Work one:** read `ticket.md` (the note, board, auctions, first
   difference, the engine's reading of BBA's auction, par), then
-  `context.json` for anything the summary leaves out. Reproduce with its
-  `rbb call` / `compare` lines; check `git` in the context, since rules
-  hot-reload and uncommitted `.bid` edits may have shaped what Rick saw.
+  `context.json` for anything the summary leaves out; together they are
+  usually enough to diagnose (the candidates, their rules and why each
+  lost, and the engine's reading of every BBA call are all there). Run
+  the `rbb call` / `compare` lines only when the rules have changed
+  since the ticket's commit (check `git` in the context: rules
+  hot-reload, so uncommitted `.bid` edits may have shaped what Rick
+  saw), or to test a fix and positions the ticket does not show.
   Diagnose before changing anything, then fix or explain, judging the
   change by the rules above (par decides, the competitive yardstick,
   `.test` cases, notes).
