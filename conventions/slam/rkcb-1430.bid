@@ -4,10 +4,12 @@
 # modules set (trump agreed, game forcing), so they work after any auction
 # that reaches that state.
 
-module rkcb-1430 "Roman Keycard Blackwood (1430, and 0314)"
+module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   needs  base
   param  k1430 = slam.blackwood.rkcb_1430 default false
   param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  m0314 = slam.blackwood.minor_0314 default false
+  param  gstyle = general.style
   param  style = slam.cue_bids.style default first_or_second_round
 
 # ── The ask ───────────────────────────────────────────────────────────
@@ -101,12 +103,26 @@ when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{tr
       priority 15
 
 when (k1430 | k0314), asked keycards(t)
-  # 0314 (Precision and the 21GF-GIB cards, 2026-09-27: without it those
-  # cards had no keycard ask at all) swaps the first two answers.
-  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial   when k1430
-  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial   when k1430
-  5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial   when k0314
-  5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial   when k0314
+  # We play 1430 whatever the card says (Rick, 2026-09-27); the
+  # `minor_0314` treatment swaps the first two answers when a minor is
+  # trumps. BBA plays the card's 0314 (Precision, 21GF-GIB, 21GF-GIB-
+  # Bergen), so `general.style=bba` does too.
+  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
+      when  gstyle is not bba, !m0314 | t is H | t is S
+  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+      when  gstyle is not bba, !m0314 | t is H | t is S
+  5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+      when  gstyle is not bba, m0314, t is C | t is D
+  5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
+      when  gstyle is not bba, m0314, t is C | t is D
+  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
+      when  gstyle is bba, !k0314
+  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+      when  gstyle is bba, !k0314
+  5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+      when  gstyle is bba, k0314
+  5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
+      when  gstyle is bba, k0314
   5H  "2 keycards, no {t} queen"       shows keycards(t)=2, !has(Q,t)  artificial
   5S  "2 keycards and the {t} queen"   shows keycards(t)=2, has(Q,t)  artificial
 
