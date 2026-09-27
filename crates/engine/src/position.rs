@@ -259,6 +259,33 @@ impl Position {
             || (st.forcing == Forcing::Game && self.below_game(d))
     }
 
+    /// The deck has 40 HCP: no seat holds more than 40 minus what the other
+    /// three have shown at least. Added as a constraint, so earlier
+    /// disjunctions are narrowed again: a takeout double's "17+ HCP, any
+    /// shape" branch drops out once the doubler cannot hold 17, leaving
+    /// the shape. Repeated until nothing moves (a collapse can raise a
+    /// minimum, which lowers the others' maxima).
+    pub fn apply_deck_hcp(&mut self) {
+        for _ in 0..4 {
+            let mut moved = false;
+            for s in 0..4 {
+                let others: i32 = (0..4)
+                    .filter(|&t| t != s)
+                    .map(|t| self.knowledge[t].hcp.lo)
+                    .sum();
+                let bound = 40 - others;
+                if bound < self.knowledge[s].hcp.hi {
+                    let before = self.knowledge[s].hcp;
+                    self.knowledge[s].add(crate::eval::hcp_at_most(bound));
+                    moved |= self.knowledge[s].hcp != before;
+                }
+            }
+            if !moved {
+                break;
+            }
+        }
+    }
+
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
         match self.auction().last_bid() {

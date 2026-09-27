@@ -491,6 +491,7 @@ impl Engine {
         step.knowledge = k.clone();
         step.warnings = warnings;
         pos.knowledge[caller.to_index()] = k;
+        pos.apply_deck_hcp();
         pos.calls.push(call.clone());
         step
     }

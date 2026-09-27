@@ -456,7 +456,12 @@ How `rbb-engine` implements the model, and its current limits:
   to M) removes the candidate before ranking. It does not appear in the
   trace and is never used for negative inference.
 - **Knowledge** holds ranges for HCP and each suit length, and whether the
-  hand is balanced. The deck constraint applies: lengths sum to 13, and a
+  hand is balanced. The deck has 40 HCP: after every call each seat's
+  maximum is capped at 40 minus the other three's minimums, and while
+  choosing a call a rule reading another seat also uses the chooser's
+  own HCP. Either cap re-narrows that seat's earlier disjunctions, so a
+  takeout double collapses to its shape once the doubler cannot hold
+  the 17 HCP of the power branch. The deck constraint applies: lengths sum to 13, and a
   balanced hand has 2 to 5 cards in every suit. All other terms (`has`,
   `keycards`, `shape`, `quality`) are kept as constraints but do not narrow
   the ranges. Partner's keycards are not tracked yet, so

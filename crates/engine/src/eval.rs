@@ -819,6 +819,24 @@ impl<'a> Ctx<'a> {
     }
 
     fn seat_attr(&self, d: Direction, seg: &Segment, b: &mut Bindings) -> R<Val> {
+        // Choosing a call, I also know my own HCP: another seat holds at
+        // most 40 minus mine and the other two seats' minimums. Narrowing a
+        // copy lets that seat's earlier disjunctions collapse too (partner's
+        // takeout double is the shape one when he cannot hold 17).
+        if let (Some(f), true) = (self.hand, d != self.actor) {
+            let k = self.pos.knowledge(d);
+            let others: i32 = Direction::ALL
+                .iter()
+                .filter(|&&t| t != d && t != self.actor)
+                .map(|&t| self.pos.knowledge(t).hcp.lo)
+                .sum();
+            let bound = 40 - f.hcp - others;
+            if bound < k.hcp.hi {
+                let mut private = k.clone();
+                private.add(hcp_at_most(bound));
+                return self.knowledge_attr(&private, d, seg, b);
+            }
+        }
         self.knowledge_attr(self.pos.knowledge(d), d, seg, b)
     }
 
@@ -1256,6 +1274,15 @@ pub fn path_expr(name: &str) -> Expr {
 }
 
 /// Constant true (`And []`) or false (`Or []`).
+/// `hcp <= n`, as a constraint for the knowledge store.
+pub fn hcp_at_most(n: i32) -> Expr {
+    Expr::Cmp {
+        cmp: CmpOp::Le,
+        lhs: Box::new(path_expr("hcp")),
+        rhs: Box::new(Expr::Int { value: n as i64 }),
+    }
+}
+
 pub fn konst(b: bool) -> Expr {
     if b {
         Expr::And { all: vec![] }
@@ -1483,6 +1510,49 @@ mod term_tests {
         assert_eq!(errors("we.bid"), ["unknown term `we.bid`"]);
         assert_eq!(errors("stopper(S)"), ["unknown function `stopper`"]);
         assert_eq!(errors("hcp.low>=3"), ["`.low` is not `.min` or `.max`"]);
+    }
+
+    /// The 40-HCP deck: publicly, a seat's maximum is 40 minus the
+    /// others' minimums, and a takeout-double-like disjunction collapses
+    /// to its shape branch once the power branch is out of reach;
+    /// privately, the actor's own HCP counts too.
+    #[test]
+    fn the_deck_collapses_a_power_branch() {
+        use crate::facts::Facts;
+        use bridge_types::Hand;
+        let double = when_of("(S>=3, D>=3, C>=3) | hcp>=17");
+        let mut pos =
+            Position::new(Direction::East, Vulnerability::None, ScoringMethod::Matchpoints);
+        let south = Direction::South.to_index();
+        assert!(pos.knowledge[south].add(double));
+        assert_eq!(pos.knowledge[south].len[3].lo, 0); // spades, C D H S
+        // Public: East 14+, North 12+, West 0+: South holds at most 14.
+        pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
+        pos.knowledge[Direction::North.to_index()].add(when_of("hcp>=12"));
+        pos.apply_deck_hcp();
+        assert_eq!(pos.knowledge[south].hcp.hi, 14);
+        assert_eq!(pos.knowledge[south].len[3].lo, 3, "{:?}", pos.knowledge[south]);
+
+        // Private: nothing public about North, but North holds 10 and East
+        // 14+, so South holds at most 16 from North's seat.
+        let mut pos =
+            Position::new(Direction::East, Vulnerability::None, ScoringMethod::Matchpoints);
+        pos.knowledge[south].add(when_of("(S>=3, D>=3, C>=3) | hcp>=17"));
+        pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
+        let hand = Facts::new(&Hand::from_pbn("T3.J.AJ8763.KJ87").unwrap());
+        let params = HashMap::new();
+        let ctx = Ctx {
+            pos: &pos,
+            actor: Direction::North,
+            hand: Some(&hand),
+            params: &params,
+            valuation: Valuation::default(),
+        };
+        let mut b = Bindings::new();
+        assert_eq!(ctx.cond(&when_of("partner.S>=3"), &mut b), Ok(Tri::True));
+        assert_eq!(ctx.cond(&when_of("partner.hcp<=16"), &mut b), Ok(Tri::True));
+        // Publicly South is still unknown.
+        assert_eq!(pos.knowledge[south].len[3].lo, 0);
     }
 
     /// Every name the checker accepts, the evaluator accepts too.
