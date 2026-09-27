@@ -46,3 +46,10 @@ card    Basic-Bridge
 dealer  S
 N 732.K864.952.J93      | 2NT P | P   | 4 HCP: no game (BBA passes)
 N 732.7654.Q953.J9      | 2NT P | P   | 3 HCP and four hearts: no Stayman
+
+# Minor slam try over 2NT (2026-09-27)
+card    Basic-Bridge
+dealer  S
+N 72.K4.K72.AQ8743      | 2NT P        | 4C  | 12 with six clubs: slam try
+S AK5.AQ2.KQ5.KJ73      | 2NT P 4C P   | 6C  | four clubs: slam
+S AK5.AQ32.KQ54.K7      | 2NT P 4C P   | 4NT | two clubs: no fit

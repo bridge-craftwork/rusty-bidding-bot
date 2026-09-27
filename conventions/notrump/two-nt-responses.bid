@@ -81,6 +81,24 @@ after 2N (P)
       when  style is bba
       priority -10
 
+# A slam try in a minor (2026-09-27; 483 boards stopped at 2NT-3NT where
+# BBA bid slam, half of them in a minor): four of the minor with six, or
+# five in an unbalanced hand, and slam-invite values. Opener bids six
+# with three-card support (20-21 and a fit is enough), else 4NT, no fit;
+# responder then bids 6NT with slam values.
+after 2N (P) when style is not bba
+  4C  "Slam try: six or more clubs, or five and unbalanced"
+      shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
+  4D  "Slam try: six or more diamonds, or five and unbalanced"
+      shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
+after 2N (P) 4x (P) when x is C | x is D, style is not bba
+  6{x}  "A fit: slam"                       shows x>=3
+  4N    "No fit"                            shows x<=2
+after 2N (P) 4x (P) 4N (P) when x is C | x is D, style is not bba
+  6N  "Slam values anyway"                  shows strength>=slam
+  P   "No fit: 4NT"
+      priority -5
+
 # Opener answers Stayman. 3♦ is the negative, as over 1NT.
 after 2N (P) 3C (P)
   3H  "4+ hearts"                 shows H>=4

@@ -138,3 +138,11 @@ Two gaps in the default, both seen in Basic_What_To_Open N/S auctions:
   BBA's does (from 5 HCP).
 
 No-rule positions in Basic_* N/S fell by 10; par effect on Basic_* +1.
+
+## Slam in a minor over 2NT (2026-09-27)
+
+483 boards stopped at 2NT-3NT where BBA bid slam (median 31 HCP between
+the hands, half of the slams in a minor). Now 4♣/4♦ is a slam try with
+six cards or five unbalanced and slam-invite values; opener bids six
+with three-card support, else 4NT; responder then 6NT with slam values.
+Full corpus +1,730 by par distance, +3,123 by side (448 boards).
