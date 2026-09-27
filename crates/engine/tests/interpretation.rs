@@ -189,3 +189,38 @@ when opening
     );
     assert_eq!(i.steps[0].knowledge.hcp.lo, 12, "{:#?}", i.steps[0]);
 }
+
+/// Replay `auction` (South deals): may the next caller not pass?
+fn must_bid_after(auction: &str) -> bool {
+    let e = engine();
+    let mut pos = e.start(
+        Direction::South,
+        Vulnerability::None,
+        ScoringMethod::Matchpoints,
+    );
+    for c in calls(auction) {
+        e.advance(&mut pos, &c);
+    }
+    pos.must_bid(pos.next_caller())
+}
+
+#[test]
+fn a_round_force_ends_when_the_opponents_act() {
+    // Responder's one-level suit is forcing for a round when RHO passes.
+    assert!(must_bid_after("1C Pass 1H Pass"));
+    // RHO bids, doubles or redoubles: opener may pass.
+    assert!(!must_bid_after("1C Pass 1H 1S"));
+    assert!(!must_bid_after("1C Pass 1H X"));
+    // The cue-bid raise over their overcall is forcing; they raise and
+    // opener is free.
+    assert!(must_bid_after("1D 1H 2H Pass"));
+    assert!(!must_bid_after("1D 1H 2H 3H"));
+    assert!(!must_bid_after("1D 1H 2H X"));
+}
+
+#[test]
+fn a_game_force_survives_their_bid() {
+    // Advancer's cue bid of their suit forces to game: the doubler may
+    // not pass when opener bids over it.
+    assert!(must_bid_after("1D X Pass 2D 3D"));
+}

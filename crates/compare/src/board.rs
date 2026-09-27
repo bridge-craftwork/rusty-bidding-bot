@@ -228,12 +228,11 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     })
 }
 
-/// Must this seat bid? Partner's call was forcing for a round, or the side
-/// is in a game force and the auction is below game.
+/// Must this seat bid? The engine's own rule (`Position::must_bid`):
+/// partner's call was forcing for a round and RHO passed, or the side is in
+/// a game force and the auction is below game.
 fn is_forced(pos: &rbb_engine::Position, seat: Direction) -> bool {
-    let st = pos.side_state(seat);
-    (st.forcing == rbb_engine::Forcing::Round && st.forcing_by == Some(seat.partner()))
-        || (st.forcing == rbb_engine::Forcing::Game && pos.below_game(seat))
+    pos.must_bid(seat)
 }
 
 #[allow(clippy::too_many_arguments)]

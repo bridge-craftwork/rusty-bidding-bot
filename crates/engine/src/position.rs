@@ -11,7 +11,9 @@ use crate::knowledge::SeatKnowledge;
 pub enum Forcing {
     #[default]
     None,
-    /// Partner of the player who set it may not pass at their next turn.
+    /// Partner of the player who set it may not pass at their next turn,
+    /// unless the opponent in between (partner's RHO) bids, doubles or
+    /// redoubles: then partner has a turn again and may pass.
     Round,
     /// Neither partner may pass below game.
     Game,
@@ -42,6 +44,19 @@ pub struct SideState {
     /// agreed, so one auction holds one dialogue.
     pub denied: [u8; 4],
     pub cued: [u8; 4],
+}
+
+impl SideState {
+    /// An opponent has bid, doubled or redoubled. A round force obliges
+    /// partner to bid only when RHO passes: once the forcer's LHO acts,
+    /// partner has room to pass and a pass says he has nothing to add.
+    /// A game force stands whatever the opponents do.
+    pub fn opponent_acted(&mut self, caller: Direction) {
+        if self.forcing == Forcing::Round && self.forcing_by.is_some_and(|f| f.next() == caller) {
+            self.forcing = Forcing::None;
+            self.forcing_by = None;
+        }
+    }
 }
 
 /// 0 for North-South, 1 for East-West.
@@ -236,6 +251,14 @@ impl Position {
         mine - 5 > before
     }
 
+    /// May `d` not pass here? Partner's last call was forcing for a round
+    /// (and RHO passed over it), or the side is in a game force below game.
+    pub fn must_bid(&self, d: Direction) -> bool {
+        let st = self.side_state(d);
+        (st.forcing == Forcing::Round && st.forcing_by == Some(d.partner()))
+            || (st.forcing == Forcing::Game && self.below_game(d))
+    }
+
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
         match self.auction().last_bid() {
@@ -306,5 +329,49 @@ mod tests {
         assert!(!pos("1D 2C X Pass 2H").jumped(s));
         assert!(!pos("1D 1H X Pass Pass").jumped(Direction::West));
         assert!(!pos("1D 1H X Pass 1S").jumped(s));
+    }
+
+    /// South deals; North's last call set `f`.
+    fn forced_by_north(calls: &str, f: Forcing) -> Position {
+        let mut p = pos(calls);
+        p.sides[0].forcing = f;
+        p.sides[0].forcing_by = Some(Direction::North);
+        p
+    }
+
+    #[test]
+    fn a_round_force_holds_when_rho_passes() {
+        let p = forced_by_north("1D 1H 2H Pass", Forcing::Round);
+        assert!(p.must_bid(Direction::South));
+        assert!(!p.must_bid(Direction::North));
+    }
+
+    #[test]
+    fn a_round_force_ends_when_rho_bids_doubles_or_redoubles() {
+        for rho in ["3H", "X", "XX"] {
+            let mut p = forced_by_north("1D 1H 2H", Forcing::Round);
+            p.calls.push(Call::from_pbn(rho).unwrap());
+            p.sides[0].opponent_acted(Direction::East);
+            assert!(!p.must_bid(Direction::South), "after {rho}");
+            assert_eq!(p.sides[0].forcing, Forcing::None);
+        }
+    }
+
+    #[test]
+    fn only_the_forcers_lho_releases_a_round_force() {
+        // West calls after South: the force North set is not his to end.
+        let mut p = forced_by_north("1D 1H 2H", Forcing::Round);
+        p.sides[0].opponent_acted(Direction::West);
+        assert_eq!(p.sides[0].forcing, Forcing::Round);
+    }
+
+    #[test]
+    fn a_game_force_holds_when_rho_bids() {
+        let mut p = forced_by_north("1D 1H 2H 3H", Forcing::Game);
+        p.sides[0].opponent_acted(Direction::East);
+        assert!(p.must_bid(Direction::South));
+        // At game the force is satisfied.
+        let p = forced_by_north("1D 1H 2H 3H 5D Pass", Forcing::Game);
+        assert!(!p.must_bid(Direction::North));
     }
 }

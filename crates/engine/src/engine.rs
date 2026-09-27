@@ -469,6 +469,9 @@ impl Engine {
         }
         // State: questions answered, forcing satisfied, then this call's effects.
         advance_state(&mut pos.sides[side(caller)], caller);
+        if !call.is_pass() {
+            pos.sides[1 - side(caller)].opponent_acted(caller);
+        }
         if let Some(best) = best {
             let entry = &sys.rules[best.entry];
             let ctx = self.ctx(pos, caller, None, entry);
@@ -502,9 +505,7 @@ impl Engine {
         let actor = pos.next_caller();
         let facts = Facts::new(hand);
         let sys = &self.systems[side(actor)];
-        let state = pos.side_state(actor);
-        let forced = (state.forcing == Forcing::Round && state.forcing_by == Some(actor.partner()))
-            || (state.forcing == Forcing::Game && pos.below_game(actor));
+        let forced = pos.must_bid(actor);
 
         struct Eligible {
             idx: usize,
