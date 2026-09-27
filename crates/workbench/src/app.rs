@@ -12,6 +12,7 @@ use egui_extras::{Column, TableBuilder};
 use rbb_compare::{short, AuctionFilter, BoardResult, Engines, Options, Report, Stats};
 
 use crate::detail::{short_path, Detail};
+use crate::ticket;
 
 pub const GOOD: Color32 = Color32::from_rgb(60, 170, 90);
 pub const BAD: Color32 = Color32::from_rgb(210, 80, 70);
@@ -70,6 +71,40 @@ enum Tab {
     Boards,
     Changes,
     Cases,
+}
+
+impl Tab {
+    fn name(self) -> &'static str {
+        match self {
+            Tab::Divergences => "Divergences",
+            Tab::Problems => "Problems",
+            Tab::Boards => "Boards",
+            Tab::Changes => "Changes",
+            Tab::Cases => "Cases",
+        }
+    }
+}
+
+/// Where "Report…" files GitHub issues.
+pub struct TicketOptions {
+    /// `owner/repo`; `None` for the origin remote's.
+    pub repo: Option<String>,
+    /// Print the `gh` commands instead of running them.
+    pub dry_run: bool,
+}
+
+/// A ticket being filed as a GitHub issue: its directory, and the outcome.
+type Filing = (PathBuf, Result<ticket::Filed, String>);
+
+/// The "Report…" dialog.
+struct TicketDialog {
+    open: bool,
+    kind: ticket::Kind,
+    note: String,
+    sink: ticket::Sink,
+    /// The last save: what was written, or what went wrong.
+    status: Option<Result<String, String>>,
+    filing: Option<mpsc::Receiver<Filing>>,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -152,10 +187,12 @@ pub struct App {
     /// The selected case, an index into `cases`.
     case: Option<usize>,
     show_passing: bool,
+    ticket: TicketDialog,
+    ticket_opts: TicketOptions,
 }
 
 impl App {
-    pub fn new(opts: Options, cards: PathBuf, editor: String) -> App {
+    pub fn new(opts: Options, cards: PathBuf, editor: String, ticket_opts: TicketOptions) -> App {
         let limit_text = opts.limit.map(|n| n.to_string()).unwrap_or_default();
         let scenarios_text = opts.scenarios.join(" ");
         let (par_tx, par_rx) = mpsc::channel();
@@ -196,6 +233,15 @@ impl App {
             cases: Ok(Vec::new()),
             case: None,
             show_passing: false,
+            ticket: TicketDialog {
+                open: false,
+                kind: ticket::Kind::Rule,
+                note: String::new(),
+                sink: ticket::Sink::load(),
+                status: None,
+                filing: None,
+            },
+            ticket_opts,
         };
         app.pending = true;
         app
@@ -593,6 +639,7 @@ impl eframe::App for App {
             }
         }
         self.receive_par();
+        self.receive_filing();
         if self.last_poll.elapsed() > Duration::from_millis(700) {
             self.last_poll = Instant::now();
             let m = rules_mtime(&self.opts.rules);
@@ -644,12 +691,25 @@ impl eframe::App for App {
             });
             });
         egui::CentralPanel::default().show(ui, |ui| self.lists(ui));
+        self.ticket_window(ui.ctx());
     }
 }
 
 impl App {
     fn toolbar(&mut self, ui: &mut egui::Ui) {
         ui.horizontal_wrapped(|ui| {
+            if ui
+                .button("Report…")
+                .on_hover_text(
+                    "File a ticket: your note plus everything the workbench shows now \
+                     (settings, figures, the selected board and the engine's reasoning), \
+                     in tickets/ and optionally as a GitHub issue.",
+                )
+                .clicked()
+            {
+                self.ticket.open = true;
+            }
+            ui.separator();
             let running = self.running.is_some();
             if ui
                 .add_enabled(!running, egui::Button::new("▶ Run"))
@@ -1506,5 +1566,309 @@ impl App {
         if let Some(i) = clicked {
             self.select_board(i);
         }
+    }
+}
+
+/// "Report…": capture what the workbench shows, with Rick's note, as a
+/// ticket (see `ticket`).
+impl App {
+    /// Everything the workbench shows now, as ticket data.
+    fn capture(&self, root: &Path) -> ticket::Context {
+        let settings = ticket::Settings {
+            scenarios: self.scenarios_text.trim().to_string(),
+            limit: self.limit_text.trim().to_string(),
+            par: self.opts.par,
+            auctions: ticket::auctions_arg(self.auctions).into(),
+            auctions_label: self.auctions.label().into(),
+            card_changes: self.opts.card_changes.clone(),
+            rules: self.opts.rules.display().to_string(),
+            pbs: self.opts.pbs.display().to_string(),
+            cards: self.cards.display().to_string(),
+            auto_rerun: self.auto,
+        };
+        let view = ticket::View {
+            tab: self.tab.name().into(),
+            selected_scenario: self.scenario.clone(),
+            divergence_filter: self.div_filter.clone(),
+            divergences_by_imps: self.div_by_imps,
+            selected_divergence: self.div.and_then(|i| self.divs.get(i)).map(|d| {
+                ticket::DivergenceRow {
+                    auction: d.auction.clone(),
+                    bba: d.reference.clone(),
+                    ours: d.ours.clone(),
+                    boards: d.boards.len(),
+                    imps: d.imps,
+                }
+            }),
+            selected_problem: self.prob.and_then(|i| self.probs.get(i)).map(|p| {
+                ticket::ProblemRow {
+                    kind: p.kind.label().into(),
+                    auction: p.auction.clone(),
+                    call: p.call.clone(),
+                    boards: p.boards.len(),
+                }
+            }),
+            selected_case: if self.tab == Tab::Cases {
+                self.case
+                    .and_then(|i| self.cases.as_ref().ok()?.get(i))
+                    .cloned()
+            } else {
+                None
+            },
+            running: self.running.is_some(),
+            error: self.error.clone(),
+        };
+        let since = self.delta.as_ref().map(|d| ticket::SinceLastRun {
+            calls: d.calls,
+            now_identical: d.now_identical,
+            no_longer_identical: d.no_longer_identical,
+            now_same_contract: d.now_same_contract,
+            lost_same_contract: d.lost_same_contract,
+        });
+        let summary = match (&self.loaded, &self.stats) {
+            (Some(l), Some((t, _))) => Some(ticket::Summary::new(t, l.took.as_secs_f64(), since)),
+            _ => None,
+        };
+        // The board shows in the detail panel on every tab but Cases.
+        let board = match (&self.loaded, self.board, &self.detail) {
+            (Some(l), Some(i), Some(d)) if self.tab != Tab::Cases => Some((&l.report.boards[i], d)),
+            _ => None,
+        };
+        let scenario_name = board
+            .map(|(b, _)| b.scenario.clone())
+            .or_else(|| self.scenario.clone());
+        let scenario = match (&self.stats, scenario_name) {
+            (Some((_, rows)), Some(name)) => rows
+                .iter()
+                .find(|s| s.name == name)
+                .map(ticket::ScenarioFigures::new),
+            _ => None,
+        };
+        ticket::Context::build(ticket::Capture {
+            kind: self.ticket.kind,
+            note: self.ticket.note.clone(),
+            created: chrono::Local::now(),
+            git: ticket::GitInfo::collect(root),
+            settings,
+            view,
+            summary,
+            scenario,
+            board,
+        })
+    }
+
+    /// Write the ticket, copy the Claude Code prompt, and file the issue
+    /// when asked (on a thread: `gh` talks to the network).
+    fn save_ticket(&mut self, ctx: &egui::Context) {
+        let root = ticket::repo_root();
+        let c = self.capture(&root);
+        let dir = match ticket::write_local(&root, &c) {
+            Ok(dir) => dir,
+            Err(e) => {
+                self.ticket.status = Some(Err(e));
+                return;
+            }
+        };
+        self.ticket.sink.save();
+        ctx.copy_text(ticket::claude_prompt(&dir, &c));
+        self.ticket.note.clear();
+        let saved = format!(
+            "Saved {}. The prompt for Claude Code is on the clipboard.",
+            dir.display()
+        );
+        if self.ticket.sink == ticket::Sink::Local {
+            self.ticket.status = Some(Ok(saved));
+            return;
+        }
+        let Some(repo) = self
+            .ticket_opts
+            .repo
+            .clone()
+            .or_else(|| ticket::origin_repo(&root))
+        else {
+            self.ticket.status = Some(Err(format!(
+                "{saved} No GitHub issue: the origin remote is not on GitHub; pass --ticket-repo."
+            )));
+            return;
+        };
+        let md = std::fs::read_to_string(dir.join("ticket.md")).unwrap_or_default();
+        let plan = ticket::plan_issue(&c, &md, &repo, &dir);
+        let dry_run = self.ticket_opts.dry_run;
+        let (tx, rx) = mpsc::channel();
+        let repaint = ctx.clone();
+        std::thread::spawn(move || {
+            let mut r = ticket::file_issue(&plan, dry_run);
+            if let Ok(ticket::Filed::Url(url)) = &r {
+                if let Err(e) = ticket::record_issue(&dir, url) {
+                    r = Err(format!("filed {url}, but could not record it: {e}"));
+                }
+            }
+            let _ = tx.send((dir, r));
+            repaint.request_repaint();
+        });
+        self.ticket.filing = Some(rx);
+        self.ticket.status = Some(Ok(format!("{saved} Filing the issue on {repo}…")));
+    }
+
+    fn receive_filing(&mut self) {
+        let Some(rx) = &self.ticket.filing else {
+            return;
+        };
+        let Ok((dir, r)) = rx.try_recv() else {
+            return;
+        };
+        self.ticket.filing = None;
+        let dir = dir.display();
+        self.ticket.status = Some(match r {
+            Ok(ticket::Filed::Url(url)) => Ok(format!(
+                "Filed {url}; saved {dir}. The prompt for Claude Code is on the clipboard."
+            )),
+            Ok(ticket::Filed::DryRun(cmd)) => Ok(format!(
+                "Dry run, nothing filed; saved {dir}. Would run: {cmd}"
+            )),
+            Err(e) => Err(format!("Saved {dir}, but the issue failed: {e}")),
+        });
+    }
+
+    fn ticket_window(&mut self, ctx: &egui::Context) {
+        if !self.ticket.open {
+            return;
+        }
+        let mut open = true;
+        let mut save = false;
+        let mut cancel = false;
+        let filing = self.ticket.filing.is_some();
+        egui::Window::new("Report")
+            .open(&mut open)
+            .collapsible(false)
+            .resizable(true)
+            .default_width(560.0)
+            .show(ctx, |ui| {
+                ui.horizontal(|ui| {
+                    ui.label("kind:");
+                    for k in ticket::Kind::ALL {
+                        ui.radio_value(&mut self.ticket.kind, k, k.label());
+                    }
+                });
+                ui.label(
+                    RichText::new(
+                        "What is wrong or wanted. The first line becomes the title. The \
+                         workbench's settings, figures, selected board and the engine's \
+                         reasoning are attached as data.",
+                    )
+                    .weak(),
+                );
+                ui.add(
+                    egui::TextEdit::multiline(&mut self.ticket.note)
+                        .desired_rows(8)
+                        .desired_width(f32::INFINITY)
+                        .hint_text("e.g. 2NT here should be forcing: partner doubled…"),
+                );
+                ui.horizontal(|ui| {
+                    ui.label("save to:");
+                    for s in [ticket::Sink::Local, ticket::Sink::GitHub] {
+                        ui.radio_value(&mut self.ticket.sink, s, s.label());
+                    }
+                    if self.ticket.sink == ticket::Sink::GitHub && self.ticket_opts.dry_run {
+                        ui.label(RichText::new("(dry run)").weak());
+                    }
+                });
+                match (&self.loaded, self.board) {
+                    (Some(l), Some(i)) if self.tab != Tab::Cases => {
+                        let b = &l.report.boards[i];
+                        ui.label(
+                            RichText::new(format!("board: {} {}", b.scenario, b.board)).weak(),
+                        );
+                    }
+                    _ => {
+                        ui.label(RichText::new("no board selected").weak());
+                    }
+                }
+                ui.horizontal(|ui| {
+                    if ui.add_enabled(!filing, egui::Button::new("Save")).clicked() {
+                        save = true;
+                    }
+                    if ui.button("Cancel").clicked() {
+                        cancel = true;
+                    }
+                    if filing {
+                        ui.spinner();
+                    }
+                });
+                match &self.ticket.status {
+                    Some(Ok(s)) => {
+                        ui.label(RichText::new(s).color(GOOD));
+                    }
+                    Some(Err(e)) => {
+                        ui.label(RichText::new(e).color(BAD));
+                    }
+                    None => {}
+                }
+            });
+        if save {
+            self.save_ticket(ctx);
+        }
+        if cancel || !open {
+            self.ticket.open = false;
+            if self.ticket.filing.is_none() {
+                self.ticket.status = None;
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Load the fixture comparison, select a divergent board, draw the
+    /// Report dialog headlessly, and capture: the ticket carries the
+    /// board, the settings and the figures the window shows.
+    #[test]
+    fn report_captures_the_selected_board() {
+        let here = Path::new(env!("CARGO_MANIFEST_DIR"));
+        let opts = Options {
+            pbs: here.join("../compare/tests/fixtures/pbs"),
+            scenarios: vec![],
+            limit: None,
+            rules: here.join("../../conventions"),
+            par: false,
+            dd_cache: std::env::temp_dir().join("rbb-workbench-app-test-dd.jsonl"),
+            card_changes: vec!["general.style=bba".into()],
+        };
+        let engines = Engines::for_options(&opts).unwrap();
+        let report = rbb_compare::run_with(&opts, &engines, &|_, _| {}).unwrap();
+        let i = report
+            .boards
+            .iter()
+            .position(|b| b.first_divergence.is_some())
+            .expect("a divergent fixture board");
+        let mut app = App::new(
+            opts,
+            here.join("../bridge-card/tests/fixtures/bbsa"),
+            String::new(),
+            TicketOptions {
+                repo: Some("o/r".into()),
+                dry_run: true,
+            },
+        );
+        app.finish(Ok((report, Arc::new(engines))), Duration::from_secs(1));
+        app.select_board(i);
+        app.tab = Tab::Boards;
+        app.ticket.open = true;
+        app.ticket.note = "A note".into();
+        let ctx = egui::Context::default();
+        let mut out = ctx.run_ui(egui::RawInput::default(), |ui| app.ticket_window(ui.ctx()));
+        out.textures_delta.clear();
+        let c = app.capture(here);
+        let b = c.board.as_ref().expect("the selected board");
+        assert_eq!(c.note, "A note");
+        assert_eq!(c.view.tab, "Boards");
+        assert_eq!(c.workbench.card_changes, vec!["general.style=bba"]);
+        assert!(c.summary.is_some());
+        assert_eq!(c.scenario.as_ref().map(|s| &s.name), Some(&b.scenario));
+        assert!(c.first_difference.is_some());
+        assert_eq!(c.bba_reading.len(), b.reference.len());
+        assert!(c.reproduce.notes.iter().any(|n| n.contains("no --set")));
     }
 }

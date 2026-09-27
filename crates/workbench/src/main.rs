@@ -3,6 +3,7 @@
 
 mod app;
 mod detail;
+mod ticket;
 
 use std::path::PathBuf;
 
@@ -37,10 +38,22 @@ struct Args {
     /// `--set general.style=bba` to compare BBA's treatments.
     #[arg(long)]
     set: Vec<String>,
+    /// GitHub repository for "Report…" issues, `owner/repo`; by default
+    /// the one the origin remote names.
+    #[arg(long)]
+    ticket_repo: Option<String>,
+    /// Print the `gh` commands a GitHub ticket would run instead of running
+    /// them (also: RBB_TICKET_DRY_RUN=1). The local copy is still written.
+    #[arg(long)]
+    ticket_dry_run: bool,
 }
 
 fn main() -> eframe::Result {
     let args = Args::parse();
+    let tickets = app::TicketOptions {
+        repo: args.ticket_repo,
+        dry_run: args.ticket_dry_run || ticket::dry_run_from_env(),
+    };
     let opts = rbb_compare::Options {
         pbs: args.pbs,
         scenarios: args.scenarios,
@@ -59,6 +72,13 @@ fn main() -> eframe::Result {
     eframe::run_native(
         "rbb workbench",
         native,
-        Box::new(move |_cc| Ok(Box::new(app::App::new(opts, args.cards, args.editor)))),
+        Box::new(move |_cc| {
+            Ok(Box::new(app::App::new(
+                opts,
+                args.cards,
+                args.editor,
+                tickets,
+            )))
+        }),
     )
 }
