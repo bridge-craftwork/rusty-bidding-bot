@@ -102,6 +102,29 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).
 
+## Tickets
+
+Rick files tickets from the workbench's **Report…** button: his note plus
+everything the workbench showed, in
+`tickets/YYYY/MM/<slug>-<stamp>/` (gitignored), and optionally as a GitHub
+issue labelled `workbench-ticket` (`--ticket-repo owner/repo` overrides the
+origin remote; `--ticket-dry-run` or `RBB_TICKET_DRY_RUN=1` prints the `gh`
+commands instead of running them).
+
+- **Work one:** read `ticket.md` (the note, board, auctions, first
+  difference, the engine's reading of BBA's auction, par), then
+  `context.json` for anything the summary leaves out. Reproduce with its
+  `rbb call` / `compare` lines; check `git` in the context, since rules
+  hot-reload and uncommitted `.bid` edits may have shaped what Rick saw.
+  Diagnose before changing anything, then fix or explain, judging the
+  change by the rules above (par decides, the competitive yardstick,
+  `.test` cases, notes).
+- **Record the verdict** in `ticket.md`'s frontmatter: `status: open` →
+  `resolved`, `wontfix` or `duplicate`; `resolution:` one line on what was
+  done or why not; `refs:` the commits (and the ticket it duplicates).
+  Close the GitHub issue, if `issue:` names one, with the same words.
+- `context.json` is evidence: never edit it.
+
 ## Card fields
 
 Add or change card fields in `crates/bridge-card/data/fields.toml`, and `.bbsa`
