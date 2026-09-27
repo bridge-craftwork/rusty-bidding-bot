@@ -57,9 +57,32 @@ advancer passed our double, leaving their weak two doubled; with the
 replies both agree. "Let them play" fell from 98,160 to about 83,000
 IMPs after step 1 alone.
 
+## Steps 3-4: balancing and three-level preempts (2026-09-27)
+
+BBA, balancing over 2♥ P P (`vs-w2-2H-bal.toml`): a reopening double
+with 12+ and two or fewer hearts; new suits from 9 total points at the
+two level, 11 at the three; 2NT 16-18; a jump to 3M with six and 15+;
+it passes 65%. Direct over 3♣/3♦/3♥/3♠ (`vs-p3-3*.toml`): the double
+from 12; new suits at three from 12 total points, at four from 14; 3NT
+17-21 with a stopper; 4M with seven; it passes 70-80%. Grid agreement
+went from 65-82% (we passed everything) to 84-91%. The replies
+(advancer, doubler's rebid, advancing an overcall, their side's pass)
+now also cover three-level preempts and the balancing seat: without the
+balancing replies advancer left our reopening double in (2♥ P P X P P
+P, +670 to them).
+
+| | full corpus (par / side) | Basic_* all |
+|---|---|---|
+| balancing and 3-level, direct replies only | +2,394 / +10,957 | -45 / +10 |
+| with the balancing replies (kept) | **+4,077 / +10,981** | -34 / -13 |
+
+Corpus no-rule positions 4,679 -> 3,277. Basic_* is slightly negative
+(50 boards, our E/W balancing against the Basic_Weak_2 opener): single
+deals, e.g. a balancing 2♠ where par was their 4♥ making.
+
 ## Next
 
-Balancing over (2x) P (P); three-level preempts; Lebensohl after the
-double on the cards that play it (`competitive.lebensohl_weak_twos`,
-on in the 21GF cards); the weak-two side's own continuations over our
-double (redouble, new suits).
+Lebensohl after the double on the cards that play it
+(`competitive.lebensohl_weak_twos`, on in the 21GF cards); the weak-two
+side's own continuations over our double (redouble, new suits); 4-level
+preempts.

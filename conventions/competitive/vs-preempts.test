@@ -13,3 +13,13 @@ N KJ7.KT842.65.Q93      | 2S X P       | 3H  | five hearts, 9: 3H (a jump would 
 N QJ82.A7.765.AK32      | 2S X P       | P   | four good spades and 14: penalty
 N Q73.A4.K42.K8764      | 2S X P       | 3NT | 12 with spades held
 N 43.KQJ75.K2.A843      | 2D X P       | 3D  | 13 with five hearts: the cue bid, forcing to game
+
+# Balancing over their weak two, and three-level preempts (2026-09-27)
+dealer  E
+N AKJ2.8.KQ43.J432      | 2H P P       | X   | reopening double: short hearts, 13
+N KJ987.83.K95.Q62      | 2H P P       | 2S  | balancing with five spades and 9
+N 952.K83.Q95.Q862      | 2H P P       | P   | nothing to reopen with
+S AKJ2.8.KQ43.KJ32      | 3H           | X   | 16, short hearts: takeout over the preempt
+S AQJ974.83.K95.A6      | 3H           | 3S  | six good spades, 14
+S AQ5.KJ4.KQJ3.K73      | 3H           | 3NT | 19 with hearts held
+S 952.K83.Q95.Q862      | 3H           | P   | nothing

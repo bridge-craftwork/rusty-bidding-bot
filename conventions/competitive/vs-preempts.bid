@@ -69,13 +69,90 @@ after (2x) when x is not N, rho.hcp.max <= 12
   P   "Nothing to say over their weak two"
       priority -10
 
+# ── Balancing over their weak two: (2x) P (P) ───────────────────────
+# BBA (probes/vs-w2-2H-bal.toml): lighter than direct. A reopening double
+# with two or fewer of theirs and 12+; a new suit from 9 total points at
+# the two level, 11 at the three; 2NT 16-18; a jump to three of a major
+# with six and 15+.
+after (2x) P (P) when x is not N, lho.hcp.max <= 12
+  X   "Reopening double: 12+, short in {x}, the unbid suits"
+      shows hcp+length_points>=12
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C), x<=2) | (hcp>=17, x<=3)
+  cheapest(S) "Balancing: five or more spades"
+      shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=9, hcp<=16
+      when  x is not S
+      when  cheapest_rank(S) <= 13 | hcp+length_points>=11
+  cheapest(H) "Balancing: five or more hearts"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=9, hcp<=16
+      when  x is not H
+      when  cheapest_rank(H) <= 13 | hcp+length_points>=11
+  cheapest(D) "Balancing: five or more diamonds"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=9, hcp<=16
+      when  x is not D
+      when  cheapest_rank(D) <= 13 | hcp+length_points>=11
+  cheapest(C) "Balancing: five or more clubs"
+      shows C>=5, C>S, C>H, C>D, hcp+length_points>=9, hcp<=16
+      when  x is not C
+      when  cheapest_rank(C) <= 13 | hcp+length_points>=11
+  jump(S) "Six or more spades, 15-16"
+      shows S>=6, hcp=15..16
+      when  x is not S, cheapest_rank(S) <= 13
+  jump(H) "Six or more hearts, 15-16"
+      shows H>=6, H>S, hcp=15..16
+      when  x is not H, cheapest_rank(H) <= 13
+  cheapest(N) "16-18 balanced, {x} stopped"
+      shows balanced, hcp=16..18, S<=4, H<=4
+      when  stop(x)
+  P   "Nothing to reopen with"
+      priority -10
+
+# ── Direct seat over their three-level preempt ───────────────────────
+# BBA (probes/vs-p3-3{C,D,H,S}.toml): a takeout double from 12; a new
+# suit at the three level from 12 total points, at the four level from
+# 14; 3NT 17-21 with their suit stopped; four of a major with seven.
+after (3x) when x is not N, rho.hcp.max <= 12
+  X   "Takeout: 12+, short in {x}, the unbid suits, or 17+"
+      shows hcp+length_points>=12
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C), x<=2) | (hcp>=17, x<=3)
+  cheapest(S) "Overcall: five or more spades"
+      shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=12, hcp<=17
+      when  x is not S
+      when  quality(S)>=good | top5(S)>=3 | S>=6 | hcp+length_points>=14
+      when  cheapest_rank(S) <= 18 | hcp+length_points>=14
+  cheapest(H) "Overcall: five or more hearts"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=12, hcp<=17
+      when  x is not H
+      when  quality(H)>=good | top5(H)>=3 | H>=6 | hcp+length_points>=14
+      when  cheapest_rank(H) <= 18 | hcp+length_points>=14
+  cheapest(D) "Overcall: five or more diamonds"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=12, hcp<=17
+      when  x is not D
+      when  quality(D)>=good | top5(D)>=3 | D>=6 | hcp+length_points>=14
+      when  cheapest_rank(D) <= 18 | hcp+length_points>=14
+  cheapest(C) "Overcall: five or more clubs"
+      shows C>=5, C>S, C>H, C>D, hcp+length_points>=12, hcp<=17
+      when  x is not C
+      when  quality(C)>=good | top5(C)>=3 | C>=6 | hcp+length_points>=14
+      when  cheapest_rank(C) <= 18 | hcp+length_points>=14
+  3N  "17-21 with {x} stopped"
+      shows hcp=17..21, S<=4, H<=4
+      when  stop(x)
+  4S  "Seven or more spades: game"
+      shows S>=7, hcp+length_points>=13
+      when  x is not S
+  4H  "Seven or more hearts: game"
+      shows H>=7, H>S, hcp+length_points>=13
+      when  x is not H
+  P   "Nothing to say over their preempt"
+      priority -10
+
 # ── Advancer after our double of their weak two ──────────────────────
 # BBA (probes/vs-w2-2H-X-adv.toml, vs-w2-2S-X-adv.toml): the cheapest
 # suit with four, 0-10 (majors first); a jump in a major with five, 8-11;
 # 2NT 11-12 and 3NT 12+ with their suit stopped; the cue bid of their
 # suit, 13+, forcing to game; four of a major with four and game values;
 # a pass with length and strength in their suit.
-after (2x) X (P) when x is not C
+after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) when x is not C
   P   "Penalty: five of their suit with two top honours"
       shows x>=5, quality(x)>=good | top5(x)>=3
       priority 1
@@ -130,7 +207,7 @@ after (2x) X (P) when x is not C
 # ── The doubler's rebid ──────────────────────────────────────────────
 # A pass denies the power double (17+ HCP); the strong hand raises,
 # shows its own suit, or bids notrump.
-after (2x) X (P) 2y (P) | (2x) X (P) 3y (P) when y is not x, x is not C
+after (2x) X (P) 2y (P) | (2x) X (P) 3y (P) | (3x) X (P) 3y (P) | (3x) X (P) 4y (P) | (2x) P (P) X (P) 2y (P) | (2x) P (P) X (P) 3y (P) when y is not x, x is not C
   P   "Minimum double: partner has chosen"          shows hcp<=16
       priority -5
   4{y} "17+ with four: game in partner's major"      shows y>=4, hcp>=17
@@ -148,7 +225,7 @@ after (2x) X (P) 2N (P) when x is not C
       priority -5
 
 # ── Advancer after our overcall of their weak two ────────────────────
-after (2x) 2y (P) | (2x) 3y (P) when y is not x, x is not C
+after (2x) 2y (P) | (2x) 3y (P) | (3x) 3y (P) | (3x) 4y (P) | (2x) P (P) 2y (P) | (2x) P (P) 3y (P) when y is not x, x is not C
   4{y} "Game: three-card support, 12+"               shows y>=3, hcp+length_points>=12
       when  y is H | y is S
   cheapest(y) "Raise: three-card support, 8-11"      shows y>=3, hcp+length_points=8..11
@@ -169,7 +246,7 @@ after (2x) 2N (P) when x is not C
 # The weak-two responses assume a pass on the right. Over our double or
 # overcall the responder competes with a fit (total-tricks.bid) or
 # passes; the opener has described his hand.
-after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) when x is not C
+after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) | 3x (X) | 3x (3y) | 3x (4y) | 3x (3N) when x is not N
   P   "They came in: nothing to add"                 priority -10
-after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) when x is not C
+after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) | 3x (X) P (*) | 3x (3y) P (*) | 3x (4y) P (*) when x is not N
   P   "Partner passed: the preempt said it all"      priority -10
