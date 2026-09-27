@@ -313,3 +313,43 @@ else the cue bid) now start at 17 rather than 19: 17 +192 by par
 distance, +278 by side; 16 +158 / +192. A case in the test file that
 recorded BBA's 2♣ on K964.K4.AT.AQJT9 (17, spades held) now expects
 3NT.
+
+## A round force ends when they act over it (2026-09-27)
+
+The engine kept a `forcing=round` in force after the forcer's LHO bid,
+doubled or redoubled, so partner could not pass (hence the "engine keeps
+the round force" workaround above). Now the force holds only when RHO
+passes; a game force is unchanged. The compare tool's broken-force check
+uses the same rule.
+
+- The workaround after `1x (1y) 2y (3y)` (opener's `cheapest(x)` at -6)
+  is gone. With the force released it was dead code: the pass at -5
+  already outranked it, and removing it changed no board.
+- The engine change alone was neutral: 230 boards changed, -1 IMP by
+  side, +0 by par distance. It hid two things. With the cue raise of a
+  minor, opener now passed their raise with a fifth trump and responder
+  passed with game values: -159 by side on 57 boards. Added opener's 4m
+  with five (nine trumps opposite the cue's four), 5m with 16+ and no
+  stopper, and responder's game with 13+ after opener's pass or 4m:
+  +290 by side, +176 by par. Opener's 18+ raise of a forcing free bid
+  (rebids.bid) was gated on `we.forcing = round` and now used the card
+  field instead: +33 by side.
+- Doubles: takeout, negative, responsive and reopening doubles never
+  set `forcing=round`. They are forcing because their blocks have no
+  pass when RHO passes, and every block where RHO has bid has one.
+  They stay that way: a round force would remove the explicit penalty
+  passes (`1x (1y) P (P) X (P)` responder with four of theirs,
+  `1N (2y) X (P)` and `1N (3y) X (P)` opener).
+- Total, full corpus: vs BBA -142,200 -> -142,024; 213 boards, +358 by
+  side, +176 by par distance; no rule 4,639 -> 4,587; broken forces 83
+  both; contested missed games (`missed 10 25`) 996 -> 971, failed games
+  (`over 10`) 2,210 -> 2,196. Basic_* competitive one board -2 (par -1),
+  N/S one board +10 (par +2).
+- Still losing: `1H (1S) 2m (2S)` with a minimum now passes where the
+  forced opener used to find 3H or 3m, about -54 by side on 55 boards.
+  Most of these are responder bidding a minor with three hearts where
+  BBA raised to 2H, so the fix belongs in responder's choice, not here.
+- For Rick: the 18+ raise on every card (not only where the free bid
+  is forcing) was +99 by side and +27 by par, but it turns rebids.test's
+  1H (2C) 2D (P) 2H (Basic-Bridge, 64.AK8432.AK86.9) into 3D. Kept to
+  the forcing cards.

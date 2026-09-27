@@ -470,7 +470,15 @@ How `rbb-engine` implements the model, and its current limits:
   `has(Q,t)` about another player's hand), because negating a partial
   condition would claim more than is known.
 - **Forcing.** After `sets forcing=round`, partner may not pass at their next
-  turn. After `sets forcing=game`, neither partner may pass below game.
+  turn if RHO passes. If RHO bids, doubles or redoubles, the round force
+  ends: partner may pass, and the pass says he has nothing to add. After
+  `sets forcing=game`, neither partner may pass below game, whatever the
+  opponents do. The compare tool's "passed a forcing auction" check uses
+  the same rule (`Position::must_bid`). Takeout, negative, responsive and
+  reopening doubles do not set `forcing=round`. Their rule blocks leave
+  out the pass when RHO passes, so they are forcing then, and offer a pass
+  once RHO bids. They can still offer an explicit penalty pass, which a
+  round force would remove.
 - **Judgment hooks** `slam_try` and `grand_try` are placeholders (combined
   HCP of at least 31 or 35) until real evaluators are written.
 - **No rule applies:** the engine passes and says so in the trace.
