@@ -149,10 +149,12 @@ after (1x) X (P) 2y (P) | (1x) P (P) X (P) 2y (P)
       when  stop(x)
 
 # The doubler again when they compete (2026-09-25; no rules before). BBA:
-# after (1x) X (2x) P P a five-card suit with 16+ (BBA also doubles again
-# with 12+ short in their suit: that cost ~1,500 IMPs against par, left
-# out); when opener competes over the advance, raise with four and 16+,
-# or show a five-card suit with 16+ (+645 with the suit bids).
+# after (1x) X (2x) P P a five-card suit with 16+, or double again with
+# 12+ short in their suit; when opener competes over the advance, raise
+# with four and 16+, or show a five-card suit with 16+ (+645 with the
+# suit bids). The second double first cost ~1,500 IMPs against par
+# because advancer had no answer and left it in; with the takeout
+# answers below it gains (2026-09-27, ticket b89, notes).
 after (1x) X (2x) P (P)
   cheapest(S) "16+ and five spades"                 shows S>=5, hcp>=16
       when  x is not S
@@ -160,7 +162,25 @@ after (1x) X (2x) P (P)
   cheapest(H) "16+ and five hearts"                 shows H>=5, S<=4, hcp>=16
       when  x is not H
       priority 1
+  X   "Takeout again: short in {x}"                 shows x<=1, hcp>=12
   P   "Nothing more"                                priority -5
+
+# Advancer after the second double: it is still for takeout. Bid the
+# longest unbid suit, a major first; pass only with a trump stack.
+after (1x) X (2x) P (P) X (P)
+  cheapest(S) "Takeout: four or more spades"        shows S>=4, S>=H, S>=D, S>=C
+      when  x is not S
+      priority 1
+  cheapest(H) "Takeout: four or more hearts"        shows H>=4, H>=D, H>=C
+      when  x is not H
+      priority 1
+  cheapest(D) "Takeout: my longest, diamonds"       shows D>=C
+      when  x is not D
+  cheapest(C) "Takeout: my longest, clubs"          shows C>=3
+      when  x is not C
+      priority -1
+  P   "Penalty: five of their suit"                 shows x>=5, hcp>=5
+      priority 2
 
 after (1x) X (P) 1y (2x) | (1x) X (P) 2y (2x)
   3{y} "16+, four-card support"                     shows y>=4, hcp+length_points>=16

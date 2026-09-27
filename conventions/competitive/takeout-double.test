@@ -42,3 +42,14 @@ card    Basic-Bridge
 dealer  E
 S AKJ5.42.AK54.KQ5      | 1H X P 2H 3H   | X   | 19: the power double doubles
 S AJ75.42.K542.A65      | 1H X P 2H 3H   | 3S  | 12 with four spades: forced, shows them (BBA passes, a forcing pass)
+
+# The second double after (1x) X (2x) P (P), and advancer's answers
+# (Basic_Takeout_Double 89, ticket 2026-09-27).
+card    Basic-Bridge
+dealer  E
+S 5.KQ43.KJ53.AQ86      | 1S X 2S P P                          | X      | 15, a singleton spade: double again for takeout
+S T5.KQ43.KJ53.AQ8      | 1S X 2S P P                          | P      | two spades: nothing more
+N AJ4.A5.9864.7432      | 1S X 2S P P X P                      | 3D     | still takeout: the longest suit, the higher of equal minors (clubs first measured 6 IMPs worse)
+N Q2.9743.986.7432      | 1S X 2S P P X P                      | 3H     | four hearts: the major first
+N 2.9743.QJT98.742      | 1S X 2S P P X P                      | 3D     | five diamonds
+N QJT98.K74.98.742     | 1S X 2S P P X P                      | P      | five trumps and a king: leave it in

@@ -147,3 +147,26 @@ For the double to collapse to its shape, a pass must deny 17+ HCP.
 
 On board 193, North now reads South's pass as 0-16 HCP with three or
 more spades, diamonds and clubs.
+
+## The second double, (1x) X (2x) P (P) X (2026-09-27)
+
+Ticket basic-takeout-double-b89: our West raised 1♠–X–2♠ at once
+(BBA passed and bid 2♠ a round later), and Rick asked whether that shut
+North–South out of their club fit. It did not in BBA's hands: given
+`1S X 2S`, bba-cli goes on `P P X P 3C`, the same +130 as its own
+auction. What shut us out was our doubler's pass. The second double
+(12+, short in their suit) had been left out on 2026-09-25 as costing
+~1,500 IMPs against par, but advancer had no rule after it and left
+every one in for penalty. With takeout answers (longest unbid suit, a
+major first; pass with five trumps and 5+):
+
+| doubler shows | full corpus (par / side) | boards |
+|---|---|---|
+| **x<=1, 12+ (kept)** | **+169 / +377** | 212 |
+| x<=2, 12+ | +159 / +515 | 372 |
+| x<=1, 14+ | +136 / +244 | 124 |
+
+Both yardsticks agree on all three; the singleton version is best by
+par. Advancer with 4-4 in the minors bids 3♦ (3♣ measured 6 IMPs
+worse on both, noise). Board 89 now goes `1S X 2S P P X P 3D`, +110
+against BBA's +130.
