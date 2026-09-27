@@ -4,9 +4,10 @@
 # modules set (trump agreed, game forcing), so they work after any auction
 # that reaches that state.
 
-module rkcb-1430 "Roman Keycard Blackwood (1430)"
-  card   slam.blackwood.rkcb_1430
+module rkcb-1430 "Roman Keycard Blackwood (1430, and 0314)"
   needs  base
+  param  k1430 = slam.blackwood.rkcb_1430 default false
+  param  k0314 = slam.blackwood.rkcb_0314 default false
   param  style = slam.cue_bids.style default first_or_second_round
 
 # ── The ask ───────────────────────────────────────────────────────────
@@ -60,7 +61,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
 # bare suit goes to `control-bids.bid` first and comes back here only
 # once partner has shown a control.
 
-when we.trump is suit, !asked, we.forcing = none | we.forcing = round
+when (k1430 | k0314), we.trump is suit, !asked, we.forcing = none | we.forcing = round
   4N  "Keycard ask in {trump}"
       when  we.tp(trump).max >= 33, losers <= 4     # 33 facing partner's maximum
       when  !((trump is not C, C>=2, !has(A,C), !has(K,C), trump is not D, D>=2, !has(A,D), !has(K,D)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not H, H>=2, !has(A,H), !has(K,H), trump is not S, S>=2, !has(A,S), !has(K,S)))  # and no two bare side suits
@@ -68,7 +69,7 @@ when we.trump is suit, !asked, we.forcing = none | we.forcing = round
       artificial
       priority 1
 
-when we.trump is suit, !asked, we.forcing = game
+when (k1430 | k0314), we.trump is suit, !asked, we.forcing = game
   4N  "Keycard ask in {trump}"
       when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18  # 33 on partner's floor, or 18 of my own
       sets  ask=keycards(trump)
@@ -85,29 +86,33 @@ when we.trump is suit, !asked, we.forcing = game
 # is covered -- a control of mine, one partner has cued, or one I denied
 # that partner has promised by bidding on. A control bid below game still
 # comes first (priority 12), the ask before one past game (10).
-when we.trump is suit, asked control(t)
+when (k1430 | k0314), we.trump is suit, asked control(t)
   4N  "Keycard ask in {trump}"
       when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C) | me.denied(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D) | me.denied(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H) | me.denied(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S) | me.denied(S))
       sets  ask=keycards(trump)
       artificial
       priority 11
 
-when we.trump is suit, answered control(t), partner.last = 4{trump}
+when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{trump}
   4N  "Keycard ask in {trump}"
       when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S))
       sets  ask=keycards(trump)
       artificial
       priority 15
 
-when asked keycards(t)
-  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
+when (k1430 | k0314), asked keycards(t)
+  # 0314 (Precision and the 21GF-GIB cards, 2026-09-27: without it those
+  # cards had no keycard ask at all) swaps the first two answers.
+  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial   when k1430
+  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial   when k1430
+  5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial   when k0314
+  5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial   when k0314
   5H  "2 keycards, no {t} queen"       shows keycards(t)=2, !has(Q,t)  artificial
   5S  "2 keycards and the {t} queen"   shows keycards(t)=2, has(Q,t)  artificial
 
 # The asker places the contract. we.keycards(t) combines my exact count
 # with partner's answer; the deck limit of 5 keycards resolves "1 or 4".
-when answered keycards(t)
+when (k1430 | k0314), answered keycards(t)
   7{t}  "Grand slam"
         when we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
   6{t}  "Small slam: at most one keycard missing"
@@ -124,7 +129,7 @@ when answered keycards(t)
 
 # When the answer was ambiguous the asker signs off in five, and the answerer
 # corrects to six holding the higher count (3 or 4 keycards).
-when asked keycard_correct(t)
+when (k1430 | k0314), asked keycard_correct(t)
   6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
   P     "Accepts the sign-off"
 

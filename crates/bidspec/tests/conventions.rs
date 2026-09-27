@@ -46,7 +46,9 @@ fn rkcb_structure() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions/slam/rkcb-1430.bid");
     let m = bidspec::compile(&fs::read_to_string(path).unwrap(), "rkcb").unwrap();
     assert_eq!(m.name, "rkcb-1430");
-    assert_eq!(m.card[0].path, "slam.blackwood.rkcb_1430");
+    // It serves 1430 and 0314, so the card fields are params, not gates.
+    assert!(m.card.is_empty());
+    assert!(m.params.iter().any(|p| p.name == "k0314"));
     // Every context is keyed on state, not on an auction: that is the
     // point of the module. The blocks themselves are found by what they
     // contain, so restructuring the file does not break this test.
