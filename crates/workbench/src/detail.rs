@@ -4,14 +4,14 @@
 use bridge_types::{Call, DdTable, Deal, Direction, Hand, Strain, Suit, STRAINS};
 use egui::{Color32, RichText};
 use rbb_compare::{short, BoardResult, Engines};
-use rbb_engine::{Decision, Interpretation, SeatKnowledge, Tri};
+use rbb_engine::{Decision, Interpretation, SeatKnowledge, SideState, Tri};
 
 use crate::app::{BAD, GOOD};
 
 /// The colour that marks BBA's call or contract; ours use `BAD`.
 const BBA: Color32 = Color32::from_rgb(90, 140, 220);
 
-const SEATS: [Direction; 4] = [
+pub(crate) const SEATS: [Direction; 4] = [
     Direction::West,
     Direction::North,
     Direction::East,
@@ -19,15 +19,15 @@ const SEATS: [Direction; 4] = [
 ];
 
 pub struct Detail {
-    deal: Option<Deal>,
+    pub(crate) deal: Option<Deal>,
     /// The engine's reading of BBA's auction.
-    reading: Option<Interpretation>,
+    pub(crate) reading: Option<Interpretation>,
     /// The engine's decision at the first difference.
-    decision: Option<Decision>,
-    error: Option<String>,
+    pub(crate) decision: Option<Decision>,
+    pub(crate) error: Option<String>,
 }
 
-fn caller(dealer: Direction, i: usize) -> Direction {
+pub(crate) fn caller(dealer: Direction, i: usize) -> Direction {
     (0..i).fold(dealer, |d, _| d.next())
 }
 
@@ -242,19 +242,7 @@ impl Detail {
                     }
                 });
             for (side, name) in [(0usize, "NS"), (1, "EW")] {
-                let st = &pos.sides[side];
-                let mut parts = vec![];
-                if let Some(t) = st.trump {
-                    parts.push(format!("trump {t}"));
-                }
-                parts.push(format!("forcing {:?}", st.forcing).to_lowercase());
-                if let Some(a) = &st.ask {
-                    parts.push(format!("asked {} by {}", a.kind, a.by.to_char()));
-                }
-                if let Some(a) = &st.answered {
-                    parts.push(format!("answered {} (asked by {})", a.kind, a.by.to_char()));
-                }
-                ui.label(format!("{name}: {}", parts.join(", ")));
+                ui.label(format!("{name}: {}", side_line(&pos.sides[side])));
             }
             ui.separator();
         }
@@ -336,7 +324,7 @@ fn suit_cards(hand: &Hand, suit: Suit) -> String {
     }
 }
 
-fn hand_line(hand: &Hand) -> String {
+pub(crate) fn hand_line(hand: &Hand) -> String {
     [Suit::Spades, Suit::Hearts, Suit::Diamonds, Suit::Clubs]
         .iter()
         .map(|s| format!("{}{}", s.symbol(), suit_cards(hand, *s)))
@@ -362,7 +350,7 @@ fn hand_block(ui: &mut egui::Ui, seat: Direction, hand: &Hand) {
 }
 
 /// The strain and declarer of a contract written `4H S` or `3NX N`.
-fn strain_and_declarer(contract: &str) -> Option<(Strain, Direction)> {
+pub(crate) fn strain_and_declarer(contract: &str) -> Option<(Strain, Direction)> {
     let (call, declarer) = contract.split_once(' ')?;
     let c = call.chars().nth(1)?;
     let strain = STRAINS.into_iter().find(|s| s.to_char() == c)?;
@@ -509,8 +497,24 @@ fn auction_grid(
     });
 }
 
-/// One line of ranges; the constraints behind them on hover.
-fn knowledge(ui: &mut egui::Ui, k: &SeatKnowledge) {
+/// A side's auction state in one line: trump, forcing, asks.
+pub(crate) fn side_line(st: &SideState) -> String {
+    let mut parts = vec![];
+    if let Some(t) = st.trump {
+        parts.push(format!("trump {t}"));
+    }
+    parts.push(format!("forcing {:?}", st.forcing).to_lowercase());
+    if let Some(a) = &st.ask {
+        parts.push(format!("asked {} by {}", a.kind, a.by.to_char()));
+    }
+    if let Some(a) = &st.answered {
+        parts.push(format!("answered {} (asked by {})", a.kind, a.by.to_char()));
+    }
+    parts.join(", ")
+}
+
+/// What a seat has shown, as one line of ranges.
+pub(crate) fn knowledge_line(k: &SeatKnowledge) -> String {
     let mut s = format!(
         "{} HCP  ♠{} ♥{} ♦{} ♣{}",
         k.hcp, k.len[3], k.len[2], k.len[1], k.len[0]
@@ -520,7 +524,12 @@ fn knowledge(ui: &mut egui::Ui, k: &SeatKnowledge) {
     } else if k.balanced == Tri::False {
         s += "  unbalanced";
     }
-    let r = ui.label(RichText::new(s).monospace().weak());
+    s
+}
+
+/// One line of ranges; the constraints behind them on hover.
+fn knowledge(ui: &mut egui::Ui, k: &SeatKnowledge) {
+    let r = ui.label(RichText::new(knowledge_line(k)).monospace().weak());
     if !k.shown.is_empty() {
         r.on_hover_text(k.shown.join("\n"));
     }
