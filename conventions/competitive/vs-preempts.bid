@@ -146,13 +146,82 @@ after (3x) when x is not N, rho.hcp.max <= 12
   P   "Nothing to say over their preempt"
       priority -10
 
+# ── Balancing over their three-level preempt: (3x) P (P) ─────────────
+# BBA (probes/vs-p3-3H-bal.toml): a reopening double with 12+ and at most
+# one of theirs; a new suit at the three level from 11 total points, at
+# the four from 13; 3NT 17-20 with their suit stopped.
+after (3x) P (P) when x is not N, lho.hcp.max <= 12
+  X   "Reopening double: 12+, short in {x}, the unbid suits"
+      shows hcp+length_points>=12
+      shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C), x<=1) | (hcp>=17, x<=3)
+  cheapest(S) "Balancing: five or more spades"
+      shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=11, hcp<=17
+      when  x is not S
+      when  cheapest_rank(S) <= 18 | hcp+length_points>=13
+  cheapest(H) "Balancing: five or more hearts"
+      shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=11, hcp<=17
+      when  x is not H
+      when  cheapest_rank(H) <= 18 | hcp+length_points>=13
+  cheapest(D) "Balancing: five or more diamonds"
+      shows D>=5, D>S, D>H, D>=C, hcp+length_points>=11, hcp<=17
+      when  x is not D
+      when  cheapest_rank(D) <= 18 | hcp+length_points>=13
+  cheapest(C) "Balancing: five or more clubs"
+      shows C>=5, C>S, C>H, C>D, hcp+length_points>=11, hcp<=17
+      when  x is not C
+      when  cheapest_rank(C) <= 18 | hcp+length_points>=13
+  3N  "17-20 with {x} stopped"
+      shows hcp=17..20, S<=4, H<=4
+      when  stop(x)
+  P   "Nothing to reopen with"
+      priority -10
+
+# ── Their four-level preempt ─────────────────────────────────────────
+# BBA (probes/vs-p4-4H.toml, vs-p4-4S.toml, vs-p4-4H-bal.toml). Over 4H a
+# takeout double from 14 and 4S with five from 14 total points; over 4S
+# the double is for penalty, 17+ (values: partner leaves it in unless
+# his shape says otherwise); five of a minor from 16. Balancing over 4H:
+# the double from 12 with no hearts, 4S from 13, five of a minor from 15.
+after (4x) when x is H, rho.hcp.max <= 12
+  X   "Takeout: 14+, short in hearts"
+      shows hcp+length_points>=14, x<=2, S>=3
+  4S  "Five or more spades, 14+"
+      shows S>=5, hcp+length_points>=14
+  cheapest(D) "Five or more diamonds, 16+"   shows D>=5, D>=C, hcp+length_points>=16
+  cheapest(C) "Five or more clubs, 16+"      shows C>=5, C>D, hcp+length_points>=16
+  P   "Nothing to say over their preempt"
+      priority -10
+after (4x) when x is S, rho.hcp.max <= 12
+  X   "Values: 17+, for penalty"
+      shows hcp>=17, x>=2
+  cheapest(D) "Five or more diamonds, 16+"   shows D>=5, D>=C, hcp+length_points>=16
+  cheapest(H) "Five or more hearts, 16+"     shows H>=5, H>=D, H>=C, hcp+length_points>=16
+  cheapest(C) "Five or more clubs, 16+"      shows C>=5, C>D, hcp+length_points>=16
+  P   "Nothing to say over their preempt"
+      priority -10
+after (4x) P (P) when x is H, lho.hcp.max <= 12
+  X   "Reopening double: 12+, no hearts"
+      shows hcp+length_points>=12, x<=1
+  4S  "Five or more spades, 13+"             shows S>=5, hcp+length_points>=13
+  cheapest(D) "Five or more diamonds, 15+"   shows D>=5, D>=C, hcp+length_points>=15
+  cheapest(C) "Five or more clubs, 15+"      shows C>=5, C>D, hcp+length_points>=15
+  P   "Nothing to reopen with"
+      priority -10
+# Advancer after our double of their four-level preempt: over 4H take
+# it out into five or more spades; otherwise leave it in.
+after (4x) X (P) | (4x) P (P) X (P) when x is H | x is S
+  4S  "Five or more spades"                  shows S>=5
+      when  x is H
+  P   "Leaves the double in"
+      priority -5
+
 # ── Advancer after our double of their weak two ──────────────────────
 # BBA (probes/vs-w2-2H-X-adv.toml, vs-w2-2S-X-adv.toml): the cheapest
 # suit with four, 0-10 (majors first); a jump in a major with five, 8-11;
 # 2NT 11-12 and 3NT 12+ with their suit stopped; the cue bid of their
 # suit, 13+, forcing to game; four of a major with four and game values;
 # a pass with length and strength in their suit.
-after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) when x is not C
+after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) | (3x) P (P) X (P) when x is not C
   P   "Penalty: five of their suit with two top honours"
       shows x>=5, quality(x)>=good | top5(x)>=3
       priority 1
@@ -246,7 +315,7 @@ after (2x) 2N (P) when x is not C
 # The weak-two responses assume a pass on the right. Over our double or
 # overcall the responder competes with a fit (total-tricks.bid) or
 # passes; the opener has described his hand.
-after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) | 3x (X) | 3x (3y) | 3x (4y) | 3x (3N) when x is not N
+after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) | 3x (X) | 3x (3y) | 3x (4y) | 3x (3N) | 4x (X) | 4x (4y) | 4x (5y) when x is not N
   P   "They came in: nothing to add"                 priority -10
-after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) | 3x (X) P (*) | 3x (3y) P (*) | 3x (4y) P (*) when x is not N
+after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) | 3x (X) P (*) | 3x (3y) P (*) | 3x (4y) P (*) | 4x (X) P (*) | 4x (4y) P (*) | 4x (5y) P (*) when x is not N
   P   "Partner passed: the preempt said it all"      priority -10

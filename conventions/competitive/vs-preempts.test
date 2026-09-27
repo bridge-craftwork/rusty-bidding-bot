@@ -23,3 +23,14 @@ S AKJ2.8.KQ43.KJ32      | 3H           | X   | 16, short hearts: takeout over th
 S AQJ974.83.K95.A6      | 3H           | 3S  | six good spades, 14
 S AQ5.KJ4.KQJ3.K73      | 3H           | 3NT | 19 with hearts held
 S 952.K83.Q95.Q862      | 3H           | P   | nothing
+
+# Balancing over three-level, and four-level preempts (2026-09-27)
+dealer  E
+N AKJ2.8.KQ43.J432      | 3H P P       | X   | reopening double: a singleton heart, 14
+N 952.K83.Q95.Q862      | 3H P P       | P   | nothing to reopen with
+S AKJ2.8.KQ43.KJ32      | 4H           | X   | 17, short hearts: takeout
+S AQJ974.83.K95.A6      | 4H           | 4S  | six good spades, 14
+S AQ5.KJ4.KQJ3.K73      | 4S           | X   | 19: values, for penalty
+S 952.K83.Q95.Q862      | 4S           | P   | nothing
+N AK752.8.KQ43.J32      | 4H X P       | 4S  | five spades: take the double out
+N 952.K83.Q95.Q862      | 4H X P       | P   | leave it in

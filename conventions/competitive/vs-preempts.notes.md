@@ -80,6 +80,20 @@ Corpus no-rule positions 4,679 -> 3,277. Basic_* is slightly negative
 (50 boards, our E/W balancing against the Basic_Weak_2 opener): single
 deals, e.g. a balancing 2♠ where par was their 4♥ making.
 
+## Step 5: balancing over three-level, and four-level preempts (2026-09-27)
+
+BBA (`vs-p3-3H-bal.toml`, `vs-p4-4H.toml`, `vs-p4-4S.toml`,
+`vs-p4-4H-bal.toml`): balancing over 3♥ a double with 12+ and at most
+one heart, new suits from 11 (three level) / 13 (four level), 3NT
+17-20; over 4♥ a takeout double from 14, 4♠ with five from 14, five of a
+minor from 16; over 4♠ the double is **penalty, 17+** (values); over
+4♥ P P a double with 12+ and no hearts, 4♠ from 13, 5m from 15.
+Advancer over our four-level double takes out into five spades over
+4♥, else leaves it in. Grid agreement 74-87% -> 82-90%.
+
+Full corpus +781 by par distance, +2,598 by side (930 boards); Basic_*
+unchanged (no four-level preempts there).
+
 ## Next
 
 Lebensohl after the double on the cards that play it
