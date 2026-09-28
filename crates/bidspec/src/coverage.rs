@@ -14,7 +14,9 @@
 //!   the other two buckets.
 //!
 //! Carding, opening leads and free-text notes cannot change a call, so they
-//! are counted apart from the conventions.
+//! are counted apart from the conventions: the sections in `NOT_BIDDING`,
+//! and any field marked `note = true` in `fields.toml` (a write-in line
+//! inside a bidding section, such as `two_level.two_clubs.notes`).
 //!
 //! Used by `rbb card coverage` and by the WASM `coverage` call (the web
 //! site's missing-convention flags).
@@ -96,7 +98,8 @@ pub fn of_card(
         if reg.get(path).and_then(|f| f.default.as_ref()) == Some(value) {
             continue;
         }
-        let bucket = if NOT_BIDDING.iter().any(|s| path.starts_with(s)) {
+        let note = reg.get(path).is_some_and(|f| f.note);
+        let bucket = if note || NOT_BIDDING.iter().any(|s| path.starts_with(s)) {
             &mut cov.other
         } else if read.contains(path) {
             &mut cov.read
@@ -183,12 +186,19 @@ mod tests {
         card.set("competitive.michaels.play", Value::Bool(true))
             .unwrap();
         card.set("carding.smith_echo", Value::Bool(true)).unwrap();
+        // A write-in line (`note = true`) inside a bidding section.
+        card.set("two_level.two_clubs.notes", Value::Text("Kokish".into()))
+            .unwrap();
         card.set("competitive.ghestem.play", Value::Bool(false))
             .unwrap();
         let cov = of_card("t", &card, vec!["Some Key".into()], &read);
         assert_eq!(cov.read, ["notrump.stayman.play"]);
         assert_eq!(cov.ignored, ["competitive.michaels.play"]);
-        assert_eq!(cov.other, ["carding.smith_echo"], "play, not bidding");
+        assert_eq!(
+            cov.other,
+            ["carding.smith_echo", "two_level.two_clubs.notes"],
+            "play and notes, not bidding"
+        );
         assert_eq!(cov.unmapped.len(), 1);
         assert_eq!(cov.score(), 0.5);
     }

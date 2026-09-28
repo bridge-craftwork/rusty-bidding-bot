@@ -96,6 +96,7 @@ vocabulary should keep them (a vocabulary without them still loads):
 | `general.system_category` | `rbb card coverage` | the system shown beside each card | shown as `two_over_one` |
 | `general.system_category` | `rbb probe` / `rbb grid` `bare:2/1` cards | the only field a `bare:` card sets (`two_over_one`, `sayc`, `polish_club`, `precision`, `acol`) | a `bare:` card is refused (unknown field); other cards are unaffected |
 | sections `carding`, `leads`, `notes`, `metadata` | `rbb card coverage` | settings under these prefixes count as play, not bidding (neither honoured nor ignored) | nothing: they are only prefixes |
+| attribute `note = true` | `rbb card coverage` | a free-text field inside a bidding section (a card's write-in line, `two_level.two_clubs.notes`) counts with carding, leads and notes | nothing: the field counts as bidding |
 
 ### Failures refuse to load
 
