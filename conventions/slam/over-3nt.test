@@ -14,4 +14,4 @@ card    Basic-Bridge
 dealer  S
 vul     NS
 S AKQJ63.32.6.T542      | 1S P 2D P 2S P 3NT P                 | 4S     | six to the AKQJ, hearts a weak doubleton
-S AKQJ63.K3.6.T542      | 1S P 2D P 2S P 3NT P                 | P      | the doubleton is guarded: 3NT
+S AKQJ63.K3.A6.T54      | 1S P 2D P 2S P 3NT P                 | P      | both doubletons guarded: 3NT
