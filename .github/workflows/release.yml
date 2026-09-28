@@ -125,6 +125,8 @@ jobs:
             dist/${{ matrix.asset }}.tar.gz
             dist/${{ matrix.asset }}.zip
           fail_on_unmatched_files: false
+          # v1.2.3-rc1 and the like are pre-releases; plain v1.2.3 is not.
+          prerelease: ${{ contains(github.ref_name, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -154,5 +156,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: dist/rbb-wasm.tar.gz
+          prerelease: ${{ contains(github.ref_name, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
