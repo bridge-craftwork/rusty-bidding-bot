@@ -78,3 +78,14 @@ after 1x (1N) X (P)
 after 1x (1N) X (*) when !rho.last=P
   P    "Partner doubled: his move next"
        priority -5
+
+# Opener after partner's preemptive jump over their 1NT (2026-09-27,
+# ticket b326: 1H 1NT 3D P 3H with a singleton diamond). Partner has
+# seven cards and 5-9: that is the trump suit. Pass, and bid game in it
+# only with 19+ and support. (BBA plays 3D here as 13-14 and forcing,
+# so it never passes: probes/pull-preempt-1H-1N-3D.toml.)
+after 1x (1N) 3z (P) when z is C | z is D, z is not x
+  5{z} "Game in partner's suit: 19+ and support"   shows z>=2, hcp>=19
+       priority 3
+  P    "Partner preempted: his suit, and no game"
+       priority 2

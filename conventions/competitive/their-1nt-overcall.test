@@ -33,3 +33,9 @@ vul     EW
 E J843.A7.J5.AQ952      | 1C 1NT X P                           | P      | sits for the penalty double
 E J843.A7.J5.AQ952      | 1C 1NT X 2D                          | P      | advancer ran: partner doubled and acts next
 E 3.A74.J5.AQ97532      | 1C 1NT X P                           | 2C     | a minimum with seven clubs and a singleton pulls
+
+# Opener over partner's preemptive 3D (Basic_Takeout_Double 326).
+card    Basic-Bridge
+dealer  E
+vul     EW
+E JT4.KQJ94.Q.AK53      | 1H 1NT 3D P                          | P      | partner's seven diamonds are trumps: no rebid of the hearts
