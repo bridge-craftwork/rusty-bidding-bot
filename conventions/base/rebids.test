@@ -238,3 +238,10 @@ S AKQJ.A2.83.AQJ63      | 1C 2D 3C P      | 5C  | 21, no diamond stopper: game i
 S A4.J6.AQ74.AKQ73      | 1C 1H 1NT P     | 3NT | 20 opposite 6-10 with hearts held: game
 S A52.K6.AQ74.KJ73      | 1C 1H 1NT P     | 2NT | 17: invites
 S KQ84.AKQ973.Q.94      | 1H X P 2H    | 3H  | 16 over their cue bid: 3H, not the 4H jump (Basic_Takeout_Double 193)
+
+# The strong double after 1x (X) 1z (1y) (Basic_Takeout_Double 6).
+card    Basic-Bridge
+dealer  E
+vul     EW
+E KQJ.KQ4.J63.AQ93      | 1C X 1D 1S                           | X      | 18: the strong hand doubles, as BBA
+E KQJ.KQ4.J63.AQ93      | 1C X 1D 1S X P 2D P                  | 2NT    | then 18-19 balanced with a spade stopper

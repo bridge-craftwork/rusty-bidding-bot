@@ -674,3 +674,30 @@ after 1x (X) XX (1y) 2x (P) | 1x (X) XX (2y) 2x (P) | 1x (X) XX (1y) 3x (P) | 1x
        sets  ask=invite(x)
   P    "Minimum for the redouble: no game"
        priority -5
+
+# ── Catch-all after partner's notrump rebid (Rick, 2026-09-27) ───────
+# A notrump rebid is a ladder bid: partner has put a range on a balanced
+# hand, so I am captain and bid game with 25 total points between us,
+# counting partner at his minimum; opposite 1NT, invite when only his
+# maximum reaches it. Below the specific rules (ticket b6: 1C X 1D P
+# 2NT P, where 7 passed 18-19).
+when partner.last=1N | partner.last=2N, me.has_bid | style is not bba, partner.balanced, !they.bid | lho.last=P, we.trump is none, !asked
+  3N  "Game: 25+ between us, partner at his minimum"
+      shows points + partner.points.min >= 25
+      priority -8
+  2N  "Invitation: game if partner is at the top"
+      shows points + partner.points.max >= 25
+      when  partner.last=1N
+      priority -8
+  P   "No game: under 25 between us"
+      shows points + partner.points.max <= 26
+      priority -9
+
+# Opener's strong double after 1x (X) 1z (1y): describe, cheapest first
+# (ticket b6).
+after 1x (X) 1z (1y) X (P) when z is not x, y is not x, y is not z
+  cheapest(N) "A stopper in {y}, nothing more to show"   shows stop(y), z<=5
+  cheapest(z) "Five or more {z}"           shows z>=5
+      priority 1
+  cheapest(x) "Three or more of partner's {x}"          shows x>=3
+  cheapest(z) "Nothing else to say: {z} again"          priority -5

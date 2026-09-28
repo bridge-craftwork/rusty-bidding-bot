@@ -403,3 +403,23 @@ And when they jump over our negative double and opener passes, responder
 with 13+ bids 3NT (their suit held) or game in opener's suit; the
 preference is now 11-12. Full corpus +262 by par distance, +515 by
 side.
+
+## The notrump ladder catch-all (2026-09-27)
+
+Rick: a notrump bid that puts a range on a balanced hand is a ladder
+bid, and responder is captain: game with 25 total points between us.
+The ladder: 1NT, 2NT, 2♣–2NT, 3NT openings (Stayman and transfers
+available); 1x then a 1NT or 2NT rebid (New Minor Forcing available);
+and the overcall ladder (1NT 15-18, double then the cheapest NT 19-21,
+double then a jump in NT 22-23; not yet probed against BBA).
+
+The specific rules stay first. The catch-all (priority −8) bids 3NT
+when my points plus partner's minimum reach 25, invites with 2NT over
+1NT when only his maximum does, and otherwise passes. It needs the new
+engine term `me.has_bid` to keep off the BBA-style 1NT-opening
+treatment (one-nt.test: BBA passes 8 flat), which it would override.
+
+Ticket basic-takeout-double-b6 (1C X 1D P 2NT P, 7 passed 18-19),
+with opener's strong double after 1x (X) 1z (1y) (rebids.bid) and
+responder's answers: +1,231 par, +1,203 side IMPs (443 boards);
+no-rule positions 3,060 → 2,871.

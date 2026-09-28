@@ -558,6 +558,24 @@ after 1x (X) 1z (P) when z is not x
   jump(N) "18-19 balanced"
       shows balanced, hcp=18..19, z<=3
 
+# Opener with 18+ after 1x (X) 1z (1w): double, the strong hand, as BBA
+# (2026-09-27, ticket b6: 18 balanced passed 1C X 1D 1S). Responder's
+# answers are in responder-rebids.bid.
+after 1x (X) 1z (1y) when z is not x, y is not x, y is not z
+  X   "18+: a strong hand, more to say"
+      shows hcp>=18
+      priority -2
+after 1x (X) 1z (1y) X (P) * (P) when z is not x, y is not x, y is not z
+  cheapest(N) "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19, stop(y)
+  3N  "20+ balanced with a stopper in {y}"
+      shows balanced, hcp>=20, stop(y)
+  cheapest(x) "Six or more {x}, the strong hand"
+      shows x>=6
+      priority -1
+  P   "Partner's answer is as far as we go"
+      priority -5
+
 # ── Partner made a free bid in a new suit at the two level or higher ─
 # Partner has 8-10 or more and five cards, and on the cards where a new
 # suit over interference is forcing (`competitive.new_suit_after_

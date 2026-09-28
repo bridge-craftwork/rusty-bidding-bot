@@ -614,6 +614,8 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "passed_hand" => Val::Bool(Tri::from_bool(self.pos.passed_hand(self.actor))),
+            // `me.has_bid`: I have made a bid, not only passes or doubles.
+            "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(self.actor))),
             "seat" => {
                 let mut d = self.pos.dealer;
                 let mut seat = 1;
@@ -770,6 +772,7 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
+            "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(seat))),
             // `partner.jumped`: their last bid skipped a level in its strain.
             "jumped" => Val::Bool(Tri::from_bool(self.pos.jumped(seat))),
             // `partner.bypassed(x)`: their last bid skipped a bid in x that
@@ -1305,6 +1308,7 @@ const STATE_TERMS: &[&str] = &[
     "opening",
     "last",
     "passed_hand",
+    "has_bid",
     "seat",
     "vul",
     "game_reached",
@@ -1330,6 +1334,7 @@ const SEAT_ATTRS: &[&str] = &[
     "length_points",
     "last",
     "opened",
+    "has_bid",
     "jumped",
     "denied",
     "cued",

@@ -125,6 +125,11 @@ impl Position {
             .map(|i| &self.calls[i])
     }
 
+    /// Has `d` made a bid (not only passes, doubles or redoubles)?
+    pub fn has_bid(&self, d: Direction) -> bool {
+        (0..self.calls.len()).any(|i| self.caller(i) == d && self.calls[i].is_bid())
+    }
+
     /// No bid yet (only passes so far).
     pub fn is_opening(&self) -> bool {
         self.calls.iter().all(|c| c.is_pass())
