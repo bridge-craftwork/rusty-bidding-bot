@@ -293,3 +293,41 @@ real evaluator would count sure tricks: my suits' top cards with
 partner's known honours and length, plus the aces and kings the asks
 have located. That wants a design (what partner's answers pin down,
 how a long suit with a known fit counts), not a one-off rule.
+
+## Game opposite a maximum answer (Rick, 2026-09-28; ticket basic-weak-2-b278)
+
+Basic_Weak_2 board 278: 2H P 2NT P 3C P, North AJ94.AT6.K95.A62 (16)
+signed off in 3H; BBA bid 4H. Rick: with 16 and opener showing a
+maximum, responder should normally bid game. The only game rule was
+`hcp>=17` whatever the answer, which is right opposite a minimum (4-10)
+and too much opposite a feature (8-10).
+
+Now responder counts partner at the floor of his answer: game with
+`hcp + partner.hcp.min >= 21` (four of the major, 3NT over a minor),
+ranked above the sign-offs. Facing a feature (8+) every 2NT asker (13+)
+bids game; facing an Ogust maximum (7+) from 14; facing a minimum (4)
+the old 17 is unchanged.
+
+| combined threshold | full corpus vs BBA | side IMPs | par-distance (sideimps) | boards |
+|---|---|---|---|---|
+| baseline | -115,452 | | | |
+| 20 (also 16 facing a minimum) | -114,591 (+861) | +1051 | +861 | 330 |
+| **21** | **-114,604 (+848)** | **+1054** | **+848** | 284 |
+| 22 | -114,659 (+793) | +975 | +793 | 261 |
+| 23 | -114,976 (+476) | +550 | +476 | 128 |
+
+21 adopted: 20 is 13 IMPs better by par and 3 worse by side IMPs, so
+the yardsticks disagree on lowering the minimum case to 16; not taken.
+The gains are over 2H (+472 side, 119 boards) and 2S (+559, 158).
+
+**BBA probes** (`probes/w2-2H-2N-3C.toml`, `probes/w2-2H-2N-3H.toml`:
+200 responders each, 13-17 HCP with two or three hearts, opener 6-card
+hearts, 8-10 or 4-7; love all and NS vulnerable, MP and IMP). Over the
+3C feature BBA bids 4H with 15+ almost always, with 14 about half the
+time and with 13 about a quarter (MP 12 of 63, IMP 19 of 63); heart
+length does not split it. So BBA wants about 14 opposite a feature;
+the corpus par says game from 13, and par decides. Over the 3H minimum
+BBA passes up to 14, and with 15-17 bids game about a quarter of the
+time at love all and half or more with NS vulnerable, where our rule
+waits for 17: left alone here (not part of the ticket; a candidate for
+a later par test).

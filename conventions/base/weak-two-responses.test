@@ -101,3 +101,12 @@ dealer  S
 vul     EW
 N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P                      | 4NT    | 26 opposite a maximum: agree hearts and ask (plain Blackwood on this card)
 N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P 4NT P 5C P           | 6H     | no aces opposite, all four here: small slam
+
+# Game opposite a maximum answer (ticket basic-weak-2-b278, 2026-09-28):
+# responder's HCP plus partner's floor, 21 or more.
+N AJ94.AT6.K95.A62      | 2H P 2NT P 3C P      | 4H     | 16 opposite a maximum with a club feature: game (Basic_Weak_2 278)
+N Q82.Q64.KT9.AQ72      | 2H P 2NT P 3C P      | 4H     | 13 opposite a feature (8-10): game
+N AJ94.AT6.K95.A62      | 2H P 2NT P 3H P      | P      | 16 opposite a minimum: no game
+card    Basic-Bridge two_level.weak_two_2nt_response=ogust
+N K94.A85.KQ64.Q93      | 2S P 2NT P 3H P      | 4S     | Ogust maximum (7-10) and 14: game
+N K94.A85.KQ64.Q93      | 2S P 2NT P 3C P      | 3S     | Ogust minimum and 14: sign off

@@ -203,6 +203,19 @@ when answered weak_two(t)
         when  t is H | t is S
   3N    "Game in notrump"             shows hcp>=17
         when  t is C | t is D
+  # Opposite a maximum game needs less (Rick, 2026-09-28, ticket
+  # basic-weak-2-b278: 16 opposite 3C, a maximum with a club feature,
+  # signed off in 3H). The answers record partner's range: counting him
+  # at its floor, game with 21 between us, so every asker (13+) facing
+  # a feature (8-10), 14 facing an Ogust maximum (7-10); facing a
+  # minimum (4) the 17 above still rules. 21 beat 22 and 23 on both
+  # yardsticks (notes).
+  4{t}  "Game: partner showed a maximum"   shows hcp + partner.hcp.min >= 21
+        when  t is H | t is S
+        priority 1
+  3N    "Game in notrump: partner showed a maximum"   shows hcp + partner.hcp.min >= 21
+        when  t is C | t is D
+        priority 1
   P     "Sign off: the answer is our suit"
         when  partner.last=3{t}
   4{t}  "Corrects 3NT to our suit"    shows hcp<=16
