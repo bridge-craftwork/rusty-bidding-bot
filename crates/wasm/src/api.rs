@@ -12,7 +12,10 @@ use bridge_card::{bbsa, Card, Vocabulary};
 use bridge_types::{
     Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
 };
-use rbb_engine::{CandidateTrace, Engine, RuleRef, RuleSet, SeatKnowledge, Step, Tri};
+use rbb_engine::{
+    Ask, CandidateTrace, Engine, Forcing, Position, RuleRef, RuleSet, SeatKnowledge, SideState,
+    Step, Tri,
+};
 use serde::Serialize;
 use serde_json::{json, Map, Value as Json};
 
@@ -981,6 +984,70 @@ fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
     })
 }
 
+fn strain_str(s: Strain) -> &'static str {
+    STRAIN_KEYS
+        .iter()
+        .find(|(k, _)| *k == s)
+        .map_or("?", |(_, v)| v)
+}
+
+fn ask_json(a: &Option<Ask>) -> Json {
+    match a {
+        Some(a) => json!({
+            "kind": a.kind,
+            "args": a.args.iter().map(|s| strain_str(*s)).collect::<Vec<_>>(),
+            "by": seat_str(a.by),
+        }),
+        None => Json::Null,
+    }
+}
+
+/// A side's auction state: trump, forcing, a question outstanding.
+fn side_json(st: &SideState) -> Json {
+    let forcing = match st.forcing {
+        Forcing::None => "none",
+        Forcing::Round => "round",
+        Forcing::Game => "game",
+    };
+    let mut summary = vec![];
+    if let Some(t) = st.trump {
+        summary.push(format!("trump {}", strain_str(t)));
+    }
+    summary.push(match st.forcing_by {
+        Some(by) if st.forcing != Forcing::None => {
+            format!("forcing {forcing} (set by {})", by.to_char())
+        }
+        _ => format!("forcing {forcing}"),
+    });
+    if let Some(a) = &st.ask {
+        summary.push(format!("asked {} by {}", a.kind, a.by.to_char()));
+    }
+    if let Some(a) = &st.answered {
+        summary.push(format!("answered {} (asked by {})", a.kind, a.by.to_char()));
+    }
+    json!({
+        "trump": st.trump.map(strain_str),
+        "forcing": forcing,
+        "forcing_by": st.forcing_by.map(seat_str),
+        "ask": ask_json(&st.ask),
+        "answered": ask_json(&st.answered),
+        "summary": summary.join(", "),
+    })
+}
+
+/// What every seat has shown, and each side's state, at a point of the
+/// auction.
+fn position_json(p: &Position) -> Json {
+    let mut seats = Map::new();
+    for s in SEATS {
+        seats.insert(seat_str(s), knowledge(p.knowledge(s)));
+    }
+    json!({
+        "knowledge": seats,
+        "sides": {"ns": side_json(&p.sides[0]), "ew": side_json(&p.sides[1])},
+    })
+}
+
 fn candidate_json(c: &CandidateTrace) -> Json {
     json!({
         "call": c.call.to_pbn(),
@@ -1204,6 +1271,8 @@ pub fn bid(request: &str) -> String {
             "rule": rule(&decision.rule),
             "candidates": decision.candidates.iter().map(candidate_json).collect::<Vec<_>>(),
             "auction": steps,
+            "position": position_json(&decision.auction.position),
+            "warnings": decision.warnings,
         }),
         d,
     )
@@ -1244,6 +1313,7 @@ pub fn interpret(request: &str) -> String {
             "next": if complete { Json::Null } else { Json::String(seat_str(interp.position.next_caller())) },
             "contract": contract,
             "declarer": declarer,
+            "position": position_json(&interp.position),
         }),
         d,
     )
@@ -1669,6 +1739,39 @@ mod tests {
         );
         assert_eq!(r["call"], dec.call.to_pbn());
         assert_eq!(r["explanation"], dec.explanation);
+    }
+
+    #[test]
+    fn bid_and_interpret_give_the_position() {
+        // South to call after 1NT: North's range is known, East's is not.
+        let r = parse(&bid(r#"{"cards": {"ns": "21GF-DEFAULT", "ew": "21GF-GIB"},
+                "hand": "T64.AT832.A2.T62", "dealer": "N", "auction": "1NT Pass"}"#));
+        assert_eq!(r["ok"], true, "{r}");
+        let k = &r["position"]["knowledge"];
+        assert_eq!(k["N"]["hcp"]["min"], 15, "{r}");
+        assert_eq!(k["N"]["balanced"], true);
+        assert_eq!(k["S"]["hcp"]["min"], 0);
+        assert!(r["position"]["sides"]["ns"]["forcing"].is_string());
+        assert!(r["position"]["sides"]["ew"]["summary"]
+            .as_str()
+            .unwrap()
+            .contains("forcing none"));
+        assert!(r["warnings"].is_array());
+
+        // After a new suit by responder the side is forced for a round.
+        let r = parse(&interpret(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1C Pass 1H"}"#,
+        ));
+        assert_eq!(r["ok"], true, "{r}");
+        let ns = &r["position"]["sides"]["ns"];
+        assert_eq!(ns["forcing"], "round", "{r}");
+        assert_eq!(ns["forcing_by"], "S", "{r}");
+        assert!(
+            r["position"]["knowledge"]["S"]["hcp"]["min"]
+                .as_i64()
+                .unwrap()
+                >= 5
+        );
     }
 
     #[test]

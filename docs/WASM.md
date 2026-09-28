@@ -310,6 +310,8 @@ Response:
     "descriptiveness": 0.97, "prefer": null, "outcome": "hand fails `shows hcp>=22`"}
  ],
  "auction": [ <step>, <step> ],
+ "position": <position>,
+ "warnings": [],
  "diagnostics": []}
 ```
 
@@ -322,6 +324,8 @@ Response:
 | `rule` | `{module, file, line}` of the chosen rule, or `null` |
 | `candidates` | every rule considered, best-ranked first: `outcome` is `"chosen"`, `"outranked"`, `"partner's call is forcing"` (a pass not allowed), or why the hand does not qualify (`hand fails ...`) |
 | `auction` | the auction so far as the engine read it: one `step` per call (below) |
+| `position` | the table as the bidder sees it **before** the call: what every seat has shown and each side's auction state (below) |
+| `warnings` | problems met while choosing the call (unknown terms, contradictions), as plain strings; they are also in `diagnostics` as `warning`s |
 
 ### `interpret(request)` → JSON
 
@@ -338,12 +342,38 @@ Response:
  "next": "N",
  "contract": null,
  "declarer": null,
+ "position": <position>,
  "diagnostics": []}
 ```
 
 `next` is the seat to call (`null` when `complete`). `contract` (`"4S"`,
 `"3NX"`, `"Pass"` for a passed-out deal) and `declarer` (a seat, `null` when
-passed out) are set once the auction is complete.
+passed out) are set once the auction is complete. `position` is the table
+after the last call (below).
+
+A **position** (added in API 1; absent from older builds):
+
+```json
+{"knowledge": {"N": <knowledge>, "E": <knowledge>, "S": <knowledge>, "W": <knowledge>},
+ "sides": {
+   "ns": {"trump": "H", "forcing": "round", "forcing_by": "S",
+          "ask": {"kind": "keycards", "args": ["H"], "by": "N"}, "answered": null,
+          "summary": "trump H, forcing round (set by S), asked keycards by N"},
+   "ew": {"trump": null, "forcing": "none", "forcing_by": null,
+          "ask": null, "answered": null, "summary": "forcing none"}}}
+```
+
+- `knowledge`: what each seat has shown so far, in the step's
+  `knowledge` shape (a seat that has not called, or has shown nothing,
+  has the full ranges: 0-37 HCP, 0-13 cards a suit, empty `summary`).
+- `sides`: each partnership's auction state as the rules see it. `trump`
+  is the agreed strain (`C`, `D`, `H`, `S`, `NT`) or `null`; `forcing` is
+  `"none"`, `"round"` (the forcer's partner may not pass at the next turn
+  unless their right-hand opponent acts) or `"game"` (neither partner may
+  pass below game), with `forcing_by` the seat that set it; `ask` a
+  question awaiting partner's answer and `answered` one partner has
+  answered (`kind` is the rule language's name, e.g. `keycards`; `args`
+  its strains); `summary` all of it in one line, as the workbench shows it.
 
 A **step**:
 
