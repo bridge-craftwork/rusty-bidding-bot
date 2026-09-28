@@ -267,6 +267,15 @@ after 1M (P) 2M (P)
 after 1m (P) 2m (P)
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
   3N  "20-21 HCP, balanced"                shows balanced, hcp>=20
+  # Counting tricks (Rick, 2026-09-27, ticket b469: K2.A9.AT.AKJ9742
+  # passed 1C P 2C): with partner's support a long minor headed by two
+  # top honours runs, and stoppers in the other three suits make up the
+  # nine tricks in notrump.
+  3N  "Nine tricks: a running {m}, the other suits stopped"
+      shows m>=6, quality(m)>=2, hcp>=16
+      shows stop(C) | m is C, stop(D) | m is D, stop(H), stop(S)
+  5{m} "Game: 19+ support points, no notrump"   shows tp(m)>=19
+      priority -1
 
 after 1M (P) 3M (P)
   4M  "Accepts the limit raise"            shows tp(M)>=15
@@ -690,6 +699,10 @@ after 1x (*) 3x (*) when they.bid
   4{x} "Game: 19+ opposite a preemptive raise"
       shows tp(x)>=19
       when  x is H | x is S
+      sets  trump=x
+  5{x} "Game: 19+ opposite a preemptive raise"
+      shows tp(x)>=19
+      when  x is C | x is D
       sets  trump=x
   P   "Nothing to add to a preemptive raise"  priority -10
 # Over a two-level overcall three of opener's suit is often the cheapest

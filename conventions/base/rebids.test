@@ -258,3 +258,11 @@ dealer  S
 vul     NS
 S AQ6542.JT65.97.K      | 1S P 2C P 2H P 2NT P                 | 3S     | the sixth spade: decline in spades, not in notrump
 S AKJ542.KQ65.97.K      | 1S P 2C P 2H P 2NT P                 | 4S     | the same with a maximum: accept in spades
+
+# Counting tricks after a minor raise; opener over a preemptive raise
+# (Basic_Overcall 469).
+card    Basic-Bridge
+dealer  E
+vul     NS
+E K2.A9.AT.AKJ9742      | 1C P 2C P                            | 3NT    | seven clubs to the AKJ with support, every suit stopped: nine tricks
+E K2.A9.AT.AKJ9742      | 1C 1S 3C 4S                          | 5C     | 19 and seven clubs opposite the preemptive raise

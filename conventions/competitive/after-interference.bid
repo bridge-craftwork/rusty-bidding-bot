@@ -69,6 +69,10 @@ after 1x (1y)
       shows x>=3, hcp+length_points>=6, hcp+length_points<=9
       when  x is H | x is S | x>=5
       when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
+  # BBA's 1C (1S) 3C (2026-09-27, ticket b469): the jump raise over an
+  # overcall is preemptive, as over the double.
+  jump(x) "Preemptive raise: five-card support, less than 8"
+      shows x>=5, hcp+length_points<=7
   cheapest(C) "8+ total points, five or more clubs"
       shows C>=5, hcp+length_points>=8
       when  x is not C, y is not C, new_suit_forcing
