@@ -671,7 +671,8 @@ fn mark(b: &BoardResult) -> Mark {
     }
 }
 
-/// Newest modification time of any `.bid` file under `dir`.
+/// Newest modification time of any `.bid` or `.test` file under `dir`, or
+/// of its card vocabulary (`card/*.toml`: field defaults change bidding).
 fn rules_mtime(dir: &Path) -> Option<SystemTime> {
     fn walk(dir: &Path, best: &mut Option<SystemTime>) {
         let Ok(entries) = std::fs::read_dir(dir) else {
@@ -681,7 +682,10 @@ fn rules_mtime(dir: &Path) -> Option<SystemTime> {
             let p: PathBuf = e.path();
             if p.is_dir() {
                 walk(&p, best);
-            } else if p.extension().is_some_and(|x| x == "bid" || x == "test") {
+            } else if p
+                .extension()
+                .is_some_and(|x| x == "bid" || x == "test" || x == "toml")
+            {
                 if let Ok(t) = e.metadata().and_then(|m| m.modified()) {
                     if best.is_none_or(|b| t > b) {
                         *best = Some(t);
@@ -806,7 +810,7 @@ impl App {
             {
                 self.pending = true;
             }
-            ui.checkbox(&mut self.auto, "re-run when a .bid or .test file is saved");
+            ui.checkbox(&mut self.auto, "re-run when a .bid, .test or card .toml file is saved");
             ui.label("scenarios:");
             let r = ui
                 .add(

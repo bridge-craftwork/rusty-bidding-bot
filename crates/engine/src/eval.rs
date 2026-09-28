@@ -1910,7 +1910,8 @@ mod term_tests {
 
     fn when_of(expr: &str) -> Expr {
         let src = format!("module t \"t\"\nwhen {expr}\n  P  \"x\"\n");
-        let m = bidspec::compile(&src, "t.bid").unwrap();
+        let m =
+            bidspec::compile(&src, "t.bid", &bridge_card::Registry::parse("").unwrap()).unwrap();
         m.contexts[0].when.clone().unwrap()
     }
 
@@ -1993,7 +1994,8 @@ mod term_tests {
     fn hand_terms_in_a_context_are_reported() {
         let check = |when: &str| {
             let src = format!("module t \"t\"\nafter 1x (P)\n  when {when}\n    P  \"x\"\n");
-            let m = bidspec::compile(&src, "t.bid").unwrap();
+            let m = bidspec::compile(&src, "t.bid", &bridge_card::Registry::parse("").unwrap())
+                .unwrap();
             check_terms(&[m])
                 .into_iter()
                 .map(|d| d.message)

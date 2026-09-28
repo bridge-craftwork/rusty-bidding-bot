@@ -2,8 +2,9 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use bridge_card::{bbsa, schema, Card};
+use bridge_card::{bbsa, schema, Card, Vocabulary};
 use clap::{Parser, Subcommand};
+use rbb_engine::RuleSet;
 
 mod bid_pbn;
 mod coverage;
@@ -271,10 +272,15 @@ enum Command {
 
 #[derive(Subcommand)]
 enum BidCommand {
-    /// Parse and check .bid files (directories are searched recursively).
+    /// Parse and check .bid files (directories are searched recursively),
+    /// and the card vocabulary they are checked against.
     Check {
         #[arg(default_value = "conventions")]
         paths: Vec<PathBuf>,
+        /// The rules directory whose card vocabulary (card/fields.toml,
+        /// card/bbsa-map.toml) the files are checked against.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
     },
     /// Run the cases in .test files (directories are searched recursively).
     Test {
@@ -316,9 +322,15 @@ enum BidCommand {
         file: PathBuf,
         #[arg(short, long)]
         output: Option<PathBuf>,
+        /// The rules directory whose card vocabulary the file is checked
+        /// against.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
     },
 }
 
+/// Every `card` command reads cards in the card vocabulary of a rules
+/// directory: `<rules>/card/fields.toml` and `<rules>/card/bbsa-map.toml`.
 #[derive(Subcommand)]
 enum CardCommand {
     /// Convert a BBA .bbsa file to card JSON; reports keys with no card field.
@@ -327,19 +339,33 @@ enum CardCommand {
         /// Write the card here instead of stdout.
         #[arg(short, long)]
         output: Option<PathBuf>,
+        /// The rules directory whose card vocabulary to use.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
     },
     /// Convert card JSON to a BBA .bbsa file.
     ExportBbsa {
         file: PathBuf,
         #[arg(short, long)]
         output: Option<PathBuf>,
+        /// The rules directory whose card vocabulary to use.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
     },
     /// Load card JSON and report aliases, unknown paths and invalid values.
-    Check { file: PathBuf },
+    Check {
+        file: PathBuf,
+        /// The rules directory whose card vocabulary to use.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+    },
     /// Print the JSON Schema for card JSON.
     Schema {
         #[arg(short, long)]
         output: Option<PathBuf>,
+        /// The rules directory whose card vocabulary to describe.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
     },
     /// How much of a card our rules read: what they honour, what they
     /// ignore, and which .bbsa keys have no card field at all.
@@ -658,24 +684,18 @@ fn run(cli: Cli) -> Result<()> {
             rules,
         } => {
             use bridge_types::{Call, ScoringMethod};
-            let modules = match &rules {
-                Some(dir) => rbb_engine::load_modules(dir),
-                None => rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()),
-            }
-            .map_err(|d| {
-                d.iter()
-                    .map(|d| d.to_string())
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            })?;
+            let rules = rules_from(rules.as_deref())?;
             let ew_card = ew_card.unwrap_or_else(|| ns_card.clone());
-            let mut cards = [card_or_stock(&ns_card)?, card_or_stock(&ew_card)?];
+            let mut cards = [
+                card_or_stock(&rules.vocab, &ns_card)?,
+                card_or_stock(&rules.vocab, &ew_card)?,
+            ];
             for card in &mut cards {
                 for change in &card_changes {
                     card.apply_change(change)?;
                 }
             }
-            let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &modules);
+            let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules);
             let opts = bid_pbn::Options {
                 prefix: auction_prefix
                     .as_deref()
@@ -1024,24 +1044,56 @@ fn compare(
     Ok(())
 }
 
-fn load_card(path: &Path) -> Result<Card> {
+fn diagnostics(d: Vec<bidspec::Diagnostic>) -> String {
+    d.iter()
+        .map(|d| d.to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// The rule set built into rbb: its rules and their card vocabulary.
+fn embedded_rules() -> std::result::Result<RuleSet, Vec<bidspec::Diagnostic>> {
+    rbb_engine::compile_rules(
+        rbb_assets::MANIFEST,
+        rbb_assets::FIELDS,
+        rbb_assets::BBSA_MAP,
+        rbb_assets::RULE_FILES.iter().copied(),
+    )
+}
+
+/// The rule set in `dir` (its `.bid` files and `card/` vocabulary), or with
+/// no directory the one built into rbb.
+fn rules_from(dir: Option<&Path>) -> Result<RuleSet> {
+    match dir {
+        Some(d) => rbb_engine::load_rules(d),
+        None => embedded_rules(),
+    }
+    .map_err(|d| diagnostics(d).into())
+}
+
+/// The card vocabulary of the rules in `dir` (`<dir>/card/`).
+fn vocab_from(dir: &Path) -> Result<Vocabulary> {
+    Ok(Vocabulary::load(dir)?)
+}
+
+fn load_card(vocab: &Vocabulary, path: &Path) -> Result<Card> {
     let text = read(path)?;
     if path.extension().is_some_and(|e| e == "bbsa") {
-        Ok(bbsa::import(&text, None)?.0)
+        Ok(bbsa::import(vocab, &text, None)?.0)
     } else {
-        Ok(Card::from_json(&text)?.0)
+        Ok(Card::from_json(vocab, &text)?.0)
     }
 }
 
 /// A card from a file (.bbsa or card JSON) or, when no such file exists,
 /// the stock card of that name built into rbb.
-fn card_or_stock(spec: &str) -> Result<Card> {
+fn card_or_stock(vocab: &Vocabulary, spec: &str) -> Result<Card> {
     let path = Path::new(spec);
     if path.exists() {
-        return load_card(path);
+        return load_card(vocab, path);
     }
     match rbb_assets::card(spec) {
-        Some(text) => Ok(bbsa::import(text, Some(spec))?.0),
+        Some(text) => Ok(bbsa::import(vocab, text, Some(spec))?.0),
         None => Err(format!(
             "{spec}: no such file, and no stock card of that name ({})",
             rbb_assets::CARDS
@@ -1076,18 +1128,13 @@ fn call(
     let dealer =
         Direction::from_char(dealer.to_ascii_uppercase()).ok_or("dealer must be N, E, S or W")?;
     let vul = Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?;
-    let ns = load_card(card)?;
+    let rules = rules_from(Some(rules))?;
+    let ns = load_card(&rules.vocab, card)?;
     let ew = match ew_card {
-        Some(p) => load_card(p)?,
+        Some(p) => load_card(&rules.vocab, p)?,
         None => ns.clone(),
     };
-    let modules = rbb_engine::load_modules(rules).map_err(|d| {
-        d.iter()
-            .map(|d| d.to_string())
-            .collect::<Vec<_>>()
-            .join("\n")
-    })?;
-    let engine = rbb_engine::Engine::new(&ns, &ew, &modules);
+    let engine = rbb_engine::Engine::new(&ns, &ew, &rules);
     let d = engine.bid(&hand, dealer, vul, scoring, &calls);
     if json {
         println!("{}", serde_json::to_string_pretty(&d)?);
@@ -1132,7 +1179,13 @@ fn call(
 
 fn bid(cmd: BidCommand) -> Result<()> {
     match cmd {
-        BidCommand::Check { paths } => {
+        BidCommand::Check { paths, rules } => {
+            let vocab = vocab_from(&rules)?;
+            let mut warnings = 0;
+            for w in vocab.lint() {
+                eprintln!("{}: warning: {w}", rules.join("card").display());
+                warnings += 1;
+            }
             let mut files = Vec::new();
             for p in &paths {
                 collect_bid_files(p, &mut files)?;
@@ -1140,7 +1193,6 @@ fn bid(cmd: BidCommand) -> Result<()> {
             files.sort();
             let mut modules = Vec::new();
             let mut errors = 0;
-            let mut warnings = 0;
             // Each directory's manifest: the language version it asks for.
             for dir in paths.iter().filter(|p| p.is_dir()) {
                 match rbb_engine::read_manifest(dir) {
@@ -1175,7 +1227,8 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 }
             }
             for file in &files {
-                match bidspec::compile(&read(file)?, &file.display().to_string()) {
+                match bidspec::compile(&read(file)?, &file.display().to_string(), vocab.registry())
+                {
                     Ok(m) => modules.push(m),
                     Err(diags) => {
                         errors += diags.len();
@@ -1193,7 +1246,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
                     errors += 1;
                 }
             }
-            for e in rbb_engine::check_card_refs(&modules) {
+            for e in rbb_engine::check_card_refs(&modules, vocab.registry()) {
                 eprintln!("{e}");
                 errors += 1;
             }
@@ -1262,17 +1315,8 @@ fn bid(cmd: BidCommand) -> Result<()> {
             json,
             output,
         } => {
-            let modules = match &rules {
-                Some(dir) => rbb_engine::load_modules(dir),
-                None => rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()),
-            }
-            .map_err(|d| {
-                d.iter()
-                    .map(|d| d.to_string())
-                    .collect::<Vec<_>>()
-                    .join("\n")
-            })?;
-            let entries = bidspec::reference::entries(&modules);
+            let rule_set = rules_from(rules.as_deref())?;
+            let entries = bidspec::reference::entries(&rule_set.modules);
             let rules_id = if rules.is_some() {
                 "from files".to_string()
             } else {
@@ -1314,15 +1358,15 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 }
             }
         }
-        BidCommand::Compile { file, output } => {
+        BidCommand::Compile {
+            file,
+            output,
+            rules,
+        } => {
+            let vocab = vocab_from(&rules)?;
             let module =
-                bidspec::compile(&read(&file)?, &file.display().to_string()).map_err(|diags| {
-                    diags
-                        .iter()
-                        .map(|d| d.to_string())
-                        .collect::<Vec<_>>()
-                        .join("\n")
-                })?;
+                bidspec::compile(&read(&file)?, &file.display().to_string(), vocab.registry())
+                    .map_err(diagnostics)?;
             write(output.as_deref(), &bidspec::to_json(&module))?;
         }
     }
@@ -1349,10 +1393,15 @@ fn collect_bid_files(path: &Path, out: &mut Vec<PathBuf>) -> Result<()> {
 
 fn card(cmd: CardCommand) -> Result<()> {
     match cmd {
-        CardCommand::ImportBbsa { file, output } => {
+        CardCommand::ImportBbsa {
+            file,
+            output,
+            rules,
+        } => {
+            let vocab = vocab_from(&rules)?;
             let text = read(&file)?;
             let name = file.file_stem().and_then(|s| s.to_str());
-            let (card, report) = bbsa::import(&text, name)?;
+            let (card, report) = bbsa::import(&vocab, &text, name)?;
             write(output.as_deref(), &card.to_json_string())?;
             eprintln!("{}: {} keys mapped", file.display(), report.mapped);
             if !report.passthrough.is_empty() {
@@ -1368,8 +1417,13 @@ fn card(cmd: CardCommand) -> Result<()> {
                 eprintln!("warning: {w}");
             }
         }
-        CardCommand::ExportBbsa { file, output } => {
-            let (card, load) = Card::from_json(&read(&file)?)?;
+        CardCommand::ExportBbsa {
+            file,
+            output,
+            rules,
+        } => {
+            let vocab = vocab_from(&rules)?;
+            let (card, load) = Card::from_json(&vocab, &read(&file)?)?;
             print_load_report(&load);
             let (text, report) = bbsa::export(&card);
             write(output.as_deref(), &text)?;
@@ -1377,16 +1431,18 @@ fn card(cmd: CardCommand) -> Result<()> {
                 eprintln!("warning: {key} is not in the current .bbsa layout; not written");
             }
         }
-        CardCommand::Check { file } => {
-            let (card, load) = Card::from_json(&read(&file)?)?;
+        CardCommand::Check { file, rules } => {
+            let vocab = vocab_from(&rules)?;
+            let (card, load) = Card::from_json(&vocab, &read(&file)?)?;
             println!("{}: {} settings", file.display(), card.values().count());
             print_load_report(&load);
             if !load.is_clean() {
                 return Err("card has unknown or invalid fields".into());
             }
         }
-        CardCommand::Schema { output } => {
-            let text = serde_json::to_string_pretty(&schema::json_schema())?;
+        CardCommand::Schema { output, rules } => {
+            let vocab = vocab_from(&rules)?;
+            let text = serde_json::to_string_pretty(&schema::json_schema(vocab.registry()))?;
             write(output.as_deref(), &text)?;
         }
         CardCommand::Coverage {
@@ -1402,8 +1458,8 @@ fn card(cmd: CardCommand) -> Result<()> {
 /// percent of. Reports what it leaves out, since that is the point.
 fn covered_scenarios(opts: &rbb_compare::Options, min: f64) -> Result<Vec<String>> {
     use std::collections::HashMap;
-    let modules = rbb_engine::load_modules(&opts.rules).map_err(|_| "rule files have errors")?;
-    let read = coverage::fields_read(&modules);
+    let rules = rules_from(Some(&opts.rules)).map_err(|_| "rule files have errors")?;
+    let read = coverage::fields_read(&rules.modules, &rules.vocab);
     let scenarios = rbb_compare::discover(&opts.pbs, &opts.scenarios)?;
     let mut score: HashMap<String, f64> = HashMap::new();
     let mut of = |name: &str| -> f64 {
@@ -1411,7 +1467,7 @@ fn covered_scenarios(opts: &rbb_compare::Options, min: f64) -> Result<Vec<String
             return *s;
         }
         let path = opts.pbs.join("bbsa").join(format!("{name}.bbsa"));
-        let s = coverage::load(&path)
+        let s = coverage::load(&rules.vocab, &path)
             .map(|(n, card, unmapped)| coverage::of_card(&n, &card, unmapped, &read).score())
             .unwrap_or(0.0);
         score.insert(name.to_string(), s);
@@ -1441,16 +1497,16 @@ fn covered_scenarios(opts: &rbb_compare::Options, min: f64) -> Result<Vec<String
 
 /// `card coverage`: what the rules read of each card.
 fn card_coverage(files: &[PathBuf], rules: &Path, verbose: bool) -> Result<()> {
-    let modules = rbb_engine::load_modules(rules).map_err(|d| {
+    let rules = rbb_engine::load_rules(rules).map_err(|d| {
         for e in &d {
             eprintln!("{e}");
         }
         "rule files have errors"
     })?;
-    let read = coverage::fields_read(&modules);
+    let read = coverage::fields_read(&rules.modules, &rules.vocab);
     println!(
         "{} modules read {} card fields\n",
-        modules.len(),
+        rules.modules.len(),
         read.len()
     );
     println!(
@@ -1459,7 +1515,7 @@ fn card_coverage(files: &[PathBuf], rules: &Path, verbose: bool) -> Result<()> {
     );
     let mut covs = Vec::new();
     for f in files {
-        let (name, card, unmapped) = coverage::load(f)?;
+        let (name, card, unmapped) = coverage::load(&rules.vocab, f)?;
         let cov = coverage::of_card(&name, &card, unmapped, &read);
         println!(
             "{:24} {:14} {:6} {:8} {:9} {:8.0}%",

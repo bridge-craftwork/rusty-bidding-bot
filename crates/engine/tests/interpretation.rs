@@ -18,9 +18,9 @@ fn engine() -> &'static Engine {
             root.join("crates/bridge-card/tests/fixtures/bbsa/21GF-DEFAULT.bbsa"),
         )
         .unwrap();
-        let (card, _) = bbsa::import(&text, None).unwrap();
-        let modules = rbb_engine::load_modules(&root.join("conventions")).unwrap();
-        Engine::new(&card, &card, &modules)
+        let rules = rbb_engine::load_rules(&root.join("conventions")).unwrap();
+        let (card, _) = bbsa::import(&rules.vocab, &text, None).unwrap();
+        Engine::new(&card, &card, &rules)
     })
 }
 
@@ -178,9 +178,18 @@ when opening
   1C  "BBA: 8+"        shows hcp>=8
       when  style is bba, C>=4
 "#;
-    let module = bidspec::compile(source, "mixed.bid").unwrap();
-    let card = bridge_card::Card::new();
-    let engine = Engine::new(&card, &card, &[module]);
+    let vocab = rbb_engine::Vocabulary::load(
+        &Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions"),
+    )
+    .unwrap();
+    let module = bidspec::compile(source, "mixed.bid", vocab.registry()).unwrap();
+    let card = bridge_card::Card::new(&vocab);
+    let rules = rbb_engine::RuleSet {
+        manifest: None,
+        vocab,
+        modules: vec![module],
+    };
+    let engine = Engine::new(&card, &card, &rules);
     let i = engine.interpret(
         Direction::South,
         Vulnerability::None,

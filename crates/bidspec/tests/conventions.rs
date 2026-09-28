@@ -17,6 +17,26 @@ fn bid_files(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
     }
 }
 
+/// The rules' own card vocabulary (`conventions/card`).
+fn vocab() -> &'static bridge_card::Vocabulary {
+    static V: std::sync::OnceLock<bridge_card::Vocabulary> = std::sync::OnceLock::new();
+    V.get_or_init(|| {
+        let rules = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
+        bridge_card::Vocabulary::load(&rules).unwrap_or_else(|e| panic!("{e}"))
+    })
+}
+
+/// `conventions/card/fields.toml` and `bbsa-map.toml` parse, every mapped
+/// path is a field and every value fits it (checked when they load), and
+/// every mapped key is one of BBA's.
+#[test]
+fn the_card_vocabulary_is_valid() {
+    let v = vocab();
+    assert!(v.registry().fields().len() > 250);
+    assert!(v.bbsa_mapping().len() > 130);
+    assert_eq!(v.lint(), Vec::<String>::new());
+}
+
 #[test]
 fn all_convention_modules_compile() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
@@ -26,7 +46,7 @@ fn all_convention_modules_compile() {
     for path in files {
         let src = fs::read_to_string(&path).unwrap();
         let name = path.display().to_string();
-        match bidspec::compile(&src, &name) {
+        match bidspec::compile(&src, &name, vocab().registry()) {
             Ok(module) => {
                 // The IR round-trips through JSON.
                 let json = bidspec::to_json(&module);
@@ -44,7 +64,12 @@ fn all_convention_modules_compile() {
 #[test]
 fn rkcb_structure() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions/slam/rkcb-1430.bid");
-    let m = bidspec::compile(&fs::read_to_string(path).unwrap(), "rkcb").unwrap();
+    let m = bidspec::compile(
+        &fs::read_to_string(path).unwrap(),
+        "rkcb",
+        vocab().registry(),
+    )
+    .unwrap();
     assert_eq!(m.name, "rkcb-1430");
     // It serves 1430 and 0314, so the card fields are params, not gates.
     assert!(m.card.is_empty());
@@ -92,7 +117,7 @@ after 1N (P)
 }
 
 fn errors(src: &str) -> Vec<String> {
-    match bidspec::compile(src, "t.bid") {
+    match bidspec::compile(src, "t.bid", vocab().registry()) {
         Ok(_) => vec![],
         Err(d) => d.iter().map(|d| d.to_string()).collect(),
     }

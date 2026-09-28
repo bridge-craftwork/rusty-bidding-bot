@@ -3,7 +3,7 @@
 The engine (`rbb-engine`, `bidspec`, the `rbb` tools, the workbench, the
 WASM build) and the conventions (`conventions/`: the `.bid` rules with
 their `.test` and `.notes.md` files, the card vocabulary
-`crates/bridge-card/data/fields.toml` and `bbsa-map.toml`, the probe specs
+`conventions/card/fields.toml` and `bbsa-map.toml`, the probe specs
 in `probes/`) are meant to live in two repositories, so that others can
 write convention scripts against a stable engine. This document is what
 each side may rely on. The first half is what the engine promises; the
@@ -55,6 +55,24 @@ accepts.
 
 ### Loading
 
+A rules directory holds:
+
+| Path | |
+|---|---|
+| `conventions.toml` | the manifest: name, rule language version |
+| `card/fields.toml` | the card fields: path, kind, options, bounds, default, aliases |
+| `card/bbsa-map.toml` | how BBA's `.bbsa` keys map onto those fields (`[implied]`, `[[derived]]`) |
+| `**/*.bid` | the rules (with their `.test` and `.notes.md` files) |
+
+- **Each rules directory brings its own card vocabulary.** The engine has
+  none built in: it reads `card/fields.toml` and `card/bbsa-map.toml` from
+  the directory it is given (`--rules DIR`; the copy embedded with the
+  rules in the release `rbb` and the WASM), checks the rules against it,
+  and reads every card (`.bbsa`, card JSON, `--set path=value`) in it, so
+  a field's default, aliases and `.bbsa` mapping are the ones the rules
+  were written for. A rule set with its own fields needs no engine change.
+  Both files must load: a missing file, a path the map names that is not a
+  field, or a value that does not fit its field refuses the rule set.
 - Every `.bid` file under the rules directory is compiled, **sorted by
   path**. That order is the last tie-breaker between candidates, so moving
   a file can change a call.
@@ -63,7 +81,7 @@ accepts.
   `param` reads a card field, with the given default when the card leaves
   it unset (no default: the value is nothing, and `style is x` is false).
 - `card` and `param` paths must exist in the card vocabulary
-  (`fields.toml`); an alias is reported with its current name, and an
+  (`card/fields.toml`); an alias is reported with its current name, and an
   enum option the field does not have is an error.
 
 ### Failures refuse to load
@@ -73,7 +91,8 @@ and `cargo test` all load through the same checks, and refuse the whole
 rule set, with `file:line` diagnostics, when:
 
 - a file does not parse (LANGUAGE.md §11);
-- a card path or enum option is unknown;
+- the card vocabulary (`card/fields.toml`, `card/bbsa-map.toml`) is
+  missing or invalid, or a card path or enum option is unknown;
 - a condition names a term, attribute or function the engine does not
   know (`check_terms`): an unknown name would otherwise make its
   condition false every time and silently switch the rule off;
@@ -139,14 +158,14 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 
 | Command | What it does |
 |---|---|
-| `rbb bid check [DIR\|FILE...]` | parse and check every rule file; reports the manifest and the language read |
+| `rbb bid check [DIR\|FILE...] [--rules DIR]` | parse and check every rule file against the card vocabulary of `--rules`; reports the manifest and the language read |
 | `rbb bid test [PATHS] [--rules DIR] [-v]` | run the `.test` cases next to the modules |
 | `rbb bid terms` | print the term vocabulary (this document's generated section) |
 | `rbb bid reference [--rules DIR]` | every module and what each call means after each auction |
-| `rbb bid compile FILE` | a file's compiled JSON IR |
+| `rbb bid compile FILE [--rules DIR]` | a file's compiled JSON IR |
 | `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json]` | the engine's call with every candidate and why it lost |
 | `rbb compare [SCENARIO...] --rules DIR [--json F]` | compare with BBA's auctions in Practice-Bidding-Scenarios: agreement, distance from par, "no rule" in live auctions |
-| `rbb-workbench --rules DIR` | the same comparison as a GUI; re-runs when a `.bid` or `.test` file is saved |
+| `rbb-workbench --rules DIR` | the same comparison as a GUI; re-runs when a `.bid`, `.test` or `card/*.toml` file is saved |
 | `rbb card coverage CARD... [--rules DIR]` | which card settings the rules read, ignore, or have no field for |
 | `rbb grid probes/NAME.toml`, `rbb probe` | ask BBA how it bids hands you make |
 
@@ -207,8 +226,8 @@ These are the habits the rule set in this repository follows
 - **Find what a decision turns on by making hands** (`rbb grid` specs in
   `probes/`), not by searching the corpus.
 - **Card fields go in the vocabulary.** A module reads only fields of
-  `fields.toml`; a new treatment is a new field or enum option there (and a
-  `.bbsa` mapping in `bbsa-map.toml` when BBA has one), never a guessed
+  `card/fields.toml`; a new treatment is a new field or enum option there (and a
+  `.bbsa` mapping in `card/bbsa-map.toml` when BBA has one), never a guessed
   meaning. An unmapped `.bbsa` key stays in passthrough until its meaning
   is known. Treatments are enum fields tested with `is`
   (LANGUAGE.md §3); the BBA treatment is the `bba` option.

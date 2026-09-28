@@ -134,9 +134,24 @@ pub struct Engine {
 }
 
 impl Engine {
-    /// An engine where North-South play `ns` and East-West play `ew`.
-    /// `modules` should be in a stable order (e.g. sorted by file).
-    pub fn new(ns: &Card, ew: &Card, modules: &[bidspec::Module]) -> Engine {
+    /// An engine where North-South play `ns` and East-West play `ew` with
+    /// `rules` (modules in a stable order, e.g. sorted by file).
+    ///
+    /// Both cards must be in the rules' vocabulary (loaded with
+    /// `rules.vocab`): a card read through another vocabulary could resolve
+    /// a field, an alias or a default differently from the one the rules
+    /// were checked against, so this panics rather than bid with it.
+    pub fn new(ns: &Card, ew: &Card, rules: &crate::RuleSet) -> Engine {
+        for (side, card) in [("North-South", ns), ("East-West", ew)] {
+            assert!(
+                *card.vocabulary() == rules.vocab,
+                "{side}'s card is in card vocabulary {} but the rules use {}: \
+                 load cards with the rule set's vocabulary",
+                card.vocabulary().id(),
+                rules.vocab.id()
+            );
+        }
+        let modules = &rules.modules;
         Engine {
             systems: [System::new(ns, modules), System::new(ew, modules)],
             valuation: [Valuation::for_card(ns), Valuation::for_card(ew)],
@@ -171,7 +186,6 @@ impl Engine {
         cache.insert(key.to_string(), c.clone());
         c
     }
-
 
     pub fn system(&self, seat: Direction) -> &System {
         &self.systems[side(seat)]
@@ -509,8 +523,10 @@ impl Engine {
                 // the denial claim more than we know. Resolved part by part,
                 // which is what resolving their conjunction does, without
                 // copying the rule's trees first.
-                let resolved: Option<Vec<Expr>> =
-                    parts.iter().map(|p| ctx.resolve_exact(p, &mut ob)).collect();
+                let resolved: Option<Vec<Expr>> = parts
+                    .iter()
+                    .map(|p| ctx.resolve_exact(p, &mut ob))
+                    .collect();
                 if let Some(resolved) = resolved.map(|all| Expr::And { all }) {
                     if !is_const(&resolved) {
                         k.add(Expr::Not {

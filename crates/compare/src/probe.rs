@@ -10,7 +10,7 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use bridge_card::{bbsa, Card, Value};
+use bridge_card::{bbsa, Card, Value, Vocabulary};
 use bridge_types::{
     Board, Call, Card as PlayingCard, Deal, Direction, Hand, Rank, ScoringMethod, Suit,
     Vulnerability,
@@ -136,8 +136,14 @@ const SYSTEMS: [(&str, &str); 5] = [
     ("acol", "acol"),
 ];
 
-/// `.bbsa` text for a card spec, with edits applied.
-pub fn card_text(spec: &str, pbs: &Path, edits: &[(String, i64)]) -> Result<String, String> {
+/// `.bbsa` text for a card spec, with edits applied. A `bare:` card is
+/// written through `vocab` (the rules' own vocabulary).
+pub fn card_text(
+    spec: &str,
+    pbs: &Path,
+    edits: &[(String, i64)],
+    vocab: &Vocabulary,
+) -> Result<String, String> {
     let text = if let Some(system) = spec.strip_prefix("bare:") {
         let category = SYSTEMS
             .iter()
@@ -148,7 +154,7 @@ pub fn card_text(spec: &str, pbs: &Path, edits: &[(String, i64)]) -> Result<Stri
                 format!("bare:{system}: expected one of {}", names.join(", "))
             })?;
         // Every toggle off; only the system type set.
-        let mut card = Card::new();
+        let mut card = Card::new(vocab);
         card.set("general.system_category", Value::Text(category.into()))
             .map_err(|e| e.to_string())?;
         bbsa::export(&card).0
@@ -470,8 +476,14 @@ fn scoring_arg(s: ScoringMethod) -> &'static str {
 pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
     std::fs::create_dir_all(&opts.out_dir)
         .map_err(|e| format!("{}: {e}", opts.out_dir.display()))?;
-    let ns_text = card_text(&opts.ns_card, &opts.pbs, &opts.ns_set)?;
-    let ew_text = card_text(&opts.ew_card, &opts.pbs, &opts.ew_set)?;
+    let rules = rbb_engine::load_rules(&opts.rules).map_err(|d| {
+        d.iter()
+            .map(|d| d.to_string())
+            .collect::<Vec<_>>()
+            .join("\n")
+    })?;
+    let ns_text = card_text(&opts.ns_card, &opts.pbs, &opts.ns_set, &rules.vocab)?;
+    let ew_text = card_text(&opts.ew_card, &opts.pbs, &opts.ew_set, &rules.vocab)?;
     let (ns_path, ew_path) = (opts.out_dir.join("ns.bbsa"), opts.out_dir.join("ew.bbsa"));
     let write =
         |p: &Path, t: &str| std::fs::write(p, t).map_err(|e| format!("{}: {e}", p.display()));
@@ -528,8 +540,10 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
         ));
     }
 
-    let (mut ns_card, _) = bbsa::import(&ns_text, Some("ns")).map_err(|e| e.to_string())?;
-    let (mut ew_card, _) = bbsa::import(&ew_text, Some("ew")).map_err(|e| e.to_string())?;
+    let (mut ns_card, _) =
+        bbsa::import(&rules.vocab, &ns_text, Some("ns")).map_err(|e| e.to_string())?;
+    let (mut ew_card, _) =
+        bbsa::import(&rules.vocab, &ew_text, Some("ew")).map_err(|e| e.to_string())?;
     for change in &opts.our_changes {
         let (path, value) = change
             .split_once('=')
@@ -546,13 +560,7 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
             card.set(path, value.clone()).map_err(|e| e.to_string())?;
         }
     }
-    let modules = rbb_engine::load_modules(&opts.rules).map_err(|d| {
-        d.iter()
-            .map(|d| d.to_string())
-            .collect::<Vec<_>>()
-            .join("\n")
-    })?;
-    let engine = Engine::new(&ns_card, &ew_card, &modules);
+    let engine = Engine::new(&ns_card, &ew_card, &rules);
     let valuation = rbb_engine::Valuation::for_card(&ns_card);
 
     let bba_boards = bridge_encodings::pbn::read_pbn_file(&output).map_err(|e| e.to_string())?;
@@ -707,7 +715,9 @@ mod tests {
 
     #[test]
     fn bare_card_turns_everything_off() {
-        let text = card_text("bare:2/1", Path::new("."), &[("Texas".into(), 1)]).unwrap();
+        let rules = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
+        let vocab = Vocabulary::load(&rules).unwrap();
+        let text = card_text("bare:2/1", Path::new("."), &[("Texas".into(), 1)], &vocab).unwrap();
         let entries = bbsa::parse(&text).unwrap();
         assert!(entries.iter().any(|(k, v)| k == "Texas" && *v == 1));
         assert!(entries.iter().any(|(k, v)| k == "System type" && *v == 0));

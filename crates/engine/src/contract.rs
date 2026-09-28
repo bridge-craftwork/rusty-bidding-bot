@@ -97,23 +97,35 @@ mod tests {
     }
 
     #[test]
-    fn load_modules_enforces_the_manifest() {
+    fn load_rules_enforces_the_manifest() {
         let dir = std::env::temp_dir().join(format!("rbb-manifest-{}", std::process::id()));
-        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::create_dir_all(dir.join("card")).unwrap();
         std::fs::write(
             dir.join("demo.bid"),
             "module demo \"Demo\"\n\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n",
         )
         .unwrap();
+        // Every rules directory brings its own card vocabulary: none, no load.
+        let err = crate::load_rules(&dir).unwrap_err();
+        assert!(err[0].file.ends_with("fields.toml"), "{}", err[0]);
+        // An empty one is enough for rules that read no card field.
+        std::fs::write(dir.join("card/fields.toml"), "").unwrap();
+        std::fs::write(dir.join("card/bbsa-map.toml"), "").unwrap();
         // No manifest: read as the current language.
-        assert!(crate::load_modules(&dir).is_ok());
+        assert!(crate::load_rules(&dir).unwrap().manifest.is_none());
         let manifest = dir.join(manifest::FILE);
         std::fs::write(&manifest, "name = \"demo\"\nlanguage = 1\n").unwrap();
-        assert!(crate::load_modules(&dir).is_ok());
+        assert_eq!(
+            crate::load_rules(&dir).unwrap().manifest.unwrap().name,
+            "demo"
+        );
         std::fs::write(&manifest, "name = \"demo\"\nlanguage = 99\n").unwrap();
-        let err = crate::load_modules(&dir).unwrap_err();
+        let err = crate::load_rules(&dir).unwrap_err();
+        let vocab = crate::Vocabulary::parse("", "").unwrap();
+        let also = crate::load_modules(&dir, &vocab).unwrap_err();
         std::fs::remove_dir_all(&dir).unwrap();
         assert!(err[0].message.contains("rule language 99"), "{}", err[0]);
+        assert!(also[0].message.contains("rule language 99"), "{}", also[0]);
     }
 
     #[test]

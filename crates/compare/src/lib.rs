@@ -53,10 +53,15 @@ pub struct Report {
     pub boards: Vec<BoardResult>,
 }
 
-fn load_card(pbs: &std::path::Path, name: &str, changes: &[String]) -> Result<Card, String> {
+fn load_card(
+    pbs: &std::path::Path,
+    vocab: &bridge_card::Vocabulary,
+    name: &str,
+    changes: &[String],
+) -> Result<Card, String> {
     let path = pbs.join("bbsa").join(format!("{name}.bbsa"));
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
-    let mut card = bbsa::import(&text, Some(name))
+    let mut card = bbsa::import(vocab, &text, Some(name))
         .map(|(c, _)| c)
         .map_err(|e| e.to_string())?;
     for change in changes {
@@ -69,7 +74,7 @@ fn load_card(pbs: &std::path::Path, name: &str, changes: &[String]) -> Result<Ca
 pub struct Engines {
     pbs: PathBuf,
     changes: Vec<String>,
-    modules: Vec<bidspec::Module>,
+    rules: rbb_engine::RuleSet,
     cache: Mutex<HashMap<(String, String), Arc<Engine>>>,
 }
 
@@ -83,7 +88,7 @@ impl Engines {
 
     /// Compile the rules in `rules`; cards are read from `pbs/bbsa`.
     pub fn new(pbs: &std::path::Path, rules: &std::path::Path) -> Result<Engines, String> {
-        let modules = rbb_engine::load_modules(rules).map_err(|d| {
+        let rules = rbb_engine::load_rules(rules).map_err(|d| {
             d.iter()
                 .map(|d| d.to_string())
                 .collect::<Vec<_>>()
@@ -92,7 +97,7 @@ impl Engines {
         Ok(Engines {
             pbs: pbs.to_path_buf(),
             changes: Vec::new(),
-            modules,
+            rules,
             cache: Mutex::new(HashMap::new()),
         })
     }
@@ -104,9 +109,9 @@ impl Engines {
             return Ok(e.clone());
         }
         let engine = Arc::new(Engine::new(
-            &load_card(&self.pbs, ns, &self.changes)?,
-            &load_card(&self.pbs, ew, &self.changes)?,
-            &self.modules,
+            &load_card(&self.pbs, &self.rules.vocab, ns, &self.changes)?,
+            &load_card(&self.pbs, &self.rules.vocab, ew, &self.changes)?,
+            &self.rules,
         ));
         self.cache.lock().unwrap().insert(key, engine.clone());
         Ok(engine)

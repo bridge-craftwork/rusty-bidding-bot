@@ -8,11 +8,11 @@
 use std::cell::RefCell;
 use std::sync::{Arc, OnceLock};
 
-use bridge_card::{bbsa, Card};
+use bridge_card::{bbsa, Card, Vocabulary};
 use bridge_types::{
     Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
 };
-use rbb_engine::{CandidateTrace, Engine, RuleRef, SeatKnowledge, Step, Tri};
+use rbb_engine::{CandidateTrace, Engine, RuleRef, RuleSet, SeatKnowledge, Step, Tri};
 use serde::Serialize;
 use serde_json::{json, Map, Value as Json};
 
@@ -119,16 +119,45 @@ fn parse_request(text: &str, d: &mut Diags) -> Json {
 
 // ── Rules and engines ──────────────────────────────────────────────────────
 
-/// The embedded rules, compiled once.
-fn modules() -> &'static Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
-    static MODULES: OnceLock<Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>>> =
-        OnceLock::new();
-    MODULES.get_or_init(|| rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()))
+/// A compiled rule set: the modules and the card vocabulary that cards are
+/// read in, with the id responses report (`rules_id`).
+struct Rules {
+    set: RuleSet,
+    id: String,
+    files: usize,
 }
 
-fn modules_or_report(d: &mut Diags) -> Option<&'static [bidspec::Module]> {
-    match modules() {
-        Ok(m) => Some(m),
+/// The embedded rules and their vocabulary, compiled once.
+fn embedded_rules() -> &'static Result<Arc<Rules>, Vec<bidspec::Diagnostic>> {
+    static RULES: OnceLock<Result<Arc<Rules>, Vec<bidspec::Diagnostic>>> = OnceLock::new();
+    RULES.get_or_init(|| {
+        rbb_engine::compile_rules(
+            rbb_assets::MANIFEST,
+            rbb_assets::FIELDS,
+            rbb_assets::BBSA_MAP,
+            rbb_assets::RULE_FILES.iter().copied(),
+        )
+        .map(|set| {
+            Arc::new(Rules {
+                set,
+                id: rbb_assets::RULES_ID.to_string(),
+                files: rbb_assets::RULE_FILES.len(),
+            })
+        })
+    })
+}
+
+/// How many rules the modules hold.
+fn rule_count(modules: &[bidspec::Module]) -> usize {
+    bidspec::reference::entries(modules)
+        .iter()
+        .map(|m| m.rules.len())
+        .sum()
+}
+
+fn embedded_or_report(d: &mut Diags) -> Option<Arc<Rules>> {
+    match embedded_rules() {
+        Ok(r) => Some(r.clone()),
         Err(errors) => {
             for e in errors {
                 d.error(format!("embedded rules: {e}"));
@@ -138,10 +167,27 @@ fn modules_or_report(d: &mut Diags) -> Option<&'static [bidspec::Module]> {
     }
 }
 
+/// The rules a request asks for, when it names no engine.
+fn rules_for(_req: &Json, d: &mut Diags) -> Option<Arc<Rules>> {
+    embedded_or_report(d)
+}
+
+/// The rules of the engine a request names, else those it asks for.
+fn rules_of(req: &Json, d: &mut Diags) -> Option<Arc<Rules>> {
+    if let Some(id) = req.get("engine").and_then(Json::as_u64) {
+        if let Some(e) = entry_by_id(id as u32) {
+            return Some(e.rules);
+        }
+    }
+    rules_for(req, d)
+}
+
+#[derive(Clone)]
 struct Entry {
     id: u32,
     key: String,
     engine: Arc<Engine>,
+    rules: Arc<Rules>,
     names: [String; 2],
 }
 
@@ -166,10 +212,10 @@ type Loaded = (Card, String, Vec<String>);
 
 /// One card from its spec: a stock card's name, `{"stock": name}`,
 /// `{"bbsa": text, "name"?: ..}` or `{"json": card_data}`.
-fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<Loaded> {
+fn load_card(spec: &Json, field: &str, vocab: &Vocabulary, d: &mut Diags) -> Option<Loaded> {
     let stock = |name: &str, d: &mut Diags| match rbb_assets::card(name) {
         Some(text) => {
-            import_bbsa(text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
+            import_bbsa(vocab, text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
         }
         None => {
             d.error(format!("{field}: no stock card called {name:?}"))
@@ -184,13 +230,14 @@ fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<Loaded> {
                 stock(name, d)
             } else if let Some(text) = m.get("bbsa").and_then(Json::as_str) {
                 let name = m.get("name").and_then(Json::as_str).unwrap_or("bbsa");
-                import_bbsa(text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
+                import_bbsa(vocab, text, Some(name), field, d)
+                    .map(|(c, u)| (c, name.to_string(), u))
             } else if let Some(card) = m.get("json") {
                 let text = match card {
                     Json::String(s) => s.clone(),
                     other => other.to_string(),
                 };
-                match Card::from_json(&text) {
+                match Card::from_json(vocab, &text) {
                     Ok((card, report)) => {
                         for (from, to) in &report.aliased {
                             d.info(format!("{field}: {from} is an old name for {to}"));
@@ -229,12 +276,13 @@ fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<Loaded> {
 }
 
 fn import_bbsa(
+    vocab: &Vocabulary,
     text: &str,
     name: Option<&str>,
     field: &str,
     d: &mut Diags,
 ) -> Option<(Card, Vec<String>)> {
-    match bbsa::import(text, name) {
+    match bbsa::import(vocab, text, name) {
         Ok((card, report)) => {
             // One remark for them all: a stock card has dozens.
             if let Some((first, _)) = report.passthrough.first() {
@@ -293,12 +341,12 @@ fn string_list(v: Option<&Json>, field: &str, d: &mut Diags) -> Vec<String> {
 }
 
 /// Both cards from `{"ns", "ew"?, "set"?, "ns_set"?, "ew_set"?}`.
-fn load_cards(cards: &Json, d: &mut Diags) -> Option<([Card; 2], [String; 2])> {
-    load_cards_full(cards, d).map(|[ns, ew]| ([ns.0, ew.0], [ns.1, ew.1]))
+fn load_cards(cards: &Json, vocab: &Vocabulary, d: &mut Diags) -> Option<([Card; 2], [String; 2])> {
+    load_cards_full(cards, vocab, d).map(|[ns, ew]| ([ns.0, ew.0], [ns.1, ew.1]))
 }
 
 /// Both cards, with the changes applied and each side's unmapped keys.
-fn load_cards_full(cards: &Json, d: &mut Diags) -> Option<[Loaded; 2]> {
+fn load_cards_full(cards: &Json, vocab: &Vocabulary, d: &mut Diags) -> Option<[Loaded; 2]> {
     let Json::Object(m) = cards else {
         d.error("cards: expected an object like {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}");
         return None;
@@ -308,9 +356,9 @@ fn load_cards_full(cards: &Json, d: &mut Diags) -> Option<[Loaded; 2]> {
             .hint("the North-South card, e.g. \"21GF-DEFAULT\"");
         return None;
     };
-    let ns = load_card(ns_spec, "cards.ns", d);
+    let ns = load_card(ns_spec, "cards.ns", vocab, d);
     let ew = match m.get("ew") {
-        Some(spec) => load_card(spec, "cards.ew", d),
+        Some(spec) => load_card(spec, "cards.ew", vocab, d),
         None => ns.clone(),
     };
     let both = string_list(m.get("set"), "cards.set", d);
@@ -332,55 +380,45 @@ fn load_cards_full(cards: &Json, d: &mut Diags) -> Option<[Loaded; 2]> {
     Some([ns, ew])
 }
 
-fn engine_by_id(id: u32) -> Option<(Arc<Engine>, [String; 2])> {
-    ENGINES.with(|r| {
-        r.borrow()
-            .1
-            .iter()
-            .find(|e| e.id == id)
-            .map(|e| (e.engine.clone(), e.names.clone()))
-    })
+fn entry_by_id(id: u32) -> Option<Entry> {
+    ENGINES.with(|r| r.borrow().1.iter().find(|e| e.id == id).cloned())
 }
 
-/// The engine for `cards`, made once per distinct request.
-fn engine_for_cards(cards: &Json, d: &mut Diags) -> Option<(u32, Arc<Engine>, [String; 2])> {
-    let key = cards.to_string();
-    if let Some(found) = ENGINES.with(|r| {
-        r.borrow()
-            .1
-            .iter()
-            .find(|e| e.key == key)
-            .map(|e| (e.id, e.engine.clone(), e.names.clone()))
-    }) {
+/// The engine for `cards` under `rules`, made once per distinct pair.
+fn engine_for_cards(cards: &Json, rules: Arc<Rules>, d: &mut Diags) -> Option<Entry> {
+    // A rule set's id covers its rule files and its vocabulary.
+    let key = format!("{} {}", rules.id, cards);
+    if let Some(found) = ENGINES.with(|r| r.borrow().1.iter().find(|e| e.key == key).cloned()) {
         return Some(found);
     }
-    let modules = modules_or_report(d)?;
-    let (cards, names) = load_cards(cards, d)?;
-    let engine = Arc::new(Engine::new(&cards[0], &cards[1], modules));
-    let id = ENGINES.with(|r| {
+    let (cards, names) = load_cards(cards, &rules.set.vocab, d)?;
+    let engine = Arc::new(Engine::new(&cards[0], &cards[1], &rules.set));
+    let entry = ENGINES.with(|r| {
         let mut r = r.borrow_mut();
         r.0 += 1;
-        let id = r.0;
-        r.1.push(Entry {
-            id,
+        let entry = Entry {
+            id: r.0,
             key,
-            engine: engine.clone(),
-            names: names.clone(),
-        });
-        id
+            engine,
+            rules,
+            names,
+        };
+        r.1.push(entry.clone());
+        entry
     });
-    Some((id, engine, names))
+    Some(entry)
 }
 
-/// The engine a request names: `"engine": id`, or `"cards": {...}`.
-fn engine_for(req: &Json, d: &mut Diags) -> Option<(u32, Arc<Engine>)> {
+/// The engine a request names: `"engine": id`, or `"cards": {...}` (with
+/// the rules the request asks for).
+fn engine_for(req: &Json, d: &mut Diags) -> Option<Entry> {
     if let Some(v) = req.get("engine") {
         let Some(id) = v.as_u64() else {
             d.error("engine: expected the number create_engine returned");
             return None;
         };
-        return match engine_by_id(id as u32) {
-            Some((e, _)) => Some((id as u32, e)),
+        return match entry_by_id(id as u32) {
+            Some(e) => Some(e),
             None => {
                 d.error(format!("engine: no engine {id}"))
                     .hint("create one with createEngine (it may have been freed)");
@@ -389,7 +427,8 @@ fn engine_for(req: &Json, d: &mut Diags) -> Option<(u32, Arc<Engine>)> {
         };
     }
     if let Some(cards) = req.get("cards") {
-        return engine_for_cards(cards, d).map(|(id, e, _)| (id, e));
+        let rules = rules_for(req, d)?;
+        return engine_for_cards(cards, rules, d);
     }
     d.error("give \"engine\" (from createEngine) or \"cards\"")
         .hint("e.g. {\"cards\": {\"ns\": \"21GF-DEFAULT\"}, ...}");
@@ -714,22 +753,16 @@ fn contract_json(dealer: Direction, calls: &[Call]) -> (Json, Json) {
 /// What this build is: API and crate versions, the rules, the stock cards.
 pub fn info() -> String {
     let mut d = Diags::default();
-    let (modules, rules) = match modules_or_report(&mut d) {
-        Some(m) => (
-            m.len(),
-            bidspec::reference::entries(m)
-                .iter()
-                .map(|m| m.rules.len())
-                .sum::<usize>(),
-        ),
-        None => (0, 0),
+    let (files, modules, rules) = match embedded_or_report(&mut d) {
+        Some(r) => (r.files, r.set.modules.len(), rule_count(&r.set.modules)),
+        None => (0, 0, 0),
     };
     respond(
         json!({
             "api": API_VERSION,
             "version": env!("CARGO_PKG_VERSION"),
             "rules_id": rbb_assets::RULES_ID,
-            "rule_files": rbb_assets::RULE_FILES.len(),
+            "rule_files": files,
             "modules": modules,
             "rules": rules,
             "stock_cards": stock_names(),
@@ -750,12 +783,15 @@ pub fn create_engine(request: &str) -> String {
                     .hint("{\"cards\": {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}}");
             }
             Some(cards) => {
-                if let Some((id, engine, names)) = engine_for_cards(cards, &mut d) {
-                    let side = |seat: Direction, name: &str| json!({"name": name, "modules": engine.system(seat).modules});
+                if let Some(e) =
+                    rules_for(&req, &mut d).and_then(|rules| engine_for_cards(cards, rules, &mut d))
+                {
+                    let side = |seat: Direction, name: &str| json!({"name": name, "modules": e.engine.system(seat).modules});
                     body = json!({
-                        "engine": id,
-                        "ns": side(Direction::North, &names[0]),
-                        "ew": side(Direction::East, &names[1]),
+                        "engine": e.id,
+                        "rules_id": e.rules.id,
+                        "ns": side(Direction::North, &e.names[0]),
+                        "ew": side(Direction::East, &e.names[1]),
                     });
                 }
             }
@@ -819,12 +855,14 @@ pub fn validate(request: &str) -> String {
     if req.get("scoring").is_some() {
         scoring(&req, &mut d);
     }
-    if let Some(cards) = req.get("cards") {
-        load_cards(cards, &mut d);
-    }
     if let Some(id) = req.get("engine") {
-        if id.as_u64().and_then(|i| engine_by_id(i as u32)).is_none() {
+        if id.as_u64().and_then(|i| entry_by_id(i as u32)).is_none() {
             d.error(format!("engine: no engine {id}"));
+        }
+    }
+    if let Some(cards) = req.get("cards") {
+        if let Some(rules) = rules_of(&req, &mut d) {
+            load_cards(cards, &rules.set.vocab, &mut d);
         }
     }
     respond(json!({}), d)
@@ -851,7 +889,8 @@ pub fn bid(request: &str) -> String {
     let vul = vulnerability(&req, &mut d);
     let scoring = scoring(&req, &mut d);
     let calls = dealer.and_then(|dl| parse_auction(req.get("auction"), "auction", dl, &mut d));
-    let (Some((_, engine)), Some(hand), Some(dealer), Some(calls)) = (engine, hand, dealer, calls)
+    let (Some(Entry { engine, .. }), Some(hand), Some(dealer), Some(calls)) =
+        (engine, hand, dealer, calls)
     else {
         return respond(empty, d);
     };
@@ -909,7 +948,7 @@ pub fn interpret(request: &str) -> String {
     let vul = vulnerability(&req, &mut d);
     let scoring = scoring(&req, &mut d);
     let calls = dealer.and_then(|dl| parse_auction(req.get("auction"), "auction", dl, &mut d));
-    let (Some((_, engine)), Some(dealer), Some(calls)) = (engine, dealer, calls) else {
+    let (Some(Entry { engine, .. }), Some(dealer), Some(calls)) = (engine, dealer, calls) else {
         return respond(empty, d);
     };
     if d.has_errors() {
@@ -962,7 +1001,7 @@ pub fn bid_deal(request: &str) -> String {
         .get("max_calls")
         .and_then(Json::as_u64)
         .map_or(MAX_CALLS, |n| n as usize);
-    let (Some((_, engine)), Some(hands), Some(dealer), Some(prefix)) =
+    let (Some(Entry { engine, .. }), Some(hands), Some(dealer), Some(prefix)) =
         (engine, hands, dealer, prefix)
     else {
         return respond(empty, d);
@@ -1018,7 +1057,7 @@ fn active_sets(req: &Json, d: &mut Diags) -> Option<[Vec<String>; 2]> {
     if req.get("engine").is_none() && req.get("cards").is_none() {
         return None;
     }
-    let (_, engine) = engine_for(req, d)?;
+    let engine = engine_for(req, d)?.engine;
     Some([
         engine.system(Direction::North).modules.clone(),
         engine.system(Direction::East).modules.clone(),
@@ -1031,13 +1070,13 @@ fn active_sets(req: &Json, d: &mut Diags) -> Option<[Vec<String>; 2]> {
 pub fn conventions(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
-    let Some(modules) = modules_or_report(&mut d) else {
+    let Some(rules) = rules_of(&req, &mut d) else {
         return respond(json!({"modules": []}), d);
     };
     let active = active_sets(&req, &mut d);
     let mut body = json!({
-        "rules_id": rbb_assets::RULES_ID,
-        "modules": bidspec::reference::entries(modules),
+        "rules_id": rules.id,
+        "modules": bidspec::reference::entries(&rules.set.modules),
     });
     if let Some([ns, ew]) = active {
         body["active"] = json!({"ns": ns, "ew": ew});
@@ -1052,7 +1091,7 @@ pub fn conventions(request: &str) -> String {
 pub fn reference(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
-    let Some(modules) = modules_or_report(&mut d) else {
+    let Some(rules) = rules_of(&req, &mut d) else {
         return d
             .0
             .iter()
@@ -1071,9 +1110,9 @@ pub fn reference(request: &str) -> String {
     let header = format!(
         "rusty-bidding-bot conventions reference\nrbb {} rules {}",
         env!("CARGO_PKG_VERSION"),
-        rbb_assets::RULES_ID
+        rules.id
     );
-    let entries = bidspec::reference::entries(modules);
+    let entries = bidspec::reference::entries(&rules.set.modules);
     let on = active.as_ref().map(|a| a[side].clone());
     let marker = on
         .as_ref()
@@ -1103,7 +1142,7 @@ pub fn coverage(request: &str) -> String {
     if d.has_errors() {
         return respond(empty, d);
     }
-    let Some(modules) = modules_or_report(&mut d) else {
+    let Some(rules) = rules_of(&req, &mut d) else {
         return respond(empty, d);
     };
     let Some(cards) = req.get("cards") else {
@@ -1111,10 +1150,10 @@ pub fn coverage(request: &str) -> String {
             .hint("{\"cards\": {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}}");
         return respond(empty, d);
     };
-    let Some([ns, ew]) = load_cards_full(cards, &mut d) else {
+    let Some([ns, ew]) = load_cards_full(cards, &rules.set.vocab, &mut d) else {
         return respond(empty, d);
     };
-    let read = bidspec::coverage::fields_read(modules);
+    let read = bidspec::coverage::fields_read(&rules.set.modules, &rules.set.vocab);
     let side = |(card, name, unmapped): Loaded| {
         let cov = bidspec::coverage::of_card(&name, &card, unmapped, &read);
         let mut j = serde_json::to_value(&cov).unwrap_or(Json::Null);
@@ -1139,7 +1178,10 @@ pub fn export_card(request: &str) -> String {
             .hint("a stock card name, {\"bbsa\": text} or {\"json\": card_data}");
         return respond(empty, d);
     };
-    let Some((mut card, name, unmapped)) = load_card(spec, "card", &mut d) else {
+    let Some(rules) = rules_of(&req, &mut d) else {
+        return respond(empty, d);
+    };
+    let Some((mut card, name, unmapped)) = load_card(spec, "card", &rules.set.vocab, &mut d) else {
         return respond(empty, d);
     };
     for change in string_list(req.get("set"), "set", &mut d) {
@@ -1331,18 +1373,18 @@ mod tests {
         assert!(r["candidates"].as_array().unwrap().len() > 1);
 
         // Same answer as the engine on the files, through rbb-assets.
-        let modules = rbb_engine::load_modules(std::path::Path::new(concat!(
+        let rules = rbb_engine::load_rules(std::path::Path::new(concat!(
             env!("CARGO_MANIFEST_DIR"),
             "/../../conventions"
         )))
         .unwrap();
-        let card = bbsa::import(rbb_assets::card("21GF-DEFAULT").unwrap(), None)
-            .unwrap()
-            .0;
-        let ew = bbsa::import(rbb_assets::card("21GF-GIB").unwrap(), None)
-            .unwrap()
-            .0;
-        let e = Engine::new(&card, &ew, &modules);
+        let stock = |name: &str| {
+            bbsa::import(&rules.vocab, rbb_assets::card(name).unwrap(), None)
+                .unwrap()
+                .0
+        };
+        let (card, ew) = (stock("21GF-DEFAULT"), stock("21GF-GIB"));
+        let e = Engine::new(&card, &ew, &rules);
         let hand = Hand::from_pbn("AK52.KJ7.Q94.K83").unwrap();
         let dec = e.bid(
             &hand,

@@ -21,7 +21,7 @@
 
 use std::collections::BTreeSet;
 
-use bridge_card::{bbsa, registry, Card, Value};
+use bridge_card::{Card, Value, Vocabulary};
 use serde::Serialize;
 
 use crate::Module;
@@ -52,15 +52,16 @@ impl Coverage {
     }
 }
 
-/// Every card path the rules name, directly or through a derivation.
-pub fn fields_read(modules: &[Module]) -> BTreeSet<String> {
+/// Every card path the rules name, directly or through a derivation in
+/// `vocab` (the rules' own vocabulary).
+pub fn fields_read(modules: &[Module], vocab: &Vocabulary) -> BTreeSet<String> {
     let mut read: BTreeSet<String> = BTreeSet::new();
     for m in modules {
         read.extend(m.card.iter().map(|c| c.path.clone()));
         read.extend(m.params.iter().map(|p| p.path.clone()));
     }
     // A field feeding a derivation counts as read when the derived field is.
-    for (inputs, outputs) in bbsa::derivations() {
+    for (inputs, outputs) in vocab.bbsa_derivations() {
         if outputs.iter().any(|o| read.contains(o)) {
             read.extend(inputs);
         }
@@ -75,7 +76,7 @@ pub fn of_card(
     unmapped: Vec<String>,
     read: &BTreeSet<String>,
 ) -> Coverage {
-    let reg = registry();
+    let reg = card.vocabulary().registry();
     let mut cov = Coverage {
         name: name.to_string(),
         system: match card.effective("general.system_category") {
@@ -127,12 +128,15 @@ mod tests {
 
     #[test]
     fn a_field_is_read_directly_or_through_a_derivation() {
-        let read = fields_read(&modules(concat!(
-            "module t \"t\"\n",
-            "  card   notrump.stayman.play\n",
-            "  param  minors = notrump.minor_transfers default relay\n",
-            "\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n"
-        )));
+        let read = fields_read(
+            &modules(concat!(
+                "module t \"t\"\n",
+                "  card   notrump.stayman.play\n",
+                "  param  minors = notrump.minor_transfers default relay\n",
+                "\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n"
+            )),
+            crate::test_vocabulary(),
+        );
         assert!(read.contains("notrump.stayman.play"));
         assert!(read.contains("notrump.minor_transfers"));
         // `minor_transfers` is derived from BBA's four switches, so those
@@ -146,12 +150,15 @@ mod tests {
 
     #[test]
     fn settings_split_into_read_ignored_and_play_only() {
-        let read = fields_read(&modules(concat!(
-            "module t \"t\"\n",
-            "  card   notrump.stayman.play\n",
-            "\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n"
-        )));
-        let mut card = Card::new();
+        let read = fields_read(
+            &modules(concat!(
+                "module t \"t\"\n",
+                "  card   notrump.stayman.play\n",
+                "\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n"
+            )),
+            crate::test_vocabulary(),
+        );
+        let mut card = Card::new(crate::test_vocabulary());
         card.set("notrump.stayman.play", Value::Bool(true)).unwrap();
         card.set("competitive.michaels.play", Value::Bool(true))
             .unwrap();

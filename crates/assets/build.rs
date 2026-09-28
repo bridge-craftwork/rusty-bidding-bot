@@ -1,9 +1,12 @@
-//! Generates `$OUT_DIR/assets.rs`: every `conventions/**/*.bid` file and every
-//! stock card `crates/bridge-card/tests/fixtures/bbsa/*.bbsa`, as
-//! `include_str!`s, so a binary (the release `rbb`, the WASM build) carries
-//! its rules and needs no filesystem to load them.
+//! Generates `$OUT_DIR/assets.rs`: every `conventions/**/*.bid` file, the
+//! manifest (`conventions/conventions.toml`), the
+//! rules' card vocabulary (`conventions/card/fields.toml` and
+//! `bbsa-map.toml`), and every stock card
+//! `crates/bridge-card/tests/fixtures/bbsa/*.bbsa`, as `include_str!`s, so a
+//! binary (the release `rbb`, the WASM build) carries its rules and needs no
+//! filesystem to load them.
 //!
-//! Rule files are named and ordered exactly as `rbb_engine::load_modules`
+//! Rule files are named and ordered exactly as `rbb_engine::load_rules`
 //! names and orders them when given the directory `conventions`: the path
 //! `conventions/<dir>/<file>.bid`, sorted by path components. File order is
 //! the engine's last tie-breaker, so the embedded rules bid exactly like the
@@ -93,6 +96,46 @@ fn main() {
         .unwrap();
     }
     out.push_str("];\n\n");
+    // The manifest (conventions.toml): the rule language the files are
+    // written in, checked when the embedded rules are compiled.
+    let manifest = rules_dir.join("conventions.toml");
+    println!("cargo:rerun-if-changed={}", manifest.display());
+    out.push_str("/// The rules' manifest (`conventions.toml`), if they have one: (name, text).\n");
+    match std::fs::read(&manifest) {
+        Ok(bytes) => {
+            let name = "conventions/conventions.toml";
+            fnv(&mut hash, name.as_bytes());
+            fnv(&mut hash, &bytes);
+            writeln!(
+                out,
+                "pub static MANIFEST: Option<(&str, &str)> = Some(({name:?}, include_str!({:?})));\n",
+                manifest.display().to_string()
+            )
+            .unwrap();
+        }
+        Err(_) => out.push_str("pub static MANIFEST: Option<(&str, &str)> = None;\n\n"),
+    }
+    // The rules' card vocabulary, which the rules are checked against and
+    // cards are read in: part of the rule set, so part of its id.
+    for (konst, rel, what) in [
+        ("FIELDS", "card/fields.toml", "card fields"),
+        ("BBSA_MAP", "card/bbsa-map.toml", ".bbsa key mapping"),
+    ] {
+        let abs = rules_dir.join(rel);
+        let name = format!("conventions/{rel}");
+        fnv(&mut hash, name.as_bytes());
+        fnv(
+            &mut hash,
+            &std::fs::read(&abs).unwrap_or_else(|e| panic!("{}: {e}", abs.display())),
+        );
+        println!("cargo:rerun-if-changed={}", abs.display());
+        writeln!(
+            out,
+            "/// The rules' {what}: (name, text).\npub static {konst}: (&str, &str) = ({name:?}, include_str!({:?}));\n",
+            abs.display().to_string()
+        )
+        .unwrap();
+    }
     out.push_str("/// Stock cards: (name, .bbsa text).\n");
     out.push_str("pub static CARDS: &[(&str, &str)] = &[\n");
     for abs in &cards {
@@ -108,7 +151,7 @@ fn main() {
     out.push_str("];\n\n");
     writeln!(
         out,
-        "/// Identifies this build of the rules (FNV-1a of the rule files' names and text).\npub const RULES_ID: &str = \"{hash:016x}\";"
+        "/// Identifies this build of the rules (FNV-1a of the names and text of the rule files, the manifest and the card vocabulary).\npub const RULES_ID: &str = \"{hash:016x}\";"
     )
     .unwrap();
 

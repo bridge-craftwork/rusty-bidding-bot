@@ -29,15 +29,31 @@ pub fn parse(source: &str, file: &str) -> Result<Module, Vec<Diagnostic>> {
     parser::parse(source, file)
 }
 
-/// Parse and check against the card registry.
-pub fn compile(source: &str, file: &str) -> Result<Module, Vec<Diagnostic>> {
+/// Parse and check against the card fields in `registry` (the rule set's
+/// vocabulary, [`bridge_card::Vocabulary::registry`]).
+pub fn compile(
+    source: &str,
+    file: &str,
+    registry: &bridge_card::Registry,
+) -> Result<Module, Vec<Diagnostic>> {
     let module = parse(source, file)?;
-    let diags = check(&module);
+    let diags = check(&module, registry);
     if diags.is_empty() {
         Ok(module)
     } else {
         Err(diags)
     }
+}
+
+/// This repository's card vocabulary (`conventions/card`), for the unit
+/// tests.
+#[cfg(test)]
+pub(crate) fn test_vocabulary() -> &'static bridge_card::Vocabulary {
+    static V: std::sync::OnceLock<bridge_card::Vocabulary> = std::sync::OnceLock::new();
+    V.get_or_init(|| {
+        let rules = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
+        bridge_card::Vocabulary::load(&rules).expect("conventions/card loads")
+    })
 }
 
 /// The module as JSON IR.

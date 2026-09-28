@@ -152,12 +152,13 @@ impl System {
     }
 }
 
-/// Check what modules say about the card against the card registry: every
+/// Check what modules say about the card against the card fields in
+/// `registry` (the rule set's vocabulary): every
 /// `card` and `param` path is a field, values fit it, and an enum parameter
 /// is only compared with its options (`style is relay`). A misspelled option
 /// would otherwise never match, silently.
-pub fn check_card_refs(modules: &[Module]) -> Vec<String> {
-    let reg = bridge_card::registry();
+pub fn check_card_refs(modules: &[Module], registry: &bridge_card::Registry) -> Vec<String> {
+    let reg = registry;
     let mut errors = Vec::new();
     for m in modules {
         let at = |line: usize| format!("{}:{line}", m.file);

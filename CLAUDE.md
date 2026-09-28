@@ -159,6 +159,12 @@ commands instead of running them).
 
 ## Card fields
 
-Add or change card fields in `crates/bridge-card/data/fields.toml`, and `.bbsa`
-mappings in `data/bbsa-map.toml`; tests validate both files. Do not guess the
-meaning of an unmapped `.bbsa` key: leave it in passthrough and ask.
+The card vocabulary belongs to the rules: add or change card fields in
+`conventions/card/fields.toml`, and `.bbsa` mappings in
+`conventions/card/bbsa-map.toml`. Every consumer reads them from the rules
+directory it was given (`--rules DIR`, default `conventions`; the embedded
+copy in `rbb-assets` for the release `rbb` and the WASM), and a card is
+always read in its rule set's vocabulary (`rbb_engine::RuleSet`), so a new
+field needs no Rust change. `rbb bid check` and `cargo test` validate both
+files. Do not guess the meaning of an unmapped `.bbsa` key: leave it in
+passthrough and ask.

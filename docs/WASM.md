@@ -125,7 +125,7 @@ through.
 - `ns` is required; `ew` defaults to the same card.
 - `set` changes apply to both sides, then `ns_set` / `ew_set` to one:
   `path=value` with `true`/`false`, integers, or text. Paths are card fields
-  (`rbb card schema`, `crates/bridge-card/data/fields.toml`). An unknown
+  (`rbb card schema`, `conventions/card/fields.toml`). An unknown
   path is an error.
 
 A **card spec** is one of:

@@ -21,7 +21,7 @@
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-use bridge_card::{bbsa, Card, Value};
+use bridge_card::{bbsa, Card, Value, Vocabulary};
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
@@ -266,10 +266,15 @@ pub fn find(dir: &Path) -> Vec<PathBuf> {
 }
 
 /// A `card` line: the card, then `path=value` changes to it.
-fn load_card(line: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, String> {
+fn load_card(
+    vocab: &Vocabulary,
+    line: &str,
+    test_dir: &Path,
+    cards_dir: &Path,
+) -> Result<Card, String> {
     let mut words = line.split_whitespace();
     let spec = words.next().ok_or("card: expected a card name or path")?;
-    let mut card = load_card_file(spec, test_dir, cards_dir)?;
+    let mut card = load_card_file(vocab, spec, test_dir, cards_dir)?;
     for w in words {
         let (path, value) = w
             .split_once('=')
@@ -288,7 +293,12 @@ fn load_card(line: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, Stri
     Ok(card)
 }
 
-fn load_card_file(spec: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card, String> {
+fn load_card_file(
+    vocab: &Vocabulary,
+    spec: &str,
+    test_dir: &Path,
+    cards_dir: &Path,
+) -> Result<Card, String> {
     let candidates = [
         test_dir.join(spec),
         PathBuf::from(spec),
@@ -302,11 +312,11 @@ fn load_card_file(spec: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card,
     })?;
     let text = std::fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))?;
     if path.extension().is_some_and(|e| e == "bbsa") {
-        bbsa::import(&text, Some(spec))
+        bbsa::import(vocab, &text, Some(spec))
             .map(|(c, _)| c)
             .map_err(|e| e.to_string())
     } else {
-        Card::from_json(&text)
+        Card::from_json(vocab, &text)
             .map(|(c, _)| c)
             .map_err(|e| e.to_string())
     }
@@ -315,7 +325,7 @@ fn load_card_file(spec: &str, test_dir: &Path, cards_dir: &Path) -> Result<Card,
 /// Run the cases in `files` against the rules in `rules`. Both sides play
 /// each case's card.
 pub fn run(files: &[PathBuf], rules: &Path, cards_dir: &Path) -> Result<Vec<Outcome>, Vec<String>> {
-    let modules = crate::load_modules(rules)
+    let rules = crate::load_rules(rules)
         .map_err(|d| d.iter().map(|d| d.to_string()).collect::<Vec<_>>())?;
     let mut engines: HashMap<(String, PathBuf), Engine> = HashMap::new();
     let mut outcomes = Vec::new();
@@ -339,9 +349,9 @@ pub fn run(files: &[PathBuf], rules: &Path, cards_dir: &Path) -> Result<Vec<Outc
         for case in cases {
             let key = (case.card.clone(), dir.clone());
             if !engines.contains_key(&key) {
-                match load_card(&case.card, &dir, cards_dir) {
+                match load_card(&rules.vocab, &case.card, &dir, cards_dir) {
                     Ok(card) => {
-                        engines.insert(key.clone(), Engine::new(&card, &card, &modules));
+                        engines.insert(key.clone(), Engine::new(&card, &card, &rules));
                     }
                     Err(e) => {
                         errors.push(format!("{}:{}: {e}", case.file, case.line));

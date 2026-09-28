@@ -34,7 +34,7 @@ fn convention_cases() {
 #[test]
 fn card_references_are_valid() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let modules = rbb_engine::load_modules(&root.join("conventions")).unwrap();
-    let errors = rbb_engine::check_card_refs(&modules);
+    let rules = rbb_engine::load_rules(&root.join("conventions")).unwrap();
+    let errors = rbb_engine::check_card_refs(&rules.modules, rules.vocab.registry());
     assert!(errors.is_empty(), "\n{}", errors.join("\n"));
 }

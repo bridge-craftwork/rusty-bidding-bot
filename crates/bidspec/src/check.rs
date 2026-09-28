@@ -1,7 +1,7 @@
 //! Checks that need more than the syntax: card paths and values must exist
-//! in the convention card registry.
+//! in the rules' card vocabulary.
 
-use bridge_card::{registry, Value};
+use bridge_card::{Registry, Value};
 
 use crate::ast::{Context, Literal, Module};
 use crate::Diagnostic;
@@ -14,8 +14,9 @@ fn to_value(lit: &Literal) -> Value {
     }
 }
 
-/// Check a parsed module against the card registry.
-pub fn check(module: &Module) -> Vec<Diagnostic> {
+/// Check a parsed module against the card fields in `registry` (the
+/// vocabulary of the rule set the module belongs to).
+pub fn check(module: &Module, registry: &Registry) -> Vec<Diagnostic> {
     let mut diags = Vec::new();
     let mut report = |line: usize, message: String| {
         diags.push(Diagnostic {
@@ -25,26 +26,26 @@ pub fn check(module: &Module) -> Vec<Diagnostic> {
             message,
         })
     };
-    let mut check_path =
-        |line: usize, path: &str, value: Option<&Literal>| match registry().get(path) {
-            None => report(
-                line,
-                format!("unknown card field `{path}` (see crates/bridge-card/data/fields.toml)"),
-            ),
-            Some(field) => {
-                if field.path != path {
-                    report(
-                        line,
-                        format!("`{path}` is an old name; use `{}`", field.path),
-                    );
-                }
-                if let Some(v) = value {
-                    if let Err(e) = field.normalize(to_value(v)) {
-                        report(line, format!("`{path}`: {e}"));
-                    }
+    let mut check_path = |line: usize, path: &str, value: Option<&Literal>| match registry.get(path)
+    {
+        None => report(
+            line,
+            format!("unknown card field `{path}` (see card/fields.toml in the rules)"),
+        ),
+        Some(field) => {
+            if field.path != path {
+                report(
+                    line,
+                    format!("`{path}` is an old name; use `{}`", field.path),
+                );
+            }
+            if let Some(v) = value {
+                if let Err(e) = field.normalize(to_value(v)) {
+                    report(line, format!("`{path}`: {e}"));
                 }
             }
-        };
+        }
+    };
     for cond in &module.card {
         check_path(cond.line, &cond.path, cond.value.as_ref());
     }
@@ -90,7 +91,7 @@ mod tests {
             "  2C \"fires anyway\" shows hcp>=0\n"
         );
         let module = crate::parse(src, "t.bid").expect("parses");
-        let diags = crate::check(&module);
+        let diags = crate::check(&module, crate::test_vocabulary().registry());
         assert_eq!(diags.len(), 1, "{diags:?}");
         assert!(diags[0].message.contains("no rules under it"));
         // Indented under it, the same condition governs the rule.
@@ -100,6 +101,6 @@ mod tests {
             "    2C \"needs 40 HCP\" shows hcp>=0\n"
         );
         let module = crate::parse(ok, "t.bid").expect("parses");
-        assert!(crate::check(&module).is_empty());
+        assert!(crate::check(&module, crate::test_vocabulary().registry()).is_empty());
     }
 }

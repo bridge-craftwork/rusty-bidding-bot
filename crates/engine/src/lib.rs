@@ -43,12 +43,93 @@ pub use contract::{
 pub use eval::{check_terms, terms_reference, Term};
 pub use system::{check_card_refs, RuleRef, System};
 
-/// Compile every `.bid` file under `dir`, sorted by path (which fixes the
-/// file-order tie-breaker). A manifest (`conventions.toml`) in `dir` that
-/// asks for a rule language this engine does not read refuses the load;
-/// a directory without one is read as the current language.
-pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
+pub use bidspec::manifest::Manifest;
+pub use bridge_card::Vocabulary;
+
+/// A rule set: its manifest (`conventions.toml`, when it has one), the card
+/// vocabulary its modules were checked against (`card/fields.toml` and
+/// `card/bbsa-map.toml` in the rules directory), and the compiled modules.
+/// Every rules directory brings its own vocabulary: cards an engine plays
+/// must be read in it (`rules.vocab`).
+#[derive(Debug, Clone)]
+pub struct RuleSet {
+    pub manifest: Option<Manifest>,
+    pub vocab: Vocabulary,
+    pub modules: Vec<bidspec::Module>,
+}
+
+/// A vocabulary problem as a rule diagnostic (file and line when known).
+fn vocab_diagnostic(e: bridge_card::Error) -> bidspec::Diagnostic {
+    bidspec::Diagnostic {
+        file: e.file.unwrap_or_default(),
+        line: e.line.unwrap_or(0),
+        col: 0,
+        message: e.message,
+    }
+}
+
+/// Load the rule set in `dir`: its manifest (a language version this
+/// engine does not read refuses the load; a directory without one is read
+/// as the current language), its card vocabulary (`card/`), then every
+/// `.bid` file under it, compiled against that vocabulary and sorted by
+/// path (which fixes the file-order tie-breaker).
+pub fn load_rules(dir: &Path) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
+    let manifest = read_manifest(dir).map_err(|d| vec![d])?;
+    let vocab = Vocabulary::load(dir).map_err(|e| vec![vocab_diagnostic(e)])?;
+    compile_dir(dir, &vocab).map(|modules| RuleSet {
+        manifest,
+        vocab,
+        modules,
+    })
+}
+
+/// The rule set given as text, for callers without a filesystem (the WASM
+/// build, the rules embedded by `rbb-assets`): what `load_rules` does once
+/// it has read the files. Each file is `(name, text)`; the names are used
+/// in diagnostics. The rule files are compiled in the order given (which
+/// fixes the file-order tie-breaker). With no manifest the rules are read
+/// as the current language.
+pub fn compile_rules<'a>(
+    manifest: Option<(&str, &str)>,
+    (fields_name, fields): (&str, &str),
+    (bbsa_map_name, bbsa_map): (&str, &str),
+    sources: impl IntoIterator<Item = (&'a str, &'a str)>,
+) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
+    let manifest = manifest
+        .map(|(name, text)| check_manifest(text, name))
+        .transpose()
+        .map_err(|d| vec![d])?;
+    let vocab = Vocabulary::parse(fields, bbsa_map).map_err(|mut e| {
+        e.file = Some(match e.file.as_deref() {
+            Some("bbsa-map.toml") => bbsa_map_name.to_string(),
+            _ => fields_name.to_string(),
+        });
+        vec![vocab_diagnostic(e)]
+    })?;
+    compile_modules(&vocab, sources).map(|modules| RuleSet {
+        manifest,
+        vocab,
+        modules,
+    })
+}
+
+/// Compile every `.bid` file under `dir` against `vocab`, sorted by path
+/// (which fixes the file-order tie-breaker). A manifest (`conventions.toml`)
+/// in `dir` that asks for a rule language this engine does not read
+/// refuses the load; a directory without one is read as the current
+/// language. `load_rules` does this and loads the vocabulary too.
+pub fn load_modules(
+    dir: &Path,
+    vocab: &Vocabulary,
+) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
     read_manifest(dir).map_err(|d| vec![d])?;
+    compile_dir(dir, vocab)
+}
+
+fn compile_dir(
+    dir: &Path,
+    vocab: &Vocabulary,
+) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
     fn collect(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
         if let Ok(entries) = std::fs::read_dir(dir) {
             for e in entries.flatten() {
@@ -78,7 +159,7 @@ pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Dia
             }),
         }
     }
-    match compile_modules(sources.iter().map(|(n, s)| (n.as_str(), s.as_str()))) {
+    match compile_modules(vocab, sources.iter().map(|(n, s)| (n.as_str(), s.as_str()))) {
         Ok(modules) if diags.is_empty() => Ok(modules),
         Ok(_) => Err(diags),
         Err(d) => {
@@ -88,17 +169,17 @@ pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Dia
     }
 }
 
-/// Compile rule files given as `(name, source)`, in the order given (which
-/// fixes the file-order tie-breaker): what `load_modules` does once it has
-/// read the files, for callers without a filesystem (the WASM build, the
-/// rules embedded by `rbb-assets`).
+/// Compile rule files given as `(name, source)` against `vocab`, in the
+/// order given (which fixes the file-order tie-breaker): what
+/// `load_modules` does once it has read the files.
 pub fn compile_modules<'a>(
+    vocab: &bridge_card::Vocabulary,
     sources: impl IntoIterator<Item = (&'a str, &'a str)>,
 ) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
     let mut modules = Vec::new();
     let mut diags = Vec::new();
     for (name, src) in sources {
-        match bidspec::compile(src, name) {
+        match bidspec::compile(src, name, vocab.registry()) {
             Ok(m) => modules.push(m),
             Err(d) => diags.extend(d),
         }

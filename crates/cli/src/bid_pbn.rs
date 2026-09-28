@@ -303,11 +303,15 @@ mod tests {
     use super::*;
 
     fn engine() -> Engine {
-        let modules = rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()).unwrap();
-        let card = bridge_card::bbsa::import(rbb_assets::card("21GF-DEFAULT").unwrap(), None)
-            .unwrap()
-            .0;
-        Engine::new(&card, &card, &modules)
+        let rules = crate::embedded_rules().unwrap();
+        let card = bridge_card::bbsa::import(
+            &rules.vocab,
+            rbb_assets::card("21GF-DEFAULT").unwrap(),
+            None,
+        )
+        .unwrap()
+        .0;
+        Engine::new(&card, &card, &rules)
     }
 
     fn opts() -> Options {

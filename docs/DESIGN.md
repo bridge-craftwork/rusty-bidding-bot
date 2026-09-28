@@ -86,10 +86,21 @@ double/redouble rules).
 **Decided.** The card schema is defined here (`crates/bridge-card`). It may
 later move to its own repo together with the card editor.
 
+**Decided (2026-09-28).** The card *vocabulary* (the fields and the `.bbsa`
+mapping) belongs to the rules, not to the engine: it lives in the rules
+directory (`conventions/card/`) and moves with the conventions when they
+get their own repository, so a rule author can add fields without an
+engine release. `bridge-card` has no built-in vocabulary and no global
+one: whoever loads a rule set (`rbb_engine::load_rules(dir)`,
+`compile_rules(...)` for text) gets a `RuleSet { vocab, modules }`, reads
+cards with `rules.vocab`, and `Engine::new` refuses a card in any other
+vocabulary. A `Card` carries its vocabulary, so every read resolves
+aliases and defaults the way the rules were checked.
+
 **Implemented (milestone 2)** as a data-driven registry rather than Rust
 structs:
 
-- [`data/fields.toml`](../crates/bridge-card/data/fields.toml) declares every
+- [`conventions/card/fields.toml`](../conventions/card/fields.toml) declares every
   field once: dotted path, kind (`bool | int | enum | text`), label, options,
   bounds, default, and **aliases** (older paths that still load). A card is a
   set of `path = value` pairs. Adding a convention means adding a field there
@@ -116,7 +127,7 @@ card switches modules on and supplies their parameters. The engine reads
 A `.bbsa` file is 258 CRLF lines of `Key = value`: a `System type` integer
 (0 = 2/1, 1 = SAYC, 2 = Polish Club, 3 = Precision, 4 = Acol), about 170
 on/off toggles, an `Opponent type`, and `Not defined` padding.
-[`data/bbsa-map.toml`](../crates/bridge-card/data/bbsa-map.toml) maps each key
+[`conventions/card/bbsa-map.toml`](../conventions/card/bbsa-map.toml) maps each key
 to card fields, in one of three forms:
 
 - a toggle (`"SMOLEN" = "notrump.smolen.play"`);

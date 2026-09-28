@@ -435,8 +435,8 @@ These are enforced by `bidspec`, with file:line:column errors:
 - `shows`, `when` and `denies` may be repeated, on the rule line or on
   continuation lines; the repeats are combined with AND. `prefer`,
   `priority`, `replaces`, `as` and `alert`/`announce` may appear once.
-- `card` and `param` paths must exist in the card registry
-  (`crates/bridge-card/data/fields.toml`); an old alias is reported with the
+- `card` and `param` paths must exist in the rules' card vocabulary
+  (`conventions/card/fields.toml`); an old alias is reported with the
   current name.
 - `rbb bid check` also checks across files: module names are unique, and a
   `needs` that names no module is a warning.
