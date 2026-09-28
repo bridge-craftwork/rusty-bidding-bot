@@ -1,0 +1,118 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Drury: after partner's third- or fourth-seat 1♥/1♠, a passed hand's 2♣
+# is artificial: a fit and limit-raise values, the hand that would
+# otherwise jump to 3M. Opener says whether game is possible:
+#
+#   original Drury (`major_openings.drury.play`)    2♦ sub-minimum, 2M full opening
+#   Reverse Drury  (`major_openings.drury.reverse`) 2M sub-minimum, 2♦ full opening
+#
+# (Bridgebum, "Drury"; Wikipedia, "Drury convention"; BBA's opener,
+# probes/drury-opener-*.toml, plays exactly these meanings.) Either switch
+# turns the convention on; with both, Reverse. Two-way Drury
+# (`drury.two_d`): 2♣ promises exactly three trumps, 2♦ four or more.
+# `drury.in_comp` keeps 2♣ Drury over a double or a one-level overcall.
+# See drury.notes.md.
+
+module drury "Drury: a passed hand's 2♣ limit raise"
+  needs  responses
+  param  drury   = major_openings.drury.play default false
+  param  reverse = major_openings.drury.reverse default false
+  param  two_way = major_openings.drury.two_d default false
+  param  in_comp = major_openings.drury.in_comp default false
+
+# ── Responder: the limit raise, at the two level ─────────────────────
+# 10-12 support points: a point below the unpassed limit raise
+# (responses.bid, 11-12), which is where BBA puts it too (9-11 total
+# points, probes/drury-resp-*.toml). Starting at 10 beat 11 (+126 IMPs)
+# and 9 (+34) on the corpus (drury.notes.md). It replaces the passed
+# hand's jump to 3M, and natural 2♣ goes with it.
+after 1M (P) when passed_hand, drury | reverse
+  2C  "Drury: 3+ {M}, limit-raise values"  alert
+      shows M>=3, tp(M)=10..12, hcp<=12
+      when  !two_way
+      sets  trump=M, ask=drury(M), forcing=round
+      artificial
+      priority 1                       # ahead of the natural calls a fit could make
+  2C  "Drury: exactly three {M}, limit-raise values"  alert
+      shows M=3, tp(M)=10..12, hcp<=12
+      when  two_way
+      sets  trump=M, ask=drury(M), forcing=round
+      artificial
+      priority 1
+  2D  "Two-way Drury: 4+ {M}, limit-raise values"  alert
+      shows M>=4, tp(M)=10..12, hcp<=12
+      when  two_way
+      sets  trump=M, ask=drury(M), forcing=round
+      artificial
+      priority 1
+
+after 1M (X) | 1M (1x) when passed_hand, in_comp, drury | reverse
+  2C  "Drury: 3+ {M}, limit-raise values"  alert
+      shows M>=3, tp(M)=10..12, hcp<=12
+      sets  trump=M, ask=drury(M), forcing=round
+      artificial
+      priority 1
+
+# ── Opener: is game possible? ────────────────────────────────────────
+# Facing 10-12 support points, game wants about 25 between us: 15+
+# support points bid it, 13-14 show a full opening and leave it to
+# responder, 12 or fewer (the light third-seat openings) stop in 2M.
+# BBA draws the line one point lower (its sub-minimum 2♥ is 11-12 total
+# points, drury-opener-21GF-DEFAULT); we count shortness, it does not.
+when asked drury(M), rho.last=P, partner.last=2C
+  2M  "Sub-minimum: no game opposite a limit raise"
+      shows tp(M)<=12
+      when  reverse
+      priority 3                       # the answer, ahead of opener's natural rebids
+  2D  "Reverse Drury: a full opening, 13-14 support points"  alert
+      shows tp(M)=13..14
+      when  reverse
+      artificial
+      priority 3                       # the answer, ahead of opener's natural rebids
+  2D  "Drury: a sub-minimum opening"  alert
+      shows tp(M)<=12
+      when  !reverse
+      artificial
+      priority 3                       # the answer, ahead of opener's natural rebids
+  2M  "A full opening, 13-14 support points"
+      shows tp(M)=13..14
+      when  !reverse
+      priority 3                       # the answer, ahead of opener's natural rebids
+  4M  "Game: 15+ support points"
+      shows tp(M)>=15
+      priority 3                       # the answer, ahead of opener's natural rebids
+
+# After two-way Drury's 2♦ (four trumps) the ninth trump is worth a
+# point: 13 bids game.
+when asked drury(M), rho.last=P, partner.last=2D
+  2M  "Sub-minimum: no game opposite a four-card limit raise"
+      shows tp(M)<=12
+      priority 3                       # the answer, ahead of opener's natural rebids
+  4M  "Game opposite a four-card limit raise"
+      shows tp(M)>=13
+      priority 3                       # the answer, ahead of opener's natural rebids
+
+# ── Responder: game or not ───────────────────────────────────────────
+when answered drury(M), partner.last=2{M}, reverse
+  P   "Partner is sub-minimum: play 2{M}"
+      priority 2                       # ahead of responder's natural rebids
+when answered drury(M), partner.last=2D, !reverse
+  2M  "Partner is sub-minimum: play 2{M}"
+      priority 2
+# A full opening (13-14) facing 10-12: game with the top of the range.
+when answered drury(M), partner.last=2D, reverse
+  4M  "Game facing a full opening"   shows tp(M)>=12 | (tp(M)=11, M>=4)
+      priority 2
+  2M  "Sign off facing a full opening"
+      priority 1
+when answered drury(M), partner.last=2{M}, !reverse
+  4M  "Game facing a full opening"   shows tp(M)>=12 | (tp(M)=11, M>=4)
+      priority 2
+  P   "No game facing a full opening"
+      priority 1
+
+# Opener, after responder signs off.
+after 1M (P) 2C (P) 2D (P) 2M (P)
+  P   "Responder signs off"
+      priority 2

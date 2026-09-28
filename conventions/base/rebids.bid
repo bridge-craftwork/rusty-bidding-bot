@@ -354,7 +354,7 @@ after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
       priority -5
 
 # ── After an invitational jump shift (10-12, six cards) ──────────────
-after 1x (P) 3y (P) when y is not x
+after 1x (P) 3y (P) when y is not x, we.trump is none   # not a splinter (splinters.bid)
   P   "Minimum, no fit"                    shows hcp<=13
       priority -5
   # With a fit for a minor 3NT is still the game (Basic_Major 44 and 121,

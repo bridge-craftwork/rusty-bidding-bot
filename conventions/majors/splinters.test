@@ -1,0 +1,35 @@
+# Splinters (21GF-DEFAULT plays them: BBA's `Splinter`, with control
+# bids and 1430). Hands made for the rule; splinters.notes.md has the
+# probes behind the ranges.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction              | expect | why
+# ── Responder's splinter ──────────────────────────────────────────────
+N KQ74.A852.7.K863      | 1S P                 | 4D     | 12 HCP, four spades, a small singleton diamond
+N 7.KJ85.AQ63.K852      | 1H P                 | 3S     | 13 HCP, four hearts, a small singleton spade
+N KQ74.A852.K863.7      | 1S P                 | 4C     | 12 HCP, singleton club
+N KQ74.7.A852.K863      | 1S P                 | 4H     | 12 HCP, singleton heart: 4H is a splinter over 1S
+N KQ74.A852.K.Q863      | 1S P                 | 2NT    | the singleton is the king: Jacoby 2NT, not a splinter
+N AQ74.A852.7.AK63      | 1S P                 | 2NT    | 17 HCP: too strong for a splinter, Jacoby 2NT
+N AQ74.8652.A.K863      | 1S P                 | 2NT    | 13 HCP, but a singleton ace is not shortness to splinter with (BBA)
+N 9874.A852.7.K863      | 1S P                 | 3S     | 7 HCP, four trumps and a singleton: 10 support points, the limit raise, not a splinter
+dealer  N
+N KJ74.A852.7.Q863      | P P 1S P             | 4D     | a passed hand's splinter: 10 HCP, four trumps
+dealer  S
+# ── Opener over the splinter ──────────────────────────────────────────
+S AQ975.KJ4.KQ3.J2      | 1S P 4D P            | 4S     | 16 HCP but ♦KQ are wasted: 17 support points less 5, game
+S KQ975.Q84.A32.J2      | 1S P 4D P            | 4S     | 12 HCP and a doubleton, 13 support points: game
+S AQ975.KJ4.A32.J2      | 1S P 4D P            | 4H     | 15 HCP, nothing wasted: slam try, ♣J2 is bare so a control bid, ♥K the cheapest
+S AQ975.AK4.A32.K2      | 1S P 4D P            | 4NT    | 20 HCP and no bare suit: the keycard ask
+S A2.KQJ75.K8.A932      | 1H P 3S P            | 4NT    | 17 HCP and a doubleton spade ace: nothing wasted, no bare suit
+S KQ2.KQJ75.Q8.A93      | 1H P 3S P            | 4H     | 17 HCP, ♠KQ wasted: 18 support points less 5, game
+
+# ── Opener's splinter ─────────────────────────────────────────────────
+S AK74.5.AQJ83.KQ2      | 1D P 1S P            | 4H     | 19 HCP, four spades, a small singleton heart
+S AK74.KQ2.AQJ83.5      | 1D P 1S P            | 4C     | 19 HCP, singleton club
+S 5.AK74.AQJ83.KQ2      | 1D P 1H P            | 3S     | over 1H the spade splinter is 3S
+S AK74.K5.AQJ83.K2      | 1D P 1S P            | 4S     | 20 HCP but no shortness: the raise to game
+# ── Responder over opener's splinter ──────────────────────────────────
+N Q9852.K84.K4.953      | 1D P 1S P 4H P       | 4S     | ♥K wasted, 8 HCP: game
+N KQ852.84.K94.A53      | 1D P 1S P 4H P       | 4NT    | 12 HCP, nothing wasted in hearts, no bare suit: the keycard ask

@@ -141,8 +141,10 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
 
 - **Opener's rebid**: the largest gap in the whole corpus now (1♣-1♦,
   1♦-1♥, 1♦-1♠ each pass on thousands of boards).
-- Responses by a passed hand beyond switching off jump shifts (Drury is a
-  convention of its own).
+- Responses by a passed hand beyond switching off jump shifts. Drury is
+  its own module (`majors/drury.bid`, 2026-09-28): with it on, a passed
+  hand's limit raise, natural 2♣ and game-values 2♣/2♦ are switched off
+  here.
 - Responses after interference.
 - 2/1 game force and forcing 1NT (the 2/1 cards): the same module plays
   them as Standard American for now.
@@ -303,6 +305,10 @@ It lost to our passed-hand limit raise on both measures: -237 by
 distance, -354 to the side (536 boards). Not adopted. A fuller version
 (opener's strong answers, responder's game tries) would be needed to
 beat it.
+
+Built 2026-09-28 as `majors/drury.bid`, with opener's game answer and
+responder's follow-ups and 2♣ from 10 support points: adopted
+(drury.notes.md).
 
 ## Over 1H, 1S before a five-card minor with 11-12 (2026-09-25)
 

@@ -1,0 +1,39 @@
+# Drury. 21GF-DEFAULT plays Reverse Drury (BBA's `Reverse drury`);
+# 21GF-GIB plays the original (`Drury`). Hands made for the rule, not
+# corpus hands; drury.notes.md has the probes behind the ranges.
+card    21GF-DEFAULT
+dealer  N
+
+# seat hand             | auction              | expect | why
+# ── Responder, a passed hand ──────────────────────────────────────────
+N KJ5.QT74.A8.8653      | P P 1H P             | 2C     | 10 HCP, four hearts and a doubleton: 11 support points
+N J85.K74.Q86.KJ52      | P P 1S P             | 2C     | 10 HCP, three spades, flat: 10 support points
+N 853.K74.Q86.J952      | P P 1S P             | 2S     | 6 HCP: the simple raise
+N KQ5.A74.J86.T952      | P P 1H P             | 2C     | 10 HCP, three hearts, flat: 10 support points (not 3H, which Drury replaces)
+# ── Opener: Reverse Drury ─────────────────────────────────────────────
+S Q52.AJ975.K42.83      | P P 1H P 2C P        | 2H     | 10 HCP and a doubleton, 11 support points: sub-minimum
+S A52.KQ975.Q42.83      | P P 1H P 2C P        | 2H     | 11 HCP and a doubleton: 12, still no game opposite 10-12
+S A52.KQ975.K42.83      | P P 1H P 2C P        | 2D     | 12 HCP and a doubleton: 13, a full opening
+S AJ.KQ975.J42.K83      | P P 1H P 2C P        | 4H     | 14 HCP and a doubleton: 15, game
+# ── Responder after the answer ────────────────────────────────────────
+N KJ5.QT74.A8.8653      | P P 1H P 2C P 2H P   | P      | partner is sub-minimum
+N KJ5.QT74.A8.8653      | P P 1H P 2C P 2D P   | 4H     | 11 support points and four trumps facing a full opening
+N J85.K74.Q86.KJ52      | P P 1S P 2C P 2D P   | 2S     | 10 support points: no game facing 13-14
+S A52.KQ975.K42.83      | P P 1H P 2C P 2D P 2H P | P   | responder signed off
+
+# ── The original Drury: 2D is the sub-minimum ─────────────────────────
+card    21GF-GIB
+S Q52.AJ975.K42.83      | P P 1H P 2C P        | 2D     | 11 support points: sub-minimum, artificial
+S A52.KQ975.K42.83      | P P 1H P 2C P        | 2H     | 13 support points: a full opening
+N KJ5.QT74.A8.8653      | P P 1H P 2C P 2D P   | 2H     | partner is sub-minimum: sign off in the suit
+N KJ5.QT74.A8.8653      | P P 1H P 2C P 2H P   | 4H     | 11 support points and four trumps facing a full opening
+
+# ── Two-way Drury: 2D shows four trumps ───────────────────────────────
+card    21GF-DEFAULT major_openings.drury.two_d=true
+N KJ5.QT74.A8.8653      | P P 1H P             | 2D     | four hearts: 2D
+N KQ5.A74.J86.T952      | P P 1H P             | 2C     | three hearts: 2C
+S A52.KQ975.K42.83      | P P 1H P 2D P        | 4H     | 13 support points opposite four trumps: game
+
+# ── In competition ────────────────────────────────────────────────────
+card    21GF-DEFAULT major_openings.drury.in_comp=true
+N KJ5.QT74.A8.8653      | P P 1H X             | 2C     | Drury over the double

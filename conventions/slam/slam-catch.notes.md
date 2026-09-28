@@ -211,10 +211,10 @@ only on the 21GF cards.
 - A game force that arrives *without* a trump suit (2♣ – 2NT – 3♠, where
   responder has three-card support and never raises) is outside the
   catch, because nothing agrees the suit. See "For Rick".
-- **Splinters are not in the rules at all.** `1S P 4C P` is "no rule in
-  a live auction", so no trump suit is agreed and the whole catch — the
-  ask, the control bids, the sign-off — never runs. BBA cue-bids 4♦ there
-  and reaches slam; we pass out 4♣. That is `majors/`, not `slam/`.
+- ~~Splinters are not in the rules at all.~~ Built 2026-09-28 in
+  `majors/splinters.bid`: a splinter agrees the suit and forces to game,
+  and the splinterer's partner decides slam or game there before this
+  catch runs (splinters.notes.md).
 
 ## For Rick (changes outside `slam/`)
 
