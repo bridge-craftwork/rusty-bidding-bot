@@ -506,7 +506,13 @@ How `rbb-engine` implements the model, and its current limits:
    need step notation (`step 1`, `step 2`) for relay systems and Kickback?
 2. **Measuring descriptiveness.** Exact fractions from hand-distribution
    tables, or estimates from a fixed sample of dealt hands? Either way,
-   they can be precomputed per rule and context.
+   they can be precomputed per rule and context. Today: the fixed sample
+   (20,000 hands), one pass per candidate at each new position, cached
+   per auction prefix. Options: exact fractions for rules that constrain
+   only HCP and lengths (the common case); precomputing per rule and
+   context; a smaller sample, at the cost of arbitrary order between
+   rules closer than the sampling noise. Rick, 2026-09-28: decide once
+   more conventions are built, for a richer basis.
 3. **How much of "natural bidding" is rules vs. built in.** Proposal: a
    `natural.bid` module for everything expressible, plus Rust judgment hooks.
 4. **Competitive defaults.** For example, "after interference, systems on
