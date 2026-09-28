@@ -69,10 +69,17 @@ def main():
                 and eval(a.partner_where, {}, {"L": L, "h": hcp(p)}))
 
     partners = []
-    while len(partners) < a.partners:
+    for _ in range(2_000_000):
+        if len(partners) >= a.partners:
+            break
         h = deal13(rng)
         if ok_partner(h):
             partners.append(pbn(h))
+    else:
+        # Contradictory constraints (say --partner-where "h <= 8" against the
+        # default --partner-hcp 15 17) used to loop for ever.
+        raise SystemExit(f"only {len(partners)} partners in 2,000,000 deals: "
+                         f"check --partner-hcp {a.partner_hcp} against --partner-where")
 
     def partner_for(h):
         # A balanced 15-17 from the other 39 cards.
