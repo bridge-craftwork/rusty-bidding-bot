@@ -23,7 +23,8 @@ import tomllib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
-GITHUB = os.path.expanduser("~/Development/GitHub")
+# Sibling checkouts: the directory that holds this repo.
+GITHUB = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 
 # ── sources ────────────────────────────────────────────────────────────────

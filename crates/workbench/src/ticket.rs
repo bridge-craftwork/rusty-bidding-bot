@@ -1999,11 +1999,14 @@ mod end_to_end {
     use super::*;
     use rbb_compare::Engines;
 
-    const PBS: &str = "/Users/rick/Development/GitHub/Practice-Bidding-Scenarios";
-
     #[test]
     fn local_ticket_for_basic_takeout_double_193() {
-        let pbs = PathBuf::from(std::env::var("RBB_PBS").unwrap_or_else(|_| PBS.to_string()));
+        // The Practice-Bidding-Scenarios checkout beside this repo, or RBB_PBS.
+        let pbs = std::env::var("RBB_PBS")
+            .map(PathBuf::from)
+            .unwrap_or_else(|_| {
+                Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../Practice-Bidding-Scenarios")
+            });
         if !pbs.join("bba").is_dir() {
             eprintln!(
                 "skipped: no Practice-Bidding-Scenarios at {}",

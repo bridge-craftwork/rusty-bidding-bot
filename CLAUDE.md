@@ -12,7 +12,7 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   `crates/bidspec`, and `conventions/` must never depend on `rbb-engine` or
   `rbb-cli`; they are expected to move to their own repo with the card editor.
 
-## Related repos (siblings under ~/Development/GitHub)
+## Related repos (sibling checkouts, `../<repo>`)
 
 - `bridge-types`: Hand, Call, Auction (git dependency).
 - `bridge-rulebot`: cardplay bot; reference for the WASM wrapper and the

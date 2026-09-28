@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """A reproducible sample of Richard Pavlicek's solved random deals, as PBN.
 
-    probes/tools/rpdd_sample.py --zrd ~/Development/GitHub/rpdd-library/rpdd.zrd \\
+    probes/tools/rpdd_sample.py --zrd ../rpdd-library/rpdd.zrd \\
         --count 10000 -o SCRATCH/rpdd-10k.pbn [--offset 0] [--event NAME]
 
 The library (10,485,760 random deals, each with its 20-cell double-dummy

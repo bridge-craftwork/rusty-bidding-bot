@@ -26,7 +26,7 @@ alternative to BBA at Bridge-Classroom's practice tables. On a single-user
 table it runs in the browser for each bot seat. On a multiplayer table each
 table bids on its own. It may need to go into the table service too.
 
-File references are to the sibling checkouts under `~/Development/GitHub` as
+File references are to the sibling checkouts under `../` (checkouts beside this repo) as
 of 2026-09-28. Line numbers will drift.
 
 ## 1. How bidding works today

@@ -17,7 +17,7 @@ The deals and double-dummy tables are **Richard Pavlicek's library of
 ([`rpdd.txt`](https://www.rpbridge.net/d/rpdd.txt)). His terms: noncommercial
 use, unmodified, credited to him. Nothing of his is in this repository; the
 sample and every file made from it live in a scratch directory. The local
-copy is `~/Development/GitHub/rpdd-library/rpdd.zrd` (his 241 MB file as
+copy is `../rpdd-library/rpdd.zrd` (his 241 MB file as
 `rpdd.bat` builds it; `rpdd zrd` from rpdd-reader rebuilds it from the
 tables).
 
@@ -55,8 +55,8 @@ tables).
 ### Reproduce
 
 ```sh
-S=<scratch dir>; PBS=~/Development/GitHub/Practice-Bidding-Scenarios
-python3 probes/tools/rpdd_sample.py --zrd ~/Development/GitHub/rpdd-library/rpdd.zrd \
+S=<scratch dir>; PBS=../Practice-Bidding-Scenarios
+python3 probes/tools/rpdd_sample.py --zrd ../rpdd-library/rpdd.zrd \
     --count 10000 -o $S/rpdd-10k.pbn
 mkdir -p $S/pbs/bba && ln -s $PBS/bbsa $S/pbs/bbsa
 BBA="/Applications/Bridge Utilities/bba-cli"
