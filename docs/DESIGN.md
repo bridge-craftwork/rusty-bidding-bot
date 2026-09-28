@@ -73,7 +73,8 @@ development, and may later move to its own repo together with the card editor.
 | `crates/compare` | `rbb-compare` | Headless comparison against reference corpora: statistics, divergences, par |
 | `crates/cli` | `rbb-cli` (binary `rbb`) | Bid PBN files; `rbb compare` report |
 | `crates/workbench` | `rbb-workbench` | Desktop GUI over `rbb-compare` (see [Comparison workbench](#comparison-workbench)) |
-| `crates/wasm` (later) | `rbb-wasm` | wasm-bindgen wrapper with a JSON boundary, same pattern as `bridge-rulebot/wasm` |
+| `crates/assets` | `rbb-assets` | The `.bid` rules and stock `.bbsa` cards compiled into binaries (build script), so `rbb` and the WASM build need no files |
+| `crates/wasm` | `rbb-wasm` | wasm-bindgen wrapper with a JSON boundary, same pattern as `bridge-rulebot/wasm` ([WASM.md](WASM.md)) |
 
 Hands, calls, and auctions come from
 [`bridge-types`](https://github.com/bridge-craftwork/bridge-types). It needs two

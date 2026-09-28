@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # The git dependencies (bridge-types, bridge-encodings, bridge-solver)
+      # are public and pinned by the committed Cargo.lock; --locked fails
+      # rather than re-resolve. No local [patch] exists here (that pattern
+      # lives in a gitignored .cargo/config.toml on a developer's machine).
+      - name: Rule files
+        run: cargo run --locked -q -p rbb-cli -- bid check
+      - name: Tests
+        run: cargo test --locked --workspace
+
+  wasm:
+    name: WASM package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Install wasm-pack
+        run: curl -sSf https://rustwasm.github.io/wasm-pack/installer/init.sh | sh
+      - name: Build
+        run: crates/wasm/build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rbb-wasm-pkg
+          path: crates/wasm/pkg

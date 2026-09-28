@@ -98,6 +98,15 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   (overcalls.notes.md, "For Rick: which yardstick").
   Corpus tables mix cards (1NT ranges, transfer structures): restrict
   them to one card.
+- `cargo run -q --release -p rbb-cli -- bid-pbn -i in.pbn -o out.pbn --ns-card X.bbsa --ew-card Y.bbsa`:
+  bid every deal of a PBN file, written in bba-cli's layout (`[Auction]`,
+  `[Note]`s for alerts, `--all-meanings` for every call). Uses the rules
+  compiled into the binary unless `--rules`; cards may be stock names
+  (`21GF-DEFAULT`). docs/RELEASING.md covers it and the release builds.
+- `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
+  docs/WASM.md, which a website builds on: change it compatibly or bump
+  `API_VERSION`. `rbb bid reference` prints the conventions reference
+  the WASM build serves.
 - `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).

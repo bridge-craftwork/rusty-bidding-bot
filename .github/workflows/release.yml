@@ -1,0 +1,158 @@
+name: Release
+
+# Push a tag v* to build rbb for macOS (arm64, x86_64), Linux and Windows,
+# sign and notarize the macOS binaries, build the WASM package, and attach
+# everything to a GitHub release. Run by hand (workflow_dispatch) to build
+# the artifacts without a release. Secrets: docs/RELEASING.md.
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-release:
+    name: Build ${{ matrix.asset }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact: rbb
+            asset: rbb-linux-x86_64
+            strip: true
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            artifact: rbb.exe
+            asset: rbb-windows-x86_64.exe
+            strip: false
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            artifact: rbb
+            asset: rbb-macos-x86_64
+            strip: false
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            artifact: rbb
+            asset: rbb-macos-aarch64
+            strip: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Cache Rust dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+
+      # The rules (conventions/*.bid) and stock cards are compiled in by
+      # rbb-assets: the binary needs no files beside it.
+      - name: Build rbb
+        run: cargo build --locked --release -p rbb-cli --bin rbb --target ${{ matrix.target }}
+
+      - name: Strip binary (Linux only)
+        if: matrix.strip
+        run: strip target/${{ matrix.target }}/release/${{ matrix.artifact }}
+
+      # Skipped with a notice when the secrets are absent (forks, PRs):
+      # the binary is then shipped unsigned.
+      - name: Sign and notarize macOS binary
+        if: runner.os == 'macOS'
+        env:
+          DEVELOPER_ID_CERT_BASE64: ${{ secrets.DEVELOPER_ID_CERT_BASE64 }}
+          DEVELOPER_ID_CERT_PASSWORD: ${{ secrets.DEVELOPER_ID_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: scripts/macos-sign.sh target/${{ matrix.target }}/release/${{ matrix.artifact }}
+
+      - name: Smoke test
+        if: matrix.target != 'x86_64-apple-darwin'
+        shell: bash
+        run: target/${{ matrix.target }}/release/${{ matrix.artifact }} --help
+
+      - name: Create distribution package
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp target/${{ matrix.target }}/release/${{ matrix.artifact }} dist/${{ matrix.asset }}
+          cp LICENSE-MIT LICENSE-APACHE README.md dist/
+
+      - name: Create tarball (Linux and macOS)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          cd dist
+          tar -czf ${{ matrix.asset }}.tar.gz ${{ matrix.asset }} LICENSE-MIT LICENSE-APACHE README.md
+
+      - name: Create zip (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cd dist
+          7z a ${{ matrix.asset }}.zip ${{ matrix.asset }} LICENSE-MIT LICENSE-APACHE README.md
+
+      - name: Keep the build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: |
+            dist/${{ matrix.asset }}.tar.gz
+            dist/${{ matrix.asset }}.zip
+          if-no-files-found: ignore
+
+      - name: Upload release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/${{ matrix.asset }}.tar.gz
+            dist/${{ matrix.asset }}.zip
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  wasm:
+    name: Build WASM package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - name: Install wasm-pack
+        run: curl -sSf https://rustwasm.github.io/wasm-pack/installer/init.sh | sh
+      - name: Build
+        run: crates/wasm/build.sh
+      - name: Package
+        run: |
+          mkdir -p dist
+          tar -czf dist/rbb-wasm.tar.gz -C crates/wasm pkg demo.html
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rbb-wasm
+          path: dist/rbb-wasm.tar.gz
+      - name: Upload release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/rbb-wasm.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

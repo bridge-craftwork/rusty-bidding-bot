@@ -18,6 +18,17 @@ Status: early design. Start with [docs/DESIGN.md](docs/DESIGN.md).
 - `crates/compare`: comparison with reference auctions (BBA)
 - `crates/cli`: the `rbb` command-line tool
 - `crates/workbench`: `rbb-workbench`, a desktop GUI for the comparison
+- `crates/assets`: the rules and stock cards, compiled into the binaries
+- `crates/wasm`: the browser build, a JSON API ([docs/WASM.md](docs/WASM.md))
+
+## Build products
+
+- `rbb bid-pbn -i deals.pbn -o bid.pbn --ns-card X.bbsa --ew-card Y.bbsa`
+  bids every deal of a PBN file, like bba-cli. Release binaries for macOS
+  (signed and notarized), Linux and Windows are built by GitHub Actions:
+  [docs/RELEASING.md](docs/RELEASING.md).
+- `crates/wasm/build.sh` builds the WASM package for in-browser bidding:
+  [docs/WASM.md](docs/WASM.md).
 
 ## License
 
