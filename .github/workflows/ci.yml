@@ -46,3 +46,45 @@ jobs:
         with:
           name: rbb-wasm-pkg
           path: crates/wasm/pkg
+
+  web:
+    name: Web site
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Pinned: jetli/wasm-pack-action with `latest` falls back to v0.9.1
+      # when its API lookup fails (bridge-craftwork-site PLAN.md, Phase 3).
+      - name: Install wasm-pack
+        uses: jetli/wasm-pack-action@v0.4.0
+        with:
+          version: 'v0.15.0'
+      - name: Build the site (engine, dealer3, reference.txt)
+        run: web/build.sh
+      - name: Tool contract tests (run, validate, getInput, dealer3)
+        run: node web/scripts/test.mjs web/dist
+      # reference.txt drift: its conventions are what the .bid files in the
+      # tree say (native `rbb bid reference`), it is what the shipped engine
+      # and the page's vocabulary write, and it names every input field,
+      # parameter, API method, card and module.
+      - name: reference.txt drift check
+        run: |
+          cargo run --locked -q -p rbb-cli -- bid reference -o native-reference.txt
+          node web/scripts/check-reference.mjs web/dist native-reference.txt
+      - name: The output is complete
+        run: |
+          for f in index.html 404.html _headers reference.txt app.js pkg/rbb_wasm_bg.wasm dealer3/dealer3_wasm_bg.wasm; do
+            test -s "web/dist/$f" || { echo "missing web/dist/$f" >&2; exit 1; }
+          done
+          grep -q '^/reference.txt' web/dist/_headers
+          du -sh web/dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rbb-web-dist
+          path: web/dist

@@ -20,6 +20,7 @@ Status: early design. Start with [docs/DESIGN.md](docs/DESIGN.md).
 - `crates/workbench`: `rbb-workbench`, a desktop GUI for the comparison
 - `crates/assets`: the rules and stock cards, compiled into the binaries
 - `crates/wasm`: the browser build, a JSON API ([docs/WASM.md](docs/WASM.md))
+- `web/`: the web site that showcases it ([docs/WEB.md](docs/WEB.md))
 
 ## Build products
 
@@ -29,6 +30,8 @@ Status: early design. Start with [docs/DESIGN.md](docs/DESIGN.md).
   [docs/RELEASING.md](docs/RELEASING.md).
 - `crates/wasm/build.sh` builds the WASM package for in-browser bidding:
   [docs/WASM.md](docs/WASM.md).
+- `web/build.sh` builds the web site (`/rusty-bidding-bot/` on
+  bridge-craftwork.com): [docs/WEB.md](docs/WEB.md).
 
 ## License
 
