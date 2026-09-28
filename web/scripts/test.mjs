@@ -134,6 +134,28 @@ await test('a Bridge-Classroom card and an uploaded .bbsa', async () => {
   assert.ok(Array.isArray(out.coverage.ew.ignored))
 })
 
+await test('a Bridge-Classroom export, as its "Export content" writes it', async () => {
+  // A small synthetic export: the wrapper, a raw BBO record and one setting.
+  const exported = {
+    schema: 'bridge-classroom/card_data@v1', name: 'Pat and Sam', description: 'Imported from BBO',
+    exportedAt: '2026-09-28T20:04:58.311Z',
+    card_data: { metadata: { name: 'Pat and Sam' }, _bbo_raw: { conventions: { '1NStayman': 'y' } },
+      notrump: { stayman: { play: true } } },
+  }
+  const out = await new Session(rbb, { fetchImpl }).run({ deal: DEAL, dealer: 'N' }, { ns: { json: exported } })
+  assert.equal(out.ok, true, JSON.stringify(out.diagnostics))
+  assert.equal(out.cards.ns, 'Pat and Sam')
+  assert.ok(out.coverage.ns.read.includes('notrump.stayman.play'))
+  // Written back out in the same wrapper, which reads back as the same card.
+  const r = JSON.parse(rbb.exportCard(JSON.stringify({ card: { json: exported }, exported_at: 'now' })))
+  assert.equal(r.ok, true, JSON.stringify(r.diagnostics))
+  assert.equal(r.bridge_classroom.schema, 'bridge-classroom/card_data@v1')
+  assert.equal(r.bridge_classroom.name, 'Pat and Sam')
+  assert.deepEqual(r.bridge_classroom.card_data._bbo_raw, exported.card_data._bbo_raw)
+  const again = JSON.parse(rbb.exportCard(JSON.stringify({ card: { json: r.bridge_classroom } })))
+  assert.deepEqual(again.json, r.json)
+})
+
 if (loadDealer3) {
   await test('a dealer3 script deals', async () => {
     const s = new Session(rbb, { fetchImpl, loadDealer3 })

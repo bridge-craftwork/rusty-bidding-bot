@@ -202,8 +202,10 @@ $('card-file').addEventListener('change', async () => {
   if (/\.json$/i.test(f.name) || /^\s*\{/.test(text)) {
     try {
       const j = JSON.parse(text)
-      // Bridge-Classroom exports wrap the card in {card_data: ...}.
-      spec = { json: j.card_data ?? j, name }
+      // Bridge-Classroom's export ({schema, name, card_data, ...}) or bare
+      // card_data: the engine reads both, and ignores `_bbo_raw` and the
+      // like with an info. The card's own name when it has one.
+      spec = { json: j, name: j.name || j.card_data?.metadata?.name || j.metadata?.name || name }
     } catch (e) {
       session.diagnostics = [{ severity: 'error', message: `card file: ${f.name} is not JSON: ${e.message}` }]
       render()
@@ -234,7 +236,9 @@ function download(name, text, type) {
 async function exportCard(side, format) {
   const specs = await session.cardSpecs()
   // Read and written in the vocabulary of the rules the engine plays.
-  const r = JSON.parse(rbb.exportCard(JSON.stringify({ card: specs[side], engine: session.engine ?? undefined })))
+  const r = JSON.parse(rbb.exportCard(JSON.stringify({
+    card: specs[side], engine: session.engine ?? undefined, exported_at: new Date().toISOString(),
+  })))
   if (!r.ok) {
     session.addDiagnostics(r.diagnostics)
     render()
@@ -242,7 +246,8 @@ async function exportCard(side, format) {
   }
   const base = String(r.name).replace(/[^\w.-]+/g, '_')
   if (format === 'json') {
-    download(`${base}.json`, JSON.stringify(r.json, null, 2) + '\n', 'application/json')
+    // Bridge-Classroom's own export format: {schema, name, description, exportedAt, card_data}.
+    download(`${base}.json`, JSON.stringify(r.bridge_classroom, null, 2) + '\n', 'application/json')
   } else {
     download(`${base}.bbsa`, r.bbsa, 'text/plain')
   }

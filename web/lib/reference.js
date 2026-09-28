@@ -137,8 +137,9 @@ output:
                 {auction: [{seat, call, note}]}
   coverage      {ns, ew}: of the settings each card switches on, read (the
                 rules use them), ignored (no rule reads them: not played),
-                unmapped (.bbsa keys with no card field), other (carding,
-                leads), score = read / (read + ignored)
+                unmapped (settings with no card field: .bbsa keys, card
+                JSON paths), other (carding, leads), score = read /
+                (read + ignored)
   xray          null unless params.xray is 1 or "all"; then
                 {calls: [{index, seat, call, by, hand, engineCall,
                 engineWhy, offered, candidates, warnings, before,
@@ -178,8 +179,10 @@ Built in (the Practice-Bidding-Scenarios .bbsa cards):
 ${wrap(info.stock_cards.join(', '), 74, '')}
 
 Also: a BBA .bbsa file ({"bbsa": text}), or a Bridge-Classroom convention
-card ({"json": card_data}); BC-21-Intermediate is Bridge-Classroom's 2/1
-Intermediate card, built in. The page converts any card to either format.
+card ({"json": card_data}, or the editor's export {"json": {schema, name,
+card_data}}: keys such as _bbo_raw are ignored); BC-21-Intermediate is
+Bridge-Classroom's 2/1 Intermediate card, built in. The page converts any
+card to either format (its JSON download is Bridge-Classroom's export).
 
 CONVENTIONS
 -----------

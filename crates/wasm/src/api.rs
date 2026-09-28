@@ -471,12 +471,13 @@ fn bbsa_line(text: &str, key: &str) -> Option<usize> {
         .map(|i| i + 1)
 }
 
-/// A card as loaded: the card, its name, and the `.bbsa` keys it switches
-/// on that have no card field (empty for card JSON).
+/// A card as loaded: the card, its name, and the settings it switches on
+/// that have no card field (`.bbsa` keys, or card JSON paths).
 type Loaded = (Card, String, Vec<String>);
 
 /// One card from its spec: a stock card's name, `{"stock": name}`,
-/// `{"bbsa": text, "name"?: ..}` or `{"json": card_data}`.
+/// `{"bbsa": text, "name"?: ..}` or `{"json": card_data}` (bare, or in
+/// Bridge-Classroom's export wrapper `{schema, name, card_data, ...}`).
 fn load_card(spec: &Json, field: &str, vocab: &Vocabulary, d: &mut Diags) -> Option<Loaded> {
     let stock = |name: &str, d: &mut Diags| match rbb_assets::card(name) {
         Some(text) => {
@@ -504,6 +505,12 @@ fn load_card(spec: &Json, field: &str, vocab: &Vocabulary, d: &mut Diags) -> Opt
                 };
                 match Card::from_json(vocab, &text) {
                     Ok((card, report)) => {
+                        if !report.ignored.is_empty() {
+                            d.info(format!(
+                                "{field}: {} ignored (not card settings: raw import records, kept)",
+                                report.ignored.join(", ")
+                            ));
+                        }
                         for (from, to) in &report.aliased {
                             d.info(format!("{field}: {from} is an old name for {to}"));
                         }
@@ -519,7 +526,8 @@ fn load_card(spec: &Json, field: &str, vocab: &Vocabulary, d: &mut Diags) -> Opt
                             .name
                             .clone()
                             .unwrap_or_else(|| "card".to_string());
-                        Some((card, name, Vec::new()))
+                        let unmapped = bidspec::coverage::unmapped_json(&card, &report.unknown);
+                        Some((card, name, unmapped))
                     }
                     Err(e) => {
                         d.error(format!("{field}: not a card: {e}"));
@@ -1507,13 +1515,15 @@ pub fn coverage(request: &str) -> String {
     respond(json!({"ns": side(ns), "ew": side(ew)}), d)
 }
 
-/// A card as Bridge-Classroom card JSON (`card_data`) and as `.bbsa` text:
-/// the mapping between the two formats. Request: `{"card": <card spec>,
-/// "set"?: ["path=value"]}`.
+/// A card as Bridge-Classroom card JSON (`card_data`, and the editor's
+/// export wrapper around it) and as `.bbsa` text: the mapping between the
+/// two formats. Request: `{"card": <card spec>, "set"?: ["path=value"],
+/// "exported_at"?: "<ISO 8601 time>"}`.
 pub fn export_card(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
-    let empty = json!({"name": Json::Null, "json": Json::Null, "bbsa": Json::Null, "unmapped": []});
+    let empty = json!({"name": Json::Null, "json": Json::Null, "bridge_classroom": Json::Null,
+                       "bbsa": Json::Null, "unmapped": []});
     if d.has_errors() {
         return respond(empty, d);
     }
@@ -1548,6 +1558,9 @@ pub fn export_card(request: &str) -> String {
         json!({
             "name": name,
             "json": card.to_json(),
+            "bridge_classroom": card.to_export_json(
+                req.get("exported_at").and_then(Json::as_str)
+            ),
             "bbsa": bbsa_text,
             "unmapped": unmapped,
         }),
@@ -1888,6 +1901,66 @@ mod tests {
             &json!({"cards": {"ns": {"json": r["json"]}}}).to_string(),
         ));
         assert_eq!(back["ok"], true, "{back}");
+        // So does Bridge-Classroom's export wrapper, with its name.
+        let wrapped = parse(&export_card(
+            r#"{"card": "21GF-DEFAULT", "exported_at": "2026-09-28T00:00:00.000Z"}"#,
+        ));
+        let bc = &wrapped["bridge_classroom"];
+        assert_eq!(bc["schema"], "bridge-classroom/card_data@v1");
+        assert_eq!(bc["exportedAt"], "2026-09-28T00:00:00.000Z");
+        assert_eq!(bc["card_data"], r["json"]);
+        let again = parse(&export_card(&json!({"card": {"json": bc}}).to_string()));
+        assert_eq!(again["ok"], true, "{again}");
+        assert_eq!(again["json"], r["json"]);
+    }
+
+    #[test]
+    fn reads_bridge_classroom_exports() {
+        // A synthetic export, shaped like the editor's: the wrapper, a raw
+        // BBO record, and a setting the vocabulary does not have.
+        let card = json!({
+            "schema": "bridge-classroom/card_data@v1",
+            "name": "Pat and Sam", "description": "Imported from BBO",
+            "exportedAt": "2026-09-28T20:04:58.311Z",
+            "card_data": {
+                "schema_version": "1.0", "format": "bridge_classroom",
+                "metadata": {"name": "Pat and Sam", "source": "bbo"},
+                "_bbo_raw": {"conventions": {"1NStayman": "y"}},
+                "notrump": {"stayman": {"play": true}, "mystery": {"on": true}}
+            }
+        });
+        let v = parse(&validate(
+            &json!({"cards": {"ns": {"json": card}}}).to_string(),
+        ));
+        assert_eq!(v["ok"], true, "{v}");
+        let raw: Vec<&Json> = v["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|d| d["message"].as_str().unwrap().contains("_bbo_raw"))
+            .collect();
+        assert_eq!(raw.len(), 1, "{v}");
+        assert_eq!(raw[0]["severity"], "info");
+        let c = parse(&coverage(
+            &json!({"cards": {"ns": {"json": card}}}).to_string(),
+        ));
+        assert_eq!(c["ok"], true, "{c}");
+        assert_eq!(c["ns"]["name"], "Pat and Sam");
+        assert!(
+            c["ns"]["read"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|p| p == "notrump.stayman.play"),
+            "{c}"
+        );
+        assert_eq!(c["ns"]["unmapped"], json!(["notrump.mystery.on"]));
+        // Card JSON as a string, the way a page reads an uploaded file.
+        let e = parse(&create_engine(
+            &json!({"cards": {"ns": {"json": card.to_string()}}}).to_string(),
+        ));
+        assert_eq!(e["ok"], true, "{e}");
+        assert_eq!(e["ns"]["name"], "Pat and Sam");
     }
 
     #[test]

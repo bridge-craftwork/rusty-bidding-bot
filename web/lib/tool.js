@@ -35,7 +35,7 @@ export const INPUT = [
 
 /** What `params` may carry. */
 export const PARAMS = [
-  { name: 'ns', form: 'card', default: 'the scenario\'s card, else 21GF-DEFAULT', about: 'North-South\'s convention card: a built-in card name (see "Cards"), "scenario", {"bbsa": "<.bbsa file text>"} or {"json": <Bridge-Classroom card JSON>}.' },
+  { name: 'ns', form: 'card', default: 'the scenario\'s card, else 21GF-DEFAULT', about: 'North-South\'s convention card: a built-in card name (see "Cards"), "scenario", {"bbsa": "<.bbsa file text>"} or {"json": <Bridge-Classroom card JSON: card_data, or the editor\'s export {schema, name, card_data}>}.' },
   { name: 'ew', form: 'card', default: 'the scenario\'s card, else 21GF-GIB', about: 'East-West\'s card, the same forms.' },
   { name: 'set', form: '["path=value", ...]', default: '[]', about: 'Card changes for both sides, e.g. "general.style=bba" or "notrump.stayman.play=false" (field paths: the conventions reference, `card:` lines).' },
   { name: 'scoring', values: ['MP', 'IMP'], default: 'the board\'s, else MP', about: 'Matchpoints or IMPs; some rules judge by it.' },

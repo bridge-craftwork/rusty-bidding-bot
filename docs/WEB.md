@@ -99,12 +99,13 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
   contract's double-dummy result (the WASM `ddTable`, bridge-solver), and
   for a scenario BBA's auction and contract.
 - **Cards**: the PBS cards built in (the scenario's by default), the
-  Bridge-Classroom 2/1 card, or an uploaded `.bbsa` / Bridge-Classroom JSON;
-  any of them downloads as Bridge-Classroom JSON or `.bbsa` (the WASM
-  `exportCard`: the mapping between the two).
+  Bridge-Classroom 2/1 card, or an uploaded `.bbsa` / Bridge-Classroom JSON
+  (bare `card_data` or the editor's export, named by its `name`);
+  any of them downloads as Bridge-Classroom JSON (the editor's export
+  format) or `.bbsa` (the WASM `exportCard`: the mapping between the two).
 - **Missing conventions**: for each card, the settings it switches on that no
   rule reads (WASM `coverage`, the same buckets as `rbb card coverage`), and
-  the `.bbsa` keys with no card field.
+  the settings with no card field (`.bbsa` keys, card JSON paths).
 
 ## Later
 

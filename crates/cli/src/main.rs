@@ -130,8 +130,10 @@ enum Command {
         vul: String,
         #[arg(short, long, default_value = "MP")]
         scoring: String,
-        /// Card for North-South: a name in PBS bbsa/, a .bbsa path, or
-        /// bare:2/1 (also bare:sayc, bare:precision, bare:acol, bare:polish).
+        /// Card for North-South: a name in PBS bbsa/, a .bbsa path, a card
+        /// JSON path (Bridge-Classroom's export too; BBA gets the .bbsa it
+        /// maps to), or bare:2/1 (also bare:sayc, bare:precision, bare:acol,
+        /// bare:polish).
         #[arg(long, default_value = "21GF-DEFAULT")]
         ns_card: String,
         #[arg(long, default_value = "21GF-GIB")]
@@ -208,8 +210,9 @@ enum Command {
         /// Output PBN file (`-` for stdout).
         #[arg(short, long, value_name = "FILE")]
         output: PathBuf,
-        /// North-South card: a .bbsa file, card JSON, or the name of a stock
-        /// card built into rbb (e.g. 21GF-DEFAULT).
+        /// North-South card: a .bbsa file, card JSON (bare card_data or
+        /// Bridge-Classroom's export), or the name of a stock card built
+        /// into rbb (e.g. 21GF-DEFAULT).
         #[arg(long, alias = "ns-conventions", value_name = "CARD")]
         ns_card: String,
         /// East-West card (default: the North-South card).
@@ -339,6 +342,10 @@ enum CardCommand {
         /// Write the card here instead of stdout.
         #[arg(short, long)]
         output: Option<PathBuf>,
+        /// Write Bridge-Classroom's export format ({schema, name,
+        /// description, exportedAt, card_data}) instead of bare card_data.
+        #[arg(long)]
+        wrap: bool,
         /// The rules directory whose card vocabulary to use.
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
@@ -352,7 +359,8 @@ enum CardCommand {
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
     },
-    /// Load card JSON and report aliases, unknown paths and invalid values.
+    /// Load card JSON (bare card_data or Bridge-Classroom's export) and
+    /// report aliases, unknown paths and invalid values.
     Check {
         file: PathBuf,
         /// The rules directory whose card vocabulary to use.
@@ -1081,7 +1089,14 @@ fn load_card(vocab: &Vocabulary, path: &Path) -> Result<Card> {
     if path.extension().is_some_and(|e| e == "bbsa") {
         Ok(bbsa::import(vocab, &text, None)?.0)
     } else {
-        Ok(Card::from_json(vocab, &text)?.0)
+        let (card, report) = Card::from_json(vocab, &text)?;
+        for key in &report.ignored {
+            eprintln!(
+                "info: {}: {key} ignored (not a card setting)",
+                path.display()
+            );
+        }
+        Ok(card)
     }
 }
 
@@ -1396,13 +1411,19 @@ fn card(cmd: CardCommand) -> Result<()> {
         CardCommand::ImportBbsa {
             file,
             output,
+            wrap,
             rules,
         } => {
             let vocab = vocab_from(&rules)?;
             let text = read(&file)?;
             let name = file.file_stem().and_then(|s| s.to_str());
             let (card, report) = bbsa::import(&vocab, &text, name)?;
-            write(output.as_deref(), &card.to_json_string())?;
+            let json = if wrap {
+                card.to_export_json_string(Some(&now_iso8601()))
+            } else {
+                card.to_json_string()
+            };
+            write(output.as_deref(), &json)?;
             eprintln!("{}: {} keys mapped", file.display(), report.mapped);
             if !report.passthrough.is_empty() {
                 eprintln!(
@@ -1535,7 +1556,7 @@ fn card_coverage(files: &[PathBuf], rules: &Path, verbose: bool) -> Result<()> {
                 println!("  {p}");
             }
             if !cov.unmapped.is_empty() {
-                println!("{}: .bbsa keys with no card field", cov.name);
+                println!("{}: settings with no card field", cov.name);
                 for k in &cov.unmapped {
                     println!("  {k}");
                 }
@@ -1546,6 +1567,12 @@ fn card_coverage(files: &[PathBuf], rules: &Path, verbose: bool) -> Result<()> {
 }
 
 fn print_load_report(load: &bridge_card::LoadReport) {
+    if let Some(schema) = &load.wrapper {
+        eprintln!("info: Bridge-Classroom export ({schema}): read its card_data");
+    }
+    for key in &load.ignored {
+        eprintln!("info: {key} ignored (not a card setting: a raw import record)");
+    }
     for (from, to) in &load.aliased {
         eprintln!("alias: {from} -> {to}");
     }
@@ -1555,6 +1582,33 @@ fn print_load_report(load: &bridge_card::LoadReport) {
     for (path, problem) in &load.invalid {
         eprintln!("invalid: {path}: {problem}");
     }
+}
+
+/// The time now in ISO 8601 (UTC, milliseconds), as JavaScript's
+/// `Date.toISOString` writes Bridge-Classroom's `exportedAt`.
+fn now_iso8601() -> String {
+    let since = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default();
+    let secs = since.as_secs() as i64;
+    let (days, rem) = (secs.div_euclid(86_400), secs.rem_euclid(86_400));
+    // Civil date from days since 1970-01-01 (Howard Hinnant's algorithm).
+    let z = days + 719_468;
+    let era = z.div_euclid(146_097);
+    let doe = z - era * 146_097;
+    let yoe = (doe - doe / 1460 + doe / 36_524 - doe / 146_096) / 365;
+    let doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    let mp = (5 * doy + 2) / 153;
+    let day = doy - (153 * mp + 2) / 5 + 1;
+    let month = if mp < 10 { mp + 3 } else { mp - 9 };
+    let year = yoe + era * 400 + i64::from(month <= 2);
+    format!(
+        "{year:04}-{month:02}-{day:02}T{:02}:{:02}:{:02}.{:03}Z",
+        rem / 3600,
+        rem % 3600 / 60,
+        rem % 60,
+        since.subsec_millis()
+    )
 }
 
 fn read(path: &Path) -> Result<String> {

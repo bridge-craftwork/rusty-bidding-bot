@@ -108,6 +108,26 @@ pub fn of_card(
     cov
 }
 
+/// The settings of a card JSON that have no card field (`unknown`, from
+/// its [`bridge_card::LoadReport`]) and are switched on: the JSON
+/// counterpart of the `.bbsa` keys with no card field, for the
+/// `unmapped` bucket.
+pub fn unmapped_json(card: &Card, unknown: &[String]) -> Vec<String> {
+    unknown
+        .iter()
+        .filter(|path| {
+            card.unknown_value(path).is_some_and(|v| match v {
+                serde_json::Value::Null => false,
+                serde_json::Value::Bool(b) => *b,
+                serde_json::Value::String(s) => !s.trim().is_empty() && s != "none",
+                serde_json::Value::Array(a) => !a.is_empty(),
+                _ => true,
+            })
+        })
+        .cloned()
+        .collect()
+}
+
 /// Is this setting saying anything? `false`, an empty string and an unset
 /// value are all "not switched on".
 fn is_on(v: &Value) -> bool {

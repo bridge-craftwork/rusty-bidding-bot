@@ -72,7 +72,8 @@ pub struct ProbeOptions {
     pub scoring: ScoringMethod,
     /// Calls forced before the decision under study.
     pub prefix: Vec<Call>,
-    /// A card name in `pbs/bbsa`, a path to a `.bbsa`, or `bare:<system>`
+    /// A card name in `pbs/bbsa`, a path to a `.bbsa` or to card JSON
+    /// (bare `card_data` or Bridge-Classroom's export), or `bare:<system>`
     /// (2/1, sayc, polish, precision, acol).
     pub ns_card: String,
     pub ew_card: String,
@@ -157,6 +158,11 @@ pub fn card_text(
         let mut card = Card::new(vocab);
         card.set("general.system_category", Value::Text(category.into()))
             .map_err(|e| e.to_string())?;
+        bbsa::export(&card).0
+    } else if spec.ends_with(".json") {
+        // Card JSON goes to BBA as the .bbsa it maps to.
+        let text = std::fs::read_to_string(spec).map_err(|e| format!("{spec}: {e}"))?;
+        let (card, _) = Card::from_json(vocab, &text).map_err(|e| format!("{spec}: {e}"))?;
         bbsa::export(&card).0
     } else {
         let path = if spec.ends_with(".bbsa") {

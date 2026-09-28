@@ -144,12 +144,14 @@ A **card spec** is one of:
 | `"21GF-DEFAULT"` | a stock card built in: the names are `info().stock_cards` |
 | `{"stock": "21GF-DEFAULT"}` | the same |
 | `{"bbsa": "<the text of a .bbsa file>", "name": "My card"}` | a BBA card file (`name` optional) |
-| `{"json": {...}}` or `{"json": "<string>"}` | Bridge-Classroom `card_data` JSON |
+| `{"json": {...}}` or `{"json": "<string>"}` | Bridge-Classroom card JSON: bare `card_data`, or the editor's export (`{"schema": "bridge-classroom/card_data@v1", "name", "description", "exportedAt", "card_data"}`, whose `name` becomes the card's) |
 
 Loading a card reports: `.bbsa` keys with no card field (one `info`, the
-line of the first), unknown JSON card fields (`warning`, ignored), old field
+line of the first), unknown JSON card fields (`warning`, ignored), keys
+starting with `_` such as `_bbo_raw`, the raw record of a BBO import (one
+`info`: not card settings, kept so an export round-trips), old field
 names (`info`), invalid values (`warning`, ignored), and a file that is not a
-card at all (`error`).
+card at all, or an export `schema` other than `@v1` (`error`).
 
 ## Functions
 
@@ -521,27 +523,33 @@ in their vocabulary).
 
 Of the settings the card switches on (not at their default): `read`, a
 module names the field (or it feeds one that does); `ignored`, the field
-exists and no rule reads it; `unmapped`, `.bbsa` keys switched on that have
-no card field at all; `other`, carding, leads and notes (they cannot change
-a call). `score` is `read / (read + ignored)`.
+exists and no rule reads it; `unmapped`, settings switched on that have no
+card field at all (`.bbsa` keys, or paths of a card JSON); `other`,
+carding, leads, notes and the fields marked `note` (write-in lines: they
+cannot change a call). `score` is `read / (read + ignored)`.
 
 ### `exportCard(request)` → JSON
 
 A card in both formats: the mapping from a BBA `.bbsa` card to
 Bridge-Classroom card JSON and back. Request: `{"card": <card spec>,
-"set"?: ["path=value"], "engine"?: 1}`: the card is read and written in
-the vocabulary of `engine`, else of a supplied rule set, else the embedded
-one.
+"set"?: ["path=value"], "engine"?: 1, "exported_at"?: "<ISO 8601>"}`: the
+card is read and written in the vocabulary of `engine`, else of a supplied
+rule set, else the embedded one.
 
 ```json
 {"ok": true, "name": "21GF-DEFAULT",
  "json": {"schema_version": "1.0", "format": "bridge_classroom", "...": "..."},
+ "bridge_classroom": {"schema": "bridge-classroom/card_data@v1", "name": "21GF-DEFAULT",
+                      "description": null, "exportedAt": "...", "card_data": {"...": "..."}},
  "bbsa": "<.bbsa text, CRLF>", "unmapped": ["..."], "diagnostics": []}
 ```
 
 `json` is Bridge-Classroom `card_data` (it loads back as `{"json": ...}`);
-unmapped `.bbsa` keys travel in its `bba_passthrough` so a `.bbsa` export
-round-trips.
+`bridge_classroom` is the same card in the editor's export format (its
+"Export content", Bridge Classroom JSON), with `exportedAt` only when the
+request gives `exported_at`; it loads back too. Unmapped `.bbsa` keys
+travel in `bba_passthrough`, and keys such as `_bbo_raw` stay where they
+were, so both formats round-trip.
 
 ### `ddTable(request)` → JSON
 
