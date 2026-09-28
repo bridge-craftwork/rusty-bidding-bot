@@ -142,7 +142,10 @@ mod tests {
     #[test]
     fn contract_doc_lists_the_terms() {
         let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/CONTRACT.md");
-        let doc = std::fs::read_to_string(&path).expect("docs/CONTRACT.md");
+        // A Windows checkout without .gitattributes has CRLF line ends.
+        let doc = std::fs::read_to_string(&path)
+            .expect("docs/CONTRACT.md")
+            .replace("\r\n", "\n");
         let want = splice_terms(&doc, &crate::terms_reference()).expect("markers");
         assert!(
             doc == want,

@@ -1,0 +1,9 @@
+# LF everywhere: tests compare generated text with checked-in files
+# (docs/CONTRACT.md, reference.txt) and parse .bid/.test files; CRLF
+# checkouts on Windows broke the first CI run.
+* text=auto eol=lf
+*.p12 binary
+*.png binary
+*.wasm binary
+*.bbsa -text
+*.pbn -text
