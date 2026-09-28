@@ -10,6 +10,8 @@ use crate::app::{BAD, GOOD};
 
 /// The colour that marks BBA's call or contract; ours use `BAD`.
 const BBA: Color32 = Color32::from_rgb(90, 140, 220);
+/// The box around a call in our auction that has a problem attached.
+const PROBLEM: Color32 = Color32::from_rgb(240, 150, 30);
 
 pub(crate) const SEATS: [Direction; 4] = [
     Direction::West,
@@ -106,7 +108,7 @@ impl Detail {
         for p in &b.problems {
             ui.label(
                 RichText::new(format!(
-                    "⚠ {} at call {}: {}",
+                    "⚠ {} at call {} (boxed in ours): {}",
                     p.kind.label(),
                     p.index + 1,
                     p.detail
@@ -131,6 +133,7 @@ impl Detail {
                     &b.reference,
                     b.first_divergence,
                     BBA,
+                    &[],
                 );
             });
             ui.add_space(24.0);
@@ -143,6 +146,7 @@ impl Detail {
                     &b.ours,
                     b.first_divergence,
                     BAD,
+                    &b.problems,
                 );
             });
             if let Some(dd) = &b.dd {
@@ -473,6 +477,7 @@ fn auction_grid(
     calls: &[Call],
     mark: Option<usize>,
     color: Color32,
+    problems: &[rbb_compare::Problem],
 ) {
     egui::Grid::new(id).spacing([14.0, 2.0]).show(ui, |ui| {
         for s in SEATS {
@@ -485,10 +490,25 @@ fn auction_grid(
         }
         for (i, c) in calls.iter().enumerate() {
             let text = RichText::new(short(c)).monospace();
-            if Some(i) == mark {
-                ui.label(text.strong().color(Color32::WHITE).background_color(color));
+            let resp = if Some(i) == mark {
+                ui.label(text.strong().color(Color32::WHITE).background_color(color))
             } else {
-                ui.label(text);
+                ui.label(text)
+            };
+            // Problems index `BoardResult::ours`: box the call and name them.
+            let here: Vec<String> = problems
+                .iter()
+                .filter(|p| p.index == i)
+                .map(|p| format!("{}: {}", p.kind.label(), p.detail))
+                .collect();
+            if !here.is_empty() {
+                ui.painter().rect_stroke(
+                    resp.rect.expand(2.0),
+                    2.0,
+                    egui::Stroke::new(2.0, PROBLEM),
+                    egui::StrokeKind::Outside,
+                );
+                resp.on_hover_text(here.join("\n"));
             }
             if (offset + i + 1) % 4 == 0 {
                 ui.end_row();
