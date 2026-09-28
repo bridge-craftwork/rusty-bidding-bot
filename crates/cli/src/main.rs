@@ -290,6 +290,19 @@ enum BidCommand {
         #[arg(short, long)]
         verbose: bool,
     },
+    /// Print the conventions reference (the WASM build's `reference`, the
+    /// text a website serves as reference.txt): every module, when a card
+    /// switches it on, and what each call means after each auction.
+    Reference {
+        /// Directory of .bid modules; default: the rules built into rbb.
+        #[arg(long)]
+        rules: Option<PathBuf>,
+        /// Also write it as JSON (the WASM build's `conventions`) here.
+        #[arg(long)]
+        json: Option<PathBuf>,
+        #[arg(short, long)]
+        output: Option<PathBuf>,
+    },
     /// Print a .bid file's compiled JSON IR.
     Compile {
         file: PathBuf,
@@ -1187,6 +1200,42 @@ fn bid(cmd: BidCommand) -> Result<()> {
             );
             if failed > 0 {
                 return Err("some cases failed".into());
+            }
+        }
+        BidCommand::Reference {
+            rules,
+            json,
+            output,
+        } => {
+            let modules = match &rules {
+                Some(dir) => rbb_engine::load_modules(dir),
+                None => rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()),
+            }
+            .map_err(|d| {
+                d.iter()
+                    .map(|d| d.to_string())
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            })?;
+            let entries = bidspec::reference::entries(&modules);
+            let rules_id = if rules.is_some() {
+                "from files".to_string()
+            } else {
+                rbb_assets::RULES_ID.to_string()
+            };
+            let header = format!(
+                "rusty-bidding-bot conventions reference\nrbb {} rules {rules_id}",
+                env!("CARGO_PKG_VERSION")
+            );
+            let text = bidspec::reference::text(&entries, &header, None);
+            if let Some(p) = json {
+                let v = serde_json::json!({"rules_id": rules_id, "modules": entries});
+                fs::write(&p, serde_json::to_string_pretty(&v)?)
+                    .map_err(|e| format!("{}: {e}", p.display()))?;
+            }
+            match output {
+                Some(p) => fs::write(&p, text).map_err(|e| format!("{}: {e}", p.display()))?,
+                None => print!("{text}"),
             }
         }
         BidCommand::Compile { file, output } => {

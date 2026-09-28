@@ -22,7 +22,9 @@ mod tests {
     #[test]
     fn rules_and_cards_are_embedded() {
         assert!(RULE_FILES.len() > 10);
-        assert!(RULE_FILES.iter().all(|(n, _)| n.starts_with("conventions/")));
+        assert!(RULE_FILES
+            .iter()
+            .all(|(n, _)| n.starts_with("conventions/")));
         assert!(card("21GF-DEFAULT").is_some());
         assert_eq!(RULES_ID.len(), 16);
     }

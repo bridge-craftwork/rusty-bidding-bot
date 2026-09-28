@@ -48,7 +48,10 @@ fn fnv(h: &mut u64, bytes: &[u8]) {
 
 fn main() {
     let manifest = PathBuf::from(std::env::var("CARGO_MANIFEST_DIR").unwrap());
-    let root = manifest.join("../..").canonicalize().expect("workspace root");
+    let root = manifest
+        .join("../..")
+        .canonicalize()
+        .expect("workspace root");
     let rules_dir = root.join("conventions");
     let cards_dir = root.join("crates/bridge-card/tests/fixtures/bbsa");
     // A directory is scanned recursively for changes.
@@ -63,7 +66,11 @@ fn main() {
         .map(|p| (relative(&p, &root), p))
         .collect();
     rules.sort();
-    assert!(!rules.is_empty(), "no .bid files under {}", rules_dir.display());
+    assert!(
+        !rules.is_empty(),
+        "no .bid files under {}",
+        rules_dir.display()
+    );
 
     let mut cards = Vec::new();
     collect(&cards_dir, "bbsa", &mut cards);
@@ -78,7 +85,12 @@ fn main() {
         fnv(&mut hash, name.as_bytes());
         fnv(&mut hash, &std::fs::read(abs).expect("read rule file"));
         println!("cargo:rerun-if-changed={}", abs.display());
-        writeln!(out, "    ({name:?}, include_str!({:?})),", abs.display().to_string()).unwrap();
+        writeln!(
+            out,
+            "    ({name:?}, include_str!({:?})),",
+            abs.display().to_string()
+        )
+        .unwrap();
     }
     out.push_str("];\n\n");
     out.push_str("/// Stock cards: (name, .bbsa text).\n");
@@ -86,7 +98,12 @@ fn main() {
     for abs in &cards {
         let name = abs.file_stem().unwrap().to_string_lossy().into_owned();
         println!("cargo:rerun-if-changed={}", abs.display());
-        writeln!(out, "    ({name:?}, include_str!({:?})),", abs.display().to_string()).unwrap();
+        writeln!(
+            out,
+            "    ({name:?}, include_str!({:?})),",
+            abs.display().to_string()
+        )
+        .unwrap();
     }
     out.push_str("];\n\n");
     writeln!(

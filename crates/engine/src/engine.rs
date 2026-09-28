@@ -464,7 +464,9 @@ impl Engine {
             let mut b = best.b.clone();
             step.rule = Some(entry.source.clone());
             step.explanation = Some(ctx.interpolate(&entry.rule.explanation, &mut b));
-            step.alert = entry.rule.alert.clone();
+            // On a copy of the bindings: filling in the text must not
+            // change what the rest of this step resolves.
+            step.alert = fill_alert(&entry.rule.alert, &ctx, &b);
             step.artificial = entry.rule.artificial;
             // What the call shows: the union over every rule that makes it.
             let meanings: Vec<Expr> = matching
@@ -565,6 +567,7 @@ impl Engine {
         }
         let mut traces = Vec::new();
         let mut eligible: Vec<Eligible> = Vec::new();
+        let mut alerts = Vec::new();
         let private = PrivateCache::default();
         for (idx, c) in cands.iter().enumerate() {
             let entry = &sys.rules[c.entry];
@@ -611,6 +614,7 @@ impl Engine {
                     prefer: prefer.unwrap_or(0.0),
                 });
             }
+            alerts.push(fill_alert(&entry.rule.alert, &ctx, &b));
             traces.push(CandidateTrace {
                 call: c.call.clone(),
                 rule: entry.source.clone(),
@@ -641,11 +645,10 @@ impl Engine {
         let (call, explanation, alert, rule) = match chosen {
             Some(idx) => {
                 let t = &traces[idx];
-                let entry = &sys.rules[cands[idx].entry];
                 (
                     t.call.clone(),
                     t.explanation.clone(),
-                    entry.rule.alert.clone(),
+                    alerts[idx].take(),
                     Some(t.rule.clone()),
                 )
             }
@@ -725,6 +728,25 @@ pub struct DealAuction {
     pub calls: Vec<DealCall>,
     /// False when the auction was stopped at `max_calls`.
     pub complete: bool,
+}
+
+/// An alert with `{name}`s in its text filled in, as explanations are
+/// (`{nt_min} to {nt_max}` is announced as `15 to 17`). Works on a copy of
+/// the bindings, so it cannot change anything else the caller resolves.
+fn fill_alert(alert: &Option<Alert>, ctx: &Ctx, b: &Bindings) -> Option<Alert> {
+    let fill = |t: &str| {
+        if t.contains('{') {
+            ctx.interpolate(t, &mut b.clone())
+        } else {
+            t.to_string()
+        }
+    };
+    alert.as_ref().map(|a| match a {
+        Alert::Alert { text } => Alert::Alert {
+            text: text.as_deref().map(fill),
+        },
+        Alert::Announce { text } => Alert::Announce { text: fill(text) },
+    })
 }
 
 fn sorted(b: &Bindings) -> Vec<(String, String)> {

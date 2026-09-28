@@ -254,14 +254,18 @@ fn string_list(v: Option<&Json>, field: &str, d: &mut Diags) -> Vec<String> {
             .filter_map(|x| match x.as_str() {
                 Some(s) => Some(s.to_string()),
                 None => {
-                    d.error(format!("{field}: expected strings like \"general.style=bba\""));
+                    d.error(format!(
+                        "{field}: expected strings like \"general.style=bba\""
+                    ));
                     None
                 }
             })
             .collect(),
         Some(Json::String(s)) => vec![s.clone()],
         Some(_) => {
-            d.error(format!("{field}: expected a list of \"path=value\" strings"));
+            d.error(format!(
+                "{field}: expected a list of \"path=value\" strings"
+            ));
             Vec::new()
         }
     }
@@ -394,7 +398,8 @@ fn seat(req: &Json, field: &str, default: Option<Direction>, d: &mut Diags) -> O
                 .next()
                 .and_then(|c| Direction::from_char(c.to_ascii_uppercase()));
             if dir.is_none() {
-                d.error(format!("{field}: {s:?} is not a seat")).hint("N, E, S or W");
+                d.error(format!("{field}: {s:?} is not a seat"))
+                    .hint("N, E, S or W");
             }
             dir
         }
@@ -418,25 +423,29 @@ fn scoring(req: &Json, d: &mut Diags) -> ScoringMethod {
         Some(s) => match ScoringMethod::from_pbn(s.trim()) {
             Some(m @ (ScoringMethod::Matchpoints | ScoringMethod::IMP)) => m,
             _ => {
-                d.error(format!("scoring: {s:?} is not MP or IMP")).hint("MP or IMP");
+                d.error(format!("scoring: {s:?} is not MP or IMP"))
+                    .hint("MP or IMP");
                 ScoringMethod::Matchpoints
             }
         },
     }
 }
 
-const HAND_HINT: &str = "spades.hearts.diamonds.clubs, e.g. AK52.KJ7.Q94.K83 (T for ten, - for a void)";
+const HAND_HINT: &str =
+    "spades.hearts.diamonds.clubs, e.g. AK52.KJ7.Q94.K83 (T for ten, - for a void)";
 
 /// A 13-card hand, S.H.D.C.
 fn parse_hand(text: &str, field: &str, d: &mut Diags) -> Option<Hand> {
     let Some(hand) = Hand::from_pbn(text) else {
-        d.error(format!("{field}: {text:?} is not a hand")).hint(HAND_HINT);
+        d.error(format!("{field}: {text:?} is not a hand"))
+            .hint(HAND_HINT);
         return None;
     };
     let cards = hand.cards();
     for (i, c) in cards.iter().enumerate() {
         if cards[..i].contains(c) {
-            d.error(format!("{field}: {c} appears twice")).hint(HAND_HINT);
+            d.error(format!("{field}: {c} appears twice"))
+                .hint(HAND_HINT);
             return None;
         }
     }
@@ -459,13 +468,24 @@ fn parse_deal(v: &Json, d: &mut Diags) -> Option<[Hand; 4]> {
                     .hint("N:<north> <east> <south> <west>, each S.H.D.C");
                 return None;
             };
-            for dir in [Direction::North, Direction::East, Direction::South, Direction::West] {
+            for dir in [
+                Direction::North,
+                Direction::East,
+                Direction::South,
+                Direction::West,
+            ] {
                 let h = deal.hand(dir);
-                hands[dir.to_index()] = parse_hand(&h.to_pbn(), &format!("deal.{}", dir.to_char()), d);
+                hands[dir.to_index()] =
+                    parse_hand(&h.to_pbn(), &format!("deal.{}", dir.to_char()), d);
             }
         }
         Json::Object(m) => {
-            for dir in [Direction::North, Direction::East, Direction::South, Direction::West] {
+            for dir in [
+                Direction::North,
+                Direction::East,
+                Direction::South,
+                Direction::West,
+            ] {
                 let key = dir.to_char().to_string();
                 match m.get(&key).and_then(Json::as_str) {
                     Some(t) => hands[dir.to_index()] = parse_hand(t, &format!("deal.{key}"), d),
@@ -501,7 +521,12 @@ fn parse_deal(v: &Json, d: &mut Diags) -> Option<[Hand; 4]> {
 /// Calls from a string (`"1NT Pass 2C"`) or a list (`["1NT", "Pass"]`),
 /// checked for legality from `dealer`. A position in a string is reported
 /// as `col` (1-based).
-fn parse_auction(v: Option<&Json>, field: &str, dealer: Direction, d: &mut Diags) -> Option<Vec<Call>> {
+fn parse_auction(
+    v: Option<&Json>,
+    field: &str,
+    dealer: Direction,
+    d: &mut Diags,
+) -> Option<Vec<Call>> {
     let tokens: Vec<(String, Option<usize>)> = match v {
         None | Some(Json::Null) => Vec::new(),
         Some(Json::String(s)) => {
@@ -533,7 +558,9 @@ fn parse_auction(v: Option<&Json>, field: &str, dealer: Direction, d: &mut Diags
             out
         }
         Some(_) => {
-            d.error(format!("{field}: expected a string like \"1NT Pass\" or a list of calls"));
+            d.error(format!(
+                "{field}: expected a string like \"1NT Pass\" or a list of calls"
+            ));
             return None;
         }
     };
@@ -551,8 +578,10 @@ fn parse_auction(v: Option<&Json>, field: &str, dealer: Direction, d: &mut Diags
             }
         };
         if auction.is_complete() {
-            d.error(format!("{field}: call {n} ({tok}): the auction is already over"))
-                .at(col.map(|_| 1), *col);
+            d.error(format!(
+                "{field}: call {n} ({tok}): the auction is already over"
+            ))
+            .at(col.map(|_| 1), *col);
             return None;
         }
         if !auction.is_legal(&call) {
@@ -646,7 +675,10 @@ fn contract_json(dealer: Direction, calls: &[Call]) -> (Json, Json) {
         return (Json::Null, Json::Null);
     }
     match a.final_contract() {
-        Some(fc) => (Json::String(fc.to_pbn()), Json::String(seat_str(fc.declarer))),
+        Some(fc) => (
+            Json::String(fc.to_pbn()),
+            Json::String(seat_str(fc.declarer)),
+        ),
         None => (Json::String("Pass".into()), Json::Null),
     }
 }
@@ -693,9 +725,7 @@ pub fn create_engine(request: &str) -> String {
             }
             Some(cards) => {
                 if let Some((id, engine, names)) = engine_for_cards(cards, &mut d) {
-                    let side = |seat: Direction, name: &str| {
-                        json!({"name": name, "modules": engine.system(seat).modules})
-                    };
+                    let side = |seat: Direction, name: &str| json!({"name": name, "modules": engine.system(seat).modules});
                     body = json!({
                         "engine": id,
                         "ns": side(Direction::North, &names[0]),
@@ -746,7 +776,11 @@ pub fn validate(request: &str) -> String {
     let dealer = seat(
         &req,
         "dealer",
-        if has_auction { None } else { Some(Direction::North) },
+        if has_auction {
+            None
+        } else {
+            Some(Direction::North)
+        },
         &mut d,
     );
     if let Some(dealer) = dealer {
@@ -902,7 +936,8 @@ pub fn bid_deal(request: &str) -> String {
         .get("max_calls")
         .and_then(Json::as_u64)
         .map_or(MAX_CALLS, |n| n as usize);
-    let (Some((_, engine)), Some(hands), Some(dealer), Some(prefix)) = (engine, hands, dealer, prefix)
+    let (Some((_, engine)), Some(hands), Some(dealer), Some(prefix)) =
+        (engine, hands, dealer, prefix)
     else {
         return respond(empty, d);
     };
@@ -992,7 +1027,11 @@ pub fn reference(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
     let Some(modules) = modules_or_report(&mut d) else {
-        return d.0.iter().map(|x| format!("# error: {}\n", x.message)).collect();
+        return d
+            .0
+            .iter()
+            .map(|x| format!("# error: {}\n", x.message))
+            .collect();
     };
     let active = active_sets(&req, &mut d);
     let side = match req.get("side").and_then(Json::as_str) {
@@ -1010,13 +1049,14 @@ pub fn reference(request: &str) -> String {
     );
     let entries = bidspec::reference::entries(modules);
     let on = active.as_ref().map(|a| a[side].clone());
-    let marker = on.as_ref().map(|list| move |name: &str| list.iter().any(|m| m == name));
-    let mut out: String = d
-        .0
-        .iter()
-        .filter(|x| x.severity != Severity::Info)
-        .map(|x| format!("# {}: {}\n", severity_word(x.severity), x.message))
-        .collect();
+    let marker = on
+        .as_ref()
+        .map(|list| move |name: &str| list.iter().any(|m| m == name));
+    let mut out: String =
+        d.0.iter()
+            .filter(|x| x.severity != Severity::Info)
+            .map(|x| format!("# {}: {}\n", severity_word(x.severity), x.message))
+            .collect();
     out.push_str(&bidspec::reference::text(
         &entries,
         &header,
@@ -1055,11 +1095,9 @@ mod tests {
 
     #[test]
     fn bids_a_hand_like_the_engine_does() {
-        let r = parse(&bid(
-            r#"{"cards": {"ns": "21GF-DEFAULT", "ew": "21GF-GIB"},
+        let r = parse(&bid(r#"{"cards": {"ns": "21GF-DEFAULT", "ew": "21GF-GIB"},
                 "hand": "AK52.KJ7.Q94.K83", "dealer": "N", "vul": "None",
-                "scoring": "IMP", "auction": ""}"#,
-        ));
+                "scoring": "IMP", "auction": ""}"#));
         assert_eq!(r["ok"], true, "{r}");
         assert_eq!(r["call"], "1NT", "{r}");
         assert_eq!(r["seat"], "N");
@@ -1120,7 +1158,9 @@ mod tests {
         ));
         assert_eq!(r["ok"], false);
         let diags = r["diagnostics"].as_array().unwrap();
-        assert!(diags.iter().any(|x| x["message"].as_str().unwrap().starts_with("hand:")));
+        assert!(diags
+            .iter()
+            .any(|x| x["message"].as_str().unwrap().starts_with("hand:")));
         let illegal = diags
             .iter()
             .find(|x| x["message"].as_str().unwrap().contains("not legal"))
@@ -1146,7 +1186,9 @@ mod tests {
         assert_eq!(v["ok"], false);
         assert_eq!(v["diagnostics"][0]["line"], 1);
 
-        let v = parse(&validate(r#"{"hand": "AK52.KJ7.Q94.K83", "dealer": "S", "auction": "1NT X XX"}"#));
+        let v = parse(&validate(
+            r#"{"hand": "AK52.KJ7.Q94.K83", "dealer": "S", "auction": "1NT X XX"}"#,
+        ));
         assert_eq!(v["ok"], true, "{v}");
     }
 
@@ -1177,7 +1219,10 @@ mod tests {
     #[test]
     fn reference_text_matches_the_data() {
         let t = reference(r#"{"cards": {"ns": "21GF-DEFAULT"}}"#);
-        assert!(t.starts_with("# rusty-bidding-bot conventions reference"), "{t}");
+        assert!(
+            t.starts_with("# rusty-bidding-bot conventions reference"),
+            "{t}"
+        );
         assert!(t.contains("== stayman"), "{}", &t[..500]);
         assert!(t.contains("[on]") && t.contains("[off]"));
         let c = parse(&conventions("{}"));

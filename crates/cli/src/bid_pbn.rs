@@ -57,7 +57,12 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
         .par_iter()
         .map(|board| {
             let mut hands: [Hand; 4] = Default::default();
-            for dir in [Direction::North, Direction::East, Direction::South, Direction::West] {
+            for dir in [
+                Direction::North,
+                Direction::East,
+                Direction::South,
+                Direction::West,
+            ] {
                 let h = board.deal.hand(dir);
                 if h.len() != 13 {
                     return Err(format!(
@@ -74,7 +79,14 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
                 .or_else(|| board.extra_tag("Scoring").and_then(ScoringMethod::from_pbn))
                 .unwrap_or_default();
             engine
-                .bid_deal(&hands, dealer, board.vulnerable, scoring, &opts.prefix, opts.max_calls)
+                .bid_deal(
+                    &hands,
+                    dealer,
+                    board.vulnerable,
+                    scoring,
+                    &opts.prefix,
+                    opts.max_calls,
+                )
                 .map(|a| (dealer, a))
         })
         .collect();
@@ -117,7 +129,8 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
         match result {
             Ok((dealer, auction)) => {
                 stats.auctions += 1;
-                let mut calls: Vec<Call> = auction.calls.iter().map(|c| c.step.call.clone()).collect();
+                let mut calls: Vec<Call> =
+                    auction.calls.iter().map(|c| c.step.call.clone()).collect();
                 if !auction.complete {
                     stats.runaway += 1;
                     eprintln!(
@@ -239,7 +252,10 @@ fn annotated_auction(auction: &DealAuction, all_meanings: bool) -> (Vec<String>,
 
 /// Safe inside a one-line quoted tag value.
 fn note_text(s: &str) -> String {
-    s.replace('"', "'").replace(['\r', '\n'], " ").trim().to_string()
+    s.replace('"', "'")
+        .replace(['\r', '\n'], " ")
+        .trim()
+        .to_string()
 }
 
 /// `text` without a previous run's header (bba-cli's or ours), so headers do
@@ -266,9 +282,13 @@ fn strip_owned_header(text: &str) -> String {
 }
 
 /// Read, bid, write. `output` `-` is stdout.
-pub fn run_files(input: &Path, output: &Path, engine: &Engine, opts: &Options) -> Result<Stats, String> {
-    let text =
-        std::fs::read_to_string(input).map_err(|e| format!("{}: {e}", input.display()))?;
+pub fn run_files(
+    input: &Path,
+    output: &Path,
+    engine: &Engine,
+    opts: &Options,
+) -> Result<Stats, String> {
+    let text = std::fs::read_to_string(input).map_err(|e| format!("{}: {e}", input.display()))?;
     let (out, stats) = bid_pbn(&text, engine, opts)?;
     if output == Path::new("-") {
         print!("{out}");
@@ -283,8 +303,7 @@ mod tests {
     use super::*;
 
     fn engine() -> Engine {
-        let modules =
-            rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()).unwrap();
+        let modules = rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()).unwrap();
         let card = bridge_card::bbsa::import(rbb_assets::card("21GF-DEFAULT").unwrap(), None)
             .unwrap()
             .0;
@@ -322,12 +341,15 @@ mod tests {
         // 1NT is announced and the transfer alerted: both get notes, placed
         // after the auction rows.
         assert!(out.contains("1N =1=    Pass  2D =2="), "{out}");
-        assert!(out.contains("[Note \"2:Transfer to hearts\"]\n[OptimumResultTable"), "{out}");
+        assert!(
+            out.contains("[Note \"2:Transfer to hearts\"]\n[OptimumResultTable"),
+            "{out}"
+        );
         // Reads back.
         let boards = bridge_encodings::pbn::read_pbn(&out).unwrap();
         let a = boards[0].auction.as_ref().unwrap();
         assert!(a.is_complete());
-        assert_eq!(a.get_note(1).is_some(), true);
+        assert!(a.get_note(1).is_some());
     }
 
     #[test]
