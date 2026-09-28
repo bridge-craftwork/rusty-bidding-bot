@@ -310,3 +310,27 @@ With four spades, a five-card minor and 11-12, BBA responds 1S; we bid
 the minor at the two level. Now 1S, and 2m with four spades needs 13 or
 a six-card minor (test 41 keeps 2D with six). +52 by distance, +71 to
 the bidding side.
+
+## Sources
+
+- **The system:** Standard American responses as BBA's Basic-Bridge card
+  plays them. The general framework is standard practice, not yet cited
+  to a book or article.
+- **BBA's meanings:** every Basic_* deal re-bid through
+  `bba-cli --all-meanings` ("How the rules were set"), which is where the
+  first bands came from.
+- **Rick's rulings:** the treatments `one_club_responses` and
+  `two_nt_response`, strong jump shift 15+, two-level new suit and the
+  three-card minor first, as BBA (2026-09-22); the raise structure over 1M
+  (2026-09-23, one detail still to confirm); total points count length
+  (2026-09-23); Walsh's game force at 12+.
+- **BBA probes:** `rbb probe` on Basic-Bridge for the `bba` raise model
+  (2026-09-24, the tables in "BBA treatment"); `probes/sjs-1H.toml`,
+  `probes/ijs-1S.toml`, `probes/drury-opener-21GF-DEFAULT.toml` and
+  `probes/drury-opener-21GF-GIB.toml` (2026-09-25).
+- **Corpus measurements:** strong jump shifts on HCP, the fourth trump
+  with shortness, over 1♥ 1♠ before a five-card minor, and the Drury
+  trial (not adopted), all 2026-09-25.
+- **Where we differ:** "Accepted differences from BBA"; the invitational
+  jump shift, where par beat BBA's 10-12 HCP range and ours stays
+  (2026-09-25).

@@ -57,3 +57,20 @@ system.
   ladder, so a strong advancer cannot invite or force.
 - `doubles.responsive.through` (a text field) is not read; the rules
   cover two- and three-level raises and stop there.
+
+## Sources
+
+- **The convention:** the responsive double. Standard practice, not yet
+  cited to a book or article.
+- **Rick's rulings:** what the double shows after a takeout double and
+  after an overcall, and advancer's 6/8/10 ladder (2026-09-22).
+- **BBA evidence:** BBA's stated meaning after partner's overcall
+  ("Responsive double, 11 to 37 total points ..."), and agreement on
+  Responsive_Double, Responsive_Double_after_Overcall, Double_by_Advancer
+  and Maximal_After_Overcall. No `probes/*.toml` spec yet.
+- **Where we differ from Rick's ruling:** after partner's overcall the
+  rules use 10+ at the two level and 11+ at the three, following BBA and
+  the measurement; Rick's ladder stands after a takeout double. This is
+  still to be settled.
+- **Where we differ from BBA:** on Double_by_Advancer BBA passes 10-11
+  counts with 4-4 in the unbid suits that our rule doubles.

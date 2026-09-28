@@ -279,3 +279,25 @@ Corpus par:
 | No split | -163,785 |
 | Relative vulnerability | -163,691 |
 | Split on our vulnerability | -163,528 (adopted) |
+
+## Sources
+
+- **Rick's rulings:** the opening guidelines (weak two 4-9 with six;
+  looser third seat; no weak two in fourth seat; seven cards at the three
+  level; third-seat four-card majors; the rule of 15 in fourth seat; 12
+  total points for a one-level opening), 2026-09-22; a major weak two up
+  to 10 HCP, 2026-09-23; the default opens weak twos as BBA does, with
+  the previous default kept as the `standard` treatment, 2026-09-24.
+- **Book practice:** the rule of 15 and the rule of 20 (measured and not
+  adopted) are standard practice, not yet cited to a book or article.
+- **BBA probes:** `rbb probe` with the opener's hand fixed, one feature at
+  a time (2026-09-24, command lines and hands in the section); responder
+  to a three-level preempt, `probes/preempt-resp-3S.toml` and
+  `probes/preempt-resp-3C.toml` (2026-09-25).
+- **BBA evidence:** Basic_Weak_2, Basic_What_To_Open and the Basic_*
+  corpus (ten-counts, side majors, six-four minors).
+- **Corpus measurements:** the opening rules, the rule of 20, the 10-HCP
+  weak two, the side four-card major trial, and the responder rules split
+  on vulnerability.
+- **Where we differ:** "Accepted differences from BBA", and the default's
+  departures listed at the end of "BBA treatment".

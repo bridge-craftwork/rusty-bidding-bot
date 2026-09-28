@@ -75,3 +75,20 @@ requires `!game_reached`. Tiny on the corpus (5 boards: +20 par, −12
 side IMPs), adopted on Rick's ruling. Keeping the LoTT out of the whole
 game force was worse: it sent a hand with a singleton heart jack to 3NT
 (the 4♦ case in total-tricks.test).
+
+## Sources
+
+- **The principle:** the Law of Total Tricks (LoTT), compete to the level
+  of the total trumps. Standard practice, not yet cited to a book or
+  article in these notes.
+- **Rick's rulings:** the guidance from Basic_Takeout_Double 193
+  (2026-09-27): compete when both sides are bidding, count the double as
+  four in the other major, play for the 19 hands in 20, hedge a trick at
+  unfavourable; do not pull partner's 3NT to a minor unless looking for
+  slam (2026-09-27, ticket basic-takeout-double-b100).
+- **BBA evidence:** BBA's 4♦ on the ticket board; the takeout double's
+  shape from `probes/tools/takeout_shape.py`; BBA's power doubles from 17
+  HCP (`takeout-double.notes.md`).
+- **Corpus measurements:** the variant table, judged by par distance and
+  by side IMPs; "still bidding" is kept although the unrestricted rule
+  scores more par, because the extra cases are wrong bridge.

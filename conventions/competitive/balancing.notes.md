@@ -64,3 +64,18 @@ the 46 scenarios that moved: calls +29.8, contracts +11.0, auctions -6.8
 - Partner should read a reopening **double** as lighter than a direct
   one; those advance rules still use the direct-seat ranges (the suit
   overcall no longer does).
+
+## Sources
+
+- **Rick's rulings:** follow BBA's meanings, which are the usual lighter
+  balancing ranges (2026-09-22).
+- **BBA evidence:** `bba-cli --all-meanings` on the Balancing scenario
+  (21GF cards, 5,197 calls), tabled in "Evidence"; advancer's ranges over
+  a balancing suit bid are BBA's own Balancing meanings. No
+  `probes/*.toml` spec yet.
+- **Book practice:** the lighter balancing ranges are standard practice,
+  not yet cited to a book or article.
+- **Corpus measurements:** the three balancing scenarios and the 46 that
+  moved (2026-09-23).
+- **Where we differ:** advancer still reads a reopening double with the
+  direct-seat ranges (Gaps).

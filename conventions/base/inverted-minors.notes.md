@@ -40,3 +40,19 @@ Corpus, together with the Basic-Bridge fixes below: -163,528 ->
   10-12.
 - **3NT:** the fallback with 13+, a fit and no major, as BBA. We had no
   call.
+
+## Sources
+
+- **The convention:** inverted minor raises. The structure is modelled on
+  BBA's treatment, learned by probing; otherwise standard practice, not
+  yet cited to a book or article.
+- **Rick's rulings:** none recorded for this module.
+- **BBA probes:** `probes/minor-resp-inv-1C.toml`,
+  `probes/minor-resp-inv-1D.toml`, `probes/inv-opener-1C.toml`,
+  `probes/inv-opener-1D.toml`; without inverted minors (Basic-Bridge),
+  `probes/minor-resp-std-1C.toml`. Opener's meanings are BBA's alerts.
+- **Corpus measurements:** 2026-09-25, with the Basic-Bridge fixes
+  (+829).
+- **Where we differ:** opener's stopper bids are simpler than BBA's (the
+  cheapest stopper with 15+ or an unbalanced hand), so opener agrees
+  about 42% of the time.

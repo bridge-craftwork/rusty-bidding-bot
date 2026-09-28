@@ -220,3 +220,25 @@ The same shape with a real invitation in HCP (8+, KT432.Q32.2.QJ93)
 bids 2NT despite the singleton, as BBA does (Basic_Openers_Rebid 172).
 And after 2NT and opener's decline in three of the major responder
 passes (it had no rule; Basic_Openers_Rebid 225, BBA passes).
+
+## Sources
+
+- **The convention:** Jacoby transfers over 1NT. Standard practice, not
+  yet cited to a book or article.
+- **Rick's rulings:** responder's new suit (3m) is game forcing
+  (2026-09-21); 8 HCP with a six-card major invites; opener bids 3M, not
+  4M, after the new suit ("as Rick plays it"); Texas for slam needs 18
+  (`texas-transfers.notes.md`).
+- **BBA probes:** `rbb probe` on 21GF-DEFAULT with
+  `--prefix "1NT Pass 2D Pass 2H Pass" --vary-tens` (the tens table) and
+  on Basic-Bridge for the 5♥-4♠ treatment (2026-09-24), both given as
+  command lines and hands; not yet kept as `probes/*.toml` specs.
+- **BBA evidence:** the Jacoby_Transfer and Jacoby_Super-Accept corpora;
+  the corpus table of opener's answers to the non-forcing 2♠
+  (2026-09-24); interference evidence in `nt-interference.notes.md`.
+- **Corpus measurements:** length points (2026-09-23), the super-accept
+  floor and the module-removal screen (2026-09-25).
+- **Where we differ:** a ten in the trump suit, the Jacoby/Texas choice,
+  opener after the new suit, and responder after a plain super-accept
+  ("Accepted differences from BBA"); responder's 2NT/3NT move a point
+  with length points.

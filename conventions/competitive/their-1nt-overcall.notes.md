@@ -118,3 +118,20 @@ six of his suit and a singleton; over a run, partner doubled and acts
 next, so opener passes. Measured together with systems on over the
 doubled 1NT overcall (advances): +149 par, +654 side IMPs (98 boards);
 no-rule positions 3,265 → 3,060.
+
+## Sources
+
+- **The approach:** penalty double with 10+ once they overcall 1NT over
+  our opening, and otherwise competitive bidding one level higher.
+  Standard practice, not yet cited to a book or article.
+- **Rick's rulings:** ticket basic-takeout-double-b160 (2026-09-27): the
+  opener's rules after our penalty double.
+- **BBA evidence:** `bba-cli --all-meanings` on Opps_Overcall_1NT
+  (21GF-DEFAULT, 406 decisions), with a grid search over those decisions
+  for the new-suit floor, the raise band and the double threshold. No
+  `probes/*.toml` spec yet.
+- **Corpus measurements:** 2026-09-23 (72.8% to 86.5% at the decision)
+  and 2026-09-27 (+149 par, +654 side IMPs).
+- **Where we differ:** BBA's stated 7-12 for a new suit against the 9
+  floor it actually bids; no preemptive jump raise ("Accepted differences
+  from BBA").

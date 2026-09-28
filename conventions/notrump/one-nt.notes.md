@@ -508,3 +508,30 @@ of the minor with a fit and a minimum (forcing; responder bids six from
 17 total points, else five), 3NT without a fit (responder bids 6NT with
 slam values, else passes). Full corpus +1,943 by par distance, +3,630 by
 side (481 boards).
+
+## Sources
+
+- **The system:** a 15-17 1NT opening and natural responses (2NT
+  invites, 3NT, quantitative 4NT, 6NT), as BBA plays them on 21GF-DEFAULT
+  and Basic-Bridge. The point bands are standard practice, not yet cited
+  to a book or article.
+- **Rick's rulings:** "we do not model BBA's finer valuation: the aim is
+  defensible bids" (2026-09-21); responder counts length points and the
+  NT opener usually does not (2026-09-23); the 6NT jump with 17 (32
+  combined, 2026-09-23); 4-3-3-3 downgrade tried at his request and not
+  adopted (2026-09-23); track BBA's 9-count valuation "down to 100%", and
+  his reading that BBA's responses value honours against a 1NT that may
+  hold 5-4-2-2 with four hearts (2026-09-24).
+- **BBA probes:** `rbb probe --vary-tens` command lines in "Evidence from
+  BBA"; the 2026-09-24 runs `probes/ntb` and `probes/nt1` (sandbox
+  outputs); `rbb grid` specs `probes/nt-9count-*.toml`,
+  `probes/nt-7count-placements-AQJTT.toml` and
+  `probes/open-15-5422-major-mirror.toml`; random hands from
+  `probes/gen_hands.py`; `rbb simulate` with
+  `probes/pools/bba-1nt-15-17-with-5422.txt`.
+- **Corpus measurements:** the slam jump (+2,543), length points, opener's
+  count, the minor slam tries (2026-09-25, 2026-09-27) and the
+  double-dummy slam calibration.
+- **Where we differ:** BBA's finer valuation, flat 8-counts, tens with a
+  five-card minor, and 16-17 opposite 15-17 ("Accepted differences from
+  BBA").

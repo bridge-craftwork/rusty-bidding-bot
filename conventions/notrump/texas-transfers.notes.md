@@ -109,3 +109,22 @@ suit-point rule. `8.AQ9732.K94.AQ8` (15 HCP + 3 for the singleton = 18)
 now Texases and asks for keycards; without the singleton
 (`82.AQ9732.K94.AQ`, 17 support points) it is still mild slam interest
 via Jacoby. Corpus par **+985 IMPs**, Basic_* 0.
+
+## Sources
+
+- **The convention:** Texas transfers (4♦/4♥ over 1NT). Standard
+  practice, not yet cited to a book or article.
+- **Rick's rulings:** Texas is game only or slam values followed by
+  keycard; slam values are 33 total points even opposite opener's
+  minimum, so 18+; 8 HCP with a six-card major invites (2026-09-21); the
+  sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`).
+- **BBA probes:** the dealer3 script `six-hearts.dlr` run through
+  `rbb probe --script` (600 deals), given in full in "Evidence from BBA".
+  It is not yet kept as a `probes/*.toml` spec.
+- **BBA evidence:** the Texas_Transfer and Texas_or_Jacoby corpora; Texas
+  as a preempt over their 2♣ ("Under interference", evidence in
+  `nt-interference.notes.md`).
+- **Corpus measurements:** support points for slam values (2026-09-23,
+  +985 IMPs).
+- **Where we differ:** with 8 HCP, 10-12 HCP and 13-17 HCP, and after a
+  5♦ answer ("Accepted differences from BBA").

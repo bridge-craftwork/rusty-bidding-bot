@@ -81,3 +81,20 @@ the weak heart doubleton is a risk in notrump. Standalone: six to the
 AKQJ or seven to the AKQ; plus a doubleton or shorter without a
 stopper. +615 par, +969 side IMPs (420 boards). Without the unguarded
 condition: +601 / +942 on 603 boards, so it stays.
+
+## Sources
+
+- **The thresholds:** the textbook combined counts for 6NT and a
+  quantitative 4NT (33 HCP for slam) are standard practice, not yet cited
+  to a book or article. The numbers in the rules are calibrated on the
+  corpus's double-dummy tables ("Calibration"), one point above the
+  textbook where partner is counted at his minimum.
+- **Rick's rulings:** ticket basic-weak-2-b194 (2026-09-27): a
+  standalone major goes back to four of it over partner's 3NT.
+- **BBA evidence:** the 14,834 corpus boards where BBA bid slam and we
+  did not, and BBA's exploring sequences after a new-suit rebid ("For
+  Rick"). No `probes/*.toml` spec yet.
+- **Corpus measurements:** the threshold tables (2026-09-27) and the
+  rejected single-context version (-11,422 par).
+- **Where we differ:** responder's thresholds stay at the textbook 33,
+  although lower ones score better on the slam-dealt scenarios.

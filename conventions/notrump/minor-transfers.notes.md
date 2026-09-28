@@ -88,3 +88,22 @@ With `points` counting length a six-card minor adds two points, so
 
 The corpus has no `relay` or `four_way` card, so these are measured only
 through the `none` cards, where every option was within 10 IMPs.
+
+## Sources
+
+- **The treatments:** `relay`, `four_way` and `four_way_reversed` as Rick
+  described them (2026-09-21; `four_way` is how Rick plays it). Beyond
+  that description, standard practice, not yet cited to a book or
+  article.
+- **`bba`:** BBA's `1N-2S transfer to clubs` and `1N-3C transfer to
+  diamonds` keys, as BBA plays them in the corpus ("Evidence from BBA").
+  How BBA plays its other switch combinations (Minor Suit Stayman over
+  1NT, 3♣ Puppet Stayman, 2♠ clubs alone) is unknown, so they import as
+  `none`.
+- **Rick's rulings:** the treatments and the default (2026-09-21); the 2♠
+  range ask he mentioned is not built.
+- **BBA evidence:** the corpus figures above, and the interference
+  evidence in `nt-interference.notes.md`. No `probes/*.toml` spec yet.
+- **Corpus measurements:** when the module was added; length points
+  (2026-09-23), measured only through the `none` cards, since no corpus
+  card plays `relay` or `four_way`.

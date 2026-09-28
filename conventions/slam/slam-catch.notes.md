@@ -269,3 +269,26 @@ only on the 21GF cards.
    (HCP + ½ per card over four), so a 6-5-1-1 with 19 HCP counts 20½ and
    never reaches `slam_invite`. Every slam decision with a fit wants
    `tp(trump)`, which is why no rule here uses the bands.
+
+## Sources
+
+- **Rick's rulings:** the framing (a common catch once a trump suit is
+  agreed) and the slam decision quoted in "The decision" (33+ combined
+  points; short-suit points for the hand with fewer trumps, capped by
+  trump length; control bids before keycard; stop in game when a suit is
+  unprotected in both hands), 2026-09-23 (dated in
+  `control-bids.notes.md`).
+- **BBA evidence:** the Basic-Bridge corpus (Rabbis_Rule,
+  To_Finesse_Or_Not_To_Finesse, Endplay_3rd_Round_Strip, Basic_Major)
+  re-bid with `bba-cli --all-meanings` and tabled by support points,
+  controls and bare suits; `rbb probe` boundary hands on Basic-Bridge and
+  21GF-DEFAULT ("Evidence"). No `probes/*.toml` spec yet.
+- **Corpus measurements:** "Measured" (the Basic subset, the whole corpus
+  and the 16 slam-shaped scenarios).
+- **Book practice:** support points (1, 3, 5 for a doubleton, singleton,
+  void) are standard practice, not yet cited to a book or article.
+- **Where we differ:** we ask less often than BBA over a simple raise,
+  control-bid less often, and have no queen ask ("Accepted differences
+  from BBA"). The engine caps shortness by trump length in both hands,
+  where Rick's rule gives short-suit points only to the hand with fewer
+  trumps ("For Rick", item 4).

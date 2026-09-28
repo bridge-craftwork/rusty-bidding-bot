@@ -27,3 +27,13 @@ In all 5 differences, BBA passes where we correct to 4M.
 
 - The same choice at the six level (after 6NT with five), and 4NT
   quantitative with five.
+
+## Sources
+
+- **The rule:** opener corrects 3NT to four of the major with an
+  eight-card fit. Standard practice, not yet cited to a book or article.
+- **Rick's rulings:** none recorded for this module.
+- **BBA evidence:** the 21GF-DEFAULT corpus, BBA's call after 3NT in four
+  auctions ("Evidence from BBA"). No `probes/*.toml` spec yet.
+- **Where we differ:** in all five disagreements BBA passes where we
+  correct to 4M.

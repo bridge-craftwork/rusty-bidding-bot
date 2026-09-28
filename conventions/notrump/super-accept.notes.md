@@ -23,3 +23,17 @@ auctions. See `superaccept-doubleton.notes.md`.
 ## Gaps (not built yet)
 
 - Responder's slam tries over 3M other than keycard.
+
+## Sources
+
+- **The convention:** the Jacoby super-accept (3M with four-card support
+  over a transfer). Standard practice, not yet cited to a book or
+  article.
+- **Rick's rulings:** none specific to this module; the doubleton
+  super-accept rulings are in `superaccept-doubleton.notes.md`.
+- **BBA evidence:** the Jacoby_Super-Accept corpus (500 boards).
+- **Corpus measurements:** the 2026-09-25 removal screen that set the
+  16-point floor (`jacoby-transfers.notes.md`, "Super-accept needs 16").
+- **Where we differ:** after a 3M super-accept, responder with
+  invitational values bids game where BBA sometimes passes ("Accepted
+  differences from BBA").

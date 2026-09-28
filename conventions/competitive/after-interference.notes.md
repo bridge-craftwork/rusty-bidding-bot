@@ -353,3 +353,24 @@ uses the same rule.
   is forcing) was +99 by side and +27 by par, but it turns rebids.test's
   1H (2C) 2D (P) 2H (Basic-Bridge, 64.AK8432.AK86.9) into 3D. Kept to
   the forcing cards.
+
+## Sources
+
+- **The conventions:** negative doubles, the redouble, the cue-bid raise
+  (limit raise or better) and free bids. Standard practice, not yet
+  cited to a book or article.
+- **Rick's rulings:** negative doubles through 3♠ and what the double,
+  redouble, raises and 1NT show; over a two-level or jump overcall, the
+  forcing new suit, the 8+ double and the cue-bid raise (2026-09-22);
+  "Rick's penalty standard" for the trap pass (two of the top three or
+  three of the top five).
+- **BBA evidence:** `bba-cli --all-meanings` on the two Basic scenarios
+  ("Evidence").
+- **BBA probes:** `probes/free-bid-1D-1S.toml` (2026-09-25).
+- **Corpus measurements:** each section, judged by par distance and by
+  side IMPs (`probes/tools/sideimps.py`); the invitational work queue
+  from `probes/tools/missed_games.py` (2026-09-26).
+- **Where we differ:** opener's answer to the negative double names an
+  unbid four-card minor first, where BBA is inconsistent (for Rick);
+  the redouble after their takeout double, where the two yardsticks
+  disagree (2026-09-25, for Rick).

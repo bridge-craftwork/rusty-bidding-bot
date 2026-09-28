@@ -260,3 +260,25 @@ covered.
 | No control bids at all | control bids now ahead by 114 | 41 behind (was 427 / 890 behind this morning) |
 
 What is left is mostly spade Jacoby auctions (1S-2NT, 118 boards).
+
+## Sources
+
+- **The convention:** control (cue) bids once a suit is agreed in a game
+  force, as Rick described them on 2026-09-25 ("Rewritten to Rick's
+  description": the cheapest control first, skipping denies, past game
+  shows first-round control). Beyond that description, standard practice,
+  not yet cited to a book or article.
+- **Rick's rulings:** 2026-09-23 (a singleton is a control; control-bid
+  when there is room and an open suit; the answerer keeps showing
+  controls; 33+ combined points; stop in game when a suit is unprotected
+  in both hands); 2026-09-25 (denial by bypassing is "the actual bridge
+  meaning", and the description quoted above).
+- **BBA evidence:** 1,024 control bids in Slam_After_Major_Fit, Jacoby_2N
+  and Splinters on 21GF-DEFAULT, read with `bba-cli --all-meanings` (what
+  a control promises); BBA's ladder after `1S P 2N P 3S P` and
+  `1H P 2N P 3H P` ("The ladder"). No `probes/*.toml` spec yet.
+- **Corpus measurements:** the removal screen, the bypass fix and the
+  rewrite (2026-09-25).
+- **Where we differ:** BBA control-bids on far more hands, continues the
+  ladder with a minimum, and sometimes bids on over game in the agreed
+  suit ("Accepted differences from BBA").

@@ -331,3 +331,27 @@ BBA passes up to 14, and with 15-17 bids game about a quarter of the
 time at love all and half or more with NS vulnerable, where our rule
 waits for 17: left alone here (not part of the ticket; a candidate for
 a later par test).
+
+## Sources
+
+- **The conventions:** the 2NT feature ask and Ogust, with the usual
+  answers. Standard practice, not yet cited to a book or article.
+- **Rick's rulings:** both treatments of the 2NT ask, chosen by the card
+  (2026-09-22); the standard feature answer as the default (2026-09-24);
+  BBA's responses become the default after a par test, the old ones kept
+  as the `standard` treatment (2026-09-24); 3NT before 5♦ over a weak 2♦
+  (2026-09-27, ticket basic-weak-2-b104); game opposite a maximum answer
+  (2026-09-28, ticket basic-weak-2-b278). Ticket basic-weak-2-b201
+  (slam after the ask, 2026-09-27).
+- **BBA probes:** `rbb probe` with responder's hand fixed over 2♥ and with
+  both hands fixed over `2S Pass 2NT Pass`, at each vulnerability
+  (2026-09-24, hands in the tables); `probes/w2-2H-2S-3H.toml`,
+  `probes/w2-2D-2H-3D.toml`, `probes/w2-2D-2S-3D.toml` (2026-09-25);
+  `probes/w2-2H-2N-3C.toml`, `probes/w2-2H-2N-3H.toml` (2026-09-28).
+- **BBA evidence:** the Basic_* boards, Basic_Weak_2 in particular.
+- **Corpus measurements:** the par test of BBA's responses (+453), the
+  sign-off pass, slam after the ask (+308), the game threshold table
+  (21 adopted), judged by par and by side IMPs.
+- **Where we differ:** we pass 2x-2NT-3y-3x, where BBA sometimes bids on
+  (par decides); game opposite a feature from 13 where BBA wants about 14;
+  the vulnerability split for asking is a question for Rick.

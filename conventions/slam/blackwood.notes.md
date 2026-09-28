@@ -40,3 +40,19 @@ plays standard Blackwood *and* control bids; no corpus card does.
   against par. `slam.blackwood.queen_ask` exists in the field registry but
   no `.bbsa` key is mapped to it, so it cannot be switched on from a
   corpus card yet.
+
+## Sources
+
+- **The convention:** standard (plain) Blackwood with the usual ace
+  answers, as the Basic-Bridge card plays it. Standard practice, not yet
+  cited to a book or article.
+- **Rick's rulings:** when to ask (33 combined support points, the
+  two-branch test, no two bare side suits), 2026-09-23; written up in
+  `slam-catch.notes.md` and quoted in `control-bids.notes.md`.
+- **BBA evidence:** BBA's asks on the Basic-Bridge card (272 boards asked
+  with none or one bare side suit, none with two), re-bid with
+  `bba-cli --all-meanings`, and the `rbb probe` boundary hands, all in
+  `slam-catch.notes.md` "Evidence". No `probes/*.toml` spec yet.
+- **Corpus measurements:** the queen-ask gap (55 boards, -30 IMPs).
+- **Where we differ:** no queen ask after 4NT-5♣, where BBA asks for the
+  trump queen with the next step (Gaps).

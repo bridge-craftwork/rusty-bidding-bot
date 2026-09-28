@@ -53,7 +53,11 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   the commit message (docs/DESIGN.md).
 - `<module>.notes.md` next to each module: Rick's guidance, probe and corpus
   evidence, accepted differences from BBA, gaps and open questions. Update it
-  when a decision is made or a probe settles something.
+  when a decision is made or a probe settles something. Each ends with a
+  **Sources** section: where the rules come from (books, articles, URLs,
+  Rick's dated rulings, probe specs, corpus measurements) and where they
+  differ from that source; "standard practice, not yet cited" when that
+  is the truth (docs/CONTRACT.md, Part 2).
 - `cargo run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything).
 - `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:

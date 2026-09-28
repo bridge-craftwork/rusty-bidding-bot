@@ -60,3 +60,17 @@ where opener showed four hearts): +2,574 by distance, +2,850 to the
 bidding side (1,468 boards). With the fix, NMF beats no NMF by 930
 IMPs by distance (955 to the bidding side): the finding above was the
 bug.
+
+## Sources
+
+- **The convention:** New Minor Forcing after 1m-1M-1NT. Standard
+  practice, not yet cited to a book or article.
+- **Rick's rulings:** NMF is its own convention; without it the same bid
+  is natural and not forcing (2026-09-22).
+- **BBA evidence:** Basic_* under `--set general.style=bba` showed no
+  divergence involving the ask, so there are no `bba` rules (2026-09-24).
+  No `probes/*.toml` spec yet.
+- **Corpus measurements:** the removal screen and the 4-3 fit bug
+  (2026-09-25): with the fix, NMF beats no NMF by 930 IMPs by distance.
+- **Where we differ:** none recorded from BBA. Suggestions not yet tried
+  (opener accepting with 13, 3NT with a flat 5-3) are in "For Rick".

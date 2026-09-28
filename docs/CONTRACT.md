@@ -230,6 +230,22 @@ These are the habits the rule set in this repository follows
   differences from BBA and why, gaps and open questions. Update it when a
   decision is made or a probe settles something, and cite the probe specs
   (`probes/NAME.toml`) it relies on.
+- **Every `.notes.md` has a "Sources" section** saying where the module's
+  rules come from (Rick, 2026-09-28: "We should document in our config
+  files where we are sourcing the bidding rules"). Name each kind that
+  applies:
+  - books, articles and URLs, and published convention descriptions;
+  - Rick's rulings, with their dates (and the ticket, if one prompted it);
+  - BBA probes, by their spec (`probes/NAME.toml`, or the `rbb probe`
+    command line when there is no spec), and `bba-cli --all-meanings`
+    readings;
+  - corpus measurements that set a threshold or decided a choice.
+
+  A rule adopted from a source says where it **differs** from that source
+  (a book's range, a convention description, BBA's treatment, Rick's
+  wording), and why. Where the source is simply common practice, say
+  "standard practice, not yet cited" rather than inventing a citation;
+  add the reference when one is found.
 - **No "no rule" in live auctions.** When the engine has no rule after its
   side has entered the auction it passes, which is usually a missing
   continuation. `rbb compare` reports these ("no rule in a live auction");

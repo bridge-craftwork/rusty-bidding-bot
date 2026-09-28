@@ -48,3 +48,19 @@ corpus):
 
 - Cuebidding after a super-accept: build it (with controls, not
   stoppers?), or keep bidding game directly?
+
+## Sources
+
+- **The convention:** BBA's "Extended acceptance after NT" `.bbsa` key,
+  as BBA plays it; learned from BBA's auctions, not from a published
+  description. Not yet cited to a book or article.
+- **Rick's rulings:** with the queen in the spade doubleton, 2NT as BBA
+  plays it (2026-09-21).
+- **BBA evidence:** the Jacoby_Super-Accept corpus, and the 21GF-DEFAULT
+  corpus table of opener's call by spade doubleton ("Evidence from BBA").
+  BBA's cue-bid meanings after the super-accept come from EPBot's own
+  alerts. No `probes/*.toml` spec yet.
+- **Corpus measurements:** agreement when the module was added (fa9e091)
+  and the 2026-09-21 fix (artificial contracts 87 to 18).
+- **Where we differ:** no cue bids after the super-accept; we bid game or
+  sign off (Gaps).

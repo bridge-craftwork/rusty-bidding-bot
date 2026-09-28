@@ -122,3 +122,22 @@ Lebensohl continuations mature?
 
 The weak-two side's own continuations over our double (redouble, new
 suits).
+
+## Sources
+
+- **Rick's rulings:** start on the defence against preempts (2026-09-27).
+  The overcall and takeout-double discipline comes from the rulings in
+  `overcalls.notes.md` and `takeout-double.notes.md`.
+- **BBA probes (Basic-Bridge unless noted, 400 random hands each):**
+  `probes/vs-w2-2D.toml`, `vs-w2-2H.toml`, `vs-w2-2S.toml`;
+  `vs-w2-2H-X-adv.toml`, `vs-w2-2S-X-adv.toml`; `vs-w2-2H-bal.toml`;
+  `vs-p3-3C.toml`, `vs-p3-3D.toml`, `vs-p3-3H.toml`, `vs-p3-3S.toml`;
+  `vs-p3-3H-bal.toml`; `vs-p4-4H.toml`, `vs-p4-4S.toml`,
+  `vs-p4-4H-bal.toml`; Lebensohl on 21GF-DEFAULT, `vs-w2-2H-X-leb.toml`
+  and `vs-w2-2S-X-leb.toml`.
+- **Corpus measurements:** `probes/tools/par_blame.py` for the motive,
+  and each step judged by par distance and by side IMPs.
+- **Where we differ from the card:** the 21GF cards list Lebensohl after
+  doubling a weak two; BBA's version was probed and written, lost on both
+  yardsticks, and was reverted, so every card plays the natural replies
+  (for Rick). No published Lebensohl description is cited yet.

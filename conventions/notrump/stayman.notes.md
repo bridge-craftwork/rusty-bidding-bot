@@ -493,3 +493,28 @@ the count, and its fit, pass.
 - Replay: 133 boards closer to BBA, 8 further.
 - Identical auctions: +45, -5.
 - The default is unchanged.
+
+## Sources
+
+- **The convention:** 2♣ Stayman over 1NT, non-forcing, with the usual
+  answers. Standard practice, not yet cited to a book or article.
+- **Rick's rulings:** 4-3-3-3 hands skip Stayman (2026-09-21); keep our
+  2NT (8-9) after Stayman; "HCP, total points and support points, and
+  decide which to use under which circumstances" (2026-09-23); 16-17 with
+  no fit bids 4NT or 6NT, and 5♥-4♠ below game transfers then bids a
+  non-forcing 2♠ (2026-09-24).
+- **BBA probes:** `rbb probe` on Basic_Openers_Rebid board 47 and
+  variants, and the 2026-09-24 sandbox runs (`fit`, `fitS`, `acc`, `nf`,
+  `st`, `t54`), which were not kept in the repo; `rbb grid` specs
+  `probes/stay-3m-*.toml`, `probes/stay-4m-*.toml`,
+  `probes/stay-nofit-2H.toml` and `probes/stay-nofit-2S.toml`, tallied
+  with `probes/grid_tally.py`.
+- **BBA evidence:** the Stayman scenario and the Basic-Bridge,
+  21GF-DEFAULT and 21GF-GIB corpora; BBA's meanings of its 3♣/3♦ read
+  with `bba-cli --all-meanings`.
+- **Corpus measurements:** support and length points (+2,478), the
+  2026-09-24 rulings (+4,518), the `bba` style's fitted counts.
+- **Where we differ:** 4-3-3-3 with a four-card major, 2NT after Stayman
+  ("Accepted differences from BBA"); the default bids 3NT with 5-4 and a
+  minor after 2♦, which par prefers, where BBA and the `bba` style bid
+  3m.

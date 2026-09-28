@@ -237,3 +237,26 @@ doubler shows four-card minors up the line (clubs with 4-4).
 Full corpus: +1,392 par, +1,698 side IMPs (1,049 boards). One test
 changed: 2C 2D 2H with three hearts and 8 HCP now bids 4♥, not the
 fallback 3NT.
+
+## Sources
+
+- **Rick's rulings:** the double (12 total points and three cards in
+  every unbid suit, or 18+ any shape), advancer's standard ladder (0-8,
+  9-11, cue bid 12+), the doubler's rebids (2026-09-22); the power double
+  as a likelihood from 17 HCP (2026-09-27). Tickets
+  basic-takeout-double-b89 (the second double) and -b60 (wasted honours
+  in their suit, "especially vulnerable"), 2026-09-27.
+- **Book practice:** the advancer ladder is the "standard ladder" in
+  Rick's words, as opposed to BBA's 0-10 / 7-12 / 10+. Standard practice,
+  not yet cited to a book or article.
+- **BBA evidence:** `bba-cli --all-meanings` on the two Basic scenarios;
+  the scan of 913 auctions with `probes/tools/takeout_shape.py`.
+- **BBA probes:** `probes/advance-1S-X.toml` and `probes/tod-1S.toml`
+  (2026-09-25), `probes/td-1S-shape.toml` (2026-09-27), and `rbb probe`
+  after the redouble.
+- **Corpus measurements:** the power-branch table and the later steps,
+  judged by par distance and by side IMPs.
+- **Where we differ:** our ladder bands against BBA's overlapping ones;
+  boundary doubles; three cards in every unbid suit ("Accepted
+  differences from BBA"). The overcall ceiling moved from 17 to 16 HCP,
+  pending Rick.

@@ -174,3 +174,21 @@ notrump context spelled `(1x) 1N (P)` now also takes `(1x) 1N (X)`,
 still gated by `nt_overcalls.direct.systems_on`. Ticket
 basic-takeout-double-b160: North, Q9.JT942.932.J84, transfers with 2♦
 (BBA too) instead of passing 1NT doubled.
+
+## Sources
+
+- **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,
+  from `bba-cli --all-meanings` ("Evidence"). Rick has not ruled on the
+  advance; the usual ranges are standard practice, not yet cited to a
+  book or article.
+- **Rick's rulings:** systems on after a 1NT overcall, and by default
+  after a penalty double of it (2026-09-27, ticket
+  basic-takeout-double-b160).
+- **BBA evidence:** BBA's advances of two-level and balancing overcalls
+  and its cue-bid raise (2026-09-23 sections). No `probes/*.toml` spec
+  yet.
+- **Corpus measurements:** the whole slice (2026-09-23) and the
+  defending-side fallback (2026-09-25).
+- **Where we differ from BBA's stated meanings:** the raise of a
+  two-level overcall asks for four trumps, as every BBA hand that raised
+  had, although its meaning allows three (for Rick).

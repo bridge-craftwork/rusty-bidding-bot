@@ -92,3 +92,24 @@ real suit) stands.
 - Opening 1M rather than 2NT with 20-21 and a five-card major, as BBA
   sometimes does: -1,717 by distance, -3,432 to the bidding side (626
   boards). Rick's ladder (2NT with 20-21 balanced) stands.
+
+## Sources
+
+- **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
+  then 2NT 22-23, 2♣ then 3NT 24-25, 3NT 26-27, 2♣ then 4NT 28+); the
+  unbalanced 2♣ on 23 total points or within a trick of game; responder's
+  2♦ waiting, positives with a real suit and 8+, the second negative.
+  Rick's guidance also stands against BBA's lighter positives and against
+  opening 1M with 20-21 and a five-card major (2026-09-25).
+- **Book practice:** the ladder, playing tricks as 13 minus losers and the
+  second negative are standard practice, not yet cited to a book or
+  article.
+- **BBA evidence:** BBA's eighteen 2♣ openings in the Basic_* scenarios
+  and its stated meaning "19 to 37 total points". No `probes/*.toml` spec
+  yet.
+- **Corpus measurements:** the unbalanced-trigger table, and raising
+  opener's major after a positive (2026-09-25).
+- **Where we differ from the source:** Rick's wording makes the two
+  unbalanced triggers alternatives; the rules require both, because
+  that measures about 1,000 IMPs better (open question for Rick). From
+  BBA: see "Accepted differences from BBA".
