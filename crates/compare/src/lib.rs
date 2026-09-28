@@ -16,7 +16,7 @@ use std::path::PathBuf;
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex};
 
-use bridge_card::{bbsa, Card, Value};
+use bridge_card::{bbsa, Card};
 use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
@@ -60,19 +60,7 @@ fn load_card(pbs: &std::path::Path, name: &str, changes: &[String]) -> Result<Ca
         .map(|(c, _)| c)
         .map_err(|e| e.to_string())?;
     for change in changes {
-        let (path, value) = change
-            .split_once('=')
-            .ok_or_else(|| format!("card change {change:?}: expected path=value"))?;
-        let value = match value {
-            "true" => Value::Bool(true),
-            "false" => Value::Bool(false),
-            v => v
-                .parse::<i64>()
-                .map(Value::Int)
-                .unwrap_or_else(|_| Value::Text(v.to_string())),
-        };
-        card.set(path, value)
-            .map_err(|e| format!("card change {change:?}: {e}"))?;
+        card.apply_change(change).map_err(|e| e.to_string())?;
     }
     Ok(card)
 }

@@ -660,6 +660,71 @@ impl Engine {
             warnings,
         }
     }
+
+    /// Bid a whole deal: `prefix` first (forced calls), then the engine's
+    /// call for each seat's hand until the auction ends or reaches
+    /// `max_calls`. `hands` is indexed by `Direction::to_index`.
+    ///
+    /// Each call keeps how it was read (`step`: what it shows, its alert,
+    /// the rule that gave it its meaning, as partner and the opponents read
+    /// it) and, for the engine's own calls, the choice with the hand.
+    /// `Err` names the first prefix call that is not legal.
+    pub fn bid_deal(
+        &self,
+        hands: &[Hand; 4],
+        dealer: Direction,
+        vul: Vulnerability,
+        scoring: ScoringMethod,
+        prefix: &[Call],
+        max_calls: usize,
+    ) -> Result<DealAuction, String> {
+        let mut pos = self.start(dealer, vul, scoring);
+        let mut calls = Vec::new();
+        for (i, call) in prefix.iter().enumerate() {
+            let auction = pos.auction();
+            if auction.is_complete() {
+                return Err(format!(
+                    "call {} ({call}): the auction is already over",
+                    i + 1
+                ));
+            }
+            if !auction.is_legal(call) {
+                return Err(format!("call {} ({call}) is not legal here", i + 1));
+            }
+            let step = self.advance(&mut pos, call);
+            calls.push(DealCall { step, choice: None });
+        }
+        let mut complete = pos.auction().is_complete();
+        while !complete && calls.len() < max_calls {
+            let seat = pos.next_caller();
+            let choice = self.choose(&pos, &hands[seat.to_index()]);
+            let step = self.advance(&mut pos, &choice.call);
+            calls.push(DealCall {
+                step,
+                choice: Some(choice),
+            });
+            complete = pos.auction().is_complete();
+        }
+        Ok(DealAuction { calls, complete })
+    }
+}
+
+/// One call of an auction bid by `Engine::bid_deal`.
+#[derive(Debug, Clone, Serialize)]
+pub struct DealCall {
+    /// How the call was read (`step.caller`, `step.call`, what it shows).
+    pub step: Step,
+    /// The engine's choice with the caller's hand; `None` for a call forced
+    /// by the prefix.
+    pub choice: Option<Choice>,
+}
+
+/// An auction bid by `Engine::bid_deal`.
+#[derive(Debug, Clone, Serialize)]
+pub struct DealAuction {
+    pub calls: Vec<DealCall>,
+    /// False when the auction was stopped at `max_calls`.
+    pub complete: bool,
 }
 
 fn sorted(b: &Bindings) -> Vec<(String, String)> {

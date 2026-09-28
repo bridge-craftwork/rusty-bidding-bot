@@ -144,7 +144,39 @@ impl Default for SeatKnowledge {
     }
 }
 
+/// `5+` for a range open at the top, `0-3`, `4`.
+fn open_range(r: Range, max: i32) -> String {
+    if r.hi >= max && r.lo > 0 {
+        format!("{}+", r.lo)
+    } else {
+        r.to_string()
+    }
+}
+
 impl SeatKnowledge {
+    /// What is known, in a line: the HCP range and suit lengths that are
+    /// narrower than nothing known, and balance (`11-15 HCP, 5+ S,
+    /// 0-3 H`). Empty when nothing is known.
+    pub fn summary(&self) -> String {
+        let fresh = SeatKnowledge::default();
+        let mut parts = Vec::new();
+        if self.hcp != fresh.hcp {
+            parts.push(format!("{} HCP", open_range(self.hcp, fresh.hcp.hi)));
+        }
+        // Spades first, as a hand is written.
+        for (i, name) in [(3, "S"), (2, "H"), (1, "D"), (0, "C")] {
+            if self.len[i] != fresh.len[i] {
+                parts.push(format!("{} {name}", open_range(self.len[i], 13)));
+            }
+        }
+        match self.balanced {
+            Tri::True => parts.push("balanced".into()),
+            Tri::False => parts.push("unbalanced".into()),
+            Tri::Unknown => {}
+        }
+        parts.join(", ")
+    }
+
     pub fn is_contradiction(&self) -> bool {
         self.bounds().is_contradiction()
     }

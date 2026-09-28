@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rbb WASM smoke test</title>
+<style>
+  body { font: 15px/1.4 system-ui, sans-serif; margin: 1.5rem; max-width: 60rem; }
+  label { display: inline-block; margin: 0 1rem 0.5rem 0; }
+  input, select { font: inherit; }
+  pre { background: #f4f4f4; padding: 0.75rem; overflow-x: auto; }
+  .error { color: #b00020; }
+  .warning { color: #8a5a00; }
+</style>
+</head>
+<body>
+<h1>rusty-bidding-bot in the browser</h1>
+<p>Smoke test for <code>crates/wasm</code> (docs/WASM.md). Build with
+<code>crates/wasm/build.sh</code>, serve <code>crates/wasm/</code> over HTTP,
+open <code>demo.html</code>.</p>
+<p id="info">Loading…</p>
+<form id="form">
+  <label>Hand <input id="hand" value="AK52.KJ7.Q94.K83" size="20"></label>
+  <label>Auction <input id="auction" value="" size="24" placeholder="e.g. 1NT Pass"></label>
+  <label>Dealer <select id="dealer"><option>N</option><option>E</option><option>S</option><option>W</option></select></label>
+  <label>Vul <select id="vul"><option>None</option><option>NS</option><option>EW</option><option>All</option></select></label>
+  <label>Scoring <select id="scoring"><option>MP</option><option>IMP</option></select></label>
+  <label>Card <select id="card"></select></label>
+  <button>Bid</button>
+</form>
+<h2 id="call"></h2>
+<ul id="diags"></ul>
+<pre id="out"></pre>
+<script type="module">
+  import init, * as rbb from "./pkg/rbb_wasm.js";
+
+  await init();
+  const info = JSON.parse(rbb.info());
+  document.getElementById("info").textContent =
+    `rbb ${info.version}, API ${info.api}, rules ${info.rules_id}: ${info.modules} modules, ${info.rules} rules`;
+  const cardSelect = document.getElementById("card");
+  for (const name of info.stock_cards) {
+    cardSelect.add(new Option(name, name, name === "21GF-DEFAULT", name === "21GF-DEFAULT"));
+  }
+
+  function show(res) {
+    const list = document.getElementById("diags");
+    list.replaceChildren(...res.diagnostics.map(d => {
+      const li = document.createElement("li");
+      li.className = d.severity;
+      li.textContent = `${d.severity}: ${d.message}` +
+        (d.col ? ` (col ${d.col})` : "") + (d.hint ? ` (${d.hint})` : "");
+      return li;
+    }));
+  }
+
+  function bid() {
+    const request = {
+      cards: { ns: cardSelect.value, ew: cardSelect.value },
+      hand: document.getElementById("hand").value,
+      auction: document.getElementById("auction").value,
+      dealer: document.getElementById("dealer").value,
+      vul: document.getElementById("vul").value,
+      scoring: document.getElementById("scoring").value,
+    };
+    const res = JSON.parse(rbb.bid(JSON.stringify(request)));
+    show(res);
+    document.getElementById("call").textContent = res.ok
+      ? `${res.seat} bids ${res.call}: ${res.explanation}` : "Cannot bid";
+    document.getElementById("out").textContent = JSON.stringify(res, null, 2);
+    window.lastResult = res;
+  }
+
+  document.getElementById("form").addEventListener("submit", e => { e.preventDefault(); bid(); });
+  bid();
+</script>
+</body>
+</html>

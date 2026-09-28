@@ -3,3 +3,4 @@
 .DS_Store
 /.rbb-cache/
 /tickets/
+/crates/wasm/pkg/

@@ -17,7 +17,9 @@ mod system;
 
 use std::path::Path;
 
-pub use engine::{CandidateTrace, Choice, Decision, Engine, Interpretation, Step};
+pub use engine::{
+    CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation, Step,
+};
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
 pub use position::{side, Ask, Forcing, Position, SideState};
@@ -54,21 +56,43 @@ pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Dia
     let mut files = Vec::new();
     collect(dir, &mut files);
     files.sort();
-    let mut modules = Vec::new();
+    let mut sources = Vec::new();
     let mut diags = Vec::new();
     for f in files {
         let name = f.display().to_string();
         match std::fs::read_to_string(&f) {
-            Ok(src) => match bidspec::compile(&src, &name) {
-                Ok(m) => modules.push(m),
-                Err(d) => diags.extend(d),
-            },
+            Ok(src) => sources.push((name, src)),
             Err(e) => diags.push(bidspec::Diagnostic {
                 file: name,
                 line: 0,
                 col: 0,
                 message: e.to_string(),
             }),
+        }
+    }
+    match compile_modules(sources.iter().map(|(n, s)| (n.as_str(), s.as_str()))) {
+        Ok(modules) if diags.is_empty() => Ok(modules),
+        Ok(_) => Err(diags),
+        Err(d) => {
+            diags.extend(d);
+            Err(diags)
+        }
+    }
+}
+
+/// Compile rule files given as `(name, source)`, in the order given (which
+/// fixes the file-order tie-breaker): what `load_modules` does once it has
+/// read the files, for callers without a filesystem (the WASM build, the
+/// rules embedded by `rbb-assets`).
+pub fn compile_modules<'a>(
+    sources: impl IntoIterator<Item = (&'a str, &'a str)>,
+) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
+    let mut modules = Vec::new();
+    let mut diags = Vec::new();
+    for (name, src) in sources {
+        match bidspec::compile(src, name) {
+            Ok(m) => modules.push(m),
+            Err(d) => diags.extend(d),
         }
     }
     // A name the engine does not know would otherwise make its condition

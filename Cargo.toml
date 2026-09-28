@@ -1,6 +1,15 @@
 [workspace]
 resolver = "2"
-members = ["crates/bridge-card", "crates/bidspec", "crates/engine", "crates/compare", "crates/cli", "crates/workbench"]
+members = [
+    "crates/bridge-card",
+    "crates/bidspec",
+    "crates/engine",
+    "crates/assets",
+    "crates/compare",
+    "crates/cli",
+    "crates/workbench",
+    "crates/wasm",
+]
 
 [workspace.package]
 version = "0.1.0"
@@ -14,3 +23,4 @@ bridge-card = { path = "crates/bridge-card" }
 bidspec = { path = "crates/bidspec" }
 rbb-engine = { path = "crates/engine" }
 rbb-compare = { path = "crates/compare" }
+rbb-assets = { path = "crates/assets" }

@@ -1,0 +1,12 @@
+[package]
+name = "rbb-assets"
+description = "The rule files (conventions/*.bid) and stock .bbsa cards, compiled into the binary"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+build = "build.rs"
+
+# Data only: no dependencies, so the convention layer's independence from the
+# engine is untouched (this crate holds text, the engine compiles it).
+[dependencies]

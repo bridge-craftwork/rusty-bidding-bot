@@ -15,6 +15,7 @@ mod display;
 mod expr;
 mod lexer;
 mod parser;
+pub mod reference;
 
 pub use ast::Module;
 pub use check::check;

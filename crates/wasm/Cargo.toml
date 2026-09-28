@@ -1,0 +1,35 @@
+# rbb-wasm: the engine in the browser. A JSON-in / JSON-out boundary over
+# rbb-engine, with the rules (conventions/*.bid) and the stock cards compiled
+# in by rbb-assets, so nothing is fetched or read at run time.
+#
+# Build: crates/wasm/build.sh (wasm-pack build --target web; output in
+# crates/wasm/pkg). API: docs/WASM.md.
+#
+# A workspace member, so it shares the committed Cargo.lock (the pinned
+# bridge-types revision) and `cargo test --workspace` runs its tests
+# natively: the API lives in `api.rs`, plain Rust; `lib.rs` only binds it.
+[package]
+name = "rbb-wasm"
+description = "Browser (WASM) build of rusty-bidding-bot: JSON API over the engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+rbb-engine.workspace = true
+rbb-assets.workspace = true
+bidspec.workspace = true
+bridge-card.workspace = true
+bridge-types.workspace = true
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+wasm-bindgen = "0.2"
+# Readable panics in the browser console.
+console_error_panic_hook = { version = "0.1", optional = true }
+
+[features]
+default = ["console_error_panic_hook"]
