@@ -163,3 +163,9 @@ W 32.J6.KQT75.J654      | 1C X 1D P 2NT P                      | 3NT    | 7 oppo
 W 32.J6.KQT75.9654      | 1C X 1D P 2NT P                      | 3NT    | 6 and a five-card suit: 25 total points
 W 32.J6.KQT75.J654      | 1C X 1D 1S X P                       | 2D     | answering the strong double: five diamonds
 W 32.J6.KQT75.J654      | 1C X 1D 1S X P 2D P 2NT P            | 3NT    | 18-19 after the double: game
+
+# Strong jump shift raised: game in the fit (Basic_Weak_2 173).
+card    Basic-Bridge
+dealer  S
+vul     All
+N QJ542.T.AK7.AJ84      | 1H P 2S P 3S P                       | 4S     | spades agreed: game in the fit, not back to 3NT

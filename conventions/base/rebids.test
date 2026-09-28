@@ -245,3 +245,9 @@ dealer  E
 vul     EW
 E KQJ.KQ4.J63.AQ93      | 1C X 1D 1S                           | X      | 18: the strong hand doubles, as BBA
 E KQJ.KQ4.J63.AQ93      | 1C X 1D 1S X P 2D P                  | 2NT    | then 18-19 balanced with a spade stopper
+
+# Opener with three spades facing the strong jump shift (Basic_Weak_2 180).
+card    Basic-Bridge
+dealer  S
+vul     All
+S T97.AKJT72.Q84.4      | 1H P 2S P                            | 4S     | three spades opposite five: game in the fit

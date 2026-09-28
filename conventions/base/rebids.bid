@@ -292,6 +292,7 @@ after 1M (P) 2x (P) when x is not M
       priority -2
   3M  "Jump rebid: 6+ {M}, 16-18"          shows M>=6, suit_points=16..18
   3x  "Raise: 4+ {x}"                      shows x>=4
+      sets  trump=x                        # agreed: keycard and the fit follow (ticket b173)
   2N  "15-17 HCP, balanced"                shows balanced, hcp=15..17
       priority -2                          # a 5-3-3-2 minimum rebids its major
   3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
