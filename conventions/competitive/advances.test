@@ -54,3 +54,11 @@ dealer  S
 W K.KT7.KJ9532.765      | 1S 2D 2S P 4S         | P | they reached game: nothing more to say
 E JT84.954.764.K94      | 1S 2D 2S P 4S P P     | P | advancer passed before: still nothing
 W AQJ2.2.QJT832.63      | 1S 2D X 3D 3H         | 4D  | six diamonds and partner's raise: ten trumps, compete to four (total tricks, 2026-09-27)
+
+# Systems on over our 1NT overcall, also when they double it (Rick,
+# 2026-09-27; Basic_Takeout_Double 160).
+card    Basic-Bridge
+dealer  E
+vul     EW
+N Q9.JT942.932.J84      | 1C 1NT X                             | 2D     | transfer to hearts, as over a pass
+S AKT7.KQ85.T74.KT      | 1C 1NT X 2D P                        | 2H     | completes the transfer

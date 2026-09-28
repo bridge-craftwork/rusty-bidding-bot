@@ -9,7 +9,7 @@ module super-accept "Super-accepting a Jacoby transfer"
 # the major. With superaccept-doubleton on as well,
 # maximums with a doubleton choose the more descriptive doubleton bids, so
 # this is left for maximums without one (4-3-3-3).
-after 1N (P) 2D (P) | (1x) 1N (P) 2D (P) | (1x) P (P) 1N (P) 2D (P)
+after 1N (P) 2D (P) | (1x) 1N (P) 2D (P) | (1x) P (P) 1N (P) 2D (P) | (1x) 1N (X) 2D (P) | (1x) P (P) 1N (X) 2D (P)
   3H  "Super-accept: 4+ hearts, a maximum"   shows H>=4, hcp>=16
-after 1N (P) 2H (P) | (1x) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2H (P)
+after 1N (P) 2H (P) | (1x) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2H (P) | (1x) 1N (X) 2H (P) | (1x) P (P) 1N (X) 2H (P)
   3S  "Super-accept: 4+ spades, a maximum"   shows S>=4, hcp>=16

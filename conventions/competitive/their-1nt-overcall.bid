@@ -64,3 +64,17 @@ after 1x (1N)
   # this side of their 15-18 loses contracts.
 
   P   "Nothing to say over their notrump"  priority -10
+
+# Opener after partner's penalty double of their 1NT (2026-09-27, ticket
+# b160: no rule). With 10+ opposite and an opening here, the double is
+# theirs to escape: sit, and pull only a minimum with a six-card suit and
+# a singleton, where 1NT doubled may make on our missing entries. When
+# advancer runs, partner doubled and acts next: pass.
+after 1x (1N) X (P)
+  2{x} "Pulls: six or more {x}, a minimum with a singleton or void"
+       shows x>=6, hcp<=13, shortest<=1
+  P    "Sits for partner's penalty double"
+       priority -5
+after 1x (1N) X (*) when !rho.last=P
+  P    "Partner doubled: his move next"
+       priority -5

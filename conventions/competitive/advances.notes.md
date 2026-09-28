@@ -165,3 +165,12 @@ instead.
 
 Advancer over our E/W's overcall of their 1NT also passes (see
 nt-interference.notes.md for the raises that were tried).
+
+## Systems on after they double our 1NT overcall (2026-09-27)
+
+Rick: systems are on after a 1NT overcall, and by default also after a
+penalty double of it (some play escapes there, as over 1NT (X)). Every
+notrump context spelled `(1x) 1N (P)` now also takes `(1x) 1N (X)`,
+still gated by `nt_overcalls.direct.systems_on`. Ticket
+basic-takeout-double-b160: North, Q9.JT942.932.J84, transfers with 2♦
+(BBA too) instead of passing 1NT doubled.

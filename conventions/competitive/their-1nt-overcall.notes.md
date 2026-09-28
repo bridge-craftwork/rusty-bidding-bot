@@ -109,3 +109,12 @@ subtree drops from 20,461 no-rule points to 16,092.
 - **A balancing 1NT overcall** (`1x P P 1N`) is a different animal and is
   not covered: the pattern here is only the direct seat.
 - **Their 1NT over a two-level or higher opening** is not covered.
+
+## After our penalty double (2026-09-27)
+
+Ticket basic-takeout-double-b160: `1C 1NT X P` had no rule for opener
+(nor over advancer's run). Opener now sits, pulling only a minimum with
+six of his suit and a singleton; over a run, partner doubled and acts
+next, so opener passes. Measured together with systems on over the
+doubled 1NT overcall (advances): +149 par, +654 side IMPs (98 boards);
+no-rule positions 3,265 → 3,060.

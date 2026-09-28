@@ -24,7 +24,7 @@ when opening
 
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
   6N  "To play: slam values"
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: invites 6NT"
