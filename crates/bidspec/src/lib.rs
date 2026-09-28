@@ -10,6 +10,7 @@
 
 pub mod ast;
 mod check;
+pub mod coverage;
 mod diag;
 mod display;
 mod expr;

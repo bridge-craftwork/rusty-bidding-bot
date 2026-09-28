@@ -68,3 +68,21 @@ pub fn conventions(request: &str) -> String {
 pub fn reference(request: &str) -> String {
     api::reference(request)
 }
+
+/// How much of each side's card the rules read → `{ok, ns, ew, diagnostics}`
+#[wasm_bindgen]
+pub fn coverage(request: &str) -> String {
+    api::coverage(request)
+}
+
+/// A card as Bridge-Classroom JSON and `.bbsa` → `{ok, name, json, bbsa, unmapped, diagnostics}`
+#[wasm_bindgen(js_name = exportCard)]
+pub fn export_card(request: &str) -> String {
+    api::export_card(request)
+}
+
+/// Double-dummy table, par and the contract's result → `{ok, tricks, par, result, diagnostics}`
+#[wasm_bindgen(js_name = ddTable)]
+pub fn dd_table(request: &str) -> String {
+    api::dd_table(request)
+}

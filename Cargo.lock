@@ -2934,6 +2934,7 @@ version = "0.1.0"
 dependencies = [
  "bidspec",
  "bridge-card",
+ "bridge-solver",
  "bridge-types",
  "console_error_panic_hook",
  "rbb-assets",

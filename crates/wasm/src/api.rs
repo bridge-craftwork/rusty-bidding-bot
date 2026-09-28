@@ -9,7 +9,9 @@ use std::cell::RefCell;
 use std::sync::{Arc, OnceLock};
 
 use bridge_card::{bbsa, Card};
-use bridge_types::{Auction, Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
+use bridge_types::{
+    Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
+};
 use rbb_engine::{CandidateTrace, Engine, RuleRef, SeatKnowledge, Step, Tri};
 use serde::Serialize;
 use serde_json::{json, Map, Value as Json};
@@ -158,11 +160,17 @@ fn bbsa_line(text: &str, key: &str) -> Option<usize> {
         .map(|i| i + 1)
 }
 
+/// A card as loaded: the card, its name, and the `.bbsa` keys it switches
+/// on that have no card field (empty for card JSON).
+type Loaded = (Card, String, Vec<String>);
+
 /// One card from its spec: a stock card's name, `{"stock": name}`,
 /// `{"bbsa": text, "name"?: ..}` or `{"json": card_data}`.
-fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<(Card, String)> {
+fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<Loaded> {
     let stock = |name: &str, d: &mut Diags| match rbb_assets::card(name) {
-        Some(text) => import_bbsa(text, Some(name), field, d).map(|c| (c, name.to_string())),
+        Some(text) => {
+            import_bbsa(text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
+        }
         None => {
             d.error(format!("{field}: no stock card called {name:?}"))
                 .hint(format!("stock cards: {}", stock_names().join(", ")));
@@ -176,7 +184,7 @@ fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<(Card, String)> 
                 stock(name, d)
             } else if let Some(text) = m.get("bbsa").and_then(Json::as_str) {
                 let name = m.get("name").and_then(Json::as_str).unwrap_or("bbsa");
-                import_bbsa(text, Some(name), field, d).map(|c| (c, name.to_string()))
+                import_bbsa(text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
             } else if let Some(card) = m.get("json") {
                 let text = match card {
                     Json::String(s) => s.clone(),
@@ -199,7 +207,7 @@ fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<(Card, String)> 
                             .name
                             .clone()
                             .unwrap_or_else(|| "card".to_string());
-                        Some((card, name))
+                        Some((card, name, Vec::new()))
                     }
                     Err(e) => {
                         d.error(format!("{field}: not a card: {e}"));
@@ -220,7 +228,12 @@ fn load_card(spec: &Json, field: &str, d: &mut Diags) -> Option<(Card, String)> 
     }
 }
 
-fn import_bbsa(text: &str, name: Option<&str>, field: &str, d: &mut Diags) -> Option<Card> {
+fn import_bbsa(
+    text: &str,
+    name: Option<&str>,
+    field: &str,
+    d: &mut Diags,
+) -> Option<(Card, Vec<String>)> {
     match bbsa::import(text, name) {
         Ok((card, report)) => {
             // One remark for them all: a stock card has dozens.
@@ -237,7 +250,15 @@ fn import_bbsa(text: &str, name: Option<&str>, field: &str, d: &mut Diags) -> Op
             for w in &report.warnings {
                 d.warning(format!("{field}: {w}"));
             }
-            Some(card)
+            // A key set to 0 says the card does not play it: nothing is
+            // lost by having nowhere to put it (as `rbb card coverage`).
+            let unmapped = report
+                .passthrough
+                .iter()
+                .filter(|(_, v)| *v != 0)
+                .map(|(k, _)| k.clone())
+                .collect();
+            Some((card, unmapped))
         }
         Err(e) => {
             d.error(format!("{field}: not a .bbsa file: {e}"));
@@ -273,6 +294,11 @@ fn string_list(v: Option<&Json>, field: &str, d: &mut Diags) -> Vec<String> {
 
 /// Both cards from `{"ns", "ew"?, "set"?, "ns_set"?, "ew_set"?}`.
 fn load_cards(cards: &Json, d: &mut Diags) -> Option<([Card; 2], [String; 2])> {
+    load_cards_full(cards, d).map(|[ns, ew]| ([ns.0, ew.0], [ns.1, ew.1]))
+}
+
+/// Both cards, with the changes applied and each side's unmapped keys.
+fn load_cards_full(cards: &Json, d: &mut Diags) -> Option<[Loaded; 2]> {
     let Json::Object(m) = cards else {
         d.error("cards: expected an object like {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}");
         return None;
@@ -290,20 +316,20 @@ fn load_cards(cards: &Json, d: &mut Diags) -> Option<([Card; 2], [String; 2])> {
     let both = string_list(m.get("set"), "cards.set", d);
     let mut out = Vec::new();
     for (side, card, own) in [("ns", ns, "ns_set"), ("ew", ew, "ew_set")] {
-        let (mut card, name) = card?;
+        let (mut card, name, unmapped) = card?;
         let own = string_list(m.get(own), &format!("cards.{own}"), d);
         for change in both.iter().chain(&own) {
             if let Err(e) = card.apply_change(change) {
                 d.error(format!("cards.{side}: {e}"));
             }
         }
-        out.push((card, name));
+        out.push((card, name, unmapped));
     }
     if d.has_errors() {
         return None;
     }
     let (ew, ns) = (out.pop().unwrap(), out.pop().unwrap());
-    Some(([ns.0, ew.0], [ns.1, ew.1]))
+    Some([ns, ew])
 }
 
 fn engine_by_id(id: u32) -> Option<(Arc<Engine>, [String; 2])> {
@@ -1065,6 +1091,207 @@ pub fn reference(request: &str) -> String {
     out
 }
 
+/// How much of each side's card the rules read: the settings the card
+/// switches on, split into `read` (a module names them), `ignored` (the
+/// field exists but no rule reads it: a convention or treatment the engine
+/// does not play) and `unmapped` (`.bbsa` keys with no card field at all).
+/// `other` holds carding, leads and notes, which cannot change a call.
+pub fn coverage(request: &str) -> String {
+    let mut d = Diags::default();
+    let req = parse_request(request, &mut d);
+    let empty = json!({"ns": Json::Null, "ew": Json::Null});
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let Some(modules) = modules_or_report(&mut d) else {
+        return respond(empty, d);
+    };
+    let Some(cards) = req.get("cards") else {
+        d.error("cards: missing")
+            .hint("{\"cards\": {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}}");
+        return respond(empty, d);
+    };
+    let Some([ns, ew]) = load_cards_full(cards, &mut d) else {
+        return respond(empty, d);
+    };
+    let read = bidspec::coverage::fields_read(modules);
+    let side = |(card, name, unmapped): Loaded| {
+        let cov = bidspec::coverage::of_card(&name, &card, unmapped, &read);
+        let mut j = serde_json::to_value(&cov).unwrap_or(Json::Null);
+        j["score"] = json!(cov.score());
+        j
+    };
+    respond(json!({"ns": side(ns), "ew": side(ew)}), d)
+}
+
+/// A card as Bridge-Classroom card JSON (`card_data`) and as `.bbsa` text:
+/// the mapping between the two formats. Request: `{"card": <card spec>,
+/// "set"?: ["path=value"]}`.
+pub fn export_card(request: &str) -> String {
+    let mut d = Diags::default();
+    let req = parse_request(request, &mut d);
+    let empty = json!({"name": Json::Null, "json": Json::Null, "bbsa": Json::Null, "unmapped": []});
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let Some(spec) = req.get("card") else {
+        d.error("card: missing")
+            .hint("a stock card name, {\"bbsa\": text} or {\"json\": card_data}");
+        return respond(empty, d);
+    };
+    let Some((mut card, name, unmapped)) = load_card(spec, "card", &mut d) else {
+        return respond(empty, d);
+    };
+    for change in string_list(req.get("set"), "set", &mut d) {
+        if let Err(e) = card.apply_change(&change) {
+            d.error(format!("set: {e}"));
+        }
+    }
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let (bbsa_text, report) = bbsa::export(&card);
+    if !report.dropped.is_empty() {
+        d.info(format!(
+            "bbsa: {} keys not in the current .bbsa layout were not written: {}",
+            report.dropped.len(),
+            report.dropped.join(", ")
+        ));
+    }
+    respond(
+        json!({
+            "name": name,
+            "json": card.to_json(),
+            "bbsa": bbsa_text,
+            "unmapped": unmapped,
+        }),
+        d,
+    )
+}
+
+const SEATS: [Direction; 4] = [
+    Direction::North,
+    Direction::East,
+    Direction::South,
+    Direction::West,
+];
+const STRAIN_KEYS: [(Strain, &str); 5] = [
+    (Strain::Clubs, "C"),
+    (Strain::Diamonds, "D"),
+    (Strain::Hearts, "H"),
+    (Strain::Spades, "S"),
+    (Strain::NoTrump, "NT"),
+];
+
+/// The double-dummy table of a deal, par, and (with a finished `auction`
+/// and its `dealer`) the tricks and score of the contract reached.
+pub fn dd_table(request: &str) -> String {
+    let mut d = Diags::default();
+    let req = parse_request(request, &mut d);
+    let empty = json!({"tricks": Json::Null, "par": Json::Null, "result": Json::Null});
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let hands = match req.get("deal") {
+        Some(v) => parse_deal(v, &mut d),
+        None => {
+            d.error("deal: missing")
+                .hint("N:<north> <east> <south> <west>, each S.H.D.C");
+            None
+        }
+    };
+    let vul = vulnerability(&req, &mut d);
+    let has_auction = req.get("auction").is_some();
+    let dealer = seat(
+        &req,
+        "dealer",
+        if has_auction {
+            None
+        } else {
+            Some(Direction::North)
+        },
+        &mut d,
+    );
+    let calls = match (has_auction, dealer) {
+        (true, Some(dl)) => parse_auction(req.get("auction"), "auction", dl, &mut d),
+        _ => None,
+    };
+    let Some(hands) = hands else {
+        return respond(empty, d);
+    };
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let mut deal = Deal::new();
+    for (i, h) in hands.iter().enumerate() {
+        if let Some(dir) = Direction::from_index(i) {
+            for c in h.cards() {
+                deal.hand_mut(dir).add_card(*c);
+            }
+        }
+    }
+    let table = bridge_solver::par::solve_dd_table(&deal);
+    let mut tricks = Map::new();
+    for seat in SEATS {
+        let row: Map<String, Json> = STRAIN_KEYS
+            .iter()
+            .map(|(s, k)| (k.to_string(), json!(table.tricks(seat, *s))))
+            .collect();
+        tricks.insert(seat_str(seat), Json::Object(row));
+    }
+    let p = bridge_solver::par::par(
+        &table,
+        vul.is_vulnerable(Direction::North),
+        vul.is_vulnerable(Direction::East),
+    );
+    let par = json!({
+        "score_ns": p.score_ns,
+        "contracts": p.contracts.iter().map(|c| c.describe()).collect::<Vec<_>>(),
+    });
+    let mut result = Json::Null;
+    if let (Some(calls), Some(dealer)) = (calls, dealer) {
+        let mut a = Auction::new(dealer);
+        for c in &calls {
+            a.add_call(c.clone());
+        }
+        if !a.is_complete() {
+            d.info("auction: not finished, so no result");
+        } else {
+            result = match a.final_contract() {
+                None => {
+                    json!({"contract": "Pass", "declarer": Json::Null, "tricks": Json::Null, "score_ns": 0})
+                }
+                Some(fc) => {
+                    let taken = table.tricks(fc.declarer, fc.strain) as i32;
+                    let doubled = if fc.redoubled {
+                        Doubled::Redoubled
+                    } else if fc.doubled {
+                        Doubled::Doubled
+                    } else {
+                        Doubled::None
+                    };
+                    let score = Contract::new(fc.level, fc.strain, doubled, fc.declarer.to_char())
+                        .score(
+                            taken - (fc.level as i32 + 6),
+                            vul.is_vulnerable(fc.declarer),
+                        );
+                    let score_ns = match fc.declarer {
+                        Direction::North | Direction::South => score,
+                        _ => -score,
+                    };
+                    json!({
+                        "contract": fc.to_pbn(),
+                        "declarer": seat_str(fc.declarer),
+                        "tricks": taken,
+                        "score_ns": score_ns,
+                    })
+                }
+            };
+        }
+    }
+    respond(json!({"tricks": tricks, "par": par, "result": result}), d)
+}
+
 fn severity_word(s: Severity) -> &'static str {
     match s {
         Severity::Error => "error",
@@ -1214,6 +1441,58 @@ mod tests {
         assert_eq!(forced["ok"], true, "{forced}");
         assert_eq!(forced["calls"][0]["call"], "1C");
         assert_eq!(forced["calls"][0]["forced"], true);
+    }
+
+    #[test]
+    fn coverage_splits_what_the_rules_read() {
+        let r = parse(&coverage(
+            r#"{"cards": {"ns": "21GF-DEFAULT", "ew": "Precision"}}"#,
+        ));
+        assert_eq!(r["ok"], true, "{r}");
+        assert!(!r["ns"]["read"].as_array().unwrap().is_empty(), "{r}");
+        assert!(r["ns"]["score"].as_f64().unwrap() > 0.0);
+        assert!(r["ew"]["ignored"].is_array());
+        assert!(r["ew"]["unmapped"].is_array());
+        let bad = parse(&coverage("{}"));
+        assert_eq!(bad["ok"], false);
+    }
+
+    #[test]
+    fn exports_a_card_both_ways() {
+        let r = parse(&export_card(r#"{"card": "21GF-DEFAULT"}"#));
+        assert_eq!(r["ok"], true, "{r}");
+        assert!(r["json"].is_object());
+        let bbsa = r["bbsa"].as_str().unwrap();
+        assert!(!bbsa.is_empty());
+        // The exported JSON loads back as a card.
+        let back = parse(&validate(
+            &json!({"cards": {"ns": {"json": r["json"]}}}).to_string(),
+        ));
+        assert_eq!(back["ok"], true, "{back}");
+    }
+
+    #[test]
+    fn dd_table_par_and_result() {
+        let r = parse(&dd_table(
+            r#"{"deal": "N:AK52.KJ7.Q94.K83 QJ3.Q95.KJ3.QJ74 T64.AT832.A2.T62 987.64.T8765.A95",
+                "vul": "None", "dealer": "N", "auction": "1NT Pass 3NT Pass Pass Pass"}"#,
+        ));
+        assert_eq!(r["ok"], true, "{r}");
+        for seat in ["N", "E", "S", "W"] {
+            for s in ["C", "D", "H", "S", "NT"] {
+                let t = r["tricks"][seat][s].as_u64().unwrap();
+                assert!(t <= 13);
+            }
+        }
+        let n = r["tricks"]["N"]["NT"].as_u64().unwrap();
+        let e = r["tricks"]["E"]["NT"].as_u64().unwrap();
+        assert_eq!(n + e, 13, "{r}");
+        assert_eq!(r["result"]["contract"], "3N");
+        assert_eq!(r["result"]["declarer"], "N");
+        assert_eq!(r["result"]["tricks"], n);
+        assert!(r["par"]["score_ns"].is_i64());
+        let bad = parse(&dd_table(r#"{"deal": "N:AK52"}"#));
+        assert_eq!(bad["ok"], false);
     }
 
     #[test]

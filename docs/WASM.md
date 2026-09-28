@@ -22,7 +22,7 @@ Output: `crates/wasm/pkg/` (gitignored), an ES module package:
 | File | What |
 |---|---|
 | `rbb_wasm.js` | JS glue, `export default init` plus the functions below |
-| `rbb_wasm_bg.wasm` | the engine, rules and cards (about 1.3 MB; 390 KB gzipped) |
+| `rbb_wasm_bg.wasm` | the engine, rules, cards and the double-dummy solver (about 1.4 MB; 430 KB gzipped) |
 | `rbb_wasm.d.ts` | TypeScript declarations |
 | `package.json` | for `npm install ./pkg` or a bundler |
 
@@ -393,6 +393,66 @@ Errors and warnings in the request are written as `# error: ...` /
 `# warning: ...` lines at the top; the rest is still produced. The same text
 comes natively from `rbb bid reference` (for generating `reference.txt` at
 build time without a browser).
+
+### `coverage(request)` → JSON
+
+How much of each side's card the rules read (the same classification as
+`rbb card coverage`): what a UI shows as "conventions and treatments this
+engine does not play". Request: `{"cards": {...}}`.
+
+```json
+{"ok": true,
+ "ns": {"name": "Precision", "system": "precision",
+        "read": ["notrump.stayman.play", "..."],
+        "ignored": ["other_conventions.precision.one_c.play", "..."],
+        "other": ["carding.upside_down_count"],
+        "unmapped": ["Crosswood 1430", "..."],
+        "score": 0.62},
+ "ew": {...},
+ "diagnostics": []}
+```
+
+Of the settings the card switches on (not at their default): `read`, a
+module names the field (or it feeds one that does); `ignored`, the field
+exists and no rule reads it; `unmapped`, `.bbsa` keys switched on that have
+no card field at all; `other`, carding, leads and notes (they cannot change
+a call). `score` is `read / (read + ignored)`.
+
+### `exportCard(request)` → JSON
+
+A card in both formats: the mapping from a BBA `.bbsa` card to
+Bridge-Classroom card JSON and back. Request: `{"card": <card spec>,
+"set"?: ["path=value"]}`.
+
+```json
+{"ok": true, "name": "21GF-DEFAULT",
+ "json": {"schema_version": "1.0", "format": "bridge_classroom", "...": "..."},
+ "bbsa": "<.bbsa text, CRLF>", "unmapped": ["..."], "diagnostics": []}
+```
+
+`json` is Bridge-Classroom `card_data` (it loads back as `{"json": ...}`);
+unmapped `.bbsa` keys travel in its `bba_passthrough` so a `.bbsa` export
+round-trips.
+
+### `ddTable(request)` → JSON
+
+The double-dummy table of a deal and par, and, given a finished auction,
+the contract's double-dummy result. Solved with bridge-solver (a few hundred
+ms in the browser). Request: `{"deal": ..., "vul"?: ..., "dealer"?: ...,
+"auction"?: ...}` (`dealer` is required with `auction`).
+
+```json
+{"ok": true,
+ "tricks": {"N": {"C": 8, "D": 6, "H": 10, "S": 10, "NT": 10}, "E": {...}, "S": {...}, "W": {...}},
+ "par": {"score_ns": 430, "contracts": ["N 3N+1"]},
+ "result": {"contract": "3N", "declarer": "N", "tricks": 10, "score_ns": 430},
+ "diagnostics": []}
+```
+
+`tricks` are for each declarer and strain. `par.contracts` lists every
+contract tied at par (empty when par is a pass-out). `result` is `null`
+without a finished auction; for a passed-out deal its `contract` is
+`"Pass"` and `score_ns` 0.
 
 ## Mapping to the bridge-craftwork tool contract
 
