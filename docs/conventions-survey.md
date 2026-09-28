@@ -285,8 +285,8 @@ States:
 | 1X-(Y)-2Z forcing | 15 | rules | after-interference, rebids | 1,809 / 457 / -474 | none |
 | Support double / redouble | 17 | field only | | 1,181 / 65 / +2 | `support_doubles` |
 | Maximal doubles | 3 | field only | | 7 / 2 / 0 | `maximal_doubles` |
-| Michaels cuebid | 17 | field only | | **3,790 / 3,559 / -3,452** | `michaels` (michaels_unusual) |
-| Unusual 2NT / 1NT / 4NT | 17 each | field only | | 2,102 / 1,875 / -772; 30 / 18 / -11; 278 / 190 / -180 | `unusual_2nt` (michaels_unusual) |
+| Michaels cuebid | 17 | rules (2026-09-28; the survey figures are from before) | two-suited-overcalls | **3,790 / 3,559 / -3,452** | `michaels` (michaels_unusual) |
+| Unusual 2NT / 1NT / 4NT | 17 each | 2NT: rules (2026-09-28); 1NT, 4NT: field only | two-suited-overcalls | 2,102 / 1,875 / -772; 30 / 18 / -11; 278 / 190 / -180 | `unusual_2nt` (michaels_unusual) |
 | Leaping / non-leaping Michaels | 3 / 0 | field only | | no separate BBA note | `leaping_michaels` |
 | Cappelletti / Multi-Landy / Landy vs 1NT | 10 / 7 / 0 | rules (2026-09-28; field `competitive.vs_1nt_strong.system`) | cappelletti, multi-landy, vs-1nt | **4,612 / 4,409 / +462**; 495 / 479 / +109 | VsNtDefense panel (structured); `dont` |
 | DONT, Meckwell, Modified Cappelletti; Suction, Spear, CRASH | none | rules for the first three (2026-09-28, options of `vs_1nt_strong.system`); none for the others | dont, meckwell, cappelletti | | `dont` (dont) |
@@ -361,7 +361,7 @@ Being implemented now, in other pieces of work; the figures are the survey's, fr
 
 | # | Convention | We differ / IMPs | Scenarios built on it | State | Effort | Why this rank |
 |---:|---|---|---|---|---|---|
-| 1 | **Michaels cuebid + Unusual 2NT** (making them, and reading them for EW, whose 21GF-GIB card plays both) | 5,434 / -4,224 | Michaels_Cuebid, Unusual_2N, Michaels_and_Unusual, Michaels_after_1m, Opps_Michaels_Cuebid, Opps_Michaels_and_Unusual, Two-Suited_Overcalls, Opps_2-Suited_Overcalls, Leaping_Michaels, Non_Leaping_* (11), all at 58-63% call agreement | field only | M-L | Most divergence boards of any missing convention; Baker skill michaels_unusual. Now first, with Soloway pushed down |
+| 1 | **Michaels cuebid + Unusual 2NT** (making them, and reading them for EW, whose 21GF-GIB card plays both) | 5,434 / -4,224 | Michaels_Cuebid, Unusual_2N, Michaels_and_Unusual, Michaels_after_1m, Opps_Michaels_Cuebid, Opps_Michaels_and_Unusual, Two-Suited_Overcalls, Opps_2-Suited_Overcalls, Leaping_Michaels, Non_Leaping_* (11), all at 58-63% call agreement | **done 2026-09-28** (two-suited-overcalls; Leaping and non-leaping Michaels still field only) | M-L | Most divergence boards of any missing convention; Baker skill michaels_unusual. Now first, with Soloway pushed down |
 | 2 | **Smolen** (built 2026-09-28: smolen.bid) | 1,409 / -1,486 | Smolen, Smolen_Invitational, Smolen_after_2N, We_Overcall_NT_then_Smolen (28 carry the note) | field only | S | Cheap; fits on stayman.bid |
 | 3 | **Jordan 2NT** | 649 / -1,476 | Jordan_2N, Xfer_after_1M_X (43 carry the note) | field only | S | Cheap; after-interference already handles 1M (X) |
 | 4 | **Gerber** (over 1NT/2NT; by opener later; built 2026-09-28 over openings and rebids: gerber.bid) | 892 / -900 | Gerber, Gerber_By_Responder, Gerber_By_Opener, Slam_after_NT… (56 carry the note) | field only | S | Cheap; the rkcb answer machinery exists |
@@ -639,7 +639,7 @@ The appendices below are its output, lightly trimmed.
 | Minor Direct Jump Cuebid Gambling | 1 | 29 / 2 | field only | `competitive.direct_jump_cuebid_minor` |  |
 | Minor Direct Jump Cuebid Majors | 0 | 0 / 0 | field only | `competitive.direct_jump_cuebid_minor` |  |
 | Minor Direct Jump Cuebid Preempt | 0 | 0 / 0 | field only | `competitive.direct_jump_cuebid_minor` |  |
-| Michaels Cuebid | 17 | 326 / 326 | field only | `competitive.michaels.play` |  |
+| Michaels Cuebid | 17 | 326 / 326 | rules | `direct_cuebids.nat_minors_michaels`, `direct_cuebids.nat_majors_michaels` |  |
 | Multi-Landy | 7 | 56 / 4 | rules | `competitive.defense_vs_strong_nt.convention` | overcalls |
 | Non-Leaping Michaels | 0 | 0 / 0 | field only | `competitive.non_leaping_michaels.play` |  |
 | Raptor 1NT | 0 | 0 / 0 | field only | `competitive.raptor_1nt.play` |  |
@@ -647,7 +647,7 @@ The appendices below are its output, lightly trimmed.
 | Scrambling 2NT | 0 | 0 / 0 | field only | `competitive.scrambling_2nt.play` |  |
 | Snapdragon Double | 0 | 0 / 0 | field only | `competitive.snapdragon.play` |  |
 | Unusual 1NT | 17 | 326 / 326 | field only | `competitive.unusual_1nt.play` |  |
-| Unusual 2NT | 17 | 326 / 326 | field only | `competitive.unusual_2nt.play` |  |
+| Unusual 2NT | 17 | 326 / 326 | rules | `competitive.unusual_2nt.play` |  |
 | Unusual 3NT | 0 | 0 / 0 | field only | `competitive.unusual_3nt.play` |  |
 | Unusual 4NT | 17 | 326 / 326 | field only | `competitive.unusual_4nt.play` |  |
 | Unusual vs. Unusual | 0 | 0 / 0 | field only | `competitive.unusual_vs_unusual.play` |  |

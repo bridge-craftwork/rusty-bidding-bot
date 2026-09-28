@@ -1,0 +1,43 @@
+# Michaels cue bids and the Unusual 2NT, 21GF-DEFAULT card (both on).
+# Hands made to the probes' pattern (probes/michaels-*.toml,
+# unusual-2n-*.toml); HCP in the why column.
+card    21GF-DEFAULT
+dealer  E
+vul     None
+
+# seat hand                 | auction  | expect | why
+# ── The two-suited overcall ──────────────────────────────────────────
+S AQ852.KQ975.9.AT          | 1C       | 2C     | 15 HCP, five-five in the majors: Michaels
+S QJ852.KT975.9.T3          | 1D       | P      | 6 HCP five-five: too weak even not vulnerable
+S AQJ85.7.KQT84.93          | 1H       | 2H     | 12 HCP, spades and diamonds: Michaels
+S 9.KQT85.93.AQJ84          | 1S       | 2S     | 12 HCP, hearts and clubs: Michaels
+S 7.93.AQJ85.KQT84          | 1H       | 2N     | 12 HCP, both minors: the Unusual 2NT
+S 7.KQT84.AQJ85.93          | 1C       | 2N     | over 1C: diamonds and hearts
+S 7.KQT84.93.AQJ85          | 1D       | 2N     | over 1D: clubs and hearts
+S AKQ85.AKJ75.9.A3          | 1C       | X      | 21 HCP: too strong, double first
+
+vul     NS
+S KQ852.QJ975.9.T3          | 1C       | 1S     | 8 HCP vulnerable: overcall the higher suit
+S AQJ85.KQT84.9.93          | 1C       | 2C     | 12 HCP vulnerable: Michaels
+
+vul     None
+# ── Advancer ─────────────────────────────────────────────────────────
+N QJ5.T8.K8732.983          | 1C 2C P  | 2S     | 6 HCP, three spades: simple preference
+N 82.QJ5.K8732.983          | 1C 2C P  | 2H     | more hearts than spades
+N K43.A42.Q83.J942          | 1C 2C P  | 3S     | 10 HCP and three spades: invitational jump
+N KJ43.Q2.8653.J42          | 1C 2C P  | 4S     | 7 HCP, four spades: preemptive game
+N AK4.A42.KQ83.J42          | 1C 2C P  | 3C     | 17 HCP: cue bid, slam interest
+N 82.93.KJ843.AQ75          | 1H 2H P  | 2N     | two spades: ask for the minor
+N Q82.93.J8543.Q75          | 1H 2H P  | 2S     | 5 HCP, three spades: preference
+N 8432.K95.QJ7.962          | 1H 2N P  | 3D     | equal minors, 6 HCP: diamonds
+N 842.K95.QJ7.J962          | 1H 2N P  | 4C     | four clubs, 7 HCP: preempt
+S AQJ85.7.KQT84.93          | 1H 2H P 2N P | 3D | the Michaels bidder names his minor
+S AQ852.KJ975.9.T3          | 1C 2C P 2S P | P  | 10 HCP: partner chose
+S AQ852.KQ975.9.AT          | 1C 2C P 2S P | 3S | 15 HCP: the top of the range invites
+S AK852.AQJ75.K.93          | 1C 2C P 2S P | 4S | 17 HCP: game
+
+# ── The opening side ─────────────────────────────────────────────────
+W K82.QJ74.A83.952          | 1H 2H    | 2S     | 10 HCP, four hearts: cue bid, limit raise
+W 752.Q84.K973.J62          | 1H 2H    | 3H     | 6 HCP, three hearts: competitive raise
+W 83.KJ74.A832.Q62          | 1H 2N    | 3C     | 10 HCP, four hearts: limit raise over 2NT
+E A5.AQJ74.K83.Q92          | 1H 2H 2S P | 4H   | 16 HCP: accepts the limit raise

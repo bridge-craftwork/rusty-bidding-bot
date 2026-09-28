@@ -378,7 +378,7 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
 # ── Opener answers the cue-bid raise ─────────────────────────────────
 # The cue bid showed three-card support and 11+ total points, so opener
 # accepts with more than a minimum and signs off otherwise.
-after 1x (1y) 2y (P) | 1x (2y) 3y (P) | 1x (3y) 4y (P)
+after 1x (1y) 2y (P) | 1x (2y) 3y (P) | 1x (3y) 4y (P) when y is not x   # their bid in our suit is a two-suiter (two-suited-overcalls.bid)
   # In support points (2026-09-26): 16 HCP left 14-15 with shortness in
   # a partscore. 14/15/16 support points: +750/+697/+519 by par distance.
   4{x} "Accepts: game in {x}"
@@ -405,7 +405,7 @@ after 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when
       priority -1
   P   "The limit raise: no game"
       priority -5
-after 1x (2y) 3y (P) 4x (P) when x is H | x is S
+after 1x (2y) 3y (P) 4x (P) when x is H | x is S, y is not x
   P   "Game reached"
 after 1x (1y) 2y (P) 2x (P) | 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) when x is H | x is S, y is not x
   4{x} "Game: 13+ opposite the sign-off"  shows hcp+length_points>=13

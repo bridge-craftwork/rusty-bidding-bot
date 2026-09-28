@@ -51,7 +51,11 @@ a raise with three-card support for partner's major.
 Their bid **in our suit** is a cue bid, not an overcall (Michaels and the
 like), so these rules are gated on `y is not x`. Without that they fired
 over a Michaels cue bid and cost about a point of agreement in each of
-the six Michaels scenarios.
+the six Michaels scenarios. Since 2026-09-28 our answers to their
+Michaels and Unusual 2NT are in `two-suited-overcalls.bid`; opener's
+answer to the cue-bid raise got the same `y is not x` guard, since
+1♦ (2♦) 3♦ (our competitive raise over Michaels) was being read as
+"1x (2y) 3y", the cue-bid raise.
 
 Opener's answer to the negative double is written once with relative
 calls (`cheapest(S)`, `jump(N)`, `cheapest(x)`), so it is right at every

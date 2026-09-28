@@ -59,8 +59,8 @@ the 46 scenarios that moved: calls +29.8, contracts +11.0, auctions -6.8
   is natural and intermediate, not the weak jump of the direct seat.
 - Reopening over a **two-level or preemptive opening**, and the balancing
   double of 1NT.
-- Michaels and the unusual notrump in balancing (`competitive.michaels`
-  is off on our cards).
+- Michaels and the unusual notrump in balancing (the direct-seat ones are
+  in `two-suited-overcalls.bid`, 2026-09-28; Basic-Bridge plays neither).
 - Partner should read a reopening **double** as lighter than a direct
   one; those advance rules still use the direct-seat ranges (the suit
   overcall no longer does).

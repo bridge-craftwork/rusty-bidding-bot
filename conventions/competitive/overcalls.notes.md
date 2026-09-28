@@ -108,9 +108,9 @@ The balancing seat is `balancing.bid`; responsive doubles are
 `responsive-doubles.bid`.
 
 - Overcalls of a 1NT opening, of a weak two, and of two-level openings.
-- Two-suited overcalls (Michaels, unusual notrump) are off on this card
-  but the fields exist.
-- Overcalls of a 1NT opening, of a weak two, and of two-level openings.
+- Two-suited overcalls (Michaels, the Unusual 2NT) are in
+  `two-suited-overcalls.bid` (2026-09-28), when the card plays them
+  (Basic-Bridge does not).
 
 ## Probed over 1C (2026-09-25, `probes/overcall-1C.toml`)
 
