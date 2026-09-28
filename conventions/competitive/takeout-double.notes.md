@@ -225,3 +225,15 @@ Ticket basic-takeout-double-b197: `1S X XX P P P`, −520. Two holes:
   corrects), and leaves it in only with four of their suit.
 
 Full corpus: +2,567 par, +4,771 side IMPs (604 boards).
+
+## Game in a known fit; minors up the line (2026-09-27)
+
+Ticket basic-takeout-double-b455: `1H X P 2H 3H 4D P`, and North, with
+five spades opposite a double that promised three, had no rule in a
+game force. The game-force fallback in base.bid knew only the agreed
+suit and 3NT; it now also bids game in an eight-card fit that has been
+shown but not agreed (a major ahead of 3NT, a minor after it). The
+doubler shows four-card minors up the line (clubs with 4-4).
+Full corpus: +1,392 par, +1,698 side IMPs (1,049 boards). One test
+changed: 2C 2D 2H with three hearts and 8 HCP now bids 4♥, not the
+fallback 3NT.

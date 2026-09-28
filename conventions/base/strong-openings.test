@@ -29,7 +29,7 @@ S AKQJ6.AQ96.Q42.K      |         | 1S     | 21 flat-ish: one level is enough
 N AKQ32.J54.97.T62      | 2C P    | 2S     | five spades to the AKQ
 N QJ932.J54.97.T62      | 2C P    | 2D     | five ragged spades: wait instead
 N 8632.J54.973.T62      | 2C P 2D P 2H P | 3C | 1 HCP: the second negative
-N K632.J54.Q973.T6      | 2C P 2D P 2H P | 3NT | 8 HCP: not a bust
+N K632.J54.Q973.T6      | 2C P 2D P 2H P | 4H  | 8 HCP, not a bust: three hearts opposite five, game in the fit (was 3NT, the fallback)
 
 # ── Opener after a positive
 S AKQ642.K8.AKJ9.6      | 2C P 2NT P | 3S  | six spades opposite a balanced positive

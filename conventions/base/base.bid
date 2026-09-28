@@ -85,3 +85,18 @@ when we.forcing = game, !game_reached
             priority -40
   3N        "Game in notrump"           when we.trump is none
             priority -40
+  # A fit shown but not agreed (2026-09-27, ticket b455: 1H X P 2H 3H 4D,
+  # where the doubler's three spades met five and nobody bid 4S): game in
+  # the known eight-card fit, a major first, above the 3NT fallback.
+  4S        "Game in the spade fit"     shows S + partner.S.min >= 8
+            when  we.trump is none
+            priority -38
+  4H        "Game in the heart fit"     shows H + partner.H.min >= 8
+            when  we.trump is none
+            priority -38
+  5D        "Game in the diamond fit"   shows D + partner.D.min >= 8
+            when  we.trump is none
+            priority -41
+  5C        "Game in the club fit"      shows C + partner.C.min >= 8
+            when  we.trump is none
+            priority -41

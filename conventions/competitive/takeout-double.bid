@@ -235,10 +235,11 @@ after (1x) X (P) 2x (*) when !rho.last=P
       priority -6
   cheapest(N) "A stopper in {x}, no extras"     shows stop(x), hcp<=16
       priority -7
-  cheapest(D) "Four or more diamonds, no extras" shows D>=4, hcp<=16
+  # Four-card minors up the line (Rick, ticket b455): clubs with 4-4.
+  cheapest(D) "Four or more diamonds, no extras" shows D>=4, D>C | x is C, hcp<=16
       when  x is not D
       priority -8
-  cheapest(C) "Four or more clubs, no extras"    shows C>=4, hcp<=16
+  cheapest(C) "Four or more clubs, no extras"    shows C>=4, C>=D | x is D, hcp<=16
       when  x is not C
       priority -8
 

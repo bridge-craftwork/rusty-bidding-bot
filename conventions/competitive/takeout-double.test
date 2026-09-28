@@ -73,3 +73,11 @@ N J975.JT.KQ972.87      | 1S X XX                              | 2D     | four o
 S KQ.AQ82.J643.T64      | 1S X XX P P                          | 2D     | partner had no suit to name: run to the cheapest four-card suit
 S Q.AQ82.J643.KT64      | 1S X XX P P                          | 2C     | clubs are cheaper
 S KQT9.AQ82.J64.T6      | 1S X XX P P                          | P      | four of their suit: leave it in
+
+# The doubler after the cue bid and opener's raise; advancer places the
+# game (Basic_Takeout_Double 455, ticket 2026-09-27).
+card    Basic-Bridge
+dealer  E
+vul     All
+S AJ9.84.K876.AJ65      | 1H X P 2H 3H                         | 4C     | four-card minors up the line
+N K8752.7.AJ3.K742      | 1H X P 2H 3H 4C P                    | 4S     | five spades opposite the double's three: game in the fit
