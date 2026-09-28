@@ -108,9 +108,14 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 
 ## Later
 
-- Deploy: a Pages project and a deploy workflow (dealer3's `pages.yml` is the
-  model), then the router entry in bridge-craftwork-site and an `llms.txt`
-  line.
+- Deploy: `.github/workflows/pages.yml` builds, checks and deploys on a push
+  to main that touches the site, engine or rules (and on demand). It needs
+  the Pages project (`npx wrangler pages project create rusty-bidding-bot`)
+  and two org secrets: `CLOUDFLARE_PAGES_DEPLOY_TOKEN` (a token with
+  Account -> Cloudflare Pages -> Edit; named for its use, mapped to
+  wrangler's `CLOUDFLARE_API_TOKEN`) and `CLOUDFLARE_ACCOUNT_ID`; until
+  they exist it builds and skips the deploy with a notice. Then the router
+  entry in bridge-craftwork-site and an `llms.txt` line.
 - Run the engine and dealer3 in a Web Worker (a hard dealer script or a
   slow double-dummy solve blocks the page briefly today).
 - The scenario's chat text and a per-scenario "what this scenario teaches"
