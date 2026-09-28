@@ -22,7 +22,7 @@ module total-tricks "The Law of Total Tricks"
 
 # `bonus`: partner's three is a takeout double of their major, counted as four.
 # The hedge: vulnerable against not, one trick fewer.
-when they.bid, !lho.last=P | !rho.last=P      # they are still bidding
+when they.bid, !lho.last=P | !rho.last=P, !game_reached   # they are still bidding; not once we have bid game (ticket b100)
   2x  "Total tricks: eight trumps between us: the two level"
       shows x + partner.x.min = 8
       when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)

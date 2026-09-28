@@ -64,3 +64,14 @@ with four spades, 3♠.
   advancer). Some of that may be worth a narrower rule.
 - The hedge is one level at unfavourable only; favourable is the plain
   count.
+
+## Not after our game (2026-09-27)
+
+Ticket basic-takeout-double-b100: `1H X P 2H 3H 3NT P 4C`, the LoTT
+pulling partner's 3NT to four of a six-card minor. Rick: we do not pull
+partner's 3NT to a minor unless looking for slam; the six clubs are
+tricks in notrump and 3NT promised the heart stopper. The context now
+requires `!game_reached`. Tiny on the corpus (5 boards: +20 par, −12
+side IMPs), adopted on Rick's ruling. Keeping the LoTT out of the whole
+game force was worse: it sent a hand with a singleton heart jack to 3NT
+(the 4♦ case in total-tricks.test).

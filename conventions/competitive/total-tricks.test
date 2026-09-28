@@ -11,3 +11,10 @@ vul     None
 # Not when they have stopped bidding, and not with a bare hand.
 S AJ82.4.KQ63.K872      | 1H X P 1S P      | P   | a minimum double: advancer's 0-8, nobody competing
 N 843.J72.932.T874      | 1D 1S P          | P   | 1 HCP: no raise on eight trumps alone
+
+# Not once we have bid game: partner's 3NT is not pulled to a minor
+# below slam (Rick, Basic_Takeout_Double 100, ticket 2026-09-27).
+card    Basic-Bridge
+dealer  E
+vul     All
+N QT2.J.Q94.AKQ942      | 1H X P 2H 3H 3NT P                   | P      | six solid clubs are tricks in 3NT; partner has the heart stopper
