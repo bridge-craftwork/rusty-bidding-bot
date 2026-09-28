@@ -4,3 +4,6 @@
 /.rbb-cache/
 /tickets/
 /crates/wasm/pkg/
+/web/dist/
+/web/.cache/
+.wrangler/

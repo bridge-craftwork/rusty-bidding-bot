@@ -1,0 +1,29 @@
+# Cloudflare Pages response headers. build.sh copies this file to the root of
+# web/dist, where Pages reads it. The bridge-craftwork.com router proxies
+# /rusty-bidding-bot/* here with the prefix stripped and keeps these headers.
+#
+# No COOP/COEP: the engines are single-threaded (dealer3's single-threaded
+# build deals one deal at a time), so nothing needs SharedArrayBuffer, and
+# the page can read Practice-Bidding-Scenarios from raw.githubusercontent.com
+# without cross-origin isolation getting in the way.
+
+/*
+  X-Content-Type-Options: nosniff
+  # A deal or a dealer script travels in the fragment, which is never sent;
+  # still, never hand the page's address to a third party.
+  Referrer-Policy: no-referrer
+
+# For readers without JavaScript (people and assistants): plain text, always
+# the current one.
+/reference.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
+
+# No bundler, so no content hashes: everything is revalidated (Pages sends
+# ETags, so an unchanged engine costs a 304, not 1.4 MB).
+/pkg/*
+  Cache-Control: public, max-age=0, must-revalidate
+/dealer3/*
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate

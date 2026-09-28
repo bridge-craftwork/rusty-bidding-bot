@@ -1,0 +1,13 @@
+// Cloudflare Pages configuration for the web site (web/, docs/WEB.md).
+//
+// A static site: the engine runs in the visitor's browser. Build with
+// `web/build.sh`, then `npx wrangler pages deploy` (the project must exist
+// first: `npx wrangler pages project create rusty-bidding-bot`).
+// bridge-craftwork.com mounts it at /rusty-bidding-bot/ through the site's
+// router (bridge-craftwork-site, src/index.js), which strips the prefix and
+// keeps this project's headers (web/_headers).
+{
+  "name": "rusty-bidding-bot",
+  "compatibility_date": "2026-08-01",
+  "pages_build_output_dir": "web/dist"
+}

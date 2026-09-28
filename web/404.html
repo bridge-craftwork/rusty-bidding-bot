@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not found: rusty-bidding-bot</title>
+<!--
+  Cloudflare Pages serves this file, with a 404 status, for any path that
+  matches no file. Without it Pages would answer every path with index.html
+  and 200, and a client could not tell a missing page from a real one. The
+  real routes are files: index.html (/), reference.txt, and the assets.
+  Links are relative, so they work at / and under /rusty-bidding-bot/ ...
+  except that a 404 can be at any depth; the page is the tool's root.
+-->
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+         max-width: 34rem; margin: 18vh auto 0; padding: 0 1.5rem; line-height: 1.6; color: #1a1a1a }
+  h1 { font-size: 1.25rem; font-weight: 500; margin: 0 0 .5rem }
+  p { color: #6b7280; margin: 0 0 1rem }
+  a { color: #334155 }
+  ul { color: #6b7280; padding-left: 1.1rem }
+</style>
+</head>
+<body>
+  <h1>Not found</h1>
+  <p>There is no page at that address.</p>
+  <ul>
+    <li><a href="./" id="home">The bidding engine</a></li>
+    <li><a href="./reference.txt" id="ref">Reference</a> (plain text)</li>
+  </ul>
+  <script>
+    // Relative links resolve against the missing path; point them at the
+    // tool's root (/rusty-bidding-bot/ behind the site router, / on its own).
+    var m = location.pathname.match(/^\/rusty-bidding-bot\//)
+    var root = m ? m[0] : '/'
+    document.getElementById('home').href = root
+    document.getElementById('ref').href = root + 'reference.txt'
+  </script>
+</body>
+</html>

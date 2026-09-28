@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- A bidding card: a plain signifier, slate like the site's wrench. -->
+  <rect x="5" y="4" width="22" height="24" rx="4" fill="none" stroke="#475569" stroke-width="2.4"/>
+  <text x="16" y="21.5" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="700"
+        text-anchor="middle" fill="#475569">1NT</text>
+</svg>

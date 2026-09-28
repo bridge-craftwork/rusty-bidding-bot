@@ -1,0 +1,11 @@
+{
+  "name": "rusty-bidding-bot-web",
+  "private": true,
+  "type": "module",
+  "description": "The bidding engine's web page. No dependencies and no bundler: web/build.sh assembles web/dist.",
+  "scripts": {
+    "build": "./build.sh",
+    "test": "node scripts/test.mjs dist",
+    "check": "node scripts/check-reference.mjs dist"
+  }
+}
