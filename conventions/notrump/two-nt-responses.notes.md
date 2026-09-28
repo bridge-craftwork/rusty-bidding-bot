@@ -146,3 +146,15 @@ the hands, half of the slams in a minor). Now 4♣/4♦ is a slam try with
 six cards or five unbalanced and slam-invite values; opener bids six
 with three-card support, else 4NT; responder then 6NT with slam values.
 Full corpus +1,730 by par distance, +3,123 by side (448 boards).
+
+## Puppet Stayman over 2NT is not reachable yet (2026-09-28)
+
+The conventions survey (docs/conventions-survey.md) found that the
+`.bbsa` import writes `notrump.stayman.puppet` while this module reads
+`notrump.two_nt.puppet` (the path Bridge-Classroom's catalog and card
+PDFs use), so the switch never reaches the rules. Merging the two
+fields (mapping the key to `two_nt.puppet`, the old path as an alias)
+was tried and measured: −168 par, −354 side IMPs (214 boards), because
+the module only guards against Puppet (ordinary Stayman switches off)
+and has no Puppet rules. Not merged. The fix is to implement Puppet
+Stayman, then make the mapping change together with it.
