@@ -21,6 +21,9 @@ BBA / EPBot.
    language"). Every rule needs an explanation and a `shows` clause.
 3. Add test auctions, and check the corpus scoreboard for regressions.
 
+docs/CONTRACT.md lists what the engine promises a rule set and what a good
+convention file does (tests, notes, measuring a change).
+
 ## License
 
 Contributions are dual licensed MIT OR Apache-2.0, as described in README.md.

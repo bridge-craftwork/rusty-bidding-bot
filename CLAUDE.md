@@ -35,6 +35,16 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   comparison to scenarios whose cards we cover that well.
 - `cargo run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
   `conventions/`; `bid compile <file>` prints the JSON IR.
+- docs/CONTRACT.md is the contract between engine and conventions (they
+  will split into two repos): what the engine promises, what a good
+  convention file does. `conventions/conventions.toml` is the rule set's
+  manifest; its `language` must be one the engine reads
+  (`rbb_engine::LANGUAGE_VERSION`, shown by `rbb --version`), or loading
+  refuses. A change that alters how existing rule files load or read
+  needs a language version bump. `rbb bid terms` prints every term a
+  condition may use; the meanings live in the term tables in
+  `crates/engine/src/eval.rs`, and after changing them run
+  `rbb bid terms --doc docs/CONTRACT.md` (a test checks the doc).
 - `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
   (`seat hand | auction | expect | why`) next to the modules; `-v` lists passes.
   `cargo test` runs them too. Put call expectations there, not in Rust tests.

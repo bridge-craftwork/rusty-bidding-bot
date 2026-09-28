@@ -5,6 +5,10 @@ into a JSON IR (`rbb bid check`, `rbb bid compile <file>`), and `rbb-engine`
 executes it (`rbb call`). Section 11 lists how the engine currently reads
 the vocabulary, including what is not implemented yet. The examples in [`conventions/`](../conventions/) all compile.
 
+This is **rule language 1**. [CONTRACT.md](CONTRACT.md) says what that
+version promises, how a rules directory declares it (`conventions.toml`),
+and lists every term a condition may use (`rbb bid terms`).
+
 ## 1. The model: rules describe calls; the engine tracks what is known
 
 Rules cannot be keyed only by auction. There are thousands of auctions that
