@@ -2,7 +2,8 @@
 #
 # Responses to a 2NT opening: the 1NT structure one level up, which is
 # what BBA plays on this card — 3♣ Stayman, 3♦ and 3♥ transfers, 3NT to
-# play, 4NT quantitative.
+# play, 4NT quantitative. With `notrump.two_nt.puppet` 3♣ is Puppet
+# Stayman instead (at the end of the file).
 #
 # Only the asking calls and opener's answers are here. What follows is
 # already written against the question in `stayman.bid` and
@@ -100,7 +101,7 @@ after 2N (P) 4x (P) 4N (P) when x is C | x is D, style is not bba
       priority -5
 
 # Opener answers Stayman. 3♦ is the negative, as over 1NT.
-after 2N (P) 3C (P)
+after 2N (P) 3C (P) when !puppet
   3H  "4+ hearts"                 shows H>=4
   3S  "4 spades, not 4 hearts"    shows S>=4, H<=3
   3D  "No four-card major"        shows H<=3, S<=3
@@ -132,3 +133,118 @@ after 2N (P) 3H (P) 3S (P)
       priority -1
   4S  "Game, six or more spades"                  shows S>=6, hcp>=25-partner.hcp.max
       priority -1
+
+# ── Puppet Stayman (`notrump.two_nt.puppet`, 2026-09-28) ──────────────
+# 3♣ asks for a four- or five-card major. Responder bids it with game
+# values, a three- or four-card major and no five (a five-card major
+# transfers, 5-4 included); opener shows a five-card major (3♥/3♠), a
+# four-card one (3♦) or neither (3NT). After 3♦ responder bids the
+# major he does NOT hold, so the strong hand declares the 4-4 fit; 4♦
+# is both majors, 4♣ both with slam interest. BBA plays it this way,
+# after 2♣–2♦–2NT too (probed: two-nt-responses.notes.md, "Puppet
+# Stayman over 2NT"). Only the ask names an auction; the rest follows
+# the questions and answers.
+after 2N (P) | 2C (P) 2D (P) 2N (P) when puppet
+  3C  "Puppet Stayman: asks for a four- or five-card major"  alert
+      shows strength>=game, H<=4, S<=4, H>=3 | S>=3
+      when  style is not bba
+      sets  forcing=game, ask=puppet
+      artificial
+      priority 1                           # ahead of 3NT, 4NT and 6NT
+  3C  "Puppet Stayman: asks for a four- or five-card major"  alert
+      shows hcp>=25-partner.hcp.min, H<=4, S<=4, H>=3 | S>=3
+      when  style is bba
+      sets  forcing=game, ask=puppet
+      artificial
+      priority 1
+
+when asked puppet
+  3H  "Five hearts"                           shows H>=5
+  3S  "Five spades"                           shows S>=5, H<=4
+  3D  "A four-card major, no five"            shows H=4 | S=4, H<=4, S<=4
+      artificial
+  3N  "No four- or five-card major"           shows H<=3, S<=3
+
+# Opener has a four-card major. Responder names the one he does not hold.
+# Without one, the no-fit counts after Stayman (stayman.bid): 6NT from
+# 32 total points on opener's minimum.
+when answered puppet, partner.last=3D
+  3H  "Four spades, not four hearts"          alert
+      shows S=4, H<=3
+      sets  ask=puppet_fit(S)
+      artificial
+  3S  "Four hearts, not four spades"          alert
+      shows H=4, S<=3
+      sets  ask=puppet_fit(H)
+      artificial
+  4D  "Both majors, no slam interest: opener chooses"  alert
+      shows H=4, S=4, strength<=game
+      sets  ask=puppet_both
+      artificial
+  4C  "Both majors, slam interest: opener chooses"     alert
+      shows H=4, S=4, strength>=slam_invite
+      sets  ask=puppet_both
+      artificial
+  6N  "No four-card major: slam"              shows H<=3, S<=3, points>=32-partner.hcp.min
+  4N  "No four-card major: quantitative, invites 6NT"
+      shows H<=3, S<=3, balanced, strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  3N  "No four-card major: game"              shows H<=3, S<=3, strength>=game
+      priority -1
+
+when asked puppet_fit(x)
+  4{x}  "Four {x}: game in the fit"           shows x=4   sets trump=x
+  3N    "No four {x}"                         shows x<=3
+when asked puppet_both
+  4S  "Four spades"                           shows S=4   sets trump=S
+  4H  "Four hearts, not four spades"          shows H=4, S<=3   sets trump=H
+after 2N (P) 3C (P) 3D (P) 3N (P) | 2C (P) 2D (P) 2N (P) 3C (P) 3D (P) 3N (P) when puppet
+  P   "No fit: 3NT"
+
+# Responder once opener has placed the contract in the 4-4 fit.
+when answered puppet_fit(x), partner.last=4{x}
+  6{x}  "Slam in the fit"                     shows tp(x)>=33-partner.hcp.min
+  P     "Game in the fit"
+        priority -5
+when answered puppet_both, we.trump is suit
+  6{trump}  "Slam in the fit"                 shows tp(trump)>=33-partner.hcp.min
+  P         "Game in the fit"
+            priority -5
+
+# Opener has a five-card major.
+when answered puppet, partner.last=3H
+  6H  "Slam in the five-three fit"            shows H>=3, tp(H)>=33-partner.hcp.min
+      sets  trump=H
+  4H  "Game in the five-three fit"            shows H>=3
+      sets  trump=H
+      priority -1                             # slam first when there
+  6N  "No fit: slam"                          shows H<=2, points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"     shows H<=2, balanced, strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  3N  "No fit: game"                          shows H<=2
+      priority -1
+when answered puppet, partner.last=3S
+  6S  "Slam in the five-three fit"            shows S>=3, tp(S)>=33-partner.hcp.min
+      sets  trump=S
+  4S  "Game in the five-three fit"            shows S>=3
+      sets  trump=S
+      priority -1
+  6N  "No fit: slam"                          shows S<=2, points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"     shows S<=2, balanced, strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  3N  "No fit: game"                          shows S<=2
+      priority -1
+# Opener has no major.
+when answered puppet, partner.last=3N
+  6N  "No fit: slam"                          shows points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"     shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  P   "No fit: 3NT"
+      priority -20                            # behind slam/over-3nt.bid (minor-suit slam tries)
+# After a 3NT that denies the 4-4 fit: the same counts.
+when answered puppet_fit(x), partner.last=3N
+  6N  "No fit: slam"                          shows points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"     shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  P   "No fit: 3NT"
+      priority -20

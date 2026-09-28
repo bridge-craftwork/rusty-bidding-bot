@@ -53,3 +53,36 @@ dealer  S
 N 72.K4.K72.AQ8743      | 2NT P        | 4C  | 12 with six clubs: slam try
 S AK5.AQ2.KQ5.KJ73      | 2NT P 4C P   | 6C  | four clubs: slam
 S AK5.AQ32.KQ54.K7      | 2NT P 4C P   | 4NT | two clubs: no fit
+
+# ── Puppet Stayman over 2NT (2026-09-28): the 21GF-MSTandMSS card ─────
+card    21GF-MSTandMSS
+dealer  S
+N K32.Q54.J432.K72      | 2NT P                | 3C  | 9 HCP, three cards in each major: Puppet looks for a 5-3 fit
+N KJ32.Q54.J43.K72      | 2NT P                | 3C  | four spades: Puppet
+N K3.Q5.J9432.K732      | 2NT P                | 3NT | 9 HCP, no three-card major: 3NT
+N KJ432.Q542.K2.72      | 2NT P                | 3H  | 5-4 in the majors: transfer to the five
+N K432.765.9432.72      | 2NT P                | P   | 3 HCP: pass
+S AQ5.KJ87.AK3.QJ7      | 2NT P 3C P           | 3D  | four hearts, no five
+S AQ5.KJ873.AK.QJ7      | 2NT P 3C P           | 3H  | five hearts
+S AQ5.KJ8.AK73.QJ7      | 2NT P 3C P           | 3NT | no four-card major
+N KJ32.Q54.J43.K72      | 2NT P 3C P 3D P      | 3H  | four spades: bid the major he does not hold
+N Q54.KJ32.J43.K72      | 2NT P 3C P 3D P      | 3S  | four hearts: bid spades
+N KJ32.Q543.J4.K72      | 2NT P 3C P 3D P      | 4D  | both majors, 10 HCP: opener chooses
+N AJ32.K543.K4.K72      | 2NT P 3C P 3D P      | 4C  | both majors, 14 HCP: slam interest
+N K32.Q54.J432.K72      | 2NT P 3C P 3D P      | 3NT | no four-card major, game values
+S AQ54.K87.AK3.KQ7      | 2NT P 3C P 3D P 3H P | 4S  | four spades: opener declares the fit
+S AQ5.K874.AK3.KQ7      | 2NT P 3C P 3D P 3H P | 3NT | no four spades
+S AQ54.K874.AK.KQ7      | 2NT P 3C P 3D P 4D P | 4S  | both majors: spades
+N KJ32.Q54.J43.K72      | 2NT P 3C P 3D P 3H P 4S P | P  | game values only
+N AKJ2.Q54.K43.K72      | 2NT P 3C P 3D P 3H P 4S P | 6S | 16 HCP in the fit: slam
+N K32.Q54.J432.K72      | 2NT P 3C P 3H P      | 4H  | three hearts opposite five: game
+N KJ2.Q5.J9432.K72      | 2NT P 3C P 3H P      | 3NT | no fit: 3NT
+N K32.Q54.J432.K72      | 2NT P 3C P 3NT P     | P   | no fit: 3NT
+S AQ5.KJ87.AK3.QJ7      | 2NT P 3C P 3D P 3N P    | P   | responder has no four-card major
+S AQ54.K87.AK3.KQ7      | 2NT P 3C P 3D P 4C P    | 4S  | both majors with slam interest: opener picks spades
+N AKJ2.Q54.K43.K72      | 2NT P 3C P 3D P 3H P 3N P | 6N | no fit, 16 HCP: slam
+N KJ2.Q5.AJ432.K72      | 2NT P 3C P 3N P         | 6N  | 14 HCP and a five-card suit: 6NT (32 on opener's minimum)
+# The same after 2♣–2♦–2NT (22-23), as BBA plays the card.
+N K32.Q54.J432.K72      | 2C P 2D P 2NT P         | 3C  | three cards in each major: Puppet
+N 732.Q54.J432.972      | 2C P 2D P 2NT P         | 3C  | 3 HCP opposite 22-23 is game values (BBA: 3C from 3)
+S AQ5.KJ87.AK3.KQ7      | 2C P 2D P 2NT P 3C P    | 3D  | four hearts, no five

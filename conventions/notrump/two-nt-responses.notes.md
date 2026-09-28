@@ -54,9 +54,8 @@ game band is wide enough that 3NT was outranking 4♥ on descriptiveness.
 - **Minor-suit transfers over 2NT** (`notrump.two_nt.minor_transfers`,
   on for both 21GF cards) and minor-suit Stayman: not written, so a
   minor one-suiter bids 3NT.
-- **Puppet Stayman** (`two_nt.puppet`) is only guarded against, not
-  played: the 3♣ rule stands down when the card says puppet, and nothing
-  replaces it.
+- **Puppet Stayman** (`two_nt.puppet`): played since 2026-09-28, see
+  the section below. Puppet over 1NT (`stayman.puppet_1nt`) is not.
 - The 3♠ relay, `two_nt.three_s`, and the four-level transfers.
 - Texas over 2NT, and slam bidding beyond the quantitative 4NT.
 
@@ -147,14 +146,125 @@ six cards or five unbalanced and slam-invite values; opener bids six
 with three-card support, else 4NT; responder then 6NT with slam values.
 Full corpus +1,730 by par distance, +3,123 by side (448 boards).
 
-## Puppet Stayman over 2NT is not reachable yet (2026-09-28)
+## Puppet Stayman over 2NT (2026-09-28)
 
-The conventions survey (docs/conventions-survey.md) found that the
-`.bbsa` import writes `notrump.stayman.puppet` while this module reads
-`notrump.two_nt.puppet` (the path Bridge-Classroom's catalog and card
-PDFs use), so the switch never reaches the rules. Merging the two
-fields (mapping the key to `two_nt.puppet`, the old path as an alias)
-was tried and measured: −168 par, −354 side IMPs (214 boards), because
-the module only guards against Puppet (ordinary Stayman switches off)
-and has no Puppet rules. Not merged. The fix is to implement Puppet
-Stayman, then make the mapping change together with it.
+Rick: "we want Puppet over 2NT working."
+
+**The switch.** The `.bbsa` key "2N-3C Puppet Stayman" used to write
+`notrump.stayman.puppet` while this module read `notrump.two_nt.puppet`
+(the path Bridge-Classroom's card editor and PDFs use), so the switch
+never reached the rules. There is now one field, `two_nt.puppet`; the
+key maps to it and `notrump.stayman.puppet` (the catalog's other path)
+is an alias. Merging the fields without Puppet rules was measured first
+at −168 par / −354 side IMPs: ordinary Stayman switched off and nothing
+replaced it. The merge now comes with the rules.
+
+**What is played** (`when puppet`):
+
+| call | shows |
+|---|---|
+| 3♣ | game values, a three- or four-card major, no five (5-4 in the majors transfers to the five) |
+| opener 3♦ / 3♥ / 3♠ / 3NT | a four-card major and no five / five hearts / five spades / neither |
+| after 3♦: 3♥ / 3♠ | four spades, not four hearts / four hearts, not four spades: the major he does *not* hold, so opener declares |
+| after 3♦: 4♦ / 4♣ | both majors, no slam interest / slam interest (slam-invite values); opener chooses, spades with both (BBA) |
+| after 3♦: 3NT / 6NT | no four-card major; 6NT from 32 total points on opener's minimum |
+| opener after 3♥/3♠/4♣/4♦ | 4M with the fit (`sets trump`), else 3NT |
+| responder after 4M | 6M with 33 support points on opener's minimum, else pass |
+| after opener's 3♥/3♠ | 4M with three, 6M with 33 support points; without: 3NT, 6NT from 32 |
+| after 3NT (no major, or no fit) | 6NT from 32, else pass; the minor-suit slam tries of slam/over-3nt.bid behind |
+
+The no-fit counts are those after Stayman (stayman.bid). The ask sets
+`ask=puppet`, the second round `ask=puppet_fit(x)` / `ask=puppet_both`,
+so only the 3♣ itself names an auction. It is on after 2♣–2♦–2NT too,
+because BBA plays it there (below); the strength bands then read the
+22-23. The bba style keeps the entry at BBA's count (`hcp>=25-
+partner.hcp.min`, 5 HCP opposite 20-21); the rest is shared.
+
+### BBA's treatment (probes, 21GF-MSTandMSS both sides, dealer S, None/MP)
+
+Specs in `probes/puppet-*.toml`:
+
+- `puppet-2N-resp` (500 random responder hands after `2NT P`): 3♣
+  with any three- or four-card major and 5+ HCP (3-1, 3-2, 3-3 and
+  4-x alike, slam hands too); a five-card major transfers, 4-5 and 5-4
+  included; two doubletons or shorter majors 3NT (or 4♣ Gerber with
+  slam values); 0-4 pass.
+- `puppet-2N-opener` (300 opener hands after `2NT P 3C P`): 3♦ with
+  any four-card major, 3♥/3♠ with five, 3NT with neither. No exceptions.
+- `puppet-2N-3D-resp` (400 hands after `... 3D P`): 3♥ = four spades,
+  3♠ = four hearts at every strength; both majors 4♦ with 6-8 HCP,
+  4♣ from 9; no four-card major 3NT to 10, 11-12 split 4NT/6NT, 12+
+  6NT (sometimes 6 of a minor).
+- `puppet-2N-3D-3H-opener`, `-3S-opener`: over 3♥ (four spades) 4♠
+  with 20 HCP but **3♠ with 21** (a maximum, below game, then cue
+  bids); over 3♠ (four hearts) 4♥ always; without the fit 3NT.
+- `puppet-2N-3D-4D-opener`, `-4C-opener`: with both majors BBA picks
+  **spades**; over 4♣ it often bids 4NT keycard itself (more with
+  hearts than spades).
+- `puppet-2N-3H-resp`, `-3S-resp` (250 each, opener with five): raise
+  to game with three, 6M with slam values, 3NT without a fit; with slam
+  values and no fit 4♣/4♦ slam tries or 6NT.
+- `puppet-2C-2N-resp` (120 hands after `2C P 2D P 2NT P`): the same
+  structure after 2♣–2♦–2NT: 3♣ with a three-card major from 3 HCP, 3♦ /
+  3♥ transfers, pass with 0-2.
+
+The corpus (Puppet_Stayman_2N, 290 boards through 3♦, 176 through 3NT)
+agrees: 3♥/3♠ for the major not held, 4♦/4♣ with both, 3NT/4NT/6NT/7NT
+with 3-3, Gerber (4♣) or a quantitative 4NT after 3NT.
+
+**Differences we keep (not modelled):** BBA's 3♠ over 3♥ with a
+maximum, its keycard asks after the fit (ours: 6M directly on a count;
+it reaches the grand slams we miss, ~20 boards at −11 to −13), 4♣ from
+9 HCP with both majors (ours: slam-invite values, 12), Gerber after
+3NT, and minor-suit slam tries at the six level.
+
+### Measured (par as the yardstick, 170,633 boards)
+
+| | before | after |
+|---|---|---|
+| whole corpus, vs BBA | −114,604 | **−114,554** (+50) |
+| Puppet_Stayman_2N, vs BBA | −364 | **−314** |
+| Puppet_Stayman_2N, calls agreeing | 70.1% | **87.4%** |
+| Puppet_Stayman_2N, same contract | 321 | **335** |
+
+`sideimps.py`: +43 IMPs to the side that changed its call (181 boards
+changed), all in Puppet_Stayman_2N; par distance +50. Both yardsticks
+agree. The other scenarios on 21GF-MSTandMSS (MST_or_MSS,
+Minor_Game_Or_Slam, Minor_Suit_Stayman, Minor_Suit_Transfer,
+We_Overcall_NT_then_MSS/MST) have no 2NT opening and are unchanged; no
+corpus board reaches 2♣–2♦–2NT on this card. With `general.style=bba`
+the scenario is −388 (87.4% of calls).
+
+A first version (−257 on the scenario) used the over-3NT counts after
+a 3NT answer (6NT from 34 HCP, quantitative 4NT from 32 HCP, which
+opener then declined because responder had shown HCP, not points) and
+lost the 6NT that plain Stayman reached; the no-fit counts after
+Stayman fixed that.
+
+### For Rick
+
+- **Puppet over 1NT** (`notrump.stayman.puppet_1nt`, "1N-3C Puppet
+  Stayman", set only on 21GF-Puppet: scenario Puppet_Stayman_1N, −341
+  vs BBA): no rule reads it; 1NT–3♣ is whatever the card's other 3♣
+  treatment is. Not implemented here, as asked; the 2NT rules above
+  would carry over one level down (the ask is written against state).
+- The 3♠-with-a-maximum and opener's own keycard ask over 4♣ are BBA's
+  refinements; worth a try if the grand slams matter.
+
+### Sources
+
+- Bridgebum, "Puppet Stayman": https://www.bridgebum.com/puppet_stayman.php
+  (3♣ with one or two four-card majors, or three-card support; 3♦/3♥/
+  3♠/3NT; after 3♦ bid the major you do not hold; 4♦ both without, 4♣
+  both with slam interest). The scenario's `.btn` cites it too.
+- Wikipedia, "Puppet Stayman": https://en.wikipedia.org/wiki/Puppet_Stayman
+  (the same answers and rebids; the strong hand declares).
+- ACBL convention card, 2NT section: the Puppet Stayman box that
+  Bridge-Classroom's "2NT options: Puppet" (`two_nt.puppet`) mirrors
+  (not re-read online for this change).
+- GIB: https://netbridge.dk/gib.html (GIB's bidding definitions); the
+  21GF-GIB card has "2N-3C Puppet Stayman = 0", so GIB plays plain
+  Stayman over 2NT in the corpus. The page renders its definitions with
+  script and could not be read here.
+- Bridge Guys' page (bridgeguys.com/Conventions/puppet_stayman.html) was
+  unreachable on 2026-09-28.
