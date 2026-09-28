@@ -294,8 +294,29 @@ after (1x) X (XX) | (1x) P (P) X (XX)
       when  x is not S
   cheapest(H) "Four or more hearts"   shows H>=4, H>=S
       when  x is not H
-  cheapest(D) "Four or more diamonds" shows D>=4, D>C, S<=3, H<=3
+  cheapest(D) "Four or more diamonds" shows D>=4, D>C, S<=3 | x is S, H<=3 | x is H
       when  x is not D
-  cheapest(C) "Four or more clubs"    shows C>=4, C>=D, S<=3, H<=3
+  cheapest(C) "Four or more clubs"    shows C>=4, C>=D, S<=3 | x is S, H<=3 | x is H
       when  x is not C
   P   "No four-card suit to name"  priority -10
+
+# The doubler when advancer passed the redouble (2026-09-27, ticket b197:
+# 1S X XX P P P was -520). Advancer had no four-card suit to name, so the
+# doubler runs to his cheapest four-card suit and advancer corrects;
+# leaving it in needs four of their suit.
+after (1x) X (XX) P (P)
+  cheapest(C) "Rescue: four or more clubs, the cheapest"     shows C>=4
+      when  x is not C
+      priority 1
+  cheapest(D) "Rescue: four or more diamonds, the cheapest"  shows D>=4, C<=3 | x is C
+      when  x is not D
+      priority 1
+  cheapest(H) "Rescue: four or more hearts, the cheapest"    shows H>=4, C<=3 | x is C, D<=3 | x is D
+      when  x is not H
+      priority 1
+  cheapest(S) "Rescue: four or more spades"                  shows S>=4, C<=3 | x is C, D<=3 | x is D, H<=3 | x is H
+      when  x is not S
+      priority 1
+  P   "Leaves it in: four or more of their suit"             shows x>=4
+      priority 2
+

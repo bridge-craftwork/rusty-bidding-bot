@@ -209,3 +209,19 @@ Only at unfavourable do both agree, which is where Rick's "especially
 vulnerable" pointed. Kept there: +103 par, +23 side (108 boards).
 Elsewhere the light double wins by side IMPs (it gets us into the
 auction). Board 60 now passes 1♠ as BBA does.
+
+## After the redouble (2026-09-27)
+
+Ticket basic-takeout-double-b197: `1S X XX P P P`, −520. Two holes:
+
+- Advancer's rules after the redouble kept `S<=3, H<=3` on the minor
+  suits, meant to send four-card majors to the major but also blocking
+  a minor when the four spades were *their* suit. North,
+  J975.JT.KQ972.87, had to pass; BBA bids 2♦ (`rbb probe`, prefix
+  `1S X XX`). Now `S<=3 | x is S`, like the other advance rules.
+- The doubler had no rule after `(1x) X (XX) P (P)` and sat in the
+  redouble. Advancer's pass there says no four-card suit to name, so
+  the doubler now runs to his cheapest four-card suit (partner
+  corrects), and leaves it in only with four of their suit.
+
+Full corpus: +2,567 par, +4,771 side IMPs (604 boards).

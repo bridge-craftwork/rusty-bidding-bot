@@ -64,3 +64,12 @@ S QT.J95.KJ95.AQT2      | 1S                                   | X      | 13: en
 S AT.J95.KJ95.QJT2      | 1S                                   | X      | the ace there keeps its value
 vul     None
 S QT.J95.KJ95.KQT2      | 1S                                   | X      | not vulnerable: doubles
+
+# After the redouble (Basic_Takeout_Double 197, ticket 2026-09-27).
+card    Basic-Bridge
+dealer  E
+vul     NS
+N J975.JT.KQ972.87      | 1S X XX                              | 2D     | four of their spades do not stop the diamonds (BBA 2D too)
+S KQ.AQ82.J643.T64      | 1S X XX P P                          | 2D     | partner had no suit to name: run to the cheapest four-card suit
+S Q.AQ82.J643.KT64      | 1S X XX P P                          | 2C     | clubs are cheaper
+S KQT9.AQ82.J64.T6      | 1S X XX P P                          | P      | four of their suit: leave it in
