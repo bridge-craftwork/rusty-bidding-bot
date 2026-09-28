@@ -1987,13 +1987,22 @@ mod term_tests {
 
     #[test]
     fn card_text_reads_as_a_bid_and_bids_are_ordered() {
-        let two_h = Call::Bid { level: 2, strain: Strain::Hearts };
+        let two_h = Call::Bid {
+            level: 2,
+            strain: Strain::Hearts,
+        };
         assert_eq!(bid_of_text("2♥"), Some(two_h.clone()));
         assert_eq!(bid_of_text(" 2H "), Some(two_h.clone()));
         assert_eq!(bid_of_text("X"), None);
         assert_eq!(bid_of_text("e.g. 2♦"), None);
-        let one_s = Call::Bid { level: 1, strain: Strain::Spades };
-        let two_s = Call::Bid { level: 2, strain: Strain::Spades };
+        let one_s = Call::Bid {
+            level: 1,
+            strain: Strain::Spades,
+        };
+        let two_s = Call::Bid {
+            level: 2,
+            strain: Strain::Spades,
+        };
         assert!(bid_rank(&one_s) < bid_rank(&two_h));
         assert!(bid_rank(&two_h) < bid_rank(&two_s));
         assert_eq!(bid_rank(&Call::Double), None);
