@@ -147,6 +147,49 @@ if (loadDealer3) {
   })
 }
 
+await test('the WASM takes a rule set and its card vocabulary at run time', async () => {
+  const J = (name, req) => JSON.parse(rbb[name](JSON.stringify(req)))
+  const ruleSet = (rule) => ({
+    manifest: 'name = "demo"\nlanguage = 1\n',
+    fields: '[demo]\n"strong_nt" = { kind = "bool", label = "1NT", default = true }\n' +
+      '"nt_min" = { kind = "int", label = "1NT minimum", min = 10, max = 20, default = 15 }\n',
+    bbsa_map: '',
+    rules: {
+      'demo/one-nt.bid': 'module demo "Demo"\n  card   demo.strong_nt\n  param  lo = demo.nt_min default 15\n\n' +
+        `when opening\n${rule}\n`,
+    },
+  })
+  const RULE = '  1N  "Demo 1NT"  shows hcp=lo..17, balanced'
+
+  const v = J('validate', ruleSet(RULE))
+  assert.equal(v.ok, true, JSON.stringify(v.diagnostics))
+  assert.equal(v.rule_set.modules, 1)
+  assert.equal(v.rule_set.name, 'demo')
+
+  const e = J('createEngine', { ...ruleSet(RULE), cards: { ns: { json: { demo: { nt_min: 15 } } } } })
+  assert.equal(e.ok, true, JSON.stringify(e.diagnostics))
+  assert.deepEqual(e.ns.modules, ['demo'])
+  const r = J('bid', { engine: e.engine, hand: 'AK52.KJ7.Q94.K83', dealer: 'N', auction: '' })
+  assert.equal(r.call, '1NT')
+  assert.equal(r.rule.file, 'demo/one-nt.bid')
+  // The card's own field, in the rule set's vocabulary.
+  const high = J('createEngine', { ...ruleSet(RULE), cards: { ns: { json: {} }, set: ['demo.nt_min=17'] } })
+  assert.equal(J('bid', { engine: high.engine, hand: 'AK52.KJ7.Q94.K83', dealer: 'N' }).call, 'Pass')
+  // The embedded rules still bid as before.
+  const std = J('bid', { cards: { ns: '21GF-DEFAULT' }, hand: 'AK52.KJ7.Q94.K83', dealer: 'N' })
+  assert.equal(std.rule.file, 'conventions/notrump/one-nt.bid')
+
+  // Compile errors and unknown terms come back with file and line.
+  const bad = J('validate', ruleSet('  1N  "Demo"  shows hcpx>=15'))
+  assert.equal(bad.ok, false)
+  const err = bad.diagnostics.find((x) => x.severity === 'error')
+  assert.equal(err.file, 'demo/one-nt.bid')
+  assert.equal(err.line, 6)
+  assert.match(err.message, /^rules: demo\/one-nt\.bid:6: /)
+  const noEngine = J('createEngine', { ...ruleSet('  1N  "Demo"  shows hcpx>=15'), cards: { ns: { json: {} } } })
+  assert.equal(noEngine.engine, null)
+})
+
 if (pbsDir) {
   await test('a PBS scenario from the corpus, with its cards and BBA\'s auction', async () => {
     const s = new Session(rbb, { fetchImpl })

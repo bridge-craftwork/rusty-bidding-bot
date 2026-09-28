@@ -1,9 +1,12 @@
 # rusty-bidding-bot in the browser (WASM API)
 
 `crates/wasm` (crate `rbb-wasm`) builds the engine for the browser. The rules
-(`conventions/**/*.bid`) and the stock convention cards are compiled into the
-`.wasm` file: nothing is fetched or read at run time. The API is JSON in,
-JSON out, and never throws on bad input: problems come back as
+(`conventions/**/*.bid`), their manifest and card vocabulary
+(`conventions/conventions.toml`, `conventions/card/*.toml`) and the stock
+convention cards are compiled into the `.wasm` file: nothing is fetched or
+read at run time. A caller may also supply a rule set of its own as text
+([Rule sets supplied at run time](#rule-sets-supplied-at-run-time)). The API
+is JSON in, JSON out, and never throws on bad input: problems come back as
 `diagnostics`.
 
 API version: **1** (`info().api`). A change to a request or response shape
@@ -91,8 +94,9 @@ engines.
 | Field | Type | |
 |---|---|---|
 | `severity` | `"error"` \| `"warning"` \| `"info"` | `error`: the request cannot be answered (`ok` is false). `warning`: answered, but something was ignored or doubtful (an unknown card field, a rule problem met while bidding). `info`: a remark (card keys the rules do not use, "no rule applies"). |
-| `message` | string | Starts with the request field it concerns: `hand:`, `deal.N:`, `auction:`, `prefix:`, `cards.ns:`, `engine:`, `dealer:`, `vul:`, `scoring:`, `request`. Warnings from the rules name a rule file and line (`conventions/x.bid:12: ...`) or a call (`call 3 (2C): ...`). |
-| `line` | integer, optional | 1-based. For an auction string, always 1. For a `.bbsa` card, the line of the key. For invalid request JSON, the line in the request. |
+| `message` | string | Starts with the request field it concerns: `hand:`, `deal.N:`, `auction:`, `prefix:`, `cards.ns:`, `engine:`, `dealer:`, `vul:`, `scoring:`, `rules:`, `fields:`, `bbsa_map:`, `manifest:`, `request`. Problems in a supplied rule file read `rules: <file>:<line>: ...`. Warnings from the rules name a rule file and line (`conventions/x.bid:12: ...`) or a call (`call 3 (2C): ...`). |
+| `file` | string, optional | For a problem in a rule file supplied at run time: its name (the key in `rules`); `line` and `col` are then in that file. |
+| `line` | integer, optional | 1-based. For an auction string, always 1. For a `.bbsa` card, the line of the key. For invalid request JSON, the line in the request. For `file`, the line in that file; for `fields` / `bbsa_map`, the line in that text (TOML syntax errors). |
 | `col` | integer, optional | 1-based character column: of the offending call in an auction **string** (not given for an auction array), or in the request JSON. |
 | `hint` | string, optional | How to fix it (the accepted forms, the list of stock cards). |
 
@@ -125,8 +129,13 @@ through.
 - `ns` is required; `ew` defaults to the same card.
 - `set` changes apply to both sides, then `ns_set` / `ew_set` to one:
   `path=value` with `true`/`false`, integers, or text. Paths are card fields
-  (`rbb card schema`, `conventions/card/fields.toml`). An unknown
-  path is an error.
+  of the rule set's vocabulary (for the embedded rules `rbb card schema`,
+  `conventions/card/fields.toml`). An unknown path is an error.
+
+Every card, however given, is read in the card vocabulary of the rules it
+is used with: the embedded one, or the `fields` and `bbsa_map` of a rule
+set supplied at run time. The same `.bbsa` file can therefore give
+different cards under different rule sets.
 
 A **card spec** is one of:
 
@@ -153,28 +162,34 @@ No argument.
 
 ```json
 {"ok": true, "api": 1, "version": "0.1.0", "rules_id": "d737c980a4bbdb8c",
- "rule_files": 34, "modules": 34, "rules": 1658,
+ "rule_files": 34, "modules": 34, "rules": 1658, "language": 1,
  "stock_cards": ["21GF-DEFAULT", "21GF-GIB", "..."], "diagnostics": []}
 ```
 
-`rules_id` is a hash of the embedded rule files: it changes whenever a rule
-does, so it can key caches and label results.
+`rules_id` is a hash of the embedded rule files, manifest and card
+vocabulary: it changes whenever one of them does, so it can key caches and
+label results. `language` is the rule language version this engine reads
+(docs/CONTRACT.md); a rule set whose manifest asks for another is refused.
 
 ### `createEngine(request)` → JSON
 
-Request: `{"cards": {...}}`.
+Request: `{"cards": {...}}`, plus optionally a rule set (`rules`, `fields`,
+`bbsa_map`, `manifest`: [below](#rule-sets-supplied-at-run-time)); without
+one, the embedded rules.
 
 ```json
-{"ok": true, "engine": 1,
+{"ok": true, "engine": 1, "rules_id": "d737c980a4bbdb8c",
  "ns": {"name": "21GF-DEFAULT", "modules": ["base", "notrump-base", "stayman", "..."]},
  "ew": {"name": "21GF-GIB", "modules": ["..."]},
  "diagnostics": [{"severity": "info", "message": "cards.ns: 27 .bbsa keys have no card field ...", "line": 12}]}
 ```
 
 `engine` is a handle (a small integer) for the other calls; `null` when
-`ok` is false. `modules` lists the modules each side plays (active under its
-card). Calling `createEngine` again with the same `cards` (same JSON text)
-returns the same handle without rebuilding. Making an engine takes a few ms.
+`ok` is false. `rules_id` identifies its rule set. `modules` lists the
+modules each side plays (active under its card). Calling `createEngine`
+again with the same `cards` (same JSON text) and the same rule set returns
+the same handle without rebuilding. Making an engine takes a few ms (plus
+compiling a supplied rule set the first time it is seen).
 
 ### `freeEngine(request)` → JSON
 
@@ -185,7 +200,52 @@ Request: `{"engine": 1}`. Response: `{"ok": true, "diagnostics": []}`
 
 `bid`, `interpret`, `bidDeal`, `conventions` and `reference` take either
 `"engine": <handle>` or `"cards": {...}` (which makes or reuses the engine
-for those cards, as `createEngine` does). `engine` wins when both are given.
+for those cards, and the rule set the request supplies, as `createEngine`
+does). `engine` wins when both are given. `conventions`, `reference`,
+`coverage`, `exportCard` and `validate` use the rules (and so the card
+vocabulary) of the `engine` they are given, else the rule set the request
+supplies, else the embedded one.
+
+### Rule sets supplied at run time
+
+Any request that can make an engine or read cards (`createEngine`,
+`validate`, `bid`, `interpret`, `bidDeal` with `cards`, `conventions`,
+`reference`, `coverage`, `exportCard`) may carry a rule set as text instead
+of using the embedded one:
+
+```json
+{"rules": {"demo/one-nt.bid": "module demo \"Demo\"\n  card demo.strong_nt\n...",
+           "demo/one-nt.notes.md": "..."},
+ "fields": "[demo]\n\"strong_nt\" = { kind = \"bool\", label = \"1NT\", default = true }\n",
+ "bbsa_map": "",
+ "manifest": "name = \"demo\"\nlanguage = 1\n",
+ "cards": {"ns": {"json": {}}}}
+```
+
+| Field | | When left out |
+|---|---|---|
+| `rules` | the rule files: an object from file name to source. Only names ending in `.bid` are compiled (others are ignored, with an `info`), in the order `rbb` reads a directory: by path, component by component (file order is the last tie-breaker between rules). The names appear in `rule.file` and in diagnostics. | the embedded `.bid` files |
+| `fields` | the text of the rule set's `card/fields.toml` | the embedded one |
+| `bbsa_map` | the text of its `card/bbsa-map.toml` (`""` maps no key: every `.bbsa` key is kept as passthrough) | the embedded one |
+| `manifest` | the text of its `conventions.toml` | with `rules`: none (an `info` says the rules are read as the current language, as `rbb` reads a directory without one); without `rules`: the embedded one |
+
+The rule set is compiled as `rbb` loads a rules directory: the manifest
+must ask for a rule language this engine reads (`info().language`), the
+vocabulary must load (every path `bbsa_map` names is a field of `fields`,
+every value fits), and every rule file must compile against that
+vocabulary, with every term known to the engine (`check_terms`). Any
+failure is an `error` diagnostic, and no engine is made: in a rule file
+with `file`, `line` and `col` (`"rules: demo/one-nt.bid:6: unknown term
+..."`), in the other texts starting with the field (`"fields: ..."`, with
+the `line` of a TOML syntax error). When only some of the texts are given,
+the embedded ones fill in and must fit: an error in one of them names it
+(`"bbsa_map: the embedded conventions/card/bbsa-map.toml (not given): ..."`).
+
+Cards are read in the supplied vocabulary (stock cards too). A compiled
+rule set is identified by a hash of all its texts (`rules_id`); the last
+few are kept, so repeating one costs nothing. The engine reads one card
+field itself, `general.style` (how it counts points; `bba` is BBA's
+valuation); a vocabulary without it gets the default valuation.
 
 ### `validate(request)` → JSON
 
@@ -194,15 +254,29 @@ optional:
 
 ```json
 {"hand": "...", "deal": "...", "dealer": "N", "auction": "...", "prefix": "...",
- "vul": "None", "scoring": "MP", "cards": {...}, "engine": 1}
+ "vul": "None", "scoring": "MP", "cards": {...}, "engine": 1,
+ "rules": {...}, "fields": "...", "bbsa_map": "...", "manifest": "..."}
 ```
 
 - `auction` and `prefix` are checked for legality from `dealer`, which is
   then required.
 - `cards` are loaded (not turned into an engine), with the card diagnostics
-  above.
+  above, in the vocabulary of `engine`, else of the supplied rule set,
+  else the embedded one.
+- A supplied rule set is compiled as above and also checked as
+  `rbb bid check` checks a directory: module names are unique and an enum
+  parameter is only compared with its options (errors); a `needs` that
+  names no module and a `.bbsa` key that is not one of BBA's are warnings.
 
-Response: `{"ok": bool, "diagnostics": [...]}`.
+Response: `{"ok": bool, "diagnostics": [...]}`, and with a supplied rule
+set that compiles, its summary:
+
+```json
+{"ok": true,
+ "rule_set": {"rules_id": "5c0e...", "name": "demo", "language": 1,
+              "rule_files": 1, "modules": 1, "rules": 1, "card_fields": 1},
+ "diagnostics": []}
+```
 
 ### `bid(request)` → JSON
 
@@ -337,7 +411,8 @@ text. For forced calls both are the table's reading.
 
 ### `conventions(request)` → JSON
 
-The embedded conventions as data, for a UI. Request: `{}`, or with `engine`
+The conventions as data, for a UI: the embedded ones, or those of `engine`
+or of a supplied rule set (`rules_id` says which). Request: `{}`, or with `engine`
 / `cards` to learn which modules each side plays.
 
 ```json
@@ -398,7 +473,9 @@ build time without a browser).
 
 How much of each side's card the rules read (the same classification as
 `rbb card coverage`): what a UI shows as "conventions and treatments this
-engine does not play". Request: `{"cards": {...}}`.
+engine does not play". Request: `{"cards": {...}}`, with `engine` or a
+supplied rule set to measure the cards against those rules (and read them
+in their vocabulary).
 
 ```json
 {"ok": true,
@@ -422,7 +499,9 @@ a call). `score` is `read / (read + ignored)`.
 
 A card in both formats: the mapping from a BBA `.bbsa` card to
 Bridge-Classroom card JSON and back. Request: `{"card": <card spec>,
-"set"?: ["path=value"]}`.
+"set"?: ["path=value"], "engine"?: 1}`: the card is read and written in
+the vocabulary of `engine`, else of a supplied rule set, else the embedded
+one.
 
 ```json
 {"ok": true, "name": "21GF-DEFAULT",

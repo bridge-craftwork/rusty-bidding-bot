@@ -98,3 +98,15 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 - The scenario's chat text and a per-scenario "what this scenario teaches"
   panel; a comparison over many boards (the workbench's view) on the page.
 - Treatments (`general.style=bba` and friends) as controls, not only `set`.
+- Custom rules. The WASM already takes a rule set as text (docs/WASM.md,
+  "Rule sets supplied at run time"), and the page already reads cards,
+  coverage and card exports through its engine, so they follow whatever
+  rules that engine plays. What is missing is on the page: a way to load a
+  rules directory (a folder picker or a `.zip` of `*.bid`,
+  `conventions.toml` and `card/*.toml`, kept per viewer), a `rules`
+  parameter for `Session.prepareEngine` passed to `createEngine` with the
+  cards, `validate` on load to list compile errors by file and line, the
+  stock and uploaded cards re-read in that vocabulary, `reference` from
+  that engine instead of the build-time `reference.txt`, and a deep link
+  that says which rule set bid (its `rules_id`; the texts are too big for a
+  fragment). The `.bid` editor itself would be a separate tool.

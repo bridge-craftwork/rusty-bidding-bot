@@ -1,9 +1,11 @@
 //! Browser (WASM) boundary for rusty-bidding-bot.
 //!
 //! Each export takes a JSON request string and returns a JSON response
-//! string (`reference` returns plain text). The logic is in `api`, plain
-//! Rust tested natively; this file only binds it. The contract, with every
-//! request and response shape, is docs/WASM.md.
+//! string (`reference` returns plain text). The rules are the embedded ones
+//! unless a request supplies its own (`rules`, `fields`, `bbsa_map`,
+//! `manifest`). The logic is in `api`, plain Rust tested natively; this
+//! file only binds it. The contract, with every request and response
+//! shape, is docs/WASM.md.
 
 pub mod api;
 
@@ -15,13 +17,13 @@ pub fn start() {
     console_error_panic_hook::set_once();
 }
 
-/// `{ok, api, version, rules_id, rule_files, modules, rules, stock_cards, diagnostics}`
+/// `{ok, api, version, rules_id, rule_files, modules, rules, language, stock_cards, diagnostics}`
 #[wasm_bindgen]
 pub fn info() -> String {
     api::info()
 }
 
-/// `{"cards": {...}}` → `{ok, engine, ns, ew, diagnostics}`
+/// `{"cards": {...}, "rules"?, "fields"?, "bbsa_map"?, "manifest"?}` → `{ok, engine, rules_id, ns, ew, diagnostics}`
 #[wasm_bindgen(js_name = createEngine)]
 pub fn create_engine(request: &str) -> String {
     api::create_engine(request)
@@ -33,7 +35,7 @@ pub fn free_engine(request: &str) -> String {
     api::free_engine(request)
 }
 
-/// Check a request's fields without bidding → `{ok, diagnostics}`
+/// Check a request's fields (and a rule set) without bidding → `{ok, rule_set?, diagnostics}`
 #[wasm_bindgen]
 pub fn validate(request: &str) -> String {
     api::validate(request)
@@ -57,13 +59,13 @@ pub fn bid_deal(request: &str) -> String {
     api::bid_deal(request)
 }
 
-/// The embedded conventions as data → `{ok, rules_id, modules, active?, diagnostics}`
+/// The conventions (embedded, or the engine's / request's rule set) as data → `{ok, rules_id, modules, active?, diagnostics}`
 #[wasm_bindgen]
 pub fn conventions(request: &str) -> String {
     api::conventions(request)
 }
 
-/// The embedded conventions as plain text (reference.txt).
+/// The same conventions as plain text (reference.txt).
 #[wasm_bindgen]
 pub fn reference(request: &str) -> String {
     api::reference(request)

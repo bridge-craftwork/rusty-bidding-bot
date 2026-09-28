@@ -232,7 +232,8 @@ function download(name, text, type) {
 
 async function exportCard(side, format) {
   const specs = await session.cardSpecs()
-  const r = JSON.parse(rbb.exportCard(JSON.stringify({ card: specs[side] })))
+  // Read and written in the vocabulary of the rules the engine plays.
+  const r = JSON.parse(rbb.exportCard(JSON.stringify({ card: specs[side], engine: session.engine ?? undefined })))
   if (!r.ok) {
     session.addDiagnostics(r.diagnostics)
     render()

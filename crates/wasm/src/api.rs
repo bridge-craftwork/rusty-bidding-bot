@@ -34,11 +34,14 @@ pub enum Severity {
 
 /// One problem or remark, in the shape the bridge-craftwork tool contract
 /// uses. `line` and `col` are 1-based and point into the request field the
-/// message names (the auction string, the `.bbsa` text).
+/// message names (the auction string, the `.bbsa` text), or, when `file` is
+/// set, into that rule file (a key of the request's `rules`).
 #[derive(Debug, Clone, PartialEq, Serialize)]
 pub struct Diagnostic {
     pub severity: Severity,
     pub message: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub line: Option<usize>,
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -55,6 +58,7 @@ impl Diags {
         self.0.push(Diagnostic {
             severity,
             message,
+            file: None,
             line: None,
             col: None,
             hint: None,
@@ -167,9 +171,267 @@ fn embedded_or_report(d: &mut Diags) -> Option<Arc<Rules>> {
     }
 }
 
-/// The rules a request asks for, when it names no engine.
-fn rules_for(_req: &Json, d: &mut Diags) -> Option<Arc<Rules>> {
-    embedded_or_report(d)
+/// The request fields that supply a rule set at run time.
+const RULE_FIELDS: [&str; 4] = ["rules", "fields", "bbsa_map", "manifest"];
+
+/// FNV-1a, for the ids of rule sets supplied at run time.
+fn fnv(h: &mut u64, bytes: &[u8]) {
+    for b in bytes {
+        *h ^= *b as u64;
+        *h = h.wrapping_mul(0x0000_0100_0000_01b3);
+    }
+}
+
+/// A rule-loading diagnostic as an API diagnostic. Problems in a rule file
+/// name it (`file`, and `rules: <file>:<line>:` in the message); problems in
+/// `fields`, `bbsa_map` or `manifest` start with that field's name.
+fn rule_diagnostic(x: &bidspec::Diagnostic, severity: Severity, d: &mut Diags) {
+    let line = (x.line > 0).then_some(x.line);
+    let col = (x.col > 0).then_some(x.col);
+    // The embedded file standing in for a field the request left out (the
+    // embedded `.bbsa` map does not fit the fields it gave, say).
+    let embedded = [
+        ("fields", Some(rbb_assets::FIELDS.0)),
+        ("bbsa_map", Some(rbb_assets::BBSA_MAP.0)),
+        ("manifest", rbb_assets::MANIFEST.map(|m| m.0)),
+    ]
+    .into_iter()
+    .find(|(_, name)| *name == Some(x.file.as_str()));
+    let diag = if RULE_FIELDS[1..].contains(&x.file.as_str()) {
+        d.push(severity, format!("{}: {}", x.file, x.message))
+    } else if let Some((field, _)) = embedded {
+        let diag = d.push(
+            severity,
+            format!(
+                "{field}: the embedded {} (not given): {}",
+                x.file, x.message
+            ),
+        );
+        diag.file = Some(x.file.clone());
+        diag
+    } else {
+        let at = match line {
+            Some(l) => format!("{}:{l}", x.file),
+            None => x.file.clone(),
+        };
+        let diag = d.push(severity, format!("rules: {at}: {}", x.message));
+        diag.file = Some(x.file.clone());
+        diag
+    };
+    diag.at(line, col);
+}
+
+thread_local! {
+    /// Rule sets supplied at run time, by id: the last few, so requests
+    /// that repeat one (with other cards, or `conventions` after
+    /// `createEngine`) do not compile it again.
+    static RULE_SETS: RefCell<Vec<Arc<Rules>>> = const { RefCell::new(Vec::new()) };
+}
+const RULE_SETS_KEPT: usize = 4;
+
+/// The rules a request asks for, when it names no engine: the embedded
+/// rules, or a rule set supplied at run time with `rules` (`{"path.bid":
+/// source, ...}`), `fields` (the text of `fields.toml`), `bbsa_map`
+/// (`bbsa-map.toml`) and `manifest` (`conventions.toml`). What is not
+/// supplied comes from the embedded rules, except the manifest when `rules`
+/// is given: rules with no manifest are read as the current rule language
+/// (an `info` says so), as `rbb` reads a directory without one.
+fn rules_for(req: &Json, d: &mut Diags) -> Option<Arc<Rules>> {
+    if RULE_FIELDS.iter().all(|f| req.get(f).is_none()) {
+        return embedded_or_report(d);
+    }
+    let text = |field: &str, d: &mut Diags| -> Option<Option<String>> {
+        match req.get(field) {
+            None | Some(Json::Null) => Some(None),
+            Some(Json::String(s)) => Some(Some(s.clone())),
+            Some(_) => {
+                d.error(format!("{field}: expected the file's text as a string"));
+                None
+            }
+        }
+    };
+    let fields = text("fields", d)?;
+    let bbsa_map = text("bbsa_map", d)?;
+    let manifest = text("manifest", d)?;
+    let mut files: Vec<(String, String)> = match req.get("rules") {
+        None | Some(Json::Null) => rbb_assets::RULE_FILES
+            .iter()
+            .map(|(n, s)| (n.to_string(), s.to_string()))
+            .collect(),
+        Some(Json::Object(m)) => {
+            let mut files = Vec::new();
+            let mut other = Vec::new();
+            for (path, v) in m {
+                match v.as_str() {
+                    Some(_) if !path.ends_with(".bid") => other.push(path.as_str()),
+                    Some(src) => files.push((path.clone(), src.to_string())),
+                    None => {
+                        d.error(format!(
+                            "rules.{path}: expected the file's text as a string"
+                        ));
+                    }
+                }
+            }
+            if !other.is_empty() {
+                d.info(format!(
+                    "rules: {} files that are not .bid ignored: {}",
+                    other.len(),
+                    other.join(", ")
+                ));
+            }
+            if files.is_empty() {
+                d.warning("rules: no .bid files: every call will be a pass");
+            }
+            files
+        }
+        Some(_) => {
+            d.error("rules: expected an object {\"path/file.bid\": \"source\", ...}")
+                .hint("the keys name the files in diagnostics and set the file order");
+            return None;
+        }
+    };
+    if d.has_errors() {
+        return None;
+    }
+    // As `rbb` orders a directory: by path, component by component (file
+    // order is the engine's last tie-breaker).
+    files.sort_by(|a, b| a.0.split('/').cmp(b.0.split('/')));
+    let custom_rules = req.get("rules").is_some_and(|v| !v.is_null());
+    let manifest: Option<(String, String)> = match manifest {
+        Some(t) => Some(("manifest".into(), t)),
+        None if custom_rules => {
+            d.info(format!(
+                "manifest: none given; the rules are read as rule language {}",
+                rbb_engine::LANGUAGE_VERSION
+            ))
+            .hint("give \"manifest\": the text of the rule set's conventions.toml");
+            None
+        }
+        None => rbb_assets::MANIFEST.map(|(n, t)| (n.to_string(), t.to_string())),
+    };
+    let fields = fields.map_or(
+        (
+            rbb_assets::FIELDS.0.to_string(),
+            rbb_assets::FIELDS.1.to_string(),
+        ),
+        |t| ("fields".into(), t),
+    );
+    let bbsa_map = bbsa_map.map_or(
+        (
+            rbb_assets::BBSA_MAP.0.to_string(),
+            rbb_assets::BBSA_MAP.1.to_string(),
+        ),
+        |t| ("bbsa_map".into(), t),
+    );
+
+    let mut h: u64 = 0xcbf2_9ce4_8422_2325;
+    for (name, text) in manifest
+        .iter()
+        .chain([&fields, &bbsa_map])
+        .chain(files.iter())
+    {
+        fnv(&mut h, name.as_bytes());
+        fnv(&mut h, &[0]);
+        fnv(&mut h, text.as_bytes());
+        fnv(&mut h, &[0]);
+    }
+    let id = format!("{h:016x}");
+    if let Some(found) = RULE_SETS.with(|r| r.borrow().iter().find(|x| x.id == id).cloned()) {
+        return Some(found);
+    }
+    let compiled = rbb_engine::compile_rules(
+        manifest.as_ref().map(|(n, t)| (n.as_str(), t.as_str())),
+        (&fields.0, &fields.1),
+        (&bbsa_map.0, &bbsa_map.1),
+        files.iter().map(|(n, s)| (n.as_str(), s.as_str())),
+    );
+    match compiled {
+        Ok(set) => {
+            let rules = Arc::new(Rules {
+                set,
+                id,
+                files: files.len(),
+            });
+            RULE_SETS.with(|r| {
+                let mut r = r.borrow_mut();
+                r.push(rules.clone());
+                if r.len() > RULE_SETS_KEPT {
+                    r.remove(0);
+                }
+            });
+            Some(rules)
+        }
+        Err(errors) => {
+            for e in &errors {
+                rule_diagnostic(e, Severity::Error, d);
+            }
+            None
+        }
+    }
+}
+
+/// What `rbb bid check` adds to loading, for `validate`: module names are
+/// unique, enum parameters are compared with their options, every `needs`
+/// names a module (a warning), and the `.bbsa` map's keys are BBA's (a
+/// warning).
+fn check_rule_set(rules: &Rules, d: &mut Diags) {
+    let modules = &rules.set.modules;
+    let mut seen = std::collections::HashMap::new();
+    for m in modules {
+        if let Some(other) = seen.insert(m.name.as_str(), m.file.as_str()) {
+            let x = bidspec::Diagnostic {
+                file: m.file.clone(),
+                line: 0,
+                col: 0,
+                message: format!("module `{}` is also defined in {other}", m.name),
+            };
+            rule_diagnostic(&x, Severity::Error, d);
+        }
+    }
+    for e in rbb_engine::check_card_refs(modules, rules.set.vocab.registry()) {
+        // `file:line: message`
+        let (at, message) = e.split_once(": ").unwrap_or(("", &e));
+        let (file, line) = match at.rsplit_once(':') {
+            Some((f, l)) if l.parse::<usize>().is_ok() => (f, l.parse().unwrap()),
+            _ => (at, 0),
+        };
+        let x = bidspec::Diagnostic {
+            file: file.to_string(),
+            line,
+            col: 0,
+            message: message.to_string(),
+        };
+        rule_diagnostic(&x, Severity::Error, d);
+    }
+    for m in modules {
+        for need in &m.needs {
+            if !seen.contains_key(need.as_str()) {
+                let x = bidspec::Diagnostic {
+                    file: m.file.clone(),
+                    line: 0,
+                    col: 0,
+                    message: format!("needs `{need}`, which no module defines"),
+                };
+                rule_diagnostic(&x, Severity::Warning, d);
+            }
+        }
+    }
+    for w in rules.set.vocab.lint() {
+        d.warning(w.replacen("bbsa-map.toml: ", "bbsa_map: ", 1));
+    }
+}
+
+/// A rule set's summary, as `validate` and `info` report it.
+fn rule_set_json(rules: &Rules) -> Json {
+    json!({
+        "rules_id": rules.id,
+        "name": rules.set.manifest.as_ref().map(|m| m.name.clone()),
+        "language": rules.set.manifest.as_ref().map_or(rbb_engine::LANGUAGE_VERSION, |m| m.language),
+        "rule_files": rules.files,
+        "modules": rules.set.modules.len(),
+        "rules": rule_count(&rules.set.modules),
+        "card_fields": rules.set.vocab.registry().fields().len(),
+    })
 }
 
 /// The rules of the engine a request names, else those it asks for.
@@ -765,6 +1027,7 @@ pub fn info() -> String {
             "rule_files": files,
             "modules": modules,
             "rules": rules,
+            "language": rbb_engine::LANGUAGE_VERSION,
             "stock_cards": stock_names(),
         }),
         d,
@@ -860,12 +1123,23 @@ pub fn validate(request: &str) -> String {
             d.error(format!("engine: no engine {id}"));
         }
     }
-    if let Some(cards) = req.get("cards") {
-        if let Some(rules) = rules_of(&req, &mut d) {
+    let mut body = json!({});
+    let supplied = RULE_FIELDS.iter().any(|f| req.get(f).is_some());
+    let rules = if supplied || req.get("cards").is_some() {
+        rules_of(&req, &mut d)
+    } else {
+        None
+    };
+    if let Some(rules) = &rules {
+        if supplied && req.get("engine").is_none() {
+            check_rule_set(rules, &mut d);
+            body["rule_set"] = rule_set_json(rules);
+        }
+        if let Some(cards) = req.get("cards") {
             load_cards(cards, &rules.set.vocab, &mut d);
         }
     }
-    respond(json!({}), d)
+    respond(body, d)
 }
 
 /// The engine's call for a hand after an auction, with the reason, the
@@ -1550,5 +1824,189 @@ mod tests {
         assert_eq!(c["ok"], true);
         let n = c["modules"].as_array().unwrap().len();
         assert_eq!(t.matches("\n== ").count(), n);
+    }
+
+    /// A rule set of its own: one field, one module, one rule.
+    fn demo_rules(rule: &str) -> Json {
+        json!({
+            "manifest": "name = \"demo\"\nlanguage = 1\n",
+            "fields": "[demo]\n\"strong_nt\" = { kind = \"bool\", label = \"1NT\", default = true }\n\"nt_min\" = { kind = \"int\", label = \"1NT minimum\", min = 10, max = 20, default = 15 }\n",
+            "bbsa_map": "",
+            "rules": {
+                "demo/one-nt.bid": format!(
+                    "module demo \"Demo\"\n  card   demo.strong_nt\n  param  lo = demo.nt_min default 15\n\nwhen opening\n{rule}\n"
+                ),
+                "demo/one-nt.notes.md": "not a rule file",
+            },
+        })
+    }
+
+    const RULE: &str = "  1N  \"Demo 1NT\"  shows hcp=lo..17, balanced";
+
+    /// The first error of a response.
+    fn error(r: &Json) -> &Json {
+        r["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|x| x["severity"] == "error")
+            .unwrap_or(&Json::Null)
+    }
+
+    #[test]
+    fn a_rule_set_supplied_at_run_time_bids() {
+        let mut req = demo_rules(RULE);
+        req["cards"] = json!({"ns": {"json": {"demo": {"nt_min": 15}}}});
+        let e = parse(&create_engine(&req.to_string()));
+        assert_eq!(e["ok"], true, "{e}");
+        assert_eq!(e["ns"]["modules"], json!(["demo"]), "{e}");
+        assert_ne!(e["rules_id"], rbb_assets::RULES_ID);
+        let id = e["engine"].as_u64().unwrap();
+        let bid_with = |engine: u64| {
+            parse(&bid(&json!({"engine": engine, "hand": "AK52.KJ7.Q94.K83",
+                                "dealer": "N", "auction": ""})
+            .to_string()))
+        };
+        let r = bid_with(id);
+        assert_eq!(r["call"], "1NT", "{r}");
+        assert_eq!(r["rule"]["file"], "demo/one-nt.bid", "{r}");
+
+        // The card is read in the rule set's vocabulary: its own field,
+        // through `set` too.
+        let mut strict = demo_rules(RULE);
+        strict["cards"] = json!({"ns": {"json": {}}, "set": ["demo.nt_min=17"]});
+        let e17 = parse(&create_engine(&strict.to_string()));
+        assert_eq!(e17["ok"], true, "{e17}");
+        assert_ne!(e17["engine"], e["engine"]);
+        assert_eq!(bid_with(e17["engine"].as_u64().unwrap())["call"], "Pass");
+        // ...and not in the embedded one.
+        let bad = parse(&create_engine(
+            r#"{"cards": {"ns": "21GF-DEFAULT", "set": ["demo.nt_min=17"]}}"#,
+        ));
+        assert_eq!(bad["ok"], false, "{bad}");
+
+        // The same rule set again is the same engine; the embedded rules
+        // are untouched.
+        let again = parse(&create_engine(&req.to_string()));
+        assert_eq!(again["engine"], e["engine"]);
+        let std = parse(&bid(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "hand": "AK52.KJ7.Q94.K83",
+                "dealer": "N", "auction": ""}"#,
+        ));
+        assert_eq!(
+            std["rule"]["file"], "conventions/notrump/one-nt.bid",
+            "{std}"
+        );
+
+        // conventions, coverage and exportCard follow the engine's rules.
+        let c = parse(&conventions(&format!(r#"{{"engine": {id}}}"#)));
+        assert_eq!(c["modules"].as_array().unwrap().len(), 1, "{c}");
+        assert_eq!(c["rules_id"], e["rules_id"]);
+        let x = parse(&export_card(&format!(
+            r#"{{"engine": {id}, "card": {{"json": {{}}}}, "set": ["demo.nt_min=16"]}}"#
+        )));
+        assert_eq!(x["ok"], true, "{x}");
+        assert_eq!(x["json"]["demo"]["nt_min"], 16, "{x}");
+        let mut cov = demo_rules(RULE);
+        cov["cards"] = json!({"ns": {"json": {"demo": {"strong_nt": true}}}});
+        let cov = parse(&coverage(&cov.to_string()));
+        assert_eq!(cov["ns"]["read"], json!([]), "at its default: {cov}");
+    }
+
+    #[test]
+    fn validate_reports_rule_set_problems_by_file_and_line() {
+        let ok = parse(&validate(&demo_rules(RULE).to_string()));
+        assert_eq!(ok["ok"], true, "{ok}");
+        assert_eq!(ok["rule_set"]["modules"], 1);
+        assert_eq!(ok["rule_set"]["name"], "demo");
+        assert_eq!(ok["rule_set"]["card_fields"], 2);
+        assert!(ok["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|x| x["message"].as_str().unwrap().contains("not .bid")));
+
+        // A card field the vocabulary does not have.
+        let mut bad = demo_rules(RULE);
+        bad["rules"]["demo/one-nt.bid"] = json!("module demo \"Demo\"\n  card   demo.nope\n");
+        let v = parse(&validate(&bad.to_string()));
+        assert_eq!(v["ok"], false, "{v}");
+        let x = &error(&v);
+        assert_eq!(x["file"], "demo/one-nt.bid", "{v}");
+        assert_eq!(x["line"], 2, "{v}");
+        assert!(x["message"]
+            .as_str()
+            .unwrap()
+            .starts_with("rules: demo/one-nt.bid:2: unknown card field"));
+
+        // A term the engine does not know (check_terms).
+        let v = parse(&validate(
+            &demo_rules("  1N  \"Demo\"  shows hcpx>=15").to_string(),
+        ));
+        assert_eq!(v["ok"], false, "{v}");
+        assert_eq!(error(&v)["file"], "demo/one-nt.bid", "{v}");
+        assert_eq!(error(&v)["line"], 6, "{v}");
+
+        // The same through createEngine: no engine.
+        let mut req = demo_rules("  1N  \"Demo\"  shows hcpx>=15");
+        req["cards"] = json!({"ns": {"json": {}}});
+        let e = parse(&create_engine(&req.to_string()));
+        assert_eq!(e["ok"], false);
+        assert_eq!(e["engine"], Json::Null);
+
+        // A vocabulary that does not parse, with its line.
+        let mut bad = demo_rules(RULE);
+        bad["fields"] = json!("[demo]\nstrong_nt = {");
+        let v = parse(&validate(&bad.to_string()));
+        assert_eq!(v["ok"], false, "{v}");
+        assert!(error(&v)["message"]
+            .as_str()
+            .unwrap()
+            .starts_with("fields: "));
+        assert_eq!(error(&v)["line"], 2, "{v}");
+
+        // A manifest in a language this engine does not read.
+        let mut bad = demo_rules(RULE);
+        bad["manifest"] = json!("name = \"demo\"\nlanguage = 99\n");
+        let v = parse(&validate(&bad.to_string()));
+        assert_eq!(v["ok"], false, "{v}");
+        assert!(error(&v)["message"]
+            .as_str()
+            .unwrap()
+            .starts_with("manifest: "));
+
+        // No manifest: read as the current language, and said so.
+        let mut none = demo_rules(RULE);
+        none.as_object_mut().unwrap().remove("manifest");
+        let v = parse(&validate(&none.to_string()));
+        assert_eq!(v["ok"], true, "{v}");
+        assert!(v["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|x| x["message"]
+                .as_str()
+                .unwrap()
+                .starts_with("manifest: none given")));
+    }
+
+    #[test]
+    fn a_vocabulary_alone_keeps_the_embedded_rules() {
+        // The embedded rules against a copy of their own vocabulary: the
+        // same rule set, so the same calls.
+        let req = json!({"fields": rbb_assets::FIELDS.1, "bbsa_map": rbb_assets::BBSA_MAP.1});
+        let v = parse(&validate(&req.to_string()));
+        assert_eq!(v["ok"], true, "{v}");
+        assert_eq!(
+            v["rule_set"]["rule_files"].as_u64().unwrap() as usize,
+            rbb_assets::RULE_FILES.len()
+        );
+        // A vocabulary without the fields the embedded rules read refuses.
+        let v = parse(&validate(r#"{"fields": ""}"#));
+        assert_eq!(v["ok"], false);
+        assert!(error(&v)["message"]
+            .as_str()
+            .unwrap()
+            .starts_with("bbsa_map: the embedded conventions/card/bbsa-map.toml"));
     }
 }

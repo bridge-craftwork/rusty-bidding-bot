@@ -116,7 +116,9 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference
-  the WASM build serves.
+  the WASM build serves. It bids with the embedded rules, or with a rule
+  set a request supplies as text (`rules`, `fields`, `bbsa_map`,
+  `manifest`); `validate` checks one without bidding.
 - `web/build.sh`: the web site in `web/dist` (docs/WEB.md): engine,
   dealer3, `reference.txt`; `node web/scripts/test.mjs web/dist` tests
   its `window.rustyBiddingBot` contract. Serve with

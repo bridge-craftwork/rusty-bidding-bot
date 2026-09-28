@@ -332,7 +332,8 @@ export class Session {
     if (r.ok) {
       this.engine = r.engine
       this.cardNames = { ns: r.ns.name, ew: r.ew.name }
-      const cov = call(this.rbb, 'coverage', { cards })
+      // The engine's rules and card vocabulary, not whatever is embedded.
+      const cov = call(this.rbb, 'coverage', { engine: this.engine, cards })
       this.coverage = cov.ok ? { ns: cov.ns, ew: cov.ew } : null
     } else {
       this.engine = null
