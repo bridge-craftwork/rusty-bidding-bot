@@ -1,6 +1,9 @@
 # Conventions survey: the PBS corpus, BBA and this engine
 
-GitHub issue #4. Survey date 2026-09-28, engine at `fc9dd81`.
+GitHub issue #4. Survey date 2026-09-28, engine at `fc9dd81`. Rick's
+decisions of 2026-09-28 are recorded in section 4 (the re-ranked priority
+list) and in "Open questions for Rick" (the answers). The figures are
+from the survey run and have not been re-measured since.
 
 This survey cross-checks four sources:
 
@@ -66,23 +69,23 @@ The 18 cards and how the corpus uses them:
 
 ### Keys whose meaning is unclear
 
-Following CLAUDE.md ("do not guess the meaning of an unmapped `.bbsa` key"), the 16 passthrough keys that are on in a used card stay in passthrough. The scenario names suggest meanings for some of them, but that is only a hint, not evidence:
+Following CLAUDE.md ("do not guess the meaning of an unmapped `.bbsa` key"), the 16 passthrough keys that are on in a used card stay in passthrough. The scenario names suggest meanings for some of them, but that is only a hint, not evidence. Rick's answers of 2026-09-28 are in the last column; every key without one is still **to be investigated**:
 
-| Key | On in | Hint from the corpus (not a definition) |
-|---|---|---|
-| `Imposible 2S` (sic) | 9 cards, incl. 21GF-DEFAULT | Scenario `Impossible_2S`. BBA's notes there show no alert with that name (forcing 1NT 364, limit raise 154) |
-| `Lebensohl after 1m` | 15 cards | 227 boards carry the note "Lebensohl after 1m", in 30 scenarios |
-| `Rubensohl after 1m` | Precision, Precision-14-16 | 90 boards carry the note |
-| `5431 after 1NT` | 21GF-SPECIALS | Scenario `5431_After_NT`. 409 boards carry the note, and we first differ from BBA on 408 of them (-319 IMPs) |
-| `Two suit takeout double` | 17 cards | 75 boards carry the note, in 36 scenarios |
-| `Support 1NT` | 6 cards | 32 boards |
-| `Collante`, `Rodrigue` | 21GF-SPECIALS2 | Scenarios `WB5_Collante` and `WB5_Rodrigue`; 108 and 352 boards |
-| `Crosswood 0314` | Precision cards | 57 boards |
-| `Shape Bergen structure`, `Strength Lawrence structure` | 12 and 6 cards; never both on in one card | No note. They look like two alternatives to one setting |
-| `Natural 3N entering style` | Precision | No note |
-| `1NT opening NT style` | all 18 | No note. `1NT opening natural` is off in all 18 |
-| `Mark on queen`, `Mark on king` | 16 cards | No note; probably carding (they sit next to Lavinthal) |
-| `Jordan Truscott 2NT defence` | Precision | 1 board |
+| Key | On in | Hint from the corpus (not a definition) | Rick, 2026-09-28 |
+|---|---|---|---|
+| `Imposible 2S` (sic) | 9 cards, incl. 21GF-DEFAULT | Scenario `Impossible_2S`. BBA's notes there show no alert with that name (forcing 1NT 364, limit raise 154) | **Named, with sources.** The impossible 2♠ in auctions like 1♥ 1NT 2♣ 2♠, showing a good club raise. Sources: Robert Todd's write-up, ["The Impossible Spade Bid"](https://static1.squarespace.com/static/5127d3d2e4b0b304f0b6db24/t/5c8e551f104c7b066eb43ac8/1552831776048/3+%28269%29+The+Impossilbe+Spade+Bid+.pdf), and the older GIB reference, <https://netbridge.dk/gib.html>, which may treat it differently. **In progress** (another piece of work) |
+| `Lebensohl after 1m` | 15 cards | 227 boards carry the note "Lebensohl after 1m", in 30 scenarios | Rick does not know what it is: to be investigated |
+| `Rubensohl after 1m` | Precision, Precision-14-16 | 90 boards carry the note | Rick does not know what it is: to be investigated |
+| `5431 after 1NT` | 21GF-SPECIALS | Scenario `5431_After_NT`. 409 boards carry the note, and we first differ from BBA on 408 of them (-319 IMPs) | to be investigated |
+| `Two suit takeout double` | 17 cards | 75 boards carry the note, in 36 scenarios | to be investigated |
+| `Support 1NT` | 6 cards | 32 boards | to be investigated |
+| `Collante`, `Rodrigue` | 21GF-SPECIALS2 | Scenarios `WB5_Collante` and `WB5_Rodrigue`; 108 and 352 boards | to be investigated |
+| `Crosswood 0314` | Precision cards | 57 boards | to be investigated |
+| `Shape Bergen structure`, `Strength Lawrence structure` | 12 and 6 cards; never both on in one card | No note. They look like two alternatives to one setting | to be investigated |
+| `Natural 3N entering style` | Precision | No note | to be investigated |
+| `1NT opening NT style` | all 18 | No note. `1NT opening natural` is off in all 18 | to be investigated |
+| `Mark on queen`, `Mark on king` | 16 cards | No note; probably carding (they sit next to Lavinthal) | to be investigated |
+| `Jordan Truscott 2NT defence` | Precision | 1 board | to be investigated |
 
 ## 2. The PBS scenarios: where BBA covers and where it does not
 
@@ -131,7 +134,7 @@ The chat text in each `.btn` names the convention, so each gap below is named af
 | 1m-2x | none | **Todd minor-suit responses** (2♠ constructive raise, 2♥ 10-12 balanced, 2NT mini-maxi GF, 3NT 15-17) | chat, "Robert Todd" | none | none |
 | Bergen_Thrump_X_after_Preempt | none | **Thrump double** (Bergen) over their three-level preempt | chat, bridgebum link | none | none |
 | CRASH | none | **CRASH** defence to a strong 1♣ | chat | none | none |
-| DONT | 500 (BBA played Cappelletti: 379 notes) | **DONT** vs 1NT | chat | yes: `competitive.defense_vs_strong_nt = dont`, `competitive.dont.play` | `dont` (skill `competitive_bidding/dont`) |
+| DONT | 500 (BBA played Cappelletti: 379 notes) | **DONT** vs 1NT (in progress, 2026-09-28) | chat | yes: `competitive.defense_vs_strong_nt = dont`, `competitive.dont.play` | `dont` (skill `competitive_bidding/dont`) |
 | Gerber_By_Opener | 500 | **Gerber by opener** after 1m–2NT or 2♣…2NT | chat; BBA's notes show no Gerber here | partly: `slam.gerber.over` (text), `gerber.over_nt_seq` | `gerber` |
 | Good_Bad_2N | 500 | **Good-bad 2NT** | chat | none | none |
 | Lars_Multi_2D | none | **Multi 2♦ with a 20-21 NT option** ("Lars Multi") | chat | none (`two_diamonds.multi` is plain Multi) | `multi_2d` (a variant of it) |
@@ -152,11 +155,13 @@ For the 17 of these with a BBA corpus, the corpus is **not a reference** for the
 
 ### `bba-works: true`, but BBA plays a stand-in
 
-Some scenarios are marked `bba-works: true`, yet BBA has no key for the convention they are named after, and its notes show another convention. This suggests that `bba-works` means "BBA's auctions are acceptable practice here", not "BBA plays the named convention". **Rick to confirm.** These are gaps for teaching, not for matching BBA:
+Some scenarios are marked `bba-works: true`, yet BBA has no key for the convention they are named after, and its notes show another convention.
+
+**Rick, 2026-09-28: `bba-works` means BBA is designed to support the given convention.** It does not mean "BBA's auctions are acceptable practice here". So for the scenarios below the flag and the corpus disagree: BBA is meant to play the named convention, but its notes show a stand-in. Possible reasons, none checked yet: the card the scenario uses does not switch the convention on, BBA plays it under an alert with another name, or the flag is wrong for that scenario. Until each is checked, treat their corpora as evidence of BBA's stand-in, not of the named convention. For us they are gaps for teaching, not for matching BBA:
 
 | Scenario | Named convention | What BBA's notes show instead |
 |---|---|---|
-| Meckwell | Meckwell vs 1NT | Multi-Landy (304) |
+| Meckwell | Meckwell vs 1NT (in progress in our rules, 2026-09-28) | Multi-Landy (304) |
 | Suction | Suction vs 1NT | Cappelletti (370) |
 | Spear | Spear (after 1m (P) 1NT) | no Spear note; Michaels 18 |
 | Help_Suit_Game_Try | help-suit game tries | two-way game tries (89) |
@@ -174,6 +179,8 @@ States:
 - **field only:** the field and its `.bbsa` mapping exist, but no rule reads the field.
 - **passthrough:** the `.bbsa` key has no field.
 - **none:** neither a field nor a BBA key.
+
+"**In progress**" marks the conventions being implemented as of 2026-09-28 (section 4); their state is the one the survey measured, before that work.
 
 "BBA boards" counts the boards whose BBA auction carries the convention's alert. "We differ" counts the boards where our replay first departs from BBA's auction at that alert. "IMPs" is the net vs BBA on those boards, with par as the yardstick; for competitive calls par is a poor judge (CLAUDE.md, "Judging a change").
 
@@ -193,7 +200,7 @@ States:
 | Minor-suit responses: 2♠→♣, 3♣→♦ | 15 | rules (the `bba` combination is derived) | minor-transfers | 380 / 101 / -198; 749 / 500 / -532 | none |
 | Minor Suit Stayman; 1NT–2NT→♣ | 2; 1 | partly (the other combinations fall to `none`) | minor-transfers | 1,065 / 1,046 / -1,118; 413 / 238 / -786 | none |
 | Puppet Stayman over 1NT (3♣) | 1 | field only | | 977 / 970 / -333 | none |
-| Puppet Stayman over 2NT | 1 | field only. The key maps to `notrump.stayman.puppet`, but two-nt-responses reads `notrump.two_nt.puppet` | two-nt-responses (Stayman and transfers) | 495 / 170 / -113 | `puppet_stayman` (on `stayman.puppet`) |
+| Puppet Stayman over 2NT (**in progress**) | 1 | field only. The key maps to `notrump.stayman.puppet`, but two-nt-responses reads `notrump.two_nt.puppet` | two-nt-responses (Stayman and transfers) | 495 / 170 / -113 | `puppet_stayman` (on `stayman.puppet`) |
 | 2NT: minor transfers, MSS, minor slam try | 15, 2, 0 | field only | | 79 / 48 / -28; 200 / 193 / -97 | 2NT options (structured) |
 | 1NT–3♦ meaning; 1NT–3M splinters | 17; 2 | rules; field only | notrump-base | 163 / 151 / -17; 347 / 339 / -135 | responses (text fields) |
 | Transfers on over X or 2♣ | 3; 18 | rules | jacoby-transfers, stayman, nt-interference | | `sys_on_vs` (text) |
@@ -201,7 +208,7 @@ States:
 | Rubensohl after 1NT | 2 | field only | | | none |
 | Gambling 3NT | 13 | partly (the field only turns natural 3NT off; no Gambling rules) | strong-openings | 1,004 / 1,003 / -794 | 3NT one-suit (structured) |
 | 4NT opening | 16 | field only | | 21 / 21 / -64 | none |
-| `5431 after 1NT`, `Imposible 2S`, `1NT opening NT style` | 1, 9, 18 | passthrough | | 409 / 408 / -319 (5431) | none |
+| `5431 after 1NT`, `Imposible 2S` (**in progress**; a major-opening convention, 1♥ 1NT 2♣ 2♠, listed here by its key), `1NT opening NT style` | 1, 9, 18 | passthrough | | 409 / 408 / -319 (5431) | none |
 
 ### Major openings and jump shifts
 
@@ -218,7 +225,7 @@ States:
 | Gazzilli | 2 | field only | | 209 / 126 / -63 | none |
 | Strong jump shifts (2 level); inviting jump shifts | 16; 8 | rules | responses | 1,347 / 1,128 / -534 (inviting) | none |
 | Weak jump shifts (2 / 3 level) | 5 / 5 | field only | | 283 / 281 / -314; 90 / 86 / -76 | none |
-| Soloway jump shifts | 1 (SPECIALS2) | field only | | **1,514 / 1,497 / -7,103** | none |
+| Soloway jump shifts (few players use them: low priority, Rick 2026-09-28) | 1 (SPECIALS2) | field only | | **1,514 / 1,497 / -7,103** | none |
 | 2/1 game force | preset | field only (derived; the rules assume 2/1) | | | `two_over_one` (two_over_one) |
 | 3NT picture response | none | none | | | none |
 
@@ -281,10 +288,10 @@ States:
 | Michaels cuebid | 17 | field only | | **3,790 / 3,559 / -3,452** | `michaels` (michaels_unusual) |
 | Unusual 2NT / 1NT / 4NT | 17 each | field only | | 2,102 / 1,875 / -772; 30 / 18 / -11; 278 / 190 / -180 | `unusual_2nt` (michaels_unusual) |
 | Leaping / non-leaping Michaels | 3 / 0 | field only | | no separate BBA note | `leaping_michaels` |
-| Cappelletti / Multi-Landy / Landy vs 1NT | 10 / 7 / 0 | partly (the field only turns natural overcalls of 1NT off; no Cappelletti rules) | overcalls | **4,612 / 4,409 / +462**; 495 / 479 / +109 | VsNtDefense panel (structured); `dont` |
-| DONT, Meckwell, Suction, Spear, CRASH | none | none (DONT and Meckwell are options of `defense_vs_strong_nt`) | | | `dont` (dont) |
+| Cappelletti (**in progress**, with Modified Cappelletti) / Multi-Landy / Landy vs 1NT | 10 / 7 / 0 | partly (the field only turns natural overcalls of 1NT off; no Cappelletti rules) | overcalls | **4,612 / 4,409 / +462**; 495 / 479 / +109 | VsNtDefense panel (structured); `dont` |
+| DONT and Meckwell (**in progress**), Suction, Spear, CRASH | none | none (DONT and Meckwell are options of `defense_vs_strong_nt`) | | | `dont` (dont) |
 | Lebensohl after doubling a weak two; Rubensohl | 15; 2 | field only | | 1,138 / 806 / +121 | `lebensohl_weak_twos` (lebensohl) |
-| `Lebensohl after 1m`, `Rubensohl after 1m` | 15; 2 | passthrough | | 227 / 119 / -251; 90 / 15 / -62 | none |
+| `Lebensohl after 1m`, `Rubensohl after 1m` (meaning unknown to Rick: to be investigated) | 15; 2 | passthrough | | 227 / 119 / -251; 90 / 15 / -62 | none |
 | Jordan (Truscott) 2NT | 17 | field only | | 859 / 649 / -1,476 | none |
 | Fit-showing jumps | 7 | field only | | 361 / 320 / -694 | none |
 | 1X-(1Y)-2Z weak | 17 | field only | | 63 / 51 / -36 | none |
@@ -305,7 +312,7 @@ States:
 | Fourth suit forcing: game force / one round | 11 / 6 | field only (rebids treats a one-level fourth suit as natural) | | 1,006 / 609 / -981; 480 / 311 / -616 | `fourth_suit_forcing_gf/_1rnd` (fourth_suit_forcing) |
 | Reverses | preset | rules | rebids, responder-rebids | | `reverse_bids` (reverse_bids) |
 | XYZ, Ingberman | none | none (fields exist) | | | `xyz`, `ingberman_2nt` |
-| Precision system (strong 1♣, 1♦, 2♣, 2♦) | `System type` = Precision (2 cards) | field only (the preset derives structural fields; there are no strong-club rules) | | "16+ HCP": **8,149 / 5,698 / -7,106** | `transfer_responses_1c` is the nearest; none for strong club |
+| Precision system (strong 1♣, 1♦, 2♣, 2♦); in scope (Rick, 2026-09-28) | `System type` = Precision (2 cards) | field only (the preset derives structural fields; there are no strong-club rules) | | "16+ HCP": **8,149 / 5,698 / -7,106** | `transfer_responses_1c` is the nearest; none for strong club |
 
 ### Taxonomy notes
 
@@ -332,35 +339,56 @@ Each convention is weighed by what it would unlock against its effort:
 
 The ranking takes both unlock figures per unit of effort (S=1, M=2, L=3, XL=5), with judgement where they disagree. Competitive entries also count their "we differ" boards, since par misjudges competitive calls.
 
+**Rick's decisions (2026-09-28)** change the ranking the figures alone would give:
+
+- **Soloway jump shifts: few players use them.** Pushed down the list, although they are the largest IMP loss per line in the corpus (one card, 21GF-SPECIALS2, plays them).
+- **Precision is in scope**, large and complex. Pushed down, but "not next but not too far": of everything here it is the convention most likely to force engine changes, and those are cheaper found early.
+- **Defences to 1NT: Cappelletti, Modified Cappelletti, Meckwell and DONT**, for compatibility with the cards people play. Comparisons between them (par, side IMPs) are for information; they do not decide which to build.
+- **Puppet Stayman over 2NT** is wanted working.
+- **Impossible 2♠** has named sources (section 1).
+
+### In progress (2026-09-28)
+
+Being implemented now, in other pieces of work; the figures are the survey's, from before that work:
+
+| Convention | We differ / IMPs | Scenarios built on it | State at survey | Effort | Notes |
+|---|---|---|---|---|---|
+| **Defences to 1NT:** Cappelletti, Modified Cappelletti, Meckwell, DONT (ours, and reading EW's) | Cappelletti 4,409 / +462 | Cappelletti, Cappelletti_in_4th, Meckwell, DONT (bba-works: false), and every 1NT scenario, where EW (21GF-GIB) plays Cappelletti: 74 scenarios carry the note | partly (Cappelletti), none (the others) | M | Rick: for compatibility. Replay fidelity: EW's calls over our 1NT that we do not make (1NT X, 2♣, 2♦, 2♠, 2♥) are five of the top 17 divergence points, 4,372 boards. Judge with par and sideimps.py, for information |
+| **Puppet Stayman over 2NT** | 170 / -113 | 2N_and_MSS and the 21GF-MSTandMSS scenarios | field only (and the `two_nt.puppet` / `stayman.puppet` path mismatch) | S | Rick: wanted working |
+| **Impossible 2♠** (1♥ 1NT 2♣ 2♠, a good club raise) | not attributable: BBA shows no alert with the name | Impossible_2S (44% call agreement) | passthrough (`Imposible 2S`, on in 9 cards) | S | Sources: Robert Todd's write-up and the GIB reference (section 1), which may differ |
+
+### Remaining, ranked
+
 | # | Convention | We differ / IMPs | Scenarios built on it | State | Effort | Why this rank |
 |---:|---|---|---|---|---|---|
-| 1 | **Soloway jump shifts** | 1,497 / -7,103 | Soloway_Jump_Shift + Type-1..4 (5) | field only | M | Largest IMP loss per line; uncontested, so par is a fair judge |
-| 2 | **Michaels cuebid + Unusual 2NT** (making them, and reading them for EW, whose 21GF-GIB card plays both) | 5,434 / -4,224 | Michaels_Cuebid, Unusual_2N, Michaels_and_Unusual, Michaels_after_1m, Opps_Michaels_Cuebid, Opps_Michaels_and_Unusual, Two-Suited_Overcalls, Opps_2-Suited_Overcalls, Leaping_Michaels, Non_Leaping_* (11), all at 58-63% call agreement | field only | M-L | Most divergence boards of any missing convention; Baker skill michaels_unusual |
-| 3 | **Precision strong club**, stage 1: 1♣ 16+, the responses, 1♦, 2♣ | 5,698 / -7,106 at "16+ HCP", plus the opening divergences (1♣ vs 1♦/1♥/1♠: 4,830 boards, about -6,300) | Strong Club (18) + Strong Club 16+ (12) + Mathe: 15,500 boards | field only (preset) | XL | The largest family we cannot bid at all (38-55% agreement). Split it into stages |
-| 4 | **Cappelletti / Multi-Landy**, both directions | 4,888 / +571 | Cappelletti, Cappelletti_in_4th, Multi_Landy, and every 1NT scenario, where EW (21GF-GIB) plays Cappelletti: 74 scenarios carry the note | partly | M | Replay fidelity: EW's calls over our 1NT that we do not make (1NT X, 2♣, 2♦, 2♠, 2♥) are five of the top 17 divergence points, 4,372 boards. Par says passing is fine, but sideimps.py should judge it |
-| 5 | **Smolen** | 1,409 / -1,486 | Smolen, Smolen_Invitational, Smolen_after_2N, We_Overcall_NT_then_Smolen (28 carry the note) | field only | S | Cheap; fits on stayman.bid |
-| 6 | **Jordan 2NT** | 649 / -1,476 | Jordan_2N, Xfer_after_1M_X (43 carry the note) | field only | S | Cheap; after-interference already handles 1M (X) |
-| 7 | **Gerber** (over 1NT/2NT; by opener later) | 892 / -900 | Gerber, Gerber_By_Responder, Gerber_By_Opener, Slam_after_NT… (56 carry the note) | field only | S | Cheap; the rkcb answer machinery exists |
-| 8 | **Splinters** (responder's and opener's) | 1,822 / -1,738 | Splinters, Splinters_By_Opener, Splinters_after_Minor, Gavin_*_Splinter (183 carry the note) | field only | M | Spread over many scenarios; Baker skill jacoby_2nt_splinters |
-| 9 | **Minor Suit Stayman family** (1NT–2♠ MSS, 1NT–2NT→♣, MSS after 2NT) | 1,477 / -2,001 | Minor_Suit_Stayman, MST_or_MSS (-4.6 IMPs a board, among the eight worst scenarios), Minor_Suit_Transfer, 2N_and_MSS, We_Overcall_NT_then_MSS/MST | partly | M | Needs a new `minor_transfers` combination for the MSS cards |
-| 10 | **Fourth suit forcing** (game force and one round) | 920 / -1,597 | Fourth_Suit_Forcing (74 carry the note) | field only | M | Baker skill fourth_suit_forcing; closes a hole in responder's rebids |
-| 11 | Gambling 3NT | 1,003 / -794 | Gambling_3N, Opps_Gambling_3N (both at about 57%) | partly | S | |
-| 12 | Forcing 1NT (opener's rebids after it) | 2,470 / -212 | Forcing_NT, BART, Last_Train… (77) | field only | M | Many divergences, few IMPs |
-| 13 | Lebensohl after a double of a weak two; Lebensohl over 1NT interference | 806 / +121 | Lebensohl_vs_Opps_W2_*, Better_Minor_Lebensohl, McCabe_After_Weak_2, Lebensohl | field only | M | Baker skill lebensohl |
-| 14 | Exclusion | 182 / -707 | Exclusion_After_1M, Exclusion_After_Sta_Jac | field only | S | |
-| 15 | Fit-showing jumps | 320 / -694 | Fit_Showing_Jumps, Fit_Jumps_after_1M_Double | field only | S | |
-| 16 | Multi 2♦ (ours and theirs) | 696 / -528 | Multi_2D, Opps_Multi_2D (both at 60%) | field only | M | |
-| 17 | Roudi, Benjamin 2♦, reverse Flannery, weak jump shifts, 5NT pick-a-slam, Puppet over 1NT and 2NT, Rodrigue | each 170-500 / -100 to -750 | one card, one or two scenarios each | field only (Rodrigue passthrough) | S each | Card-specific; do them with their scenarios |
-| 18 | DONT, Western cue bid, transfer advances, 1NT ranges outside BBA's presets | no BBA reference | 9 of the bba-works: false scenarios | fields exist | S-M | Teaching value (DONT has a Baker lesson), but no corpus to test against: judge by par and `.test` cases only |
+| 1 | **Michaels cuebid + Unusual 2NT** (making them, and reading them for EW, whose 21GF-GIB card plays both) | 5,434 / -4,224 | Michaels_Cuebid, Unusual_2N, Michaels_and_Unusual, Michaels_after_1m, Opps_Michaels_Cuebid, Opps_Michaels_and_Unusual, Two-Suited_Overcalls, Opps_2-Suited_Overcalls, Leaping_Michaels, Non_Leaping_* (11), all at 58-63% call agreement | field only | M-L | Most divergence boards of any missing convention; Baker skill michaels_unusual. Now first, with Soloway pushed down |
+| 2 | **Smolen** | 1,409 / -1,486 | Smolen, Smolen_Invitational, Smolen_after_2N, We_Overcall_NT_then_Smolen (28 carry the note) | field only | S | Cheap; fits on stayman.bid |
+| 3 | **Jordan 2NT** | 649 / -1,476 | Jordan_2N, Xfer_after_1M_X (43 carry the note) | field only | S | Cheap; after-interference already handles 1M (X) |
+| 4 | **Gerber** (over 1NT/2NT; by opener later) | 892 / -900 | Gerber, Gerber_By_Responder, Gerber_By_Opener, Slam_after_NT… (56 carry the note) | field only | S | Cheap; the rkcb answer machinery exists |
+| 5 | Gambling 3NT | 1,003 / -794 | Gambling_3N, Opps_Gambling_3N (both at about 57%) | partly | S | Cheap |
+| 6 | **Precision strong club**, stage 1: 1♣ 16+, the responses, 1♦, 2♣ | 5,698 / -7,106 at "16+ HCP", plus the opening divergences (1♣ vs 1♦/1♥/1♠: 4,830 boards, about -6,300) | Strong Club (18) + Strong Club 16+ (12) + Mathe: 15,500 boards | field only (preset) | XL | Rick: in scope, "not next but not too far". The largest family we cannot bid at all (38-55% agreement), and the likeliest to need engine changes. Split it into stages |
+| 7 | **Splinters** (responder's and opener's) | 1,822 / -1,738 | Splinters, Splinters_By_Opener, Splinters_after_Minor, Gavin_*_Splinter (183 carry the note) | field only | M | Spread over many scenarios; Baker skill jacoby_2nt_splinters |
+| 8 | **Minor Suit Stayman family** (1NT–2♠ MSS, 1NT–2NT→♣, MSS after 2NT) | 1,477 / -2,001 | Minor_Suit_Stayman, MST_or_MSS (-4.6 IMPs a board, among the eight worst scenarios), Minor_Suit_Transfer, 2N_and_MSS, We_Overcall_NT_then_MSS/MST | partly | M | Needs a new `minor_transfers` combination for the MSS cards; shares 2N_and_MSS with the Puppet work |
+| 9 | **Fourth suit forcing** (game force and one round) | 920 / -1,597 | Fourth_Suit_Forcing (74 carry the note) | field only | M | Baker skill fourth_suit_forcing; closes a hole in responder's rebids |
+| 10 | Multi-Landy (ours and theirs) | 479 / +109 | Multi_Landy; BBA's stand-in in Meckwell | field only | S | Not in Rick's list of defences to 1NT; cheap once that work lands |
+| 11 | Forcing 1NT (opener's rebids after it) | 2,470 / -212 | Forcing_NT, BART, Last_Train… (77) | field only | M | Many divergences, few IMPs |
+| 12 | Lebensohl after a double of a weak two; Lebensohl over 1NT interference | 806 / +121 | Lebensohl_vs_Opps_W2_*, Better_Minor_Lebensohl, McCabe_After_Weak_2, Lebensohl | field only | M | Baker skill lebensohl. The weak-two version was tried on 2026-09-27 and lost on both yardsticks (vs-preempts.notes.md) |
+| 13 | Exclusion | 182 / -707 | Exclusion_After_1M, Exclusion_After_Sta_Jac | field only | S | |
+| 14 | Fit-showing jumps | 320 / -694 | Fit_Showing_Jumps, Fit_Jumps_after_1M_Double | field only | S | |
+| 15 | Multi 2♦ (ours and theirs) | 696 / -528 | Multi_2D, Opps_Multi_2D (both at 60%) | field only | M | |
+| 16 | **Soloway jump shifts** | 1,497 / -7,103 | Soloway_Jump_Shift + Type-1..4 (5) | field only | M | Rick: few players use them. By the figures alone this would be first |
+| 17 | Roudi, Benjamin 2♦, reverse Flannery, weak jump shifts, 5NT pick-a-slam, Puppet over 1NT, Rodrigue | each 170-500 / -100 to -750 | one card, one or two scenarios each | field only (Rodrigue passthrough) | S each | Card-specific; do them with their scenarios |
+| 18 | Western cue bid, transfer advances, 1NT ranges outside BBA's presets | no BBA reference | 7 of the bba-works: false scenarios | fields exist | S-M | Teaching value, but no corpus to test against: judge by par and `.test` cases only |
 | 19 | Other bba-works: false gaps (picture 3NT, Todd, Mitchell, Rosenkranz, good-bad 2NT, Tislevoll, Thrump X, CRASH, keycard over preempts, six-key RKCB, reversed splinters, Lars Multi) | no BBA reference | one scenario each; 7 have no corpus at all | none: a new field each | S-M each | After the above |
 
 Recommended order:
 
-1. **Quick wins:** Smolen, Jordan 2NT, Gerber and Gambling 3NT. All are S; together they account for 3,953 divergence boards and about -4,650 IMPs.
-2. **The two big conventional gaps:** Soloway, then Michaels/Unusual 2NT.
-3. **EW fidelity:** Cappelletti/Multi-Landy.
-4. **Medium modules:** splinters, the MSS family and FSF.
-5. **Precision:** a project of its own, in stages. Stage 1 is the strong 1♣ and its responses, which covers the 12 SCS16 and 11 SCS scenarios.
+1. **Finish the work in progress:** the four defences to 1NT, Puppet Stayman over 2NT, and Impossible 2♠.
+2. **The big conventional gap:** Michaels/Unusual 2NT.
+3. **Quick wins:** Smolen, Jordan 2NT, Gerber and Gambling 3NT. All are S; together they account for 3,953 divergence boards and about -4,650 IMPs.
+4. **Precision:** a project of its own, in stages, started here rather than last so that the engine changes it forces come early. Stage 1 is the strong 1♣ and its responses, which covers the 12 SCS16 and 11 SCS scenarios.
+5. **Medium modules:** splinters, the MSS family and FSF.
+6. **The rest of the table**, with Soloway near the end on Rick's ruling.
 
 ### Implemented, but still costly
 
@@ -385,7 +413,7 @@ If tuning counts as priority work, slam entry (when to use keycard) belongs abov
 
 | File | Done | Remaining | How estimated |
 |---|---|---|---|
-| `bbsa-map.toml` | 145 of 173 keys mapped (84%) | 28 passthrough keys; 16 are on in a used card and each needs Rick's ruling on its meaning (section 1) | key count |
+| `bbsa-map.toml` | 145 of 173 keys mapped (84%) | 28 passthrough keys; 16 are on in a used card. `Imposible 2S` now has named sources (in progress); the other 15 are to be investigated, since Rick does not know `Lebensohl after 1m` or `Rubensohl after 1m` either (section 1) | key count |
 | `fields.toml` | 321 fields. They express every BBA key except the 28 above, 5 of the 20 named bba-works: false gaps fully (DONT, Mini-Roman, Western cue, transfer advances, 1NT range), and 3 partly (Gerber by opener, Gerber after a 1NT overcall, size-asking) | About 25 new fields: ~15 for passthrough keys once named, ~12 for gap conventions with no field. Plus 3 path fixes (Stayman catalog path, `two_nt.puppet` vs `stayman.puppet`, `walsh.play` vs `one_club_responses`). **About 90% done** | field count |
 | `.bid` modules | 34 modules, 6,535 lines, reading 63 fields. They cover 32 of the 117 keys in use (27%; 36% weighted by boards), and all the unkeyed basics (openings, responses, rebids, overcalls, takeout and negative doubles, advances, vs preempts) | By the effort classes above: about 42 S units (~60 lines each, ~2,500), about 16 M units (~200 each, ~3,200, Michaels/Unusual counted as L), Precision (~2,000), and ~20 gap conventions with no BBA key (~100 each, ~2,000). **About 9,700 lines**, plus about 2,700 lines of `.test` at today's ratio | S/M/L sizes taken from the lines in today's comparable modules |
 
@@ -395,12 +423,20 @@ The remaining share also understates the tuning that follows each module. Today'
 
 ## Open questions for Rick
 
-1. **Passthrough keys.** What do the 16 in-use passthrough keys mean? `Imposible 2S`, `Lebensohl after 1m`, `Shape Bergen structure` vs `Strength Lawrence structure`, `Two suit takeout double`, `Support 1NT`, `5431 after 1NT`, `1NT opening NT style`, `Collante`, `Rodrigue`, `Crosswood 0314`, `Rubensohl after 1m`, `Natural 3N entering style`, `Mark on queen/king`, `Jordan Truscott 2NT defence`. Each can be probed with `rbb grid` once named. This survey does not guess.
-2. **What `bba-works` means.** Does `bba-works: true` mean "BBA plays the named convention" or "BBA's auctions are acceptable here"? Several true scenarios (Meckwell, Suction, Spear, Muiderberg, Help_Suit_Game_Try, Namyats…) show BBA playing a stand-in.
-3. **Size-asking MSS.** Is it a new option of `notrump.minor_transfers`, or its own convention?
-4. **Cappelletti.** Par favours our passing (+571 IMPs), but replay fidelity suffers in 74 scenarios. Implement it for EW anyway, and judge it with sideimps.py?
-5. **Precision.** Is it in scope, and in which stages? It is the largest family by boards.
-6. **Classroom catalog.** Should the catalog gain rows for the priority conventions that it lacks: Soloway, Jordan 2NT, Cappelletti/Multi-Landy, fit-showing jumps, super-accept, Flannery, two-way game tries?
+Answered on 2026-09-28:
+
+1. **Passthrough keys** (partly answered). `Imposible 2S` is the impossible 2♠ (1♥ 1NT 2♣ 2♠, a good club raise); sources: Robert Todd's write-up (<https://static1.squarespace.com/static/5127d3d2e4b0b304f0b6db24/t/5c8e551f104c7b066eb43ac8/1552831776048/3+%28269%29+The+Impossilbe+Spade+Bid+.pdf>) and the older GIB reference (<https://netbridge.dk/gib.html>), which may treat it differently; in progress. Rick does not know what `Lebensohl after 1m` and `Rubensohl after 1m` are. **Still open:** those two and the other in-use passthrough keys stay to be investigated: `Shape Bergen structure` vs `Strength Lawrence structure`, `Two suit takeout double`, `Support 1NT`, `5431 after 1NT`, `1NT opening NT style`, `Collante`, `Rodrigue`, `Crosswood 0314`, `Natural 3N entering style`, `Mark on queen/king`, `Jordan Truscott 2NT defence`. Each can be probed with `rbb grid` once there is a candidate meaning to test; this survey does not guess.
+2. **What `bba-works` means.** Answered: BBA is designed to support the given convention. The scenarios where the flag is true but BBA's notes show a stand-in (section 2) are therefore to be checked one by one.
+3. **Cappelletti.** Answered: implement Cappelletti, Modified Cappelletti, Meckwell and DONT, for compatibility with the cards people play; comparisons between them are for information. In progress.
+4. **Precision.** Answered: in scope, large and complex; pushed down the list but not too far, since it is the convention most likely to force engine changes. **Still open:** the stages (the proposal is stage 1 = the strong 1♣, its responses, 1♦ and 2♣).
+5. **Soloway** (not asked, ruled): few players use it; pushed down the list.
+6. **Puppet Stayman over 2NT** (not asked, ruled): wanted working; in progress.
+
+Still open:
+
+7. **Size-asking MSS.** Is it a new option of `notrump.minor_transfers`, or its own convention?
+8. **Classroom catalog.** Should the catalog gain rows for the priority conventions that it lacks: Jordan 2NT, Cappelletti/Multi-Landy (and Modified Cappelletti, Meckwell), fit-showing jumps, super-accept, Flannery, two-way game tries, Soloway?
+9. **The `bba-works` stand-ins.** With `bba-works` meaning "BBA is designed to support it", should the stand-in scenarios (Meckwell, Suction, Spear, Muiderberg, Help_Suit_Game_Try, Namyats, Impossible_2S…) be reported to the PBS maintainers, or re-run with a card that switches the convention on?
 
 ## How this was made
 
