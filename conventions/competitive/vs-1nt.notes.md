@@ -135,8 +135,8 @@ Reading it:
   sides; the corpus has no BBA reference for DONT, Meckwell or Modified
   Cappelletti, so only the two double-dummy yardsticks judge them.
 
-Runs: `/Volumes/X10 Pro/rusty-bidding-bot/compare/ntd/` (`base.json`,
-`final.json`, `f-<defence>.json`).
+Runs: local `rbb compare --json` outputs (`base.json`, `final.json`,
+`f-<defence>.json`, one per defence forced on with `--set`), not kept.
 
 ## Sources
 
