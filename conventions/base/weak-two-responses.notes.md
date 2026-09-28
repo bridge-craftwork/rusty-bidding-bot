@@ -277,3 +277,19 @@ On the same board BBA answered the 2NT ask with 3NT on KQ8764 and Q3:
 BBA's maximum with no side honour (the `bba` treatment), which our
 default reads as AKQ. Our default answer is 3♥, the heart queen with a
 maximum, and responder then bids 3NT. No change needed there.
+
+## Slam after the 2NT ask (2026-09-27)
+
+Ticket basic-weak-2-b201: 2H 2NT 3S (maximum), North AKJT86.AJ.AK8.AQ
+bid 4H. Responder now agrees the weak-two suit and asks with 4NT
+(keycards on 1430/0314 cards, aces on standard-Blackwood cards) when
+his HCP plus partner's floor reach 33: +308 par, +832 side IMPs (70
+boards). The board now reaches 6H.
+
+**Open, for Rick: counting tricks for the grand.** BBA reached 7H via
+5NT; Rick counts 14 top tricks for 7NT. `grand_try` is still the
+placeholder "35 HCP between us, partner at his floor" (34 here). A
+real evaluator would count sure tricks: my suits' top cards with
+partner's known honours and length, plus the aces and kings the asks
+have located. That wants a design (what partner's answers pin down,
+how a long suit with a known fit counts), not a one-off rule.

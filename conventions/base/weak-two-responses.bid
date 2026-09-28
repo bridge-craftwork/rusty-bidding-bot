@@ -10,6 +10,9 @@ module weak-two-responses "Responses to a weak two"
   param  ask2nt = two_level.weak_two_2nt_response default feature
   param  two_c  = two_level.two_clubs.meaning default strong
   param  style  = general.style
+  param  k1430  = slam.blackwood.rkcb_1430 default false
+  param  k0314  = slam.blackwood.rkcb_0314 default false
+  param  aces   = slam.blackwood.standard default false
 
 # Standard responder (the default until 2026-09-24): 2NT from 15, raises
 # with four. The default is now BBA's, below: par preferred it (+453 IMPs
@@ -182,6 +185,20 @@ when answered weak_two(t), style is bba, !partner.last=3{t}
         priority 1
 
 when answered weak_two(t)
+  # Slam values opposite the answer (2026-09-27, ticket b201: 26 HCP
+  # opposite a maximum with a feature stopped in 4H): agree the suit and
+  # ask for keycards, with 33 HCP between us counting partner at the
+  # floor of his answer.
+  4N    "Keycard ask in {t}"          shows t>=2, hcp + partner.hcp.min >= 33
+        when  k1430 | k0314
+        sets  trump=t, ask=keycards(t)
+        artificial
+        priority 2
+  4N    "Blackwood: aces, {t} agreed"  shows t>=2, hcp + partner.hcp.min >= 33
+        when  aces, !k1430, !k0314
+        sets  trump=t, ask=aces
+        artificial
+        priority 2
   4{t}  "Game in the weak two suit"   shows hcp>=17
         when  t is H | t is S
   3N    "Game in notrump"             shows hcp>=17

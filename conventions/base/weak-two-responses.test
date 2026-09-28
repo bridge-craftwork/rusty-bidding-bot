@@ -94,3 +94,10 @@ N AK.AK985.JT2.A74      | 2D P  | 3NT | 19, diamond help, every side suit held: 
 N AK.AK985.J2.A742      | 2D P  | 3NT | two diamonds are help enough
 N 64.AK985.JT2.AK4      | 2D P  | !3NT | no spade stopper
 N A6.KT7632.KJT.KJ      | 2D P  | !3NT | six hearts: bid them
+
+# Slam opposite the answer to 2NT (Basic_Weak_2 201).
+card    Basic-Bridge
+dealer  S
+vul     EW
+N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P                      | 4NT    | 26 opposite a maximum: agree hearts and ask (plain Blackwood on this card)
+N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P 4NT P 5C P           | 6H     | no aces opposite, all four here: small slam
