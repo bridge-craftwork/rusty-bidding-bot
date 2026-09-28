@@ -46,7 +46,12 @@ no-rule problems 73,286 → 29,714.
 ## Gaps (not built yet)
 
 - Fourth suit forcing (the card field exists; the Basic card does not play
-  it: 1♦-1♥-1♠-2♣ is natural).
+  it: 1♦-1♥-1♠-2♣ is natural). 2026-09-28: `other_conventions.
+  fourth_suit_forcing.play` (Bridge-Classroom's seed card sets it) turns
+  the natural 2♣ off; there is no artificial 2♣ yet, so that hand bids
+  1NT or its next-best call. The `.bbsa` keys set only `one_round` /
+  `game_force`, which nothing reads, so the corpus is unchanged. The
+  one-level fourth suit (1♣-1♦-1♥-1♠) stays natural either way.
 - Slam tries by responder; opener's continuations after responder's
   second call beyond the invitations.
 - Passed-hand and competitive versions.

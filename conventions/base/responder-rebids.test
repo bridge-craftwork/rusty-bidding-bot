@@ -169,3 +169,13 @@ card    Basic-Bridge
 dealer  S
 vul     All
 N QJ542.T.AK7.AJ84      | 1H P 2S P 3S P                       | 4S     | spades agreed: game in the fit, not back to 3NT
+
+# The fourth suit at the two level: natural on a card without fourth
+# suit forcing, not available with it (Bridge-Classroom's cards set
+# other_conventions.fourth_suit_forcing.play).
+card    Basic-Bridge
+dealer  S
+N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 2C     | 8 HCP, five clubs: natural
+card    Basic-Bridge other_conventions.fourth_suit_forcing.play=true
+dealer  S
+N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 1NT    | 2C would be fourth suit forcing: 1NT instead

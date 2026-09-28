@@ -17,6 +17,7 @@
 module responder-rebids "Responder's second call"
   needs  rebids
   param  nmf = other_conventions.new_minor_forcing.play default false
+  param  fsf = other_conventions.fourth_suit_forcing.play default false
   param  style = general.style
 
 # ── Opener rebid 1NT (12-14) ─────────────────────────────────────────
@@ -82,6 +83,8 @@ after 1C (P) 1D (P) 2D (P)
   3N  "Game: 13+"                          shows points>=13
 
 # ── Opener bid a new suit at the one level (not forcing) ─────────────
+# The fourth suit at the one level stays natural whatever the card says
+# about fourth suit forcing: 1♠ here is a real suit (rebids.bid answers it).
 after 1C (P) 1D (P) 1H (P)
   1S  "4+ spades"                          shows S>=4, H<=3
       priority 1
@@ -97,8 +100,13 @@ after 1x (P) 1y (P) 1z (P)
   3N  "Game: 13+"                          shows points>=13, z<=3
 after 1x (P) 1y (P) 1M (P)
   4M  "Game raise: 4+ {M}, 13+"            shows M>=4, points>=13
+# The fourth suit at the two level: natural unless the card plays fourth
+# suit forcing (`other_conventions.fourth_suit_forcing.play`, set by
+# Bridge-Classroom's cards; the .bbsa keys set only one_round/game_force,
+# so the corpus keeps it natural). There is no artificial 2♣ yet.
 after 1D (P) 1H (P) 1S (P)
   2C  "5+ clubs, 8-10"                     shows C>=5, points=8..10, S<=3   sets ask=signoff
+      when  !fsf
 
 # ── Opener bid a new suit at the two level (a reverse is forcing) ────
 after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
