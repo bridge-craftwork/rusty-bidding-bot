@@ -1,0 +1,151 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Over their 1NT opening: what every defence shares (vs-1nt.notes.md).
+#
+# The card's `competitive.vs_1nt_strong.system` picks the
+# defence, and each has its own module for the calls that differ:
+# natural (overcalls.bid), Cappelletti and Modified Cappelletti
+# (cappelletti.bid), DONT (dont.bid), Meckwell (meckwell.bid), Landy and
+# Multi-Landy (multi-landy.bid). Their calls say what they show and set
+# a question for partner (`sets ask=...`); the answers that are the same
+# whichever defence asked are written here, once, against the question:
+#
+#   nt_majors       partner has both majors: pick one, invite or bid game
+#   nt_mm(M)        partner has five M and a four-card minor
+#   nt_which_minor  I asked for that minor: partner names it
+#   nt_minors       partner has both minors: pick one
+#   nt_pc(x)        partner has x and another suit: pass, or ask which
+#   nt_other        I asked for the other suit: partner names it
+#   nt_one(x)       partner has shown one long suit x
+#   nt_penalty      partner doubled for penalties
+#
+# Advancer's strength is measured in support points (tp) once a major
+# fits. BBA (21GF-DEFAULT, probes/vs-1N-capp-*-adv.toml) raises a
+# five-card major with 3+ support: to three with 8-14 total points and
+# to game from about 11. The overcaller has 9-17, so we invite with 10-12
+# support points and bid game from 13.
+
+module vs-1nt "Over their 1NT: what every defence shares"
+  needs  base
+  param  def       = competitive.vs_1nt_strong.system default other
+  param  dont_play = competitive.dont.play default false
+
+# ── Preempts and the pass ────────────────────────────────────────────
+# With a conventional defence a seven-card suit jumps to the three level
+# only when it is too weak for the one-suited call: BBA on 21GF-DEFAULT
+# preempts with 6-8 HCP and bids 2♣ (Cappelletti) from 9 with seven cards
+# (probes/vs-1N-capp.toml). We preempt up to 11 counting a point a card
+# beyond four, one below the one-suiter's 12: 4-8 HCP with seven cards.
+# The natural defence keeps its own 4-10 (overcalls.bid).
+after (1N) when !(def is other) | dont_play
+  3S  "Preemptive: seven spades"                  shows S>=7, hcp>=4, hcp+length_points<=11
+      priority 1
+  3H  "Preemptive: seven hearts"                  shows H>=7, hcp>=4, hcp+length_points<=11
+      priority 1
+  3D  "Preemptive: seven diamonds"                shows D>=7, hcp>=4, hcp+length_points<=11
+      priority 1
+  3C  "Preemptive: seven clubs"                   shows C>=7, hcp>=4, hcp+length_points<=11
+      priority 1
+after (1N) | (1N) P (P)
+  P   "Nothing to say over their 1NT"             priority -10
+
+# ── Partner has both majors ──────────────────────────────────────────
+# Cappelletti 2♦, Landy and Multi-Landy 2♣, DONT 2♥, Meckwell X then 2♥.
+# Preference to the longer major (hearts when equal, as BBA and GIB),
+# a jump to invite with four, game from 13 support points; a long minor
+# with at most two cards in either major plays there.
+when asked nt_majors, rho.last=P | rho.last=X
+  P   "Hearts: to play"                  shows H>=S
+      when  partner.last=2H
+  2H  "Preference: hearts"               shows H>=S
+  2S  "Preference: spades"               shows S>H
+  3H  "Invitational: four hearts"        shows H>=4, H>=S, tp(H)=10..12
+  3S  "Invitational: four spades"        shows S>=4, S>H, tp(S)=10..12
+  4H  "Game in hearts"                   shows H>=3, H>=S, tp(H)>=13
+  4S  "Game in spades"                   shows S>=3, S>H, tp(S)>=13
+  P   "Long clubs: to play"              shows C>=6, H<=2, S<=2
+      when  partner.last=2C
+  P   "Long diamonds: to play"           shows D>=6, H<=2, S<=2
+      when  partner.last=2D
+  3C  "Long clubs: to play"              shows C>=6, H<=2, S<=2
+      when  !partner.last=2C
+  3D  "Long diamonds: to play"           shows D>=6, H<=2, S<=2
+      when  !partner.last=2D
+
+# ── Partner has five of a major and a four-card minor ────────────────
+# Cappelletti and Multi-Landy 2♥/2♠, Modified Cappelletti 2♣ then 2♥/2♠.
+# Pass with two or more; raise with three; 2NT asks for the minor with a
+# singleton or void; a six-card suit of my own is to play.
+when asked nt_mm(M), rho.last=P | rho.last=X
+  P    "{M} to play"                            shows M>=2
+  3{M} "Invitational raise"                     shows M>=3, tp(M)=10..12
+  4{M} "Game in {M}"                            shows M>=3, tp(M)>=13
+  2N   "Which is your minor?"                   alert  artificial
+       shows M<=1
+       sets  ask=nt_which_minor
+  2S   "Six or more spades: to play"            shows S>=6, M<=2
+       when  M is H
+  3H   "Six or more hearts: to play"            shows H>=6, M<=2
+       when  M is S
+  3C   "Six or more clubs: to play"             shows C>=6, M<=1
+  3D   "Six or more diamonds: to play"          shows D>=6, M<=1
+
+when asked nt_which_minor, rho.last=P | rho.last=X
+  3C  "My minor is clubs"                       shows C>=4, C>=D
+  3D  "My minor is diamonds"                    shows D>=4, D>C
+
+# ── Partner has both minors ──────────────────────────────────────────
+# 2NT in Cappelletti, Meckwell and Multi-Landy. The longer minor, and
+# diamonds when equal (BBA, probes/vs-1N-capp-2N-adv.toml: 98 of 98);
+# game with a fit and 14 support points.
+when asked nt_minors, rho.last=P | rho.last=X
+  3C  "Preference: clubs"                       shows C>D
+  3D  "Preference: diamonds"                    shows D>=C
+  5C  "Game in clubs"                           shows C>=4, C>D, tp(C)>=14
+  5D  "Game in diamonds"                        shows D>=4, D>=C, tp(D)>=14
+  3H  "Six or more hearts: to play"             shows H>=6, C<=2, D<=2
+  3S  "Six or more spades: to play"             shows S>=6, C<=2, D<=2
+
+# ── Partner has a known suit and another ─────────────────────────────
+# DONT 2♣/2♦ (and a higher suit), Meckwell 2♣/2♦ (and a major). Pass
+# with three of the known suit; otherwise the next step asks for the
+# other one, which partner passes or corrects.
+when asked nt_pc(x), rho.last=P | rho.last=X
+  P   "Support for {x}: to play"                shows x>=3
+  2D  "Which is your other suit?"               alert
+      shows x<=2
+      when  x is C
+      sets  ask=nt_other
+  2H  "Which is your other suit? (pass or correct)"   alert
+      shows x<=2
+      when  x is D
+      sets  ask=nt_other
+
+when asked nt_other, rho.last=P | rho.last=X
+  P   "My other suit is diamonds"               shows D>=4
+      when  partner.last=2D
+  P   "My other suit is hearts"                 shows H>=4
+      when  partner.last=2H
+  2H  "My other suit is hearts"                 shows H>=4
+  2S  "My other suit is spades"                 shows S>=4
+
+# ── Partner has shown one long suit ──────────────────────────────────
+# After a relay answer, a natural 2♥/2♠ (Meckwell, DONT 2♠) or the
+# Multi-Landy 2♦. Raise a major with two or more: invite with 11-12,
+# game from 13.
+when asked nt_one(x), rho.last=P | rho.last=X
+  3{x} "Invitational raise"                     shows x>=2, hcp=11..12
+       when  x is H | x is S
+  4{x} "Game in {x}"                            shows x>=2, hcp>=13
+       when  x is H | x is S
+  P    "Nothing more to say"                    priority -5
+
+# ── Partner doubled for penalties ────────────────────────────────────
+# Cappelletti and Modified Cappelletti: 15+ HCP. Sit with five or more
+# HCP, or with nowhere to go; run to a five-card suit with less.
+when asked nt_penalty, rho.last=P | rho.last=XX
+  P   "Sitting for the penalty double"          priority -1
+  2C  "Weak: five or more clubs"                shows C>=5, hcp<=4
+  2D  "Weak: five or more diamonds"             shows D>=5, hcp<=4
+  2H  "Weak: five or more hearts"               shows H>=5, hcp<=4
+  2S  "Weak: five or more spades"               shows S>=5, hcp<=4

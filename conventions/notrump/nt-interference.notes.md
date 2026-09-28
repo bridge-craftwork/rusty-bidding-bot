@@ -187,3 +187,41 @@ defends with four of theirs, else 3NT with a stopper or a four-card
 suit), otherwise pass. BBA's calls in the corpus: pass, 3NT and one
 double. Full corpus: 1NT (3♦) +105, (3♣) +90, (3♥) +80 by side, part of
 a +189 / +262 change with the fallbacks below.
+
+## Their conventional defences (2026-09-28)
+
+The opponents' calls over our 1NT are now read with their card's defence
+(`competitive.vs_1nt_strong.system`: cappelletti.bid, dont.bid,
+meckwell.bid, multi-landy.bid; vs-1nt.notes.md). 21GF-GIB, the EW card
+of 316 scenarios, plays Cappelletti, so from now on EW double 1NT with
+15+, bid 2♣ with a one-suiter, 2♦ with the majors and so on, where
+before they passed every hand. What changed here:
+
+- **The natural-overcall rules** (`after 1N (2y)` and their
+  continuations) now apply only when the overcaller has shown four or
+  more of the suit bid and not both majors: `rho.y>=4, (maybe
+  rho.H<=3) | (maybe rho.S<=3)` (`lho.` from opener's seat). Cappelletti
+  2♥/2♠ (five of the major and a minor), Meckwell 2♥/2♠, DONT 2♦ and 2♠
+  pass; Cappelletti 2♦ and DONT 2♥ (both majors) do not.
+- **Both majors shown** (Cappelletti 2♦, DONT 2♥): X shows 8+ HCP and
+  says we can defend; 3♣/3♦ natural and forcing to game (opener bids
+  3NT); 3NT with both majors held. When they run, a double is for
+  penalties (four of the suit), and opener leaves a penalty double in.
+- **An unknown major** (Multi-Landy 2♦): X values, 3NT game.
+- **Their 2NT** (minors): X values; 3♥/3♠ natural and forcing, four of
+  a major with six; 3NT with 10+; opener raises a major with three.
+- **Their 2♣ relay over our Stayman double** (Cappelletti 2♣ X 2♦):
+  opener still shows a major, doubles 2♦ with four and no major.
+- **Their penalty double**: opener passes partner's escape
+  (`vs_double` off), passes a redouble left in, and after our redouble
+  and their run leaves it to responder, who doubles with four of their
+  suit or 9+.
+- After a transfer they interrupted, a responder with no continuation
+  (5-4 in the majors with a singleton, which goes through Stayman
+  uncontested) passes: a fallback, not a treatment.
+
+These took the no-rule positions they had caused (821 more at the first
+run) back below the baseline (2,835 before, 2,795 after). Still open:
+Lebensohl (on for 21GF-DEFAULT) over their two-level calls; a cue-bid
+structure over Landy/Multi-Landy 2♣ (we keep Stayman by double);
+opener's rebids when their advancer bids over our double (a pass).

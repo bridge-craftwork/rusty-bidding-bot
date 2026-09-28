@@ -1,0 +1,97 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Cappelletti (Hamilton) and Modified Cappelletti over their 1NT, direct
+# and balancing (vs-1nt.notes.md has the sources and the BBA probes).
+#
+#   X    penalty, 15+ HCP                     (both)
+#   2♣   one long suit, six or more            (Cappelletti)
+#        a long minor, or a major and a minor  (Modified)
+#   2♦   both majors, 5-4 or longer            (both)
+#   2♥/2♠ that major (5) and a minor (4)       (Cappelletti)
+#        that major, six or more, one-suited   (Modified)
+#   2NT  both minors, 5-5 or longer            (both)
+#
+# Strength (BBA on 21GF-DEFAULT, probes/vs-1N-capp.toml, 1,500 hands):
+# BBA doubles from 15 HCP, shows a six-card suit from 9-10 HCP and a
+# two-suiter from 9; it passes a 5-4 major-minor hand whose four-card
+# minor has no top honour. We count HCP plus a point a card beyond four
+# in each suit: 12 for a one-suiter (10 HCP with six cards, 9 with
+# seven), 10 for a two-suiter (9 HCP with 5-4, 8 with 5-5), 8 for the
+# minors (6 HCP with 5-5 minors, as BBA at 6-7 with 6-5). With 18+ HCP
+# the double comes first whatever the shape.
+
+module cappelletti "Cappelletti and Modified Cappelletti over their 1NT"
+  needs  vs-1nt
+  param  def = competitive.vs_1nt_strong.system default other
+
+# ── Direct and balancing: the calls both versions share ──────────────
+after (1N) | (1N) P (P) when def is cappelletti | def is modified_cappelletti
+  X   "Penalty: 15+ HCP"
+      shows hcp>=15
+      sets  ask=nt_penalty
+  2D  "Cappelletti: both majors, 5-4 or longer"   alert
+      shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, hcp<=17
+      sets  ask=nt_majors
+  2N  "Cappelletti: both minors, 5-5 or longer"   alert
+      shows C>=5, D>=5, hcp+length_points>=8, hcp<=17
+      sets  ask=nt_minors
+
+# ── Cappelletti ──────────────────────────────────────────────────────
+after (1N) | (1N) P (P) when def is cappelletti
+  2C  "Cappelletti: one long suit, six or more"   alert
+      shows longest>=6, second_longest<=4, hcp+length_points>=12, hcp<=17
+      sets  ask=capp_one
+  2H  "Cappelletti: five hearts and a four-card minor"   alert
+      shows H>=5, S<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_mm(H)
+  2S  "Cappelletti: five spades and a four-card minor"   alert
+      shows S>=5, H<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_mm(S)
+
+# Advancer over 2♣: the 2♦ relay asks for the suit. BBA and GIB pass with
+# six clubs and bid a six-card major of their own, not forcing
+# (probes/vs-1N-capp-2C-adv.toml: 526 relays, 32 2♥, 21 2♠, 21 passes).
+when asked capp_one, rho.last=P | rho.last=X
+  2D  "Relay: bid your suit"                      alert
+      sets  ask=capp_relay
+  P   "Long clubs: to play"                       shows C>=6
+  2H  "Six or more hearts: to play"               shows H>=6, hcp<=12
+  2S  "Six or more spades: to play"               shows S>=6, hcp<=12
+
+when asked capp_relay, rho.last=P | rho.last=X
+  P   "My suit is diamonds"                       shows D>=6
+  2H  "My suit is hearts"                         shows H>=6
+      sets  ask=nt_one(H)
+  2S  "My suit is spades"                         shows S>=6
+      sets  ask=nt_one(S)
+  3C  "My suit is clubs"                          shows C>=6
+      sets  ask=nt_one(C)
+
+# ── Modified Cappelletti ─────────────────────────────────────────────
+# 2♣ is a long minor or a major-minor two-suiter; 2♥/2♠ one-suited.
+after (1N) | (1N) P (P) when def is modified_cappelletti
+  2C  "Modified Cappelletti: a long minor, or a major and a minor"   alert
+      shows ((C>=6 | D>=6), second_longest<=4, hcp+length_points>=12) | (((H>=5, S<=3) | (S>=5, H<=3)), (C>=4 | D>=4), hcp+length_points>=10)
+      shows hcp<=17
+      sets  ask=mcapp_one
+  2H  "Modified Cappelletti: six or more hearts"  alert
+      shows H>=6, second_longest<=4, hcp+length_points>=12, hcp<=17
+      sets  ask=nt_one(H)
+  2S  "Modified Cappelletti: six or more spades"  alert
+      shows S>=6, second_longest<=4, hcp+length_points>=12, hcp<=17
+      sets  ask=nt_one(S)
+
+# Advancer relays: 2♣ may be diamonds or a major, so it is not passed.
+when asked mcapp_one, rho.last=P | rho.last=X
+  2D  "Relay: show your hand"                     alert
+      sets  ask=mcapp_relay
+
+when asked mcapp_relay, rho.last=P | rho.last=X
+  P   "Long diamonds"                             shows D>=6
+  2H  "Hearts and a minor"                        shows H>=5, C>=4 | D>=4
+      sets  ask=nt_mm(H)
+  2S  "Spades and a minor"                        shows S>=5, C>=4 | D>=4
+      sets  ask=nt_mm(S)
+  3C  "Long clubs"                                shows C>=6

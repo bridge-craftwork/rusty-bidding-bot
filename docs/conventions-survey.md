@@ -288,8 +288,8 @@ States:
 | Michaels cuebid | 17 | field only | | **3,790 / 3,559 / -3,452** | `michaels` (michaels_unusual) |
 | Unusual 2NT / 1NT / 4NT | 17 each | field only | | 2,102 / 1,875 / -772; 30 / 18 / -11; 278 / 190 / -180 | `unusual_2nt` (michaels_unusual) |
 | Leaping / non-leaping Michaels | 3 / 0 | field only | | no separate BBA note | `leaping_michaels` |
-| Cappelletti (**in progress**, with Modified Cappelletti) / Multi-Landy / Landy vs 1NT | 10 / 7 / 0 | partly (the field only turns natural overcalls of 1NT off; no Cappelletti rules) | overcalls | **4,612 / 4,409 / +462**; 495 / 479 / +109 | VsNtDefense panel (structured); `dont` |
-| DONT and Meckwell (**in progress**), Suction, Spear, CRASH | none | none (DONT and Meckwell are options of `defense_vs_strong_nt`) | | | `dont` (dont) |
+| Cappelletti / Multi-Landy / Landy vs 1NT | 10 / 7 / 0 | rules (2026-09-28; field `competitive.vs_1nt_strong.system`) | cappelletti, multi-landy, vs-1nt | **4,612 / 4,409 / +462**; 495 / 479 / +109 | VsNtDefense panel (structured); `dont` |
+| DONT, Meckwell, Modified Cappelletti; Suction, Spear, CRASH | none | rules for the first three (2026-09-28, options of `vs_1nt_strong.system`); none for the others | dont, meckwell, cappelletti | | `dont` (dont) |
 | Lebensohl after doubling a weak two; Rubensohl | 15; 2 | field only | | 1,138 / 806 / +121 | `lebensohl_weak_twos` (lebensohl) |
 | `Lebensohl after 1m`, `Rubensohl after 1m` (meaning unknown to Rick: to be investigated) | 15; 2 | passthrough | | 227 / 119 / -251; 90 / 15 / -62 | none |
 | Jordan (Truscott) 2NT | 17 | field only | | 859 / 649 / -1,476 | none |

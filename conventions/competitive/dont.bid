@@ -1,0 +1,61 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# DONT (Disturb Opponents' No Trump, Marty Bergen) over their 1NT, direct
+# and balancing (vs-1nt.notes.md has the sources).
+#
+#   X    one long suit, six or more, not spades: partner relays 2♣
+#   2♣   clubs and a higher suit, 5-4 either way
+#   2♦   diamonds and a major, 5-4 either way
+#   2♥   hearts and spades, 5-4 either way
+#   2♠   six or more spades, one-suited
+#
+# DONT is meant to be light: shape before points. We count HCP plus a
+# point a card beyond four in each suit and ask for 10 (8 HCP with a
+# six-card suit or 5-5, 9 with 5-4), with a 15 HCP ceiling: DONT has no
+# penalty double, and a stronger hand passes and comes in later. There
+# is no BBA reference (BBA has no DONT; scenario DONT is bba-works:
+# false).
+#
+# The card turns it on with `competitive.vs_1nt_strong.system
+# = dont`, or with Bridge-Classroom's `competitive.dont.play` when the
+# convention field is unset.
+
+module dont "DONT over their 1NT"
+  needs  vs-1nt
+  param  def       = competitive.vs_1nt_strong.system default other
+  param  dont_play = competitive.dont.play default false
+
+after (1N) | (1N) P (P) when def is dont | (dont_play, def is other)
+  X   "DONT: one long suit (clubs, diamonds or hearts)"   alert
+      shows (C>=6 | D>=6 | H>=6), second_longest<=3, hcp+length_points>=10, hcp<=15
+      sets  ask=dont_one
+  2C  "DONT: clubs and a higher suit"            alert
+      shows (C>=5, (D>=4 | H>=4 | S>=4)) | (C>=4, (D>=5 | H>=5 | S>=5))
+      shows hcp+length_points>=10, hcp<=15
+      sets  ask=nt_pc(C)
+  2D  "DONT: diamonds and a major"               alert
+      shows (D>=5, (H>=4 | S>=4)) | (D>=4, (H>=5 | S>=5))
+      shows hcp+length_points>=10, hcp<=15
+      sets  ask=nt_pc(D)
+  2H  "DONT: hearts and spades"                  alert
+      shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, hcp<=15
+      sets  ask=nt_majors
+  2S  "DONT: six or more spades"
+      shows S>=6, second_longest<=4, hcp+length_points>=10, hcp<=15
+      sets  ask=nt_one(S)
+
+# Advancer over the double: 2♣ asks for the suit (partner passes with
+# clubs); a six-card suit of my own is to play.
+when asked dont_one, rho.last=P | rho.last=X | rho.last=XX
+  2C  "Relay: bid your suit"                      alert
+      sets  ask=dont_relay
+  2D  "Six or more diamonds: to play"             shows D>=6
+  2H  "Six or more hearts: to play"               shows H>=6
+  2S  "Six or more spades: to play"               shows S>=6
+
+when asked dont_relay, rho.last=P | rho.last=X
+  P   "My suit is clubs"                          shows C>=6
+  2D  "My suit is diamonds"                       shows D>=6
+      sets  ask=nt_one(D)
+  2H  "My suit is hearts"                         shows H>=6
+      sets  ask=nt_one(H)

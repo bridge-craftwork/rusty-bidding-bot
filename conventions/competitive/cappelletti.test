@@ -1,0 +1,45 @@
+# Cappelletti and Modified Cappelletti over their 1NT (cappelletti.bid).
+#
+# 21GF-DEFAULT has `Cappelletti` on. East opens 1NT; South is the
+# direct seat, North the advancer (and the balancing seat after
+# 1NT Pass Pass).
+card    21GF-DEFAULT
+dealer  E
+
+# seat hand                 | auction              | expect | why
+S AQ652.QJ82.3.AJ2          | 1NT                  | 2D     | 5-4 in the majors, 14: both majors
+S KQ54.AJ95.AT9.Q2          | 1NT                  | X      | 16 balanced: penalty double
+S AKQ52.AKJ43.5.K2          | 1NT                  | X      | 20: too strong for the two-suited 2♦, double first
+S T82.J.AK9643.QJ8          | 1NT                  | 2C     | six diamonds, 11: one long suit
+S KQ86543.652.A9.8          | 1NT                  | 2C     | seven spades and 9: 12 counting length (BBA 2♣ too)
+S Q5.AQT76.QJT3.QT          | 1NT                  | 2H     | five hearts, four diamonds with the queen
+S AKJ74.3.92.KJ865          | 1NT                  | 2S     | five spades, five clubs with the king, 12
+S 5.3.KJ964.AQ8753          | 1NT                  | 2NT    | six clubs, five diamonds: the minors
+S AKQ73.KQ5.9.8732          | 1NT                  | P      | 5-4 with a four-card minor without a top honour: BBA passes too
+S K72.Q953.J84.Q62          | 1NT                  | P      | 8 flat: nothing to say
+N T82.J.AK9643.QJ8          | 1NT P P              | 2C     | balancing: the same one-suited 2♣
+N KQ54.AJ95.AT9.Q2          | 1NT P P              | X      | balancing: 16, penalty
+
+# Advancer over 2♣: relay, or pass with long clubs, or a long major
+N 954.K82.Q8743.J5          | 1NT 2C P             | 2D     | relay: bid your suit
+N 83.Q4.52.KJ97643          | 1NT 2C P             | P      | seven clubs: play 2♣
+N KJ9852.84.73.Q62          | 1NT 2C P             | 2S     | six spades of my own: to play
+# The overcaller shows the suit over the relay
+S T82.J.AK9643.QJ8          | 1NT 2C P 2D P        | P      | the suit is diamonds
+S KQJ852.A4.K52.J4          | 1NT 2C P 2D P        | 2S     | the suit is spades
+S 4.J832.A2.AKQT42          | 1NT 2C P 2D P        | 3C     | the suit is clubs
+
+# ── Modified Cappelletti ─────────────────────────────────────────────
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=modified_cappelletti
+dealer  E
+
+S Q5.AQT76.QJT3.QT          | 1NT                  | 2C     | a major and a minor go through 2♣
+S T82.J.AK9643.QJ8          | 1NT                  | 2C     | a long minor
+S 6.KQJ9763.A32.72          | 1NT                  | 2H     | seven hearts, one-suited: 2♥ is natural here
+S AQ652.QJ82.3.AJ2          | 1NT                  | 2D     | the majors, as in Cappelletti
+N 954.K82.Q8743.J5          | 1NT 2C P             | 2D     | relay
+N 83.Q4.52.KJ97643          | 1NT 2C P             | 2D     | 2♣ may be diamonds or a major: no pass
+S Q5.AQT76.QJT3.QT          | 1NT 2C P 2D P        | 2H     | hearts and a minor
+S T82.J.AK9643.QJ8          | 1NT 2C P 2D P        | P      | long diamonds
+S 4.J83.A2.AKQT742          | 1NT 2C P 2D P        | 3C     | long clubs
+N 954.8.Q8743.KJ54          | 1NT 2C P 2D P 2H P   | 2NT    | a singleton heart: which minor?

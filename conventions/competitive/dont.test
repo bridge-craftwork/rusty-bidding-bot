@@ -1,0 +1,30 @@
+# DONT over their 1NT (dont.bid). East opens 1NT.
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=dont
+dealer  E
+
+# seat hand                 | auction              | expect | why
+S T82.J.AK9643.QJ8          | 1NT                  | X      | six diamonds: one long suit
+S AQ652.QJ82.3.AJ2          | 1NT                  | 2H     | hearts and spades
+S Q5.AQT76.QJT3.QT          | 1NT                  | 2D     | diamonds and a higher suit (hearts)
+S K3.2.QJ85.AT9643          | 1NT                  | 2C     | clubs and a higher suit (diamonds)
+S KQJ852.54.A52.J4          | 1NT                  | 2S     | six spades: bid them
+N T82.J.AK9643.QJ8          | 1NT P P              | X      | balancing: the same
+# Advancer over the double: relay, or a long suit of my own
+N 954.K82.Q8743.J5          | 1NT X P              | 2C     | relay: bid your suit
+N 83.Q4.KJ97643.52          | 1NT X P              | 2D     | seven diamonds of my own
+N 954.K82.Q8743.J5          | 1NT X XX             | 2C     | the relay over their redouble
+S T82.J.AK9643.QJ8          | 1NT X P 2C P         | 2D     | the suit is diamonds
+S 6.KQJ9763.A32.72          | 1NT X P 2C P         | 2H     | the suit is hearts
+S J4.K2.83.AKJ8643          | 1NT X P 2C P         | P      | the suit is clubs
+# Advancer over the two-suiters: pass with three, else ask
+N 954.K82.Q873.J54          | 1NT 2C P             | P      | three clubs: play 2♣
+N 954.K82.QJ8743.5          | 1NT 2C P             | 2D     | one club: which is your other suit?
+S K3.2.QJ85.AT9643          | 1NT 2C P 2D P        | P      | the other suit is diamonds
+S 3.QJ85.K2.AT9643          | 1NT 2C P 2D P        | 2H     | the other suit is hearts
+N 954.K82.Q8743.J5          | 1NT 2H P             | P      | three of each major: play hearts
+N K954.82.Q873.J54          | 1NT 2H P             | 2S     | longer spades
+
+# Bridge-Classroom's DONT switch plays DONT when the convention is unset
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=other competitive.dont.play=true
+dealer  E
+S T82.J.AK9643.QJ8          | 1NT                  | X      | DONT through `competitive.dont.play`

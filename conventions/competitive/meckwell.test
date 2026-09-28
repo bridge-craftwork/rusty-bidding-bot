@@ -1,0 +1,23 @@
+# Meckwell over their 1NT (meckwell.bid). East opens 1NT.
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=meckwell
+dealer  E
+
+# seat hand                 | auction              | expect | why
+S T82.J.AK9643.QJ8          | 1NT                  | X      | a long minor
+S AQ652.QJ82.3.AJ2          | 1NT                  | X      | both majors
+S Q5.AQT76.QJT3.QT          | 1NT                  | 2D     | diamonds and a major
+S K3.QJ85.2.AT9643          | 1NT                  | 2C     | clubs and a major
+S 6.KQJ9763.A32.72          | 1NT                  | 2H     | natural: seven hearts
+S 5.3.KJ964.AQ8753          | 1NT                  | 2NT    | the minors
+N AQ652.QJ82.3.AJ2          | 1NT P P              | X      | balancing: the same
+# The double: relay, then the suit (or 2♥ for the majors)
+N 954.K82.Q8743.J5          | 1NT X P              | 2C     | relay
+S AQ652.QJ82.3.AJ2          | 1NT X P 2C P         | 2H     | both majors
+S T82.J.AK9643.QJ8          | 1NT X P 2C P         | 2D     | long diamonds
+S J4.K2.83.AKJ8643          | 1NT X P 2C P         | P      | long clubs
+N Q954.82.Q873.J54          | 1NT X P 2C P 2H P    | 2S     | longer spades
+N 954.K82.Q8743.J5          | 1NT X P 2C P 2H P    | P      | three of each: hearts
+# A minor and a major: pass with three, else ask for the major
+N 954.K82.Q873.J54          | 1NT 2D P             | P      | four diamonds: play 2♦
+N 954.K82.J5.Q8743          | 1NT 2D P             | 2H     | two diamonds: pass or correct
+S KQJ85.A4.QJ52.J4          | 1NT 2D P 2H P        | 2S     | the major is spades

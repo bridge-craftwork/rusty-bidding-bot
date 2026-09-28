@@ -1,0 +1,59 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Landy and Multi-Landy over their 1NT, direct and balancing
+# (vs-1nt.notes.md). BBA plays Multi-Landy on seven cards (21GF-Multi,
+# 21GF-SPECIALS2 and others) as Woolsey describes it; its meanings,
+# from probes/vs-1N-mlandy.toml (1,000 hands, 21GF-Multi):
+#
+#   X    a four-card major and a longer minor, 12+ HCP
+#   2♣   both majors
+#   2♦   one major, six or more (the "multi")
+#   2♥/2♠ that major (5) and a minor (4)
+#   2NT  both minors
+#
+# Landy is 2♣ for the majors, everything else natural (overcalls.bid).
+
+module multi-landy "Landy and Multi-Landy over their 1NT"
+  needs  vs-1nt
+  param  def = competitive.vs_1nt_strong.system default other
+
+after (1N) | (1N) P (P) when def is multi_landy | def is landy
+  2C  "Landy: both majors, 5-4 or longer"          alert
+      shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, hcp<=17
+      sets  ask=nt_majors
+
+after (1N) | (1N) P (P) when def is multi_landy
+  X   "Multi-Landy: a four-card major and a longer minor"   alert
+      shows H=4 | S=4, C>=5 | D>=5, hcp+length_points>=12, hcp<=17
+      sets  ask=ml_x
+  2D  "Multi-Landy: six or more in one major"      alert
+      shows H>=6 | S>=6, second_longest<=4, hcp+length_points>=11, hcp<=17
+      sets  ask=ml_multi
+  2H  "Multi-Landy: five hearts and a four-card minor"   alert
+      shows H>=5, S<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_mm(H)
+  2S  "Multi-Landy: five spades and a four-card minor"   alert
+      shows S>=5, H<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_mm(S)
+  2N  "Multi-Landy: both minors, 5-5 or longer"    alert
+      shows C>=5, D>=5, hcp+length_points>=8, hcp<=17
+      sets  ask=nt_minors
+
+# Advancer over the double bids 2♣, pass or correct to the minor.
+when asked ml_x, rho.last=P | rho.last=X | rho.last=XX
+  2C  "Pass or correct: bid your minor"            alert
+      sets  ask=ml_minor
+when asked ml_minor, rho.last=P | rho.last=X
+  P   "My minor is clubs"                          shows C>=5
+  2D  "My minor is diamonds"                       shows D>=5
+
+# Advancer over the multi 2♦ bids 2♥, pass or correct.
+when asked ml_multi, rho.last=P | rho.last=X
+  2H  "Pass or correct: bid your major"            alert
+      sets  ask=ml_major
+when asked ml_major, rho.last=P | rho.last=X
+  P   "My major is hearts"                         shows H>=6
+  2S  "My major is spades"                         shows S>=6
+      sets  ask=nt_one(S)

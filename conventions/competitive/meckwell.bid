@@ -1,0 +1,61 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Meckwell (Meckstroth-Rodwell) over their strong 1NT, direct and
+# balancing (vs-1nt.notes.md has the sources).
+#
+#   X    a long minor (six or more), or both majors: partner relays 2♣
+#   2♣   clubs and a major, 5-4 either way
+#   2♦   diamonds and a major, 5-4 either way
+#   2♥/2♠ natural: six or more, or a good five without a four-card minor
+#   2NT  both minors, 5-5 or longer
+#
+# This is the scheme against a strong notrump. Against a weak notrump
+# Meckwell players double for penalties and change the other calls
+# (bridgebum); our card has one field, for the strong notrump, so the
+# same scheme is played against any range. A passed hand plays it
+# anyway. Strength as in Cappelletti (cappelletti.bid): HCP plus a point
+# a card beyond four, 10 for a two-suiter and 12 for a one-suiter. No
+# BBA reference: BBA has no Meckwell, and played Multi-Landy in the
+# Meckwell scenario.
+
+module meckwell "Meckwell over their 1NT"
+  needs  vs-1nt
+  param  def = competitive.vs_1nt_strong.system default other
+
+after (1N) | (1N) P (P) when def is meckwell
+  X   "Meckwell: a long minor, or both majors"   alert
+      shows ((C>=6 | D>=6), second_longest<=3, hcp+length_points>=12) | (H>=4, S>=4, H+S>=9, hcp+length_points>=10)
+      shows hcp<=17
+      sets  ask=meck_one
+  2C  "Meckwell: clubs and a major"              alert
+      shows (C>=5, (H>=4 | S>=4)) | (C>=4, (H>=5 | S>=5))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_pc(C)
+  2D  "Meckwell: diamonds and a major"           alert
+      shows (D>=5, (H>=4 | S>=4)) | (D>=4, (H>=5 | S>=5))
+      shows hcp+length_points>=10, hcp<=17
+      sets  ask=nt_pc(D)
+  2H  "Natural: six or more hearts, or a good five"
+      shows H>=6 | (H>=5, quality(H)>=good, C<=3, D<=3), S<=3, hcp+length_points>=11, hcp<=17
+      sets  ask=nt_one(H)
+  2S  "Natural: six or more spades, or a good five"
+      shows S>=6 | (S>=5, quality(S)>=good, C<=3, D<=3), H<=3, hcp+length_points>=11, hcp<=17
+      sets  ask=nt_one(S)
+  2N  "Meckwell: both minors, 5-5 or longer"     alert
+      shows C>=5, D>=5, hcp+length_points>=8, hcp<=17
+      sets  ask=nt_minors
+
+# Advancer relays over the double; the doubler passes with clubs, bids
+# 2♦ with diamonds and 2♥ with both majors (then partner picks the major,
+# vs-1nt.bid).
+when asked meck_one, rho.last=P | rho.last=X | rho.last=XX
+  2C  "Relay: bid your suit"                      alert
+      sets  ask=meck_relay
+
+when asked meck_relay, rho.last=P | rho.last=X
+  P   "My suit is clubs"                          shows C>=6
+  2D  "My suit is diamonds"                       shows D>=6
+      sets  ask=nt_one(D)
+  2H  "Both majors"                               alert
+      shows H>=4, S>=4
+      sets  ask=nt_majors

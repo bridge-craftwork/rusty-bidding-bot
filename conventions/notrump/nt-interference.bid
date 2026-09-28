@@ -13,6 +13,7 @@
 module nt-interference "Our 1NT when RHO acts"
   needs  notrump-base
   param  vs_double = notrump.transfers.vs_double default false
+  param  vs_2c     = notrump.transfers.vs_2c default false
 
 # ── They doubled, transfers on ───────────────────────────────────────
 # 2♣ is Stayman and 2♦/2♥ are the transfers (see the other modules).
@@ -46,6 +47,23 @@ after 1N (X) when !vs_double
   P   "Sitting for the double"
       priority -10
 
+# Opener after responder's escape over the double: partner's suit is
+# where we play (2026-09-28: 179 no-rule boards once the opponents'
+# Cappelletti doubled for penalties).
+after 1N (X) 2y (P) when !vs_double, y is not N
+  P   "Partner's escape: to play"
+
+after 1N (X) XX (P)
+  P   "Playing 1NT redoubled"
+
+# Our redouble, and they run: opener passes, leaving it to responder,
+# who doubles for penalties with four of their suit or 9+ HCP.
+after 1N (X) XX (*) when !rho.last=P
+  P   "Partner redoubled: his decision"
+after 1N (X) XX (2y) P (P)
+  X   "Penalty"                                  shows y>=4 | hcp>=9
+  P   "Nothing more"                             priority -5
+
 # Over a 2♣ overcall nothing new is needed: the double is Stayman
 # (stayman.bid), the transfers keep their calls (jacoby-transfers.bid,
 # minor-transfers.bid, texas-transfers.bid) and the natural notrump
@@ -61,7 +79,7 @@ after 1N (X) when !vs_double
 # jump in a five-card major); 2NT invites with 8-9 and 3NT is game from
 # 10 (BBA does not insist on a stopper); four of a major is six cards
 # and 10+.
-after 1N (2y) when y is not C
+after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
   X   "Negative double: four cards in an unbid major, 5+ HCP"
       alert  artificial
       shows  hcp>=5, S>=4 | H>=4
@@ -104,7 +122,7 @@ after 1N (2y) when y is not C
 # Opener answers the negative double: a four-card major at the cheapest
 # level, 2NT with a stopper, a four-card minor, or a pass for penalties
 # with four of their suit.
-after 1N (2y) X (P) when y is not C
+after 1N (2y) X (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   cheapest(H) "Four hearts for partner's double"   shows H>=4   when y is not H
   cheapest(S) "Four spades for partner's double"   shows S>=4   when y is not S
   2N  "No four-card major, a stopper in {y}"       shows stop(y)
@@ -121,29 +139,121 @@ after 1N (2y) X (P) when y is not C
 
 # Responder after opener's answer: game with 10+, an invitation in the
 # major with 8-9, else pass.
-after 1N (2y) X (P) 2M (P) | 1N (2y) X (P) 3M (P) when y is not C
+after 1N (2y) X (P) 2M (P) | 1N (2y) X (P) 3M (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
   4M  "Game in the fit: 10+"          shows M>=4, points>=10
   3M  "Invitational in the fit: 8-9"  shows M>=4, points=8..9
       when  partner.last=2M
   3N  "Game, no fit: 10+"             shows M<=3, points>=10
   P   "No game"                       shows points<=9
       priority -5
-after 1N (2y) X (P) 2N (P) | 1N (2y) X (P) 3C (P) | 1N (2y) X (P) 3D (P) when y is not C
+after 1N (2y) X (P) 2M (P) 3M (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  4M  "Accepts the invitation: a maximum"        shows hcp>=16
+  P   "Declines: a minimum"                      shows hcp<=15
+after 1N (2y) X (P) 2N (P) | 1N (2y) X (P) 3C (P) | 1N (2y) X (P) 3D (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
   3N  "Game: 10+"                     shows points>=10
   P   "No game"                       shows points<=9
       priority -5
 
 # Opener after responder's other calls.
-after 1N (2y) 3z (P) when y is not C, z is not y, z is not N
+after 1N (2y) 3z (P) when y is not C, z is not y, z is not N, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   4{z}  "Three-card support: game in the major"   shows z>=3
         when  z is H | z is S
   3N    "Game in notrump"
         priority -1
-after 1N (2y) 2z (P) when y is not C, z is not N
+after 1N (2y) 2z (P) when y is not C, z is not N, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   P   "Partner's suit, to play"
-after 1N (2y) 2N (P) when y is not C
+after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   3N  "Accepts: a maximum"             shows hcp>=16
   P   "Declines: a minimum"            shows hcp<=15
+
+# ── Their conventional overcalls (2026-09-28, vs-1nt.notes.md) ───────
+# The rules above read 2♦/2♥/2♠ as natural: they apply when the
+# overcaller has shown four or more of the suit bid and not both majors.
+# The opponents' defence (their card: cappelletti.bid, dont.bid,
+# meckwell.bid, multi-landy.bid) can show something else:
+#
+# - both majors (Cappelletti 2♦, DONT 2♥): the double shows values and
+#   says we can defend; a minor at the three level is natural and forcing
+#   to game; 3NT is game with both majors held. Afterwards a double of
+#   their major is for penalties.
+# - an unknown major (Multi-Landy 2♦): the double shows values; 3NT game.
+# - their 2♣ is left to the systems-on rules (Stayman by double), and
+#   their double to the rules at the top.
+after 1N (2y) when y is not C, rho.H>=4, rho.S>=4
+  X   "Values: 8+ HCP, we can defend"                shows hcp>=8
+  3C  "Natural, forcing to game: five or more clubs"      shows C>=5, points>=10
+      sets  forcing=game
+  3D  "Natural, forcing to game: five or more diamonds"   shows D>=5, points>=10
+      sets  forcing=game
+  3N  "Game: 10+, both majors held"                   shows hcp>=10, stop(H), stop(S)
+  P   "Nothing to say over their overcall"
+      priority -10
+after 1N (2y) when y is not C, (maybe rho.y<=3), (maybe rho.H<=3) | (maybe rho.S<=3)
+  X   "Values: 8+ HCP, we can defend"                shows hcp>=8
+  3N  "Game: 10+ HCP"                                shows hcp>=10
+  P   "Nothing to say over their overcall"
+      priority -10
+
+# Responder after a transfer that they interrupted (2026-09-28): with a
+# hand no transfer continuation describes (5-4 in the majors and a
+# singleton, which uncontested goes through Stayman first) he passes.
+# A gap to fill, not a treatment: nt-interference.notes.md.
+when answered transfer(M), they.bid
+  P   "Nothing more to show"                         priority -10
+
+# Their relay over our Stayman double (Cappelletti 2♣, X, 2♦): opener
+# still shows a major, doubles 2♦ with four of them, else passes.
+after 1N (2C) X (2D) when vs_2c
+  2H  "4+ hearts"                                shows H>=4
+  2S  "4 spades, not 4 hearts"                   shows S>=4, H<=3
+  X   "Penalty: four or more diamonds, no major"  shows D>=4, H<=3, S<=3
+  P   "No 4-card major"                          shows H<=3, S<=3
+      priority -1
+
+# Opener after responder's game-forcing minor over their majors: 3NT,
+# the game our side can make with both majors held by one of us.
+after 1N (2y) 3z (P) when y is not C, lho.H>=4, lho.S>=4, z is C | z is D
+  3N  "Game in notrump"
+
+# Opener after the value-showing double: pass unless they run; a double
+# of the suit they run to is for penalties. Responder the same after
+# opener's pass: game with 10+ and their suit held.
+after 1N (2y) X (P) when y is not C, (lho.H>=4, lho.S>=4) | ((maybe lho.y<=3), (maybe lho.H<=3) | (maybe lho.S<=3))
+  P   "Defending their artificial overcall"
+
+# Whatever their overcall, once their advancer bids over our double
+# opener has said what he has; the rules above add what he can (a
+# penalty double). 2026-09-28: 110 no-rule boards, 1N 2♠ X 2NT and alike.
+after 1N (2y) X (*) when !rho.last=P, !rho.last=X
+  P   "Nothing more to say"                          priority -10
+after 1N (2y) X (2z) when y is not C, (lho.H>=4, lho.S>=4) | ((maybe lho.y<=3), (maybe lho.H<=3) | (maybe lho.S<=3))
+  X   "Penalty: four or more {z}"                    shows z>=4
+  P   "Nothing more to say"                          priority -5
+after 1N (2y) X (2z) X (P) when y is not C, (rho.H>=4, rho.S>=4) | ((maybe rho.y<=3), (maybe rho.H<=3) | (maybe rho.S<=3))
+  P   "Partner doubled for penalties: defend"
+after 1N (2y) X (2z) P (P) when y is not C, (rho.H>=4, rho.S>=4) | ((maybe rho.y<=3), (maybe rho.H<=3) | (maybe rho.S<=3))
+  X   "Penalty: four or more {z}"                    shows z>=4
+  3N  "Game: 10+, {z} held"                          shows hcp>=10, stop(z)
+  P   "Nothing more to say"                          priority -5
+
+# ── Their 2NT: both minors (Cappelletti, Meckwell, Multi-Landy) ─────
+after 1N (2N)
+  X   "Values: 8+ HCP, we can defend"                shows hcp>=8
+  3H  "Natural, forcing to game: five or more hearts"     shows H>=5, points>=10
+      sets  forcing=game
+  3S  "Natural, forcing to game: five or more spades"     shows S>=5, points>=10
+      sets  forcing=game
+  4H  "Game: six or more hearts"                     shows H>=6, hcp>=10
+      priority 1
+  4S  "Game: six or more spades"                     shows S>=6, hcp>=10
+      priority 1
+  3N  "Game: 10+ HCP"                                shows hcp>=10
+  P   "Nothing to say over their 2NT"
+      priority -10
+after 1N (2N) 3z (P) when z is H | z is S
+  4{z}  "Three-card support: game in the major"      shows z>=3
+  3N    "Game in notrump"
+        priority -1
 
 # Responder passed their overcall: opener has shown his hand.
 after 1N (2y) P (P)

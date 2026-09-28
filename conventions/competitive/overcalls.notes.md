@@ -209,3 +209,13 @@ not agree, and par decides. **For Rick:** adopt at 15 on your judgment
 and BBA's evidence, or keep the suit test. The ticket's alternative,
 1NT with 5-4-2-2, runs against the 1NT overcall's evidence (no BBA 1NT
 overcall held a five-card major), so it was not tried.
+
+## Conventional defences to 1NT (2026-09-28)
+
+The natural overcalls of their 1NT now apply only when the card's
+`competitive.vs_1nt_strong.system` is unset or `other` (and not DONT by
+`competitive.dont.play`); Landy keeps the natural 2♦/2♥/2♠. The other
+defences, the shared answers and the pass are in cappelletti.bid,
+dont.bid, meckwell.bid, multi-landy.bid and vs-1nt.bid
+(vs-1nt.notes.md). The natural three-level preempts (4-10) are
+unchanged.
