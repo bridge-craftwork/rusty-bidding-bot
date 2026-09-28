@@ -170,3 +170,42 @@ Both yardsticks agree on all three; the singleton version is best by
 par. Advancer with 4-4 in the minors bids 3♦ (3♣ measured 6 IMPs
 worse on both, noise). Board 89 now goes `1S X 2S P P X P 3D`, +110
 against BBA's +130.
+
+## Wasted honours in their suit (2026-09-27)
+
+Ticket basic-takeout-double-b60: South doubled 1♠ with
+QT.J95.KJ95.KQT2 (12 HCP, NS vulnerable), BBA passed. Rick asked how
+BBA values such hands: his instinct was that the QT is not worth two
+points, that the tens and nines should help, and that a shape double
+wants 13+ dummy points.
+
+`probes/td-1S-shape.toml`: 500 hands, 10-15 HCP, a doubleton spade and
+three or more in the other suits, over 1♠, all four vulnerabilities.
+Without a five-card minor:
+
+| spade holding | 12 HCP | 13 HCP |
+|---|---|---|
+| no honour | X 12 | X 13 |
+| A or K (with or without J) | X 10 | X 13 |
+| Q or J alone | **P 10** | X 7 |
+
+So BBA marks a lone queen or jack in a doubleton of their suit down by
+about a point, and the same at every vulnerability. It gives no
+visible credit for tens and nines here (QT passes like Q2), and a 12
+count with a doubleton and nothing wasted doubles: it does not ask for
+13 dummy points.
+
+Played at every vulnerability the discount splits the yardsticks: +418
+par, −218 side IMPs (360 boards). By the doubler's vulnerability:
+
+| doubler / opponents | boards | side | par |
+|---|---|---|---|
+| nv / nv | 82 | −78 | +94 |
+| nv / vul | 83 | −104 | +137 |
+| **vul / nv** | 96 | **+3** | **+101** |
+| vul / vul | 99 | −39 | +86 |
+
+Only at unfavourable do both agree, which is where Rick's "especially
+vulnerable" pointed. Kept there: +103 par, +23 side (108 boards).
+Elsewhere the light double wins by side IMPs (it gets us into the
+auction). Board 60 now passes 1♠ as BBA does.

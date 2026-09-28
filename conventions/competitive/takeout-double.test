@@ -53,3 +53,14 @@ N AJ4.A5.9864.7432      | 1S X 2S P P X P                      | 3D     | still 
 N Q2.9743.986.7432      | 1S X 2S P P X P                      | 3H     | four hearts: the major first
 N 2.9743.QJT98.742      | 1S X 2S P P X P                      | 3D     | five diamonds
 N QJT98.K74.98.742     | 1S X 2S P P X P                      | P      | five trumps and a king: leave it in
+
+# A queen or jack alone in a doubleton of their suit, at unfavourable:
+# one point less (Basic_Takeout_Double 60, ticket 2026-09-27).
+card    Basic-Bridge
+dealer  E
+vul     NS
+S QT.J95.KJ95.KQT2      | 1S                                   | P      | 12 with QT doubleton in their suit, vulnerable against not
+S QT.J95.KJ95.AQT2      | 1S                                   | X      | 13: enough even so
+S AT.J95.KJ95.QJT2      | 1S                                   | X      | the ace there keeps its value
+vul     None
+S QT.J95.KJ95.KQT2      | 1S                                   | X      | not vulnerable: doubles

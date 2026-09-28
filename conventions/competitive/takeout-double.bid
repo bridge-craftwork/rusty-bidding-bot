@@ -28,6 +28,11 @@ after (1x)
   X   "Takeout: 12+ total points and the unbid suits, or 18+ with any shape"
       shows hcp+length_points>=12
       shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)) | hcp>=oc_max+1
+      # A queen or jack, alone, in a doubleton of their suit is marked
+      # down: 12 with Qx or Jx there passes, 13 doubles. BBA does this at
+      # every vulnerability (probes/td-1S-shape.toml; ticket b60); we only
+      # at unfavourable, the one where it gains on both yardsticks (notes).
+      shows hcp+length_points>=13 | x>=3 | has(A,x) | has(K,x) | (!has(Q,x), !has(J,x)) | !vul | they.vul
 
 # ── Advancer, when RHO passes ────────────────────────────────────────
 # The double is forcing: advancer names his suit however weak he is.
