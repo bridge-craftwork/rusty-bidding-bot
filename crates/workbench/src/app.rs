@@ -4,7 +4,7 @@
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{mpsc, Arc, OnceLock};
+use std::sync::{mpsc, Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant, SystemTime};
 
 use egui::{Color32, RichText, Sense};
@@ -30,6 +30,86 @@ type ParResult = (
 
 /// The `.test` cases under the rules directory, or why they could not run.
 type CaseResults = Result<Vec<rbb_engine::cases::Outcome>, Vec<String>>;
+
+/// The last outcomes of each `.test` file, with a hash of the file and its
+/// module (`x.test` next to `x.bid`), so a run repeats only what changed.
+type CaseCache = Arc<Mutex<HashMap<PathBuf, (u64, Vec<rbb_engine::cases::Outcome>)>>>;
+
+fn case_file_hash(file: &Path) -> u64 {
+    use std::hash::{Hash, Hasher};
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    std::fs::read(file).ok().hash(&mut h);
+    std::fs::read(file.with_extension("bid")).ok().hash(&mut h);
+    h.finish()
+}
+
+/// Run the `.test` files whose text or module changed since the last run,
+/// or that failed then, spread over the cores; keep the rest from `cache`.
+/// Rick, 2026-09-27: running all ~1,000 cases before every comparison
+/// took 16 s on one thread. A change in one module can still break
+/// another module's cases, which this misses until that file is touched
+/// (`rbb bid test` and `cargo test` run them all).
+fn run_cases(rules: &Path, cards: &Path, cache: &CaseCache) -> CaseResults {
+    let files = rbb_engine::cases::find(rules);
+    let hashes: Vec<u64> = files.iter().map(|f| case_file_hash(f)).collect();
+    let stale: Vec<PathBuf> = {
+        let c = cache.lock().unwrap();
+        files
+            .iter()
+            .zip(&hashes)
+            .filter(|(f, h)| match c.get(*f) {
+                Some((old, outcomes)) => old != *h || outcomes.iter().any(|o| !o.passed),
+                None => true,
+            })
+            .map(|(f, _)| f.clone())
+            .collect()
+    };
+    let threads = std::thread::available_parallelism().map_or(4, |n| n.get());
+    let chunks: Vec<&[PathBuf]> = stale.chunks(stale.len().div_ceil(threads).max(1)).collect();
+    let results: Vec<CaseResults> = std::thread::scope(|scope| {
+        let handles: Vec<_> = chunks
+            .iter()
+            .map(|chunk| scope.spawn(move || rbb_engine::cases::run(chunk, rules, cards)))
+            .collect();
+        handles
+            .into_iter()
+            .map(|h| {
+                h.join()
+                    .unwrap_or_else(|_| Err(vec!["a case run panicked".into()]))
+            })
+            .collect()
+    });
+    let mut errors = Vec::new();
+    let mut fresh: HashMap<PathBuf, Vec<rbb_engine::cases::Outcome>> =
+        stale.iter().map(|f| (f.clone(), Vec::new())).collect();
+    for r in results {
+        match r {
+            Ok(outcomes) => {
+                for o in outcomes {
+                    if let Some(v) = fresh.get_mut(Path::new(&o.case.file)) {
+                        v.push(o);
+                    }
+                }
+            }
+            Err(e) => errors.extend(e),
+        }
+    }
+    if !errors.is_empty() {
+        cache.lock().unwrap().clear();
+        return Err(errors);
+    }
+    let mut c = cache.lock().unwrap();
+    for (f, h) in files.iter().zip(&hashes) {
+        if let Some(outcomes) = fresh.remove(f) {
+            c.insert(f.clone(), (*h, outcomes));
+        }
+    }
+    c.retain(|f, _| files.contains(f));
+    Ok(files
+        .iter()
+        .flat_map(|f| c.get(f).map(|(_, o)| o.clone()).unwrap_or_default())
+        .collect())
+}
 
 struct Running {
     started: Instant,
@@ -184,6 +264,7 @@ pub struct App {
     /// Boards being solved for par.
     solving: HashSet<BoardKey>,
     cases: CaseResults,
+    case_cache: CaseCache,
     /// The selected case, an index into `cases`.
     case: Option<usize>,
     show_passing: bool,
@@ -231,6 +312,7 @@ impl App {
             par_rx,
             solving: HashSet::new(),
             cases: Ok(Vec::new()),
+            case_cache: CaseCache::default(),
             case: None,
             show_passing: false,
             ticket: TicketDialog {
@@ -271,17 +353,24 @@ impl App {
         let (tx, rx) = mpsc::channel();
         let (d, t, c) = (done.clone(), total.clone(), ctx.clone());
         let cards = self.cards.clone();
+        let cache = self.case_cache.clone();
         std::thread::spawn(move || {
-            let files = rbb_engine::cases::find(&opts.rules);
-            let cases = rbb_engine::cases::run(&files, &opts.rules, &cards);
-            let outcome = Engines::for_options(&opts).and_then(|engines| {
-                let engines = Arc::new(engines);
-                rbb_compare::run_with(&opts, &engines, &|n, of| {
-                    d.store(n, Ordering::Relaxed);
-                    t.store(of, Ordering::Relaxed);
-                    c.request_repaint();
-                })
-                .map(|r| (r, engines))
+            // The cases alongside the comparison, not ahead of it.
+            let (outcome, cases) = std::thread::scope(|scope| {
+                let cases = scope.spawn(|| run_cases(&opts.rules, &cards, &cache));
+                let outcome = Engines::for_options(&opts).and_then(|engines| {
+                    let engines = Arc::new(engines);
+                    rbb_compare::run_with(&opts, &engines, &|n, of| {
+                        d.store(n, Ordering::Relaxed);
+                        t.store(of, Ordering::Relaxed);
+                        c.request_repaint();
+                    })
+                    .map(|r| (r, engines))
+                });
+                let cases = cases
+                    .join()
+                    .unwrap_or_else(|_| Err(vec!["the case run panicked".into()]));
+                (outcome, cases)
             });
             let _ = tx.send((outcome, cases));
             c.request_repaint();
@@ -1820,6 +1909,27 @@ impl App {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    /// A second run with nothing changed takes every case from the cache.
+    #[test]
+    fn cases_rerun_only_what_changed() {
+        let here = Path::new(env!("CARGO_MANIFEST_DIR"));
+        let rules = here.join("../../conventions");
+        let cards = here.join("../bridge-card/tests/fixtures/bbsa");
+        let cache = CaseCache::default();
+        let first = run_cases(&rules, &cards, &cache).expect("the cases run");
+        assert!(first.len() > 100);
+        let started = Instant::now();
+        let second = run_cases(&rules, &cards, &cache).expect("the cases run");
+        let failing = first.iter().filter(|o| !o.passed).count();
+        assert_eq!(second.len(), first.len());
+        if failing == 0 {
+            assert!(
+                started.elapsed() < Duration::from_secs(2),
+                "nothing was rerun"
+            );
+        }
+    }
 
     /// Load the fixture comparison, select a divergent board, draw the
     /// Report dialog headlessly, and capture: the ticket carries the
