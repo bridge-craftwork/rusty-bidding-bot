@@ -637,9 +637,29 @@ impl<'a> Ctx<'a> {
                 _ => Err(format!("cannot order {l:?} and {r:?}")),
             }
         };
+        // A card field holding a bid ("through 2♥") compares as that bid.
+        let as_bid = |v: &Val, other: &Val| match (v, other) {
+            (Val::Sym(s), Val::Call(_)) => bid_of_text(s).map(Val::Call),
+            _ => None,
+        };
+        let (l, r) = (
+            &as_bid(l, r).unwrap_or_else(|| l.clone()),
+            &as_bid(r, l).unwrap_or_else(|| r.clone()),
+        );
         match (l, r) {
             (Val::Strain(a), Val::Strain(b)) => eq_only(a == b),
-            (Val::Call(a), Val::Call(b)) => eq_only(a == b),
+            // Bids are ordered by rank (`rho.last <= 2H`); other calls
+            // only compare equal or not.
+            (Val::Call(a), Val::Call(b)) => match (op, bid_rank(a), bid_rank(b)) {
+                (CmpOp::Eq | CmpOp::Ne, _, _) => eq_only(a == b),
+                (_, Some(x), Some(y)) => Ok(Tri::from_bool(match op {
+                    CmpOp::Ge => x >= y,
+                    CmpOp::Gt => x > y,
+                    CmpOp::Le => x <= y,
+                    _ => x < y,
+                })),
+                _ => eq_only(a == b),
+            },
             (Val::Nothing, Val::Nothing) => eq_only(true),
             (Val::Nothing, _) | (_, Val::Nothing) => eq_only(false),
             (Val::Call(_), _) | (_, Val::Call(_)) => eq_only(false),
@@ -1372,6 +1392,40 @@ fn strain_value(v: &Val) -> Option<Strain> {
     }
 }
 
+/// A card's text as a bid ("2♥", "2H", "3NT"), for comparing a call with
+/// a card field such as `doubles.support.through`.
+fn bid_of_text(s: &str) -> Option<Call> {
+    let t: String = s
+        .trim()
+        .chars()
+        .map(|c| match c {
+            '♠' => 'S',
+            '♥' => 'H',
+            '♦' => 'D',
+            '♣' => 'C',
+            c => c,
+        })
+        .collect();
+    Call::from_pbn(&t).filter(|c| matches!(c, Call::Bid { .. }))
+}
+
+/// A bid's place in the bidding order (1♣ lowest, 7NT highest).
+fn bid_rank(c: &Call) -> Option<i32> {
+    match c {
+        Call::Bid { level, strain } => {
+            let s = match strain {
+                Strain::Clubs => 0,
+                Strain::Diamonds => 1,
+                Strain::Hearts => 2,
+                Strain::Spades => 3,
+                Strain::NoTrump => 4,
+            };
+            Some(*level as i32 * 5 + s)
+        }
+        _ => None,
+    }
+}
+
 fn cmp3(known_true: bool, known_false: bool) -> Tri {
     if known_true {
         Tri::True
@@ -1929,6 +1983,20 @@ mod term_tests {
         let mut out = Vec::new();
         check_expr(&when_of(expr), &["style"], &mut out);
         out
+    }
+
+    #[test]
+    fn card_text_reads_as_a_bid_and_bids_are_ordered() {
+        let two_h = Call::Bid { level: 2, strain: Strain::Hearts };
+        assert_eq!(bid_of_text("2♥"), Some(two_h.clone()));
+        assert_eq!(bid_of_text(" 2H "), Some(two_h.clone()));
+        assert_eq!(bid_of_text("X"), None);
+        assert_eq!(bid_of_text("e.g. 2♦"), None);
+        let one_s = Call::Bid { level: 1, strain: Strain::Spades };
+        let two_s = Call::Bid { level: 2, strain: Strain::Spades };
+        assert!(bid_rank(&one_s) < bid_rank(&two_h));
+        assert!(bid_rank(&two_h) < bid_rank(&two_s));
+        assert_eq!(bid_rank(&Call::Double), None);
     }
 
     #[test]

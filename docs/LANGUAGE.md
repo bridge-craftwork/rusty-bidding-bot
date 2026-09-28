@@ -267,7 +267,14 @@ opening: write `!lho.opened, !rho.opened` with `they.bid`), `they.bid`,
 `imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
 board-a-match), `me.last` (my own last call). A last call compares with a
 call: `partner.last=3N`, `partner.last=3{t}`, and `partner.last=P`, `X` or
-`XX` for pass, double and redouble.
+`XX` for pass, double and redouble. Bids are also ordered, in the
+bidding order: `rho.last <= 2{M}` holds when RHO's last bid was no higher
+than two of M (a pass or double compares only with `=`). A text card
+field holding a bid (`"2♥"`, `"2H"`, `"3NT"`) compares as that bid, so a
+card's limit can be read with a `param`: `rho.last <= through`
+(support-doubles.bid, `doubles.support.through`). Text that is not a bid
+makes the comparison an error, reported as a warning, and the condition
+does not hold.
 
 **Skipping a suit.** `partner.bypassed(x)` is true when partner's last call
 was a bid in another strain and a bid in `x` was available between the
