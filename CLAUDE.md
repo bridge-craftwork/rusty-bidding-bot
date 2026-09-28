@@ -106,7 +106,8 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
 
 Rick files tickets from the workbench's **Report…** button: his note plus
 everything the workbench showed, in
-`tickets/YYYY/MM/<slug>-<stamp>/` (gitignored), and optionally as a GitHub
+`tickets/YYYY/MM/DD/NN.<status>.<slug>/` (gitignored; `NN` numbers the
+day's tickets from 01, `<status>` mirrors the frontmatter), and optionally as a GitHub
 issue labelled `workbench-ticket` (`--ticket-repo owner/repo` overrides the
 origin remote; `--ticket-dry-run` or `RBB_TICKET_DRY_RUN=1` prints the `gh`
 commands instead of running them).
@@ -123,10 +124,14 @@ commands instead of running them).
   Diagnose before changing anything, then fix or explain, judging the
   change by the rules above (par decides, the competitive yardstick,
   `.test` cases, notes).
-- **Record the verdict** in `ticket.md`'s frontmatter: `status: open` →
-  `resolved`, `wontfix` or `duplicate`; `resolution:` one line on what was
-  done or why not; `refs:` the commits (and the ticket it duplicates).
-  Close the GitHub issue, if `issue:` names one, with the same words.
+- **Record the verdict** with `probes/tools/ticket.py status DIR
+  resolved|wontfix|duplicate --resolution "..." --refs a,b`: it sets the
+  frontmatter (`status`, `resolution`: one line on what was done or why
+  not, `refs`: the commits and any ticket it duplicates) and renames the
+  folder to the new status, so the two never disagree. A ticket left
+  for Rick stays `open` with the question in `resolution`.
+  `ticket.py list [--status open]` lists them. Close the GitHub issue,
+  if `issue:` names one, with the same words.
 - `context.json` is evidence: never edit it.
 
 ## Card fields

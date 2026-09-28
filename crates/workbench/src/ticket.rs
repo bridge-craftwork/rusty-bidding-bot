@@ -1,6 +1,8 @@
 //! Tickets: what the workbench shows at one moment, with Rick's note, filed
-//! as `tickets/YYYY/MM/<slug>-<stamp>/{ticket.md,context.json}` and
-//! optionally as a GitHub issue.
+//! as `tickets/YYYY/MM/DD/NN.<status>.<slug>/{ticket.md,context.json}` and
+//! optionally as a GitHub issue. `NN` numbers the day's tickets from 01;
+//! `<status>` mirrors the frontmatter (`open` when filed; renamed with it
+//! by `probes/tools/ticket.py status`).
 //!
 //! `context.json` is the evidence: everything bridge-relevant the workbench
 //! shows, as data, from the same sources the board detail draws from.
@@ -1390,23 +1392,19 @@ pub fn slug(scenario: Option<&str>, board: Option<&str>, note: &str) -> String {
 }
 
 /// Write `ticket.md` and `context.json` under
-/// `root/tickets/YYYY/MM/<slug>-<stamp>/`. Returns the directory.
+/// `root/tickets/YYYY/MM/DD/NN.open.<slug>/`, `NN` the next number that
+/// day. Returns the directory.
 pub fn write_local(root: &Path, c: &Context) -> Result<PathBuf, String> {
     let base = root
         .join("tickets")
         .join(c.stamp.format("%Y").to_string())
-        .join(c.stamp.format("%m").to_string());
-    let name = format!(
-        "{}-{}",
-        slug(c.scenario_name(), c.board_number(), &c.note),
-        c.stamp.format("%Y%m%d-%H%M%S")
-    );
-    let mut dir = base.join(&name);
-    let mut n = 2;
-    while dir.exists() {
-        dir = base.join(format!("{name}-{n}"));
-        n += 1;
-    }
+        .join(c.stamp.format("%m").to_string())
+        .join(c.stamp.format("%d").to_string());
+    let dir = base.join(format!(
+        "{:02}.open.{}",
+        next_index(&base),
+        slug(c.scenario_name(), c.board_number(), &c.note)
+    ));
     std::fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
     let json = serde_json::to_string_pretty(c).map_err(|e| e.to_string())?;
     let write = |file: &str, text: &str| {
@@ -1416,6 +1414,21 @@ pub fn write_local(root: &Path, c: &Context) -> Result<PathBuf, String> {
     write("context.json", &json)?;
     write("ticket.md", &render_markdown(c))?;
     Ok(dir)
+}
+
+/// One more than the highest `NN.` among the day's ticket folders.
+fn next_index(day: &Path) -> u32 {
+    std::fs::read_dir(day)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .filter_map(|e| {
+            let name = e.file_name().to_string_lossy().into_owned();
+            name.split_once('.')?.0.parse::<u32>().ok()
+        })
+        .max()
+        .unwrap_or(0)
+        + 1
 }
 
 /// Record the issue URL in a written ticket's frontmatter.
@@ -1822,6 +1835,18 @@ mod tests {
     }
 
     #[test]
+    fn day_folders_are_numbered_in_order() {
+        let day = std::env::temp_dir().join(format!("rbb-ticket-index-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&day);
+        assert_eq!(next_index(&day), 1);
+        std::fs::create_dir_all(day.join("01.resolved.a")).unwrap();
+        std::fs::create_dir_all(day.join("02.open.b")).unwrap();
+        std::fs::create_dir_all(day.join("notes")).unwrap();
+        assert_eq!(next_index(&day), 3);
+        let _ = std::fs::remove_dir_all(&day);
+    }
+
+    #[test]
     fn slug_takes_scenario_board_and_first_words() {
         assert_eq!(
             slug(
@@ -2029,11 +2054,13 @@ mod end_to_end {
         let json: Value =
             serde_json::from_str(&std::fs::read_to_string(dir.join("context.json")).unwrap())
                 .unwrap();
-        assert!(dir
-            .file_name()
-            .unwrap()
-            .to_string_lossy()
-            .starts_with("basic-takeout-double-b193-west-s-double"));
+        let name = dir.file_name().unwrap().to_string_lossy().into_owned();
+        let (index, rest) = name.split_once('.').unwrap();
+        assert!(index.len() == 2 && index.parse::<u32>().is_ok(), "{name}");
+        assert!(
+            rest.starts_with("open.basic-takeout-double-b193-west-s-double"),
+            "{name}"
+        );
         assert!(md.contains("scenario: Basic_Takeout_Double\nboard: 193\n"));
         assert!(md.contains("## How the engine read BBA's auction"));
         assert_eq!(json["schema_version"], 1);
