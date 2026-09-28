@@ -18,6 +18,7 @@ mod lexer;
 pub mod manifest;
 mod parser;
 pub mod reference;
+pub mod skills;
 
 pub use ast::Module;
 pub use check::check;

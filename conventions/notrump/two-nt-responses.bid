@@ -16,6 +16,9 @@
 
 module two-nt-responses "Responses to a 2NT opening"
   needs  notrump-base
+  skill  partnership_bidding/basic_notrump
+  skill  bidding_conventions/stayman
+  skill  bidding_conventions/jacoby_transfers
   param  stayman = notrump.stayman.play default true
   param  jacoby  = notrump.transfers.jacoby default true
   param  puppet  = notrump.two_nt.puppet default false

@@ -3,6 +3,8 @@
 module jacoby-transfers "Jacoby Transfers"
   card   notrump.transfers.jacoby
   needs  notrump-base
+  skill  bidding_conventions/jacoby_transfers
+  skill  partnership_bidding/stayman_transfers
   param  texas = notrump.transfers.texas default false
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_double = notrump.transfers.vs_double default false

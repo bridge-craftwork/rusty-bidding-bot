@@ -15,6 +15,8 @@
 
 module multi-landy "Landy and Multi-Landy over their 1NT"
   needs  vs-1nt
+  skill  competitive_bidding/multi_landy
+  skill  competitive_bidding/defense_vs_1nt
   param  def = competitive.vs_1nt_strong.system default other
 
 after (1N) | (1N) P (P) when def is multi_landy | def is landy

@@ -28,6 +28,8 @@
 module advances "Advancing partner's overcall"
   needs  base
   needs  overcalls
+  skill  competitive_bidding/advancing_overcalls
+  skill  competitive_bidding/support_cuebids
   param  jump_raise = overcalls.responses.jump_raise default weak
 
 after (1x) 1y (P)

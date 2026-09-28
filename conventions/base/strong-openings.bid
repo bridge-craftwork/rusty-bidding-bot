@@ -20,6 +20,8 @@
 
 module strong-openings "2♣ and 2NT openings"
   needs  base
+  skill  bidding_conventions/strong_2c
+  skill  partnership_bidding/two_club
   param  two_c      = two_level.two_clubs.meaning default strong
   param  two_d_resp = two_level.two_clubs.2d_response default waiting
   param  bust_2h    = two_level.two_clubs.parrish_bust default false

@@ -22,6 +22,8 @@
 
 module dont "DONT over their 1NT"
   needs  vs-1nt
+  skill  competitive_bidding/dont
+  skill  competitive_bidding/defense_vs_1nt
   param  def       = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
 

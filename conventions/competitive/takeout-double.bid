@@ -21,6 +21,7 @@
 module takeout-double "Takeout doubles"
   needs  base
   needs  overcalls
+  skill  competitive_bidding/takeout_doubles
   param  oc_max = overcalls.one_level_max default 16
 
 # ── The double ───────────────────────────────────────────────────────

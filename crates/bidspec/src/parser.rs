@@ -19,7 +19,7 @@ const CLAUSES: &[&str] = &[
     "announce",
     "artificial",
 ];
-const HEADERS: &[&str] = &["card", "needs", "param"];
+const HEADERS: &[&str] = &["card", "needs", "param", "skill"];
 
 struct Line<'a> {
     no: usize,
@@ -148,6 +148,7 @@ impl<'a> Parser<'a> {
             card: Vec::new(),
             needs: Vec::new(),
             params: Vec::new(),
+            skills: Vec::new(),
             contexts: Vec::new(),
         };
         for node in &first.children {
@@ -261,10 +262,32 @@ impl<'a> Parser<'a> {
                     "expected `param <name> = <card path> [default <value>]`",
                 ),
             },
+            Some("skill") => {
+                if words.is_empty() {
+                    self.error(line, None, "expected `skill <category>/<name>`");
+                }
+                for w in words {
+                    if bridge_card::skills::is_skill_path(w) {
+                        module.skills.push(SkillRef {
+                            path: w.to_string(),
+                            line: no,
+                        });
+                    } else {
+                        self.error(
+                            line,
+                            None,
+                            format!(
+                                "{w:?} is not a skill path: `<category>/<name>`, lower case \
+                                 (`bidding_conventions/stayman`)"
+                            ),
+                        );
+                    }
+                }
+            }
             _ => self.error(
                 line,
                 Some(0),
-                "expected `card`, `needs` or `param` under `module`",
+                "expected `card`, `needs`, `param` or `skill` under `module`",
             ),
         }
     }

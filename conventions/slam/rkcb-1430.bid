@@ -6,6 +6,8 @@
 
 module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   needs  base
+  skill  bidding_conventions/roman_keycard
+  skill  partnership_bidding/roman_key_card
   param  k1430 = slam.blackwood.rkcb_1430 default false
   param  k0314 = slam.blackwood.rkcb_0314 default false
   param  m0314 = slam.blackwood.minor_0314 default false

@@ -3,6 +3,7 @@
 module super-accept "Super-accepting a Jacoby transfer"
   card   notrump.transfers.super_accept
   needs  jacoby-transfers
+  skill  bidding_conventions/super_accept
 
 # Four-card support and 16-17 (2026-09-25: any four-card super-accept cost
 # 1,517 IMPs to our side against 16+; see jacoby-transfers.notes.md): jump in

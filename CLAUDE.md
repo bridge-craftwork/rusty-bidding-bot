@@ -45,6 +45,13 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   condition may use; the meanings live in the term tables in
   `crates/engine/src/eval.rs`, and after changing them run
   `rbb bid terms --doc docs/CONTRACT.md` (a test checks the doc).
+- Teaching skills (docs/SKILLS.md): each module names the Bridge-Classroom
+  skills it implements (`skill bidding_conventions/stayman` header lines),
+  each convention's card field its skill (`skill = ...` in fields.toml);
+  the card field is the canonical convention ID. Known paths:
+  `conventions/card/skills.toml` (add a new one under `[proposed]`). After
+  changing any, run `rbb bid skills --doc docs/SKILLS.md` (a test checks
+  the doc).
 - `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
   (`seat hand | auction | expect | why`) next to the modules; `-v` lists passes.
   `cargo test` runs them too. Put call expectations there, not in Rust tests.

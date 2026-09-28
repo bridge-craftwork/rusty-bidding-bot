@@ -17,6 +17,7 @@
 module smolen "Smolen: 5-4 in the majors after Stayman's denial"
   card   notrump.smolen.play
   needs  stayman
+  skill  bidding_conventions/smolen
   param  style = general.style
 
 when answered majors, partner.H<=3, partner.S<=3

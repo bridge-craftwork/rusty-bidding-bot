@@ -8,6 +8,7 @@
 module new-minor-forcing "New Minor Forcing"
   card   other_conventions.new_minor_forcing.play
   needs  responder-rebids
+  skill  bidding_conventions/new_minor_forcing
 
 after 1C (P) 1M (P) 1N (P)
   2D  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert

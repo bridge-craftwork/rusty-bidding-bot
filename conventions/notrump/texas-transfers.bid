@@ -3,6 +3,7 @@
 module texas-transfers "Texas Transfers"
   card   notrump.transfers.texas
   needs  notrump-base
+  skill  bidding_conventions/jacoby_transfers
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_2c = notrump.transfers.vs_2c default false
 

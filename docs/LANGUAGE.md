@@ -83,6 +83,7 @@ it depends on.
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
   card   slam.blackwood.rkcb_1430          # active when the card says so
   needs  base
+  skill  bidding_conventions/roman_keycard
   param  nt_min = notrump.one_nt.range_min default 15
 ```
 
@@ -92,6 +93,11 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
 - `param <name> = <card path> [default v]`: a card value the rules can use by
   name.
 - `needs <module>`: load order and dependencies.
+- `skill <category>/<name>`: a teaching skill the module implements, as
+  Bridge-Classroom tags its lessons (`skill bidding_conventions/stayman`).
+  Repeatable, and a line may name several. It records what the module
+  teaches and changes nothing about how it loads or bids; `rbb bid skills`
+  maps skills to card fields and modules (docs/SKILLS.md).
 
 **Treatments.** When players agree on a convention but not on its details,
 the card holds one enum field for the choice (`notrump.minor_transfers`:
@@ -442,6 +448,10 @@ These are enforced by `bidspec`, with file:line:column errors:
 - `shows`, `when` and `denies` may be repeated, on the rule line or on
   continuation lines; the repeats are combined with AND. `prefer`,
   `priority`, `replaces`, `as` and `alert`/`announce` may appear once.
+- A `skill` path is lower-case letters, digits and `_` on both sides of
+  one `/` (`precision/1c_opener`); `/` appears nowhere else in the
+  language. `rbb bid check` warns about a path that the rules'
+  `card/skills.toml` does not list.
 - `card` and `param` paths must exist in the rules' card vocabulary
   (`conventions/card/fields.toml`); an old alias is reported with the
   current name.

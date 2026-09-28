@@ -13,6 +13,8 @@
 
 module rebids "Opener's rebid"
   needs  responses
+  skill  partnership_bidding/rebids
+  skill  bidding_conventions/reverse_bids
   param  style = general.style
   param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
   param  support_x = doubles.support.play default false

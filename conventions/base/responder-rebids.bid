@@ -16,6 +16,8 @@
 
 module responder-rebids "Responder's second call"
   needs  rebids
+  skill  partnership_bidding/responders_rebid
+  skill  bidding_conventions/fourth_suit_forcing
   param  nmf = other_conventions.new_minor_forcing.play default false
   param  fsf = other_conventions.fourth_suit_forcing.play default false
   param  style = general.style

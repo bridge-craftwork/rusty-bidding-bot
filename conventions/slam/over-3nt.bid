@@ -13,6 +13,7 @@
 
 module over-3nt "Slam after partner's 3NT"
   needs  base
+  skill  partnership_bidding/slam_bidding
 
 when partner.last=3N, !they.bid, we.trump is none
   6N  "Slam: 34 or more between us (partner at his minimum)"

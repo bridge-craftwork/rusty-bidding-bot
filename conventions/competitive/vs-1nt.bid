@@ -27,6 +27,7 @@
 
 module vs-1nt "Over their 1NT: what every defence shares"
   needs  base
+  skill  competitive_bidding/defense_vs_1nt
   param  def       = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
 

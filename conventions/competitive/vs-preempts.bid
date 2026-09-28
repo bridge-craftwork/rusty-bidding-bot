@@ -25,6 +25,8 @@
 
 module vs-preempts "Defence against preempts"
   needs  base
+  skill  competitive_bidding/defense_vs_preempts
+  skill  competitive_bidding/takeout_doubles
 
 # ── Direct seat over their weak two ──────────────────────────────────
 after (2x) when x is not N, rho.hcp.max <= 12

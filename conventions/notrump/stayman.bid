@@ -3,6 +3,8 @@
 module stayman "Stayman"
   card   notrump.stayman.play
   needs  notrump-base
+  skill  bidding_conventions/stayman
+  skill  partnership_bidding/stayman_transfers
   param  minors = notrump.minor_transfers default relay
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_double = notrump.transfers.vs_double default false

@@ -13,6 +13,7 @@
 module impossible-2s "Impossible 2♠"
   card   major_openings.impossible_2s.play
   needs  responder-rebids
+  skill  bidding_conventions/impossible_2s
 
 # ── Responder: the good raise ────────────────────────────────────────
 # Our 1NT is 6-10 HCP, so the raise to 3m (9-10 points) is the courtesy

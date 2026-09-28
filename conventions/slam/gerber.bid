@@ -20,6 +20,7 @@
 module gerber "Gerber: 4♣ asks for aces over partner's notrump"
   card   slam.gerber.play
   needs  notrump-base
+  skill  bidding_conventions/gerber
   param  only_openings = slam.gerber.only_over_nt_openings default false
   param  texas_4c = notrump.transfers.texas_4c default false
   param  style = general.style

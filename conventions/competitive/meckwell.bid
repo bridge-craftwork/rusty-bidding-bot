@@ -20,6 +20,8 @@
 
 module meckwell "Meckwell over their 1NT"
   needs  vs-1nt
+  skill  competitive_bidding/meckwell
+  skill  competitive_bidding/defense_vs_1nt
   param  def = competitive.vs_1nt_strong.system default other
 
 after (1N) | (1N) P (P) when def is meckwell

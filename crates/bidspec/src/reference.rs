@@ -17,6 +17,9 @@ pub struct ModuleRef {
     /// `notrump.range = 15-17`).
     pub card: Vec<String>,
     pub needs: Vec<String>,
+    /// The teaching skills it declares (`skill` lines).
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub skills: Vec<String>,
     pub rules: Vec<RuleRef>,
 }
 
@@ -122,6 +125,7 @@ pub fn entries(modules: &[Module]) -> Vec<ModuleRef> {
                     })
                     .collect(),
                 needs: m.needs.clone(),
+                skills: m.skills.iter().map(|s| s.path.clone()).collect(),
                 rules,
             }
         })
@@ -170,6 +174,9 @@ pub fn text(modules: &[ModuleRef], header: &str, active: Option<&dyn Fn(&str) ->
         }
         if !m.needs.is_empty() {
             out.push_str(&format!("   needs: {}\n", m.needs.join(", ")));
+        }
+        if !m.skills.is_empty() {
+            out.push_str(&format!("   skills: {}\n", m.skills.join(", ")));
         }
         let mut last: Option<(&Vec<String>, &Vec<String>)> = None;
         for r in &m.rules {

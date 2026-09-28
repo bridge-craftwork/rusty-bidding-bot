@@ -16,6 +16,7 @@
 module responsive-doubles "Responsive doubles"
   card   doubles.responsive.play
   needs  base
+  skill  competitive_bidding/responsive_doubles
 
 # ── After partner's takeout double ───────────────────────────────────
 # Partner has the other three suits, so the double picks the two he can

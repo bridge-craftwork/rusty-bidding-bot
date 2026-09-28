@@ -22,6 +22,8 @@
 
 module overcalls "Suit and notrump overcalls"
   needs  base
+  skill  competitive_bidding/overcalls
+  skill  partnership_bidding/overcalls
   param  one_min = overcalls.one_level_min default 8
   param  one_max = overcalls.one_level_max default 16
   param  two_min = overcalls.two_level_min default 12

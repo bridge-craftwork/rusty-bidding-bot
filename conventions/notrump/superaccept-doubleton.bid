@@ -3,6 +3,7 @@
 module superaccept-doubleton "Superaccept doubleton"
   card   notrump.transfers.super_accept_doubleton
   needs  super-accept
+  skill  bidding_conventions/super_accept
 
 # Four-card support, a maximum and a doubleton: bid the doubleton when it is
 # cheaper than 2NT, otherwise 2NT. (BBA calls this "Extended acceptance".)

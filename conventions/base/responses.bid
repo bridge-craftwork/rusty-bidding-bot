@@ -10,6 +10,8 @@
 
 module responses "Responses to one-level suit openings"
   needs  base
+  skill  partnership_bidding/basic_bidding
+  skill  partnership_bidding/basic_major
   param  limit_raise = major_openings.jump_raise.inv default true
   param  strong_js   = general.jump_shifts.strong_2 default true
   param  inv_js      = general.jump_shifts.invitational default false

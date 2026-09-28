@@ -19,6 +19,7 @@
 
 module total-tricks "The Law of Total Tricks"
   needs  base
+  skill  competitive_bidding/law_of_total_tricks
 
 # `bonus`: partner's three is a takeout double of their major, counted as four.
 # The hedge: vulnerable against not, one trick fewer.

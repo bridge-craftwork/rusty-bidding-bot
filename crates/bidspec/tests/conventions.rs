@@ -157,3 +157,66 @@ fn diagnostics_have_locations() {
     let e = errors("module demo \"Demo\"\n\nwhen hcp>=\n");
     assert!(e[0].starts_with("t.bid:3:"), "{e:?}");
 }
+
+/// docs/SKILLS.md carries the output of `rbb bid skills`, and every skill
+/// a module or field names is in `conventions/card/skills.toml`.
+/// Regenerate with `cargo run -q -p rbb-cli -- bid skills --doc docs/SKILLS.md`.
+#[test]
+fn skills_doc_carries_the_map() {
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
+    let known = bridge_card::Skills::load(&root)
+        .unwrap_or_else(|e| panic!("{e}"))
+        .expect("conventions/card/skills.toml");
+    let mut files = Vec::new();
+    bid_files(&root, &mut files);
+    files.sort();
+    let modules: Vec<bidspec::Module> = files
+        .iter()
+        .map(|p| {
+            let src = fs::read_to_string(p).unwrap();
+            bidspec::compile(&src, &p.display().to_string(), vocab().registry()).unwrap()
+        })
+        .collect();
+    let unknown = bidspec::skills::check(&modules, vocab().registry(), &known, "fields.toml");
+    assert!(unknown.is_empty(), "{unknown:?}");
+    let map = bidspec::skills::map(&modules, vocab().registry(), &known);
+    let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/SKILLS.md");
+    // A Windows checkout without .gitattributes has CRLF line ends.
+    let doc = fs::read_to_string(&path)
+        .expect("docs/SKILLS.md")
+        .replace("\r\n", "\n");
+    let want = bidspec::skills::splice(&doc, &bidspec::skills::markdown(&map)).expect("markers");
+    assert!(
+        doc == want,
+        "docs/SKILLS.md's skill map is out of date: run \
+         `cargo run -q -p rbb-cli -- bid skills --doc docs/SKILLS.md`"
+    );
+}
+
+#[test]
+fn modules_name_their_teaching_skills() {
+    let src = "module demo \"Demo\"\n  card notrump.stayman.play\n  skill bidding_conventions/stayman\n  skill partnership_bidding/stayman_transfers precision/1c_opener\n\nafter 1N (P)\n  2C \"x\"\n";
+    let m = bidspec::compile(src, "t.bid", vocab().registry()).unwrap();
+    let paths: Vec<(&str, usize)> = m.skills.iter().map(|s| (s.path.as_str(), s.line)).collect();
+    assert_eq!(
+        paths,
+        [
+            ("bidding_conventions/stayman", 3),
+            ("partnership_bidding/stayman_transfers", 4),
+            ("precision/1c_opener", 4)
+        ]
+    );
+    let json = bidspec::to_json(&m);
+    assert!(json.contains("\"skills\""), "{json}");
+
+    let e = errors("module demo \"Demo\"\n  skill Stayman\n");
+    assert!(e[0].starts_with("t.bid:2:"), "{e:?}");
+    assert!(e[0].contains("not a skill path"), "{e:?}");
+    let e = errors("module demo \"Demo\"\n  skill\n");
+    assert!(e[0].contains("expected `skill"), "{e:?}");
+    let e = errors("module demo \"Demo\"\nskill bidding_conventions/stayman\n");
+    assert!(e[0].contains("must be indented under `module`"), "{e:?}");
+    // A `/` is only for skill paths.
+    let e = errors("module demo \"Demo\"\n\nwhen hcp / 2 >= 4\n");
+    assert!(e[0].starts_with("t.bid:3:"), "{e:?}");
+}

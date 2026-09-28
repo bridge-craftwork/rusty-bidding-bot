@@ -20,6 +20,8 @@
 module control-bids "Control bids before the keycard ask"
   card   slam.cue_bids.play
   needs  base
+  skill  bidding_conventions/control_bids
+  skill  partnership_bidding/slam_bidding
   param  style = slam.cue_bids.style default first_or_second_round
 
 # ── The treatment (Rick, 2026-09-25) ─────────────────────────────────

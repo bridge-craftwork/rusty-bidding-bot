@@ -2,6 +2,8 @@
 
 module notrump-base "1NT opening and natural responses"
   needs  base
+  skill  basic_bidding/notrump_openings
+  skill  partnership_bidding/basic_notrump
   param  nt_min   = notrump.one_nt.range_min default 15
   param  nt_max   = notrump.one_nt.range_max default 17
   param  one_less = notrump.one_nt.allow_one_less default false

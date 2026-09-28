@@ -8,6 +8,9 @@
 # Not yet covered: 2-level and higher openings, and anything above 21 HCP.
 
 module base "Natural opening bids"
+  skill  basic_bidding/major_suit_openings
+  skill  basic_bidding/minor_suit_openings
+  skill  partnership_bidding/basic_bidding
   param  min_open = general.min_hcp_open default 12
   param  style = general.style
 

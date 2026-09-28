@@ -17,6 +17,7 @@
 module balancing "The balancing seat"
   needs  base
   needs  overcalls
+  skill  competitive_bidding/balancing
   param  one_min = overcalls.one_level_min default 8
   param  two_min = overcalls.two_level_min default 12
   param  nt_min  = nt_overcalls.balance.range_min default 12

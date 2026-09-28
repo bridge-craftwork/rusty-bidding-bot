@@ -18,7 +18,19 @@ pub struct Module {
     pub needs: Vec<String>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub params: Vec<Param>,
+    /// The teaching skills the module implements (`skill <path>`):
+    /// Bridge-Classroom's SkillPath strings. Documentation only: they do
+    /// not change what the module does.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub skills: Vec<SkillRef>,
     pub contexts: Vec<Context>,
+}
+
+/// `skill <path>`
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SkillRef {
+    pub path: String,
+    pub line: usize,
 }
 
 /// `card <path> [= value]`

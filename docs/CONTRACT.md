@@ -15,7 +15,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.1.0 (rule language 1)`), and so does the last line of
+(`rbb 0.2.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
@@ -25,7 +25,7 @@ its root, `conventions.toml`:
 name = "rusty-bidding-bot"
 description = "The base system and conventions, switched on by the convention card"
 language = 1          # required: the rule language version
-engine = "0.1.0"      # optional: the engine it was developed against (information only)
+engine = "0.2.0"      # optional: the engine it was developed against (information only)
 ```
 
 - A manifest that asks for a language this engine does not read refuses
@@ -62,6 +62,7 @@ A rules directory holds:
 | `conventions.toml` | the manifest: name, rule language version |
 | `card/fields.toml` | the card fields: path, kind, options, bounds, default, aliases |
 | `card/bbsa-map.toml` | how BBA's `.bbsa` keys map onto those fields (`[implied]`, `[[derived]]`) |
+| `card/skills.toml` | optional: the known teaching-skill paths (docs/SKILLS.md); read only by `rbb bid check` and `rbb bid skills` |
 | `**/*.bid` | the rules (with their `.test` and `.notes.md` files) |
 
 - **Each rules directory brings its own card vocabulary.** The engine has
@@ -181,6 +182,7 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 | `rbb bid check [DIR\|FILE...] [--rules DIR]` | parse and check every rule file against the card vocabulary of `--rules`; reports the manifest and the language read |
 | `rbb bid test [PATHS] [--rules DIR] [-v]` | run the `.test` cases next to the modules |
 | `rbb bid terms` | print the term vocabulary (this document's generated section) |
+| `rbb bid skills [--rules DIR] [--doc F]` | the teaching-skill map: each skill, the card fields and the modules that name it, and the gaps (docs/SKILLS.md) |
 | `rbb bid reference [--rules DIR]` | every module and what each call means after each auction |
 | `rbb bid compile FILE [--rules DIR]` | a file's compiled JSON IR |
 | `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json]` | the engine's call with every candidate and why it lost |
@@ -211,7 +213,19 @@ of them needs a new language version (and a manifest that asks for it):
 Additions that no existing file can notice may come without a new version:
 a new term, a new function, a new tool or option. A rule set that uses one
 does not load on an older engine (the unknown-term check refuses it), so
-bump `engine` in the manifest when you start relying on one. What the
+bump `engine` in the manifest when you start relying on one.
+
+The `skill` header line (LANGUAGE.md §3, engine 0.2.0) is such an
+addition. No existing file can notice it: it only records which teaching
+skills a module implements, and changes nothing about loading or bidding.
+It is still grammar an older engine does not read (its parser refuses a
+header line other than `card`, `needs` and `param`), so it came without a
+new language version, and this repository's manifest names `engine =
+"0.2.0"`. A skill path is not checked against Bridge-Classroom when the
+rules load; `rbb bid check` warns about one that `card/skills.toml` does
+not list. The same goes for the `skill` attribute of a card field.
+
+What the
 engine *knows* may also get sharper within a version (the deck limits,
 how a range narrows): rules read it through the same terms, but a call can
 change. Such changes are measured on the corpus like a rule change.
@@ -261,6 +275,12 @@ These are the habits the rule set in this repository follows
   corpus tables to one card when cards differ.
 - **Find what a decision turns on by making hands** (`rbb grid` specs in
   `probes/`), not by searching the corpus.
+- **Name the teaching skills.** A module lists the skills it implements
+  with `skill` lines, and a field the skill its convention is taught under
+  with its `skill` attribute (Bridge-Classroom's SkillPath strings; the
+  known ones are `card/skills.toml`). A convention Bridge-Classroom has no
+  skill for gets a proposed path there. Regenerate docs/SKILLS.md with
+  `rbb bid skills --doc docs/SKILLS.md`.
 - **Card fields go in the vocabulary.** A module reads only fields of
   `card/fields.toml`; a new treatment is a new field or enum option there (and a
   `.bbsa` mapping in `card/bbsa-map.toml` when BBA has one), never a guessed

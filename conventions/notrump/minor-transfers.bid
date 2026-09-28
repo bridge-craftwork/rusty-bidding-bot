@@ -2,6 +2,7 @@
 
 module minor-transfers "Minor-suit responses to 1NT"
   needs  notrump-base
+  skill  bidding_conventions/minor_suit_transfers
   param  style = notrump.minor_transfers default relay
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_2c = notrump.transfers.vs_2c default false

@@ -320,6 +320,19 @@ enum BidCommand {
         #[arg(long)]
         doc: Option<PathBuf>,
     },
+    /// Print the teaching-skill map (Markdown): each skill path, the card
+    /// fields tagged with it (`skill` in card/fields.toml), the modules
+    /// declaring it (`skill` lines), and the gaps.
+    Skills {
+        /// The rules directory: its .bid files, card/fields.toml and
+        /// card/skills.toml.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Instead of printing, rewrite the generated section of this
+        /// Markdown file (docs/SKILLS.md) between its markers.
+        #[arg(long)]
+        doc: Option<PathBuf>,
+    },
     /// Print a .bid file's compiled JSON IR.
     Compile {
         file: PathBuf,
@@ -1280,6 +1293,27 @@ fn bid(cmd: BidCommand) -> Result<()> {
                     }
                 }
             }
+            // Teaching skills: every path named is one card/skills.toml lists.
+            match bridge_card::Skills::load(&rules) {
+                Ok(Some(known)) => {
+                    let fields_file = rules.join(Vocabulary::FIELDS).display().to_string();
+                    for d in
+                        bidspec::skills::check(&modules, vocab.registry(), &known, &fields_file)
+                    {
+                        if d.line == 0 {
+                            eprintln!("{}: warning: {}", d.file, d.message);
+                        } else {
+                            eprintln!("{}:{}: warning: {}", d.file, d.line, d.message);
+                        }
+                        warnings += 1;
+                    }
+                }
+                Ok(None) => {}
+                Err(e) => {
+                    eprintln!("{e}");
+                    errors += 1;
+                }
+            }
             let rules: usize = modules.iter().map(count_rules).sum();
             println!(
                 "{} files, {} modules, {rules} rules: {errors} errors, {warnings} warnings \
@@ -1369,6 +1403,46 @@ fn bid(cmd: BidCommand) -> Result<()> {
                     if new != text {
                         fs::write(&p, new).map_err(|e| format!("{}: {e}", p.display()))?;
                         eprintln!("{}: term reference updated", p.display());
+                    }
+                }
+            }
+        }
+        BidCommand::Skills { rules, doc } => {
+            let vocab = vocab_from(&rules)?;
+            let known = bridge_card::Skills::load(&rules)?.unwrap_or_default();
+            let mut files = Vec::new();
+            collect_bid_files(&rules, &mut files)?;
+            files.sort();
+            let mut modules = Vec::new();
+            for file in &files {
+                let m =
+                    bidspec::compile(&read(file)?, &file.display().to_string(), vocab.registry())
+                        .map_err(|diags| {
+                        diags
+                            .iter()
+                            .map(|d| d.to_string())
+                            .collect::<Vec<_>>()
+                            .join("\n")
+                    })?;
+                modules.push(m);
+            }
+            let map = bidspec::skills::map(&modules, vocab.registry(), &known);
+            let text = bidspec::skills::markdown(&map);
+            match doc {
+                None => print!("{text}"),
+                Some(p) => {
+                    let old = read(&p)?;
+                    let new = bidspec::skills::splice(&old, &text).ok_or_else(|| {
+                        format!(
+                            "{}: no `{}` ... `{}` markers",
+                            p.display(),
+                            bidspec::skills::BEGIN,
+                            bidspec::skills::END
+                        )
+                    })?;
+                    if new != old {
+                        fs::write(&p, new).map_err(|e| format!("{}: {e}", p.display()))?;
+                        eprintln!("{}: skill map updated", p.display());
                     }
                 }
             }

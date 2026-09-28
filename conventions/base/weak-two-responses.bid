@@ -7,6 +7,9 @@
 
 module weak-two-responses "Responses to a weak two"
   needs  preempts
+  skill  bidding_conventions/weak_2s
+  skill  bidding_conventions/ogust
+  skill  partnership_bidding/weak_twos
   param  ask2nt = two_level.weak_two_2nt_response default feature
   param  two_c  = two_level.two_clubs.meaning default strong
   param  style  = general.style

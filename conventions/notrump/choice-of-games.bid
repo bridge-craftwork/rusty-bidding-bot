@@ -2,6 +2,7 @@
 
 module choice-of-games "Choosing between 3NT and a major-suit game"
   needs  notrump-base
+  skill  partnership_bidding/basic_notrump
 
 # Partner has bid 3NT offering a choice (after Stayman, or with five cards
 # in a major after a transfer). Correct to four of a major with an

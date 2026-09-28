@@ -18,6 +18,7 @@
 module support-doubles "Support doubles and redoubles"
   card   doubles.support.play
   needs  rebids
+  skill  competitive_bidding/support_doubles
   param  rdbl = doubles.support.rdbl default false
   param  through = doubles.support.through
 

@@ -17,6 +17,7 @@
 module inverted-minors "Inverted minor raises"
   card   minor_openings.inverted_minors.play
   needs  responses
+  skill  bidding_conventions/inverted_minors
 
 after 1m (P)
   2m  "Inverted raise: 10+, 4+ {m}, no 4-card major, forcing"  shows m>=4, hcp>=10, H<=3, S<=3

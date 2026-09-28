@@ -6,6 +6,8 @@
 module blackwood "Blackwood (standard)"
   card   slam.blackwood.standard
   needs  base
+  skill  bidding_conventions/blackwood
+  skill  partnership_bidding/blackwood
   param  style = slam.cue_bids.style default first_or_second_round
 
 # ── The ask ───────────────────────────────────────────────────────────

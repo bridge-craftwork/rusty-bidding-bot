@@ -13,6 +13,7 @@
 
 module slam-catch "Game or slam once a trump suit is agreed"
   needs  base
+  skill  partnership_bidding/slam_bidding
 
 # ── The sign-off ──────────────────────────────────────────────────────
 #
