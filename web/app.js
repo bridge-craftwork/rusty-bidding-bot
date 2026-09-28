@@ -90,7 +90,7 @@ function syncControls() {
   const p = session.params
   for (const el of document.querySelectorAll('[data-param]')) {
     const k = el.dataset.param
-    if (k === 'ns' || k === 'ew') continue
+    if (k === 'ns' || k === 'ew' || k === 'xray') continue
     if (el.type === 'checkbox') el.checked = !!p[k]
     else el.value = p[k] == null ? '' : String(p[k])
   }
@@ -112,6 +112,7 @@ function syncControls() {
 }
 
 for (const el of document.querySelectorAll('[data-param]')) {
+  if (el.dataset.param === 'xray') continue // drawn and wired by drawXray
   el.addEventListener('change', async () => {
     const k = el.dataset.param
     let v = el.type === 'checkbox' ? el.checked : el.value
@@ -258,7 +259,9 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'n') $('bid-next').click()
   else if (e.key === 'e') $('bid-end').click()
   else if (e.key === 'u') $('undo').click()
+  else if (e.key === 'x') $('xray-toggle').click()
 })
+$('xray-toggle').addEventListener('click', () => session.setParams({ xray: session.params.xray ? 0 : 1 }))
 
 const STRAINS = ['C', 'D', 'H', 'S', 'NT']
 function legal(calls, dealerIdx) {
@@ -420,16 +423,12 @@ function drawDetail(out) {
     return
   }
   const raw = session.calls[selected]
-  const rows = [
-    ['Call', `${SEAT_NAMES[c.seat]}: ${fmtCall(c.call)} (${c.by === 'engine' ? "the engine's call" : c.by === 'you' ? 'your call' : 'given'})`],
-  ]
-  if (c.alert) rows.push([c.alert.kind === 'announce' ? 'Announced' : 'Alerted', esc(c.alert.text ?? '(alert)')])
-  if (c.why) rows.push(['Why', esc(c.why)])
-  if (c.meaning && c.meaning !== c.why) rows.push(['Shows the table', esc(c.meaning)])
-  if (c.shows) rows.push(['Hand known', esc(c.shows)])
-  if (c.noRule && c.call !== 'Pass') rows.push(['Gap', 'No rule explains this call: outside the engine\'s system here.'])
-  else if (c.noRule && c.by === 'engine') rows.push(['Note', 'No rule applied, so the engine passed.'])
-  if (c.rule) rows.push(['Rule', `<a href="${SOURCE_URL}${esc(c.rule.file)}#L${c.rule.line}" target="_blank" rel="noopener">${esc(c.rule.module)} · ${esc(c.rule.file)}:${c.rule.line}</a>`])
+  if (out.xray) {
+    // The x-ray under the auction says all of this and more.
+    el.hidden = true
+    return
+  }
+  const rows = detailRows(c)
   let cands = ''
   if (raw?.candidates?.length) {
     cands = '<details class="cands"><summary>Calls the engine considered</summary><ul>' +
@@ -438,6 +437,139 @@ function drawDetail(out) {
   }
   el.innerHTML = `<dl>${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${cands}`
   el.hidden = false
+}
+
+const byText = (by) => by === 'engine' ? "the engine's call" : by === 'you' ? 'your call' : 'given'
+
+function ruleLink(r) {
+  if (!r) return ''
+  const short = String(r.file).replace(/^.*?conventions\//, '')
+  return `<a href="${SOURCE_URL}${esc(r.file)}#L${r.line}" target="_blank" rel="noopener" title="${esc(r.module)} · ${esc(r.file)}:${r.line}">${esc(short)}:${r.line}</a>`
+}
+
+/** The rows of a call's detail: what it says, what it shows, its rule. */
+function detailRows(c) {
+  const rows = [
+    ['Call', `${SEAT_NAMES[c.seat]}: ${fmtCall(c.call)} (${byText(c.by)})`],
+  ]
+  if (c.alert) rows.push([c.alert.kind === 'announce' ? 'Announced' : 'Alerted', esc(c.alert.text ?? '(alert)')])
+  if (c.why) rows.push(['Why', esc(c.why)])
+  if (c.meaning && c.meaning !== c.why) rows.push(['Shows the table', esc(c.meaning)])
+  if (c.shows) rows.push(['Hand known', esc(c.shows)])
+  if (c.noRule && c.call !== 'Pass') rows.push(['Gap', 'No rule explains this call: outside the engine\'s system here.'])
+  else if (c.noRule && c.by === 'engine') rows.push(['Note', 'No rule applied, so the engine passed.'])
+  if (c.rule) rows.push(['Rule', `<a href="${SOURCE_URL}${esc(c.rule.file)}#L${c.rule.line}" target="_blank" rel="noopener">${esc(c.rule.module)} · ${esc(c.rule.file)}:${c.rule.line}</a>`])
+  return rows
+}
+
+// ── The x-ray: the workbench's view of a call ─────────────────────────
+
+const FULL = { hcp: 37, len: 13 }
+function fmtRange(r, full) {
+  if (!r) return ''
+  if (r.min <= 0 && r.max >= full) return '<span class="unk">·</span>'
+  return r.min === r.max ? String(r.min) : `${r.min}–${r.max}`
+}
+
+function handLine(hand) {
+  return hand.split('.').map((cards, i) => `<span class="s-${SUITS[i]}">${SUIT_SYMBOLS[SUITS[i]]}</span>${esc(cards || '—').replace(/T/g, '10')}`).join(' ')
+}
+
+/** What every seat had shown, one row a seat (West first, as the auction); `mark` is the caller. */
+function knowledgeTable(pos, mark) {
+  if (!pos?.knowledge) return ''
+  const order = ['W', 'N', 'E', 'S']
+  const rows = order.map((s) => {
+    const k = pos.knowledge[s]
+    if (!k) return ''
+    const bal = k.balanced === true ? 'yes' : k.balanced === false ? 'no' : '<span class="unk">·</span>'
+    const shown = k.shown?.length
+      ? `<details><summary>${k.shown.length}</summary><ul>${k.shown.map((x) => `<li><code>${esc(x)}</code></li>`).join('')}</ul></details>` : ''
+    return `<tr${s === mark ? ' class="caller"' : ''}><th>${s}</th><td>${fmtRange(k.hcp, FULL.hcp)}</td>${SUITS.map((x) => `<td>${fmtRange(k.lengths?.[x], FULL.len)}</td>`).join('')}<td>${bal}</td><td class="shown">${shown}</td></tr>`
+  }).join('')
+  return `<div class="xscroll"><table class="xt know"><thead><tr><th>Seat</th><th>HCP</th>${SUITS.map((x) => `<th><span class="s-${x}">${SUIT_SYMBOLS[x]}</span></th>`).join('')}<th>Bal.</th><th>Shown</th></tr></thead><tbody>${rows}</tbody></table></div>`
+}
+
+function sidesLine(pos) {
+  if (!pos?.sides) return ''
+  return `<p class="sides"><span><strong>N-S</strong> ${esc(pos.sides.ns.summary)}</span><span><strong>E-W</strong> ${esc(pos.sides.ew.summary)}</span></p>`
+}
+
+function outcomeClass(o) {
+  return o === 'chosen' ? 'chosen' : o === 'outranked' ? 'outranked' : 'fails'
+}
+
+/** One call under the x-ray. */
+function xrayCall(out, x) {
+  const c = out.calls[x.index]
+  const view = session.params.view
+  const secret = view !== 'all' && view !== x.seat && !out.complete
+  const parts = []
+  const engine = x.by === 'engine'
+    ? ''
+    : x.engineCall
+      ? ` · the engine would bid ${fmtCall(x.engineCall)}${x.engineCall === x.call ? ' too' : ''}`
+      : ''
+  // The head names the call: its rows from "why" on.
+  parts.push(`<dl>${detailRows(c).slice(1).map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`)
+  if (secret) {
+    parts.push(`<p class="hint">${SEAT_NAMES[x.seat]}'s hand is hidden (Show: ${SEAT_NAMES[view]} only), and so are the rules weighed for it. What the table knows is below.</p>`)
+  } else {
+    parts.push(`<p class="holds">${SEAT_NAMES[x.seat]} holds ${handLine(x.hand)} · ${hcp(x.hand)} HCP${engine}</p>`)
+    if (x.candidates.length) {
+      parts.push('<h4>Candidates, best-ranked first</h4>')
+      parts.push(`<div class="xscroll"><table class="xt cands"><thead><tr><th>Call</th><th title="Priority: a higher priority wins outright">Prio</th><th title="Descriptiveness: the share of the hands the caller could hold that the call rules out; higher says more">Descr</th><th>Outcome</th><th>Meaning</th><th>Rule</th></tr></thead><tbody>` +
+        x.candidates.map((k) => `<tr class="${outcomeClass(k.outcome)}${k.call === x.call ? ' made' : ''}"><td class="call">${fmtCall(k.call)}</td><td class="num">${k.priority}</td><td class="num">${Number(k.descriptiveness).toFixed(3)}</td><td class="outcome">${esc(k.outcome)}</td><td class="meaning">${esc(k.explanation)}</td><td class="rule">${ruleLink(k.rule)}</td></tr>`).join('') +
+        '</tbody></table></div>')
+    } else {
+      parts.push('<p class="hint">No rule applies here for this hand.</p>')
+    }
+    if (!x.offered && x.call !== 'Pass') parts.push(`<p class="gap">No rule offers ${fmtCall(x.call)} here.</p>`)
+    for (const w of x.warnings) parts.push(`<p class="warn">warning: ${esc(w)}</p>`)
+  }
+  parts.push('<h4>What each seat had shown before the call</h4>')
+  parts.push(knowledgeTable(x.before, x.seat))
+  parts.push(sidesLine(x.before))
+  return parts.join('')
+}
+
+function xrayHead(x) {
+  return `Call ${x.index + 1} · ${SEAT_NAMES[x.seat]} ${fmtCall(x.call)} <span class="by">(${byText(x.by)})</span>`
+}
+
+function drawXray(out) {
+  const el = $('xray')
+  const mode = session.params.xray
+  $('xray-toggle').setAttribute('aria-pressed', String(!!mode))
+  el.hidden = !mode || !out.hands
+  if (el.hidden) return
+  const all = mode === 'all'
+  const list = out.xray?.calls ?? []
+  const bar = `<div class="xbar"><h3>X-ray</h3><label class="check"><input type="checkbox" data-param="xray" ${all ? 'checked' : ''}> Every call</label></div>`
+  let body
+  if (!list.length) {
+    body = '<p class="hint">No calls yet. Once a call is made, the x-ray shows every rule the engine weighed for it, what each seat had shown and the forcing state.</p>'
+  } else if (all) {
+    body = list.map((x) => `<details class="xcall" open><summary>${xrayHead(x)}</summary>${xrayCall(out, x)}</details>`).join('')
+  } else {
+    const x = list[selected ?? list.length - 1] ?? list[list.length - 1]
+    body = `<div class="xcall"><p class="xhead">${xrayHead(x)}${selected == null ? ' <span class="hint">the last call; click a call to x-ray it</span>' : ''}</p>${xrayCall(out, x)}</div>`
+  }
+  el.innerHTML = bar + body
+  el.querySelector('input[data-param=xray]').addEventListener('change', (e) => session.setParams({ xray: e.target.checked ? 'all' : 1 }))
+}
+
+/** BBA's auction as the engine reads it: the workbench's table. */
+function bbaReading(out) {
+  const rows = out.xray?.bba
+  if (!rows?.length) return ''
+  return '<h4>How the engine reads BBA\'s auction</h4><div class="xscroll"><table class="xt reading"><thead><tr><th>#</th><th>Seat</th><th>BBA</th><th>BBA\'s note</th><th>The engine\'s reading</th><th>Engine would bid</th></tr></thead><tbody>' +
+    rows.map((r, i) => {
+      const read = r.reading?.explanation ? esc(r.reading.explanation) : '<span class="unk">no rule</span>'
+      const known = r.reading?.knowledge?.summary ? `<span class="known">${esc(r.reading.knowledge.summary)}</span>` : ''
+      const same = r.engineCall === r.call
+      return `<tr><td class="num">${i + 1}</td><th>${r.seat}</th><td class="call">${fmtCall(r.call)}</td><td>${esc(r.note ?? '')}</td><td class="meaning">${read} ${ruleLink(r.reading?.rule)}${known}</td><td class="call ${same ? 'same' : 'differs'}">${r.engineCall ? fmtCall(r.engineCall) : ''}</td></tr>`
+    }).join('') + '</tbody></table></div>'
 }
 
 function drawMeanings(out) {
@@ -506,7 +638,7 @@ function drawResult(out) {
     }
     const notes = out.bba.auction.filter((c) => c.note)
     if (notes.length) bbaLine += `<p class="hint">${notes.map((c) => `${fmtCall(c.call)}: ${esc(c.note)}`).join(' · ')}</p>`
-    parts.push(`<div class="cmp">${bbaLine}</div>`)
+    parts.push(`<div class="cmp">${bbaLine}${bbaReading(out)}</div>`)
   }
   el.innerHTML = parts.join('')
 }
@@ -554,7 +686,7 @@ function writeHash(out) {
   if (!out.hands || loading) return
   const params = { ...session.params, stop: out.complete ? 'end' : String(out.calls.length) }
   const hash = writeFragment(session.getInput(), params, {
-    ns: 'scenario', ew: 'scenario', rotate: 0, stop: 'end', dd: true, view: 'all', meanings: false,
+    ns: 'scenario', ew: 'scenario', rotate: 0, stop: 'end', dd: true, view: 'all', meanings: false, xray: 0,
   })
   if (hash !== location.hash) {
     lastHash = hash
@@ -567,6 +699,7 @@ function render() {
   drawHead(out)
   drawHands(out)
   drawAuction(out)
+  drawXray(out)
   drawDetail(out)
   drawMeanings(out)
   drawBidbox(out)

@@ -44,7 +44,15 @@ export const PARAMS = [
   { name: 'dd', values: [true, false], default: true, about: 'Solve the double-dummy table, par and the contract\'s result when the auction ends.' },
   { name: 'view', values: ['all', 'N', 'E', 'S', 'W'], default: 'all', about: 'The page: show all four hands, or only this seat\'s until the auction ends.' },
   { name: 'meanings', values: [true, false], default: false, about: 'The page: show what every call means, not only alerts.' },
+  { name: 'xray', values: [0, 1, 'all'], default: 0, about: 'X-ray: every rule the engine weighed for each call (priority, descriptiveness, why each lost), what every seat had shown and each side\'s forcing state before the call, and how the engine read the call; for a scenario, how it read BBA\'s auction. 1: the page shows the selected call\'s x-ray under the auction (the last call when none is selected); all: every call\'s. With 1 or all the output carries `xray` (true and false are read as 1 and 0).' },
 ]
+
+/** The x-ray parameter as 0, 1 or "all" (true/false, "1"/"0" accepted); anything else as given, for checkParams to refuse. */
+export function normXray(v) {
+  if (v == null || v === '' || v === false || v === 0 || v === '0' || v === 'false' || v === 'off') return 0
+  if (v === true || v === 1 || v === '1' || v === 'true' || v === 'on') return 1
+  return v
+}
 
 const PARAM_NAMES = new Set(PARAMS.map((p) => p.name))
 const INPUT_NAMES = new Set(INPUT.map((p) => p.name))
@@ -60,6 +68,12 @@ function call(rbb, fn, req) {
 
 function diag(severity, message, hint) {
   return hint ? { severity, message, hint } : { severity, message }
+}
+
+/** How the table reads a call (an interpret step), without its seat and call. */
+function stepReading(s) {
+  if (!s) return null
+  return { explanation: s.explanation ?? null, alert: s.alert ?? null, rule: s.rule ?? null, artificial: !!s.artificial, knowledge: s.knowledge ?? null }
 }
 
 /**
@@ -94,6 +108,8 @@ export class Session {
     this.input = {}
     this.calls = [] // [{call, by: 'forced'|'engine'|'you', why, alert, rule, candidates}]
     this.steps = [] // interpret's reading of the auction
+    this.position = null // interpret's position after the last call: knowledge and sides
+    this.xcache = new Map() // x-ray bids for calls the engine did not make, by position and hand
     this.dd = null
     this.diagnostics = []
     this.engine = null
@@ -104,7 +120,7 @@ export class Session {
   }
 
   defaultParams() {
-    return { ns: 'scenario', ew: 'scenario', set: [], scoring: null, rotate: 0, stop: 'end', dd: true, view: 'all', meanings: false }
+    return { ns: 'scenario', ew: 'scenario', set: [], scoring: null, rotate: 0, stop: 'end', dd: true, view: 'all', meanings: false, xray: 0 }
   }
 
   onChange(f) { this.listeners.add(f); return () => this.listeners.delete(f) }
@@ -120,6 +136,7 @@ export class Session {
       if (!INPUT_NAMES.has(k)) d.push(diag('warning', `input.${k}: not an input field (ignored)`, `input fields: ${[...INPUT_NAMES].join(', ')}`))
     }
     const p = { ...this.params, ...(params ?? {}) }
+    p.xray = normXray(p.xray)
     for (const k of Object.keys(params ?? {})) {
       if (!PARAM_NAMES.has(k)) d.push(diag('warning', `params.${k}: not a parameter (ignored)`, `parameters: ${[...PARAM_NAMES].join(', ')}`))
     }
@@ -276,6 +293,7 @@ export class Session {
     if (p.rotate != null) p.rotate = ((parseInt(p.rotate, 10) || 0) % 4 + 4) % 4
     if (typeof p.dd === 'string') p.dd = p.dd !== 'false'
     if (typeof p.meanings === 'string') p.meanings = p.meanings === 'true'
+    p.xray = normXray(p.xray)
     if (typeof p.set === 'string') p.set = p.set.split(/[;\n]/).map((s) => s.trim()).filter(Boolean)
     const engineChange = ['ns', 'ew', 'set', 'rotate', 'scoring'].some((k) => JSON.stringify(p[k]) !== JSON.stringify(this.params[k]))
     this.params = p
@@ -329,6 +347,7 @@ export class Session {
     const cards = await this.cardSpecs(this.params, d)
     const r = call(this.rbb, 'createEngine', { cards })
     d.push(...r.diagnostics)
+    if (r.engine !== this.engine) this.xcache.clear()
     if (r.ok) {
       this.engine = r.engine
       this.cardNames = { ns: r.ns.name, ew: r.ew.name }
@@ -380,6 +399,7 @@ export class Session {
       auction: this.calls.map((c) => c.call),
     })
     this.steps = r.steps ?? []
+    this.position = r.position ?? null
     this.contract = r.contract
     this.declarer = r.declarer
     this.addDiagnostics(r.diagnostics.filter((x) => x.severity !== 'info'))
@@ -410,6 +430,7 @@ export class Session {
     this.calls.push({
       call: r.call, by: 'engine', why: r.explanation, alert: r.alert, rule: r.rule,
       candidates: r.candidates, noRule: r.rule == null,
+      position: r.position ?? null, warnings: r.warnings ?? [],
     })
     if (refresh) this.refresh()
     return true
@@ -451,6 +472,73 @@ export class Session {
     this.calls = this.calls.filter((c, i) => c.by === 'forced' && this.calls.slice(0, i).every((x) => x.by === 'forced'))
     this.dd = null
     this.refresh()
+  }
+
+  // ── X-ray ───────────────────────────────────────────────────────────
+
+  /**
+   * The engine's decision for `seat`'s hand after `prefix` (the WASM `bid`
+   * response), cached: for a call the engine did not make, what it would
+   * have bid there and every candidate it weighed.
+   */
+  decide(seat, prefix) {
+    const v = this.view
+    if (!v || this.engine == null) return null
+    const key = JSON.stringify([this.engine, v.dealer, v.vul, this.scoring, v.deal[seat], prefix])
+    let r = this.xcache.get(key)
+    if (!r) {
+      r = call(this.rbb, 'bid', { engine: this.engine, hand: v.deal[seat], dealer: v.dealer, vul: v.vul, scoring: this.scoring, auction: prefix })
+      this.xcache.set(key, r)
+    }
+    return r.ok ? r : null
+  }
+
+  /**
+   * Call i under the x-ray: the candidates for the caller's hand at that
+   * point (best-ranked first), what every seat had shown and each side's
+   * state before the call, and how the table reads the call.
+   */
+  xrayOf(i) {
+    const v = this.view
+    const c = this.calls[i]
+    if (!v || !c) return null
+    const seat = SEATS[(SEATS.indexOf(v.dealer) + i) % 4]
+    const r = c.by === 'engine' && c.position ? c : this.decide(seat, this.calls.slice(0, i).map((x) => x.call))
+    const candidates = r?.candidates ?? []
+    return {
+      index: i,
+      seat,
+      call: c.call,
+      by: c.by,
+      hand: v.deal[seat],
+      engineCall: r?.call ?? null,
+      engineWhy: r ? (r.why ?? r.explanation ?? null) : null,
+      offered: candidates.some((k) => k.call === c.call),
+      candidates,
+      warnings: r?.warnings ?? [],
+      before: r?.position ?? null,
+      reading: stepReading(this.steps[i]),
+    }
+  }
+
+  /** BBA's auction (a scenario's) as the engine reads it, and what the engine would bid at each of its calls. */
+  bbaXray() {
+    const v = this.view
+    const bba = this.base?.bba
+    if (!v || !bba?.length || this.engine == null) return null
+    const calls = bba.map((c) => c.call)
+    const key = JSON.stringify(['bba', this.engine, v.dealer, v.vul, this.scoring, calls])
+    let r = this.xcache.get(key)
+    if (!r) {
+      r = call(this.rbb, 'interpret', { engine: this.engine, dealer: v.dealer, vul: v.vul, scoring: this.scoring, auction: calls })
+      this.xcache.set(key, r)
+    }
+    if (!r.ok) return null
+    return bba.map((c, i) => {
+      const seat = SEATS[(SEATS.indexOf(v.dealer) + i) % 4]
+      const e = this.decide(seat, calls.slice(0, i))
+      return { seat, call: c.call, note: c.note ?? null, reading: stepReading(r.steps[i]), engineCall: e?.call ?? null }
+    })
   }
 
   // ── The contract surface ────────────────────────────────────────────
@@ -519,6 +607,11 @@ export class Session {
       dd: this.dd,
       bba,
       coverage: this.coverage,
+      xray: this.params.xray ? {
+        calls: this.calls.map((_, i) => this.xrayOf(i)),
+        now: this.position,
+        bba: this.bbaXray(),
+      } : null,
       diagnostics: this.diagnostics,
     }
   }

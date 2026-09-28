@@ -22,8 +22,8 @@ button, select, input, textarea { font: inherit; }
 .foot { max-width: 1200px; margin: 0 auto; padding: 1rem; color: var(--color-text-secondary); font-size: .85rem; }
 
 .layout { max-width: 1200px; margin: 0 auto; padding: 0 1rem; display: grid; grid-template-columns: 330px 1fr; gap: 1rem; align-items: start; }
-@media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
-.table-area { display: grid; gap: 1rem; min-width: 0; }
+@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.table-area { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; min-width: 0; }
 
 .panel { background: var(--color-background-primary); border-radius: var(--border-radius-lg); padding: 1rem; border: 1px solid var(--color-border-tertiary); }
 .controls label { display: block; margin: .4rem 0; font-size: .9rem; color: var(--color-text-secondary); }
@@ -64,6 +64,7 @@ button.linkish { border: 0; background: none; padding: .2rem 0; color: var(--col
 .centre .v.dealer { text-decoration: underline; }
 .centre .v.next { background: #334155; color: #fff; border-radius: 4px; padding: 0 .25rem; }
 .hand { min-width: 9rem; font-size: .95rem; }
+@media (max-width: 480px) { .hand { min-width: 0; font-size: .85rem; } .compass { gap: .5rem .4rem; } .centre { width: 6rem; height: 6rem; } }
 .hand .who { font-size: .78rem; color: var(--color-text-secondary); margin-bottom: .1rem; }
 .hand .suit { white-space: nowrap; font-family: var(--font-mono); letter-spacing: .02em; }
 .hand.hidden .suits { color: var(--color-text-tertiary); font-style: italic; font-family: var(--font-sans); }
@@ -93,6 +94,48 @@ table.auction td { padding: .1rem .2rem; }
 .call-detail .cands { margin-top: .4rem; font-size: .82rem; }
 .call-detail .cands li { list-style: none; }
 .call-detail .cands .chosen { font-weight: 600; }
+button[aria-pressed=true] { background: #334155; color: #fff; border-color: #334155; }
+
+/* The x-ray: the rules weighed for a call, and the table before it */
+.xray { margin-top: .75rem; padding: .6rem .75rem; background: var(--color-background-secondary); border-radius: var(--border-radius-md); font-size: .88rem; min-width: 0; }
+.xray .xbar { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+.xray h3 { font-size: .85rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--color-text-secondary); }
+.xray h4 { font-size: .8rem; font-weight: 600; color: var(--color-text-secondary); margin: .6rem 0 .2rem; }
+.xray .check { font-size: .85rem; color: var(--color-text-secondary); }
+.xray dl { display: grid; grid-template-columns: max-content 1fr; gap: .15rem .75rem; margin: .3rem 0; }
+.xray dt { color: var(--color-text-secondary); }
+.xray dd { min-width: 0; overflow-wrap: anywhere; }
+.xray .xhead, .xray summary { font-weight: 600; margin-top: .4rem; }
+.xray summary { cursor: pointer; }
+.xray .by, .xray .xhead .hint { font-weight: 400; color: var(--color-text-secondary); font-size: .82rem; }
+.xray details.xcall { border-top: 1px solid var(--color-border-tertiary); padding: .3rem 0; }
+.xray .holds { margin: .3rem 0; }
+.xray .gap { color: var(--gap-flag); }
+.xray .warn { color: var(--color-text-warning); }
+.xray .sides { display: flex; flex-wrap: wrap; gap: .2rem 1.2rem; margin: .3rem 0; font-size: .85rem; }
+.xscroll { overflow-x: auto; max-width: 100%; -webkit-overflow-scrolling: touch; }
+table.xt { border-collapse: collapse; font-size: .82rem; background: var(--color-background-primary); }
+table.xt th, table.xt td { padding: .15rem .45rem; border-bottom: 1px solid var(--color-border-tertiary); text-align: left; vertical-align: top; }
+table.xt thead th { font-weight: 500; color: var(--color-text-secondary); white-space: nowrap; }
+table.xt .num { text-align: right; font-variant-numeric: tabular-nums; }
+table.xt .call, table.xt .rule, table.xt .outcome { white-space: nowrap; }
+table.xt .meaning { min-width: 14rem; }
+table.xt .rule { font-family: var(--font-mono); font-size: .75rem; }
+table.xt tr.chosen .outcome { color: var(--color-text-success); font-weight: 600; }
+table.xt tr.outranked .outcome { color: var(--color-text-warning); }
+table.xt tr.fails { color: var(--color-text-secondary); }
+table.xt tr.made .call { font-weight: 700; text-decoration: underline; }
+table.xt.know td { text-align: center; font-variant-numeric: tabular-nums; white-space: nowrap; }
+table.xt.know td.shown { text-align: left; }
+table.xt.know tr.caller { font-weight: 600; }
+table.xt .shown ul { margin: .2rem 0 0 1rem; }
+table.xt .shown summary { cursor: pointer; font-weight: 400; margin: 0; }
+table.xt .known { display: block; font-size: .75rem; color: var(--color-text-secondary); }
+table.xt td.same { color: var(--color-text-success); }
+table.xt td.differs { color: var(--color-text-danger); font-weight: 600; }
+.unk { color: var(--color-text-tertiary); }
+.cmp h4 { font-size: .8rem; font-weight: 600; color: var(--color-text-secondary); margin: .6rem 0 .2rem; }
+
 .meanings { margin-top: .75rem; padding-left: 0; font-size: .9rem; }
 .meanings li { list-style: none; padding: .15rem 0; border-top: 1px solid var(--color-border-tertiary); display: grid; grid-template-columns: 1.4rem 3rem 1fr; gap: .5rem; }
 .meanings .seat { color: var(--color-text-secondary); }

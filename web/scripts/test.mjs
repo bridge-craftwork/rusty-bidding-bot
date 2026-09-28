@@ -190,6 +190,60 @@ await test('the WASM takes a rule set and its card vocabulary at run time', asyn
   assert.equal(noEngine.engine, null)
 })
 
+await test('x-ray: the candidates, the table before each call, and the deep link', async () => {
+  const s = new Session(rbb, { fetchImpl })
+  let out = await s.run({ deal: DEAL, dealer: 'N', vul: 'None', auction: '1C' }, { stop: 3 })
+  assert.equal(out.xray, null, 'off by default')
+  out = await s.run(null, { xray: true, stop: 3 })
+  assert.equal(s.params.xray, 1, 'true is read as 1')
+  assert.equal(out.xray.calls.length, out.calls.length)
+  // The engine's own call: its candidates, best-ranked first, the chosen one on top.
+  const own = out.xray.calls[1]
+  assert.equal(own.by, 'engine')
+  assert.equal(own.seat, 'E')
+  assert.equal(own.engineCall, own.call)
+  assert.equal(own.candidates.find((k) => k.outcome === 'chosen')?.call, own.call)
+  assert.ok(own.candidates.every((k) => typeof k.priority === 'number' && typeof k.descriptiveness === 'number' && k.rule.file && k.rule.line))
+  assert.ok(own.candidates.some((k) => /^hand fails/.test(k.outcome)), 'some rules fail for this hand')
+  // Before East's call, North has opened 1C: shown, with each side's state.
+  assert.deepEqual(Object.keys(own.before.knowledge).sort(), ['E', 'N', 'S', 'W'])
+  assert.ok(own.before.knowledge.N.hcp.min >= 10, JSON.stringify(own.before.knowledge.N))
+  assert.ok(['none', 'round', 'game'].includes(own.before.sides.ns.forcing))
+  assert.equal(typeof own.before.sides.ew.summary, 'string')
+  assert.ok(own.reading && 'explanation' in own.reading)
+  // A given call: what the engine would have bid with that hand there.
+  const given = out.xray.calls[0]
+  assert.equal(given.by, 'forced')
+  assert.equal(given.engineCall, '1NT')
+  assert.equal(given.offered, true)
+  assert.equal(given.before.knowledge.N.hcp.min, 0, 'nothing shown before the first call')
+  assert.ok(out.xray.now.sides.ns.summary.includes('forcing'))
+  // Every call; then off again.
+  out = await s.run(null, { xray: 'all', stop: 3 })
+  assert.equal(out.xray.calls.length, 3)
+  assert.equal((await s.validate(null, { xray: 'sometimes' })).ok, false)
+  assert.equal((await s.validate(null, { xray: '1' })).ok, true)
+  // The fragment carries it, and reads back.
+  const { writeFragment, readFragment } = await import(pathToFileURL(path.join(dist, 'lib', 'fragment.js')).href)
+  const hash = writeFragment(s.getInput(), { ...s.params, xray: 1 }, { xray: 0 })
+  assert.match(hash, /(^#|&)xray=1(&|$)/)
+  assert.equal(readFragment(hash).params.xray, '1')
+  assert.doesNotMatch(writeFragment(s.getInput(), { ...s.params, xray: 0 }, { xray: 0 }), /xray/)
+  out = await s.run(null, { xray: 0 })
+  assert.equal(out.xray, null)
+})
+
+await test('the WASM bid and interpret give the position', async () => {
+  const J = (name, req) => JSON.parse(rbb[name](JSON.stringify(req)))
+  const r = J('bid', { cards: { ns: '21GF-DEFAULT' }, hand: 'T64.AT832.A2.T62', dealer: 'N', auction: '1NT Pass' })
+  assert.equal(r.ok, true, JSON.stringify(r.diagnostics))
+  assert.equal(r.position.knowledge.N.hcp.min, 15)
+  assert.ok(Array.isArray(r.warnings))
+  const i = J('interpret', { cards: { ns: '21GF-DEFAULT' }, dealer: 'N', auction: '1C Pass 1H' })
+  assert.equal(i.position.sides.ns.forcing, 'round')
+  assert.equal(i.position.sides.ns.forcing_by, 'S')
+})
+
 if (pbsDir) {
   await test('a PBS scenario from the corpus, with its cards and BBA\'s auction', async () => {
     const s = new Session(rbb, { fetchImpl })
@@ -199,6 +253,11 @@ if (pbsDir) {
     assert.equal(out.cards.ew, '21GF-GIB')
     assert.ok(out.bba.auction.length > 3)
     assert.deepEqual(s.getInput(), { scenario: 'Stayman', board: 2 })
+    // The x-ray reads BBA's auction too.
+    const x = await s.run(null, { xray: 1 })
+    assert.equal(x.xray.bba.length, out.bba.auction.length)
+    assert.equal(x.xray.bba[0].call, out.bba.auction[0].call)
+    assert.ok(x.xray.bba.every((r) => r.engineCall && 'reading' in r))
     const turned = await s.run(null, { rotate: 1 })
     assert.equal(turned.cards.ns, '21GF-GIB', 'odd rotation swaps the scenario cards')
   })

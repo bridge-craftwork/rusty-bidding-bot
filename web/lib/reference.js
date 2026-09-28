@@ -58,7 +58,10 @@ dealer3 script or a deal of your own), the two partnerships' convention
 cards, and let the engine bid: one call at a time or to the end. Undo takes
 back the last call; the bidding box makes a call of your own, and the
 engine carries on from it. Alerted and announced calls are marked; the
-meanings of all calls can be shown. When the auction ends every hand is
+meanings of all calls can be shown. The x-ray shows, under the auction,
+every rule the engine weighed for a call (its priority, descriptiveness and
+why it lost), what each seat had shown and each side's forcing state
+before it, and how the engine reads BBA's auction. When the auction ends every hand is
 shown with the double-dummy table, par and the contract's result. For a
 scenario, BBA's auction of the same deal is shown beside ours. Settings a
 card switches on that no rule reads (conventions and treatments the engine
@@ -77,9 +80,12 @@ Examples:
   #deal=N%3AAK52.KJ7.Q94.K83%20QJ3.Q95.KJ3.QJ74%20T64.AT832.A2.T62%20987.64.T8765.A95&dealer=N&vul=None&auction=1NT%20Pass&ns=21GF-DEFAULT&ew=Precision
   #scenario=Jacoby_2N&board=4&rotate=2&stop=3
   #scenarioScript=Stayman&seed=7
+  #scenario=Stayman&board=12&xray=1
 
 stop=N shows the position after N calls (the engine is deterministic, so
-the link reproduces them). set is written path=value;path=value. An
+the link reproduces them). xray=1 opens the x-ray under the auction (the
+rules the engine weighed for a call, what each seat had shown, the forcing
+state); xray=all shows it for every call. set is written path=value;path=value. An
 uploaded card cannot travel in a link.
 
 JAVASCRIPT API
@@ -133,6 +139,27 @@ output:
                 rules use them), ignored (no rule reads them: not played),
                 unmapped (.bbsa keys with no card field), other (carding,
                 leads), score = read / (read + ignored)
+  xray          null unless params.xray is 1 or "all"; then
+                {calls: [{index, seat, call, by, hand, engineCall,
+                engineWhy, offered, candidates, warnings, before,
+                reading}], now, bba}. For each call: candidates are every
+                rule the engine weighed for the caller's hand there,
+                best-ranked first: {call, explanation, priority,
+                descriptiveness, prefer, outcome, rule: {module, file,
+                line}}, outcome "chosen", "outranked", "partner's call is
+                forcing" or why the hand fails ("hand fails \`shows
+                hcp>=17\`"); engineCall is what the engine bids with that
+                hand there (for a call it did not make, too) and offered
+                whether any rule offers the call actually made; before is
+                the table before the call: {knowledge: {N, E, S, W: {hcp:
+                {min, max}, lengths: {S, H, D, C}, balanced, summary,
+                shown}}, sides: {ns, ew: {trump, forcing: "none" |
+                "round" | "game", forcing_by, ask, answered, summary}}};
+                reading is how the table reads the call: {explanation,
+                alert, rule, artificial, knowledge (the caller's, after
+                it)}. now is the table after the last call, in the shape
+                of before. bba (a scenario) is BBA's auction as the engine
+                reads it: [{seat, call, note, reading, engineCall}].
   diagnostics   [{severity, message, line?, col?, hint?}]
 
 DIAGNOSTICS

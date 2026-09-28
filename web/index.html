@@ -126,9 +126,11 @@
           <button id="bid-end" title="The engine bids to the end (key: e)">Bid to end</button>
           <button id="undo" title="Take back the last call (key: u)">Undo</button>
           <button id="restart" title="Back to the start of the auction">Restart</button>
+          <button id="xray-toggle" data-param="xray" aria-pressed="false" aria-controls="xray" title="X-ray: every rule the engine weighed for a call, what each seat had shown, the forcing state (key: x)">X-ray</button>
         </div>
       </div>
       <table class="auction" id="auction"><thead><tr><th>West</th><th>North</th><th>East</th><th>South</th></tr></thead><tbody></tbody></table>
+      <div id="xray" class="xray" hidden></div>
       <div id="call-detail" class="call-detail" hidden></div>
       <details class="bidbox-wrap" id="bidbox-wrap">
         <summary>Make a call yourself</summary>

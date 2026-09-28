@@ -56,7 +56,7 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 | CI drift check | `.github/workflows/ci.yml`, job *Web site*: `check-reference.mjs` fails if the conventions section differs from native `rbb bid reference` (the rules compiled into the WASM are the tree's), if the file is not what the shipped engine writes, if it misses an input field, parameter, API method, card or module, or if the page has a `data-param` control that is not a `PARAMS` field |
 | `window.rustyBiddingBot = {run, validate, getInput, setInput, getOutput}` | `app.js`, over `Session`; shapes in `reference.txt` |
 | structured diagnostics | `{severity, message, line?, col?, hint?}`, the WASM API's own, plus the page's (params, script); listed under the table and returned by `validate` and in every output |
-| fragment deep links | `#scenario=Stayman&board=12&stop=3&rotate=1&view=S...`; the page rewrites its fragment as you go (`replaceState`), `hashchange` reloads; never a query string |
+| fragment deep links | `#scenario=Stayman&board=12&stop=3&rotate=1&view=S&xray=1...`; the page rewrites its fragment as you go (`replaceState`), `hashchange` reloads; never a query string |
 | real 404s | `404.html` at the root: Pages answers unknown paths with it and status 404 (checked with `wrangler pages dev`) |
 | relative asset URLs | all of them; tested served under `/rusty-bidding-bot/` |
 | `_headers` | nosniff, no-referrer, revalidation for the unhashed assets; no COOP/COEP (nothing threaded) |
@@ -73,6 +73,24 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
   the rule and its file and line, and the candidates it weighed), *Bid to
   end*, *Undo*, *Restart*, and a bidding box for a call of your own, from
   which the engine carries on.
+- **X-ray** (button in the auction head, key `x`, parameter `xray`, deep
+  link `xray=1`): the workbench's view of a call, directly under the
+  auction. For the selected call (the last one when none is selected), or
+  for every call with *Every call* (`xray=all`): the caller's hand, every
+  rule the engine weighed for it best-ranked first (call, priority,
+  descriptiveness, outcome: chosen / outranked / why the hand fails,
+  meaning, rule file:line linked to the source), for a call the engine did
+  not make what it would have bid and whether any rule offers the call,
+  warnings, then what each seat had shown before the call (HCP and suit
+  ranges, balance, the constraints behind them) and each side's state
+  (trump, forcing none/round/game and who set it, asks). At the end of a
+  scenario it adds how the engine reads BBA's auction: each BBA call with
+  BBA's note, the engine's reading, rule and what it shows, and the call
+  the engine would make there. When *Show* hides a seat, that seat's hand
+  and candidates stay hidden until the auction ends. The same data is
+  `output.xray` (reference.txt, "output"): `{calls, now, bba}`, built on
+  the WASM `bid` / `interpret` responses' `position` and `warnings`
+  (docs/WASM.md).
 - **Rotate** the deal 0-3 seats (dealer and vulnerability turn; the
   scenario's cards follow their hands). **Show** all hands or one seat's.
 - **Alerts** (`!`) and announcements (`A`) marked; optionally every call's
