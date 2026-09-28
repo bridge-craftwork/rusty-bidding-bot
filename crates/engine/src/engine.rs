@@ -809,6 +809,142 @@ fn advance_state(st: &mut SideState, caller: Direction) {
     }
 }
 
+/// The state names `sets` may assign, with the form of their value
+/// (`args`), as `rbb bid terms` prints them. `check_sets` accepts exactly
+/// these and `apply_sets` applies them; `sets_match_apply_sets` keeps the
+/// two in step.
+pub const SET_KEYS: &[crate::eval::Term] = &[
+    crate::eval::Term {
+        name: "forcing",
+        args: "=round/game/none",
+        meaning: "`round`: partner may not pass if RHO passes; `game`: neither \
+                  partner may pass below game (a round force never weakens it); \
+                  `none` ends a force",
+    },
+    crate::eval::Term {
+        name: "trump",
+        args: "=x",
+        meaning: "the agreed strain: a suit, `N`/`NT`, a suit variable or `trump`",
+    },
+    crate::eval::Term {
+        name: "ladder",
+        args: "=control/stopper",
+        meaning: "a ladder call (control or stopper bids, recorded alike): the \
+                  suits it skipped, other than trump, become `denied(x)` for the \
+                  caller, the suit it names `cued(x)`",
+    },
+    crate::eval::Term {
+        name: "ask",
+        args: "=kind(x, ...)",
+        meaning: "a question to partner, read by `asked kind(...)` and \
+                  `answered kind(...)`; the kind is a free name, the arguments \
+                  (optional) each a suit, `N`/`NT`, a suit variable or `trump`",
+    },
+];
+
+/// The values `sets ladder=` accepts (the engine records them alike).
+const LADDER_KINDS: &[&str] = &["control", "stopper"];
+
+/// A bare word (`round`, `control`, `x`), if `e` is one.
+fn bare_word(e: &Expr) -> Option<&str> {
+    match e {
+        Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
+            Some(path[0].name.as_str())
+        }
+        _ => None,
+    }
+}
+
+/// A strain as `sets trump=` and an `ask` argument take it.
+fn strain_form(e: &Expr) -> bool {
+    bare_word(e).is_some_and(|n| {
+        crate::knowledge::suit_index(n).is_some()
+            || matches!(n, "N" | "NT" | "trump")
+            || crate::eval::is_variable(n)
+    })
+}
+
+/// What is wrong with one `sets` assignment, if anything.
+fn check_assign(a: &bidspec::ast::Assign) -> Option<String> {
+    let v = &a.value;
+    match a.name.as_str() {
+        "forcing" => match bare_word(v) {
+            Some("round" | "game" | "none") => None,
+            _ => Some(format!("sets forcing: `{v}` is not round, game or none")),
+        },
+        "trump" if strain_form(v) => None,
+        "trump" => Some(format!(
+            "sets trump: `{v}` is not a strain (a suit, N, a suit variable or trump)"
+        )),
+        "ladder" => match bare_word(v) {
+            Some(w) if LADDER_KINDS.contains(&w) => None,
+            _ => Some(format!(
+                "sets ladder: `{v}` is not {}",
+                LADDER_KINDS.join(" or ")
+            )),
+        },
+        "ask" => match v {
+            Expr::Path { path } if path.len() == 1 => {
+                let bad: Vec<String> = path[0]
+                    .args
+                    .iter()
+                    .flatten()
+                    .filter(|x| !strain_form(x))
+                    .map(|x| format!("`{x}`"))
+                    .collect();
+                (!bad.is_empty()).then(|| {
+                    format!(
+                        "sets ask: {} is not a strain (a suit, N, a suit variable or trump)",
+                        bad.join(", ")
+                    )
+                })
+            }
+            _ => Some(format!(
+                "sets ask: `{v}` is not a question (`kind` or `kind(x)`)"
+            )),
+        },
+        n => Some(format!(
+            "sets: unknown state `{n}` (known: {})",
+            SET_KEYS
+                .iter()
+                .map(|k| k.name)
+                .collect::<Vec<_>>()
+                .join(", ")
+        )),
+    }
+}
+
+/// Every `sets` in every rule names a state `apply_sets` knows, with a
+/// value of the right form. Errors name the file and the rule's line:
+/// otherwise a misspelt state is only a warning in the trace when the
+/// rule is used, and the state is silently not set.
+pub fn check_sets(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
+    fn walk(m: &bidspec::Module, c: &bidspec::ast::Context, out: &mut Vec<bidspec::Diagnostic>) {
+        for r in &c.rules {
+            for a in &r.sets {
+                if let Some(message) = check_assign(a) {
+                    out.push(bidspec::Diagnostic {
+                        file: m.file.clone(),
+                        line: r.line,
+                        col: 0,
+                        message,
+                    });
+                }
+            }
+        }
+        for inner in &c.contexts {
+            walk(m, inner, out);
+        }
+    }
+    let mut out = Vec::new();
+    for m in modules {
+        for c in &m.contexts {
+            walk(m, c, &mut out);
+        }
+    }
+    out
+}
+
 fn apply_sets(
     st: &mut SideState,
     sets: &[bidspec::ast::Assign],
@@ -1017,5 +1153,130 @@ fn expand(
                 _ => vec![],
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod sets_tests {
+    use super::*;
+    use bridge_types::Strain;
+
+    fn compile(src: &str) -> bidspec::Module {
+        bidspec::compile(src, "t.bid", &bridge_card::Registry::parse("").unwrap()).unwrap()
+    }
+
+    fn rule_sets(sets: &str) -> Vec<bidspec::ast::Assign> {
+        let m = compile(&format!(
+            "module t \"t\"\nafter 1S (P)\n  2S  \"x\"  sets {sets}\n"
+        ));
+        m.contexts[0].rules[0].sets.clone()
+    }
+
+    /// `apply_sets` on one assignment, spades agreed and `x` and `M`
+    /// bound: its warnings.
+    fn apply(a: &bidspec::ast::Assign) -> Vec<String> {
+        let mut pos = Position::new(
+            Direction::South,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
+        for s in &mut pos.sides {
+            s.trump = Some(Strain::Spades);
+        }
+        let params = HashMap::new();
+        let ctx = Ctx {
+            pos: &pos,
+            actor: Direction::South,
+            hand: None,
+            params: &params,
+            valuation: Valuation::default(),
+            private: None,
+        };
+        let mut st = SideState {
+            trump: Some(Strain::Spades),
+            ..Default::default()
+        };
+        let mut b = Bindings::new();
+        b.insert("x".into(), Val::Suit(2));
+        b.insert("M".into(), Val::Suit(3));
+        let call = Call::Bid {
+            level: 2,
+            strain: Strain::Spades,
+        };
+        let mut warnings = Vec::new();
+        apply_sets(
+            &mut st,
+            std::slice::from_ref(a),
+            &ctx,
+            &mut b,
+            Direction::South,
+            (&pos, &call),
+            &mut warnings,
+        );
+        warnings
+    }
+
+    /// Every value the check accepts, `apply_sets` applies without a
+    /// warning, and the keys are those of `SET_KEYS`; every value it
+    /// refuses, `apply_sets` warns about (`ladder` ignores its value).
+    #[test]
+    fn sets_match_apply_sets() {
+        let good = [
+            "forcing=round",
+            "forcing=game",
+            "forcing=none",
+            "trump=H",
+            "trump=N",
+            "trump=NT",
+            "trump=x",
+            "trump=M",
+            "trump=trump",
+            "ladder=control",
+            "ladder=stopper",
+            "ask=signoff",
+            "ask=invite(x)",
+            "ask=keycards(trump)",
+            "ask=control(S), forcing=game",
+        ];
+        let mut keys = std::collections::BTreeSet::new();
+        for s in good {
+            for a in rule_sets(s) {
+                assert_eq!(check_assign(&a), None, "{s}");
+                assert!(apply(&a).is_empty(), "{s}: {:?}", apply(&a));
+                keys.insert(a.name.clone());
+            }
+        }
+        let known: std::collections::BTreeSet<String> =
+            SET_KEYS.iter().map(|k| k.name.to_string()).collect();
+        assert_eq!(keys, known);
+        for s in [
+            "forcing=gam",
+            "trump=Q",
+            "trump=hcp",
+            "trump=partner.S",
+            "ask=invite(Q)",
+            "ask=keycards(hcp)",
+            "ask=partner.invite",
+            "force=game",
+        ] {
+            let a = &rule_sets(s)[0];
+            assert!(check_assign(a).is_some(), "{s} passed the check");
+            assert!(!apply(a).is_empty(), "{s}: apply_sets did not warn");
+        }
+        // Refused although `apply_sets` would read them.
+        for s in ["ladder=cue", "forcing=round(S)"] {
+            assert!(check_assign(&rule_sets(s)[0]).is_some(), "{s}");
+        }
+    }
+
+    #[test]
+    fn check_sets_names_file_and_line() {
+        let m = compile(
+            "module t \"t\"\nafter 1S (P)\n  2S  \"x\"  sets forcing=round\n  \
+             3S  \"y\"  sets trump=Q\n",
+        );
+        let d = check_sets(&[m]);
+        assert_eq!(d.len(), 1, "{d:?}");
+        assert_eq!((d[0].file.as_str(), d[0].line), ("t.bid", 4));
     }
 }

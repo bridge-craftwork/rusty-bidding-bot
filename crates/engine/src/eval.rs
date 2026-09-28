@@ -1672,13 +1672,21 @@ pub fn terms_reference() -> String {
         "",
         PATTERN_NAMES,
     );
+    table(
+        "State set by `sets`",
+        "Not conditions: what a rule's `sets` clause may assign \
+         (`sets forcing=game, trump=x`). Another name, or a value of another \
+         form, refuses the load.",
+        "sets ",
+        crate::engine::SET_KEYS,
+    );
     out.truncate(out.trim_end().len());
     out.push('\n');
     out
 }
 
 /// A suit variable (`x`, `M`, `t`, ...), bound by a pattern or a question.
-fn is_variable(n: &str) -> bool {
+pub(crate) fn is_variable(n: &str) -> bool {
     n == "M" || (n.len() == 1 && n.chars().all(|c| c.is_ascii_lowercase()))
 }
 
@@ -1843,7 +1851,8 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
 }
 
 /// Every name in every condition (`when`, `shows`, `denies`, `prefer`)
-/// is one the engine knows. Errors name the file and line.
+/// is one the engine knows, and so is every `sets` state and value
+/// (`check_sets`). Errors name the file and line.
 pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
     fn walk(
         m: &bidspec::Module,
@@ -1900,6 +1909,7 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
             walk(m, c, &params, &mut out);
         }
     }
+    out.extend(crate::engine::check_sets(modules));
     out
 }
 

@@ -96,6 +96,10 @@ rule set, with `file:line` diagnostics, when:
 - a condition names a term, attribute or function the engine does not
   know (`check_terms`): an unknown name would otherwise make its
   condition false every time and silently switch the rule off;
+- a `sets` names a state the engine does not keep, or gives it a value
+  of the wrong form (`forcing=gam`, `trump=Q`, `ladder=cue`,
+  `ask=invite(hcp)`): the forms are in the [reference](#state-set-by-sets);
+  otherwise the state would silently not be set;
 - a context's `when` depends on the chooser's hand (`hcp`, a suit length,
   `stop(x)`, `shape`, `we.hcp`...): contexts are tried before the hand is
   known, so such a context never holds;
@@ -134,8 +138,9 @@ that cannot be judged for another hand. `denies` adds one by hand.
 ### State: `sets` and questions
 
 `sets` changes the calling side's state when the call is made (chosen or
-read): `forcing=round|game`, `trump=<strain>`, `ladder=control` (records
-the suits a control bid skipped and named), and `ask=<kind>(<args>)`. An
+read): `forcing=round|game|none`, `trump=<strain>`, `ladder=control|stopper`
+(records the suits a ladder call skipped and named), and
+`ask=<kind>(<args>)`. An
 `ask` is a question to partner: at partner's next turn `asked <kind>(...)`
 holds for partner, and binds its arguments; once partner has called,
 `answered <kind>(...)` holds for the asker, whatever partner bid, until
@@ -143,9 +148,10 @@ the asker calls again. The kind is a free name (`keycards`, `transfer`,
 `majors`), agreed only between the rules that set and read it. A round
 force never weakens a game force.
 
-Not checked at load time yet: a `sets` name other than these four, or a
-value of the wrong kind (`forcing=gam`), is only reported as a warning in
-the trace when the rule is used.
+These four are the only states, and each value must have the form listed
+in the [reference](#state-set-by-sets) (`SET_KEYS` beside `apply_sets` in
+`crates/engine/src/engine.rs`); anything else refuses the load
+(`check_sets`, run with `check_terms`).
 
 ### Determinism
 
@@ -431,5 +437,16 @@ Checked by shape rather than listed.
 | `<param>` | a module `param`, the card value it names |
 | `partner.bba_*` | any `bba_` count of another seat: unknown (0..40) |
 | `.min / .max` | the ends of a range: `partner.hcp.min` |
+
+### State set by `sets`
+
+Not conditions: what a rule's `sets` clause may assign (`sets forcing=game, trump=x`). Another name, or a value of another form, refuses the load.
+
+| Term | Meaning |
+|---|---|
+| `sets forcing=round/game/none` | `round`: partner may not pass if RHO passes; `game`: neither partner may pass below game (a round force never weakens it); `none` ends a force |
+| `sets trump=x` | the agreed strain: a suit, `N`/`NT`, a suit variable or `trump` |
+| `sets ladder=control/stopper` | a ladder call (control or stopper bids, recorded alike): the suits it skipped, other than trump, become `denied(x)` for the caller, the suit it names `cued(x)` |
+| `sets ask=kind(x, ...)` | a question to partner, read by `asked kind(...)` and `answered kind(...)`; the kind is a free name, the arguments (optional) each a suit, `N`/`NT`, a suit variable or `trump` |
 
 <!-- END GENERATED: rbb bid terms -->

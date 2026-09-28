@@ -19,7 +19,8 @@ mod system;
 use std::path::Path;
 
 pub use engine::{
-    CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation, Step,
+    check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation,
+    Step, SET_KEYS,
 };
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
