@@ -1,0 +1,29 @@
+# Smolen (21GF-DEFAULT: SMOLEN = 1).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                   | expect | why
+# Responder: Stayman first with 5-4, then three of the four-card major.
+N KQJ85.AJ84.72.83      | 1NT P                     | 2C     | five spades, four hearts, game values: Stayman first
+N KQJ85.AJ84.72.83      | 1NT P 2C P 2D P           | 3H     | four hearts, five spades: Smolen
+N AJ84.KQJ85.72.83      | 1NT P 2C P 2D P           | 3S     | four spades, five hearts: Smolen
+N KQJ85.AJ84.72.83      | 1NT P 2C P 2H P           | 4H     | the heart fit found: no Smolen
+N KQ985.J984.Q2.83      | 1NT P 2C P 2D P           | 2S     | 8 HCP, 9 total points: five spades, four hearts, invitational
+
+# Opener: game in the 5-3 fit, 3NT with two, 3S with three and a maximum.
+S A72.K62.AQ84.K93      | 1NT P 2C P 2D P 3H P      | 4S     | three spades, 16: game in the fit
+S A72.K62.AQ84.KJ3      | 1NT P 2C P 2D P 3H P      | 3S     | three spades and 17: slam interest
+S A7.K62.AQ84.K932      | 1NT P 2C P 2D P 3H P      | 3NT    | two spades: no fit
+S A72.K62.AQ84.K93      | 1NT P 2C P 2D P 3S P      | 4H     | three hearts: game in the fit
+S A72.K6.AQ84.K932      | 1NT P 2C P 2D P 3S P      | 3NT    | two hearts: no fit
+
+# Responder after opener's answer.
+N KQJ85.AJ84.72.83      | 1NT P 2C P 2D P 3H P 3NT P | P     | no fit: 3NT
+N KQJ85.AJ84.72.83      | 1NT P 2C P 2D P 3H P 4S P  | P     | game in the fit, no slam
+
+# Opener over the invitational 2S.
+S A72.K62.AQ84.K93      | 1NT P 2C P 2D P 2S P      | 4S     | 16 and three spades: accept
+S A72.K62.AQ84.Q93      | 1NT P 2C P 2D P 2S P      | P      | 15, a minimum: pass
+
+# Over 2NT: 2NT-3C-3D, then the same jumps.
+N KJ985.Q984.72.83      | 2NT P 3C P 3D P           | 3H     | four hearts, five spades, game values opposite 20-21

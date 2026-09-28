@@ -1,0 +1,74 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Smolen. With five cards in one major, four in the other and game values,
+# responder bids Stayman (stayman.bid gives 5-4 hands priority for it);
+# when opener denies a major, responder bids three of the FOUR-card major,
+# showing five of the other. Opener, who has two or three of that suit,
+# bids 3NT or game in the 5-3 fit, so the notrump opener declares either
+# way. With three spades and a maximum, after 3♥ opener has room to agree
+# spades below game (3♠): a slam try. Once a suit is agreed the keycard
+# and control-bid modules take over; nothing here names them.
+#
+# Written against the Stayman question, not the auction: `answered
+# majors` with opener's answer denying both majors covers 1NT–2♣–2♦,
+# 2NT–3♣–3♦ (Smolen_after_2N) and the same with systems on after
+# interference, as BBA plays it. Notes: smolen.notes.md.
+
+module smolen "Smolen: 5-4 in the majors after Stayman's denial"
+  card   notrump.smolen.play
+  needs  stayman
+  param  style = general.style
+
+when answered majors, partner.H<=3, partner.S<=3
+  3H  "Smolen: four hearts, five spades, game forcing"  alert
+      shows H=4, S=5, strength>=game
+      when  style is not bba
+      sets  forcing=game, ask=smolen(S)
+      artificial
+      priority 1                          # ahead of 3NT, which now denies 5-4
+  3S  "Smolen: four spades, five hearts, game forcing"  alert
+      shows S=4, H=5, strength>=game
+      when  style is not bba
+      sets  forcing=game, ask=smolen(H)
+      artificial
+      priority 1
+  # BBA (probes/smolen-resp-1N.toml): from 10 HCP opposite 15-17, in
+  # HCP; with 8-9 it bids two of the five-card major.
+  3H  "Smolen: four hearts, five spades, game forcing"  alert
+      shows H=4, S=5, hcp>=25-partner.hcp.min
+      when  style is bba
+      sets  forcing=game, ask=smolen(S)
+      artificial
+      priority 1
+  3S  "Smolen: four spades, five hearts, game forcing"  alert
+      shows S=4, H=5, hcp>=25-partner.hcp.min
+      when  style is bba
+      sets  forcing=game, ask=smolen(H)
+      artificial
+      priority 1
+
+# Opener: two or three cards in responder's five-card major (the 2♦ or
+# 3♦ answer denied four). BBA (probes/smolen-opener-3H.toml, 3S): game
+# with three, 3NT with two, whatever the strength; after 3♥, 3♠ with
+# three spades and a maximum (17 opposite 15-17, every time).
+when asked smolen(M)
+  3S    "Three spades and a maximum: slam interest"
+        shows S>=3, hcp>=shown.hcp.max
+        when  M is S
+        sets  trump=S
+        priority 1                        # ahead of 4S
+  4{M}  "Three {M}: game in the five-three fit"
+        shows M>=3
+        sets  trump=M
+  3N    "Two {M}: no fit, play 3NT"
+        shows M<=2
+
+# Responder after 3NT: no fit. The slam counts after Stayman apply
+# (stayman.bid): 6NT with 32 between us, else pass.
+when answered smolen(M), partner.last=3N
+  6N  "No fit, but slam values"           shows points>=32-partner.hcp.min
+  P   "No fit: 3NT"
+      priority -5
+# After a fit (4M, or opener's 3♠) the agreed suit is enough: keycard
+# (rkcb-1430.bid, blackwood.bid) and control bids (control-bids.bid) read
+# `we.trump` and the game force; otherwise game (base.bid).

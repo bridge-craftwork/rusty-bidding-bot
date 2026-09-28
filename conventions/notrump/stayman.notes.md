@@ -7,7 +7,12 @@ Cases: `stayman.test`.
 
 - Stayman promises a four-card major and invitational values or better.
   With 5-4 in the majors, Stayman comes first (priority 1), ahead of the
-  transfer, as the start of Smolen.
+  transfer, as the start of Smolen (`smolen.bid`, `smolen.notes.md`).
+- **Five spades and four hearts, invitational** (2026-09-28): 2♠ over the
+  2♦ denial, and opener bids game with 16-17 (4♠ with three spades, 3NT
+  with two) or passes (`when asked spades_invite`). BBA bids 2♠ with 8-9
+  HCP (`probes/smolen-resp-1N.toml`); it used to bid 2NT here. +167 IMPs
+  against BBA on 117 boards (smolen.notes.md, "Corpus").
 - **4-3-3-3 hands bid notrump and skip Stayman** (Rick, 2026-09-21), though
   BBA uses Stayman with them.
 - Responder's second call: raise with a fit (3M invites, 4M is game, 6M is
@@ -38,8 +43,8 @@ Choice of games after `1NT P 2C P 2M P 3NT P`: 210 of 211 corpus boards agree.
 - **5-4 with a minor after 2D**: BBA bids 3C or 3D (for example
   `A82.QJ98.7.KJ973` bids 3C, then 4C). The bba style now does too
   ("BBA's 3C/3D after Stayman"); the default bids 3NT, which par prefers.
-- **Smolen** (5-4 majors, game force after 2D), **Garbage Stayman** (weak
-  hands that pass the answer), and Stayman with interference.
+- **Garbage Stayman** (weak hands that pass the answer), and Stayman with
+  interference. (Smolen is built: `smolen.bid`.)
 - **Slam after a fit**: with 18+ and a fit we jump to 6M. Keycard first
   would be better.
 

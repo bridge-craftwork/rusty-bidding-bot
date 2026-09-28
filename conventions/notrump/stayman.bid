@@ -51,6 +51,17 @@ after 1N (P) 2C (P) | (1x) 1N (P) 2C (P) | (1x) P (P) 1N (P) 2C (P) | (1x) 1N (X
 # total-point ones, which stay the ones partner reads the negative
 # inferences from (3NT here denies the fit only through them).
 when answered majors
+  # Five spades and four hearts, invitational: 2♠ over the 2♦ denial
+  # (Smolen_Invitational; BBA bids it with 8-9 HCP,
+  # probes/smolen-resp-1N.toml). With five hearts and four spades an
+  # invitation transfers instead (jacoby-transfers.bid). Game-forcing
+  # 5-4 hands use Smolen (smolen.bid).
+  2S  "Five spades, four hearts, invitational"   shows S=5, H=4, strength=invite
+      when  partner.last=2D, style is not bba
+      sets  ask=spades_invite
+  2S  "Five spades, four hearts, invitational"   shows S=5, H=4, hcp>=23-partner.hcp.min, hcp<=24-partner.hcp.min
+      when  partner.last=2D, style is bba
+      sets  ask=spades_invite
   6H  "Slam in the heart fit"                     shows H>=4, strength=slam   when partner.H>=4
   6S  "Slam in the spade fit"                     shows S>=4, strength=slam   when partner.S>=4
   4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4, style is not bba
@@ -378,6 +389,13 @@ when answered majors
 when asked fit_invite(M)
   4M  "Accepts: a maximum"             shows points>=shown.hcp.max | (M>=5, points>=shown.hcp.max-1)
   P   "Declines: not a maximum"        shows points<=shown.hcp.max-1, M<=4 | points<=shown.hcp.max-2
+
+# Opener over the invitational 2♠ (five spades, four hearts): game with
+# the top of the range, in spades with three, else 3NT; a minimum passes.
+when asked spades_invite
+  4S  "Accepts, three spades"          shows S>=3, hcp>=shown.hcp.max-1
+  3N  "Accepts, two spades"            shows S<=2, hcp>=shown.hcp.max-1
+  P   "Declines: a minimum"            shows hcp<=shown.hcp.max-2
 
 # BBA: after 2NT opener shows his four spades with 3S when he declines;
 # responder, who has them too, bids game with 9 (probed 2026-09-24).
