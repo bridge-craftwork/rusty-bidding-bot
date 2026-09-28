@@ -185,3 +185,27 @@ Kept where both measures agree: the three doubles are rejected, and the
 17-HCP cap stays. The rest are for you, above all the quality test on
 one-level overcalls: +7,429 by the second measure, -4,924 by the first.
 A fair test probably needs penalty doubles on the defending side first.
+
+## Two-level overcalls: the suit test at 15 HCP? (2026-09-27, for Rick)
+
+Ticket basic-weak-2-b51: P 1S, KJ87.QJT76.K7.AJ (15 HCP) passes because
+QJT76 fails the two-level suit test (six cards, two of the top three,
+or four of the top five). BBA bids 2H; Rick: 2H is more descriptive
+than pass. `probes/oc-2H-over-1S.toml` (400 hands with five hearts,
+10-17 HCP, at None and EW): with a good suit BBA overcalls from 12;
+with a weak one it splits at 12-14 (13 of 32 at 12) and always bids
+from 15. Vulnerability makes no difference.
+
+Waiving the suit test from N HCP, all three two-level overcalls:
+
+| waived from | boards | par | side IMPs |
+|---|---|---|---|
+| 14 | 486 | −203 | −144 |
+| **15** | 133 | **−37** | **+31** |
+| 16 | 35 | −37 | +4 |
+
+At 15 the yardsticks disagree, both near zero. Not adopted: they do
+not agree, and par decides. **For Rick:** adopt at 15 on your judgment
+and BBA's evidence, or keep the suit test. The ticket's alternative,
+1NT with 5-4-2-2, runs against the 1NT overcall's evidence (no BBA 1NT
+overcall held a five-card major), so it was not tried.
