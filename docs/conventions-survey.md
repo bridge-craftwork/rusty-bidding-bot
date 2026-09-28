@@ -195,7 +195,7 @@ States:
 | Jacoby transfers | implied | rules | jacoby-transfers | | `jacoby_transfers` (jacoby_transfers) |
 | Texas | 17 | rules | texas-transfers | 1,763 / 774 / -1,549 | `texas_transfers` |
 | Super-accept; doubleton super-accept | 17; 10 | rules | super-accept, superaccept-doubleton | 469 / 167 / -183; 963 / 239 / -475 | none |
-| Smolen | 17 | field only (Stayman accepts 5-4 hands, but there is no Smolen jump) | | 1,592 / 1,409 / -1,486 | `smolen` (stayman) |
+| Smolen | 17 | rules (2026-09-28) | smolen | 1,592 / 1,409 / -1,486 | `smolen` (stayman) |
 | Garbage Stayman | 0 | field only | | | `garbage_stayman` |
 | Minor-suit responses: 2♠→♣, 3♣→♦ | 15 | rules (the `bba` combination is derived) | minor-transfers | 380 / 101 / -198; 749 / 500 / -532 | none |
 | Minor Suit Stayman; 1NT–2NT→♣ | 2; 1 | partly (the other combinations fall to `none`) | minor-transfers | 1,065 / 1,046 / -1,118; 413 / 238 / -786 | none |
@@ -264,7 +264,7 @@ States:
 | Plain Blackwood | 1 (Basic-Bridge) | rules | blackwood | 782 / 183 / -665 | `standard_blackwood` (blackwood) |
 | Control (cue) bids | 17 | rules | control-bids | 8,103 / 1,114 / -986 | `control_bids` (text) |
 | Quantitative 4NT | 18 | partly (rules in over-3nt and one-nt, not gated by the field) | over-3nt, notrump-base | 2,130 / 569 / -938 | none |
-| Gerber | 17 (+3 only over NT) | field only | | 1,403 / 892 / -900 | `gerber` (blackwood) |
+| Gerber | 17 (+3 only over NT) | rules (2026-09-28; the only-over-openings switch too) | gerber | 1,403 / 892 / -900 | `gerber` (blackwood) |
 | King ask by 5NT / next step | 18 / 0 | field only (a TODO in rkcb-1430) | | 1,387 / 17 / -126 | `queen_ask` is the nearest |
 | Exclusion | 7 | field only | | 1,163 / 182 / -707 | `exclusion_blackwood` |
 | 5NT pick-a-slam | 7 | field only | | 444 / 178 / -455 | `pick_a_slam_5nt` |
@@ -362,9 +362,9 @@ Being implemented now, in other pieces of work; the figures are the survey's, fr
 | # | Convention | We differ / IMPs | Scenarios built on it | State | Effort | Why this rank |
 |---:|---|---|---|---|---|---|
 | 1 | **Michaels cuebid + Unusual 2NT** (making them, and reading them for EW, whose 21GF-GIB card plays both) | 5,434 / -4,224 | Michaels_Cuebid, Unusual_2N, Michaels_and_Unusual, Michaels_after_1m, Opps_Michaels_Cuebid, Opps_Michaels_and_Unusual, Two-Suited_Overcalls, Opps_2-Suited_Overcalls, Leaping_Michaels, Non_Leaping_* (11), all at 58-63% call agreement | field only | M-L | Most divergence boards of any missing convention; Baker skill michaels_unusual. Now first, with Soloway pushed down |
-| 2 | **Smolen** | 1,409 / -1,486 | Smolen, Smolen_Invitational, Smolen_after_2N, We_Overcall_NT_then_Smolen (28 carry the note) | field only | S | Cheap; fits on stayman.bid |
+| 2 | **Smolen** (built 2026-09-28: smolen.bid) | 1,409 / -1,486 | Smolen, Smolen_Invitational, Smolen_after_2N, We_Overcall_NT_then_Smolen (28 carry the note) | field only | S | Cheap; fits on stayman.bid |
 | 3 | **Jordan 2NT** | 649 / -1,476 | Jordan_2N, Xfer_after_1M_X (43 carry the note) | field only | S | Cheap; after-interference already handles 1M (X) |
-| 4 | **Gerber** (over 1NT/2NT; by opener later) | 892 / -900 | Gerber, Gerber_By_Responder, Gerber_By_Opener, Slam_after_NT… (56 carry the note) | field only | S | Cheap; the rkcb answer machinery exists |
+| 4 | **Gerber** (over 1NT/2NT; by opener later; built 2026-09-28 over openings and rebids: gerber.bid) | 892 / -900 | Gerber, Gerber_By_Responder, Gerber_By_Opener, Slam_after_NT… (56 carry the note) | field only | S | Cheap; the rkcb answer machinery exists |
 | 5 | Gambling 3NT | 1,003 / -794 | Gambling_3N, Opps_Gambling_3N (both at about 57%) | partly | S | Cheap |
 | 6 | **Precision strong club**, stage 1: 1♣ 16+, the responses, 1♦, 2♣ | 5,698 / -7,106 at "16+ HCP", plus the opening divergences (1♣ vs 1♦/1♥/1♠: 4,830 boards, about -6,300) | Strong Club (18) + Strong Club 16+ (12) + Mathe: 15,500 boards | field only (preset) | XL | Rick: in scope, "not next but not too far". The largest family we cannot bid at all (38-55% agreement), and the likeliest to need engine changes. Split it into stages |
 | 7 | **Splinters** (responder's and opener's) | 1,822 / -1,738 | Splinters, Splinters_By_Opener, Splinters_after_Minor, Gavin_*_Splinter (183 carry the note) | field only | M | Spread over many scenarios; Baker skill jacoby_2nt_splinters |
@@ -515,7 +515,7 @@ The appendices below are its output, lightly trimmed.
 | Minor Suit Stayman after 2NT | 2 | 3 / 0 | field only | `notrump.two_nt.minor_stayman` |  |
 | Minor Suit Transfers after 2NT | 15 | 323 / 326 | field only | `notrump.two_nt.minor_transfers` |  |
 | Rubensohl after 1NT | 2 | 30 / 2 | field only | `notrump.rubensohl.over_interference` |  |
-| SMOLEN | 17 | 326 / 326 | field only | `notrump.smolen.play` |  |
+| SMOLEN | 17 | 326 / 326 | rules | `notrump.smolen.play` |  |
 | Super acceptance after NT | 17 | 326 / 326 | rules | `notrump.transfers.super_accept` | super-accept |
 | Texas | 17 | 326 / 326 | rules | `notrump.transfers.texas` | jacoby-transfers, texas-transfers |
 | Transfers if RHO doubles | 3 | 60 / 340 | rules | `notrump.transfers.vs_double` | jacoby-transfers, nt-interference, stayman |
@@ -600,8 +600,8 @@ The appendices below are its output, lightly trimmed.
 | DEPO | 0 | 0 / 0 | field only | `slam.depo` |  |
 | DOPI | 17 | 326 / 326 | field only | `slam.dopi` |  |
 | Exclusion | 7 | 83 / 319 | field only | `slam.exclusion_blackwood.play` |  |
-| Gerber | 17 | 326 / 326 | field only | `slam.gerber.play` |  |
-| Gerber only for NT openings | 3 | 10 / 1 | field only | `slam.gerber.only_over_nt_openings` |  |
+| Gerber | 17 | 326 / 326 | rules | `slam.gerber.play` |  |
+| Gerber only for NT openings | 3 | 10 / 1 | rules | `slam.gerber.only_over_nt_openings` |  |
 | Kickback 0314 | 0 | 0 / 0 | field only | `slam.kickback.rkcb_0314` |  |
 | Kickback 1430 | 0 | 0 / 0 | field only | `slam.kickback.rkcb_1430` |  |
 | King ask by 5NT | 18 | 350 / 350 | field only | `slam.king_ask.five_nt` |  |

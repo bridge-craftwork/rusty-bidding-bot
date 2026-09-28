@@ -1,0 +1,43 @@
+# Gerber (21GF-DEFAULT: Gerber = 1, over NT rebids too).
+card    21GF-DEFAULT
+dealer  N
+
+# seat hand             | auction                         | expect | why
+# The ask: the hands that would bid 6NT check the aces first.
+S AQ3.K52.KQ84.AJ3      | 1NT P                           | 4C     | 19 balanced, no major: 34+ between us, ask for aces
+S AQ3.K52.KQ84.Q43      | 1NT P                           | 4NT    | 16: quantitative, not Gerber (Rick: 16 invites)
+S K83.Q52.KJ84.A93      | 2NT P                           | 4C     | 13 opposite 20-21: slam values, ask
+S K83.Q52.KJ84.J93      | 2NT P                           | 3NT    | 10: game only
+S 83.Q5.K4.AQJ9632      | 2NT P                           | 4C     | 12 with seven clubs: Gerber replaces the 4C slam try
+
+# The answers, by steps.
+N KQ2.KJ4.KQ5.QJ63      | 1NT P 4C P                      | 4D     | no aces
+N K82.QJ4.AQ5.KQ63      | 1NT P 4C P                      | 4H     | one ace
+N AK2.QJ4.A95.QJ63      | 1NT P 4C P                      | 4S     | two aces
+
+# The asker places the contract.
+S AQ3.K52.KQ84.AJ3      | 1NT P 4C P 4H P                 | 6NT    | two aces and one: one missing, slam
+S AQ3.K52.KQ84.AJ3      | 1NT P 4C P 4D P                 | 4NT    | two aces and "0 or 4", which must be 0: two missing, sign off
+S KQ3.KQ2.KQ84.KJ3      | 1NT P 4C P 4D P                 | 6NT    | no aces of mine: "0 or 4" is 4
+S AK3.KQ2.KQ84.AJ3      | 1NT P 4C P 4S P                 | 7NT    | 22: all the aces and 37 between us (35 is enough)
+S AQ3.K52.KQ84.AJ3      | 1NT P 4C P 4S P                 | 5C     | all the aces, 33-34 between us: ask for kings
+S 83.Q5.K4.AQJ9632      | 2NT P 4C P 4S P                 | 6NT    | three aces between us: at matchpoints 6NT, not 6C
+
+# Kings: controls less two for each ace.
+N AK2.QJ4.A95.QJ63      | 1NT P 4C P 4S P 5C P            | 5H     | one king
+S AQ3.K52.KQ84.AJ3      | 1NT P 4C P 4S P 5C P 5H P       | 6NT    | two kings and one: a king missing
+S A53.K52.KJ84.AK3      | 1NT P 4C P 4S P 5C P 5H P       | 7NT    | 18: three kings and one, all of them
+S AQ3.K52.KQ84.AK3      | 1NT P 4C P 4S P                 | 7NT    | 21 and all the aces: 36 between us, no need to ask for kings
+
+# Over a 1NT or 2NT rebid, not only over the opening (the card's "Gerber
+# only for NT openings" is off).
+dealer  S
+N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4C     | 15 balanced opposite 18-19: slam values
+
+# "Gerber only for NT openings" (21GF-MSS): no Gerber over the rebid.
+card    21GF-MSS
+N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 3NT    | 4C is not Gerber here (the 3NT is responder-rebids.bid's)
+
+# No Gerber on the card (Basic-Bridge): 6NT directly, as before.
+card    Basic-Bridge
+N A3.K98.KJT7.AQ87      | 1NT P                           | 6NT    | 17 opposite 15-17: slam, no ace check

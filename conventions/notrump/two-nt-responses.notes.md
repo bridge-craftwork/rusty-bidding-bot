@@ -146,6 +146,16 @@ six cards or five unbalanced and slam-invite values; opener bids six
 with three-card support, else 4NT; responder then 6NT with slam values.
 Full corpus +1,730 by par distance, +3,123 by side (448 boards).
 
+**With Gerber on the card (2026-09-28)** the 4♣ club try is off: 4♣
+asks for aces (`slam/gerber.bid`), and the club hands (six clubs, or
+five unbalanced, slam-invite values) ask and then bid 6NT with three
+aces between the hands (6♣ at IMPs), or sign off in 4NT. The 4♦ diamond
+try and its follow-ups stay. This is what BBA does on the 21GF cards
+(2NT–4♣ Gerber, then 6♣/6♦ or 6NT: `probes/gerber-resp-2N.toml`).
+Measured with the rest of Gerber: `gerber.notes.md`. Texas over 2NT
+(4♦/4♥, `two_nt.transfers_4level`, on Rick's card) is still not built;
+when it is, the 4♦ diamond try will have to give way to it the same way.
+
 ## Puppet Stayman over 2NT (2026-09-28)
 
 Rick: "we want Puppet over 2NT working."

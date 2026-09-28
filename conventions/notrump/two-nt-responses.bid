@@ -19,6 +19,7 @@ module two-nt-responses "Responses to a 2NT opening"
   param  stayman = notrump.stayman.play default true
   param  jacoby  = notrump.transfers.jacoby default true
   param  puppet  = notrump.two_nt.puppet default false
+  param  gerber  = slam.gerber.play default false
   param  style   = general.style
 
 after 2N (P)
@@ -87,15 +88,18 @@ after 2N (P)
 # five in an unbalanced hand, and slam-invite values. Opener bids six
 # with three-card support (20-21 and a fit is enough), else 4NT, no fit;
 # responder then bids 6NT with slam values.
+# With Gerber on the card 4♣ asks for aces instead (gerber.bid): the club
+# hands ask and bid 6♣. The diamond try stays.
 after 2N (P) when style is not bba
   4C  "Slam try: six or more clubs, or five and unbalanced"
       shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
+      when  !gerber
   4D  "Slam try: six or more diamonds, or five and unbalanced"
       shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
-after 2N (P) 4x (P) when x is C | x is D, style is not bba
+after 2N (P) 4x (P) when (x is C, !gerber) | x is D, style is not bba
   6{x}  "A fit: slam"                       shows x>=3
   4N    "No fit"                            shows x<=2
-after 2N (P) 4x (P) 4N (P) when x is C | x is D, style is not bba
+after 2N (P) 4x (P) 4N (P) when (x is C, !gerber) | x is D, style is not bba
   6N  "Slam values anyway"                  shows strength>=slam
   P   "No fit: 4NT"
       priority -5
