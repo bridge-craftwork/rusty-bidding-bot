@@ -84,6 +84,19 @@ A rules directory holds:
   (`card/fields.toml`); an alias is reported with its current name, and an
   enum option the field does not have is an error.
 
+### Card fields the engine reads by name
+
+Everything else on a card reaches the engine only through a module's
+`card` and `param` lines. These few the Rust code reads by path, so a
+vocabulary should keep them (a vocabulary without them still loads):
+
+| Field | Read by | What it does | Without it |
+|---|---|---|---|
+| `general.style` | engine (`Valuation::for_card`) | `bba` counts total `points` as BBA does, without the point per card beyond four (LANGUAGE.md, "Points"). Modules also read it through `param` for treatments | the default count, length included; `--set general.style=...` is refused |
+| `general.system_category` | `rbb card coverage` | the system shown beside each card | shown as `two_over_one` |
+| `general.system_category` | `rbb probe` / `rbb grid` `bare:2/1` cards | the only field a `bare:` card sets (`two_over_one`, `sayc`, `polish_club`, `precision`, `acol`) | a `bare:` card is refused (unknown field); other cards are unaffected |
+| sections `carding`, `leads`, `notes`, `metadata` | `rbb card coverage` | settings under these prefixes count as play, not bidding (neither honoured nor ignored) | nothing: they are only prefixes |
+
 ### Failures refuse to load
 
 `rbb bid check`, `rbb bid test`, `rbb call`, `rbb compare`, the workbench
