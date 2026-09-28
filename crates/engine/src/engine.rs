@@ -8,7 +8,7 @@ use bridge_card::Card;
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
-use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, Val};
+use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, PrivateCache, Val};
 use crate::facts::{Facts, Valuation};
 use crate::knowledge::{SeatKnowledge, Tri};
 use crate::position::{side, Ask, Forcing, Position, SideState};
@@ -100,6 +100,28 @@ pub struct Decision {
 
 type IndexCache = HashMap<String, Arc<Vec<u32>>>;
 
+/// The candidates at a position, with the warnings met finding them.
+type CandCache = HashMap<String, Arc<(Vec<Cand>, Vec<String>)>>;
+
+/// Entries kept before the candidate cache is emptied and refilled, so a
+/// run over the whole corpus stays within memory.
+const CACHE_LIMIT: usize = 400_000;
+
+/// What a position is made of: the calls so far and the board's
+/// conditions. The candidates at a position depend on nothing else (never
+/// on a hand), so they are found once per auction prefix and shared by the
+/// boards that reach it: many share the first few calls. (Caching the
+/// position after each call as well cost 18 GB over the corpus for a
+/// small gain: deeper auctions rarely repeat.)
+fn pos_key(pos: &Position) -> String {
+    let mut k = format!("{:?} {:?} {:?}", pos.dealer, pos.vul, pos.scoring);
+    for c in &pos.calls {
+        k.push(' ');
+        k.push_str(&c.to_pbn());
+    }
+    k
+}
+
 pub struct Engine {
     /// By side: 0 = North-South, 1 = East-West.
     systems: [System; 2],
@@ -108,6 +130,7 @@ pub struct Engine {
     pool: Vec<Facts>,
     consistent: Mutex<IndexCache>,
     descriptiveness: Mutex<HashMap<String, f64>>,
+    cands: Mutex<CandCache>,
 }
 
 impl Engine {
@@ -120,6 +143,7 @@ impl Engine {
             pool: sample::pool(),
             consistent: Mutex::new(HashMap::new()),
             descriptiveness: Mutex::new(HashMap::new()),
+            cands: Mutex::new(HashMap::new()),
         }
     }
 
@@ -128,8 +152,26 @@ impl Engine {
         self.valuation = [valuation; 2];
         self.descriptiveness.lock().unwrap().clear();
         self.consistent.lock().unwrap().clear();
+        self.cands.lock().unwrap().clear();
         self
     }
+
+    /// The candidates at `pos`, computed once per position (`pos_key`).
+    fn cands_at(&self, pos: &Position, key: &str) -> Arc<(Vec<Cand>, Vec<String>)> {
+        if let Some(c) = self.cands.lock().unwrap().get(key) {
+            return c.clone();
+        }
+        let mut warnings = Vec::new();
+        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
+        let c = Arc::new((cands, warnings));
+        let mut cache = self.cands.lock().unwrap();
+        if cache.len() >= CACHE_LIMIT {
+            cache.clear();
+        }
+        cache.insert(key.to_string(), c.clone());
+        c
+    }
+
 
     pub fn system(&self, seat: Direction) -> &System {
         &self.systems[side(seat)]
@@ -148,6 +190,7 @@ impl Engine {
             hand,
             params: &self.systems[side(actor)].params[entry.module],
             valuation: self.valuation[side(actor)],
+            private: None,
         }
     }
 
@@ -250,6 +293,7 @@ impl Engine {
                     hand: Some(f),
                     params: &params,
                     valuation: v,
+                    private: None,
                 };
                 k.constraints
                     .iter()
@@ -285,10 +329,19 @@ impl Engine {
             ids = Arc::new((0..self.pool.len() as u32).collect());
         }
         let mut pass = 0usize;
+        let private = PrivateCache::default();
+        // One copy of the bindings for the whole pool, restored only when
+        // an evaluation bound something new (cloning per hand was a sixth
+        // of the run).
+        let mut b = c.b.clone();
         for &i in ids.iter() {
-            let ctx = self.ctx(pos, actor, Some(&self.pool[i as usize]), entry);
-            if ctx.cond(shows, &mut c.b.clone()) == Ok(Tri::True) {
+            let mut ctx = self.ctx(pos, actor, Some(&self.pool[i as usize]), entry);
+            ctx.private = Some(&private);
+            if ctx.cond(shows, &mut b) == Ok(Tri::True) {
                 pass += 1;
+            }
+            if b.len() != c.b.len() {
+                b = c.b.clone();
             }
         }
         let d = 1.0 - pass as f64 / ids.len() as f64;
@@ -303,26 +356,23 @@ impl Engine {
 
     /// Interpret one more call: what it shows, and its effect on the state.
     pub fn advance(&self, pos: &mut Position, call: &Call) -> Step {
-        let mut warnings = Vec::new();
-        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
-        self.advance_from(pos, call, &cands, warnings)
+        let cands = self.cands_at(pos, &pos_key(pos));
+        self.advance_from(pos, call, &cands.0, cands.1.clone())
     }
 
     /// Choose a call for `hand` at the current position.
     pub fn choose(&self, pos: &Position, hand: &Hand) -> Choice {
-        let mut warnings = Vec::new();
-        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
-        self.choose_from(pos, hand, &cands, warnings)
+        let cands = self.cands_at(pos, &pos_key(pos));
+        self.choose_from(pos, hand, &cands.0, cands.1.clone())
     }
 
     /// Both at once, sharing the candidate list: what would the engine call
     /// with `hand` here, and what does the `actual` call show? This is the
     /// step used to replay a reference auction.
     pub fn step(&self, pos: &mut Position, hand: &Hand, actual: &Call) -> (Choice, Step) {
-        let mut warnings = Vec::new();
-        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
-        let choice = self.choose_from(pos, hand, &cands, warnings.clone());
-        let step = self.advance_from(pos, actual, &cands, warnings);
+        let cands = self.cands_at(pos, &pos_key(pos));
+        let choice = self.choose_from(pos, hand, &cands.0, cands.1.clone());
+        let step = self.advance_from(pos, actual, &cands.0, cands.1.clone());
         (choice, step)
     }
 
@@ -453,12 +503,13 @@ impl Engine {
                 if parts.is_empty() {
                     continue;
                 }
-                let whole = Expr::And {
-                    all: parts.into_iter().cloned().collect(),
-                };
                 // Only when every term resolves: a dropped term would make
-                // the denial claim more than we know.
-                if let Some(resolved) = ctx.resolve_exact(&whole, &mut ob) {
+                // the denial claim more than we know. Resolved part by part,
+                // which is what resolving their conjunction does, without
+                // copying the rule's trees first.
+                let resolved: Option<Vec<Expr>> =
+                    parts.iter().map(|p| ctx.resolve_exact(p, &mut ob)).collect();
+                if let Some(resolved) = resolved.map(|all| Expr::And { all }) {
                     if !is_const(&resolved) {
                         k.add(Expr::Not {
                             expr: Box::new(resolved),
@@ -514,9 +565,11 @@ impl Engine {
         }
         let mut traces = Vec::new();
         let mut eligible: Vec<Eligible> = Vec::new();
+        let private = PrivateCache::default();
         for (idx, c) in cands.iter().enumerate() {
             let entry = &sys.rules[c.entry];
-            let ctx = self.ctx(pos, actor, Some(&facts), entry);
+            let mut ctx = self.ctx(pos, actor, Some(&facts), entry);
+            ctx.private = Some(&private);
             let mut b = c.b.clone();
             let mut outcome = String::new();
             for (label, e) in [("shows", &entry.rule.shows), ("when", &entry.rule.when)] {

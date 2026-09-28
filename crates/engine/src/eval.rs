@@ -4,7 +4,9 @@
 //! and a set of ranges otherwise. Other seats are always ranges, so a
 //! comparison about them is `Tri::True` only when it is known.
 
+use std::cell::RefCell;
 use std::collections::HashMap;
+use std::rc::Rc;
 
 use bidspec::ast::{ArithOp, CallSpec, CmpOp, Expr, Segment, StrainSpec};
 use bridge_types::{Call, Direction, Strain};
@@ -166,7 +168,14 @@ pub struct Ctx<'a> {
     pub params: &'a HashMap<String, Val>,
     /// How total points are counted.
     pub valuation: Valuation,
+    /// Another seat's knowledge capped by my own HCP (`seat_attr`), shared
+    /// by the evaluations of one decision: building it clones the seat's
+    /// whole knowledge, once per attribute read without the cache.
+    pub private: Option<&'a PrivateCache>,
 }
+
+/// Capped knowledge by (seat, HCP bound), for one position (`Ctx::private`).
+pub type PrivateCache = RefCell<HashMap<(usize, i32), Rc<SeatKnowledge>>>;
 
 type R<T> = Result<T, String>;
 
@@ -835,8 +844,23 @@ impl<'a> Ctx<'a> {
                 .sum();
             let bound = 40 - f.hcp - others;
             if bound < k.hcp.hi {
-                let mut private = k.clone();
-                private.add(hcp_at_most(bound));
+                let capped = || {
+                    let mut private = k.clone();
+                    private.add(hcp_at_most(bound));
+                    Rc::new(private)
+                };
+                let private = match self.private {
+                    Some(cache) => {
+                        let key = (d.to_index(), bound);
+                        let hit = cache.borrow().get(&key).cloned();
+                        hit.unwrap_or_else(|| {
+                            let p = capped();
+                            cache.borrow_mut().insert(key, p.clone());
+                            p
+                        })
+                    }
+                    None => capped(),
+                };
                 return self.knowledge_attr(&private, d, seg, b);
             }
         }
@@ -1639,6 +1663,7 @@ mod term_tests {
             hand: Some(&hand),
             params: &params,
             valuation: Valuation::default(),
+            private: None,
         };
         let mut b = Bindings::new();
         assert_eq!(ctx.cond(&when_of("partner.S>=3"), &mut b), Ok(Tri::True));
@@ -1688,6 +1713,7 @@ mod term_tests {
             hand: None,
             params: &params,
             valuation: Valuation::default(),
+            private: None,
         };
         let arg = |n: &str| match n {
             "has" => "(A, S)",

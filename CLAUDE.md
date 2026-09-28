@@ -48,7 +48,7 @@ Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md
   the engine's call with the candidate trace (`--json` for everything).
 - `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
   compare with BBA's auctions in `../Practice-Bidding-Scenarios` (all 342
-  scenarios in ~30 s in release). The top divergence points are the work
+  scenarios in ~45 s in release). The top divergence points are the work
   queue. Par comes free for boards whose corpus file carries an
   `OptimumResultTable`; `--par` solves the deals that have none.
   A scenario argument may be a pattern: `compare 'Basic_*'`, quoted so the
