@@ -9,7 +9,7 @@ mod bid_pbn;
 mod coverage;
 
 #[derive(Parser)]
-#[command(name = "rbb", about = "rusty-bidding-bot command-line tools")]
+#[command(name = "rbb", about = "rusty-bidding-bot command-line tools", version = version())]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -303,6 +303,14 @@ enum BidCommand {
         #[arg(short, long)]
         output: Option<PathBuf>,
     },
+    /// Print every name a rule condition may use, with its meaning: the
+    /// term vocabulary of this engine's rule language (Markdown).
+    Terms {
+        /// Instead of printing, rewrite the generated section of this
+        /// Markdown file (docs/CONTRACT.md) between its markers.
+        #[arg(long)]
+        doc: Option<PathBuf>,
+    },
     /// Print a .bid file's compiled JSON IR.
     Compile {
         file: PathBuf,
@@ -345,6 +353,18 @@ enum CardCommand {
         #[arg(short, long)]
         verbose: bool,
     },
+}
+
+/// `rbb --version`: the engine version and the rule language it reads.
+fn version() -> &'static str {
+    static V: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    V.get_or_init(|| {
+        format!(
+            "{} (rule language {})",
+            env!("CARGO_PKG_VERSION"),
+            rbb_engine::LANGUAGE_VERSION
+        )
+    })
 }
 
 fn main() -> ExitCode {
@@ -1120,6 +1140,40 @@ fn bid(cmd: BidCommand) -> Result<()> {
             files.sort();
             let mut modules = Vec::new();
             let mut errors = 0;
+            let mut warnings = 0;
+            // Each directory's manifest: the language version it asks for.
+            for dir in paths.iter().filter(|p| p.is_dir()) {
+                match rbb_engine::read_manifest(dir) {
+                    Ok(Some(m)) => {
+                        for k in &m.unknown_keys {
+                            eprintln!(
+                                "{}: warning: unknown key `{k}`",
+                                dir.join(bidspec::manifest::FILE).display()
+                            );
+                            warnings += 1;
+                        }
+                        println!(
+                            "{}: {} (rule language {})",
+                            dir.display(),
+                            m.name,
+                            m.language
+                        );
+                    }
+                    Ok(None) => {
+                        eprintln!(
+                            "{}: warning: no {}; read as rule language {}",
+                            dir.display(),
+                            bidspec::manifest::FILE,
+                            rbb_engine::LANGUAGE_VERSION
+                        );
+                        warnings += 1;
+                    }
+                    Err(d) => {
+                        eprintln!("{d}");
+                        errors += 1;
+                    }
+                }
+            }
             for file in &files {
                 match bidspec::compile(&read(file)?, &file.display().to_string()) {
                     Ok(m) => modules.push(m),
@@ -1147,7 +1201,6 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 eprintln!("{d}");
                 errors += 1;
             }
-            let mut warnings = 0;
             for m in &modules {
                 for need in &m.needs {
                     if !seen.contains_key(need.as_str()) {
@@ -1161,9 +1214,11 @@ fn bid(cmd: BidCommand) -> Result<()> {
             }
             let rules: usize = modules.iter().map(count_rules).sum();
             println!(
-                "{} files, {} modules, {rules} rules: {errors} errors, {warnings} warnings",
+                "{} files, {} modules, {rules} rules: {errors} errors, {warnings} warnings \
+                 (engine reads rule language {})",
                 files.len(),
-                modules.len()
+                modules.len(),
+                rbb_engine::LANGUAGE_VERSION
             );
             if errors > 0 {
                 return Err("rule files have errors".into());
@@ -1236,6 +1291,27 @@ fn bid(cmd: BidCommand) -> Result<()> {
             match output {
                 Some(p) => fs::write(&p, text).map_err(|e| format!("{}: {e}", p.display()))?,
                 None => print!("{text}"),
+            }
+        }
+        BidCommand::Terms { doc } => {
+            let terms = rbb_engine::terms_reference();
+            match doc {
+                None => print!("{terms}"),
+                Some(p) => {
+                    let text = read(&p)?;
+                    let new = rbb_engine::splice_terms(&text, &terms).ok_or_else(|| {
+                        format!(
+                            "{}: no `{}` ... `{}` markers",
+                            p.display(),
+                            rbb_engine::TERMS_BEGIN,
+                            rbb_engine::TERMS_END
+                        )
+                    })?;
+                    if new != text {
+                        fs::write(&p, new).map_err(|e| format!("{}: {e}", p.display()))?;
+                        eprintln!("{}: term reference updated", p.display());
+                    }
+                }
             }
         }
         BidCommand::Compile { file, output } => {

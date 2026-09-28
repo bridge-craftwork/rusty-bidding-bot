@@ -15,6 +15,7 @@ mod diag;
 mod display;
 mod expr;
 mod lexer;
+pub mod manifest;
 mod parser;
 pub mod reference;
 

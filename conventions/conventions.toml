@@ -1,0 +1,8 @@
+# The manifest of this rule set (docs/CONTRACT.md).
+name = "rusty-bidding-bot"
+description = "The base system and conventions, switched on by the convention card"
+# The rule language version these files are written in: an engine that
+# reads another version refuses to load them.
+language = 1
+# The engine version they were developed against (information only).
+engine = "0.1.0"

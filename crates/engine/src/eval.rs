@@ -82,25 +82,79 @@ fn rank_value(word: &str) -> Option<u8> {
     })
 }
 
-const SYMBOLS: &[&str] = &[
-    "game",
-    "round",
-    "none",
-    "suit",
-    "notrump",
-    "poor",
-    "fair",
-    "good",
-    "excellent",
-    "signoff",
-    "invite",
-    "slam_invite",
-    "slam",
-    "A",
-    "K",
-    "Q",
-    "J",
-    "T",
+/// A name the evaluator accepts and what it means. The lists below are
+/// both what `check_terms` allows and the reference `rbb bid terms`
+/// prints (docs/CONTRACT.md), so a new term is documented where it is
+/// added.
+#[derive(Debug, Clone, Copy)]
+pub struct Term {
+    pub name: &'static str,
+    /// How it takes arguments, as written: `(x)`, `(rank, x)`; empty for none.
+    pub args: &'static str,
+    pub meaning: &'static str,
+}
+
+const fn t(name: &'static str, meaning: &'static str) -> Term {
+    Term {
+        name,
+        args: "",
+        meaning,
+    }
+}
+
+const fn f(name: &'static str, args: &'static str, meaning: &'static str) -> Term {
+    Term {
+        name,
+        args,
+        meaning,
+    }
+}
+
+fn named(list: &[Term], n: &str) -> bool {
+    list.iter().any(|t| t.name == n)
+}
+
+/// Words that stand for themselves (`we.forcing = game`, `quality(x) >= good`).
+const SYMBOLS: &[Term] = &[
+    t(
+        "game",
+        "a forcing level (`we.forcing = game`), and a strength band",
+    ),
+    t(
+        "round",
+        "a forcing level: partner may not pass at the next turn",
+    ),
+    t(
+        "none",
+        "no forcing level; with `is`, no trump agreed (`we.trump is none`)",
+    ),
+    t(
+        "suit",
+        "with `is`: the agreed trump is a suit (`we.trump is suit`)",
+    ),
+    t("notrump", "with `is`: the agreed strain is notrump"),
+    t("poor", "suit quality 0: none of A, K, Q"),
+    t("fair", "suit quality 1: one of A, K, Q"),
+    t("good", "suit quality 2: two of A, K, Q"),
+    t("excellent", "suit quality 3: A, K and Q"),
+    t(
+        "signoff",
+        "strength band: too weak to invite (`strength=signoff`)",
+    ),
+    t(
+        "invite",
+        "strength band: invitational opposite partner's range",
+    ),
+    t("slam_invite", "strength band: enough to invite slam"),
+    t(
+        "slam",
+        "strength band: enough for slam opposite partner's minimum",
+    ),
+    t("A", "the ace, in `has(A, x)`"),
+    t("K", "the king, in `has(K, x)`"),
+    t("Q", "the queen, in `has(Q, x)`"),
+    t("J", "the jack, in `has(J, x)`"),
+    t("T", "the ten, in `has(T, x)`"),
 ];
 /// Strength bands, weakest first (see `Ctx::strength_as_hcp`).
 pub const BANDS: [&str; 5] = ["signoff", "invite", "game", "slam_invite", "slam"];
@@ -118,35 +172,99 @@ fn flip(op: CmpOp) -> CmpOp {
     }
 }
 
-const SELF_ATTRS: &[&str] = &[
-    "hcp",
-    "tens",
-    "points",
-    "suit_points",
-    "balanced",
-    "semibalanced",
-    "shortest",
-    "longest",
-    "second_longest",
-    "length_points",
-    "bba_nt_points",
-    "bba_nt_game_points",
-    "bba_nt_imp_points",
-    "bba_nt_imp_game_points",
-    "bba_stay_nt_points",
-    "bba_stay_nt_imp_points",
-    "bba_stay_raise_points",
-    "bba_stay_raise_imp_points",
-    "bba_stay_game_points",
-    "bba_stay_game_imp_points",
-    "bba_stay_sraise_points",
-    "bba_stay_sraise_imp_points",
-    "bba_stay_sgame_points",
-    "bba_stay_sgame_imp_points",
-    "controls",
-    "losers",
+/// My own hand, exact while I choose a call (bare, or `me.`); what I
+/// have shown otherwise.
+const SELF_ATTRS: &[Term] = &[
+    t("hcp", "high-card points (A 4, K 3, Q 2, J 1)"),
+    t("tens", "tens held"),
+    t(
+        "points",
+        "total points: HCP + 1/2 a ten + 1 a card beyond four (whole part)",
+    ),
+    t(
+        "suit_points",
+        "suit points: HCP + 1/2 a card beyond four (whole part)",
+    ),
+    t("balanced", "4-3-3-3, 4-4-3-2 or 5-3-3-2"),
+    t(
+        "semibalanced",
+        "no singleton or void, no suit longer than six",
+    ),
+    t("shortest", "length of the shortest suit"),
+    t("longest", "length of the longest suit"),
+    t("second_longest", "length of the second-longest suit"),
+    t(
+        "length_points",
+        "one for each card beyond four in every suit",
+    ),
+    t(
+        "bba_nt_points",
+        "BBA's count opposite 1NT, scaled so it invites from 8 (matchpoints)",
+    ),
+    t(
+        "bba_nt_game_points",
+        "BBA's count opposite 1NT, scaled so it bids game from 10 (matchpoints)",
+    ),
+    t("bba_nt_imp_points", "`bba_nt_points` at IMPs"),
+    t("bba_nt_imp_game_points", "`bba_nt_game_points` at IMPs"),
+    t(
+        "bba_stay_nt_points",
+        "BBA's count after Stayman, no fit: 3NT rather than 2NT from 10 (matchpoints)",
+    ),
+    t("bba_stay_nt_imp_points", "`bba_stay_nt_points` at IMPs"),
+    t(
+        "bba_stay_raise_points",
+        "BBA's count after Stayman, heart fit: invite rather than pass from 8 (matchpoints)",
+    ),
+    t(
+        "bba_stay_raise_imp_points",
+        "`bba_stay_raise_points` at IMPs",
+    ),
+    t(
+        "bba_stay_game_points",
+        "BBA's count after Stayman, heart fit: game rather than invite from 10 (matchpoints)",
+    ),
+    t("bba_stay_game_imp_points", "`bba_stay_game_points` at IMPs"),
+    t(
+        "bba_stay_sraise_points",
+        "BBA's count after Stayman, spade fit: invite rather than pass from 8 (matchpoints)",
+    ),
+    t(
+        "bba_stay_sraise_imp_points",
+        "`bba_stay_sraise_points` at IMPs",
+    ),
+    t(
+        "bba_stay_sgame_points",
+        "BBA's count after Stayman, spade fit: game rather than invite from 10 (matchpoints)",
+    ),
+    t(
+        "bba_stay_sgame_imp_points",
+        "`bba_stay_sgame_points` at IMPs",
+    ),
+    t("controls", "controls: ace 2, king 1"),
+    t("losers", "losing-trick count"),
 ];
-const SELF_FUNCS: &[&str] = &["tp", "keycards", "has", "quality", "top5", "stop"];
+/// Functions of my own hand (bare, or `me.`).
+const SELF_FUNCS: &[Term] = &[
+    f(
+        "tp",
+        "(x)",
+        "total points with x as trump: support points, shortness capped by trumps held",
+    ),
+    f(
+        "keycards",
+        "(x)",
+        "aces plus the king of x (`keycards(N)`: the four aces)",
+    ),
+    f("has", "(rank, x)", "holds that card (A K Q J T) in x"),
+    f(
+        "quality",
+        "(x)",
+        "top honours (A, K, Q) in x: poor 0, fair 1, good 2, excellent 3",
+    ),
+    f("top5", "(x)", "how many of A K Q J T are held in x"),
+    f("stop", "(x)", "a stopper in x: A, Kx, Qxx or Jxxx"),
+];
 
 /// Printed name of a strain for explanations.
 pub fn strain_symbol(s: Strain) -> &'static str {
@@ -608,7 +726,7 @@ impl<'a> Ctx<'a> {
                 BANDS.join(", ")
             ));
         }
-        if SELF_ATTRS.contains(&n) {
+        if named(SELF_ATTRS, n) {
             return Ok(match self.hand {
                 Some(f) => exact_attr(f, n, self.valuation),
                 None => self.knowledge_attr(self.self_knowledge(), self.actor, seg, b)?,
@@ -651,7 +769,7 @@ impl<'a> Ctx<'a> {
                 let we = self.num(&self.we_attr(&plain("hcp"), b)?)?;
                 Val::Bool(cmp3(we.lo >= 35, we.hi < 35))
             }
-            w if SYMBOLS.contains(&w) => Val::Sym(w.to_string()),
+            w if named(SYMBOLS, w) => Val::Sym(w.to_string()),
             _ => return Err(format!("unknown term `{n}`")),
         })
     }
@@ -699,7 +817,7 @@ impl<'a> Ctx<'a> {
             }
             _ => {}
         }
-        if !SELF_FUNCS.contains(&n) {
+        if !named(SELF_FUNCS, n) {
             return Err(format!("unknown function `{n}`"));
         }
         let Some(f) = self.hand else {
@@ -1079,7 +1197,7 @@ impl<'a> Ctx<'a> {
             Expr::Path { path }
                 if path.len() == 1
                     && path[0].args.is_none()
-                    && SELF_ATTRS.contains(&path[0].name.as_str()) =>
+                    && named(SELF_ATTRS, &path[0].name) =>
             {
                 e.clone()
             }
@@ -1118,7 +1236,7 @@ impl<'a> Ctx<'a> {
                         }],
                     });
                 }
-                if SELF_ATTRS.contains(&n) || suit_index(n).is_some() {
+                if named(SELF_ATTRS, n) || suit_index(n).is_some() {
                     return Some(e.clone());
                 }
                 match self.eval(e, b).ok()? {
@@ -1200,8 +1318,8 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                 "partner" | "lho" | "rho" | "shown" | "they" => false,
                 _ if path.len() > 1 => false,
                 n => {
-                    SELF_ATTRS.contains(&n)
-                        || SELF_FUNCS.contains(&n)
+                    named(SELF_ATTRS, n)
+                        || named(SELF_FUNCS, n)
                         || matches!(n, "slam_try" | "grand_try" | "strength" | "suit_strength")
                         || suit_index(n).is_some()
                         || matches!(b.get(n), Some(Val::Suit(_)))
@@ -1218,12 +1336,9 @@ fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
         Expr::Path { path } => {
             let n = path[0].name.as_str();
             if path.len() == 1 && path[0].args.is_some() {
-                return SELF_FUNCS.contains(&n);
+                return named(SELF_FUNCS, n);
             }
-            path.len() == 1
-                && !params.contains_key(n)
-                && !b.contains_key(n)
-                && SELF_ATTRS.contains(&n)
+            path.len() == 1 && !params.contains_key(n) && !b.contains_key(n) && named(SELF_ATTRS, n)
         }
         Expr::Cmp { lhs, rhs, .. } => {
             // A suit or suit variable in a comparison is a length.
@@ -1328,53 +1443,239 @@ pub fn konst(b: bool) -> Expr {
 // `they_attr` accept; `terms_match_the_evaluator` keeps them in step.
 
 /// Bare state names (`name`).
-const STATE_TERMS: &[&str] = &[
-    "opening",
-    "last",
-    "passed_hand",
-    "has_bid",
-    "seat",
-    "vul",
-    "game_reached",
-    "imps",
-    "matchpoints",
-    "trump",
-    "slam_try",
-    "grand_try",
+/// Bare state names (`name`).
+const STATE_TERMS: &[Term] = &[
+    t("opening", "no one has bid yet"),
+    t(
+        "last",
+        "my own last call (`me.last`); compare with a call: `me.last=1N`",
+    ),
+    t("passed_hand", "I have called, and only passed"),
+    t(
+        "has_bid",
+        "I have made a bid, not only passes or doubles (`me.has_bid`)",
+    ),
+    t("seat", "my seat from the dealer, 1 to 4"),
+    t("vul", "my side is vulnerable"),
+    t(
+        "game_reached",
+        "our side's last bid is game or higher and it is our contract",
+    ),
+    t("imps", "IMPs or other total-point scoring"),
+    t("matchpoints", "matchpoints or board-a-match"),
+    t("trump", "`we.trump`"),
+    t(
+        "slam_try",
+        "judgment hook: slam is worth trying (placeholder: combined HCP >= 31)",
+    ),
+    t(
+        "grand_try",
+        "judgment hook: grand slam is worth trying (placeholder: combined HCP >= 35)",
+    ),
 ];
 /// Functions of my own hand or position (`self_func`), besides SELF_FUNCS.
-const POSITION_FUNCS: &[&str] = &["denied", "cued", "under_game", "cheapest_rank"];
+/// Functions of my own position (`self_func`), besides SELF_FUNCS.
+const POSITION_FUNCS: &[Term] = &[
+    f(
+        "denied",
+        "(x)",
+        "in the control-bid dialogue I skipped x (`me.denied(x)`)",
+    ),
+    f(
+        "cued",
+        "(x)",
+        "in the control-bid dialogue I have shown a control in x",
+    ),
+    f(
+        "under_game",
+        "(x)",
+        "the cheapest bid in x is below game in our agreed suit (3NT if none)",
+    ),
+    f(
+        "cheapest_rank",
+        "(x)",
+        "the cheapest bid in x as level x 5 + C0 D1 H2 S3 (`prefer 0 - cheapest_rank(x)`)",
+    ),
+];
 /// What `partner.`, `lho.`, `rho.` and `shown.` take (`knowledge_attr`),
 /// besides suits, variables and `bba_*`.
-const SEAT_ATTRS: &[&str] = &[
-    "hcp",
-    "tens",
-    "points",
-    "suit_points",
-    "balanced",
-    "shortest",
-    "longest",
-    "second_longest",
-    "length_points",
-    "last",
-    "opened",
-    "has_bid",
-    "jumped",
-    "denied",
-    "cued",
-    "bypassed",
-    "has",
-    "stop",
-    "semibalanced",
-    "tp",
-    "keycards",
-    "controls",
-    "losers",
-    "quality",
-    "top5",
+/// What `partner.`, `lho.`, `rho.` and `shown.` take (`knowledge_attr`),
+/// besides suits, variables and `bba_*`. Values are ranges: a comparison
+/// holds when it is known (`maybe` for "not ruled out").
+const SEAT_ATTRS: &[Term] = &[
+    t("hcp", "HCP shown"),
+    t("tens", "tens (never tracked: 0..4)"),
+    t(
+        "points",
+        "total points shown (HCP when no call showed points)",
+    ),
+    t("suit_points", "suit points shown"),
+    t("balanced", "shown balanced"),
+    t("shortest", "length of the shortest suit, as far as shown"),
+    t("longest", "length of the longest suit, as far as shown"),
+    t(
+        "second_longest",
+        "length of the second-longest suit, as far as shown",
+    ),
+    t("length_points", "cards beyond four, as far as shown"),
+    t(
+        "last",
+        "that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`)",
+    ),
+    t("opened", "that seat made the opening bid"),
+    t(
+        "has_bid",
+        "that seat has made a bid, not only passes or doubles",
+    ),
+    t(
+        "jumped",
+        "that seat's last bid was at least a level above the cheapest in its strain",
+    ),
+    f(
+        "denied",
+        "(x)",
+        "in the control-bid dialogue that seat skipped x",
+    ),
+    f(
+        "cued",
+        "(x)",
+        "in the control-bid dialogue that seat has shown a control in x",
+    ),
+    f(
+        "bypassed",
+        "(x[, call])",
+        "that seat's last bid went past an available bid in x (above `call` when given)",
+    ),
+    f("has", "(rank, x)", "not tracked: unknown"),
+    f("stop", "(x)", "not tracked: unknown"),
+    t("semibalanced", "not tracked: unknown"),
+    f(
+        "tp",
+        "(x)",
+        "support points with x as trump, when a raise showed them; else HCP",
+    ),
+    f("keycards", "(x)", "not tracked: 0..40 (see `we.keycards`)"),
+    t("controls", "not tracked: 0..40"),
+    t("losers", "not tracked: 0..40"),
+    f("quality", "(x)", "not tracked: 0..40"),
+    f("top5", "(x)", "not tracked: 0..40"),
 ];
-const WE_ATTRS: &[&str] = &["trump", "forcing", "gf", "hcp", "tp", "keycards"];
-const THEY_ATTRS: &[&str] = &["bid", "vul"];
+/// `we.`: our partnership, my hand and partner's range together.
+const WE_ATTRS: &[Term] = &[
+    t(
+        "trump",
+        "the agreed strain (`is suit`, `is notrump`, `is none`), usable as a suit",
+    ),
+    t("forcing", "`none`, `round` or `game`"),
+    t("gf", "we are in a game force (`we.forcing = game`)"),
+    t("hcp", "my HCP plus partner's range"),
+    f(
+        "tp",
+        "(x)",
+        "my support points with x as trump plus partner's",
+    ),
+    f(
+        "keycards",
+        "(x)",
+        "my keycards plus partner's answer, within the deck's five",
+    ),
+];
+/// `they.`: the opponents.
+const THEY_ATTRS: &[Term] = &[
+    t("bid", "the opponents have bid or doubled"),
+    t("vul", "the opponents are vulnerable"),
+];
+/// Other bare names (`name`).
+const BARE_NAMES: &[Term] = &[
+    t("N", "notrump, as a strain (`NT` too)"),
+    t("NT", "notrump, as a strain"),
+    t(
+        "strength",
+        "my total points as a band: `strength=invite`, `strength>=game`",
+    ),
+    t("suit_strength", "the same with suit points"),
+];
+/// Names accepted by pattern rather than by list: documented here, checked
+/// by `bare_name_ok` and `seat_attr_ok`.
+const PATTERN_NAMES: &[Term] = &[
+    t("S H D C", "a suit: its length in a comparison (`S>=5`), else the suit (`stop(S)`)"),
+    t("M, m, x, y, z, t, ...", "suit variables, bound by a pattern (`after 1M (P)`) or a question; `M` a major, `m` a minor"),
+    t("<param>", "a module `param`, the card value it names"),
+    t("partner.bba_*", "any `bba_` count of another seat: unknown (0..40)"),
+    t(".min / .max", "the ends of a range: `partner.hcp.min`"),
+];
+
+/// Markdown reference of every name a condition may use, grouped as
+/// `check_terms` reads them: what `rbb bid terms` prints, and what the
+/// generated section of docs/CONTRACT.md holds.
+pub fn terms_reference() -> String {
+    use std::fmt::Write as _;
+    let mut out = String::new();
+    let mut table = |title: &str, intro: &str, prefix: &str, list: &[Term]| {
+        let _ = writeln!(out, "### {title}\n");
+        if !intro.is_empty() {
+            let _ = writeln!(out, "{intro}\n");
+        }
+        let _ = writeln!(out, "| Term | Meaning |\n|---|---|");
+        for term in list {
+            let _ = writeln!(
+                out,
+                "| `{prefix}{}{}` | {} |",
+                term.name, term.args, term.meaning
+            );
+        }
+        out.push('\n');
+    };
+    table(
+        "My own hand",
+        "Exact while I choose a call; what I have shown when my call is being \
+         read. Bare or with `me.` (`me.hcp`). They may not appear in a \
+         context's `when`.",
+        "",
+        SELF_ATTRS,
+    );
+    table(
+        "Functions of my own hand",
+        "Bare or with `me.`. `x` is a suit, a suit variable or `trump`.",
+        "",
+        SELF_FUNCS,
+    );
+    table(
+        "Auction state",
+        "Bare or with `me.`. Public, so fine in a context's `when`, except the \
+         judgment hooks `slam_try` and `grand_try`.",
+        "",
+        STATE_TERMS,
+    );
+    table(
+        "My position in the auction",
+        "Bare or with `me.`.",
+        "",
+        POSITION_FUNCS,
+    );
+    table(
+        "Other seats",
+        "With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), \
+         besides a suit or suit variable for its length (`partner.S`, \
+         `partner.M`). Values are ranges: a comparison holds when it is \
+         known; `maybe` asks whether it is still possible.",
+        "partner.",
+        SEAT_ATTRS,
+    );
+    table("Our partnership", "", "we.", WE_ATTRS);
+    table("The opponents", "", "they.", THEY_ATTRS);
+    table("Other names", "", "", BARE_NAMES);
+    table("Words", "Values compared with `=` or `is`.", "", SYMBOLS);
+    table(
+        "Names accepted by form",
+        "Checked by shape rather than listed.",
+        "",
+        PATTERN_NAMES,
+    );
+    out.truncate(out.trim_end().len());
+    out.push('\n');
+    out
+}
 
 /// A suit variable (`x`, `M`, `t`, ...), bound by a pattern or a question.
 fn is_variable(n: &str) -> bool {
@@ -1385,14 +1686,14 @@ fn bare_name_ok(n: &str, params: &[&str]) -> bool {
     is_variable(n)
         || params.contains(&n)
         || suit_index(n).is_some()
-        || matches!(n, "N" | "NT" | "strength" | "suit_strength")
-        || SELF_ATTRS.contains(&n)
-        || STATE_TERMS.contains(&n)
-        || SYMBOLS.contains(&n)
+        || named(BARE_NAMES, n)
+        || named(SELF_ATTRS, n)
+        || named(STATE_TERMS, n)
+        || named(SYMBOLS, n)
 }
 
 fn seat_attr_ok(n: &str) -> bool {
-    suit_index(n).is_some() || is_variable(n) || n.starts_with("bba_") || SEAT_ATTRS.contains(&n)
+    suit_index(n).is_some() || is_variable(n) || n.starts_with("bba_") || named(SEAT_ATTRS, n)
 }
 
 fn check_path(path: &[Segment], params: &[&str], out: &mut Vec<String>) {
@@ -1406,10 +1707,10 @@ fn check_path(path: &[Segment], params: &[&str], out: &mut Vec<String>) {
         let seg = &path[1];
         let n = seg.name.as_str();
         let ok = match first.name.as_str() {
-            "we" => WE_ATTRS.contains(&n),
-            "they" => THEY_ATTRS.contains(&n),
+            "we" => named(WE_ATTRS, n),
+            "they" => named(THEY_ATTRS, n),
             "me" => match &seg.args {
-                Some(_) => SELF_FUNCS.contains(&n) || POSITION_FUNCS.contains(&n),
+                Some(_) => named(SELF_FUNCS, n) || named(POSITION_FUNCS, n),
                 None => bare_name_ok(n, params),
             },
             _ => seat_attr_ok(n),
@@ -1421,11 +1722,15 @@ fn check_path(path: &[Segment], params: &[&str], out: &mut Vec<String>) {
     } else {
         let n = first.name.as_str();
         let ok = match &first.args {
-            Some(_) => SELF_FUNCS.contains(&n) || POSITION_FUNCS.contains(&n),
+            Some(_) => named(SELF_FUNCS, n) || named(POSITION_FUNCS, n),
             None => bare_name_ok(n, params),
         };
         if !ok {
-            let what = if first.args.is_some() { "function" } else { "term" };
+            let what = if first.args.is_some() {
+                "function"
+            } else {
+                "term"
+            };
             out.push(format!("unknown {what} `{n}`"));
         }
         (first, &path[1..])
@@ -1510,9 +1815,9 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
             let n = path[0].name.as_str();
             let self_term = |m: &str, args: bool| {
                 if args {
-                    SELF_FUNCS.contains(&m)
+                    named(SELF_FUNCS, m)
                 } else {
-                    SELF_ATTRS.contains(&m)
+                    named(SELF_ATTRS, m)
                         || matches!(m, "slam_try" | "grand_try" | "strength" | "suit_strength")
                 }
             };
@@ -1637,22 +1942,32 @@ mod term_tests {
         use crate::facts::Facts;
         use bridge_types::Hand;
         let double = when_of("(S>=3, D>=3, C>=3) | hcp>=17");
-        let mut pos =
-            Position::new(Direction::East, Vulnerability::None, ScoringMethod::Matchpoints);
+        let mut pos = Position::new(
+            Direction::East,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
         let south = Direction::South.to_index();
         assert!(pos.knowledge[south].add(double));
         assert_eq!(pos.knowledge[south].len[3].lo, 0); // spades, C D H S
-        // Public: East 14+, North 12+, West 0+: South holds at most 14.
+                                                       // Public: East 14+, North 12+, West 0+: South holds at most 14.
         pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
         pos.knowledge[Direction::North.to_index()].add(when_of("hcp>=12"));
         pos.apply_deck_hcp();
         assert_eq!(pos.knowledge[south].hcp.hi, 14);
-        assert_eq!(pos.knowledge[south].len[3].lo, 3, "{:?}", pos.knowledge[south]);
+        assert_eq!(
+            pos.knowledge[south].len[3].lo, 3,
+            "{:?}",
+            pos.knowledge[south]
+        );
 
         // Private: nothing public about North, but North holds 10 and East
         // 14+, so South holds at most 16 from North's seat.
-        let mut pos =
-            Position::new(Direction::East, Vulnerability::None, ScoringMethod::Matchpoints);
+        let mut pos = Position::new(
+            Direction::East,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
         pos.knowledge[south].add(when_of("(S>=3, D>=3, C>=3) | hcp>=17"));
         pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
         let hand = Facts::new(&Hand::from_pbn("T3.J.AJ8763.KJ87").unwrap());
@@ -1679,7 +1994,10 @@ mod term_tests {
         let check = |when: &str| {
             let src = format!("module t \"t\"\nafter 1x (P)\n  when {when}\n    P  \"x\"\n");
             let m = bidspec::compile(&src, "t.bid").unwrap();
-            check_terms(&[m]).into_iter().map(|d| d.message).collect::<Vec<_>>()
+            check_terms(&[m])
+                .into_iter()
+                .map(|d| d.message)
+                .collect::<Vec<_>>()
         };
         for ok in [
             "x is not C, they.bid",
@@ -1698,14 +2016,21 @@ mod term_tests {
             ("me.points >= 12", "`me.points`"),
         ] {
             let msgs = check(bad);
-            assert!(msgs.len() == 1 && msgs[0].starts_with(term), "{bad}: {msgs:?}");
+            assert!(
+                msgs.len() == 1 && msgs[0].starts_with(term),
+                "{bad}: {msgs:?}"
+            );
         }
     }
 
     /// Every name the checker accepts, the evaluator accepts too.
     #[test]
     fn terms_match_the_evaluator() {
-        let pos = Position::new(Direction::South, Vulnerability::None, ScoringMethod::Matchpoints);
+        let pos = Position::new(
+            Direction::South,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
         let params = HashMap::new();
         let ctx = Ctx {
             pos: &pos,
@@ -1722,22 +2047,29 @@ mod term_tests {
             _ => "",
         };
         let mut exprs: Vec<String> = Vec::new();
+        // The reference's `args` column says which names take arguments.
         for n in STATE_TERMS.iter().chain(SELF_ATTRS) {
-            exprs.push(format!("me.{n}"));
-            exprs.push(n.to_string());
+            assert!(n.args.is_empty(), "{}", n.name);
+            exprs.push(format!("me.{}", n.name));
+            exprs.push(n.name.to_string());
         }
         for n in SELF_FUNCS.iter().chain(POSITION_FUNCS) {
-            exprs.push(format!("{n}{}", arg(n)));
+            assert!(!n.args.is_empty(), "{}", n.name);
+            exprs.push(format!("{}{}", n.name, arg(n.name)));
         }
         for n in SEAT_ATTRS {
-            exprs.push(format!("partner.{n}{}", arg(n)));
+            assert_eq!(n.args.is_empty(), arg(n.name).is_empty(), "{}", n.name);
+            exprs.push(format!("partner.{}{}", n.name, arg(n.name)));
         }
         for n in WE_ATTRS {
-            exprs.push(format!("we.{n}{}", if *n == "tp" || *n == "keycards" { "(S)" } else { "" }));
+            let a = if n.args.is_empty() { "" } else { "(S)" };
+            exprs.push(format!("we.{}{a}", n.name));
         }
         for n in THEY_ATTRS {
-            exprs.push(format!("they.{n}"));
+            exprs.push(format!("they.{}", n.name));
         }
+        // `strength` is only compared with a band (tested with the bands).
+        exprs.extend(["N", "NT"].map(String::from));
         for x in exprs {
             let e = when_of(&format!("{x} = 1 | !{x} = 1"));
             let Expr::Or { any } = &e else { panic!("{x}") };

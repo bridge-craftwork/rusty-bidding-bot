@@ -7,6 +7,7 @@
 //! order) among those the hand satisfies.
 
 pub mod cases;
+mod contract;
 mod engine;
 mod eval;
 mod facts;
@@ -35,12 +36,19 @@ pub fn suit_of(strain: bridge_types::Strain) -> Option<bridge_types::Suit> {
         Strain::NoTrump => None,
     }
 }
-pub use eval::check_terms;
+pub use contract::{
+    check_manifest, read_manifest, splice_terms, LANGUAGE_VERSION, OLDEST_LANGUAGE_VERSION,
+    TERMS_BEGIN, TERMS_END,
+};
+pub use eval::{check_terms, terms_reference, Term};
 pub use system::{check_card_refs, RuleRef, System};
 
 /// Compile every `.bid` file under `dir`, sorted by path (which fixes the
-/// file-order tie-breaker).
+/// file-order tie-breaker). A manifest (`conventions.toml`) in `dir` that
+/// asks for a rule language this engine does not read refuses the load;
+/// a directory without one is read as the current language.
 pub fn load_modules(dir: &Path) -> Result<Vec<bidspec::Module>, Vec<bidspec::Diagnostic>> {
+    read_manifest(dir).map_err(|d| vec![d])?;
     fn collect(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
         if let Ok(entries) = std::fs::read_dir(dir) {
             for e in entries.flatten() {

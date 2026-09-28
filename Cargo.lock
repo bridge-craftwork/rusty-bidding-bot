@@ -474,6 +474,7 @@ dependencies = [
  "bridge-card",
  "serde",
  "serde_json",
+ "toml",
 ]
 
 [[package]]
