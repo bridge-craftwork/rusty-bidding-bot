@@ -31,6 +31,19 @@ when partner.last=3N, !they.bid, we.trump is none
       sets  ask=slam_try(D)
       priority -10
 
+  # A standalone major, six to the AKQJ or seven to the AKQ, plays in
+  # game without help from partner, and a short suit with no stopper is
+  # a risk in notrump (Rick, 2026-09-27, ticket b194: 1S 2D 2S 3NT with
+  # AKQJ63 and 32 in hearts; BBA bids 4S).
+  4S  "A standalone spade suit, and a short suit unguarded"
+      shows (S>=6, quality(S)=3, top5(S)>=4) | (S>=7, quality(S)=3)
+      shows (H<=2, !stop(H)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority -10
+  4H  "A standalone heart suit, and a short suit unguarded"
+      shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
+      shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority -10
+
 when asked slam_try(m), partner.last=4{m}, we.trump is none
   6{m}  "A fit: slam"                       shows m>=3
   4N    "No fit"                            shows m<=2

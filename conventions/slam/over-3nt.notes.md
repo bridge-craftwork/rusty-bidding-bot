@@ -72,3 +72,12 @@ A first attempt put the rule in one context for every uncontested
 position below game. It overrode the notrump auctions' own slam
 counting (Stayman, transfers, 1NT–4NT): −11,422 par, −14,314 side. The
 contexts are now named auctions.
+
+## A standalone major over partner's 3NT (2026-09-27)
+
+Ticket basic-weak-2-b194 (Rick): 1S 2D 2S 3NT with AKQJ63.32.6.T542
+should go back to 4S: the suit needs no help to keep trump control, and
+the weak heart doubleton is a risk in notrump. Standalone: six to the
+AKQJ or seven to the AKQ; plus a doubleton or shorter without a
+stopper. +615 par, +969 side IMPs (420 boards). Without the unguarded
+condition: +601 / +942 on 603 boards, so it stays.

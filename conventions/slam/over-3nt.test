@@ -8,3 +8,10 @@ N 874.KJ5.Q953.K75      | 1D P 2C P 3N P | P   | 9: no slam
 # Responder after opener's new suit: the same count, in points.
 N T87.Q7.AKT9.KQJ4      | 1H P 2C P 2S P                       | 6NT    | 15 facing a reverse after two over one: 33 points between us
 N Q54.K92.KJT3.AJ5      | 1C P 1D P 2S P                       | 6NT    | 13 facing a jump shift (20+ points): BBA also reaches 6NT (1m-3N 316)
+
+# A standalone major back to game over partner's 3NT (Basic_Weak_2 194).
+card    Basic-Bridge
+dealer  S
+vul     NS
+S AKQJ63.32.6.T542      | 1S P 2D P 2S P 3NT P                 | 4S     | six to the AKQJ, hearts a weak doubleton
+S AKQJ63.K3.6.T542      | 1S P 2D P 2S P 3NT P                 | P      | the doubleton is guarded: 3NT
