@@ -828,3 +828,17 @@ after 1x (1y) P (P) | 1x (2y) P (P) | 1x (3y) P (P) when y is not x
   cheapest(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19
       when  stop(y)
+
+# Opener answering responder's 2NT invitation with a six-card major
+# (2026-09-27, ticket b220: 1S 2C 2H 2NT, AQ6542.JT65.97.K passed): the
+# sixth card plays better than notrump opposite partner's doubleton.
+# Three declines, four accepts; BBA bids 3S and responder raises.
+when asked nt_invite, !partner.opened
+  3S  "Six or more spades: not a maximum"   shows S>=6, strength<=invite
+      priority 1
+  4S  "Six or more spades: accepts"         shows S>=6, strength>=game
+      priority 1
+  3H  "Six or more hearts: not a maximum"   shows H>=6, S<=3, strength<=invite
+      priority 1
+  4H  "Six or more hearts: accepts"         shows H>=6, S<=3, strength>=game
+      priority 1
