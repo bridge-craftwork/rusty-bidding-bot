@@ -1,0 +1,49 @@
+# Support doubles and redoubles: we open, partner responds one of a
+# major, RHO comes in. 21GF-DEFAULT plays them, with `through` unset
+# (two of partner's major).
+card    21GF-DEFAULT
+dealer  S
+vul     None
+
+# seat hand                 | auction          | expect | why
+S AK3.Q84.J3.KJ652          | 1C P 1H 1S       | X      | exactly three hearts, 14 HCP: support double
+S AK3.Q842.J3.KJ65          | 1C P 1H 1S       | 2H     | four hearts: the raise
+S T72.AKQ.2.AQ8543          | 1C P 1H 1S       | X      | three hearts and six clubs: support first, as BBA
+S KJ3.7.AQ852.KJ52          | 1D P 1S 2H       | X      | 2H is below two spades
+S AK3.Q84.J3.KJ652          | 1C P 1H 2S       | P      | 2S is above two hearts: no support double
+S AK3.Q84.J3.KJ652          | 1C P 1H X        | XX     | support redouble over their double
+S AK3.Q84.J3.KJ652          | 1C 1D 1H 2D      | X      | LHO overcalled and RHO raised: still support
+S AK3.Q84.J3.KJ652          | 1C X 1H 1S       | X      | after their takeout double too
+S AK3.Q8.AJ3.KJ652          | 1C X 1H 1S       | 2NT    | 18 balanced, two hearts: not the 18+ double here
+S AK3.Q8.AJ.KJ6532          | 1C X 1H 1S       | 2S     | 18 unbalanced with no three hearts: cue bid
+
+# Responder after the double, LHO passing.
+N 874.KJ642.95.K82          | 1C P 1H 1S X P   | 2H     | five hearts, 8 points: the eight-card fit
+N 874.KJ642.Q5.K82          | 1C P 1H 1S X P   | 3H     | five hearts, 10 points: invites
+N A74.KJ642.Q5.K82          | 1C P 1H 1S X P   | 4H     | five hearts, 13 HCP: game
+N KJ4.QT64.Q53.J82          | 1C P 1H 1S X P   | 1NT    | four hearts, 9 balanced with a spade stopper
+N K84.KJ64.A53.Q82          | 1C P 1H 1S X P   | 3NT    | four hearts, 13 balanced with a spade stopper
+N 84.KJ64.Q53.K842          | 1C P 1H 1S X P   | 2C     | four hearts and four clubs, 9: raise the minor
+N 874.KJ64.AQ5.A82          | 1C P 1H 1S X P   | 2S     | four hearts, 14, no spade stopper: cue bid
+N 874.KJ64.Q53.K82          | 1C P 1H 1S X P   | 2H     | nothing better: the 4-3 fit at the two level
+N T832.A96.92.AKJ2          | 1D P 1S 2C X P   | P      | four spades and AKJ2 in their clubs: penalty
+
+# After the redouble, and when they bid again.
+N 874.KJ64.Q53.K82          | 1C P 1H X XX P   | P      | play one heart redoubled
+N 874.KJ642.Q5.K82          | 1C P 1H 1S X 2S  | 3H     | five hearts: compete in the eight-card fit
+N 874.KJ64.Q53.K82          | 1C P 1H 1S X 2S  | P      | four hearts and a minimum: leave it
+
+# Opener's next call.
+S AK3.Q84.J3.KJ652          | 1C P 1H 1S X P 2S P | 3NT | a spade stopper for the cue bid
+S 983.AQ4.K3.AKJ52          | 1C P 1H 1S X P 2S P | 4H  | no spade stopper: the 4-3 game
+S AK3.Q84.J3.KJ652          | 1C P 1H 1S X P 2H P | P   | a minimum opposite the sign-off
+
+# A card that plays them through 3♣.
+card    21GF-DEFAULT doubles.support.through=3♣
+S A5.KJ3.AQ852.J52          | 1D P 1H 3C       | X      | 3C is within the card's through
+S A5.KJ3.AQ852.J52          | 1D P 1H 3D       | !X     | 3D is above it
+
+# Basic-Bridge does not play them.
+card    Basic-Bridge
+S AK3.Q84.J3.KJ652          | 1C P 1H 1S       | P      | three hearts: no support double on this card
+S AK3.Q8.AJ3.KJ652          | 1C X 1H 1S       | X      | the 18+ double where support doubles are off

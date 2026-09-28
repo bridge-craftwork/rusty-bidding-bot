@@ -15,6 +15,8 @@ module rebids "Opener's rebid"
   needs  responses
   param  style = general.style
   param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
+  param  support_x = doubles.support.play default false
+  param  support_through = doubles.support.through
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
@@ -571,11 +573,17 @@ after 1x (X) 1z (P) when z is not x
 # Opener with 18+ after 1x (X) 1z (1w): double, the strong hand, as BBA
 # (2026-09-27, ticket b6: 18 balanced passed 1C X 1D 1S). Responder's
 # answers are in responder-rebids.bid.
+# Where the double is a support double (support-doubles.bid: partner's
+# major, their call no higher than the card's `through`), it is not
+# this one: with support doubles on BBA doubles with three of partner's
+# major at any strength and never with 18+ otherwise
+# (probes/support-x-1C-X-1H-1S.toml).
 after 1x (X) 1z (1y) when z is not x, y is not x, y is not z
   X   "18+: a strong hand, more to say"
       shows hcp>=18
+      when  !support_x | z is C | z is D | !((support_through is none, rho.last <= 2{z}) | rho.last <= support_through)
       priority -2
-after 1x (X) 1z (1y) X (P) * (P) when z is not x, y is not x, y is not z
+after 1x (X) 1z (1y) X (P) * (P) when z is not x, y is not x, y is not z, !answered support
   cheapest(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19, stop(y)
   3N  "20+ balanced with a stopper in {y}"

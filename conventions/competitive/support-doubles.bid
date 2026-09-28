@@ -1,0 +1,151 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Support doubles and redoubles. We open, partner responds one of a
+# major, and RHO comes in: opener's double (redouble over their double)
+# shows exactly three cards in partner's major, and a raise shows four.
+# The strength is not limited: opener shows extras at his next turn.
+#
+# The card switches them on (`doubles.support.play`; the redouble is
+# `doubles.support.rdbl`). `doubles.support.through` is the highest call
+# by RHO over which the double still shows support ("2♥" on Rick's card);
+# a card that leaves it unset plays them through two of responder's major,
+# which is where BBA stops (probes/support-x-1C-1H-2S.toml,
+# support-x-1D-1H-3C.toml). Above it opener's double keeps whatever
+# meaning it had.
+#
+# Notes: support-doubles.notes.md.
+
+module support-doubles "Support doubles and redoubles"
+  card   doubles.support.play
+  needs  rebids
+  param  rdbl = doubles.support.rdbl default false
+  param  through = doubles.support.through
+
+# ── Opener: the double shows three, the raise four ───────────────────
+# BBA doubles on every hand with three of partner's major, 11 to 21, and
+# with a six-card minor too (probes/support-x-*.toml: 490 of 490), so the
+# double comes before every other rebid. The raise with four is
+# unchanged (rebids.bid, `1x (*) 1z (*)`: it already shows four).
+after 1x (*) 1M (1z) | 1x (*) 1M (2z) | 1x (*) 1M (3z) when M is not x, z is not M
+  when (through is none, rho.last <= 2{M}) | rho.last <= through
+    X   "Support double: exactly three {M}"
+        alert  artificial
+        shows  M=3
+        sets   ask=support(M, x, z)
+        priority 1                 # before any other rebid, as BBA (above)
+    # After their takeout double of our opening the double was the 18+
+    # hand (rebids.bid, ticket b6), which gives way to the support double
+    # here. The strong hands without three of the major still need a
+    # call: BBA bids 2NT or 3NT with 18 (probes/support-x-1C-X-1H-1S.toml).
+    jump(N) "18-19 balanced with a stopper in {z}"
+        shows  balanced, hcp=18..19, M<=2, stop(z)
+        when   lho.last=X
+    3N  "20+ with a stopper in {z}"
+        shows  hcp>=20, M<=2, stop(z)
+        when   lho.last=X
+        priority -1
+    cheapest(z) "Cue bid: 18+, forcing to game"
+        alert  artificial
+        shows  hcp>=18, M<=2
+        when   lho.last=X
+        sets   forcing=game
+        priority -3
+
+after 1x (*) 1M (X) when M is not x, rdbl
+  XX  "Support redouble: exactly three {M}"
+      alert  artificial
+      shows  M=3
+      sets   ask=support(M, x)
+      priority 1                   # before any other rebid (probes/support-xx-1C-1H-X.toml)
+
+# ── Responder after the support double, when they pass ───────────────
+# Partner has exactly three of my major. With five it is an eight-card
+# fit, bid to the level the hand is worth; with four it is a 4-3 fit, and
+# notrump with their suit held, or a minor, comes first (BBA: 2C or 2D
+# rather than the 4-3 fit on 100 of 100 minimum hands with four,
+# probes/support-x-resp-1C-1H-1S.toml).
+when asked support(M, x, z), rho.last=P, partner.last=X
+  cheapest(M) "Five or more {M}, minimum: the eight-card fit"
+      shows M>=5, points<=9
+      sets  trump=M, ask=signoff
+  jump(M) "Five or more {M}, 10-11: invitational"
+      shows M>=5, points=10..11
+      sets  trump=M, ask=invite(M)
+  4M  "Five or more {M}, 12+: game"
+      shows M>=5, points>=12
+      sets  trump=M
+  1N  "Four {M}, 6-10 balanced with a stopper in {z}"
+      shows M=4, balanced, points=6..10, stop(z)
+      sets  ask=signoff
+  2N  "Four {M}, 11-12 with a stopper in {z}: invitational"
+      shows M=4, semibalanced, points=11..12, stop(z)
+      sets  ask=nt_invite
+  3N  "Four {M}, 13+ with a stopper in {z}"
+      shows M=4, semibalanced, points>=13, stop(z)
+  # The minor bids only at the two level, and never in a suit LHO has
+  # shown (2026-09-28: 1C (1D) 1S (2H) X (P) 3D left us in a 5-card fit).
+  cheapest(x) "Four or more {x}, minimum: raises opener's minor"
+      shows x>=4, M=4, points<=10
+      when  x is C | x is D, z is not x, cheapest_rank(x)<=14
+      sets  ask=signoff
+  cheapest(D) "Four or more diamonds, minimum"
+      shows D>=4, M=4, points<=10
+      when  x is C, z is not D, cheapest_rank(D)<=14
+      when  maybe lho.D<=4
+      sets  ask=signoff
+      priority -1
+  cheapest(C) "Four or more clubs, minimum"
+      shows C>=4, M=4, points<=10
+      when  x is not C, z is not C, cheapest_rank(C)<=14
+      when  maybe lho.C<=4
+      sets  ask=signoff
+      priority -1
+  cheapest(z) "Cue bid: four {M}, 13+ without a stopper: forcing to game"
+      alert  artificial
+      shows M=4, points>=13
+      sets  forcing=game, ask=support_cue(M, z)
+      priority -1
+  jump(M) "Four {M}, 11-12: invitational in the 4-3 fit"
+      shows M=4, points=11..12
+      sets  trump=M, ask=invite(M)
+      priority -2
+  # BBA converts the double on 30 of 184 hands with four of partner's
+  # major and four or more of theirs (probes/support-x-resp-1D-1S-2C.toml).
+  P   "Penalty: four or more {z} with two of the top five"
+      shows z>=4, top5(z)>=2, M<=4, hcp>=7
+      priority 1                   # before the notrump and minor bids it outranks
+  cheapest(M) "Nothing better to say: {M} in the 4-3 fit"
+      shows M>=4
+      sets  ask=signoff
+      priority -5
+
+# After the redouble, their pass leaves us in one of the major
+# redoubled with seven trumps: BBA passes (216 of 250,
+# probes/support-xx-resp-1C-1H-X.toml).
+when asked support(M), rho.last=P, partner.last=XX
+  P   "Plays one {M} redoubled"
+  4M  "Five or more {M}, 13+: game"
+      shows M>=5, points>=13
+      sets  trump=M
+      priority -1
+
+# ── Responder after the support double, when they bid again ──────────
+# The double is no longer to be answered: compete with the eight-card
+# fit, bid game with it and 12+, and otherwise leave it to partner.
+when asked support(M), rho.last!=P
+  cheapest(M) "Five or more {M}: competes in the eight-card fit"
+      shows M>=5, points<=11
+      sets  trump=M, ask=signoff     # opener goes on only with 19+ (rebids.bid)
+  4M  "Five or more {M}, 12+: game"
+      shows M>=5, points>=12
+      sets  trump=M
+  P   "They have bid again: nothing more to say"
+      priority -10
+
+# ── Opener answers the cue bid ───────────────────────────────────────
+# Responder has four of the major, 13+ and nothing in their suit; the
+# cue bid asks for a stopper. With none, the 4-3 fit is the game.
+when asked support_cue(M, z)
+  3N  "A stopper in {z}"             shows stop(z)
+  4M  "No stopper in {z}: game in the 4-3 fit"
+      priority -1

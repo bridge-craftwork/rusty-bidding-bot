@@ -702,8 +702,8 @@ when partner.last=1N | partner.last=2N, me.has_bid | style is not bba, partner.b
       priority -9
 
 # Opener's strong double after 1x (X) 1z (1y): describe, cheapest first
-# (ticket b6).
-after 1x (X) 1z (1y) X (P) when z is not x, y is not x, y is not z
+# (ticket b6). Not after a support double (support-doubles.bid).
+after 1x (X) 1z (1y) X (P) when z is not x, y is not x, y is not z, !asked support
   cheapest(N) "A stopper in {y}, nothing more to show"   shows stop(y), z<=5
   cheapest(z) "Five or more {z}"           shows z>=5
       priority 1
