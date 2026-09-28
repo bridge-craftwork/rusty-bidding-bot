@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use bridge_card::{bbsa, schema, Card};
 use clap::{Parser, Subcommand};
 
+mod bid_pbn;
 mod coverage;
 
 #[derive(Parser)]
@@ -191,6 +192,51 @@ enum Command {
         /// Also write the rows as TSV here.
         #[arg(long)]
         tsv: Option<PathBuf>,
+    },
+    /// Bid every deal in a PBN file and write it with our auctions, like
+    /// bba-cli: [Auction] with alerts as [Note]s, [Declarer], [Contract].
+    /// Every other tag of the input is kept.
+    ///
+    /// Example: rbb bid-pbn -i deals.pbn -o bid.pbn --ns-card 21GF-DEFAULT.bbsa
+    ///          --ew-card 21GF-GIB.bbsa
+    #[command(name = "bid-pbn")]
+    BidPbn {
+        /// Input PBN file.
+        #[arg(short, long, value_name = "FILE")]
+        input: PathBuf,
+        /// Output PBN file (`-` for stdout).
+        #[arg(short, long, value_name = "FILE")]
+        output: PathBuf,
+        /// North-South card: a .bbsa file, card JSON, or the name of a stock
+        /// card built into rbb (e.g. 21GF-DEFAULT).
+        #[arg(long, alias = "ns-conventions", value_name = "CARD")]
+        ns_card: String,
+        /// East-West card (default: the North-South card).
+        #[arg(long, alias = "ew-conventions", value_name = "CARD")]
+        ew_card: Option<String>,
+        /// A card change for both sides, `path=value` (repeatable).
+        #[arg(long = "set")]
+        card_changes: Vec<String>,
+        /// Scoring, MP or IMP, for every board (also written as [Scoring]).
+        /// Default: each board's [Scoring] tag, else MP.
+        #[arg(long)]
+        scoring: Option<String>,
+        /// A note for every call a rule explains, with what it showed, not
+        /// only for alerted calls.
+        #[arg(long)]
+        all_meanings: bool,
+        /// Force these calls at the start of every auction, e.g. "1C Pass 1H".
+        #[arg(long, value_name = "CALLS")]
+        auction_prefix: Option<String>,
+        /// Set [Event] on every board.
+        #[arg(long)]
+        event: Option<String>,
+        /// Stop an auction after this many calls (it is then finished with AP).
+        #[arg(long, default_value_t = 60)]
+        max_calls: usize,
+        /// Directory of .bid modules; default: the rules built into rbb.
+        #[arg(long)]
+        rules: Option<PathBuf>,
     },
     /// Choose a call for a hand and show why.
     Call {
@@ -565,6 +611,76 @@ fn run(cli: Cli) -> Result<()> {
             }
             Ok(())
         }
+        Command::BidPbn {
+            input,
+            output,
+            ns_card,
+            ew_card,
+            card_changes,
+            scoring,
+            all_meanings,
+            auction_prefix,
+            event,
+            max_calls,
+            rules,
+        } => {
+            use bridge_types::{Call, ScoringMethod};
+            let modules = match &rules {
+                Some(dir) => rbb_engine::load_modules(dir),
+                None => rbb_engine::compile_modules(rbb_assets::RULE_FILES.iter().copied()),
+            }
+            .map_err(|d| {
+                d.iter()
+                    .map(|d| d.to_string())
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            })?;
+            let ew_card = ew_card.unwrap_or_else(|| ns_card.clone());
+            let mut cards = [card_or_stock(&ns_card)?, card_or_stock(&ew_card)?];
+            for card in &mut cards {
+                for change in &card_changes {
+                    card.apply_change(change)?;
+                }
+            }
+            let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &modules);
+            let opts = bid_pbn::Options {
+                prefix: auction_prefix
+                    .as_deref()
+                    .unwrap_or("")
+                    .split_whitespace()
+                    .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
+                    .collect::<std::result::Result<_, _>>()?,
+                scoring: scoring
+                    .map(|s| match ScoringMethod::from_pbn(&s) {
+                        Some(m @ (ScoringMethod::Matchpoints | ScoringMethod::IMP)) => Ok(m),
+                        _ => Err("scoring must be MP or IMP"),
+                    })
+                    .transpose()?,
+                all_meanings,
+                event,
+                max_calls,
+                ns_card,
+                ew_card,
+            };
+            let started = std::time::Instant::now();
+            let stats = bid_pbn::run_files(&input, &output, &engine, &opts)?;
+            eprintln!(
+                "{} deals, {} auctions, {} errors{} ({:.1}s)",
+                stats.deals,
+                stats.auctions,
+                stats.errors,
+                if stats.runaway > 0 {
+                    format!(", {} stopped at {max_calls} calls", stats.runaway)
+                } else {
+                    String::new()
+                },
+                started.elapsed().as_secs_f64()
+            );
+            if stats.auctions == 0 {
+                return Err("no auctions generated".into());
+            }
+            Ok(())
+        }
         Command::Call {
             hand,
             auction,
@@ -881,6 +997,27 @@ fn load_card(path: &Path) -> Result<Card> {
         Ok(bbsa::import(&text, None)?.0)
     } else {
         Ok(Card::from_json(&text)?.0)
+    }
+}
+
+/// A card from a file (.bbsa or card JSON) or, when no such file exists,
+/// the stock card of that name built into rbb.
+fn card_or_stock(spec: &str) -> Result<Card> {
+    let path = Path::new(spec);
+    if path.exists() {
+        return load_card(path);
+    }
+    match rbb_assets::card(spec) {
+        Some(text) => Ok(bbsa::import(text, Some(spec))?.0),
+        None => Err(format!(
+            "{spec}: no such file, and no stock card of that name ({})",
+            rbb_assets::CARDS
+                .iter()
+                .map(|(n, _)| *n)
+                .collect::<Vec<_>>()
+                .join(", ")
+        )
+        .into()),
     }
 }
 

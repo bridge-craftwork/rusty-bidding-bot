@@ -2891,8 +2891,11 @@ version = "0.1.0"
 dependencies = [
  "bidspec",
  "bridge-card",
+ "bridge-encodings",
  "bridge-types",
  "clap",
+ "rayon",
+ "rbb-assets",
  "rbb-compare",
  "rbb-engine",
  "serde_json",
