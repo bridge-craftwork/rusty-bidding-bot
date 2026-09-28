@@ -1,0 +1,71 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The Impossible 2♠ (Robert Todd, "The Impossible ♠ Bid", Adventures in
+# Bridge TWiB 269; GIB's "Impossible spade"): after 1♥–1NT, responder has
+# denied four spades, so a later 2♠ over opener's 2♣ or 2♦ cannot be
+# natural. It shows a good raise of opener's minor: four or more, the top
+# of the 1NT response, and forcing to three of the minor. The plain raise
+# to 3m stays the lesser raise (responder-rebids.bid). Only after a 1♥
+# opening (over 1♠, 2♠ is a preference) and only over a minor rebid: our
+# 1NT denies three hearts, so Todd's 1♥–1NT–2♥–2♠ (a three-card limit
+# raise) has no hand here. See impossible-2s.notes.md.
+
+module impossible-2s "Impossible 2♠"
+  card   major_openings.impossible_2s.play
+  needs  responder-rebids
+
+# ── Responder: the good raise ────────────────────────────────────────
+# Our 1NT is 6-10 HCP, so the raise to 3m (9-10 points) is the courtesy
+# raise and 2♠ takes the 11+ hands (10 HCP and a fifth trump, or a
+# sixth), which had no call at all and passed.
+after 1H (P) 1N (P) 2m (P)
+  2S  "Impossible 2♠: good raise of {m}, 4+ {m}, 11+ points"  alert
+      shows m>=4, H<=2, points>=11
+      sets  trump=m, forcing=round
+      artificial
+
+# ── Opener answers ───────────────────────────────────────────────────
+# Responder has 11-13 with the fit, so opener goes to game with 15+
+# support points (HCP and shortness: a 5-4-3-1 twelve-count, a 5-4-2-2
+# thirteen; GIB's minimum is 12-13 total points): 3NT with both unbid suits stopped, otherwise the
+# stopper he has (up the line, looking for 3NT, with the minor as the
+# fallback; responder answers in responder-rebids.bid), otherwise five
+# of the minor. With a minimum he signs off in three of the minor.
+after 1H (P) 1N (P) 2C (P) 2S (P)
+  3C  "Minimum: no game opposite the good raise"
+      shows tp(C)<=14
+      sets  ask=signoff
+  3N  "Game: 15+, spades and diamonds stopped"
+      shows tp(C)>=15, stop(S), stop(D)
+  3D  "Diamond stopper, not spades: looking for 3NT"
+      shows tp(C)>=15, stop(D), !stop(S)
+      sets  ask=stoppers, ladder=stopper, forcing=game
+  3S  "Spade stopper, not diamonds: looking for 3NT"
+      shows tp(C)>=15, stop(S), !stop(D)
+      sets  ask=stoppers, ladder=stopper, forcing=game
+  5C  "Game in clubs: 15+, neither suit stopped"
+      shows tp(C)>=15
+      priority -1
+after 1H (P) 1N (P) 2D (P) 2S (P)
+  3D  "Minimum: no game opposite the good raise"
+      shows tp(D)<=14
+      sets  ask=signoff
+  3N  "Game: 15+, spades and clubs stopped"
+      shows tp(D)>=15, stop(S), stop(C)
+  3C  "Club stopper, not spades: looking for 3NT"
+      shows tp(D)>=15, stop(C), !stop(S)
+      sets  ask=stoppers, ladder=stopper, forcing=game
+  3S  "Spade stopper, not clubs: looking for 3NT"
+      shows tp(D)>=15, stop(S), !stop(C)
+      sets  ask=stoppers, ladder=stopper, forcing=game
+  5D  "Game in diamonds: 15+, neither suit stopped"
+      shows tp(D)>=15
+      priority -1
+
+# ── Responder after opener's minimum ─────────────────────────────────
+after 1H (P) 1N (P) 2m (P) 2S (P) 3m (P)
+  P   "Opener is minimum: play three of {m}"
+
+# ── Responder after opener's game ────────────────────────────────────
+after 1H (P) 1N (P) 2m (P) 2S (P) 3N (P) | 1H (P) 1N (P) 2m (P) 2S (P) 5m (P)
+  P   "Opener has placed the contract"

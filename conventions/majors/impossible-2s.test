@@ -1,0 +1,26 @@
+# The Impossible 2♠ (21GF-DEFAULT turns it on: `Imposible 2S`).
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                        | expect | why
+# Responder: 2♠ is the good raise, 3m the lesser one.
+N 62.32.A64.AQT764      | 1H P 1NT P 2C P                | 2S     | 10 HCP and six clubs: 12 points, the good raise
+N 54.8.AQJ82.Q9763      | 1H P 1NT P 2D P                | 2S     | 9 HCP, five diamonds and five clubs: 11 points
+N 853.J4.K962.AQ75      | 1H P 1NT P 2C P                | 3C     | 10 points, four clubs: the lesser raise
+N 853.J4.9862.KQ75      | 1H P 1NT P 2C P                | P      | 6 HCP: pass
+# Opener: 3m with a minimum, else game: 3NT with both suits stopped, a
+# stopper bid with one, five of the minor with neither.
+S 95.KQ764.Q8.AJ92      | 1H P 1NT P 2C P 2S P           | 3C     | 12 HCP, two doubletons: 14 support points, minimum
+S A.AJ963.Q43.KJ92      | 1H P 1NT P 2C P 2S P           | 3NT    | 15 HCP, spades and diamonds stopped
+S A83.KQJ82.5.KQ63      | 1H P 1NT P 2C P 2S P           | 3S     | 15 HCP, a spade stopper and a singleton diamond
+S 8.AKJ82.KQ5.Q632      | 1H P 1NT P 2C P 2S P           | 3D     | 15 HCP, a diamond stopper, singleton spade
+S 8.AKJ82.53.AKJ63      | 1H P 1NT P 2C P 2S P           | 5C     | 16 HCP, neither suit stopped
+# Responder after opener's answer.
+N 62.32.A64.AQT764      | 1H P 1NT P 2C P 2S P 3S P      | 3NT    | opener stops spades, I stop diamonds
+N 62.32.K64.AQT764      | 1H P 1NT P 2C P 2S P 3D P      | 5C     | no spade stopper on either side
+N 62.32.A64.AQT764      | 1H P 1NT P 2C P 2S P 3C P      | P      | opener is minimum
+
+# Without the convention 2♠ has no meaning here, and 3♣ is the only raise.
+card    21GF-DEFAULT major_openings.impossible_2s.play=false
+N 853.J4.K962.AQ75      | 1H P 1NT P 2C P                | 3C     | 10 points, four clubs
+N 62.32.A64.AQT764      | 1H P 1NT P 2C P                | P      | 12 points has no raise without it (a gap: notes)
