@@ -2,8 +2,12 @@
 
 Status: **plan, for review** (issue #3). Rick answered most of the open
 questions on 2026-09-28; his decisions are listed below and folded into the
-recommendation, the phased plan and the draft issues. The questions still
-open are at the end. The issues are drafts, not yet filed.
+recommendation, the phased plan and the draft issues. Three more (Q2, Q7,
+Q11) were settled the same day as provisional defaults (§7). The questions
+still open are at the end. The issues were revised on 2026-09-28 for the
+engine work that has landed since the first draft (§1.7) and now describe
+only the remaining work; their bodies, ready to file, are in
+[drafts/integration-issues/](drafts/integration-issues/INDEX.md).
 
 **Rick's decisions (2026-09-28):**
 
@@ -20,6 +24,14 @@ open are at the end. The issues are drafts, not yet filed.
    or offline tables.
 6. **When no rule applies, fall back to BBA for that call**, initially,
    and do not flag it at this level.
+
+Provisional defaults, approved 2026-09-28 (§7):
+
+- **Q2:** the student is marked against BBA for now, whichever engine bids.
+- **Q7:** Bridge-Classroom pulls the WASM package from rusty-bidding-bot's
+  GitHub release assets; it is not hand-vendored.
+- **Q11:** BBA's fallback calls use the scenario's own `.bbsa` card, or
+  `21GF-DEFAULT` when the table has none.
 
 Goal (issue #3): offer this engine (called "Rusty" below) as a configurable
 alternative to BBA at Bridge-Classroom's practice tables. On a single-user
@@ -153,10 +165,9 @@ Axum wrapper around `epbot-core`.
 
 ### 1.6 What this repo offers
 
-- `rbb_engine::Engine::new(ns: &Card, ew: &Card, modules)`
-  (`crates/engine/src/engine.rs:115`), `bid(hand, dealer, vul, scoring,
-  calls) -> Decision` (`:345`) and `interpret(dealer, vul, scoring, calls) ->
-  Interpretation` (`:329`).
+- `rbb_engine::Engine::new(ns: &Card, ew: &Card, rules: &RuleSet)`
+  (`crates/engine/src/engine.rs:144`), `bid(...) -> Decision` (`:410`),
+  `interpret(...)` (`:394`) and `bid_deal(...)` (`:691`).
   - `Decision` has `call`, `explanation`, `alert`, `rule` (file:line), the
     ranked `candidates` with the reason each lost, and the interpreted
     auction.
@@ -167,25 +178,79 @@ Axum wrapper around `epbot-core`.
   other three hands.
 - It is deterministic by design. The sample pool uses a fixed seed
   (`crates/engine/src/sample.rs`). There is no clock and no randomness.
-- `bridge_card::Card::from_json` (`crates/bridge-card/src/card.rs:107`) reads
-  the editor's nested `card_data` directly.
+- Cards are read from the editor's nested `card_data`, or from its export
+  file (`bridge-classroom/card_data@v1`, whose `name` becomes the card's;
+  keys such as `_bbo_raw` are reported and ignored), everywhere a card JSON
+  is read: CLI, WASM, workbench (commit 091c8e4). Bridge-Classroom's
+  ACBL-card fields are card fields under its own paths (d7d466a), and its
+  seed 2/1 Intermediate card loads cleanly (f5b4932).
   - Aliases cover the places where the seed card and the catalog disagree
     (docs/DESIGN.md, "The convention card"). Unknown leaves are kept.
   - `.bbsa` import is lossless. All 18 PBS `.bbsa` files load.
-- Cost: one cold native `rbb call` is 0.1–0.2 s of wall time. That includes
-  parsing every `.bid` file from disk and building the sample pool. The WASM
-  cost is not measured yet.
+- Cost: `bidDeal` takes about 100–150 ms for a whole auction in the
+  browser, and one `bid` a few ms to tens of ms (docs/WASM.md, "Embed").
+  The package is about 1.4 MB, 430 KB gzipped.
 - Coverage gap: when no rule applies, the call is `Pass` with explanation "No
-  rule applies" and `rule: null` (seen on `Pass 1H 1S 2H 2S 3H`). A practice
-  table must not show that as if it were a system bid. Rick's decision:
-  the table asks BBA for that one call instead (decision 6, §3.4).
+  rule applies", `rule: null` and an `info` diagnostic (seen on `Pass 1H 1S
+  2H 2S 3H`). A practice table must not show that as if it were a system
+  bid. Rick's decision: the table asks BBA for that one call instead
+  (decision 6, §3.4).
+
+### 1.7 What has landed since the first draft
+
+The plan was first drafted in bb64ed0 and revised for Rick's decisions in
+0db54f3. Since then (engine version 0.2.0):
+
+- **The WASM API** (docs/WASM.md, API version 1): `info`,
+  `createEngine`/`freeEngine` (a handle, reused for the same cards),
+  `bid`, `interpret` (every call of an actual auction, human calls
+  included, with `explanation`, `alert` as `{kind: alert|announce, text}`,
+  `rule`, `artificial`, `knowledge` with a one-line `summary`, and the
+  `position`), `bidDeal` (a whole auction from an optional `prefix`),
+  `validate`, `conventions`, `reference`, `coverage` (the card report),
+  `exportCard` and `ddTable`. JSON string in and out; nothing throws;
+  problems come back as structured `diagnostics` `{severity, message,
+  line?, col?, hint?}`. Calls accept `1N`/`1NT`, `P`/`Pass`; vul accepts
+  `Both`. Commits c350a6c, 7499107, 1e57c2d.
+- **Rule sets supplied at run time** (062b0e1): a request may carry rules,
+  card vocabulary and manifest as text; `rules_id` (a hash of the texts)
+  identifies the rule set of every engine and of the embedded rules.
+- **Built-in cards** (`rbb-assets`, c350a6c): the rules and the 18 PBS
+  `.bbsa` cards are compiled into the release `rbb` and the WASM package.
+  A card spec is a stock name (`"21GF-DEFAULT"`), `{bbsa: text}` or
+  `{json: card_data | export}`; an unknown stock name is an error whose
+  hint lists the names. The showcase also offers Bridge-Classroom's 2/1
+  Intermediate card, as `BC-21-Intermediate` from `web/cards/` (it is
+  passed as `{json}`, not a stock name).
+- **Release builds** (0f6c2b3, fd781b0, docs/RELEASING.md): a tag `v*`
+  builds `rbb` for Linux, Windows and macOS (signed and notarized) and
+  attaches `rbb-wasm.tar.gz` (the package plus `demo.html`); tags with a
+  suffix publish as pre-releases. `v0.1.0-rc1` is out. CI builds the
+  package on every push (artifact `rbb-wasm-pkg`).
+- **The showcase** at bridge-craftwork.com/rusty-bidding-bot/ (docs/WEB.md):
+  the WASM bidding PBS scenarios, random deals and dealer3 scripts seat by
+  seat, every call explained, with the cards read from the PBN's CC1/CC2
+  headers (`web/lib/pbs.js`). `web/lib/tool.js` is a working client of the
+  API that Bridge-Classroom can crib from.
+- **Teaching skills** (docs/SKILLS.md, d91f4f8): modules and card fields
+  name Bridge-Classroom's skill paths; the taxonomy proposals are filed as
+  bridge-craftwork/Bridge-Classroom#422.
+
+**In progress:** R1, an `auction` entry point that bids the bot seats until
+the auction ends, a human is to call, or a bot reaches a position with no
+rule (it stops there so the client can take BBA's call and resume), the
+meaning of any call, and a native/WASM determinism test.
+
+**Not done yet:** a no-rule stop in `bidDeal` (R1), size and speed budgets
+in CI and a coverage manifest (R4), the build's git commit in `info()` and
+a documented native embedding for a service (R5).
 
 ## 2. Integration points
 
 | # | Where | Today | With Rusty |
 |---|---|---|---|
-| P1 | `bbaClient.js` / LocalEngine `generateAuction()` | whole BBA auction | Rusty in the browser: a call per bot seat, or a whole auction in BBA's shape |
-| P2 | LocalEngine reference and divergence | BBA's prediction | the reference engine's call for the human's seat, with candidates ("why") |
+| P1 | `bbaClient.js` / LocalEngine `generateAuction()` | whole BBA auction | Rusty in the browser: R1's `auction` bids the bot seats up to the human's turn, with BBA's call at a no-rule stop |
+| P2 | LocalEngine reference and divergence | BBA's prediction | still BBA's prediction for now (Q2); Rusty's reading of the student's call and its candidates ("why") alongside |
 | P3 | `AuctionTable` tooltips | BBA meanings by predicted position | `interpret()` of the **actual** auction, every call, human calls included (decision 3) |
 | P4 | Engine choice | none (bidding is always BBA) | a remembered per-user setting on the solo table, default BBA; a per-session setting on served tables; one bot for every non-human seat (decisions 1, 2) |
 | P5 | Cards | `.bbsa` names only | the user's own `card_data`; built-in named cards for scenarios and defaults; the same card both ways by default (decision 4) |
@@ -208,9 +273,11 @@ When a bot seat is to call, it asks `bid()` with that seat's hand.
   the table works offline only while Rusty has a rule for every bot call.
 - For: prefix caching and resending requests go away. The "expected auction"
   becomes one `bid()` for the human's seat, which also says *why*.
-- Against: the WASM download, and the compute cost on slow devices (the
-  sample pool and descriptiveness). This needs a Web Worker and measuring.
-  Rules update only when the vendored WASM is rebuilt.
+- Against: the WASM download (430 KB gzipped), and the compute cost on
+  slow devices (the sample pool and descriptiveness; about 100–150 ms a
+  whole auction on a laptop). This needs a Web Worker and budgets in CI
+  (R4). Rules update only when Bridge-Classroom moves to a newer release
+  (Q7).
 
 **B. Native, in bridge-table-service.** `choose_call()` calls `rbb-engine`
 directly, the way the service already calls `bridge-rulebot`.
@@ -257,6 +324,8 @@ the bot seats bid on the server. Tables that run without the service
 (peer-to-peer or offline) are not wanted.
 
 - **Solo table:** there is one bidder, so nothing can diverge.
+  (The reference the student is marked against is BBA's auction for now,
+  Q2, so it is a second source but not a second bidder.)
 - **Served table with B:** there is one bidder per room, on the server.
   Each table in a class session bids on its own, and the same position gives
   the same call at every table because the engine is deterministic. The only
@@ -264,14 +333,17 @@ the bot seats bid on the server. Tables that run without the service
   browser's WASM is a different version from the service's crate. The fix:
   - the service sends each bot call's explanation (P7), so the client does
     not recompute it;
-  - the welcome frame carries `bidder` and `bidder_version`;
-  - the overlay says which version it used, or hides itself when the versions
-    differ.
+  - the welcome frame carries `bidder` and `bidder_version` (the crate
+    version and `rules_id`);
+  - the client's own Rusty readings (the mouseover meaning of a human's
+    call) say which version they used, or are hidden when the versions
+    differ. The "you vs reference" overlay stays BBA's for now (Q2).
 - **Determinism is a claim to test, not assume.** Rust's `HashMap` hashes
   with a random seed. Any tie-break that depends on map iteration would make
   two processes disagree. The WASM and native builds need a golden test: the
   same inputs give the same call and explanation across runs and across
-  targets. The candidate sort must break ties on a stable key.
+  targets. The candidate sort must break ties on a stable key. This test
+  is being written as part of R1.
 
 ### 3.3 Passing cards
 
@@ -280,16 +352,18 @@ The options:
 1. **The editor's card JSON, as is.** `new(ns_json, ew_json)` accepts
    `card_data`, and the engine loads it with `Card::from_json`. This is what
    makes Rusty worth having in a classroom: partner bids *your* card.
-2. **Built-in named cards.** The 18 PBS `.bbsa` files are imported to card
-   JSON at build time and embedded by name (`"21GF-DEFAULT"`, …). Scenario
-   tables use them.
+2. **Built-in named cards.** The 18 PBS `.bbsa` files are embedded by name
+   (`"21GF-DEFAULT"`, …) and imported when an engine is made. Scenario
+   tables use them. *Done* (§1.7).
    - The scenario PBN files the client already downloads carry `% CC1 - …/21GF-DEFAULT.bbsa`
      and `% CC2` headers. The client reads CC1/CC2 there, as `rbb compare`
      does, so it needs no `.pbs` fetch.
    - A name that is not built in fails loudly. It never falls back silently.
-3. **Raw `.bbsa` text**, imported in WASM. This is useful for teachers'
-   custom `.bbsa` files, and it is cheap to add because `bridge-card`
-   already does the import.
+     The client strips the path and `.bbsa` from the header, as
+     `web/lib/pbs.js` does; a PBS card that is not built in can be fetched
+     and passed as `{bbsa: text}`.
+3. **Raw `.bbsa` text**, imported in WASM (`{bbsa: text}`). *Done.* Option
+   1 is done too (`{json: card_data}` or the editor's export).
 
 **Which card each side plays.** Rick's decision 4: by default the same card
 is played in both directions. So:
@@ -303,34 +377,40 @@ is played in both directions. So:
   one card for both sides: the owner's primary card, or the teacher's
   choice (which of the two is still open, Q3).
 - When the table falls back to BBA for a call (decision 6), BBA can only be
-  given `.bbsa` names. With an editor card, the fallback call is bid on
-  BBA's nearest card (the default `21GF-DEFAULT`, or a built-in name that
-  the editor card was imported from). The draft issues record this; it is
-  a known inconsistency of the fallback, not a new decision.
+  given `.bbsa` names. **Q11 (provisional):** a scenario table sends the
+  scenario's own `.bbsa` cards (CC1/CC2); any other table, including one
+  playing an editor card, sends `21GF-DEFAULT`. With an editor card the
+  fallback call is therefore bid on a different card from Rusty's: a known
+  inconsistency of the fallback, accepted for now.
 - The card is needed for **interpreting** too, not only for bidding. Its
   interpretation of a human's call ("your 2♣ was read as Stayman") uses the
   human's side's card.
 
 **Coverage warnings:** a user's card can switch on conventions Rusty has no
-rules for yet. WASM should expose a card report: fields honoured, ignored and
-unknown, as `rbb card coverage` does for `.bbsa`. The table can then say
-"Rusty doesn't play Smolen yet; partner will treat 3♥ as natural."
+rules for yet. WASM's `coverage` is the card report (*done*): the settings
+read, ignored, unmapped and other, as `rbb card coverage` does for `.bbsa`.
+The table can then say "Rusty doesn't play Smolen yet; partner will treat
+3♥ as natural." Card fields name their Bridge-Classroom skill
+(docs/SKILLS.md), which gives the warning a name the student has seen in
+lessons.
 
 ### 3.4 Alerts and explanations → the UI
 
-Proposed mapping into the shape `AuctionTable` already takes, so the
-component changes little:
+The engine's side of this exists: every step of `interpret`, `bid` and
+`bidDeal` carries the fields in the left column (docs/WASM.md). The mapping
+into the shape `AuctionTable` already takes is the client's adapter (C1),
+so the component changes little:
 
-| Rusty | UI field | Notes |
+| Rusty (WASM step) | UI field | Notes |
 |---|---|---|
-| `explanation` | `meaning` | short text, e.g. "Stayman: asks for a 4-card major" |
-| `knowledge` (HCP, lengths) | `meaningExtended` | rendered by the engine, e.g. "8+ HCP, 4+ ♥"; one wording, owned by the engine |
-| `alert: Alert` | `isAlert: true` (+ `alertText`) | first use of `isAlert` in the UI |
-| `alert: Announce{text}` | `announce: text` | e.g. "Transfer", "15–17"; shown inline, not only on hover |
+| `explanation` (`meaning` in `bidDeal`) | `meaning` | short text, e.g. "Stayman: asks for a 4-card major" |
+| `knowledge.summary` | `meaningExtended` | rendered by the engine, e.g. "15-17 HCP, 2-5 S, ..., balanced"; one wording, owned by the engine |
+| `alert: {kind: "alert", text?}` | `isAlert: true` (+ `alertText`) | first use of `isAlert` in the UI |
+| `alert: {kind: "announce", text}` | `announce: text` | e.g. "Transfer", "15 to 17"; shown inline, not only on hover |
 | `artificial` | `artificial` | may style the cell |
-| `rule == null` | `fallback: true` | not shown: the table replaces the call with BBA's call at that point and shows BBA's meaning for it, unflagged (decision 6); the flag stays in the data for logs and bug reports |
-| `rule` (file:line) | `ruleRef` | goes into bug reports, not shown to students |
-| `candidates` | `why` | the teaching panel: why the reference call won and why the student's call lost |
+| `rule == null` on the engine's own call | `fallback: true` | R1 stops there instead of passing. Not shown: the table replaces the call with BBA's call at that point and shows BBA's meaning for it, unflagged (decision 6); the flag stays in the data for logs and bug reports |
+| `rule` (`{module, file, line}`) | `ruleRef` | goes into bug reports, not shown to students |
+| `candidates` (`outcome` per rule) | `why` | the teaching panel: why Rusty rejected the student's call |
 
 **Mouseover (decision 3).** Every call in the auction grid gets a tooltip
 from Rusty: for a human's call, what it would mean to Rusty (the
@@ -352,9 +432,10 @@ Differences from BBA that the UI must allow for:
 1. Meanings come from `interpret()` over the **actual** auction, so tooltips
    stay correct after a divergence. The BBA meanings describe BBA's line, and
    they no longer line up with the actual calls once the auction leaves it.
-2. The suit notation must be settled once. Either the engine emits `!S`
-   tokens, which `formatMeaningHtml` already converts, or it emits Unicode
-   symbols. HTML is never passed through.
+2. Suit notation: the engine's text is plain, never HTML, with calls in
+   the engine's spelling (`2S`, `1NT`) and suits as letters (`4+ H`). The
+   client turns them into symbols when it renders (C3), as
+   `formatMeaningHtml` does for BBA's `!S` tokens.
 3. Hidden information: in real bridge you do not see explanations of your
    partner's calls, and alerts go to the opponents. For teaching, the solo
    table can show everything. A served table should probably follow table
@@ -369,11 +450,13 @@ Differences from BBA that the UI must allow for:
 - Served: add a host setting. This is a new `set_bidder` frame, or a field on
   session create. It is separate from `BotMode`, which is about cardplay. The
   seat label becomes `"Rusty+RulesBot"`. Again one bidder for all bot seats.
-- The **reference** the student is marked against is either the table's
-  engine (the simplest), or a separate choice that can show both BBA and
-  Rusty (Q2). Every hardcoded "BBA" label becomes a parameter: the stacked
-  cell label (`AuctionTable.vue:37`), the summary text
-  (`localEngine.js:134-135`) and the seat label (`serverEngine.js:404`).
+- The **reference** the student is marked against stays **BBA** for now,
+  whichever engine bids (Q2, provisional). So a Rusty table still asks BBA
+  for its predicted auction, as today, for marking only. Every hardcoded
+  "BBA" label becomes a parameter naming its source: the stacked cell label
+  (`AuctionTable.vue:37`) and the summary text (`localEngine.js:134-135`)
+  name the reference (BBA), and the seat label (`serverEngine.js:404`)
+  names the bidder.
 - Per-scenario gating: PBS already publishes `bbaWorks` per scenario
   (`pbsScenarios.js:182-212`). Rusty can publish a matching coverage manifest,
   built from `rbb compare` (agreement and card coverage per scenario). The
@@ -381,18 +464,23 @@ Differences from BBA that the UI must allow for:
 
 ### 3.6 Versioning rules and engine
 
-- The rules are embedded at build time. The WASM and the native crate both
-  expose `version()`, which returns the crate version, the git commit, a
-  **content hash of the compiled rules**, and the card schema version.
-- Bridge-Classroom vendors the WASM, as it does the rulebot, and the vendor
-  README records the commit. The table service pins a git rev in its
-  `Cargo.lock`. Both report their version in the welcome frame and in bug
-  reports.
-- Upgrades are explicit. Rebuild and re-vendor, or bump the pin. A table
+- The rules are embedded at build time (`rbb-assets`). WASM `info()`
+  returns `api`, the crate `version`, `rules_id` (a content hash of the
+  embedded rules, manifest and card vocabulary), the rule `language`
+  version and the stock card names. The source commit is not in it yet (R5).
+- **Bridge-Classroom pulls the WASM package from rusty-bidding-bot's
+  GitHub release assets** (`rbb-wasm.tar.gz`), pinned to a tag and a
+  checksum, instead of hand-vendoring it (Q7, provisional). The table
+  service pins a rev in its `Cargo.lock`. Both report their version in
+  the welcome frame and in bug reports.
+- Upgrades are explicit: bump the release tag, or bump the pin. A table
   never changes rules in the middle of a board.
-- Loading the compiled rules (the JSON IR) from a URL at run time would let
-  rules ship without an app deploy. It costs reproducibility and adds a
-  compatibility contract between the IR and the engine. **Defer it** (Q8).
+- Rules without a deploy: the WASM now accepts a rule set as text at run
+  time (`rules`, `fields`, `bbsa_map`, `manifest`; 062b0e1), identified by
+  its `rules_id`, so the mechanism exists. Using it from Bridge-Classroom
+  costs reproducibility (a report must then carry the rule set or its id
+  and a way to fetch it). **Still deferred** (Q8): the tables play the
+  embedded rules.
 - Card JSON: `schema_version` is "1.0" on both sides. `Card::from_json` is
   already tolerant: aliases work, unknown leaves are kept, and a `LoadReport`
   describes what happened. The open question in DESIGN.md ("Versioning")
@@ -405,62 +493,64 @@ Differences from BBA that the UI must allow for:
 
 ## 4. What the integration needs from the WASM crate (issue #1)
 
-Assumed base API: `new(ns_card, ew_card)`, `bid(...)`, `interpret(...)`. The
-integration also needs:
+The first draft assumed a base API of `new`, `bid` and `interpret` and
+listed ten additions. Their state on 2026-09-28 (docs/WASM.md, §1.7):
 
-1. **Cards** accepted as editor JSON, as a built-in name (the PBS set,
-   embedded), or as `.bbsa` text. Load warnings are returned, not thrown.
-2. **Handle reuse.** `new()` is where the cost goes (compiled rules, the
-   sample pool). The object has to stay alive across calls and boards, and be
-   cached per card pair.
-3. **`auction(hands, dealer, vul, scoring, prefix)`** runs `bid()` for each
-   seat until the auction ends. It returns `{auction[], meanings[]}` in BBA's
-   shape. That makes it a drop-in for `fetchAuction()`, and it is the
-   cheapest first step for LocalEngine. Because of the BBA fallback
-   (decision 6), it **stops at the first call with no rule** and says so
-   (`fallbackAt: <index>`), so the caller can take BBA's call there and
-   call `auction()` again with the longer prefix. The WASM never calls
-   BBA itself.
-4. **Display fields** as in §3.4: `meaning`, `meaningExtended`, `isAlert`,
-   `alertText`, `announce`, `artificial`, `fallback`, `ruleRef`. The
-   `candidates` come with human-readable reasons.
-5. **`card_report(card)`**: fields honoured, ignored and unknown.
-6. **`version()`**: crate version, commit, rules hash, schema version.
-7. **Errors** as `{error}` JSON or a thrown string, never a panic.
-   `console_error_panic_hook` is on, as in the rulebot.
-8. **Wire formats that match the app**:
-   - calls in PBN (`"1N"`, `"Pass"`, `"X"`), with the app's `"1NT"` accepted
-     too;
-   - hands as `{spades:[…],…}` or `S.H.D.C`;
-   - vul as `None|NS|EW|All` (with `Both` accepted);
-   - scoring as `MP|IMP`.
-9. **Budgets, measured in CI:**
-   - the wasm size (gzipped);
-   - the time for `new()` and for one `bid()` in a headless browser;
-   - a determinism test that runs the same golden cases natively and in
-     WASM.
-10. **A web target** (`wasm-pack --target web`) that also runs in a module
-    Web Worker.
+1. **Cards** as editor JSON, as a built-in name (the PBS set), or as
+   `.bbsa` text; load warnings returned, not thrown. *Done*: card specs
+   `"21GF-DEFAULT"`, `{bbsa}`, `{json}` (bare `card_data` or the editor's
+   `@v1` export); problems are `diagnostics`.
+2. **Handle reuse.** *Done*: `createEngine` returns a handle and reuses it
+   for the same cards; the engine caches per position.
+3. **`auction(...)`** bids the bot seats and **stops at the first call
+   with no rule** so the caller can take BBA's call and resume. *In
+   progress* (R1): it also stops when a human is to call. `bidDeal` (a
+   whole auction from a `prefix`) exists but passes at a no-rule call.
+4. **Display fields** (§3.4). *Done* on the engine's side: `explanation`,
+   `alert` (`alert`/`announce`), `artificial`, `rule`, `knowledge.summary`,
+   `candidates` with their `outcome`. The mapping into `AuctionTable`'s
+   field names is the client's (C1). The meaning of *any* call, not only
+   one in the auction, is part of R1.
+5. **Card report.** *Done*: `coverage`.
+6. **Version.** *Mostly done*: `info()` gives `api`, `version`, `rules_id`,
+   `language`. The source commit is missing (R5).
+7. **Errors** never thrown. *Done*: `{ok, diagnostics}` on every response;
+   `console_error_panic_hook` is on.
+8. **Wire formats.** *Done*, except hands: calls `1N`/`1NT`, `P`/`Pass`,
+   `X`, `XX`; vul `None|NS|EW|All|Both`; scoring `MP|IMP`. Hands are
+   `S.H.D.C` strings only; the client converts the app's `{spades: [...]}`
+   form (C1).
+9. **Budgets measured in CI** (size, `createEngine`, one `bid` in a
+   headless browser). *Not done* (R4). The size is known (1.4 MB, 430 KB
+   gzipped) and timings are documented, but nothing fails on a
+   regression. The native/WASM **determinism test** is part of R1.
+10. **A web target** that runs in a module Web Worker. *Done* for the
+    target (`wasm-pack --target web`; `initSync` works in a worker). A
+    worker smoke test is left to the client (C1).
 
 ## 5. Recommendation
 
-Revised for Rick's decisions of 2026-09-28.
+Revised for Rick's decisions of 2026-09-28 and the provisional defaults
+Q2, Q7 and Q11.
 
 1. **Solo table first, in the browser (A).**
    - Rusty is a bidding engine chosen in the table settings: **BBA by
      default, the choice remembered** (decision 1). The chosen engine bids
      every non-human seat (decision 2).
-   - Step one is the smallest possible change: an `rbbClient.fetchAuction()`
-     with BBA's return shape, selected by the setting. It runs Rusty seat by
-     seat and, where Rusty has no rule, **takes BBA's call for that seat**
-     (decision 6). That puts Rusty behind a switch with almost no change to
-     LocalEngine.
-   - **Mouseover meanings come with step one** (decision 3): with Rusty
-     bidding there are no BBA meanings to show, so the tooltips must come
+   - The WASM package comes from rusty-bidding-bot's **GitHub release
+     assets**, pinned by tag and checksum (Q7).
+   - Rusty bids the bot seats with R1's `auction` entry point: it runs until
+     a human is to call, and where Rusty has no rule the client **takes
+     BBA's call for that seat** and resumes (decision 6), asking BBA with
+     the scenario's own cards, or `21GF-DEFAULT` (Q11). Because R1 stops at
+     the human's turn, the earlier plan's two steps (a `fetchAuction`
+     look-alike first, calls per seat later) collapse into one: nothing is
+     predicted, so there is nothing to request again on divergence.
+   - The student is **still marked against BBA** (Q2): the table keeps
+     asking BBA for its predicted auction, for the reference only.
+   - **Mouseover meanings come with Rusty** (decision 3): the tooltips come
      from Rusty's `interpret()` over the actual auction, human calls
      included.
-   - Step two moves to calls per seat, which removes the re-requests on
-     divergence and gives the "why" panel.
 2. **Run it in a Web Worker** from the start. The worker exposes a
    promise-based API. The engine is not free, bots already pace at 300 ms,
    and a main-thread stall would show.
@@ -469,7 +559,8 @@ Revised for Rick's decisions of 2026-09-28.
    at one table, the bot seats bid on the server.
    - Add a per-session bidder choice. `choose_call()` calls `rbb-engine`
      directly, with an engine cached per session and card pair, and falls
-     back to its existing BBA client for a call with no rule.
+     back to its existing BBA client for a call with no rule, with the
+     session's named cards or `21GF-DEFAULT` (Q11).
    - Bot-call events carry the explanation. The API passes cards at session
      create.
 4. **No BBA-compatible Rusty service (C)**, and no bot calls computed by
@@ -482,37 +573,42 @@ Revised for Rick's decisions of 2026-09-28.
 6. **The fallback is not shown, but it is counted.** A BBA call in place of
    a Rusty no-rule call is not flagged to the player (decision 6); it is
    logged with the position, so the gaps reach this repo as work.
-7. **Gate by coverage** later (Q1): publish a per-scenario manifest, so the
-   picker can show where Rusty is ready once Rick sets the threshold.
+7. **Gate by coverage** later (Q1): publish a per-scenario manifest with
+   each release, so the picker can show where Rusty is ready once Rick sets
+   the threshold.
 
 ## 6. Risks
 
 | Risk | Mitigation |
 |---|---|
-| Coverage gaps: partner bids badly, and students learn wrong things | Opt-in (default BBA), BBA fallback for no-rule calls, coverage manifest, fallback log and bidding reports routed to this repo |
+| Coverage gaps: partner bids badly, and students learn wrong things | Opt-in (default BBA), BBA fallback for no-rule calls, marked against BBA for now (Q2), coverage manifest, fallback log and bidding reports routed to this repo |
 | The fallback hides the gaps: nobody sees how often BBA stepped in | Log every fallback (position, cards, versions); count them in the coverage manifest and in "Report a Problem" bundles |
-| A fallback call mixes two systems: BBA bids on a `.bbsa` card, Rusty may be playing an editor card, and Rusty then has to read BBA's call | Accepted for now (decision 6). Use the built-in name the card came from where there is one; log the cases where Rusty has no reading of BBA's call |
-| The fallback needs the network | Only at no-rule calls; if BBA is unreachable, Pass as the table service does today, and log it |
-| WASM compute on slow devices (sample pool, descriptiveness over 20k hands) | Web Worker, reuse the handle, measure in CI; shrink or precompute the pool if needed |
-| WASM size (the rules are ~240 KB of `.bid` source; the rulebot is 162 KB) | Embed the compiled IR, not the source; wasm-opt; lazy-load only when Rusty is chosen |
-| Non-determinism (HashMap order, float ties) splits native from WASM | Golden determinism tests; stable tie-break key |
-| `bridge-types` version skew in the table service (two copies of `Call`) | Keep the git revs pinned together, or keep the service's boundary in PBN strings |
-| The editor's catalog and the card registry drift apart (seed/catalog path differences) | Registry aliases; a fixture test over real DB cards; later, the editor consumes `rbb card schema` |
-| Confusing BBA and Rusty feedback | Every surface names its engine; one reference per table unless Q2 says both |
-| Mixed versions (the WASM overlay vs the service crate) | The service sends explanations; versions in the welcome frame; the overlay is hidden on mismatch |
+| A fallback call mixes two systems: BBA bids on a `.bbsa` card, Rusty may be playing an editor card, and Rusty then has to read BBA's call | Accepted for now (decision 6, Q11: the scenario's own cards, else `21GF-DEFAULT`); log the cases where Rusty has no reading of BBA's call |
+| The fallback needs the network | Only at no-rule calls; if BBA is unreachable, Pass as the table service does today, and log it. (Marking against BBA, Q2, needs the network anyway.) |
+| WASM compute on slow devices (sample pool, descriptiveness over 20k hands) | Web Worker, reuse the handle, budgets in CI (R4); shrink or precompute the pool if needed |
+| WASM size (1.4 MB, 430 KB gzipped; the rulebot is 162 KB) | Lazy-load only when Rusty is chosen; a size budget in CI (R4) |
+| A release asset changes or disappears under a pinned tag | Pin tag and SHA-256; the fetch fails loudly on a mismatch (C1, R4) |
+| Non-determinism (HashMap order, float ties) splits native from WASM | Golden determinism tests (R1); stable tie-break key |
+| `bridge-types` version skew in the table service (two copies of `Call`) | Keep the revs pinned together, or keep the service's boundary in PBN strings (R5) |
+| The editor's catalog and the card registry drift apart (seed/catalog path differences) | Bridge-Classroom's fields are card fields under its paths (d7d466a); aliases; a fixture test over real DB cards; later, the editor consumes `rbb card schema` |
+| Confusing BBA and Rusty feedback | Every surface names its source: the bidder on seats, the reference (BBA, Q2) on marking |
+| Mixed versions (the client's WASM vs the service crate) | The service sends explanations; versions (`rules_id`) in the welcome frame; client-side Rusty readings hidden on mismatch |
 | Clean room | Unchanged: BBA stays a black box behind HTTP, the fallback included; nothing proxies it or models it |
 
 ## 7. Open questions for Rick
 
 The original numbers are kept, so references elsewhere stay valid. Rick
-answered some on 2026-09-28 (the decisions at the top); the rest stay open.
+answered some on 2026-09-28 (the decisions at the top) and approved
+provisional defaults for Q2, Q7 and Q11 the same day; the rest stay open.
 
 1. **Default and gating.** *Partly answered:* a settings option, default
    BBA, remembered once changed (decision 1). **Still open:** at what
    coverage (agreement or card coverage per scenario) may a scenario offer
    Rusty, or default to it?
-2. **Reference.** *Open.* On a Rusty table, is the student marked against
-   Rusty, against BBA, or can they see both?
+2. **Reference.** *Answered (provisional, 2026-09-28):* mark the student
+   against **BBA** for now, whichever engine bids. Rusty's reading of the
+   student's call may be shown beside it, labelled as Rusty's (C4).
+   Showing BBA and Rusty as two references stays deferred.
 3. **Whose card.** *Partly answered:* by default the same card in both
    directions (decision 4), so on a solo table both sides play the user's
    primary card. **Still open:** on served tables, does the teacher pick
@@ -526,20 +622,21 @@ answered some on 2026-09-28 (the decisions at the top); the rest stay open.
    (you do not see explanations of your partner's calls, and alerts go to
    the opponents), or teaching rules (everyone sees everything)? This
    decides who sees the mouseover meanings (decision 3) on a served table.
-7. **Release path.** *Open.* Hand-vendored WASM, like the rulebot, or a
-   build product from issue #1 (CI artifact or npm package) that
-   Bridge-Classroom pulls?
-8. **Rules without a deploy.** *Open.* Load the rules IR from a URL at run
-   time, or keep them pinned inside the WASM (the recommendation)?
+7. **Release path.** *Answered (provisional, 2026-09-28):* Bridge-Classroom
+   pulls the WASM package from rusty-bidding-bot's GitHub release assets
+   (`rbb-wasm.tar.gz`), pinned by tag and checksum; it is not hand-vendored.
+8. **Rules without a deploy.** *Open.* The WASM can now take a rule set as
+   text at run time (062b0e1). Should Bridge-Classroom ever use that, or
+   keep the rules pinned inside the release it pulls (the recommendation)?
 9. **Card editor.** *Open.* Should the editor start reading
-   `rbb card schema` and the coverage report now, ahead of the convention
-   layer's move to its own repo with the editor?
+   `rbb card schema` and the coverage report (WASM `coverage`) now, ahead
+   of the convention layer's move to its own repo with the editor? The
+   skill taxonomy work (Bridge-Classroom#422) is a first step of this kind.
 10. **Scoring.** *Open.* Bridge-Classroom always sends MP. Should tables
     offer IMPs? The engine takes scoring as an input.
-11. **Fallback card** (new, follows from decisions 4 and 6). When the table
-    plays an editor card and falls back to BBA, which `.bbsa` card should
-    BBA use: `21GF-DEFAULT`, or the built-in card nearest to the editor
-    card?
+11. **Fallback card.** *Answered (provisional, 2026-09-28):* BBA's fallback
+    calls use the scenario's own `.bbsa` cards (CC1/CC2), or `21GF-DEFAULT`
+    when the table has none (an editor card, a non-scenario table).
 12. **When to flag the fallback** (new). "Not at this level" leaves a later
     level open: should a teacher's view or a debug setting show which calls
     BBA made?
@@ -551,332 +648,125 @@ and mouseover meanings from Rusty for human and bot calls (decision 3).
 
 | Phase | Scope | Issues (below) |
 |---|---|---|
-| 0. Engine ready | WASM API additions (including `auction()` that stops at a no-rule call), built-in cards, display contract, determinism and performance budgets, coverage manifest with fallback counts | R1–R4 (and #1) |
-| 1. Solo, opt-in | Vendor the WASM in a worker; `fetchAuction`-compatible adapter with the BBA fallback; the remembered engine setting (default BBA), one engine for all bot seats; parameterized labels; mouseover meanings from Rusty for every call | C1, C2, C3 |
-| 2. Solo, teaching | Calls per seat; alerts and announcements; "why" panel; the user's card for both sides and coverage warnings; bidding reports with the fallback log | C4, C5 |
-| 3. Served ("distributed") tables | Native bidder in the table service with the BBA fallback; explanations on the wire; one card for both sides at session create; client labels and tooltips | R5, T1, T2, C6 |
+| 0. Engine ready | *Done:* WASM API, built-in cards, display fields, card report, release builds with the WASM package. *Remaining:* the `auction` entry point that stops at a human's turn or a no-rule call, meanings for any call, determinism (R1); budgets, checksums and the coverage manifest in the release (R4); native embedding for the service (R5) | R1, R4, R5 |
+| 1. Solo, opt-in | The WASM from the release in a worker; Rusty bids the bot seats with the BBA fallback (Q11 cards); the remembered engine setting (default BBA), one engine for all bot seats; labels naming bidder and reference (BBA, Q2); mouseover meanings from Rusty for every call | C1, C2, C3 |
+| 2. Solo, teaching | "Why" panel beside the BBA reference; the user's card for both sides and coverage warnings; bidding reports with the fallback log | C4, C5 |
+| 3. Served ("distributed") tables | Native bidder in the table service with the BBA fallback; explanations on the wire; one card for both sides at session create; client labels and tooltips | T1, T2, C6 |
 | 4. Gating | Per-scenario offer or default from the manifest, decided by Rick with evidence (Q1) | none yet |
 
 ## Proposed issues
 
-Drafts for review. **Not filed.** R = rusty-bidding-bot, C = Bridge-Classroom,
-T = bridge-table-service. Dependencies are given in each body. Revised on
-2026-09-28 for Rick's decisions (numbered at the top of this document).
+Revised 2026-09-28 for the work that has landed (§1.7) and the
+provisional defaults Q2, Q7, Q11. **Not filed.** R = rusty-bidding-bot,
+C = Bridge-Classroom, T = bridge-table-service. The full bodies, ready to
+file, are one file per issue in
+[drafts/integration-issues/](drafts/integration-issues/INDEX.md), which
+also gives the filing order. Below: what each issue now covers, and what
+was done, merged or dropped since the first draft.
 
-### R1 · rusty-bidding-bot · WASM API for Bridge-Classroom's practice tables
+### Done, merged or dropped
 
-Issue #1 builds the WASM. This issue gives what Bridge-Classroom needs from
-it (docs/integration-bridge-classroom.md §4).
+- **R2 · Built-in named cards: dropped, done.** The 18 PBS `.bbsa` cards
+  are compiled in (`rbb-assets`, c350a6c), listed by `info().stock_cards`;
+  `createEngine({cards: {ns: "21GF-DEFAULT", ew: "21GF-GIB"}})` works; an
+  unknown name is an error with the list as its hint. Reading the name
+  from a CC1/CC2 header path is done client-side, as the showcase does
+  (`web/lib/pbs.js`); C1 carries that. The one leftover, a check that the
+  embedded copies match Practice-Bidding-Scenarios' `bbsa/`, moves to R4.
+- **R3 · Display contract: dropped, merged.** The fields exist and are
+  documented (docs/WASM.md: step `explanation`, `alert` with `kind`
+  alert/announce, `artificial`, `rule`, `knowledge.summary`, `candidates`
+  with `outcome`). What was left is split: the no-rule signal and the
+  meaning of any call go to R1; the mapping into `AuctionTable`'s field
+  names goes to C1 (it is Bridge-Classroom's shape); the suit notation is
+  settled in §3.4 (plain text, letters, the client renders symbols; C3).
+- **R1** keeps its ID but not its scope: `createEngine`, `bid`,
+  `interpret`, card specs, handle reuse, card report (`coverage`),
+  diagnostics and the web target are done. What remains is what is being
+  built now.
+- **R4** loses the determinism test (to R1) and gains the release items
+  Q7 needs (checksums) and R2's leftover.
+- **C1** absorbs C4's first half: with R1 stopping at the human's turn,
+  per-seat bidding is C1's design from the start, not a later step. It
+  also pulls the release instead of vendoring (Q7).
+- **C4** keeps only the "why" panel, beside BBA's reference (Q2).
 
-- `new(ns, ew)` takes each card as editor `card_data` JSON, a built-in name
-  (R2), or `{bbsa: "<text>"}`. Load warnings are returned. Passing one card
-  for both sides is the common case (decision 4).
-- `bid(hand, dealer, vul, scoring, auction)` returns `{call, meaning,
-  meaningExtended, isAlert, alertText, announce, artificial, fallback,
-  ruleRef, candidates[]}`. `fallback: true` tells the caller to take BBA's
-  call instead (decision 6).
-- `interpret(dealer, vul, scoring, auction)` returns one entry per call with
-  the same display fields, for human calls as well as bot calls: the
-  mouseover meanings (decision 3).
-- `auction(hands, dealer, vul, scoring, prefix)` returns `{auction[],
-  meanings[], fallbackAt?}` in the shape of bba-server's
-  `/api/auction/generate`. It stops at the first call with no rule and
-  gives its index, so the caller can insert BBA's call and continue. The
-  WASM never calls BBA.
-- `card_report(card)` returns the fields honoured, ignored and unknown.
-- `version()` returns `{crate, commit, rulesHash, cardSchema}`.
-- Calls may be PBN or app tokens (`1N`/`1NT`, `Pass`, `X`, `XX`). Vul may be
-  `None|NS|EW|All|Both`.
+### R1 · rusty-bidding-bot · Bid a practice table's bot seats: `auction`, meanings for any call, determinism
 
-Acceptance:
-- [ ] Every function takes and returns JSON strings; errors are returned, and
-      nothing panics.
-- [ ] The handle is reusable: a second `bid()` does not rebuild rules or the
-      sample pool.
-- [ ] `auction()` output, completed with the fallback calls, is accepted
-      unchanged by Bridge-Classroom's `AuctionTable` / LocalEngine.
-- [ ] `auction()` stops at a no-rule call and resumes from a prefix that
-      includes a call it did not make (test).
-- [ ] The build works as `wasm-pack --target web` and loads inside a module
-      Web Worker (smoke test).
-- [ ] Documented in the crate README with a JS example.
+In progress. The `auction` entry point (native and WASM) bids from a
+prefix until the auction ends, a human is to call, or a bot seat reaches a
+position with no rule, and says which; the meaning of any call at any
+point; a golden native/WASM determinism test. Done parts listed in the
+body. File: `R1-rusty-bidding-bot.md`.
 
-### R2 · rusty-bidding-bot · Built-in named cards (the PBS `.bbsa` set)
+### R4 · rusty-bidding-bot · Release package for Bridge-Classroom: budgets, checksums, coverage manifest
 
-Scenario tables name their cards the way BBA does (`21GF-DEFAULT`,
-`21GF-GIB`, … from the PBN `% CC1/CC2` headers). Embed the 18
-Practice-Bidding-Scenarios `.bbsa` files, imported to card JSON at build
-time, so the WASM and native builds resolve these names without network
-access. The same names are what the BBA fallback sends to BBA.
+Size and speed budgets checked in CI (headless browser); SHA-256 checksums
+for the release assets; `rbb compare --manifest` per scenario with the
+no-rule (fallback) rate, published with the release; a check that the
+stock cards match PBS. File: `R4-rusty-bidding-bot.md`.
 
-Acceptance:
-- [ ] `cards()` lists the built-in names. `new("21GF-DEFAULT", "21GF-GIB")`
-      works.
-- [ ] An unknown name is an error. It never falls back silently.
-- [ ] A build script or test fails when a PBS `.bbsa` changes and the
-      embedded copy has not been refreshed. At minimum, the refresh is one
-      documented command.
-- [ ] Names parsed from a CC1/CC2 header path (`…/bbsa/21GF-DEFAULT.bbsa`)
-      resolve.
+### R5 · rusty-bidding-bot · Native embedding for bridge-table-service
 
-### R3 · rusty-bidding-bot · Display contract for explanations and alerts
+`rbb-assets` already embeds the rules for native and WASM with one
+`RULES_ID`. Remaining: one native constructor from card specs (the WASM's
+`load_card` moved where a service can call it), the native `auction` /
+meaning output in the WASM's JSON shape, the source commit in `info()` and
+natively, and the `bridge-types` pin policy. File:
+`R5-rusty-bidding-bot.md`.
 
-Define and implement how a call's explanation reaches a UI:
+### C1 · Bridge-Classroom · Rusty bidder in a Web Worker, from the release, with the BBA fallback
 
-- `meaning` comes from the rule text.
-- `meaningExtended` is rendered from `knowledge`: HCP and suit-length ranges,
-  one wording owned by the engine.
-- `Alert` maps to `isAlert` plus `alertText`, and `Announce` to `announce`.
-- `artificial`.
-- `fallback: true` when no rule applied. It replaces the "No rule applies"
-  text as a meaning. The table does not show it (decision 6): it takes
-  BBA's call and meaning instead, and logs the flag.
-- The meaning of a call the engine did not make (a human's call, or a BBA
-  fallback call) comes from `interpret()` in the same shape, so the
-  mouseover is uniform (decision 3).
+Fetch `rbb-wasm.tar.gz` from a pinned release (Q7); a worker client; bot
+seats bid with R1's `auction`, BBA's call at each no-rule stop (cards per
+Q11); the adapter from Rusty's steps to `AuctionTable`'s fields. File:
+`C1-Bridge-Classroom.md`.
 
-Choose one suit notation (`!S` tokens, which Bridge-Classroom already
-renders, or Unicode) and never HTML.
+### C2 · Bridge-Classroom · Bidding engine setting (BBA or Rusty), remembered; labels name their source
 
-Acceptance:
-- [ ] The contract is documented in docs/ (fields, notation, examples).
-- [ ] Native `Decision`/`Step` and the WASM output share it (one serializer).
-- [ ] `.test` cases or unit tests cover an alert, an announcement, an
-      artificial call, a fallback, and the interpretation of a call no rule
-      would make.
-
-### R4 · rusty-bidding-bot · Determinism, performance budget, and coverage manifest
-
-- Determinism: golden cases (hand, auction, cards → call and explanation)
-  give identical results natively and in WASM, across runs. Candidate ties
-  break on a stable key, never on HashMap order.
-- Performance: CI measures the wasm size (gzipped), `new()`, and one `bid()`
-  in a headless browser, and fails on regressions past the agreed budgets.
-- Coverage manifest: `rbb compare --manifest out.json` writes, per scenario,
-  the agreement with BBA, the contract agreement, the vs-BBA IMPs, the card
-  coverage, and **how often a bot call would need the BBA fallback** (no
-  rule in a live auction). Bridge-Classroom can later gate Rusty the way it
-  uses `bbaWorks` (Q1).
-
-Acceptance:
-- [ ] The determinism test runs in `cargo test` (native) and in the WASM
-      test job.
-- [ ] Budgets are recorded in docs and checked in CI.
-- [ ] The manifest schema is documented. A release build publishes it next to
-      the WASM.
-
-### R5 · rusty-bidding-bot · Native embedding for services
-
-bridge-table-service needs the engine with the rules embedded, as the WASM
-has them, without reading `conventions/` from disk. Provide
-`rbb_engine::builtin::engine(ns, ew)` (or an `rbb-embedded` crate) that
-shares the embedding with the WASM crate. Document the `bridge-types` pin
-policy so that the service does not link two copies.
-
-Acceptance:
-- [ ] One embedding mechanism serves both WASM and native.
-- [ ] Native and WASM report the same `version().rulesHash` for the same
-      commit.
-- [ ] Documented: how a downstream service pins the crate and `bridge-types`
-      together.
-
-### C1 · Bridge-Classroom · Vendor rusty-bidding-bot WASM with a worker-based client and the BBA fallback
-
-Depends on R1 and R2. Add `src/vendor/rbb-wasm/`, vendored the same way as
-`bridge-rulebot-wasm` (README with the build command and commit). Add
-`src/utils/rbbClient.js`, which runs the engine in a module Web Worker and
-exposes a promise API:
-
-- `fetchAuction()`, with the same signature and return value as
-  `bbaClient.fetchAuction()`. It runs Rusty's `auction()`; at each
-  `fallbackAt` it asks `bbaClient.fetchAuction()` with the calls so far as
-  `auctionPrefix`, takes BBA's next call and its meaning, and resumes
-  Rusty (decision 6). The fallback is not marked in the returned meanings;
-  it is logged (position, cards, versions).
-- `bid()`, `interpret()`, `cardReport()` and `version()`.
-
-It loads lazily on first use and caches engines per card pair.
-
-Acceptance:
-- [ ] The WASM loads only when Rusty is selected (a network trace shows no
-      download otherwise).
-- [ ] The main thread is never blocked by an engine call.
-- [ ] A position with no Rusty rule is bid by BBA, and the auction
-      continues with Rusty (fixture test).
-- [ ] If BBA is unreachable at a fallback, the call is Pass and the table
-      does not hang; a failure in the WASM surfaces as `dealError` with a
-      clear message.
-- [ ] `npm ci && npm run build` needs no sibling checkout.
-
-### C2 · Bridge-Classroom · Bidding engine setting (BBA or Rusty), remembered
-
-Depends on C1. Add a `bp.biddingEngine = bba | rusty` setting in the table
-settings, **default `bba`, persisted like the other `bp.*` settings** so the
-choice is remembered once changed (decision 1), plus `?bidder=` for testing.
-The chosen engine bids **all** non-human seats (decision 2).
-
-- LocalEngine's `generateAuction()` dispatches to `bbaClient` or `rbbClient`.
-- The hardcoded "BBA" text becomes the selected engine's name: the stacked
-  cell label (`AuctionTable.vue:37`) and the summary
-  (`localEngine.js:131-136`).
-- `getExpectedAuction()` follows the setting.
-
-Acceptance:
-- [ ] A full board can be played with Rusty for all three bot seats,
-      including divergence, toggle, undo and restart.
-- [ ] The setting defaults to BBA for a new user, and a changed choice
-      survives a reload and a new session.
-- [ ] Switching the engine takes effect on the next board.
-- [ ] No table mixes engines across bot seats (the per-call BBA fallback
-      aside).
-- [ ] The UI never says "BBA" about a Rusty result.
-- [ ] Embedded (iframe) mode keeps BBA unless the host passes `bidder`.
+Unchanged in scope, except that the reference stays BBA (Q2), so the
+labels name the bidder and the reference separately. File:
+`C2-Bridge-Classroom.md`.
 
 ### C3 · Bridge-Classroom · Mouseover meanings from Rusty for every call
 
-Depends on C1 and R3. Today the tooltips show BBA's meanings by position
-in BBA's predicted auction, and a human's call after a divergence has none.
-On a Rusty table, every call in the auction grid gets its meaning from
-Rusty's `interpret()` over the **actual** auction (decision 3):
+Unchanged in scope; the engine side exists (`interpret`) plus R1's meaning
+of any call; suit letters rendered as symbols. File:
+`C3-Bridge-Classroom.md`.
 
-- a human's call: what it would mean to Rusty, read with the human's side's
-  card;
-- Rusty's calls: what they mean;
-- a BBA fallback call: BBA's meaning, unflagged (decision 6).
+### C4 · Bridge-Classroom · The "why" panel beside BBA's reference
 
-Also show `announce` inline and use `isAlert`.
-
-Acceptance:
-- [ ] Every call in the auction grid, including the human's, has a tooltip
-      when the engine has a meaning for it.
-- [ ] After a divergence, the tooltips match the calls actually made
-      (regression test with a fixture).
-- [ ] Announcements are visible without hover. Alerts are marked.
-- [ ] Who sees which meanings on a served table follows Rick's ruling on
-      hidden information (Q6); on the solo table everything is shown.
-
-### C4 · Bridge-Classroom · Per-seat Rusty bidding and the "why" panel
-
-Depends on C3. With Rusty, bot seats call `bid()` for their own hand at
-their turn, instead of replaying a predicted auction; there is no
-prediction to request again on divergence or undo. A `fallback` result is
-replaced by BBA's call, as in C1. The reference call for the human's seat
-is one `bid()`, measured against the reference Rick chooses (Q2).
-
-When the student's call differs from the reference, show the reference
-call, its meaning, and why the student's call lost. The losing reasons come
-from `candidates[].outcome`, such as "hand fails `shows
-strength=invite`", rewritten for students where the engine gives a readable
-reason.
-
-Acceptance:
-- [ ] Bot calls come from `bid()` per seat; divergence, toggle and undo send
-      no new auction request.
-- [ ] Clicking or tapping a diverged cell opens the panel. Its content comes
-      from the engine, not from hardcoded text.
-- [ ] It works in review and during the auction, and is hidden when the
-      comparison is off (`bp.cardplayShowBbaCompare`, renamed if needed).
+Per-seat bidding moved to C1. The panel shows BBA's reference call (Q2)
+and, labelled as Rusty's, its reading of the student's call and why its
+own rules rejected it. File: `C4-Bridge-Classroom.md`.
 
 ### C5 · Bridge-Classroom · Play my convention card, both ways, with coverage warnings
 
-Depends on C1 and R1. On non-scenario solo tables with Rusty, the user's
-**primary card** (`useConventionCard`) is played by **both sides** by
-default (decision 4). Scenario tables use CC1/CC2 read from the PBN header.
-Show `cardReport()`: conventions on the card that Rusty does not honour yet.
-
-- The BBA fallback sends BBA a `.bbsa` name, since BBA cannot read an
-  editor card; which one is Q11 (until then `21GF-DEFAULT`).
-- Include `{rbb version, cards (ids or hash), dealer, vul, auction, seat,
-  hand, fallback positions}` in "Report a Problem" bundles.
-- Offer a "bidding problem" target that files to rusty-bidding-bot.
-
-Acceptance:
-- [ ] Changing the primary card changes both sides' bidding on the next
-      board.
-- [ ] The coverage warning lists the unsupported conventions by their catalog
-      names.
-- [ ] A filed bidding report reproduces with `rbb call` from the bundle
-      alone.
+The card goes in as stored (`{json: card_data}`); `coverage` gives the
+warnings; the BBA fallback uses `21GF-DEFAULT` for an editor card (Q11);
+bidding reports. File: `C5-Bridge-Classroom.md`.
 
 ### C6 · Bridge-Classroom · Served ("distributed") table: bidder choice, labels, meanings
 
-Depends on T1 (and T2 for cards). The served table is Rick's "distributed
-table" (decision 5): humans on different computers, bot seats bid by the
-table service.
-
-- Add a host control for the session bidder (BBA or Rusty), one bidder for
-  all bot seats (decision 2).
-- `botLabelFor()` (`serverEngine.js:401-406`) shows the actual bidder.
-- `AuctionTable` on the served table gets `meanings` from the explanations on
-  bot-call events, and the mouseover meaning of human calls from the
-  client's `interpret()` (decision 3), within Rick's ruling on hidden
-  information (Q6).
-- The "you vs reference" overlay uses the table's bidder. It is hidden when
-  the client's WASM version differs from the service's `bidder_version`.
-- Pass the chosen card at session create (bridge-classroom-api
-  `table_sessions.rs`), one card for both sides by default (decision 4).
-
-Acceptance:
-- [ ] A host can switch the bidder between boards. Seat labels follow.
-- [ ] Bot calls on a Rusty table show explanations for every viewer allowed to
-      see them.
-- [ ] No "BBA" label appears on a Rusty table (a fallback call is not
-      labelled either, decision 6).
+The "you vs reference" overlay stays BBA's (Q2); the version check now
+guards the client's Rusty readings. File: `C6-Bridge-Classroom.md`.
 
 ### T1 · bridge-table-service · Native Rusty bidder with the BBA fallback
 
-Depends on R5. Add a per-session and per-room `BidderMode { Bba, Rusty }`
-(default `Bba`), set by a `{"t":"set_bidder","bidder":"rusty"}` host frame and
-by an optional `bidder` on `POST /admin/sessions`. The bidder plays every bot
-seat (decision 2).
-
-- For Rusty, `choose_call()` calls `rbb-engine` directly with the seat's hand
-  and the calls so far. It needs no prefix cache and no HTTP.
-- **When Rusty has no rule** (`fallback`), `choose_call()` asks the existing
-  BBA client (`src/bots/bba.rs`) with the calls so far and uses BBA's call
-  for that seat (decision 6). The event is not flagged to clients; it is
-  recorded with `record_event()` and counted in the metrics.
-- Engines are cached per card pair.
-- Illegal or failed calls, including a failed fallback, fall back to Pass,
-  as today, and are logged with `record_event()`.
-- Bot-call events add `explanation`, `alert` and `announce` (BBA's meaning
-  for a fallback call).
-- The welcome frame carries `bidder` and `bidder_version`.
-- PlayOnly and PassBot behave as they do with BBA.
-
-Acceptance:
-- [ ] A Rusty table plays a board end to end; BBA traffic appears only for
-      no-rule positions (checked in the metrics and logs).
-- [ ] Same board, same auction, same seat: the same call at every table in a
-      session (test), fallback calls included while BBA answers.
-- [ ] Undo and changes during a bot's turn stay safe (the existing
-      seq-recheck pattern).
-- [ ] The CI-parity build (`./dev-build.sh --ci test`) passes with the pinned
-      git rev. The committed `Cargo.lock` has no local paths.
+Unchanged in scope; builds on R5; fallback cards per Q11. File:
+`T1-bridge-table-service.md`.
 
 ### T2 · bridge-table-service · Convention cards per session
 
-Accept `cards: {ns, ew}` on `POST /admin/sessions`, or a single `card` that
-both sides play (the default, decision 4). Each is either a built-in name or
-editor `card_data` JSON. Use them for Rusty, and for BBA (and the BBA
-fallback) when they are names BBA knows, which replaces the hardcoded
-`21GF-DEFAULT` (`src/bots/bba.rs:28-29`). The companion change in
-bridge-classroom-api (`table_sessions.rs` `service_create_payload`) sends
-the owner's primary card or the teacher's choice (Q3 decides which).
-
-Acceptance:
-- [ ] A session created with one card bids with it on both sides; one
-      created with two cards bids each side with its own; one created
-      without cards keeps today's default.
-- [ ] Invalid card JSON is rejected at session create with a clear error, not
-      at the first bot call.
-- [ ] Cards are visible in the dashboard or session info for debugging.
+Card specs in the WASM's form; BBA and its fallback get the session's
+named cards or `21GF-DEFAULT` (Q11). File: `T2-bridge-table-service.md`.
 
 ### Deferred (not proposed for now)
 
 - **Rusty behind BBA's HTTP interface (alternative C).** File it only if a
   consumer other than Bridge-Classroom needs it.
-- **Rules IR loaded at run time** (Q8).
+- **Rule sets loaded at run time by Bridge-Classroom** (Q8); the engine
+  side exists.
 - **Showing BBA and Rusty together** as two references (Q2).
 - **Mixing engines across bot seats** (decision 2 says "initially" one bot
   for all).
