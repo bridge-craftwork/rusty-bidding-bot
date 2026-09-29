@@ -59,6 +59,19 @@ pub fn bid_deal(request: &str) -> String {
     api::bid_deal(request)
 }
 
+/// Bid a practice table's bot seats until the end, a human's turn, or a
+/// bot seat with no rule → `{ok, rules_id, cards, calls, steps, stop, complete, next, contract, declarer, position, diagnostics}`
+#[wasm_bindgen]
+pub fn auction(request: &str) -> String {
+    api::auction(request)
+}
+
+/// What one call of an auction means to the engine (a mouseover) → `{ok, index, known, step, diagnostics}`
+#[wasm_bindgen]
+pub fn meaning(request: &str) -> String {
+    api::meaning(request)
+}
+
 /// The conventions (embedded, or the engine's / request's rule set) as data → `{ok, rules_id, modules, active?, diagnostics}`
 #[wasm_bindgen]
 pub fn conventions(request: &str) -> String {

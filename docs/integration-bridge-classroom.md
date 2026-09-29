@@ -682,8 +682,11 @@ was done, merged or dropped since the first draft.
   settled in §3.4 (plain text, letters, the client renders symbols; C3).
 - **R1** keeps its ID but not its scope: `createEngine`, `bid`,
   `interpret`, card specs, handle reuse, card report (`coverage`),
-  diagnostics and the web target are done. What remains is what is being
-  built now.
+  diagnostics and the web target are done. *Status (2026-09-28): the rest
+  is in too:* `auction` (bots, stop at a `no_rule` position, resume after an
+  appended call; native as `Engine::auction`) and `meaning`, documented in
+  docs/WASM.md, which is the contract (the shapes follow the rest of the API,
+  not bba-server's); the native/WASM determinism check runs in CI.
 - **R4** loses the determinism test (to R1) and gains the release items
   Q7 needs (checksums) and R2's leftover.
 - **C1** absorbs C4's first half: with R1 stopping at the human's turn,

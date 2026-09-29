@@ -200,7 +200,8 @@ Request: `{"engine": 1}`. Response: `{"ok": true, "diagnostics": []}`
 
 ### Engine selection in requests
 
-`bid`, `interpret`, `bidDeal`, `conventions` and `reference` take either
+`bid`, `interpret`, `bidDeal`, `auction`, `meaning`, `conventions` and
+`reference` take either
 `"engine": <handle>` or `"cards": {...}` (which makes or reuses the engine
 for those cards, and the rule set the request supplies, as `createEngine`
 does). `engine` wins when both are given. `conventions`, `reference`,
@@ -211,9 +212,9 @@ supplies, else the embedded one.
 ### Rule sets supplied at run time
 
 Any request that can make an engine or read cards (`createEngine`,
-`validate`, `bid`, `interpret`, `bidDeal` with `cards`, `conventions`,
-`reference`, `coverage`, `exportCard`) may carry a rule set as text instead
-of using the embedded one:
+`validate`, `bid`, `interpret`, `bidDeal`, `auction` and `meaning` with
+`cards`, `conventions`, `reference`, `coverage`, `exportCard`) may carry a
+rule set as text instead of using the embedded one:
 
 ```json
 {"rules": {"demo/one-nt.bid": "module demo \"Demo\"\n  card demo.strong_nt\n...",
@@ -440,6 +441,157 @@ engine's own calls `explanation`, `rule` and `alert` are the rule that chose
 the call for this hand (as `bid` reports it), and `meaning` is what the call
 shows to the table (as `interpret` reports it); they are usually the same
 text. For forced calls both are the table's reading.
+
+### `auction(request)` → JSON
+
+A practice table: the engine bids the bot seats in turn, from the calls
+so far, and stops when the auction is over, when a seat that is not a bot
+is to call, or when a bot seat reaches a position where no rule applies.
+Added for Bridge-Classroom's practice tables (the same bot plays every
+non-human seat; where it has no rule, the table takes BBA's call for that
+seat). The native engine has the same function, `Engine::auction`
+(`rbb_engine::{Table, OnNoRule, TableAuction}`), for a service.
+
+Request:
+
+```json
+{"engine": 1, "dealer": "N", "vul": "None", "scoring": "IMP",
+ "bots": ["E", "S", "W"],
+ "hands": {"E": "QJ3.Q95.KJ3.QJ74", "S": "T64.AT832.A2.T62", "W": "987.64.T8765.A95"},
+ "auction": ["1C", "Pass"],
+ "no_rule": "stop"}
+```
+
+| Field | |
+|---|---|
+| `bots` | required: the seats the engine bids for, a list (`["E", "S", "W"]`) or a string (`"ESW"`) |
+| `hands` | the hands by seat; every bot seat needs one, the others may be left out. Or `deal`, all four (either form of a deal) |
+| `auction` | every call so far, from the dealer, whoever made it: the humans', the engine's from earlier requests, and fallback calls. Checked for legality |
+| `no_rule` | `"stop"` (default): stop before a bot call no rule covers. `"pass"`: pass there and go on, as `bid` and `bidDeal` do (the call is marked `no_rule`) |
+| `engine` / `cards`, `dealer`, `vul`, `scoring` | as for `bid` |
+
+Response:
+
+```json
+{"ok": true,
+ "rules_id": "d737c980a4bbdb8c",
+ "cards": {"ns": "21GF-DEFAULT", "ew": "21GF-DEFAULT"},
+ "calls": [
+   {"index": 2, "seat": "S", "call": "1H", "forced": false, "no_rule": false,
+    "explanation": "...", "meaning": "...", "alert": null, "rule": {...},
+    "artificial": false, "knowledge": {...}},
+   ...],
+ "steps": [
+   {"index": 0, "by": "given", "seat": "N", "call": "1C", "explanation": "...",
+    "alert": null, "rule": {...}, "artificial": false, "knowledge": {...}},
+   ...],
+ "stop": {"reason": "human_to_call", "seat": "N", "index": 4,
+          "auction": ["1C", "Pass", "1H", "Pass"]},
+ "complete": false, "next": "N", "contract": null, "declarer": null,
+ "position": <position>,
+ "diagnostics": []}
+```
+
+| Field | |
+|---|---|
+| `calls` | the calls the engine made in this request, in order, in `bidDeal`'s shape (`explanation`, `rule`, `alert`: the rule that chose the call for the hand; `meaning`: what it shows to the table), plus `index` (its place in the auction, 0 = the dealer's first call) and `no_rule` (true only with `"no_rule": "pass"`, for a pass no rule chose) |
+| `steps` | every call of the auction, given and made, as `interpret` reads it (the step shape), plus `index` and `by`: `"given"` (in the request's `auction`) or `"bot"` (made in this request). `by` is about this request only: the table keeps its own record of who made each call |
+| `stop.reason` | `"complete"` (the auction is over; `seat` is `null`), `"human_to_call"` (`seat` is not a bot), `"no_rule"` (`seat` is a bot and no rule covers its hand here) |
+| `stop.seat`, `stop.index` | the seat to call and the index its call will take (the number of calls so far) |
+| `stop.auction` | every call so far, as a list: the prefix to send to the fallback bidder, and to log |
+| `stop.call`, `stop.candidates` | at a `no_rule` stop only: what the engine would do without a fallback (`"Pass"`) and every rule it considered with why it failed (the `bid` candidates), for logs and bug reports |
+| `rules_id`, `cards` | the rule set and the two cards' names: with `stop`, the key of a coverage log entry |
+| `complete`, `next`, `contract`, `declarer`, `position` | as `interpret` gives them for the whole auction |
+
+A `no_rule` stop also adds an `info` diagnostic. A bot seat without a hand,
+two hands sharing a card, or an illegal call is an `error`.
+
+#### The solo-table loop
+
+The client keeps the auction and who made each call, and calls `auction`
+whenever it is a bot's turn: at the start, and after every human call and
+every fallback call.
+
+```js
+const board = { engine, dealer: "N", vul: "None", scoring: "IMP",
+                bots: ["E", "S", "W"], hands: { E: ..., S: ..., W: ... } };
+const calls = [], who = [];
+async function botsTurn() {
+  for (;;) {
+    const r = JSON.parse(rbb.auction(JSON.stringify({ ...board, auction: calls })));
+    if (!r.ok) throw r.diagnostics;
+    for (const c of r.calls) { calls.push(c.call); who.push("rusty"); }
+    showMeanings(r.steps);                     // every call, human's too
+    if (r.stop.reason === "complete") return finish(r.contract, r.declarer);
+    if (r.stop.reason === "human_to_call") return waitForHuman(r.stop.seat);
+    // no_rule: take BBA's call for this seat, silently, and count it.
+    logFallback({ rules_id: r.rules_id, cards: r.cards, dealer: board.dealer,
+                  vul: board.vul, scoring: board.scoring, seat: r.stop.seat,
+                  index: r.stop.index, auction: r.stop.auction });
+    calls.push(await bbaNextCall(r.stop.auction));   // BBA, from that prefix
+    who.push("bba");
+  }
+}
+function humanCalled(call) { calls.push(call); who.push("human"); botsTurn(); }
+```
+
+The fallback's call (or a human's) goes into `auction` like any other call
+and is read the same way, so the steps after it, and the engine's later
+calls, take it into account. If Rusty has no rule for that call its step
+has `rule: null` and says less than usual, which is one more reason the
+stops are logged. The WASM never calls BBA itself. Without a network
+(or with `"no_rule": "pass"`), the table can let the engine pass instead.
+
+For the coverage count (the R4 manifest), each `no_rule` stop is one
+record: `rules_id`, `cards`, the board's `dealer`/`vul`/`scoring`,
+`stop.seat`, `stop.index` and `stop.auction` (and `stop.candidates` for a
+bug report).
+
+### `meaning(request)` → JSON
+
+What one call of an auction means to the engine: the mouseover of a call
+in the auction grid, a human's call as well as a bot's.
+
+Request: `{"engine": 1, "dealer": "N", "vul": "None", "scoring": "MP",
+"auction": "1NT Pass 2C Pass", "index": 2}`. `index` is the call's place
+(0 = the dealer's first call); left out, the last call. The auction is
+read up to and including that call.
+
+```json
+{"ok": true, "index": 2, "known": true,
+ "step": {"index": 2, "seat": "S", "call": "2C",
+          "explanation": "Stayman: asks for a 4-card major",
+          "alert": {"kind": "alert"}, "rule": {...}, "artificial": true,
+          "knowledge": {...}},
+ "diagnostics": []}
+```
+
+`step` is the call's step, as `interpret` gives it. `known` is false when
+no rule gives the call a meaning (`rule` and `explanation` are then
+`null`): the call is outside Rusty's system, typically a human's call or a
+fallback call. The UI should then say that the meaning is unknown to the
+engine (e.g. "Rusty has no meaning for this call"), not show "No rule
+applies" as if it were a meaning in the system: that text in `bid` is the
+engine's reason for passing, not what a call shows. Its `knowledge` is
+still what the seat has shown by its earlier calls.
+
+Cost: a meaning reads the auction up to the call. The engine caches every
+position it has read, so after an `auction`, `interpret` or `bid` over the
+same auction a meaning costs well under a millisecond; reading a new
+16-call auction from cold takes about 150 ms in the browser. A table that
+already has `auction`'s `steps` (every call's reading) can show those
+directly; `meaning` is for a single call, e.g. a human's call before the
+bots have answered, or a hover over a proposed call.
+
+### Determinism
+
+The WASM engine bids exactly as the native `rbb` does: CI (web job) bids
+300 random deals with both (`rbb bid-pbn --all-meanings` natively,
+`bidDeal` and `auction` in the WASM) and compares every call, its meaning
+and what it showed (`web/scripts/determinism.mjs`). `cargo test` also
+bids random deals with two engines in opposite orders and requires the
+same auctions (`crates/engine/tests/determinism.rs`): results do not
+depend on what an engine has cached or on hash-map order.
 
 ### `conventions(request)` → JSON
 

@@ -13,8 +13,8 @@ use bridge_types::{
     Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
 };
 use rbb_engine::{
-    Ask, CandidateTrace, Engine, Forcing, Position, RuleRef, RuleSet, SeatKnowledge, SideState,
-    Step, Tri,
+    Ask, CandidateTrace, DealCall, Engine, Forcing, OnNoRule, Position, RuleRef, RuleSet,
+    SeatKnowledge, SideState, Step, StopReason, Table, Tri,
 };
 use serde::Serialize;
 use serde_json::{json, Map, Value as Json};
@@ -992,6 +992,31 @@ fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
     })
 }
 
+/// A call of an auction the engine bid: its step, plus `forced` and
+/// `meaning`; for the engine's own calls `explanation`, `rule` and `alert`
+/// are the rule that chose it for the hand.
+fn deal_call_json(c: &DealCall, index: usize, d: &mut Diags) -> Json {
+    let mut j = step_json(&c.step, index, d);
+    let m = j.as_object_mut().unwrap();
+    // "explanation" is why this hand made the call (the rule that chose
+    // it); "meaning" is what the call shows to the table (the step).
+    m.insert("meaning".into(), json!(c.step.explanation));
+    m.insert("forced".into(), Json::Bool(c.choice.is_none()));
+    if let Some(choice) = &c.choice {
+        m.insert("explanation".into(), json!(choice.explanation));
+        m.insert("rule".into(), rule(&choice.rule));
+        m.insert("alert".into(), alert(&choice.alert));
+        for w in &choice.warnings {
+            d.warning(format!(
+                "call {} ({}): {w}",
+                index + 1,
+                choice.call.to_pbn()
+            ));
+        }
+    }
+    j
+}
+
 fn strain_str(s: Strain) -> &'static str {
     STRAIN_KEYS
         .iter()
@@ -1376,21 +1401,7 @@ pub fn bid_deal(request: &str) -> String {
     let mut calls = Vec::new();
     let mut plain = Vec::new();
     for (i, c) in auction.calls.iter().enumerate() {
-        let mut j = step_json(&c.step, i, &mut d);
-        let m = j.as_object_mut().unwrap();
-        // "explanation" is why this hand made the call (the rule that chose
-        // it); "meaning" is what the call shows to the table (the step).
-        m.insert("meaning".into(), json!(c.step.explanation));
-        m.insert("forced".into(), Json::Bool(c.choice.is_none()));
-        if let Some(choice) = &c.choice {
-            m.insert("explanation".into(), json!(choice.explanation));
-            m.insert("rule".into(), rule(&choice.rule));
-            m.insert("alert".into(), alert(&choice.alert));
-            for w in &choice.warnings {
-                d.warning(format!("call {} ({}): {w}", i + 1, choice.call.to_pbn()));
-            }
-        }
-        calls.push(j);
+        calls.push(deal_call_json(c, i, &mut d));
         plain.push(c.step.call.clone());
     }
     let (contract, declarer) = contract_json(dealer, &plain);
@@ -1400,6 +1411,271 @@ pub fn bid_deal(request: &str) -> String {
             "complete": auction.complete,
             "contract": contract,
             "declarer": declarer,
+        }),
+        d,
+    )
+}
+
+/// The hands of a practice table: `deal` (all four) or `hands` (an object
+/// with the seats given, at least the bots'), no card in two hands.
+fn table_hands(req: &Json, d: &mut Diags) -> Option<[Option<Hand>; 4]> {
+    match (req.get("deal"), req.get("hands")) {
+        (Some(_), Some(_)) => {
+            d.error("hands: give \"deal\" or \"hands\", not both");
+            None
+        }
+        (Some(v), None) => parse_deal(v, d).map(|h| h.map(Some)),
+        (None, Some(Json::Object(m))) => {
+            let mut hands: [Option<Hand>; 4] = Default::default();
+            for (key, v) in m {
+                let Some(dir) = key
+                    .chars()
+                    .next()
+                    .and_then(|c| Direction::from_char(c.to_ascii_uppercase()))
+                else {
+                    d.error(format!("hands: {key:?} is not a seat"))
+                        .hint("N, E, S or W");
+                    continue;
+                };
+                let field = format!("hands.{}", dir.to_char());
+                match v.as_str() {
+                    Some(t) => hands[dir.to_index()] = parse_hand(t, &field, d),
+                    None => {
+                        d.error(format!("{field}: expected a hand as a string"))
+                            .hint(HAND_HINT);
+                    }
+                }
+            }
+            if d.has_errors() {
+                return None;
+            }
+            let mut seen = Vec::with_capacity(52);
+            for (i, h) in hands.iter().enumerate() {
+                for c in h.iter().flat_map(|h| h.cards()) {
+                    if seen.contains(c) {
+                        let who = Direction::from_index(i).map_or('?', |x| x.to_char());
+                        d.error(format!("hands: {c} is in two hands (again in {who})"));
+                        return None;
+                    }
+                    seen.push(*c);
+                }
+            }
+            Some(hands)
+        }
+        (None, Some(_)) => {
+            d.error("hands: expected {\"S\": hand, ...} with the bot seats' hands");
+            None
+        }
+        (None, None) => {
+            d.error("hands: missing")
+                .hint("\"hands\": {\"E\": .., \"W\": ..} (the bot seats), or a whole \"deal\"");
+            None
+        }
+    }
+}
+
+/// The seats the engine bids for: `"bots": ["N", "E", "W"]` or `"NEW"`.
+fn bot_seats(req: &Json, d: &mut Diags) -> Option<[bool; 4]> {
+    let mut bots = [false; 4];
+    let mut mark = |s: &str, d: &mut Diags| {
+        let dir = s
+            .trim()
+            .chars()
+            .next()
+            .and_then(|c| Direction::from_char(c.to_ascii_uppercase()));
+        match dir {
+            Some(dir) => bots[dir.to_index()] = true,
+            None => {
+                d.error(format!("bots: {s:?} is not a seat"))
+                    .hint("a list of seats, e.g. [\"N\", \"E\", \"W\"], or \"NEW\"");
+            }
+        }
+    };
+    match req.get("bots") {
+        Some(Json::String(s)) => {
+            for c in s.chars().filter(|c| !c.is_whitespace() && *c != ',') {
+                mark(&c.to_string(), d);
+            }
+        }
+        Some(Json::Array(a)) => {
+            for x in a {
+                match x.as_str() {
+                    Some(s) => mark(s, d),
+                    None => {
+                        d.error("bots: expected seats as strings");
+                    }
+                }
+            }
+        }
+        None | Some(Json::Null) => {
+            d.error("bots: missing")
+                .hint("the seats the engine bids for, e.g. [\"N\", \"E\", \"W\"]");
+        }
+        Some(_) => {
+            d.error("bots: expected a list of seats");
+        }
+    }
+    (!d.has_errors()).then_some(bots)
+}
+
+/// Bid the bot seats of a practice table from the calls so far until the
+/// auction ends, a human is to call, or a bot seat has no rule (where the
+/// caller takes another bidder's call and calls again).
+pub fn auction(request: &str) -> String {
+    let mut d = Diags::default();
+    let req = parse_request(request, &mut d);
+    let empty = json!({"calls": [], "steps": [], "stop": Json::Null});
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let entry = engine_for(&req, &mut d);
+    let hands = table_hands(&req, &mut d);
+    let bots = bot_seats(&req, &mut d);
+    let dealer = seat(&req, "dealer", None, &mut d);
+    let vul = vulnerability(&req, &mut d);
+    let scoring = scoring(&req, &mut d);
+    let calls = dealer.and_then(|dl| parse_auction(req.get("auction"), "auction", dl, &mut d));
+    let on_no_rule = match field_str(&req, "no_rule", &mut d) {
+        None | Some("stop") => OnNoRule::Stop,
+        Some("pass") => OnNoRule::Pass,
+        Some(s) => {
+            d.error(format!("no_rule: {s:?} is not \"stop\" or \"pass\""));
+            OnNoRule::Stop
+        }
+    };
+    let (Some(entry), Some(hands), Some(bots), Some(dealer), Some(calls)) =
+        (entry, hands, bots, dealer, calls)
+    else {
+        return respond(empty, d);
+    };
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let table = Table {
+        dealer,
+        vul,
+        scoring,
+        hands,
+        bots,
+    };
+    let t = match entry.engine.auction(&table, &calls, on_no_rule) {
+        Ok(t) => t,
+        Err(e) => {
+            let field = if e.contains("bot seat") {
+                "hands"
+            } else {
+                "auction"
+            };
+            d.error(format!("{field}: {e}"));
+            return respond(empty, d);
+        }
+    };
+    let mut steps = Vec::new();
+    let mut made = Vec::new();
+    let mut plain = Vec::new();
+    for (i, c) in t.calls.iter().enumerate() {
+        let by = if c.choice.is_some() { "bot" } else { "given" };
+        let mut s = step_json(&c.step, i, &mut Diags::default());
+        s["index"] = json!(i);
+        s["by"] = json!(by);
+        steps.push(s);
+        if let Some(choice) = &c.choice {
+            let mut j = deal_call_json(c, i, &mut d);
+            j["index"] = json!(i);
+            j["no_rule"] = json!(choice.rule.is_none());
+            made.push(j);
+        }
+        plain.push(c.step.call.clone());
+    }
+    // The warnings of the given calls' readings, once.
+    for (i, c) in t.calls.iter().enumerate().take(t.given) {
+        for w in &c.step.warnings {
+            d.warning(format!("call {} ({}): {w}", i + 1, c.step.call.to_pbn()));
+        }
+    }
+    let stop = &t.stop;
+    let mut stop_json = json!({
+        "reason": stop.reason,
+        "seat": stop.seat.map(seat_str),
+        "index": stop.index,
+        "auction": plain.iter().map(Call::to_pbn).collect::<Vec<_>>(),
+    });
+    if let Some(choice) = &stop.choice {
+        stop_json["call"] = json!(choice.call.to_pbn());
+        stop_json["candidates"] = choice.candidates.iter().map(candidate_json).collect();
+        for w in &choice.warnings {
+            d.warning(format!("call {} (no rule): {w}", stop.index + 1));
+        }
+    }
+    if stop.reason == StopReason::NoRule {
+        d.info(format!(
+            "no rule applies for {} at call {}: supply that call and call auction again",
+            stop.seat.map_or('?', |s| s.to_char()),
+            stop.index + 1
+        ));
+    }
+    let (contract, declarer) = contract_json(dealer, &plain);
+    let complete = stop.reason == StopReason::Complete;
+    respond(
+        json!({
+            "rules_id": entry.rules.id,
+            "cards": {"ns": entry.names[0], "ew": entry.names[1]},
+            "calls": made,
+            "steps": steps,
+            "stop": stop_json,
+            "complete": complete,
+            "next": stop.seat.map(seat_str),
+            "contract": contract,
+            "declarer": declarer,
+            "position": position_json(&t.position),
+        }),
+        d,
+    )
+}
+
+/// What one call of an auction means to the engine (a mouseover): the
+/// auction is read up to and including call `index` (default the last).
+pub fn meaning(request: &str) -> String {
+    let mut d = Diags::default();
+    let req = parse_request(request, &mut d);
+    let empty = json!({"index": Json::Null, "known": false, "step": Json::Null});
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let engine = engine_for(&req, &mut d);
+    let dealer = seat(&req, "dealer", None, &mut d);
+    let vul = vulnerability(&req, &mut d);
+    let scoring = scoring(&req, &mut d);
+    let calls = dealer.and_then(|dl| parse_auction(req.get("auction"), "auction", dl, &mut d));
+    let (Some(Entry { engine, .. }), Some(dealer), Some(calls)) = (engine, dealer, calls) else {
+        return respond(empty, d);
+    };
+    if d.has_errors() {
+        return respond(empty, d);
+    }
+    let index = match req.get("index") {
+        None | Some(Json::Null) if !calls.is_empty() => calls.len() - 1,
+        Some(v) if v.as_u64().is_some_and(|i| (i as usize) < calls.len()) => {
+            v.as_u64().unwrap() as usize
+        }
+        _ => {
+            d.error(format!(
+                "index: expected the index of a call of the auction (0 to {})",
+                calls.len() as i64 - 1
+            ))
+            .hint("0 is the dealer's first call; leave it out for the last call");
+            return respond(empty, d);
+        }
+    };
+    let interp = engine.interpret(dealer, vul, scoring, &calls[..=index]);
+    let step = &interp.steps[index];
+    let mut s = step_json(step, index, &mut d);
+    s["index"] = json!(index);
+    respond(
+        json!({
+            "index": index,
+            "known": step.rule.is_some(),
+            "step": s,
         }),
         d,
     )
@@ -1873,6 +2149,183 @@ mod tests {
         assert_eq!(forced["ok"], true, "{forced}");
         assert_eq!(forced["calls"][0]["call"], "1C");
         assert_eq!(forced["calls"][0]["forced"], true);
+    }
+
+    /// North and East human, South and West bots: after 1C (4NT) no rule
+    /// covers South's hand.
+    const TABLE: &str = r#""cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "vul": "None",
+        "scoring": "IMP", "bots": ["S", "W"],
+        "hands": {"S": "AK52.KJ7.Q94.K83", "W": "QJ3.Q95.KJ3.QJ74"}"#;
+
+    #[test]
+    fn auction_stops_at_no_rule_and_resumes_after_a_call_from_outside() {
+        let r = parse(&auction(&format!(r#"{{{TABLE}, "auction": "1C 4NT"}}"#)));
+        assert_eq!(r["ok"], true, "{r}");
+        assert_eq!(r["stop"]["reason"], "no_rule", "{r}");
+        assert_eq!(r["stop"]["seat"], "S");
+        assert_eq!(r["stop"]["index"], 2);
+        assert_eq!(r["stop"]["auction"], json!(["1C", "4NT"]));
+        assert_eq!(r["stop"]["call"], "Pass");
+        assert!(r["stop"]["candidates"].is_array());
+        assert_eq!(r["calls"], json!([]));
+        assert_eq!(r["steps"].as_array().unwrap().len(), 2);
+        assert_eq!(r["steps"][1]["by"], "given");
+        assert_eq!(r["next"], "S");
+        assert_eq!(r["complete"], false);
+        assert_eq!(r["cards"]["ns"], "21GF-DEFAULT");
+        assert_eq!(r["rules_id"], rbb_assets::RULES_ID);
+        assert!(r["diagnostics"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|x| x["severity"] == "info"));
+
+        // The fallback's pass appended: West bids, North (human) is next.
+        let r = parse(&auction(&format!(
+            r#"{{{TABLE}, "auction": "1C 4NT Pass"}}"#
+        )));
+        assert_eq!(r["ok"], true, "{r}");
+        assert_eq!(r["stop"]["reason"], "human_to_call", "{r}");
+        assert_eq!(r["stop"]["seat"], "N");
+        assert_eq!(r["stop"]["index"], 4);
+        assert!(r["stop"].get("candidates").is_none());
+        let made = r["calls"].as_array().unwrap();
+        assert_eq!(made.len(), 1);
+        assert_eq!(made[0]["seat"], "W");
+        assert_eq!(made[0]["index"], 3);
+        assert_eq!(made[0]["no_rule"], false);
+        assert_eq!(made[0]["forced"], false);
+        assert!(made[0]["rule"].is_object());
+        let steps = r["steps"].as_array().unwrap();
+        assert_eq!(steps.len(), 4);
+        assert_eq!(steps[2]["by"], "given");
+        assert_eq!(steps[3]["by"], "bot");
+
+        // Every call reads as `interpret` reads it.
+        let i = parse(&interpret(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "vul": "None", "scoring": "IMP",
+                "auction": "1C 4NT Pass Pass"}"#,
+        ));
+        for (a, b) in steps.iter().zip(i["steps"].as_array().unwrap()) {
+            for k in ["call", "explanation", "alert", "rule", "knowledge"] {
+                assert_eq!(a[k], b[k], "{k}");
+            }
+        }
+        assert_eq!(r["position"], i["position"]);
+
+        // Passing without a rule instead of stopping.
+        let r = parse(&auction(&format!(
+            r#"{{{TABLE}, "auction": "1C 4NT", "no_rule": "pass"}}"#
+        )));
+        assert_eq!(r["stop"]["reason"], "human_to_call", "{r}");
+        assert_eq!(r["calls"][0]["no_rule"], true);
+        assert_eq!(r["calls"][0]["rule"], Json::Null);
+        assert_eq!(r["calls"][0]["explanation"], "No rule applies");
+    }
+
+    #[test]
+    fn auction_bids_to_the_end_with_four_bots() {
+        let deal = "N:AK52.KJ7.Q94.K83 QJ3.Q95.KJ3.QJ74 T64.AT832.A2.T62 987.64.T8765.A95";
+        let r = parse(&auction(&format!(
+            r#"{{"cards": {{"ns": "21GF-DEFAULT", "ew": "21GF-GIB"}}, "deal": "{deal}",
+                "dealer": "N", "bots": "NESW", "no_rule": "pass"}}"#
+        )));
+        let b = parse(&bid_deal(&format!(
+            r#"{{"cards": {{"ns": "21GF-DEFAULT", "ew": "21GF-GIB"}}, "deal": "{deal}",
+                "dealer": "N"}}"#
+        )));
+        assert_eq!(r["ok"], true, "{r}");
+        assert_eq!(r["stop"]["reason"], "complete");
+        assert_eq!(r["stop"]["seat"], Json::Null);
+        assert_eq!(r["complete"], true);
+        assert_eq!(r["contract"], b["contract"]);
+        let calls = |x: &Json| -> Vec<Json> {
+            x.as_array()
+                .unwrap()
+                .iter()
+                .map(|c| c["call"].clone())
+                .collect()
+        };
+        assert_eq!(calls(&r["calls"]), calls(&b["calls"]));
+        // A human at the dealer's seat: nothing to bid yet.
+        let r = parse(&auction(&format!(
+            r#"{{"cards": {{"ns": "21GF-DEFAULT"}}, "deal": "{deal}", "dealer": "N",
+                "bots": ["E", "S", "W"]}}"#
+        )));
+        assert_eq!(r["stop"]["reason"], "human_to_call", "{r}");
+        assert_eq!(r["stop"]["index"], 0);
+    }
+
+    #[test]
+    fn auction_reports_bad_tables() {
+        let bad = |req: &str, starts: &str| {
+            let r = parse(&auction(req));
+            assert_eq!(r["ok"], false, "{r}");
+            assert!(
+                r["diagnostics"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|x| x["message"].as_str().unwrap().starts_with(starts)),
+                "{starts}: {r}"
+            );
+            assert!(r["stop"].is_null());
+        };
+        bad(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "bots": ["S"], "hands": {"W": "AK52.KJ7.Q94.K83"}}"#,
+            "hands: S is a bot seat",
+        );
+        bad(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "hands": {"S": "AK52.KJ7.Q94.K83"}}"#,
+            "bots: missing",
+        );
+        bad(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "bots": "S",
+                "hands": {"S": "AK52.KJ7.Q94.K83", "W": "AK52.KJ7.Q94.K83"}}"#,
+            "hands: ",
+        );
+        bad(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "bots": "S", "no_rule": "guess",
+                "hands": {"S": "AK52.KJ7.Q94.K83"}}"#,
+            "no_rule:",
+        );
+    }
+
+    #[test]
+    fn meaning_of_one_call() {
+        let r = parse(&meaning(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1NT Pass 2C Pass", "index": 2}"#,
+        ));
+        assert_eq!(r["ok"], true, "{r}");
+        assert_eq!(r["index"], 2);
+        assert_eq!(r["known"], true);
+        assert_eq!(r["step"]["call"], "2C");
+        assert_eq!(r["step"]["seat"], "S");
+        let i = parse(&interpret(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1NT Pass 2C Pass"}"#,
+        ));
+        for k in ["explanation", "alert", "rule", "knowledge", "artificial"] {
+            assert_eq!(r["step"][k], i["steps"][2][k], "{k}");
+        }
+        // The last call by default; a call outside the system is unknown.
+        let r = parse(&meaning(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1C 4NT"}"#,
+        ));
+        assert_eq!(r["index"], 1, "{r}");
+        let unknown = parse(&meaning(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "2C 3NT Pass 7C"}"#,
+        ));
+        assert_eq!(unknown["ok"], true, "{unknown}");
+        assert_eq!(unknown["known"], false, "{unknown}");
+        assert_eq!(unknown["step"]["explanation"], Json::Null);
+        let r = parse(&meaning(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1C", "index": 1}"#,
+        ));
+        assert_eq!(r["ok"], false);
+        let r = parse(&meaning(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N"}"#,
+        ));
+        assert_eq!(r["ok"], false);
     }
 
     #[test]

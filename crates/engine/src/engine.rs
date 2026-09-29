@@ -726,6 +726,159 @@ impl Engine {
         }
         Ok(DealAuction { calls, complete })
     }
+
+    /// Bid the bot seats of a practice table in turn: the `given` calls
+    /// first (anyone's: a human's, or a call another bidder made where this
+    /// engine had no rule), then the engine's call for each bot seat until
+    /// the auction ends, a seat that is not a bot is to call, or, with
+    /// `OnNoRule::Stop`, a bot seat reaches a position where no rule
+    /// applies. The caller then supplies that call itself (the table's
+    /// fallback bidder), appends it to `given` and calls again.
+    ///
+    /// Every call, given or made, is read the same way (`step`), so the
+    /// meanings of a human's call and of a fallback call come out as
+    /// `interpret` gives them. `Err` names the first given call that is not
+    /// legal, or a bot seat without a hand.
+    pub fn auction(
+        &self,
+        table: &Table,
+        given: &[Call],
+        on_no_rule: OnNoRule,
+    ) -> Result<TableAuction, String> {
+        for seat in SEATS {
+            if table.bots[seat.to_index()] && table.hands[seat.to_index()].is_none() {
+                return Err(format!("{} is a bot seat without a hand", seat.to_char()));
+            }
+        }
+        let mut pos = self.start(table.dealer, table.vul, table.scoring);
+        let mut calls = Vec::new();
+        for (i, call) in given.iter().enumerate() {
+            let auction = pos.auction();
+            if auction.is_complete() {
+                return Err(format!(
+                    "call {} ({call}): the auction is already over",
+                    i + 1
+                ));
+            }
+            if !auction.is_legal(call) {
+                return Err(format!("call {} ({call}) is not legal here", i + 1));
+            }
+            let step = self.advance(&mut pos, call);
+            calls.push(DealCall { step, choice: None });
+        }
+        let stop = loop {
+            let index = calls.len();
+            if pos.auction().is_complete() {
+                break TableStop {
+                    reason: StopReason::Complete,
+                    seat: None,
+                    index,
+                    choice: None,
+                };
+            }
+            let seat = pos.next_caller();
+            let Some(hand) = table.hands[seat.to_index()]
+                .as_ref()
+                .filter(|_| table.bots[seat.to_index()])
+            else {
+                break TableStop {
+                    reason: StopReason::HumanToCall,
+                    seat: Some(seat),
+                    index,
+                    choice: None,
+                };
+            };
+            let choice = self.choose(&pos, hand);
+            if choice.rule.is_none() && on_no_rule == OnNoRule::Stop {
+                break TableStop {
+                    reason: StopReason::NoRule,
+                    seat: Some(seat),
+                    index,
+                    choice: Some(choice),
+                };
+            }
+            let step = self.advance(&mut pos, &choice.call);
+            calls.push(DealCall {
+                step,
+                choice: Some(choice),
+            });
+        };
+        Ok(TableAuction {
+            given: given.len(),
+            calls,
+            stop,
+            position: pos,
+        })
+    }
+}
+
+const SEATS: [Direction; 4] = [
+    Direction::North,
+    Direction::East,
+    Direction::South,
+    Direction::West,
+];
+
+/// A practice table for `Engine::auction`: the board, and which seats the
+/// engine bids for.
+#[derive(Debug, Clone)]
+pub struct Table {
+    pub dealer: Direction,
+    pub vul: Vulnerability,
+    pub scoring: ScoringMethod,
+    /// By `Direction::to_index`. Every bot seat needs its hand; the others
+    /// may be left out (they are not looked at).
+    pub hands: [Option<Hand>; 4],
+    /// By `Direction::to_index`: the seats the engine bids for.
+    pub bots: [bool; 4],
+}
+
+/// What `Engine::auction` does at a bot seat where no rule applies.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum OnNoRule {
+    /// Stop there, so the caller can take another bidder's call.
+    Stop,
+    /// Pass (what `bid` and `bid_deal` do) and go on.
+    Pass,
+}
+
+/// Why `Engine::auction` stopped.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum StopReason {
+    /// The auction is over.
+    Complete,
+    /// A seat the engine does not bid for is to call.
+    HumanToCall,
+    /// A bot seat is to call and no rule applies (with `OnNoRule::Stop`).
+    NoRule,
+}
+
+/// Where `Engine::auction` stopped.
+#[derive(Debug, Clone, Serialize)]
+pub struct TableStop {
+    pub reason: StopReason,
+    /// The seat to call; `None` when the auction is complete.
+    pub seat: Option<Direction>,
+    /// The index (0-based, from the dealer's first call) of the next call:
+    /// the number of calls so far.
+    pub index: usize,
+    /// At a `NoRule` stop, the engine's choice there: a pass with no rule,
+    /// and every candidate with why it failed.
+    pub choice: Option<Choice>,
+}
+
+/// A practice-table auction bid by `Engine::auction`.
+#[derive(Debug, Clone, Serialize)]
+pub struct TableAuction {
+    /// Every call so far: the given ones first (`choice` is `None`), then
+    /// the engine's (`choice` is `Some`).
+    pub calls: Vec<DealCall>,
+    /// How many of `calls` were given.
+    pub given: usize,
+    pub stop: TableStop,
+    /// The table after the last call.
+    pub position: Position,
 }
 
 /// One call of an auction bid by `Engine::bid_deal`.

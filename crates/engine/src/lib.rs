@@ -20,7 +20,7 @@ use std::path::Path;
 
 pub use engine::{
     check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation,
-    Step, SET_KEYS,
+    OnNoRule, Step, StopReason, Table, TableAuction, TableStop, SET_KEYS,
 };
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};

@@ -266,6 +266,58 @@ await test('the WASM bid and interpret give the position', async () => {
   assert.equal(i.position.sides.ns.forcing_by, 'S')
 })
 
+await test('the practice-table loop: bots, a human, the fallback for a call with no rule', async () => {
+  const J = (name, req) => JSON.parse(rbb[name](JSON.stringify(req)))
+  const engine = J('createEngine', { cards: { ns: '21GF-DEFAULT' } }).engine
+  // North and East are human; South and West are bots. After 1C (4NT) no
+  // rule covers South's hand.
+  const board = {
+    engine, dealer: 'N', vul: 'None', scoring: 'IMP', bots: ['S', 'W'],
+    hands: { S: 'AK52.KJ7.Q94.K83', W: 'QJ3.Q95.KJ3.QJ74' },
+  }
+  const humans = ['1C', '4NT', 'Pass', 'Pass', 'Pass', 'Pass']
+  const fallback = () => 'Pass'           // stands in for BBA
+  const log = []
+  let calls = []
+  const who = []                          // the table keeps who made each call
+  let r
+  for (let round = 0; round < 20; round++) {
+    r = J('auction', { ...board, auction: calls })
+    assert.equal(r.ok, true, JSON.stringify(r.diagnostics))
+    for (const c of r.calls) {
+      assert.equal(c.index, calls.length)
+      calls.push(c.call)
+      who.push('rusty')
+    }
+    assert.deepEqual(r.steps.map((s) => s.call), calls)
+    if (r.stop.reason === 'complete') break
+    if (r.stop.reason === 'no_rule') {
+      log.push({ rules_id: r.rules_id, seat: r.stop.seat, index: r.stop.index, auction: r.stop.auction.join(' ') })
+      calls.push(fallback(r.stop.auction))
+      who.push('fallback')
+    } else {
+      assert.equal(r.stop.reason, 'human_to_call')
+      calls.push(humans.shift())
+      who.push('human')
+    }
+  }
+  assert.equal(r.complete, true)
+  assert.equal(r.stop.index, calls.length)
+  assert.deepEqual(log[0], { rules_id: r.rules_id, seat: 'S', index: 2, auction: '1C 4NT' })
+  // The last response reads every call, whoever made it.
+  assert.equal(r.steps.length, calls.length)
+  assert.deepEqual(who.slice(0, 4), ['human', 'human', 'fallback', 'rusty'])
+  // A mouseover: one call's meaning, the same as the reading above.
+  const m = J('meaning', { engine, dealer: 'N', vul: 'None', scoring: 'IMP', auction: calls, index: 3 })
+  assert.equal(m.ok, true, JSON.stringify(m.diagnostics))
+  assert.equal(m.known, true)
+  assert.equal(m.step.explanation, r.steps[3].explanation)
+  assert.deepEqual(m.step.knowledge, r.steps[3].knowledge)
+  const unknown = J('meaning', { engine, dealer: 'N', auction: '2C 3NT Pass 7C' })
+  assert.equal(unknown.known, false)
+  assert.equal(unknown.step.explanation, null)
+})
+
 if (pbsDir) {
   await test('a PBS scenario from the corpus, with its cards and BBA\'s auction', async () => {
     const s = new Session(rbb, { fetchImpl })
