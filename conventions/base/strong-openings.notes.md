@@ -65,6 +65,10 @@ twice). BBA opens that 1♠ and so do we.
 - BBA opens 2♣ on hands of 20-22 total points that we open at the one
   level (8 of its 18): `AKQ654.AK9.J5.K5` (22), `2.AQJ872.AKQJ83.` (21).
 - BBA opens 1♥/1♠ on some hands within a trick of game that we open 2♣.
+- After 2C P 2M P 2NT P: BBA jumps to 4M with some weak seven-card
+  suits, bids 4NT rather than a four-card minor with 8-9, and shows
+  hearts before rebidding six spades; opener cues a control where BBA
+  asks at once (see "After a positive and opener's 2NT" below).
 
 ## Gaps and open questions
 
@@ -73,8 +77,13 @@ twice). BBA opens that 1♠ and so do we.
   card, and there is no rule for opener after it.
 - `two_clubs.2d_response = steps` is not modelled.
 - Opener's second call after the second negative.
-- Slam bidding after a positive: the raise agrees the suit but nothing
-  looks for keycards.
+- Slam bidding after a positive: covered for opener's raise (responder
+  4M, opener asks), for 2C P 2M P 2NT P (below) and for the balanced
+  positive; not for a minor second suit (opener bids 3NT over 3C/3D, and
+  4NT in the minor is not tried), nor for the grand: after 2C P 3D P 3S
+  P BBA reaches 7S with all the keycards where we stop in 6S
+  (To_Finesse_Or_Not_To_Finesse 1, 15, 38, 89), because `grand_try`
+  counts responder at his 8 HCP floor and there is no king ask.
 
 ## Raising opener's major after a positive (2026-09-25)
 
@@ -93,6 +102,58 @@ real suit) stands.
   sometimes does: -1,717 by distance, -3,432 to the bidding side (626
   boards). Rick's ladder (2NT with 20-21 balanced) stands.
 
+## After a positive and opener's 2NT; the balanced positive (2026-09-28)
+
+NT_Ladder 426 (Rick: "we should be in 6S here like BBA"): 2C P 2S P
+2NT P with `AK9876.J4.T9653.` opposite `J4.AKT.AKQ2.AJ75`. BBA:
+3S, 4NT, 5H, 6S. We bid 3NT: there were no rules for responder here,
+and the notrump-ladder catch-all (responder-rebids.bid) took over.
+
+Opener's 2NT after a major positive is balanced, 22+, with exactly two
+cards in responder's major. Responder now (priority order):
+- **3M with six or more**: the eight-card fit is known, so it agrees the
+  suit (`sets trump`), and the keycard or control-bid machinery in
+  slam/ takes over (opener's 22 is always 18 of its own).
+- **The other major with four**, then **a minor with four**: natural.
+  Opener with four in responder's other major agrees it and asks at once
+  (4NT, `trump=z, ask=keycards(z)`; game in it without RKCB on the
+  card). Over a minor opener bids 3NT (the base fallback).
+- **5-3-3-2**: a quantitative 4NT with 30-32 between us (opener at 22),
+  6NT with 33+.
+
+Opener's notrump after 2C P 2NT P now splits the ladder as over 2D:
+3NT is 22, a quantitative 4NT 23-24, 6NT 25+; and both of opener's
+balanced rebids after a positive show `hcp>=22` (the 2C opening's own
+reading starts at 17 because of the playing-strength openings), so
+responder's slam arithmetic over them counts opener at 22. That is what
+found 6NT on Benjamin_2D 25 and 151.
+
+BBA, probed:
+- `probes/strong2c-2S-2N-resp.toml`, `strong2c-2H-2N-resp.toml`
+  (responder, 8-13 with five or more in the major, opener 22-24 with two):
+  six-card suits rebid (we always do; BBA jumps to 4M with some weak
+  7-card suits and 8-9), four-card side suits are shown (BBA, with a
+  minor and 8-9, bids 4NT about half the time; we show the minor),
+  5-3-3-2 bids 4NT with 8-9 and 6NT with 10+ (we bid 4NT with 10: 22+10
+  is 32, one short). BBA shows hearts before rebidding six spades on
+  6-4; we rebid the spades.
+- `probes/strong2c-2S-2N-3S-opener.toml` (opener, 22-24 with two spades,
+  after 3S): BBA asks with 4NT on 289 of 300 and bids 4S on 11; we agree
+  on 256. The rest are control bids: with a side suit holding neither
+  ace nor king we cue first (control-bids.bid, Rick 2026-09-25), where
+  BBA asks straight away.
+- `probes/strong2c-2N-opener.toml` (opener balanced 22-25 after
+  2C P 2NT P): BBA 3NT with 22, 4NT with 23-24, 6NT with 25; we agree on
+  295 of 300.
+
+Measured (after the catch-all change in responder-rebids.bid):
+- Responder's rebid over 2NT and the 4NT ask: distance from par +48,
+  to the side +135 (22 boards).
+- Opener after 2C P 2NT P (3NT 22, 4NT 23-24) and `hcp>=22` on the
+  balanced rebids: distance from par +452, to the side +951 (132 boards).
+- The 2C-opened boards over all scenarios (either auction opened 2C,
+  5,401 boards): vs BBA -11,726 → -11,226.
+
 ## Sources
 
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
@@ -101,14 +162,22 @@ real suit) stands.
   2♦ waiting, positives with a real suit and 8+, the second negative.
   Rick's guidance also stands against BBA's lighter positives and against
   opening 1M with 20-21 and a five-card major (2026-09-25).
-- **Book practice:** the ladder, playing tricks as 13 minus losers and the
-  second negative are standard practice, not yet cited to a book or
-  article.
+- **Book practice:** the ladder, playing tricks as 13 minus losers, the
+  second negative, and after 2C–positive–2NT rebidding a six-card suit,
+  showing a four-card side suit and the quantitative 4NT are standard
+  practice, not yet cited to a book or article.
 - **BBA evidence:** BBA's eighteen 2♣ openings in the Basic_* scenarios
-  and its stated meaning "19 to 37 total points". No `probes/*.toml` spec
-  yet.
-- **Corpus measurements:** the unbalanced-trigger table, and raising
-  opener's major after a positive (2026-09-25).
+  and its stated meaning "19 to 37 total points" (no probe spec for the
+  opening itself).
+- **BBA probes (2026-09-28):** `probes/strong2c-2S-2N-resp.toml`,
+  `strong2c-2H-2N-resp.toml`, `strong2c-2S-2N-3S-opener.toml`,
+  `strong2c-2N-opener.toml` (responder's rebid over 2NT, opener after
+  the six-card rebid, opener after the balanced positive).
+- **Rick's ticket (2026-09-28):** NT_Ladder 426, "we should be in 6S
+  here like BBA".
+- **Corpus measurements:** the unbalanced-trigger table, raising
+  opener's major after a positive (2026-09-25), and the 2NT
+  continuations (2026-09-28).
 - **Where we differ from the source:** Rick's wording makes the two
   unbalanced triggers alternatives; the rules require both, because
   that measures about 1,000 IMPs better (open question for Rick). From

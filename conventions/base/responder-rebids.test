@@ -185,4 +185,5 @@ N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 1NT    | 2C wou
 card    21GF-DEFAULT
 dealer  S
 vul     All
-N AK9876.J4.T9653.      | 2C P 2S P 2NT P                      | 4S     | 8 HCP, six spades opposite two: game in the fit, not 3NT
+N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 4H     | 4 HCP, six hearts opposite two or more: game in the fit, not 3NT
+# (2C P 2S P 2NT P itself now has its own rules: strong-openings.test.)

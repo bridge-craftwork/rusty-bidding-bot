@@ -35,3 +35,23 @@ N K632.J54.Q973.T6      | 2C P 2D P 2H P | 4H  | 8 HCP, not a bust: three hearts
 S AKQ642.K8.AKJ9.6      | 2C P 2NT P | 3S  | six spades opposite a balanced positive
 S AKQ642.K8.AKJ9.6      | 2C P 2H P  | 2S  | our own suit over partner's hearts
 S AK7.K83.AKJ9.AQ6      | 2C P 2H P  | 3H  | three hearts: raise
+
+# ── Responder's rebid over opener's 2NT, and the slam after it (2026-09-28)
+# NT_Ladder 426 (21GF-DEFAULT, all vul): BBA 2C 2S 2NT 3S 4NT 5H 6S.
+card    21GF-DEFAULT
+dealer  S
+vul     All
+N AK9876.J4.T9653.      | 2C P 2S P 2NT P            | 3S   | 8 HCP, six spades opposite two: the fit is known
+S J4.AKT.AKQ2.AJ75      | 2C P 2S P 2NT P 3S P       | 4NT  | 22 balanced, spades agreed: keycards
+N AK9876.J4.T9653.      | 2C P 2S P 2NT P 3S P 4NT P | 5H   | two keycards, no spade queen
+S J4.AKT.AKQ2.AJ75      | 2C P 2S P 2NT P 3S P 4NT P 5H P | 6S | all five keycards, no queen: small slam
+N KQ654.K764.3.Q74      | 2C P 2S P 2NT P            | 3H   | 10 HCP, five spades and four hearts
+N QJ752.K53.AJT6.8      | 2C P 2S P 2NT P            | 3D   | 11 HCP, five spades and four diamonds
+N AKJ74.T65.J42.64      | 2C P 2S P 2NT P            | 4NT  | 9 HCP, 5-3-3-2: quantitative opposite 22+
+N KQJ75.Q53.J63.K6      | 2C P 2S P 2NT P            | 6NT  | 12 HCP, 5-3-3-2: 34 between us
+N KJ82.AQ975.43.72      | 2C P 2H P 2NT P            | 3S   | 10 HCP, five hearts and four spades
+S KJ.AKQ4.QJ54.AK5      | 2C P 2S P 2NT P 3H P       | 4NT  | 23 with four hearts: agree them and ask
+# After the balanced positive: 3NT is exactly 22, 4NT invites with 23-24.
+S AQ5.KQ7.AKJ4.K76      | 2C P 2NT P                 | 3NT  | 22 balanced
+S AQ5.KQ7.AKJ4.KJ6      | 2C P 2NT P                 | 4NT  | 23 balanced: quantitative
+N JT974.AQ2.K2.KT2      | 2C P 2NT P 3NT P           | 6NT  | 13 opposite 22+: slam

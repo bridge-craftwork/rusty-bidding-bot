@@ -30,6 +30,8 @@ module strong-openings "2♣ and 2NT openings"
   param  three_nt_min = notrump.three_nt.range_min default 26
   param  three_nt_max = notrump.three_nt.range_max default 27
   param  gambling   = notrump.three_nt.one_suit default false
+  param  k1430      = slam.blackwood.rkcb_1430 default false
+  param  k0314      = slam.blackwood.rkcb_0314 default false
 
 when opening
   2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
@@ -115,8 +117,47 @@ after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
   cheapest(H) "Five or more hearts"           shows H>=5   when y is not H
   cheapest(D) "Five or more diamonds"         shows D>=5   when y is not D
   cheapest(C) "Five or more clubs"            shows C>=5   when y is not C
-  cheapest(N) "Balanced, no fit for {y}"      shows balanced
+  cheapest(N) "Balanced, no fit for {y}"      shows balanced, hcp>=22   # every balanced 2C is 22+
       priority -1
+
+# ── Responder's rebid over opener's 2NT (2026-09-28) ─────────────────
+# Opener is balanced, 22+, with exactly two cards in my major (three
+# would have raised). We are forced to game and hold 30+ between us, so
+# every call here is a step towards slam (NT_Ladder 426: 2C P 2S P 2NT
+# P, where six spades opposite two bid 3NT and BBA reached 6S).
+# BBA, probes/strong2c-2S-2N-resp.toml and strong2c-2H-2N-resp.toml:
+# a six-card suit rebids, a four-card side suit is shown, 5-3-3-2 bids a
+# quantitative 4NT with 8-9 and 6NT with 10+.
+after 2C (P) 2y (P) 2N (P) when y is H | y is S
+  3y  "Six or more {y}: the fit is known"      shows y>=6   sets trump=y
+      priority 2                             # the fit first, before a side suit
+  3S  "Four or more spades"                    shows S>=4
+      when  y is H
+      priority 1                             # a major fit before a minor suit
+  3H  "Four or more hearts"                    shows H>=4
+      when  y is S
+      priority 1
+  3C  "Four or more clubs"                     shows C>=4
+  3D  "Four or more diamonds"                  shows D>=4
+  4N  "Quantitative: 30-32 between us, invites 6NT"
+      shows balanced, hcp + partner.hcp.min >= 30, hcp + partner.hcp.min <= 32
+      sets  ask=quant
+  6N  "Slam: 33 or more between us"            shows balanced, hcp + partner.hcp.min >= 33
+  3N  "Nothing more to show"
+      priority -1
+
+# Opener with four cards in responder's second major agrees it and asks
+# for keycards at once: 30+ between us and a fit (BBA asks on almost
+# every hand after 2C P 2S P 2NT P 3S P, probes/strong2c-2S-2N-3S-opener.toml).
+# Without 1430 or 0314 on the card, game in the fit.
+after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y
+  4N  "Keycard ask in {z}: four-card support"  shows z>=4
+      when  k1430 | k0314
+      sets  trump=z, ask=keycards(z)
+      artificial
+  4z  "Four-card support: game in {z}"          shows z>=4
+      when  !k1430, !k0314
+      sets  trump=z
 
 # After the balanced positive, opener shows a suit or raises the notrump.
 after 2C (P) 2N (P)
@@ -124,8 +165,10 @@ after 2C (P) 2N (P)
   3H  "Five or more hearts"                   shows H>=5
   3D  "Five or more diamonds"                 shows D>=5
   3C  "Five or more clubs"                    shows C>=5
-  3N  "Balanced, no suit to show"             shows balanced
+  3N  "Balanced 22, no suit to show"         shows balanced, hcp>=22   # 23+ bids 4NT or 6NT
       priority -1
+  4N  "Quantitative: 23-24 balanced, invites 6NT"  shows balanced, hcp=23..24
+      sets  ask=quant
   6N  "Slam: the values are there"            shows hcp>=25, balanced
 
 # ── Responder's second call: the second negative ─────────────────────
