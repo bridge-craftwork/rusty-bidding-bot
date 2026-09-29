@@ -77,6 +77,14 @@ jobs:
         run: |
           cargo run --locked -q -p rbb-cli -- bid reference -o native-reference.txt
           node web/scripts/check-reference.mjs web/dist native-reference.txt
+      # Determinism (R4): the WASM engine bids 300 random deals exactly as
+      # the native rbb does (calls, meanings, what each call showed).
+      - name: Native and WASM bid the same
+        run: |
+          node web/scripts/determinism.mjs deals det-deals.pbn 300
+          cargo run --locked -q -p rbb-cli -- bid-pbn -i det-deals.pbn -o det-native.pbn \
+            --ns-card 21GF-DEFAULT --ew-card 21GF-GIB --all-meanings
+          node web/scripts/determinism.mjs check web/dist det-native.pbn
       - name: The output is complete
         run: |
           for f in index.html 404.html _headers reference.txt app.js pkg/rbb_wasm_bg.wasm dealer3/dealer3_wasm_bg.wasm; do

@@ -370,9 +370,20 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
         }
     }
     let mut problems: Vec<ProblemPoint> = probs.into_values().collect();
-    problems.sort_by(|a, b| b.count.cmp(&a.count).then(a.auction.cmp(&b.auction)));
+    // Ties are broken on the whole key, so the order never depends on the
+    // hash map's.
+    problems.sort_by(|a, b| {
+        (b.count, &a.auction, &a.call, a.kind).cmp(&(a.count, &b.auction, &b.call, b.kind))
+    });
     let mut divergences: Vec<Divergence> = points.into_values().collect();
-    divergences.sort_by(|a, b| b.count.cmp(&a.count).then(a.auction.cmp(&b.auction)));
+    divergences.sort_by(|a, b| {
+        (b.count, &a.auction, &a.reference, &a.ours).cmp(&(
+            a.count,
+            &b.auction,
+            &b.reference,
+            &b.ours,
+        ))
+    });
     Summary {
         total,
         scenarios,
