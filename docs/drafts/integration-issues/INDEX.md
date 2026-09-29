@@ -29,3 +29,17 @@ Not filed (see the plan, "Done, merged or dropped"):
 - **R3** (display contract): done on the engine side; the no-rule signal
   and meanings for any call are in R1, the field mapping is in C1, the
   suit notation is settled in the plan (§3.4) and rendered in C3.
+
+## Filed (2026-09-28)
+
+- R1: bridge-craftwork/rusty-bidding-bot#6
+- R4: bridge-craftwork/rusty-bidding-bot#7
+- R5: bridge-craftwork/rusty-bidding-bot#8
+- C1: bridge-craftwork/Bridge-Classroom#423
+- C2: bridge-craftwork/Bridge-Classroom#424
+- C3: bridge-craftwork/Bridge-Classroom#425
+- C4: bridge-craftwork/Bridge-Classroom#426
+- C5: bridge-craftwork/Bridge-Classroom#427
+- T1: bridge-craftwork/bridge-table-service#16
+- T2: bridge-craftwork/bridge-table-service#17
+- C6: bridge-craftwork/Bridge-Classroom#428
