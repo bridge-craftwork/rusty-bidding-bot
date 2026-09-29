@@ -1,4 +1,4 @@
-# Draft issue for Bridge-Classroom (not filed)
+# Issue for Bridge-Classroom (filed as bridge-craftwork/Bridge-Classroom#422)
 
 Drafted 2026-09-28 from rusty-bidding-bot's work on tying teaching skills
 to card fields and rules (docs/SKILLS.md). Every claim below was checked
