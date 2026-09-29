@@ -428,3 +428,31 @@ Ticket basic-takeout-double-b6 (1C X 1D P 2NT P, 7 passed 18-19),
 with opener's strong double after 1x (X) 1z (1y) (rebids.bid) and
 responder's answers: +1,231 par, +1,203 side IMPs (443 boards);
 no-rule positions 3,060 → 2,871.
+
+### Not notrump with a major fit known (2026-09-28)
+
+NT_Ladder 426 (Rick: "we should be in 6S here like BBA"): 2C P 2S P
+2NT P, North `AK9876.J4.T9653.`. Opener's 2NT denied three spades, so
+it showed exactly two, and the six-card suit makes eight; the catch-all
+still bid 3NT, above the fit-game fallback in base.bid (priority −38).
+Now its 3NT and 2NT show no eight-card major fit (my length plus
+partner's shown minimum), and the same block bids 4M with 25 between us
+or, over 1NT, invites with 3M (`ask=invite(M)`, answered in
+jacoby-transfers.bid). The slam that follows on this board is
+strong-openings.bid's (responder's rebid after 2C–positive–2NT).
+- Distance from par: +201 over the corpus (103 boards changed; 44 of
+  them 2C P 2D ...).
+- To the side that changed its call: +285.
+
+## Sources
+
+- **Rick's rulings**, dated in the sections above (the ranges and
+  invitations 2026-09-22, the ladder catch-all 2026-09-27, the minor-fit
+  stoppers 2026-09-25), and the tickets named there.
+- **BBA evidence:** corpus auctions only, as quoted in each section; no
+  `probes/*.toml` spec yet for this module.
+- **Corpus measurements:** the par and side-IMP figures given with each
+  change.
+- **Book practice:** the Standard American responder's rebids (weak,
+  invitational, game ranges; fourth suit and new minor forcing) are
+  standard practice, not yet cited to a book.

@@ -179,3 +179,10 @@ N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 2C     | 8 HCP,
 card    Basic-Bridge other_conventions.fourth_suit_forcing.play=true
 dealer  S
 N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 1NT    | 2C would be fourth suit forcing: 1NT instead
+
+# The ladder catch-all is not notrump with an eight-card major fit known
+# (2026-09-28, NT_Ladder 426: 2NT showed two spades, six-card spades).
+card    21GF-DEFAULT
+dealer  S
+vul     All
+N AK9876.J4.T9653.      | 2C P 2S P 2NT P                      | 4S     | 8 HCP, six spades opposite two: game in the fit, not 3NT
