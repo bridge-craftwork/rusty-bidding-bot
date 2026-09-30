@@ -21,10 +21,10 @@ use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
 
-pub use board::{par_for, BoardResult, ParComparison, Problem, ProblemKind};
+pub use board::{par_for, BoardResult, ParComparison, Problem, ProblemKind, ReadAs};
 pub use report::{
     contest, scoring_name, short, summarize, tally, Agreement, AuctionFilter, Contest, Divergence,
-    ParTally, ProblemPoint, Stats, Summary,
+    ParTally, ProblemPoint, ReadAsPoint, Stats, Summary,
 };
 pub use scenario::{discover, Scenario};
 

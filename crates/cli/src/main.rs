@@ -974,6 +974,31 @@ fn compare(
         );
     }
 
+    // Our calls partner reads by a higher rule than the one that chose
+    // them (docs/JUDGMENT-LAYER.md, "Reading partner's judgment call").
+    println!(
+        "\ncalls read as a higher rule than chose them: {}",
+        t.read_as
+    );
+    let prio = |p: Option<i64>| p.map(|p| format!(" ({p})")).unwrap_or_default();
+    for r in s.read_as.iter().take(top) {
+        println!(
+            "  {:>5}  {:>5}  {}{} -> {}{}   {}",
+            r.count,
+            r.call,
+            r.chosen,
+            prio(r.chosen_priority),
+            r.read.as_deref().unwrap_or("(no rule)"),
+            prio(r.read_priority),
+            r.scenarios.first().cloned().unwrap_or_default()
+                + &if r.scenarios.len() > 1 {
+                    format!(" +{}", r.scenarios.len() - 1)
+                } else {
+                    String::new()
+                }
+        );
+    }
+
     // The conditions the reference auctions were made under.
     let list = |m: &std::collections::BTreeMap<String, usize>| {
         m.iter()

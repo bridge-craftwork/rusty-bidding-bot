@@ -90,6 +90,11 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   `--auctions ns|ew|competitive` keeps only the boards where, in BBA's
   auction, one side bid alone or both sides bid (the workbench has the same
   filter in its toolbar).
+  "calls read as a higher rule than chose them" counts our own calls
+  that partner reads by a higher-priority rule than the one that bid
+  them (a judgment or fallback rule claiming a call a higher rule
+  offers; docs/JUDGMENT-LAYER.md §4), with the top (chosen -> read as)
+  pairs; `read_as` in `--json`.
 - `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).

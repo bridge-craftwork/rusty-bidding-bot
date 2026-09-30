@@ -458,7 +458,9 @@ make it common. The options:
 1. **Rule discipline plus a lint.** A judgment rule may not claim a call
    that a higher rule offers in the same position. `compare` can count
    the positions where that happens ("judgment call read as …").
-   Cheap, and it can come first.
+   Cheap, and it can come first. `compare` now prints it: "calls read
+   as a higher rule than chose them", with the top (chosen rule ->
+   read-as rule, call) pairs, and `read_as` in `--json`.
 2. **Engine: read a fallback as the union** of the top rule and each
    lower rule for the same call, each branch carrying the denial of what
    outranks it. This is correct in principle. It changes how existing

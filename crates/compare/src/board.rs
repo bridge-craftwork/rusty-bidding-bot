@@ -54,6 +54,57 @@ pub struct Problem {
     pub detail: String,
 }
 
+/// One of our own calls that partner reads by a higher-priority rule than
+/// the one that chose it: the engine reads a call as the highest-priority
+/// rules for it whose public conditions hold, so a lower-priority
+/// (judgment, fallback) rule choosing a call a higher rule also offers is
+/// read as the higher rule (docs/JUDGMENT-LAYER.md, "Reading partner's judgment call").
+#[derive(Debug, Clone, Serialize)]
+pub struct ReadAs {
+    /// The call, as an index into `BoardResult::ours`.
+    pub index: usize,
+    pub call: String,
+    /// The rule that chose the call, `file:line`, and its priority.
+    pub chosen: String,
+    pub chosen_priority: Option<i64>,
+    /// The rule it was read as, `file:line` (None: no rule read it), and
+    /// its priority.
+    pub read: Option<String>,
+    pub read_priority: Option<i64>,
+}
+
+fn read_as(index: usize, choice: &rbb_engine::Choice, step: &rbb_engine::Step) -> Option<ReadAs> {
+    let chosen = choice.rule.as_ref()?;
+    if step.rule.as_ref() == Some(chosen) {
+        return None;
+    }
+    let priority = |r: &rbb_engine::RuleRef| {
+        choice
+            .candidates
+            .iter()
+            .find(|c| &c.rule == r && c.call == choice.call)
+            .map(|c| c.priority)
+    };
+    let chosen_priority = priority(chosen);
+    let read_priority = step.rule.as_ref().and_then(priority);
+    // A rule of the same priority is read together with the chosen one
+    // (the call shows their union), so only a higher rule misreads it.
+    if let (Some(c), Some(r)) = (chosen_priority, read_priority) {
+        if r <= c {
+            return None;
+        }
+    }
+    let at = |r: &rbb_engine::RuleRef| format!("{}:{}", r.file, r.line);
+    Some(ReadAs {
+        index,
+        call: crate::report::short(&choice.call),
+        chosen: at(chosen),
+        chosen_priority,
+        read: step.rule.as_ref().map(at),
+        read_priority,
+    })
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct ParComparison {
     pub par_ns: i32,
@@ -93,6 +144,10 @@ pub struct BoardResult {
     /// (`probes/tools/par_blame.py`).
     #[serde(default)]
     pub our_rules: Vec<Option<String>>,
+    /// Our own calls read by a higher rule than the one that chose them
+    /// (see `ReadAs`).
+    #[serde(default)]
+    pub read_as: Vec<ReadAs>,
     pub first_divergence: Option<usize>,
     pub reference_contract: Option<String>,
     pub our_contract: Option<String>,
@@ -153,6 +208,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     // rule matched and it fell back to one.
     let mut forced: Vec<bool> = Vec::new();
     let mut at_divergence = None;
+    let mut read_as_list: Vec<ReadAs> = Vec::new();
     for (i, call) in reference.iter().enumerate() {
         let before = pos.clone();
         let seat = before.next_caller();
@@ -167,6 +223,8 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             acted[side] |= !call.is_pass();
             decided.push(choice.rule.is_some());
             forced.push(was_forced);
+            // Our engine chose this call itself (it agrees with BBA's).
+            read_as_list.extend(read_as(i, &choice, &step));
             steps.push(step);
         }
         replay.push(choice.call);
@@ -189,7 +247,9 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
             acted[side] |= !choice.call.is_pass();
             decided.push(choice.rule.is_some());
             forced.push(is_forced(&p, seat));
-            steps.push(engine.advance(&mut p, &choice.call));
+            let step = engine.advance(&mut p, &choice.call);
+            read_as_list.extend(read_as(ours.len(), &choice, &step));
+            steps.push(step);
             ours.push(choice.call);
         }
     }
@@ -241,6 +301,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
         replay,
         ours,
         our_rules,
+        read_as: read_as_list,
         first_divergence,
         par: None,
         runaway,
