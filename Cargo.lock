@@ -537,7 +537,8 @@ dependencies = [
 
 [[package]]
 name = "bridge-card"
-version = "0.4.0"
+version = "0.1.0"
+source = "git+https://github.com/bridge-craftwork/convention-card?tag=v0.1.0#cf471721d53c7dddbaa2f465d0c5cb6d10ec6abb"
 dependencies = [
  "serde",
  "serde_json",
@@ -2885,6 +2886,9 @@ dependencies = [
 [[package]]
 name = "rbb-assets"
 version = "0.4.0"
+dependencies = [
+ "bridge-card",
+]
 
 [[package]]
 name = "rbb-cli"

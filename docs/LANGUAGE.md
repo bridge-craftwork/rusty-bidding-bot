@@ -519,9 +519,9 @@ These are enforced by `bidspec`, with file:line:column errors:
 - A `skill` path is lower-case letters, digits and `_` on both sides of
   one `/` (`precision/1c_opener`); `/` appears nowhere else in the
   language. `rbb bid check` warns about a path that the rules'
-  `card/skills.toml` does not list.
+  is not a standard convention or skill (convention-card's `spec/conventions/`).
 - `card` and `param` paths must exist in the rules' card vocabulary
-  (`conventions/card/fields.toml`); an old alias is reported with the
+  (convention-card's `spec/fields.toml`); an old alias is reported with the
   current name.
 - `rbb bid check` also checks across files: module names are unique, and a
   `needs` that names no module is a warning.

@@ -46,15 +46,12 @@ pub fn compile(
     }
 }
 
-/// This repository's card vocabulary (`conventions/card`), for the unit
+/// The standard card vocabulary (convention-card's `spec/`), for the unit
 /// tests.
 #[cfg(test)]
 pub(crate) fn test_vocabulary() -> &'static bridge_card::Vocabulary {
     static V: std::sync::OnceLock<bridge_card::Vocabulary> = std::sync::OnceLock::new();
-    V.get_or_init(|| {
-        let rules = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
-        bridge_card::Vocabulary::load(&rules).expect("conventions/card loads")
-    })
+    V.get_or_init(|| bridge_card::standard::vocabulary().expect("the standard vocabulary loads"))
 }
 
 /// The module as JSON IR.

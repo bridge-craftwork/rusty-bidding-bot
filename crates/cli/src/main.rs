@@ -280,8 +280,8 @@ enum BidCommand {
     Check {
         #[arg(default_value = "conventions")]
         paths: Vec<PathBuf>,
-        /// The rules directory whose card vocabulary (card/fields.toml,
-        /// card/bbsa-map.toml) the files are checked against.
+        /// The rules directory; the files are checked against its card
+        /// vocabulary (its own card/ files, or the standard one).
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
     },
@@ -293,7 +293,7 @@ enum BidCommand {
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
         /// Where card names (`card 21GF-DEFAULT`) are looked up as .bbsa.
-        #[arg(long, default_value = "crates/bridge-card/tests/fixtures/bbsa")]
+        #[arg(long, default_value = "cards/bbsa")]
         cards: PathBuf,
         /// Also list the cases that pass.
         #[arg(short, long)]
@@ -321,11 +321,11 @@ enum BidCommand {
         doc: Option<PathBuf>,
     },
     /// Print the teaching-skill map (Markdown): each skill path, the card
-    /// fields tagged with it (`skill` in card/fields.toml), the modules
+    /// fields tagged with it (`skill` in the card fields), the modules
     /// declaring it (`skill` lines), and the gaps.
     Skills {
-        /// The rules directory: its .bid files, card/fields.toml and
-        /// card/skills.toml.
+        /// The rules directory: its .bid files (the card fields and skills
+        /// are the standard ones, from the bridge-card crate).
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
         /// Instead of printing, rewrite the generated section of this
@@ -346,7 +346,7 @@ enum BidCommand {
 }
 
 /// Every `card` command reads cards in the card vocabulary of a rules
-/// directory: `<rules>/card/fields.toml` and `<rules>/card/bbsa-map.toml`.
+/// directory: its own `card/` files, or the standard vocabulary.
 #[derive(Subcommand)]
 enum CardCommand {
     /// Convert a BBA .bbsa file to card JSON; reports keys with no card field.
@@ -1117,9 +1117,10 @@ fn rules_from(dir: Option<&Path>) -> Result<RuleSet> {
     .map_err(|d| diagnostics(d).into())
 }
 
-/// The card vocabulary of the rules in `dir` (`<dir>/card/`).
+/// The card vocabulary of the rules in `dir`: its own `card/` files, or
+/// the standard one (`rbb_engine::rules_vocabulary`).
 fn vocab_from(dir: &Path) -> Result<Vocabulary> {
-    Ok(Vocabulary::load(dir)?)
+    Ok(rbb_engine::rules_vocabulary(dir)?)
 }
 
 fn load_card(vocab: &Vocabulary, path: &Path) -> Result<Card> {
@@ -1318,10 +1319,11 @@ fn bid(cmd: BidCommand) -> Result<()> {
                     }
                 }
             }
-            // Teaching skills: every path named is one card/skills.toml lists.
-            match bridge_card::Skills::load(&rules) {
-                Ok(Some(known)) => {
-                    let fields_file = rules.join(Vocabulary::FIELDS).display().to_string();
+            // Teaching skills: every path named is a standard convention or
+            // skill (convention-card's spec/conventions/).
+            match bridge_card::standard::conventions() {
+                Ok(known) => {
+                    let fields_file = "fields.toml (convention-card spec/)".to_string();
                     for d in
                         bidspec::skills::check(&modules, vocab.registry(), &known, &fields_file)
                     {
@@ -1333,7 +1335,6 @@ fn bid(cmd: BidCommand) -> Result<()> {
                         warnings += 1;
                     }
                 }
-                Ok(None) => {}
                 Err(e) => {
                     eprintln!("{e}");
                     errors += 1;
@@ -1434,7 +1435,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
         }
         BidCommand::Skills { rules, doc } => {
             let vocab = vocab_from(&rules)?;
-            let known = bridge_card::Skills::load(&rules)?.unwrap_or_default();
+            let known = bridge_card::standard::conventions()?;
             let mut files = Vec::new();
             collect_bid_files(&rules, &mut files)?;
             files.sort();

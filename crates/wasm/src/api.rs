@@ -2636,6 +2636,6 @@ mod tests {
         assert!(error(&v)["message"]
             .as_str()
             .unwrap()
-            .starts_with("bbsa_map: the embedded conventions/card/bbsa-map.toml"));
+            .starts_with("bbsa_map: the embedded convention-card/spec/formats/bbsa-map.toml"));
     }
 }

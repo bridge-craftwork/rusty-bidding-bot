@@ -17,16 +17,14 @@ fn bid_files(dir: &Path, out: &mut Vec<std::path::PathBuf>) {
     }
 }
 
-/// The rules' own card vocabulary (`conventions/card`).
+/// The standard card vocabulary (convention-card's `spec/`), which these
+/// rules are written against.
 fn vocab() -> &'static bridge_card::Vocabulary {
     static V: std::sync::OnceLock<bridge_card::Vocabulary> = std::sync::OnceLock::new();
-    V.get_or_init(|| {
-        let rules = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
-        bridge_card::Vocabulary::load(&rules).unwrap_or_else(|e| panic!("{e}"))
-    })
+    V.get_or_init(|| bridge_card::standard::vocabulary().unwrap_or_else(|e| panic!("{e}")))
 }
 
-/// `conventions/card/fields.toml` and `bbsa-map.toml` parse, every mapped
+/// The standard `fields.toml` and `bbsa-map.toml` parse, every mapped
 /// path is a field and every value fits it (checked when they load), and
 /// every mapped key is one of BBA's.
 #[test]
@@ -159,14 +157,13 @@ fn diagnostics_have_locations() {
 }
 
 /// docs/SKILLS.md carries the output of `rbb bid skills`, and every skill
-/// a module or field names is in `conventions/card/skills.toml`.
+/// a module or field names is a standard convention or skill
+/// (convention-card's `spec/conventions/`).
 /// Regenerate with `cargo run -q -p rbb-cli -- bid skills --doc docs/SKILLS.md`.
 #[test]
 fn skills_doc_carries_the_map() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
-    let known = bridge_card::Skills::load(&root)
-        .unwrap_or_else(|e| panic!("{e}"))
-        .expect("conventions/card/skills.toml");
+    let known = bridge_card::standard::conventions().unwrap_or_else(|e| panic!("{e}"));
     let mut files = Vec::new();
     bid_files(&root, &mut files);
     files.sort();

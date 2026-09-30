@@ -11,12 +11,9 @@ fn convention_cases() {
         .unwrap();
     let files = rbb_engine::cases::find(&root.join("conventions"));
     assert!(!files.is_empty(), "no .test files under conventions/");
-    let outcomes = rbb_engine::cases::run(
-        &files,
-        &root.join("conventions"),
-        &root.join("crates/bridge-card/tests/fixtures/bbsa"),
-    )
-    .unwrap_or_else(|errors| panic!("\n{}", errors.join("\n")));
+    let outcomes =
+        rbb_engine::cases::run(&files, &root.join("conventions"), &root.join("cards/bbsa"))
+            .unwrap_or_else(|errors| panic!("\n{}", errors.join("\n")));
     let failures: Vec<String> = outcomes
         .iter()
         .filter(|o| !o.passed)

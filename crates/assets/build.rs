@@ -1,8 +1,8 @@
 //! Generates `$OUT_DIR/assets.rs`: every `conventions/**/*.bid` file, the
-//! manifest (`conventions/conventions.toml`), the
-//! rules' card vocabulary (`conventions/card/fields.toml` and
-//! `bbsa-map.toml`), and every stock card
-//! `crates/bridge-card/tests/fixtures/bbsa/*.bbsa`, as `include_str!`s, so a
+//! manifest (`conventions/conventions.toml`), the card vocabulary (the
+//! standard one from `bridge_card::standard`, unless the rules bring their
+//! own `conventions/card/fields.toml` and `bbsa-map.toml`), and every stock
+//! card `cards/bbsa/*.bbsa`, as `include_str!`s, so a
 //! binary (the release `rbb`, the WASM build) carries its rules and needs no
 //! filesystem to load them.
 //!
@@ -56,7 +56,7 @@ fn main() {
         .canonicalize()
         .expect("workspace root");
     let rules_dir = root.join("conventions");
-    let cards_dir = root.join("crates/bridge-card/tests/fixtures/bbsa");
+    let cards_dir = root.join("cards/bbsa");
     // A directory is scanned recursively for changes.
     println!("cargo:rerun-if-changed={}", rules_dir.display());
     println!("cargo:rerun-if-changed={}", cards_dir.display());
@@ -115,26 +115,45 @@ fn main() {
         }
         Err(_) => out.push_str("pub static MANIFEST: Option<(&str, &str)> = None;\n\n"),
     }
-    // The rules' card vocabulary, which the rules are checked against and
-    // cards are read in: part of the rule set, so part of its id.
-    for (konst, rel, what) in [
-        ("FIELDS", "card/fields.toml", "card fields"),
-        ("BBSA_MAP", "card/bbsa-map.toml", ".bbsa key mapping"),
-    ] {
-        let abs = rules_dir.join(rel);
-        let name = format!("conventions/{rel}");
-        fnv(&mut hash, name.as_bytes());
-        fnv(
-            &mut hash,
-            &std::fs::read(&abs).unwrap_or_else(|e| panic!("{}: {e}", abs.display())),
+    // The card vocabulary, which the rules are checked against and cards are
+    // read in: part of the rule set, so part of its id. The standard one
+    // comes from the bridge-card crate at the tag Cargo.toml pins; its
+    // Cargo.lock entry (with the commit) stands for its text in the id.
+    if rules_dir.join("card/fields.toml").exists() {
+        for (konst, rel, what) in [
+            ("FIELDS", "card/fields.toml", "card fields"),
+            ("BBSA_MAP", "card/bbsa-map.toml", ".bbsa key mapping"),
+        ] {
+            let abs = rules_dir.join(rel);
+            let name = format!("conventions/{rel}");
+            fnv(&mut hash, name.as_bytes());
+            fnv(
+                &mut hash,
+                &std::fs::read(&abs).unwrap_or_else(|e| panic!("{}: {e}", abs.display())),
+            );
+            println!("cargo:rerun-if-changed={}", abs.display());
+            writeln!(
+                out,
+                "/// The rules' {what}: (name, text).\npub static {konst}: (&str, &str) = ({name:?}, include_str!({:?}));\n",
+                abs.display().to_string()
+            )
+            .unwrap();
+        }
+    } else {
+        let lock_path = root.join("Cargo.lock");
+        println!("cargo:rerun-if-changed={}", lock_path.display());
+        let lock = std::fs::read_to_string(&lock_path).expect("Cargo.lock");
+        let entry = lock
+            .split("[[package]]")
+            .find(|p| p.contains("name = \"bridge-card\""))
+            .expect("bridge-card in Cargo.lock");
+        fnv(&mut hash, entry.as_bytes());
+        out.push_str(
+            "/// The card fields: (name, text), the standard vocabulary.\n\
+             pub static FIELDS: (&str, &str) = (\"convention-card/spec/fields.toml\", bridge_card::standard::FIELDS);\n\n\
+             /// The .bbsa key mapping: (name, text), the standard vocabulary.\n\
+             pub static BBSA_MAP: (&str, &str) = (\"convention-card/spec/formats/bbsa-map.toml\", bridge_card::standard::BBSA_MAP);\n\n",
         );
-        println!("cargo:rerun-if-changed={}", abs.display());
-        writeln!(
-            out,
-            "/// The rules' {what}: (name, text).\npub static {konst}: (&str, &str) = ({name:?}, include_str!({:?}));\n",
-            abs.display().to_string()
-        )
-        .unwrap();
     }
     out.push_str("/// Stock cards: (name, .bbsa text).\n");
     out.push_str("pub static CARDS: &[(&str, &str)] = &[\n");

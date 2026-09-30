@@ -11,7 +11,8 @@ Status: early design. Start with [docs/DESIGN.md](docs/DESIGN.md).
 
 ## Layout
 
-- `crates/bridge-card`: convention card schema, `.bbsa` import
+- `bridge-card` (from the convention-card repo, pinned by tag): the convention card schema and vocabulary, `.bbsa` import
+- `cards/bbsa/`: the stock `.bbsa` cards
 - `crates/bidspec`: the rule language
 - `conventions/`: system and convention rule files (`.bid`)
 - `crates/engine`: the bidding engine

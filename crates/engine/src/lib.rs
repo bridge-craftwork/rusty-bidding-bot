@@ -49,10 +49,11 @@ pub use bidspec::manifest::Manifest;
 pub use bridge_card::Vocabulary;
 
 /// A rule set: its manifest (`conventions.toml`, when it has one), the card
-/// vocabulary its modules were checked against (`card/fields.toml` and
-/// `card/bbsa-map.toml` in the rules directory), and the compiled modules.
-/// Every rules directory brings its own vocabulary: cards an engine plays
-/// must be read in it (`rules.vocab`).
+/// vocabulary its modules were checked against, and the compiled modules.
+/// The vocabulary is the standard one (the convention-card repository's
+/// `spec/`, pinned by tag in Cargo.toml) unless the rules directory brings
+/// its own (`card/fields.toml` and `card/bbsa-map.toml`); cards an engine
+/// plays must be read in it (`rules.vocab`).
 #[derive(Debug, Clone)]
 pub struct RuleSet {
     pub manifest: Option<Manifest>,
@@ -70,14 +71,26 @@ fn vocab_diagnostic(e: bridge_card::Error) -> bidspec::Diagnostic {
     }
 }
 
+/// The card vocabulary for the rules in `dir`: the directory's own
+/// (`card/fields.toml`, `card/bbsa-map.toml`) when it has one, otherwise
+/// the standard vocabulary built into `bridge_card` (convention-card's
+/// `spec/`, at the tag Cargo.toml pins).
+pub fn rules_vocabulary(dir: &Path) -> Result<Vocabulary, bridge_card::Error> {
+    if dir.join(Vocabulary::FIELDS).exists() {
+        Vocabulary::load(dir)
+    } else {
+        bridge_card::standard::vocabulary()
+    }
+}
+
 /// Load the rule set in `dir`: its manifest (a language version this
 /// engine does not read refuses the load; a directory without one is read
-/// as the current language), its card vocabulary (`card/`), then every
+/// as the current language), its card vocabulary ([`rules_vocabulary`]), then every
 /// `.bid` file under it, compiled against that vocabulary and sorted by
 /// path (which fixes the file-order tie-breaker).
 pub fn load_rules(dir: &Path) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
     let manifest = read_manifest(dir).map_err(|d| vec![d])?;
-    let vocab = Vocabulary::load(dir).map_err(|e| vec![vocab_diagnostic(e)])?;
+    let vocab = rules_vocabulary(dir).map_err(|e| vec![vocab_diagnostic(e)])?;
     compile_dir(dir, &vocab).map(|modules| RuleSet {
         manifest,
         vocab,

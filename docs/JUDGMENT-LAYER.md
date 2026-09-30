@@ -553,7 +553,7 @@ Contract notes that apply throughout:
   version.
 - New modules get `skill` lines (`competitive_bidding/law_of_total_tricks`,
   `partnership_bidding/slam_bidding`; a new path under `[proposed]` in
-  `card/skills.toml` for penalty doubles if Bridge-Classroom has none)
+  convention-card's `spec/conventions/` for penalty doubles if Bridge-Classroom has none)
   and `rbb bid skills --doc docs/SKILLS.md`.
 
 ## 7. Open questions for Rick

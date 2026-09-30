@@ -16,7 +16,8 @@ BBA / EPBot.
 
 ## Adding a convention
 
-1. Add or find the card setting that turns it on (`crates/bridge-card`).
+1. Add or find the card setting that turns it on: the card fields are in the
+   convention-card repo (`spec/fields.toml`, `spec/conventions/`).
 2. Write a `.bid` module in `conventions/` (syntax: docs/DESIGN.md, "The rule
    language"). Every rule needs an explanation and a `shows` clause.
 3. Add test auctions, and check the corpus scoreboard for regressions.

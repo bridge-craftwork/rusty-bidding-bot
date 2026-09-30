@@ -105,14 +105,17 @@ mod tests {
             "module demo \"Demo\"\n\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n",
         )
         .unwrap();
-        // Every rules directory brings its own card vocabulary: none, no load.
-        let err = crate::load_rules(&dir).unwrap_err();
-        assert!(err[0].file.ends_with("fields.toml"), "{}", err[0]);
-        // An empty one is enough for rules that read no card field.
+        // A rules directory without card files uses the standard vocabulary.
+        let standard = crate::load_rules(&dir).unwrap();
+        assert!(standard.vocab.registry().fields().len() > 400);
+        // One that brings its own uses it; an empty one is enough for rules
+        // that read no card field.
         std::fs::write(dir.join("card/fields.toml"), "").unwrap();
         std::fs::write(dir.join("card/bbsa-map.toml"), "").unwrap();
         // No manifest: read as the current language.
-        assert!(crate::load_rules(&dir).unwrap().manifest.is_none());
+        let own = crate::load_rules(&dir).unwrap();
+        assert!(own.manifest.is_none());
+        assert!(own.vocab.registry().fields().is_empty());
         let manifest = dir.join(manifest::FILE);
         std::fs::write(&manifest, "name = \"demo\"\nlanguage = 1\n").unwrap();
         assert_eq!(

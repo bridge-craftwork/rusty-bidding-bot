@@ -83,10 +83,17 @@ double/redouble rules).
 
 ## The convention card
 
-**Decided.** The card schema is defined here (`crates/bridge-card`). It may
-later move to its own repo together with the card editor.
+**Moved (2026-09-30).** The `bridge-card` crate and the standard card
+vocabulary now live in the
+[convention-card](https://github.com/bridge-craftwork/convention-card) repo
+(its `spec/`), with their history; this repo depends on it at a tag. Its
+ADR-0001 replaces the 2026-09-28 decision below: the standard vocabulary is
+the shared one, and a rule author adds a convention with a namespaced ID
+instead of a rules-local field. A conventions directory may still bring its
+own `card/` files (`rbb_engine::rules_vocabulary`), and everything else below
+about reading cards in a rule set's vocabulary holds.
 
-**Decided (2026-09-28).** The card *vocabulary* (the fields and the `.bbsa`
+**Decided (2026-09-28; superseded 2026-09-30, above).** The card *vocabulary* (the fields and the `.bbsa`
 mapping) belongs to the rules, not to the engine: it lives in the rules
 directory (`conventions/card/`) and moves with the conventions when they
 get their own repository, so a rule author can add fields without an
@@ -435,7 +442,7 @@ Next to each module, a `<module>.test` file holds hands whose call is
 agreed, one per line: `seat hand | auction | expect | why`. Header lines
 (`card`, `dealer`, `vul`, `scoring`) apply to the lines below them. `card`
 names a `.bbsa` in the cards directory (default
-`crates/bridge-card/tests/fixtures/bbsa`), or a path; both sides play it.
+`cards/bbsa`), or a path; both sides play it.
 Changes can follow, so one file can test each treatment:
 `card 21GF-DEFAULT notrump.minor_transfers=four_way`.
 `expect` is a call, `!call` (anything but), or alternatives `a/b`.

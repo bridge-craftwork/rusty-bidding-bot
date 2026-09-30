@@ -4,7 +4,8 @@
 Reads, never writes, the sibling repos:
   Practice-Bidding-Scenarios  bbsa/*.bbsa, btn/*.btn, bba/*.pbn, the release layout
   Bridge-Classroom            src/utils/conventionCatalog.js
-and this repo's crates/bridge-card/data/{fields,bbsa-map}.toml and conventions/*.bid.
+convention-card's spec/{fields,formats/bbsa-map}.toml (a sibling checkout, or
+$CONVENTION_CARD_SPEC) and this repo's conventions/*.bid.
 
   conventions_survey.py [--pbs DIR] [--classroom DIR] [--json OUT] [--compare compare.json]
 
@@ -23,6 +24,7 @@ import tomllib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(os.path.dirname(HERE))
+SPEC = os.environ.get("CONVENTION_CARD_SPEC", os.path.join(REPO, "..", "convention-card", "spec"))
 # Sibling checkouts: the directory that holds this repo.
 GITHUB = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -111,7 +113,7 @@ def layout_sections(pbs):
 def map_groups():
     """.bbsa key -> the `# ── Group ──` heading it sits under in bbsa-map.toml."""
     groups, cur = {}, "General"
-    for line in open(os.path.join(REPO, "crates/bridge-card/data/bbsa-map.toml"), encoding="utf-8"):
+    for line in open(os.path.join(SPEC, "formats/bbsa-map.toml"), encoding="utf-8"):
         m = re.match(r"^# ── (.+?) ─", line)
         if m:
             cur = m.group(1)
@@ -124,7 +126,7 @@ def map_groups():
 
 
 def read_map():
-    data = tomllib.load(open(os.path.join(REPO, "crates/bridge-card/data/bbsa-map.toml"), "rb"))
+    data = tomllib.load(open(os.path.join(SPEC, "formats/bbsa-map.toml"), "rb"))
     mapping = {}
     for k, v in data.items():
         if k in ("implied", "derived"):
@@ -144,7 +146,7 @@ def read_map():
 
 
 def read_fields():
-    data = tomllib.load(open(os.path.join(REPO, "crates/bridge-card/data/fields.toml"), "rb"))
+    data = tomllib.load(open(os.path.join(SPEC, "fields.toml"), "rb"))
     fields, aliases = {}, {}
     for sec, entries in data.items():
         for k, v in entries.items():

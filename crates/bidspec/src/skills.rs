@@ -101,9 +101,13 @@ pub fn map(modules: &[Module], registry: &Registry, known: &Skills) -> SkillMap 
     }
 }
 
-/// Warnings for `rbb bid check`: skill paths that `skills.toml` does not
-/// list, on a module's `skill` line or a field's `skill` attribute
-/// (`fields_file` names `card/fields.toml` in the message).
+/// Where the standard conventions and skills live, for messages.
+const KNOWN_SKILLS: &str = "convention-card's spec/conventions/";
+
+/// Warnings for `rbb bid check`: skill paths that the standard list
+/// (convention-card's `spec/conventions/`) does not have, on a module's
+/// `skill` line or a field's `skill` attribute (`fields_file` names the
+/// fields file in the message).
 pub fn check(
     modules: &[Module],
     registry: &Registry,
@@ -120,8 +124,7 @@ pub fn check(
                     col: 0,
                     message: format!(
                         "skill `{}` is not in {} (a typo, or a new skill to add there)",
-                        s.path,
-                        Skills::FILE
+                        s.path, KNOWN_SKILLS
                     ),
                 });
             }
@@ -134,7 +137,7 @@ pub fn check(
                     file: fields_file.to_string(),
                     line: 0,
                     col: 0,
-                    message: format!("`{}`: skill `{s}` is not in {}", f.path, Skills::FILE),
+                    message: format!("`{}`: skill `{s}` is not in {KNOWN_SKILLS}", f.path),
                 });
             }
         }
@@ -291,15 +294,16 @@ mod tests {
             "\n",
         ))
         .unwrap();
-        let known = Skills::parse(concat!(
-            "[taxonomy]\n",
-            "\"bidding_conventions/stayman\" = \"Stayman\"\n",
-            "\"bidding_conventions/ogust\" = \"Ogust\"\n",
-            "\"declarer_play/finessing\" = \"Finessing\"\n",
-            "[proposed]\n",
-            "\"bidding_conventions/smolen\" = \"Smolen\"\n",
-        ))
-        .unwrap();
+        let entry = |id: &str, name: &str, source: &str| {
+            let text = format!("id = \"{id}\"\nname = \"{name}\"\nsource = \"{source}\"\n");
+            Skills::parse_entry(id, &text).unwrap()
+        };
+        let known = Skills::from_entries([
+            entry("bidding_conventions/stayman", "Stayman", "taxonomy"),
+            entry("bidding_conventions/ogust", "Ogust", "taxonomy"),
+            entry("declarer_play/finessing", "Finessing", "taxonomy"),
+            entry("bidding_conventions/smolen", "Smolen", "proposed"),
+        ]);
         let parse = |src: &str| crate::parse(src, "t.bid").unwrap();
         let modules = [
             parse("module stayman \"S\"\n  skill bidding_conventions/stayman\n"),

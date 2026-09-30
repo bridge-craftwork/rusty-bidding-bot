@@ -2,8 +2,7 @@
 
 The engine (`rbb-engine`, `bidspec`, the `rbb` tools, the workbench, the
 WASM build) and the conventions (`conventions/`: the `.bid` rules with
-their `.test` and `.notes.md` files, the card vocabulary
-`conventions/card/fields.toml` and `bbsa-map.toml`, the probe specs
+their `.test` and `.notes.md` files, and the probe specs
 in `probes/`) are meant to live in two repositories, so that others can
 write convention scripts against a stable engine. This document is what
 each side may rely on. The first half is what the engine promises; the
@@ -60,13 +59,13 @@ A rules directory holds:
 | Path | |
 |---|---|
 | `conventions.toml` | the manifest: name, rule language version |
-| `card/fields.toml` | the card fields: path, kind, options, bounds, default, aliases |
-| `card/bbsa-map.toml` | how BBA's `.bbsa` keys map onto those fields (`[implied]`, `[[derived]]`) |
-| `card/skills.toml` | optional: the known teaching-skill paths (docs/SKILLS.md); read only by `rbb bid check` and `rbb bid skills` |
+| `card/fields.toml`, `card/bbsa-map.toml` | optional: the rules' own card vocabulary. Without them the rules use the standard one, convention-card's `spec/` at the tag `Cargo.toml` pins |
 | `**/*.bid` | the rules (with their `.test` and `.notes.md` files) |
 
-- **Each rules directory brings its own card vocabulary.** The engine has
-  none built in: it reads `card/fields.toml` and `card/bbsa-map.toml` from
+- **Each rules directory has a card vocabulary**: its own `card/fields.toml`
+  and `card/bbsa-map.toml` when it brings them, otherwise the standard one
+  (convention-card's `spec/`, carried by the `bridge-card` crate; the
+  teaching skills are its `spec/conventions/`). The engine uses the one for
   the directory it is given (`--rules DIR`; the copy embedded with the
   rules in the release `rbb` and the WASM), checks the rules against it,
   and reads every card (`.bbsa`, card JSON, `--set path=value`) in it, so
@@ -82,7 +81,7 @@ A rules directory holds:
   `param` reads a card field, with the given default when the card leaves
   it unset (no default: the value is nothing, and `style is x` is false).
 - `card` and `param` paths must exist in the card vocabulary
-  (`card/fields.toml`); an alias is reported with its current name, and an
+  (the card fields); an alias is reported with its current name, and an
   enum option the field does not have is an error.
 
 ### Card fields the engine reads by name
@@ -106,8 +105,8 @@ and `cargo test` all load through the same checks, and refuse the whole
 rule set, with `file:line` diagnostics, when:
 
 - a file does not parse (LANGUAGE.md §11);
-- the card vocabulary (`card/fields.toml`, `card/bbsa-map.toml`) is
-  missing or invalid, or a card path or enum option is unknown;
+- the card vocabulary (the rules' own `card/` files, when they bring them) is
+  invalid, or a card path or enum option is unknown;
 - a condition names a term, attribute or function the engine does not
   know (`check_terms`): an unknown name would otherwise make its
   condition false every time and silently switch the rule off;
@@ -222,8 +221,8 @@ It is still grammar an older engine does not read (its parser refuses a
 header line other than `card`, `needs` and `param`), so it came without a
 new language version, and this repository's manifest names `engine =
 "0.2.0"`. A skill path is not checked against Bridge-Classroom when the
-rules load; `rbb bid check` warns about one that `card/skills.toml` does
-not list. The same goes for the `skill` attribute of a card field.
+rules load; `rbb bid check` warns about one that is not a standard
+convention or skill (convention-card's `spec/conventions/`). The same goes for the `skill` attribute of a card field.
 
 Engine 0.3.0 adds, the same way: named conditions (`define`, LANGUAGE.md
 §3), conditions counted as 1 or 0 in arithmetic, and the terms of the
@@ -290,12 +289,12 @@ These are the habits the rule set in this repository follows
 - **Name the teaching skills.** A module lists the skills it implements
   with `skill` lines, and a field the skill its convention is taught under
   with its `skill` attribute (Bridge-Classroom's SkillPath strings; the
-  known ones are `card/skills.toml`). A convention Bridge-Classroom has no
+  known ones are convention-card's `spec/conventions/`). A convention Bridge-Classroom has no
   skill for gets a proposed path there. Regenerate docs/SKILLS.md with
   `rbb bid skills --doc docs/SKILLS.md`.
 - **Card fields go in the vocabulary.** A module reads only fields of
-  `card/fields.toml`; a new treatment is a new field or enum option there (and a
-  `.bbsa` mapping in `card/bbsa-map.toml` when BBA has one), never a guessed
+  convention-card's `spec/fields.toml`; a new treatment is a new field or enum option there (and a
+  `.bbsa` mapping in its `spec/formats/bbsa-map.toml` when BBA has one), never a guessed
   meaning. An unmapped `.bbsa` key stays in passthrough until its meaning
   is known. Treatments are enum fields tested with `is`
   (LANGUAGE.md §3); the BBA treatment is the `bba` option.

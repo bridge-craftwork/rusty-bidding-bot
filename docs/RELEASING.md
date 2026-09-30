@@ -22,7 +22,7 @@ so a script that calls `bba-cli -i in.pbn -o out.pbn --ns-conventions X.bbsa
 |---|---|
 | `-i`, `--input` | the PBN file (deals; any auctions in it are replaced) |
 | `-o`, `--output` | where to write; `-` for stdout |
-| `--ns-card`, `--ew-card` | a `.bbsa` file, card JSON, or a stock card's name (`21GF-DEFAULT`; the list is in `crates/bridge-card/tests/fixtures/bbsa`). `--ew-card` defaults to the North-South card |
+| `--ns-card`, `--ew-card` | a `.bbsa` file, card JSON, or a stock card's name (`21GF-DEFAULT`; the list is in `cards/bbsa`). `--ew-card` defaults to the North-South card |
 | `--set path=value` | a card change for both sides (repeatable), e.g. `general.style=bba` |
 | `--scoring MP\|IMP` | for every board, also written as `[Scoring]`; default each board's `[Scoring]`, else MP |
 | `--all-meanings` | a note for every call a rule explains, with what it showed (`15-17 HCP, balanced \| 15-17 HCP, 2-5 S, ...`), not only for alerted and announced calls |

@@ -1807,7 +1807,7 @@ mod tests {
             card_changes: vec![],
             rules: rules.into(),
             pbs: pbs.into(),
-            cards: "crates/bridge-card/tests/fixtures/bbsa".into(),
+            cards: "cards/bbsa".into(),
             auto_rerun: true,
         }
     }
