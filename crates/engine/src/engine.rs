@@ -327,8 +327,20 @@ impl Engine {
         let Some(shows) = &entry.rule.shows else {
             return 0.0;
         };
+        // The calls fix everything a `shows` can read except the board's
+        // conditions; a rule that reads those (`unfavourable`, `imps`) is
+        // keyed on their values too, or boards bid in parallel would share
+        // whichever came first.
+        let board: Vec<String> = {
+            let ctx = self.ctx(pos, actor, None, entry);
+            entry
+                .board_terms
+                .iter()
+                .map(|t| format!("{:?}", ctx.eval(t, &mut c.b.clone())))
+                .collect()
+        };
         let key = format!(
-            "{}|{}|{}|{:?}|{:?}",
+            "{}|{}|{}|{:?}|{:?}|{board:?}",
             side(actor),
             c.entry,
             c.call,
@@ -342,6 +354,18 @@ impl Engine {
         if ids.is_empty() {
             ids = Arc::new((0..self.pool.len() as u32).collect());
         }
+        // A condition counted in arithmetic (`+ doubler_four(x)`) would be
+        // judged again for every hand: what the auction already settles is
+        // settled once.
+        let folded;
+        let shows = if entry.counts_conditions {
+            folded = self
+                .ctx(pos, actor, None, entry)
+                .fold_public(shows, &mut c.b.clone());
+            &folded
+        } else {
+            shows
+        };
         let mut pass = 0usize;
         let private = PrivateCache::default();
         // One copy of the bindings for the whole pool, restored only when

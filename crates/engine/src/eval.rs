@@ -161,6 +161,9 @@ pub const BANDS: [&str; 5] = ["signoff", "invite", "game", "slam_invite", "slam"
 /// Combined HCP for game and for small slam.
 const GAME: i32 = 25;
 const SLAM: i32 = 33;
+/// `captain`: partner's shown range is at most this wide (high minus low,
+/// so 3 is a range of four points: 12-15).
+const CAPTAIN_WIDTH: i32 = 3;
 
 fn flip(op: CmpOp) -> CmpOp {
     match op {
@@ -243,6 +246,14 @@ const SELF_ATTRS: &[Term] = &[
     ),
     t("controls", "controls: ace 2, king 1"),
     t("losers", "losing-trick count"),
+    t(
+        "quick_tricks",
+        "quick tricks, whole part: A-K 2, A-Q 1½, A 1, K-Q 1, K-x ½ (Culbertson)",
+    ),
+    t(
+        "bare_suits",
+        "how many side suits are `bare(x)`: 2+ cards without the ace or king",
+    ),
 ];
 /// Functions of my own hand (bare, or `me.`).
 const SELF_FUNCS: &[Term] = &[
@@ -264,6 +275,16 @@ const SELF_FUNCS: &[Term] = &[
     ),
     f("top5", "(x)", "how many of A K Q J T are held in x"),
     f("stop", "(x)", "a stopper in x: A, Kx, Qxx or Jxxx"),
+    f(
+        "bare",
+        "(x)",
+        "x is a side suit (not the agreed trump) of 2+ cards without the ace or king",
+    ),
+    f(
+        "safe_level",
+        "(x)",
+        "the level our trumps make safe, the Law of Total Tricks: `we.fit(x).min - 6`",
+    ),
 ];
 
 /// Printed name of a strain for explanations.
@@ -614,6 +635,13 @@ impl<'a> Ctx<'a> {
             Val::Sym(w) => quality_level(w)
                 .map(Range::point)
                 .ok_or_else(|| format!("`{w}` is not a number")),
+            // A condition in arithmetic counts 1 when it holds, 0 when it
+            // does not (`we.fit(x).min - unfavourable`).
+            Val::Bool(t) => Ok(match t {
+                Tri::True => Range::point(1),
+                Tri::False => Range::point(0),
+                Tri::Unknown => Range::new(0, 1),
+            }),
             other => Err(format!("expected a number, found {other:?}")),
         }
     }
@@ -679,6 +707,11 @@ impl<'a> Ctx<'a> {
     }
 
     fn path(&self, path: &[Segment], b: &mut Bindings) -> R<Val> {
+        // The partnership sums, for a caller that did not expand them
+        // (rules are expanded when they are flattened: `macros`).
+        if let Some(e) = crate::macros::sugar(path) {
+            return self.eval(&e?, b);
+        }
         let first = &path[0];
         let (mut val, rest) = match first.name.as_str() {
             "partner" | "lho" | "rho" | "shown" | "me" | "we" | "they" if path.len() > 1 => {
@@ -696,7 +729,7 @@ impl<'a> Ctx<'a> {
                     }
                     ("me", _) => self.name(seg, b)?,
                     ("we", _) => self.we_attr(seg, b)?,
-                    _ => self.they_attr(seg)?,
+                    _ => self.they_attr(seg, b)?,
                 };
                 (v, &path[2..])
             }
@@ -746,6 +779,15 @@ impl<'a> Ctx<'a> {
                 BANDS.join(", ")
             ));
         }
+        if n == "bare_suits" {
+            let trump = self.pos.side_state(self.actor).trump.and_then(suit_of_strain);
+            return Ok(Val::Num(match self.hand {
+                Some(f) => Range::point(
+                    (0..4).filter(|&s| Some(s) != trump && f.bare(s)).count() as i32,
+                ),
+                None => Range::new(0, 4),
+            }));
+        }
         if named(SELF_ATTRS, n) {
             return Ok(match self.hand {
                 Some(f) => exact_attr(f, n, self.valuation),
@@ -779,6 +821,32 @@ impl<'a> Ctx<'a> {
             )),
             "imps" => Val::Bool(Tri::from_bool(self.pos.is_imps())),
             "matchpoints" => Val::Bool(Tri::from_bool(!self.pos.is_imps())),
+            "favourable" | "unfavourable" => {
+                let (us, them) = (
+                    self.pos.is_vulnerable(self.actor),
+                    self.pos.is_vulnerable(self.actor.next()),
+                );
+                Val::Bool(Tri::from_bool(if n == "favourable" {
+                    !us && them
+                } else {
+                    us && !them
+                }))
+            }
+            // I place the contract: partner has put his hand in a range of
+            // four points or less and mine is wider, or partner has
+            // answered my question (Rick, 2026-09-30).
+            "captain" => {
+                let side = self.pos.side_state(self.actor);
+                let width = |d: Direction| {
+                    let r = self.pos.knowledge(d).whole_points(0);
+                    r.hi - r.lo
+                };
+                let (p, me) = (width(self.partner()), width(self.actor));
+                Val::Bool(Tri::from_bool(
+                    side.answered.as_ref().is_some_and(|a| a.by == self.actor)
+                        || (p <= CAPTAIN_WIDTH && p < me),
+                ))
+            }
             "trump" => self.we_attr(seg, b)?,
             // Judgment hooks. Placeholders until real evaluators are written.
             "slam_try" => {
@@ -840,10 +908,18 @@ impl<'a> Ctx<'a> {
         if !named(SELF_FUNCS, n) {
             return Err(format!("unknown function `{n}`"));
         }
+        if n == "safe_level" {
+            let e = crate::macros::sugar(&[Segment {
+                name: n.into(),
+                args: Some(args.to_vec()),
+            }])
+            .expect("safe_level is sugar")?;
+            return self.eval(&e, b);
+        }
         let Some(f) = self.hand else {
             // Not tracked in knowledge yet.
             return Ok(match n {
-                "has" | "stop" => Val::Bool(Tri::Unknown),
+                "has" | "stop" | "bare" => Val::Bool(Tri::Unknown),
                 _ => Val::Num(Range::new(0, 40)),
             });
         };
@@ -859,6 +935,13 @@ impl<'a> Ctx<'a> {
             "stop" => Val::Bool(Tri::from_bool(
                 self.suit_arg(args, 0, b)?.is_some_and(|s| f.stop(s)),
             )),
+            "bare" => {
+                let trump = self.pos.side_state(self.actor).trump.and_then(suit_of_strain);
+                Val::Bool(Tri::from_bool(
+                    self.suit_arg(args, 0, b)?
+                        .is_some_and(|s| Some(s) != trump && f.bare(s)),
+                ))
+            }
             "has" => {
                 let rank = match args.first() {
                     Some(Expr::Path { path }) => rank_value(&path[0].name),
@@ -886,6 +969,13 @@ impl<'a> Ctx<'a> {
         }
         if let Some(Val::Suit(s)) = b.get(n) {
             return Ok(Val::Num(k.len[*s]));
+        }
+        // `partner.trump`: the length in our agreed suit.
+        if n == "trump" {
+            return match self.pos.side_state(self.actor).trump.and_then(suit_of_strain) {
+                Some(s) => Ok(Val::Num(k.len[s])),
+                None => Err("no trump suit agreed".into()),
+            };
         }
         Ok(match n {
             "hcp" => Val::Num(k.hcp),
@@ -954,13 +1044,16 @@ impl<'a> Ctx<'a> {
                     None => Val::Bool(Tri::False),
                 }
             }
-            "has" | "stop" | "semibalanced" => Val::Bool(Tri::Unknown),
+            "has" | "stop" | "semibalanced" | "bare" => Val::Bool(Tri::Unknown),
             // Support points are known when a raise showed them.
             "tp" => match self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)? {
                 Some(t) => Val::Num(k.tp[t]),
                 None => Val::Num(k.hcp),
             },
-            "keycards" | "controls" | "losers" | "quality" | "top5" => Val::Num(Range::new(0, 40)),
+            "keycards" | "controls" | "losers" | "quality" | "top5" | "quick_tricks" => {
+                Val::Num(Range::new(0, 40))
+            }
+            "bare_suits" => Val::Num(Range::new(0, 4)),
             // BBA's fitted counts (Facts::bba_named) are about the actor's
             // own hand; for anyone else they are unknown.
             n if n.starts_with("bba_") => Val::Num(Range::new(0, 40)),
@@ -1059,11 +1152,63 @@ impl<'a> Ctx<'a> {
         })
     }
 
-    fn they_attr(&self, seg: &Segment) -> R<Val> {
+    fn they_attr(&self, seg: &Segment, b: &mut Bindings) -> R<Val> {
         let opp = self.actor.next();
+        // Both opponents' ranges added: `they.hcp`, `they.fit(x)`.
+        let sum = |a: Val, c: Val| -> R<Val> {
+            let (a, c) = (self.num(&a)?, self.num(&c)?);
+            Ok(Val::Num(Range::new(a.lo + c.lo, a.hi + c.hi)))
+        };
+        // The opponents' last bid, level and strain.
+        let last_bid = || {
+            (0..self.pos.calls.len())
+                .rev()
+                .filter(|&i| crate::position::side(self.pos.caller(i)) != crate::position::side(self.actor))
+                .find_map(|i| match self.pos.calls[i] {
+                    Call::Bid { level, strain } => Some((level, strain)),
+                    _ => None,
+                })
+        };
         Ok(match seg.name.as_str() {
             "bid" => Val::Bool(Tri::from_bool(self.pos.side_acted(opp))),
             "vul" => Val::Bool(Tri::from_bool(self.pos.is_vulnerable(opp))),
+            "hcp" => sum(
+                self.seat_attr(opp, seg, b)?,
+                self.seat_attr(opp.partner(), seg, b)?,
+            )?,
+            "fit" => {
+                let x = match seg.args.as_deref() {
+                    Some([x]) => x,
+                    _ => return Err("`they.fit(x)` takes one suit".into()),
+                };
+                let suit = match self.eval(x, b)? {
+                    Val::Suit(s) => s,
+                    Val::Strain(st) => suit_of_strain(st).ok_or("they.fit: notrump has no length")?,
+                    v => return Err(format!("they.fit: `{x}` is not a suit ({v:?})")),
+                };
+                let len = Segment {
+                    name: SUITS[suit].into(),
+                    args: None,
+                };
+                sum(
+                    self.seat_attr(opp, &len, b)?,
+                    self.seat_attr(opp.partner(), &len, b)?,
+                )?
+            }
+            "level" => last_bid().map_or(Val::Nothing, |(l, _)| Val::Num(Range::point(l as i32))),
+            "strain" => last_bid().map_or(Val::Nothing, |(_, s)| match suit_of_strain(s) {
+                Some(x) => Val::Suit(x),
+                None => Val::Strain(s),
+            }),
+            // One of their last calls is not a pass (a seat yet to call
+            // counts as still bidding).
+            "still_bidding" => Val::Bool(Tri::from_bool(
+                self.pos.last_call_of(opp) != Some(&Call::Pass)
+                    || self.pos.last_call_of(opp.partner()) != Some(&Call::Pass),
+            )),
+            "game_reached" => Val::Bool(Tri::from_bool(
+                self.pos.side_acted(opp) && !self.pos.below_game(opp),
+            )),
             n => return Err(format!("unknown attribute `they.{n}`")),
         })
     }
@@ -1128,6 +1273,63 @@ impl<'a> Ctx<'a> {
         }
         out.push_str(rest);
         out
+    }
+
+    /// `e` with every condition that does not depend on the hand and is
+    /// known from the auction replaced by its value, for evaluating it on
+    /// many hands (`descriptiveness_of`). Exact: a hand only narrows what
+    /// the auction says about the other seats, so what is known without it
+    /// stays so. Not under `maybe`, which a narrower range can turn false.
+    pub fn fold_public(&self, e: &Expr, b: &mut Bindings) -> Expr {
+        let known = |e: &Expr, b: &mut Bindings| {
+            if hand_dependent(e, b) || has_maybe(e) {
+                return None;
+            }
+            match self.eval(e, b) {
+                Ok(Val::Bool(Tri::True)) => Some(konst(true)),
+                Ok(Val::Bool(Tri::False)) => Some(konst(false)),
+                _ => None,
+            }
+        };
+        match e {
+            Expr::And { .. }
+            | Expr::Or { .. }
+            | Expr::Not { .. }
+            | Expr::Cmp { .. }
+            | Expr::Is { .. }
+            | Expr::InRange { .. }
+            | Expr::InSet { .. }
+            | Expr::Path { .. } => match known(e, b) {
+                Some(k) => k,
+                None => self.fold_parts(e, b),
+            },
+            _ => self.fold_parts(e, b),
+        }
+    }
+
+    /// `fold_public` below the top of `e`.
+    fn fold_parts(&self, e: &Expr, b: &mut Bindings) -> Expr {
+        let rec = |x: &Expr, b: &mut Bindings| Box::new(self.fold_public(x, b));
+        match e {
+            Expr::And { all } => Expr::And {
+                all: all.iter().map(|x| *rec(x, b)).collect(),
+            },
+            Expr::Or { any } => Expr::Or {
+                any: any.iter().map(|x| *rec(x, b)).collect(),
+            },
+            Expr::Not { expr } => Expr::Not { expr: rec(expr, b) },
+            Expr::Cmp { cmp, lhs, rhs } => Expr::Cmp {
+                cmp: *cmp,
+                lhs: rec(lhs, b),
+                rhs: rec(rhs, b),
+            },
+            Expr::Arith { arith, lhs, rhs } => Expr::Arith {
+                arith: *arith,
+                lhs: rec(lhs, b),
+                rhs: rec(rhs, b),
+            },
+            _ => e.clone(),
+        }
     }
 
     /// Rewrite a `shows` (or denial) as a constraint on the actor's own hand:
@@ -1262,6 +1464,8 @@ impl<'a> Ctx<'a> {
                 match self.eval(e, b).ok()? {
                     Val::Suit(s) => Some(path_expr(SUITS[s])),
                     Val::Num(r) => r.as_point().map(|v| Expr::Int { value: v as i64 }),
+                    Val::Bool(Tri::True) => Some(Expr::Int { value: 1 }),
+                    Val::Bool(Tri::False) => Some(Expr::Int { value: 0 }),
                     _ => None,
                 }
             }
@@ -1286,6 +1490,8 @@ impl<'a> Ctx<'a> {
             },
             _ => match self.eval(e, b).ok()? {
                 Val::Num(r) => r.as_point().map(|v| Expr::Int { value: v as i64 }),
+                Val::Bool(Tri::True) => Some(Expr::Int { value: 1 }),
+                Val::Bool(Tri::False) => Some(Expr::Int { value: 0 }),
                 _ => None,
             },
         }
@@ -1333,7 +1539,7 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                 // condition is judged with no hand, comes out false, and
                 // the candidate vanishes silently.
                 "we" => path.get(1).is_some_and(|s| {
-                    matches!(s.name.as_str(), "hcp" | "keycards" | "points" | "tp")
+                    matches!(s.name.as_str(), "hcp" | "keycards" | "points" | "tp" | "fit")
                 }),
                 "partner" | "lho" | "rho" | "shown" | "they" => false,
                 _ if path.len() > 1 => false,
@@ -1346,6 +1552,97 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                 }
             }
         }
+    }
+}
+
+/// Does `e` count a condition in arithmetic (`we.fit(x).min +
+/// doubler_four(x)`)?
+pub fn counts_conditions(e: &Expr) -> bool {
+    let condition = |x: &Expr| {
+        matches!(
+            x,
+            Expr::And { .. }
+                | Expr::Or { .. }
+                | Expr::Not { .. }
+                | Expr::Maybe { .. }
+                | Expr::Cmp { .. }
+                | Expr::Is { .. }
+                | Expr::InRange { .. }
+                | Expr::InSet { .. }
+        ) || matches!(x, Expr::Path { path } if path.iter().any(|s| matches!(
+            s.name.as_str(),
+            "vul" | "favourable" | "unfavourable" | "imps" | "matchpoints" | "balanced"
+                | "opening" | "game_reached" | "captain" | "still_bidding" | "bid"
+        )))
+    };
+    match e {
+        Expr::Arith { lhs, rhs, .. } => {
+            condition(lhs) || condition(rhs) || counts_conditions(lhs) || counts_conditions(rhs)
+        }
+        Expr::And { all } => all.iter().any(counts_conditions),
+        Expr::Or { any } => any.iter().any(counts_conditions),
+        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => counts_conditions(expr),
+        Expr::Cmp { lhs, rhs, .. } => counts_conditions(lhs) || counts_conditions(rhs),
+        Expr::InRange { expr, lo, hi } => {
+            counts_conditions(expr) || counts_conditions(lo) || counts_conditions(hi)
+        }
+        _ => false,
+    }
+}
+
+fn has_maybe(e: &Expr) -> bool {
+    match e {
+        Expr::Maybe { .. } => true,
+        Expr::And { all } => all.iter().any(has_maybe),
+        Expr::Or { any } => any.iter().any(has_maybe),
+        Expr::Not { expr } | Expr::Neg { expr } => has_maybe(expr),
+        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
+            has_maybe(lhs) || has_maybe(rhs)
+        }
+        Expr::InRange { expr, lo, hi } => has_maybe(expr) || has_maybe(lo) || has_maybe(hi),
+        Expr::InSet { expr, .. } | Expr::Is { expr, .. } => has_maybe(expr),
+        Expr::Path { path } => path.iter().any(|s| s.args.iter().flatten().any(has_maybe)),
+        _ => false,
+    }
+}
+
+/// The terms in `e` that read the board's conditions (vulnerability,
+/// scoring, seat), which the calls so far do not fix: `vul`,
+/// `unfavourable`, `they.vul`, ...
+pub fn board_terms(e: &Expr, out: &mut Vec<Expr>) {
+    match e {
+        Expr::And { all } => all.iter().for_each(|x| board_terms(x, out)),
+        Expr::Or { any } => any.iter().for_each(|x| board_terms(x, out)),
+        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => board_terms(expr, out),
+        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
+            board_terms(lhs, out);
+            board_terms(rhs, out);
+        }
+        Expr::InRange { expr, lo, hi } => {
+            board_terms(expr, out);
+            board_terms(lo, out);
+            board_terms(hi, out);
+        }
+        Expr::InSet { expr, .. } | Expr::Is { expr, .. } => board_terms(expr, out),
+        Expr::Path { path } => {
+            let board = path.iter().any(|s| {
+                matches!(
+                    s.name.as_str(),
+                    "vul" | "favourable" | "unfavourable" | "imps" | "matchpoints" | "seat"
+                )
+            });
+            if board && !out.contains(e) {
+                out.push(e.clone());
+            }
+            for s in path {
+                s.args.iter().flatten().for_each(|x| board_terms(x, out));
+            }
+        }
+        Expr::Asked { .. }
+        | Expr::Answered { .. }
+        | Expr::Shape { .. }
+        | Expr::Int { .. }
+        | Expr::Call { .. } => {}
     }
 }
 
@@ -1452,6 +1749,7 @@ fn exact_attr(f: &Facts, n: &str, v: Valuation) -> Val {
         n if n.starts_with("bba_") => Val::Num(Range::point(f.bba_named(n).unwrap_or(0))),
         "controls" => Val::Num(Range::point(f.controls())),
         "losers" => Val::Num(Range::point(f.losers())),
+        "quick_tricks" => Val::Num(Range::point(f.quick_trick_halves().div_euclid(2))),
         _ => unreachable!(),
     }
 }
@@ -1517,6 +1815,12 @@ const STATE_TERMS: &[Term] = &[
     ),
     t("imps", "IMPs or other total-point scoring"),
     t("matchpoints", "matchpoints or board-a-match"),
+    t("favourable", "we are not vulnerable and they are"),
+    t("unfavourable", "we are vulnerable and they are not"),
+    t(
+        "captain",
+        "I place the contract: partner's shown points span 4 or fewer (12-15) and mine more, or partner has answered my question",
+    ),
     t("trump", "`we.trump`"),
     t(
         "slam_try",
@@ -1611,6 +1915,10 @@ const SEAT_ATTRS: &[Term] = &[
     f("keycards", "(x)", "not tracked: 0..40 (see `we.keycards`)"),
     t("controls", "not tracked: 0..40"),
     t("losers", "not tracked: 0..40"),
+    t("quick_tricks", "not tracked: 0..40"),
+    t("bare_suits", "not tracked: 0..4"),
+    f("bare", "(x)", "not tracked: unknown"),
+    t("trump", "length in our agreed suit (`partner.trump.min`)"),
     f("quality", "(x)", "not tracked: 0..40"),
     f("top5", "(x)", "not tracked: 0..40"),
 ];
@@ -1622,11 +1930,23 @@ const WE_ATTRS: &[Term] = &[
     ),
     t("forcing", "`none`, `round` or `game`"),
     t("gf", "we are in a game force (`we.forcing = game`)"),
-    t("hcp", "my HCP plus partner's range"),
+    t(
+        "hcp",
+        "my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends)",
+    ),
+    t(
+        "points",
+        "my points plus partner's range: `points + partner.points`",
+    ),
+    f(
+        "fit",
+        "(x)",
+        "my length in x plus partner's range: `x + partner.x`; `.min` is the known fit",
+    ),
     f(
         "tp",
         "(x)",
-        "my support points with x as trump plus partner's",
+        "my support points with x as trump plus partner's: `tp(x) + partner.tp(x)`",
     ),
     f(
         "keycards",
@@ -1638,6 +1958,24 @@ const WE_ATTRS: &[Term] = &[
 const THEY_ATTRS: &[Term] = &[
     t("bid", "the opponents have bid or doubled"),
     t("vul", "the opponents are vulnerable"),
+    t("hcp", "LHO's and RHO's HCP ranges added"),
+    f("fit", "(x)", "LHO's and RHO's lengths in x added"),
+    t(
+        "level",
+        "the level of the opponents' last bid (none before they bid)",
+    ),
+    t(
+        "strain",
+        "the strain of the opponents' last bid, usable as a suit",
+    ),
+    t(
+        "still_bidding",
+        "one of the opponents' last calls is not a pass (or one has not called yet)",
+    ),
+    t(
+        "game_reached",
+        "the opponents' last bid is game or higher and it is their contract",
+    ),
 ];
 /// Other bare names (`name`).
 const BARE_NAMES: &[Term] = &[
@@ -1854,11 +2192,10 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
         Expr::And { all } => all.iter().for_each(|x| hand_terms(x, out)),
         Expr::Or { any } => any.iter().for_each(|x| hand_terms(x, out)),
         Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => hand_terms(expr, out),
+        // A suit compared, or in arithmetic, is my length there.
         Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
-            if matches!(e, Expr::Cmp { .. }) {
-                length(lhs, out);
-                length(rhs, out);
-            }
+            length(lhs, out);
+            length(rhs, out);
             hand_terms(lhs, out);
             hand_terms(rhs, out);
         }
@@ -1888,7 +2225,7 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
                     out.push(format!("`me.{}`", seg.name))
                 }
                 ("we", Some(seg))
-                    if matches!(seg.name.as_str(), "hcp" | "keycards" | "points" | "tp") =>
+                    if matches!(seg.name.as_str(), "hcp" | "keycards" | "points" | "tp" | "fit") =>
                 {
                     out.push(format!("`we.{}`", seg.name))
                 }
@@ -1906,61 +2243,100 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
 
 /// Every name in every condition (`when`, `shows`, `denies`, `prefer`)
 /// is one the engine knows, and so is every `sets` state and value
-/// (`check_sets`). Errors name the file and line.
+/// (`check_sets`). Conditions are checked as the engine runs them, with
+/// every definition inlined (`macros`); the definitions themselves are
+/// checked too. Errors name the file and line.
 pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
+    use crate::macros::{qualified, Defines};
+    let defines = Defines::new(modules);
+    // A definition's card parameters, as the rules that use it see them.
+    let defined: Vec<String> = modules
+        .iter()
+        .filter(|m| !m.defines.is_empty())
+        .flat_map(|m| m.params.iter().map(|p| qualified(&m.name, &p.name)))
+        .collect();
     fn walk(
         m: &bidspec::Module,
         c: &bidspec::ast::Context,
         params: &[&str],
+        defines: &Defines,
         out: &mut Vec<bidspec::Diagnostic>,
     ) {
+        let diag = |line: usize, message: String| bidspec::Diagnostic {
+            file: m.file.clone(),
+            line,
+            col: 0,
+            message,
+        };
+        let expand = |line: usize, e: &Expr, out: &mut Vec<bidspec::Diagnostic>| {
+            let mut errors = Vec::new();
+            let x = defines.expand(e, &mut errors);
+            out.extend(errors.into_iter().map(|msg| diag(line, msg)));
+            x
+        };
         if let Some(w) = &c.when {
+            let w = expand(c.line, w, out);
             let mut terms = Vec::new();
-            hand_terms(w, &mut terms);
+            hand_terms(&w, &mut terms);
             terms.dedup();
             if !terms.is_empty() {
-                out.push(bidspec::Diagnostic {
-                    file: m.file.clone(),
-                    line: c.line,
-                    col: 0,
-                    message: format!(
+                out.push(diag(
+                    c.line,
+                    format!(
                         "{} in a context's `when` depends on the hand: contexts are \
                          checked before the hand is known, so it is never true; move it \
                          to the rules' `when` or `shows`",
                         terms.join(", ")
                     ),
-                });
+                ));
             }
-        }
-        let mut push = |line: usize, e: Option<&Expr>| {
             let mut msgs = Vec::new();
-            if let Some(e) = e {
-                check_expr(e, params, &mut msgs);
-            }
-            for message in msgs {
-                out.push(bidspec::Diagnostic {
-                    file: m.file.clone(),
-                    line,
-                    col: 0,
-                    message,
-                });
-            }
-        };
-        push(c.line, c.when.as_ref());
+            check_expr(&w, params, &mut msgs);
+            out.extend(msgs.into_iter().map(|msg| diag(c.line, msg)));
+        }
         for r in &c.rules {
-            for e in [&r.shows, &r.when, &r.denies, &r.prefer] {
-                push(r.line, e.as_ref());
+            for e in [&r.shows, &r.when, &r.denies, &r.prefer].into_iter().flatten() {
+                let e = expand(r.line, e, out);
+                let mut msgs = Vec::new();
+                check_expr(&e, params, &mut msgs);
+                out.extend(msgs.into_iter().map(|msg| diag(r.line, msg)));
             }
         }
         for inner in &c.contexts {
-            walk(m, inner, params, out);
+            walk(m, inner, params, defines, out);
         }
     }
     let mut out = Vec::new();
+    let mut seen: HashMap<&str, &str> = HashMap::new();
     for m in modules {
-        let params: Vec<&str> = m.params.iter().map(|p| p.name.as_str()).collect();
+        let mut params: Vec<&str> = m.params.iter().map(|p| p.name.as_str()).collect();
+        params.extend(defined.iter().map(String::as_str));
+        for d in &m.defines {
+            let diag = |message: String| bidspec::Diagnostic {
+                file: m.file.clone(),
+                line: d.line,
+                col: 0,
+                message,
+            };
+            let n = d.name.as_str();
+            if bare_name_ok(n, &[])
+                || named(SELF_FUNCS, n)
+                || named(POSITION_FUNCS, n)
+                || named(BARE_NAMES, n)
+            {
+                out.push(diag(format!("`define {n}`: `{n}` is already a term")));
+            }
+            if let Some(first) = seen.insert(n, &m.file) {
+                out.push(diag(format!("`{n}` is defined twice (first in {first})")));
+            }
+            let mut errors = Vec::new();
+            let body = defines.expand(&d.body, &mut errors);
+            let mut msgs = Vec::new();
+            check_expr(&body, &params, &mut msgs);
+            out.extend(errors.into_iter().chain(msgs).map(|msg| diag(format!("`{n}`: {msg}"))));
+        }
         for c in &m.contexts {
-            walk(m, c, &params, &mut out);
+            walk(m, c, &params, &defines, &mut out);
         }
     }
     out.extend(crate::engine::check_sets(modules));
@@ -2101,7 +2477,8 @@ mod term_tests {
             ("x>=3", "`x` (my length)"),
             ("stop(S)", "`stop`"),
             ("shape 4333", "`shape 4333`"),
-            ("we.hcp >= 25", "`we.hcp`"),
+            ("we.hcp >= 25", "`hcp`"),
+            ("we.fit(S).min >= 8", "`S` (my length)"),
             ("me.points >= 12", "`me.points`"),
         ] {
             let msgs = check(bad);
@@ -2110,6 +2487,109 @@ mod term_tests {
                 "{bad}: {msgs:?}"
             );
         }
+    }
+
+    /// Definitions are checked where they are made and where they are
+    /// used; their card parameters are their own module's.
+    #[test]
+    fn definitions_are_checked() {
+        let module = |src: &str| bidspec::parse(src, "t.bid").unwrap();
+        let msgs = |mods: &[bidspec::Module]| {
+            check_terms(mods)
+                .into_iter()
+                .map(|d| d.message)
+                .collect::<Vec<_>>()
+        };
+        let d = module(
+            "module d \"d\"\n  param style = x.y\n\
+             define held(x) = has(A,x), style is bba\n\
+             define hcp = balanced\n\
+             define loop = loop\n\
+             define oops = hpc>=3\n",
+        );
+        let u = module(
+            "module u \"u\"\nwhen opening\n  P \"x\"  when held(S), held\n  P \"y\"  when held(S, H)\n",
+        );
+        let m = msgs(&[d.clone(), u]);
+        for want in [
+            "`define hcp`: `hcp` is already a term",
+            "`loop` is defined in terms of itself",
+            "unknown term `hpc`",
+            "`held` takes 1 argument (x)",
+        ] {
+            assert!(m.iter().any(|x| x.contains(want)), "{want}: {m:?}");
+        }
+        assert!(!m.iter().any(|x| x.contains("style")), "{m:?}");
+        let twice = module("module e \"e\"\ndefine held(x) = x>=3\n");
+        assert!(msgs(&[d, twice]).iter().any(|x| x.contains("`held` is defined twice")));
+    }
+
+    /// The judgment layer's Phase 0 terms (docs/JUDGMENT-LAYER.md).
+    #[test]
+    fn phase_0_terms() {
+        use crate::facts::Facts;
+        use bridge_types::Hand;
+        let bid = |s: &str| Call::from_pbn(s).unwrap();
+        // South deals, NS vulnerable: 1NT (2H) 3S (P), North to call.
+        let mut pos = Position::new(
+            Direction::South,
+            Vulnerability::NorthSouth,
+            ScoringMethod::from_pbn("IMP").unwrap(),
+        );
+        for c in ["1N", "2H", "3S", "P"] {
+            pos.calls.push(bid(c));
+        }
+        let s = Direction::South.to_index();
+        let (w, e) = (Direction::West.to_index(), Direction::East.to_index());
+        pos.knowledge[s].add(when_of("hcp=15..17"));
+        pos.knowledge[s].add(when_of("S>=2"));
+        pos.knowledge[w].add(when_of("hcp=8..11"));
+        pos.knowledge[w].add(when_of("H>=6"));
+        pos.knowledge[e].add(when_of("H>=2"));
+        let hand = Facts::new(&Hand::from_pbn("AKJ74.K2.Q2.QT93").unwrap());
+        let params = HashMap::new();
+        let ctx = |actor, hand| Ctx {
+            pos: &pos,
+            actor,
+            hand,
+            params: &params,
+            valuation: Valuation::default(),
+            private: None,
+        };
+        let north = ctx(Direction::North, Some(&hand));
+        let holds = |c: &Ctx, e: &str| {
+            let e = crate::macros::Defines::default().expand(&when_of(e), &mut Vec::new());
+            c.cond(&e, &mut Bindings::new())
+        };
+        for e in [
+            "unfavourable, !favourable",
+            "they.level = 2, they.strain is H, they.bid",
+            "they.fit(H).min = 8, they.hcp.min = 8",
+            "they.still_bidding",
+            "!they.game_reached",
+            "we.fit(S).min = 7, safe_level(S) = 1, we.hcp.min = 30",
+            "we.points.max >= 30",
+            "captain",
+            "quick_tricks = 2, bare(C), bare(D), !bare(H), !bare(S), bare_suits = 2",
+            // A condition counts 1 or 0.
+            "we.fit(S).min + unfavourable = 8, 5 - favourable = 5",
+        ] {
+            assert_eq!(holds(&north, e), Ok(Tri::True), "{e}");
+        }
+        // South limited his hand: North places the contract, not South.
+        let south = ctx(Direction::South, None);
+        assert_eq!(holds(&south, "captain"), Ok(Tri::False));
+        assert_eq!(holds(&south, "favourable"), Ok(Tri::False));
+        // A condition not yet known counts 0..1.
+        assert_eq!(holds(&north, "(partner.H>=3) + 1 >= 2"), Ok(Tri::Unknown));
+        // With a trump agreed, the trump suit is not bare.
+        let mut agreed = pos.clone();
+        agreed.sides[0].trump = Some(Strain::Clubs);
+        let north = Ctx {
+            pos: &agreed,
+            ..ctx(Direction::North, Some(&hand))
+        };
+        assert_eq!(holds(&north, "!bare(C), bare_suits = 1"), Ok(Tri::True));
     }
 
     /// Every name the checker accepts, the evaluator accepts too.
@@ -2132,7 +2612,7 @@ mod term_tests {
         let arg = |n: &str| match n {
             "has" => "(A, S)",
             "bypassed" | "denied" | "cued" | "tp" | "keycards" | "stop" | "quality" | "top5"
-            | "under_game" | "cheapest_rank" => "(S)",
+            | "under_game" | "cheapest_rank" | "bare" | "safe_level" | "fit" => "(S)",
             _ => "",
         };
         let mut exprs: Vec<String> = Vec::new();
@@ -2155,7 +2635,7 @@ mod term_tests {
             exprs.push(format!("we.{}{a}", n.name));
         }
         for n in THEY_ATTRS {
-            exprs.push(format!("they.{}", n.name));
+            exprs.push(format!("they.{}{}", n.name, arg(n.name)));
         }
         // `strength` is only compared with a band (tested with the bands).
         exprs.extend(["N", "NT"].map(String::from));

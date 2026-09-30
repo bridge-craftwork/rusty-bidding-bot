@@ -407,6 +407,30 @@ impl Facts {
             .count() as i32
     }
 
+    /// Quick tricks in half tricks (the Culbertson scale): A-K 4, A-Q 3,
+    /// A 2, K-Q 2, K-x 1.
+    pub fn quick_trick_halves(&self) -> i32 {
+        (0..4)
+            .map(|s| {
+                let (a, k, q) = (self.has(s, ACE), self.has(s, KING), self.has(s, QUEEN));
+                match (a, k, q) {
+                    (true, true, _) => 4,
+                    (true, false, true) => 3,
+                    (true, false, false) => 2,
+                    (false, true, true) => 2,
+                    (false, true, false) if self.len[s] >= 2 => 1,
+                    _ => 0,
+                }
+            })
+            .sum()
+    }
+
+    /// Two or more cards in `suit` and neither the ace nor the king: a
+    /// suit the opponents may cash first.
+    pub fn bare(&self, suit: usize) -> bool {
+        self.len[suit] >= 2 && !self.has(suit, ACE) && !self.has(suit, KING)
+    }
+
     /// The length of the second-longest suit.
     pub fn second_longest(&self) -> i32 {
         self.dist[1]

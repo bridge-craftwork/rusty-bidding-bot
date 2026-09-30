@@ -149,6 +149,7 @@ impl<'a> Parser<'a> {
             needs: Vec::new(),
             params: Vec::new(),
             skills: Vec::new(),
+            defines: Vec::new(),
             contexts: Vec::new(),
         };
         for node in &first.children {
@@ -161,6 +162,11 @@ impl<'a> Parser<'a> {
                         module.contexts.push(ctx);
                     }
                 }
+                Some("define") => {
+                    if let Some(d) = self.define(node) {
+                        module.defines.push(d);
+                    }
+                }
                 Some("module") => self.error(node.line, Some(0), "only one module per file"),
                 Some(w) if HEADERS.contains(&w) => {
                     self.error(node.line, Some(0), format!("`{w}` must be indented under `module`"))
@@ -168,7 +174,7 @@ impl<'a> Parser<'a> {
                 _ => self.error(
                     node.line,
                     Some(0),
-                    "expected a context (`after <auction>` or `when <condition>`) at the left margin",
+                    "expected a context (`after <auction>` or `when <condition>`) or a `define` at the left margin",
                 ),
             }
         }
@@ -290,6 +296,61 @@ impl<'a> Parser<'a> {
                 "expected `card`, `needs`, `param` or `skill` under `module`",
             ),
         }
+    }
+
+    /// `define name[(x, y)] = <condition>`, the condition continuing on
+    /// indented lines, each one more part of it (joined like `,`).
+    fn define(&mut self, node: &Node) -> Option<Define> {
+        let lines = self.lines;
+        let line = node.line;
+        let l = &lines[line];
+        let toks = &l.toks[1..];
+        let mut c = Cursor::new(toks, l.code);
+        let head = expr::define_head(&mut c);
+        let (name, params) = match head {
+            Ok(h) => h,
+            Err(e) => {
+                self.perror(line, e);
+                return None;
+            }
+        };
+        let mut parts = Vec::new();
+        if !c.at_end() {
+            match expr::expr(&mut c).and_then(|e| c.expect_end("in the definition").map(|_| e)) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(line, e);
+                    return None;
+                }
+            }
+        }
+        for child in &node.children {
+            let cl = &lines[child.line];
+            if let Some(g) = child.children.first() {
+                self.error(g.line, Some(0), "unexpected indentation in a definition");
+            }
+            match self.condition(&cl.toks, cl.code) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(child.line, e);
+                    return None;
+                }
+            }
+        }
+        let body = match parts.len() {
+            0 => {
+                self.error(line, None, "a definition needs a condition after `=`");
+                return None;
+            }
+            1 => parts.pop().unwrap(),
+            _ => Expr::And { all: parts },
+        };
+        Some(Define {
+            name,
+            params,
+            body,
+            line: l.no,
+        })
     }
 
     fn context(&mut self, node: &Node) -> Option<Context> {

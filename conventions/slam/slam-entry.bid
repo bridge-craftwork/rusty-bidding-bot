@@ -1,0 +1,61 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Slam entry: the conditions the slam modules share, named once
+# (docs/JUDGMENT-LAYER.md, Phase 0). rkcb-1430.bid, blackwood.bid and
+# control-bids.bid used to spell each of them out, up to 1,300 characters
+# a line. No rules yet: what decides whether slam is worth looking for
+# (Phase 1) will live here, and the modules that ask keep deciding how.
+#
+# The thresholds are Rick's (rkcb-1430.bid, "The ask"; slam-catch.notes.md):
+# 33 support points between us with the agreed suit as trump, or 18 of my
+# own facing a game force; the control rulings are control-bids.bid's.
+
+module slam-entry "Slam entry: the conditions the slam modules share"
+  skill  partnership_bidding/slam_bidding
+  param  style = slam.cue_bids.style default first_or_second_round
+
+# ── Values ────────────────────────────────────────────────────────────
+
+# Facing a game force: 33 on partner's floor, or 18 of my own.
+define slam_values = we.tp(trump).min >= 33 | tp(trump) >= 18
+
+# Facing a limited hand (a raise with a top): 33 on partner's maximum,
+# and a hand of four losers or fewer.
+define slam_values_limited = we.tp(trump).max >= 33, losers <= 4
+
+# ── Controls ──────────────────────────────────────────────────────────
+
+# A control in x: the ace or a void, or with `first_or_second_round` the
+# king or a singleton. Shortness counts only when partner has not shown
+# four of x (a singleton in partner's suit is not a control).
+define controlled(x) = has(A,x) | (x<=0, partner.x.min<=3) | (style is first_or_second_round, has(K,x) | (x<=1, partner.x.min<=3))
+
+# First-round control only: past game.
+define first_round(x) = has(A,x) | (x<=0, partner.x.min<=3)
+
+# A side suit I cannot control on my own: what sends a hand to control
+# bids rather than straight to the keycard ask.
+define side_suit_uncontrolled = (trump is not C, !controlled(C)) | (trump is not D, !controlled(D)) | (trump is not H, !controlled(H)) | (trump is not S, !controlled(S))
+
+# Rick's rule for the ask: no two bare side suits (2+ cards, neither the
+# ace nor the king).
+define two_bare_suits = (bare(C), bare(D)) | (bare(C), bare(H)) | (bare(C), bare(S)) | (bare(D), bare(H)) | (bare(D), bare(S)) | (bare(H), bare(S))
+
+# Going on in the dialogue promises every suit partner denied: it is the
+# trump suit, partner did not skip it, or I control it.
+define promised(x) = trump is x | !partner.denied(x) | controlled(x)
+define denials_promised = promised(C), promised(D), promised(H), promised(S)
+
+# The same past game, with first-round controls.
+define promised_first(x) = trump is x | !partner.denied(x) | first_round(x)
+define denials_promised_first = promised_first(C), promised_first(D), promised_first(H), promised_first(S)
+
+# Every side suit covered for the keycard ask: my control, one partner
+# has cued, or one I denied that partner has promised by bidding on.
+define covered(x) = trump is x | controlled(x) | partner.cued(x) | me.denied(x)
+define all_covered = covered(C), covered(D), covered(H), covered(S)
+
+# The same when I opened the dialogue (partner answered me): my control
+# or partner's.
+define covered_by_us(x) = trump is x | controlled(x) | partner.cued(x)
+define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)

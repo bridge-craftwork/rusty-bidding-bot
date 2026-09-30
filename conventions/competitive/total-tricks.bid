@@ -14,6 +14,11 @@
 #
 # At unfavourable vulnerability we hedge a trick: one level lower.
 #
+# Three rules, one per level: the doubler's bonus and the hedge are terms
+# in the count (a condition counts 1 when it holds). Until 2026-09-30 the
+# file spelled each combination out, twelve rules (docs/JUDGMENT-LAYER.md,
+# Phase 0).
+#
 # A fallback: below every rule that describes a hand, above the passes
 # that only say "nothing more to say".
 
@@ -21,90 +26,29 @@ module total-tricks "The Law of Total Tricks"
   needs  base
   skill  competitive_bidding/law_of_total_tricks
 
-# `bonus`: partner's three is a takeout double of their major, counted as four.
-# The hedge: vulnerable against not, one trick fewer.
-when they.bid, !lho.last=P | !rho.last=P, !game_reached   # they are still bidding; not once we have bid game (ticket b100)
+# Partner's three cards in x count as four when his takeout double of
+# their major is known to be the shape double.
+define doubler_four(x) = ((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3), partner.x.min = 3
+
+# Our trumps as the Law counts them, a trick fewer at unfavourable.
+define lott_trumps(x) = we.fit(x).min + doubler_four(x) - unfavourable
+
+when they.bid, they.still_bidding, !game_reached   # not once we have bid game (ticket b100)
   2x  "Total tricks: eight trumps between us: the two level"
-      shows x + partner.x.min = 8
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  2x  "Total tricks: eight trumps between us, a trick hedged vulnerable: the two level"
-      shows x + partner.x.min - 1 = 8
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  2x  "Total tricks: eight trumps between us, partner's double counted as four: the two level"
-      shows x + partner.x.min + 1 = 8
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  2x  "Total tricks: eight trumps between us, partner's double counted as four, a trick hedged vulnerable: the two level"
-      shows x + partner.x.min + 1 - 1 = 8
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      shows lott_trumps(x) = 8
+      when  doubler_four(x) | !doubler_four(x)       # known either way: not while the double may be the strong one
+      when  partner.x>=3, hcp>=5, we.hcp.min <= 24   # not clearly our hand
       sets  ask=signoff
       priority -4
   3x  "Total tricks: nine trumps between us: the three level"
-      shows x + partner.x.min = 9
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  3x  "Total tricks: nine trumps between us, a trick hedged vulnerable: the three level"
-      shows x + partner.x.min - 1 = 9
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  3x  "Total tricks: nine trumps between us, partner's double counted as four: the three level"
-      shows x + partner.x.min + 1 = 9
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  3x  "Total tricks: nine trumps between us, partner's double counted as four, a trick hedged vulnerable: the three level"
-      shows x + partner.x.min + 1 - 1 = 9
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      shows lott_trumps(x) = 9
+      when  doubler_four(x) | !doubler_four(x)
+      when  partner.x>=3, hcp>=5, we.hcp.min <= 24
       sets  ask=signoff
       priority -4
   4x  "Total tricks: ten+ trumps between us: the four level"
-      shows x + partner.x.min >= 10
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  4x  "Total tricks: ten+ trumps between us, a trick hedged vulnerable: the four level"
-      shows x + partner.x.min - 1 >= 10
-      when  !((((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3)
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  4x  "Total tricks: ten+ trumps between us, partner's double counted as four: the four level"
-      shows x + partner.x.min + 1 >= 10
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  !vul | they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
-      sets  ask=signoff
-      priority -4
-  4x  "Total tricks: ten+ trumps between us, partner's double counted as four, a trick hedged vulnerable: the four level"
-      shows x + partner.x.min + 1 - 1 >= 10
-      when  (((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3)), partner.x.min = 3
-      when  vul, !they.vul
-      when  partner.x>=3, hcp>=5, hcp + partner.hcp.min <= 24   # not clearly our hand
+      shows lott_trumps(x) >= 10
+      when  doubler_four(x) | !doubler_four(x)
+      when  partner.x>=3, hcp>=5, we.hcp.min <= 24
       sets  ask=signoff
       priority -4

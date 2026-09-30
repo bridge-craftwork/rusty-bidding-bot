@@ -12,6 +12,7 @@ mod engine;
 mod eval;
 mod facts;
 mod knowledge;
+mod macros;
 mod position;
 mod sample;
 mod system;

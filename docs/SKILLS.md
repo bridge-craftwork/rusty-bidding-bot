@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-58 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 17 proposed, 0 unknown. 44 modules declare a skill; 60 card fields carry one.
+58 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 17 proposed, 0 unknown. 45 modules declare a skill; 60 card fields carry one.
 
 ### The map
 
@@ -98,7 +98,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `partnership_bidding/rebids` (Rebids by Opener or Responder) | lessons only | — | `rebids` |
 | `partnership_bidding/responders_rebid` (Responder's Rebid) | lessons only | — | `responder-rebids` |
 | `partnership_bidding/roman_key_card` (Roman Key Card (Partnership)) | taxonomy | — | `rkcb-1430` |
-| `partnership_bidding/slam_bidding` (Slam Bidding) | lessons only | — | `control-bids`, `over-3nt`, `slam-catch` |
+| `partnership_bidding/slam_bidding` (Slam Bidding) | lessons only | — | `control-bids`, `over-3nt`, `slam-catch`, `slam-entry` |
 | `partnership_bidding/stayman_transfers` (Stayman & Transfers (Partnership)) | taxonomy | — | `jacoby-transfers`, `stayman` |
 | `partnership_bidding/two_club` (Two Club (Partnership)) | taxonomy | — | `strong-openings` |
 | `partnership_bidding/weak_twos` (Weak Twos (Partnership)) | taxonomy | — | `preempts`, `weak-two-responses` |

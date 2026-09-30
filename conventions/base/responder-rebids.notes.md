@@ -444,6 +444,16 @@ strong-openings.bid's (responder's rebid after 2C–positive–2NT).
   them 2C P 2D ...).
 - To the side that changed its call: +285.
 
+## The ladder written with the partnership sums (2026-09-30)
+
+The notrump ladder's conditions now use `we.points` and `we.fit(x)`
+(`we.points.min >= 25` for `points + partner.points.min >= 25`,
+`we.fit(S).min <= 7` for `S + partner.S.min <= 7`). The engine writes
+them out the old way before the rules are used, so nothing changed: the
+full corpus bids identically (docs/JUDGMENT-LAYER.md, Phase 0). The other
+24 places that add partner's minimum by hand are left for when their
+modules are next touched.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

@@ -698,30 +698,30 @@ after 1x (X) XX (1y) 2x (P) | 1x (X) XX (2y) 2x (P) | 1x (X) XX (1y) 3x (P) | 1x
 # the major instead.
 when partner.last=1N | partner.last=2N, me.has_bid | style is not bba, partner.balanced, !they.bid | lho.last=P, we.trump is none, !asked
   3N  "Game: 25+ between us, partner at his minimum"
-      shows points + partner.points.min >= 25, S + partner.S.min <= 7, H + partner.H.min <= 7
+      shows we.points.min >= 25, we.fit(S).min <= 7, we.fit(H).min <= 7
       priority -8
   2N  "Invitation: game if partner is at the top"
-      shows points + partner.points.max >= 25, S + partner.S.min <= 7, H + partner.H.min <= 7
+      shows we.points.max >= 25, we.fit(S).min <= 7, we.fit(H).min <= 7
       when  partner.last=1N
       priority -8
   4S  "Game in the spade fit: 25+ between us"
-      shows points + partner.points.min >= 25, S + partner.S.min >= 8
+      shows we.points.min >= 25, we.fit(S).min >= 8
       priority -8
   4H  "Game in the heart fit: 25+ between us"
-      shows points + partner.points.min >= 25, H + partner.H.min >= 8
+      shows we.points.min >= 25, we.fit(H).min >= 8
       priority -8
   3S  "Invitation in the spade fit"
-      shows points + partner.points.max >= 25, S + partner.S.min >= 8
+      shows we.points.max >= 25, we.fit(S).min >= 8
       when  partner.last=1N
       sets  ask=invite(S)
       priority -8
   3H  "Invitation in the heart fit"
-      shows points + partner.points.max >= 25, H + partner.H.min >= 8
+      shows we.points.max >= 25, we.fit(H).min >= 8
       when  partner.last=1N
       sets  ask=invite(H)
       priority -8
   P   "No game: under 25 between us"
-      shows points + partner.points.max <= 26
+      shows we.points.max <= 26
       priority -9
 
 # Opener's strong double after 1x (X) 1z (1y): describe, cheapest first

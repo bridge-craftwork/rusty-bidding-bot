@@ -230,6 +230,39 @@ pub fn string(c: &mut Cursor) -> Option<String> {
 }
 
 /// Full expression: `a, b | c, !d`.
+/// The head of a definition, up to and including `=`: `name`, or
+/// `name(x, y)` with suit variables (one lower-case letter, or `M`).
+pub fn define_head(c: &mut Cursor) -> Result<(String, Vec<String>), PError> {
+    let name = c.word("a name after `define`")?;
+    let named = |n: &str| {
+        n.chars().next().is_some_and(|ch| ch.is_ascii_lowercase())
+            && n.chars().all(|ch| ch.is_ascii_lowercase() || ch.is_ascii_digit() || ch == '_')
+    };
+    if !named(&name) || name.len() < 2 {
+        return c.err("a definition's name uses a-z, 0-9 and `_`, two characters or more");
+    }
+    let mut params = Vec::new();
+    if c.peek() == Some(&Tok::LParen) && c.adjacent() {
+        c.bump();
+        loop {
+            let p = c.word("a suit variable")?;
+            if !(p == "M" || (p.len() == 1 && p.chars().all(|ch| ch.is_ascii_lowercase()))) {
+                return c.err("a definition's parameters are suit variables: one lower-case letter, or `M`");
+            }
+            if params.contains(&p) {
+                return c.err(format!("parameter `{p}` twice"));
+            }
+            params.push(p);
+            if !c.eat(&Tok::Comma) {
+                break;
+            }
+        }
+        c.expect(&Tok::RParen, "`)` after the parameters")?;
+    }
+    c.expect(&Tok::Eq, "`=` after the name")?;
+    Ok((name, params))
+}
+
 pub fn expr(c: &mut Cursor) -> Result<Expr, PError> {
     let mut all = vec![or(c)?];
     while c.eat(&Tok::Comma) {
