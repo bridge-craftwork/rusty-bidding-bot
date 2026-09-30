@@ -1,0 +1,69 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Fourth suit forcing (2026-09-30; Rick: the game-force state is
+# triggered by "2/1, or 4th suit forcing, or xyz 2d"). After three suits
+# have been bid, responder's cheapest bid in the fourth, at the two level,
+# is artificial: values and no clear call (no fit, no stopper, no long
+# suit to rebid). It forces to game when the card says so
+# (`fourth_suit_forcing.game_force`, 21GF-DEFAULT), otherwise one round.
+#
+# BBA (probe 2026-09-30, 1D P 1H P 1S P, responder 4-4 in hearts and
+# clubs): on the game-forcing card 12 HCP bids 2NT and 14-15 bid 2C, a
+# club stopper or not; on the one-round card 2C from 12.
+#
+# The fourth suit at the one level (1C 1D 1H 1S) stays natural.
+#
+# It ranks with the natural calls, not above them: with a stopper and game
+# values 3NT comes first. Preferring the fourth suit as BBA does scored
+# -79 on random deals and -686 on the corpus against this (notes).
+
+module fourth-suit-forcing "Fourth suit forcing"
+  needs  base
+  skill  bidding_conventions/fourth_suit_forcing
+  param  fsf_play  = other_conventions.fourth_suit_forcing.play default false
+  param  fsf_round = other_conventions.fourth_suit_forcing.one_round default false
+  param  fsf_gf    = other_conventions.fourth_suit_forcing.game_force default false
+
+# Played at all; and whether it forces to game (the card's game_force, or
+# Bridge-Classroom's plain `play` without one_round).
+define fsf_on = fsf_play | fsf_round | fsf_gf
+define fsf_game = fsf_gf | (fsf_play, !fsf_round)
+
+
+after 1x (P) 1y (P) 1z (P) | 1x (P) 1y (P) 2z (P) when y is not x, z is not x, z is not y
+  cheapest(w)  "Fourth suit forcing: game values, no clear call"  alert
+      shows points>=13
+      when  fsf_on, fsf_game, w is not x, w is not y, w is not z, cheapest_rank(w) <= 13, !passed_hand
+      sets  ask=fsf(x, y, z, w), forcing=game
+      artificial
+  cheapest(w)  "Fourth suit forcing: 12+, no clear call"  alert
+      shows points>=12
+      when  fsf_on, !fsf_game, w is not x, w is not y, w is not z, cheapest_rank(w) <= 13, !passed_hand
+      sets  ask=fsf(x, y, z, w), forcing=round
+      artificial
+
+# Opener describes, in this order: three cards in responder's suit, a
+# stopper in the fourth suit, a longer first suit, a five-card second
+# suit, four cards in the fourth suit.
+when asked fsf(x, y, z, w)
+  cheapest(y)  "Three-card support for {y}"      shows y>=3
+      priority 4
+  cheapest(N)  "A stopper in {w}"                shows stop(w), y<=2
+      priority 3
+  cheapest(x)  "Five or more {x}"                 shows x>=5, y<=2, !stop(w)
+      priority 2
+  cheapest(z)  "Five or more {z} as well"         shows z>=5, y<=2, !stop(w)
+      priority 1
+  cheapest(w)  "Four cards in {w}"                shows w>=4, y<=2, !stop(w)
+  cheapest(x)  "Nothing more to show"
+      priority -5
+
+# Responder places the contract.
+when answered fsf(x, y, z, w)
+  4y  "Game in the {y} fit"                       shows we.fit(y).min >= 8, points>=12
+      when  y is H | y is S
+  3N  "Game in notrump"                           shows points>=12
+      priority -1
+  P   "Invitational only: partner's minimum answer"   shows points<=12
+      when  !we.gf
+      priority -5

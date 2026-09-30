@@ -1331,6 +1331,25 @@ fn expand(
                 )
             })
             .collect(),
+        // `cheapest(w)` with `w` not yet bound: one candidate per suit, as
+        // `2x` expands (before, no call at all, so the rule never applied).
+        CallSpec::Relative {
+            func,
+            arg: Some(arg),
+        } if (func == "cheapest" || func == "jump")
+            && crate::eval::is_variable(arg)
+            && !b.contains_key(arg)
+            && !ctx.params.contains_key(arg) =>
+        {
+            (0..4)
+                .filter(|&s| var_allows(arg, s))
+                .flat_map(|s| {
+                    let mut nb = b.clone();
+                    nb.insert(arg.clone(), Val::Suit(s));
+                    expand(spec, ctx, nb, auction)
+                })
+                .collect()
+        }
         CallSpec::Relative {
             func,
             arg: Some(arg),

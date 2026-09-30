@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-59 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 18 proposed, 0 unknown. 47 modules declare a skill; 61 card fields carry one.
+59 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 18 proposed, 0 unknown. 48 modules declare a skill; 61 card fields carry one.
 
 ### The map
 
@@ -50,7 +50,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/blackwood` (Blackwood) | taxonomy | `slam.blackwood.standard` | `blackwood` |
 | `bidding_conventions/control_bids` (Control (Cue) Bids) | proposed | `slam.cue_bids.play` | `control-bids` |
 | `bidding_conventions/drury` (Drury) | proposed | `major_openings.drury.play`, `major_openings.drury.two_d` | `drury` |
-| `bidding_conventions/fourth_suit_forcing` (Fourth Suit Forcing) | taxonomy | `other_conventions.fourth_suit_forcing.play`, `other_conventions.fourth_suit_forcing.one_round`, `other_conventions.fourth_suit_forcing.game_force` | `responder-rebids` |
+| `bidding_conventions/fourth_suit_forcing` (Fourth Suit Forcing) | taxonomy | `other_conventions.fourth_suit_forcing.play`, `other_conventions.fourth_suit_forcing.one_round`, `other_conventions.fourth_suit_forcing.game_force` | `fourth-suit-forcing`, `responder-rebids` |
 | `bidding_conventions/gerber` (Gerber) | proposed | `slam.gerber.play` | `gerber` |
 | `bidding_conventions/help_suit_game_try` (Help Suit Game Try) | taxonomy | `other_conventions.help_suit_game_tries.play` | — |
 | `bidding_conventions/impossible_2s` (Impossible 2♠) | proposed | `major_openings.impossible_2s.play` | `impossible-2s` |

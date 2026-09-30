@@ -108,7 +108,7 @@ after 1x (P) 1y (P) 1M (P)
 # so the corpus keeps it natural). There is no artificial 2♣ yet.
 after 1D (P) 1H (P) 1S (P)
   2C  "5+ clubs, 8-10"                     shows C>=5, points=8..10, S<=3   sets ask=signoff
-      when  !fsf
+      when  !fsf_on                    # fourth-suit-forcing.bid
 
 # ── Opener bid a new suit at the two level (a reverse is forcing) ────
 after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
