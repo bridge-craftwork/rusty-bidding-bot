@@ -1,0 +1,16 @@
+# Slam entry (docs/JUDGMENT-LAYER.md, Phase 1).
+card    21GF-DEFAULT
+
+# A fit known but not agreed: the ask agrees it on the way.
+dealer  S
+# seat hand             | auction                              | expect | why
+N AK3.AK7.AKQ4.AT5      | 3S P                                 | 4NT    | 26 HCP facing a preempt's seven spades: ask, agreeing spades
+dealer  N
+N AK4.K5.Q32.AQJ85      | 1C P 2S P                            | 3S     | 17 facing a strong jump shift: agree spades slowly, slam interest
+N Q74.K5.Q32.AQJ85      | 1C P 2S P                            | 4S     | 12: fast arrival, the minimum
+N KQ3.AK9863.Q5.A7      | 1H P 2S P                            | 3S     | 20 facing a jump shift: no jump to 4H opposite a game force
+N KQ3.AK9863.Q5.A7      | 1H P 1S P                            | 4H     | a one-level response: the jump to game stands
+
+card    21GF-SPECIALS2
+dealer  N
+S KJT5.KT8.AKQ92.Q      | 1C P 1D P 1N P 2S P 4S P             | 4NT    | partner's 4S shows the fit (my 2S had four): ask with 19 facing 12-14

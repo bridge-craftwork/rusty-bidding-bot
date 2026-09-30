@@ -59,3 +59,44 @@ define all_covered = covered(C), covered(D), covered(H), covered(S)
 # or partner's.
 define covered_by_us(x) = trump is x | controlled(x) | partner.cued(x)
 define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)
+
+# ── A fit known but not agreed (Phase 1, 2026-09-30) ─────────────────
+
+# A suit both hands know we fit: eight cards shown between us, or
+# partner's own six-card suit. Public, so partner knows what a keycard
+# ask agrees.
+define shown_fit(x) = shown.x.min + partner.x.min >= 8 | partner.x.min >= 6
+
+# Slam values with x as trump before it is agreed: my support points and
+# partner's shown floor make 33, or, when he has limited his hand to a
+# range of seven points or less (a preempt, a weak two), his top does and
+# my hand has four losers or fewer (as `slam_values_limited`).
+define fit_slam_values(x) = tp(x) + partner.points.min >= 33 | (tp(x) + partner.points.max >= 33, losers <= 4, partner.points.max - partner.points.min <= 6)
+
+# Two side suits, beside t, of 2+ cards without the ace or king.
+define bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)
+define two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(C,t), bare_beside(H,t)) | (bare_beside(C,t), bare_beside(S,t)) | (bare_beside(D,t), bare_beside(H,t)) | (bare_beside(D,t), bare_beside(S,t)) | (bare_beside(H,t), bare_beside(S,t))
+
+# ── Fast arrival (Phase 1, 2026-09-30) ────────────────────────────────
+#
+# In a game force with an eight-card fit known and no suit agreed, the
+# cheapest bid in the fit agrees it and shows slam interest; jumping to
+# game in it (base.bid's fallback) is then the minimum, and denies the
+# interest. Once it is agreed, control bids and the keycard ask take over.
+# On 20,000 random deals we bid a slam on 15 of 63 boards with a fit and
+# 33 HCP between us (BBA 55); the usual path was a jump to game after a
+# jump shift or a reverse, where neither hand could count 33 on the
+# other's floor.
+
+# Slam interest: 31 between us on partner's floor.
+define slam_interest(x) = tp(x) + partner.points.min >= 31
+
+when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
+  cheapest(S)  "Agrees ♠: slam interest"
+      shows we.fit(S).min >= 8, slam_interest(S)
+      when  partner.S.min >= 3, under_game(S)   # public: a raise of partner's suit, never read into a natural bid
+      sets  trump=S
+  cheapest(H)  "Agrees ♥: slam interest"
+      shows we.fit(H).min >= 8, slam_interest(H)
+      when  partner.H.min >= 3, under_game(H)   # public: a raise of partner's suit, never read into a natural bid
+      sets  trump=H

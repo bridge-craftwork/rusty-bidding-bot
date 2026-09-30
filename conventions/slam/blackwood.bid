@@ -74,6 +74,23 @@ when we.trump is suit, !asked, we.forcing = game
       artificial
       priority -1                      # after any natural 4NT
 
+# A fit known but not agreed (docs/JUDGMENT-LAYER.md, Phase 1): partner's
+# game raise, his preempt, a transfer completed. No rule set `trump`, so
+# the asks above never saw it. The ask agrees the major on the way.
+# Majors only for now: the sign-offs after an answer are awkward in a
+# minor.
+when we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
+  4N  "Blackwood, agreeing ♠: how many aces?"
+      when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=aces
+      artificial
+      priority 1
+  4N  "Blackwood, agreeing ♥: how many aces?"
+      when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=aces
+      artificial
+      priority 1
+
 # After a control-bid exchange (`control-bids.bid`, when the card plays
 # them). `asked control(t)` is partner's control bid; `answered control(u)`
 # says partner was answering mine, so I am the hand that opened the

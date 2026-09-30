@@ -77,6 +77,23 @@ when (k1430 | k0314), we.trump is suit, !asked, we.forcing = game
       sets  ask=keycards(trump)
       artificial
 
+# A fit known but not agreed (docs/JUDGMENT-LAYER.md, Phase 1): partner's
+# game raise, his preempt, a transfer completed. No rule set `trump`, so
+# the asks above never saw it. The ask agrees the major on the way.
+# Majors only for now: the sign-offs after an answer are awkward in a
+# minor.
+when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
+  4N  "Keycard ask, agreeing ♠"
+      when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=keycards(S)
+      artificial
+      priority 1
+  4N  "Keycard ask, agreeing ♥"
+      when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=keycards(H)
+      artificial
+      priority 1
+
 # After a control-bid exchange (`control-bids.bid`, when the card plays
 # them). `asked control(t)` is partner's control bid; `answered control(u)`
 # says partner was answering mine, so I am the hand that opened the

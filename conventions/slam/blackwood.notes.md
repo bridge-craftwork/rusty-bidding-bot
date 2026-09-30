@@ -57,6 +57,14 @@ same card field and default (`slam.cue_bids.style`,
 inference is unchanged; `bare_suits <= 1` would say the same but would
 add that denial, a change to measure on its own.
 
+## A fit known but not agreed (2026-09-30)
+
+With no trump suit set, a public fit in a major (eight shown between us,
+or partner's six-card suit) and slam values on partner's floor (or his
+top when he has limited his hand, as a preempt does), 4NT agrees the
+major and asks (`sets trump=x`). Uncontested only. Evidence and figures:
+slam-entry.notes.md, "Phase 1".
+
 ## Sources
 
 - **The convention:** standard (plain) Blackwood with the usual ace

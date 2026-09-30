@@ -623,3 +623,19 @@ rebids.test cases that expected the jump now expect the free bid. It
 also changes what opener's rebid tells the others: E's 3♥ now reads
 13-18, which is what lets North place the doubler below 18 by deck
 arithmetic (the Law of Total Tricks work that follows).
+
+## No jump to game over a game force (2026-09-30)
+
+"19+ with six or more M: game" also matched 1M-2y where 2y is a two-over-
+one or a strong jump shift, both game forcing: 1H 2S 4H with 20 HCP
+facing 15+, and responder passed. Over a game force the jump to game is
+the minimum (fast arrival), so the rule now needs `!we.gf`; opener raises
+or rebids and the slam machinery takes over (slam-entry.notes.md).
+
+**For Rick:** the minor twin, "18-21 with six or more m: 3NT", was
+changed the same way and measured both ways. Without it, random deals
+gain +112 and the corpus loses -1,027 (465 boards of 1m-2y-3NT where
+responder's 6NT counted opener's 18-21; without the rule opener has only
+base.bid's bare 3NT after a jump shift over a minor). Kept for now. The
+proper fix is opener's natural rebids after a minor-suit jump shift
+(repeat the suit, raise, 2NT), which do not exist yet.

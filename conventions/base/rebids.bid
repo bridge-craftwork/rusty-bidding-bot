@@ -219,6 +219,14 @@ after 1C (P) 1N (P)
 # rebid at all and passed a forcing response. BBA plays these as 3NT with
 # a long minor ("calculated bid: 18 to 21 total points, 6+ clubs"), and
 # game in a long major.
+#
+# A major's jump to game is not made once the response forced to game (a
+# two-over-one, a strong jump shift): there the jump to game is the
+# minimum (fast arrival), and with 19+ opposite a game force slam is in
+# the air (2026-09-30, random deals: 1H 2S 4H with 20 HCP facing 15,
+# where responder passed 35 between us). The minor's 3NT stays: its
+# 18-21 is what over-3nt.bid counts to 6NT, and without it opener had
+# only base.bid's bare 3NT (corpus: -1,027 on 465 boards).
 after 1m (P) 1y (P) | 1m (P) 2y (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
@@ -226,10 +234,10 @@ after 1m (P) 1y (P) | 1m (P) 2y (P)
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
-      when  y is not M, style is not bba
+      when  y is not M, style is not bba, !we.gf
   4M  "Game (BBA): seven {M} and 13+, or six and 19+"
       shows M>=6, (M>=7, hcp>=13) | hcp>=19
-      when  y is not M, style is bba
+      when  y is not M, style is bba, !we.gf
 # The same two rules after a 1NT response. They cannot share the context
 # above: `y` is bound by the other alternatives only, and a `when` that
 # names it can never be decided after 1NT, so the rules never fired.
