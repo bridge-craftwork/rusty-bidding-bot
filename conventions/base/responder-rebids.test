@@ -187,3 +187,12 @@ dealer  S
 vul     All
 N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 4H     | 4 HCP, six hearts opposite two or more: game in the fit, not 3NT
 # (2C P 2S P 2NT P itself now has its own rules: strong-openings.test.)
+
+# Fast arrival after a two-over-one and opener's second suit (2026-09-30,
+# slam entry): game is the minimum; with slam interest agree below game.
+card    21GF-DEFAULT
+dealer  S
+E K54.AKQ4.QJ.KQ94      | P 1S P 2C P 2H P                     | 3H     | 19 HCP and four hearts: agree, slam interest
+E 854.AJ74.Q2.KQ94      | P 1S P 2C P 2H P                     | 4H     | 12: raise to game, the minimum
+E K54.A4.QJ2.KQJ94      | P 1S P 2C P 2H P                     | 3S     | three spades and 16+ support points: agree, slam interest
+E K54.A4.Q72.QJ974      | P 1S P 2C P 2H P                     | 4S     | 12: game with support

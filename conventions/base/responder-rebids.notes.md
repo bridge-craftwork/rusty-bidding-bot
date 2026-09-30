@@ -454,6 +454,19 @@ full corpus bids identically (docs/JUDGMENT-LAYER.md, Phase 0). The other
 24 places that add partner's minimum by hand are left for when their
 modules are next touched.
 
+## Fast arrival after a two-over-one (2026-09-30)
+
+After 1y-2x-2z responder had no raise of opener's second suit, and
+"Game with support" (4M) had no top: on random deals responder jumped
+to game with 19 HCP and 33 between the hands. Now the jump to game is
+the minimum (4z with 11-14 points, 4M with 11-15 support points) and
+the slam-interest hand agrees below game and forces (3z with 15+, 3M
+with 16+), so control bids and the keycard ask follow. Random deals
+(20,000, 21GF): +265 IMPs vs BBA, par as the yardstick; corpus +2,166.
+A small loss group remains, 1H-2D-2H-3H with 16 support points reaching
+a failing slam (-13 on 9 boards). Thresholds: the textbook 15-16 for
+slam interest opposite an opening, not tuned. See slam-entry.notes.md.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and
