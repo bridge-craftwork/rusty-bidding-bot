@@ -757,6 +757,16 @@ when partner.last=1N | partner.last=2N, me.has_bid | style is not bba, partner.b
   P   "No game: under 25 between us"
       shows we.points.max <= 26
       priority -9
+  # Slam over partner's notrump (2026-09-30: 2C 2D 2NT 3NT with 33 between
+  # us, random deals): over-3nt.bid's calibrated HCP numbers, 6NT with 34
+  # on partner's floor, a quantitative 4NT with 32-33.
+  6N  "Slam: 34 between us (partner at his minimum)"
+      shows hcp + partner.hcp.min >= 34, we.fit(S).min <= 7, we.fit(H).min <= 7
+      priority -8
+  4N  "Quantitative: 32-33 between us"
+      shows hcp + partner.hcp.min >= 32, hcp + partner.hcp.max <= 35, we.fit(S).min <= 7, we.fit(H).min <= 7
+      sets  ask=quant
+      priority -8
 
 # Opener's strong double after 1x (X) 1z (1y): describe, cheapest first
 # (ticket b6). Not after a support double (support-doubles.bid).

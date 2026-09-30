@@ -202,3 +202,10 @@ card    21GF-DEFAULT
 dealer  N
 S 72.K84.A73.AQ952      | 1S P 2C P 2S P                       | !P     | the 2/1 forced to game
 S Q72.K84.K73.QJ95      | 1S P 1N P 2C P                       | 3S     | three spades, 11: the limit raise through the forcing 1NT
+
+# Slam over opener's 2NT after 2C (2026-09-30): 6NT with 34 on partner's
+# floor, a quantitative 4NT with 32-33 (Gerber, when played, comes first).
+card    21GF-DEFAULT slam.gerber.play=false
+dealer  N
+S K83.QJ4.K872.Q95      | 2C P 2D P 2N P                       | 4NT    | 11 facing 22-23: 33 on his floor, quantitative
+S K83.Q54.K872.J95      | 2C P 2D P 2N P                       | 3NT    | 9: 31, game only

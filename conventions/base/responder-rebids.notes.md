@@ -476,6 +476,15 @@ invite: 2NT, 3M with three-card support (the limit raise through 1NT),
 two or three after 2M, and a raise of opener's minor with 11-12 HCP.
 Figures: responses.notes.md.
 
+## Slam over partner's notrump in the ladder (2026-09-30)
+
+The notrump ladder stopped at 3NT with 33 between the hands (2C 2D 2NT
+3NT on random deals). It now bids 6NT with 34 HCP on partner's floor and
+a quantitative 4NT with 32-33 (answered by one-nt.bid's `asked quant`),
+without a known major fit: over-3nt.bid's calibrated numbers. Random
+deals, tuning 100k +48, confirmation 20k +14; corpus +132. Gerber, where
+played, comes first.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and
