@@ -383,6 +383,23 @@ fn attr_of(e: &Expr) -> Option<Attr> {
     }
 }
 
+/// `attr + k` (constants added or taken away in any order): the attribute
+/// and k. A bare attribute is `(attr, 0)`.
+fn linear(e: &Expr) -> Option<(Attr, i32)> {
+    use bidspec::ast::ArithOp;
+    match e {
+        Expr::Arith { arith, lhs, rhs } => {
+            let sign = if *arith == ArithOp::Add { 1 } else { -1 };
+            match (linear(lhs), int_of(rhs), int_of(lhs), linear(rhs)) {
+                (Some((a, k)), Some(c), _, _) => Some((a, k + sign * c)),
+                (_, _, Some(c), Some((a, k))) if *arith == ArithOp::Add => Some((a, k + c)),
+                _ => None,
+            }
+        }
+        _ => attr_of(e).map(|a| (a, 0)),
+    }
+}
+
 fn int_of(e: &Expr) -> Option<i32> {
     match e {
         Expr::Int { value } => Some(*value as i32),
@@ -481,6 +498,24 @@ fn narrow(k: Bounds, e: &Expr, positive: bool) -> Bounds {
         Expr::Not { expr } => return narrow(k, expr, !positive),
         Expr::Cmp { cmp, lhs, rhs } => {
             let op = if positive { *cmp } else { negate(*cmp) };
+            // One attribute plus constants against a number, as a resolved
+            // partnership sum leaves it (`S + 4 >= 8`: four or more).
+            if let (Some((a, k)), Some(n)) = (linear(lhs), int_of(rhs)) {
+                if k != 0 {
+                    let r = out.range_mut(a);
+                    *r = apply_attr(a, *r, op, n - k);
+                    out.normalize();
+                    return out;
+                }
+            }
+            if let (Some(n), Some((a, k))) = (int_of(lhs), linear(rhs)) {
+                if k != 0 {
+                    let r = out.range_mut(a);
+                    *r = apply_attr(a, *r, flip(op), n - k);
+                    out.normalize();
+                    return out;
+                }
+            }
             match (attr_of(lhs), attr_of(rhs), int_of(lhs), int_of(rhs)) {
                 (Some(a), _, _, Some(n)) => {
                     let r = out.range_mut(a);
@@ -580,6 +615,17 @@ mod tests {
             .shows
             .clone()
             .unwrap()
+    }
+
+    #[test]
+    fn narrows_a_partnership_sum() {
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("S + 4 >= 8")));
+        assert_eq!(k.len[3].lo, 4);
+        assert!(k.add(expr("H + 3 + 1 - 1 = 8")));
+        assert_eq!((k.len[2].lo, k.len[2].hi), (5, 5));
+        assert!(k.add(expr("points + 15 <= 24")));
+        assert_eq!(k.whole_points(0).hi, 9);
     }
 
     #[test]
