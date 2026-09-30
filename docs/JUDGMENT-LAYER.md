@@ -612,3 +612,36 @@ Contract notes that apply throughout:
   `crates/engine/src/eval.rs` (`we_attr`, `hand_dependent`, the
   placeholder hooks), `crates/engine/src/engine.rs` (`advance_from`: how
   a call is read).
+
+## Decisions (Rick, 2026-09-30) and where to start
+
+Answers to §7's first five questions:
+
+1. **Thresholds live in the rules**, as named conditions, not Rust hooks.
+2. **Captain:** when a player has limited his range to 3-4 points, his
+   partner usually becomes captain. The notrump ladder always does this;
+   a limit bid often does; opener's rebid usually does, but opener's
+   non-jump new suit (normally 12-18) does not limit him yet. Define
+   `captain` from the width of each partner's shown range (about 4
+   points or less), not from a per-call attribute; the asker is captain
+   after an answer to his question.
+3. **Reading judgment calls:** a lint and rule discipline for now; no
+   language-2 engine change.
+4. **Order:** penalty doubles (Phase 3) before the defending-side pass
+   (Phase 2), so the side-IMP yardstick is fair when the pass work is
+   measured.
+5. **Scoring:** slam and grand thresholds may differ by scoring (IMPs vs
+   matchpoints); when the evidence conflicts, textbook 33 is the default.
+
+Questions 6-10 stay open.
+
+**Start here (a new session):** Phase 0 exactly as §6 describes: the
+convenience terms (`we.fit(x)`, `we.points` fixed or dropped, the
+opponents' fit and level, favourable/unfavourable, `safe_level`,
+`quick_tricks`), named conditions (`define`), `captain` per decision 2,
+the priority bands, and the lint for decision 3; compare output must be
+unchanged (byte-identical boards) and `rbb bid terms --doc
+docs/CONTRACT.md` regenerated. Then Phase 1 (slam entry), then Phase 3
+(penalty doubles), then Phase 2. Work pattern: CLAUDE.md, the
+controller/agent memory, compare JSONs in the SSD scratchpad (the X10
+drive is corrupt), both yardsticks, random deals alongside the corpus.
