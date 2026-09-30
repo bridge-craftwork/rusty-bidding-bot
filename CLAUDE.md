@@ -1,6 +1,7 @@
 # rusty-bidding-bot
 
-Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md.
+Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md;
+the proposed top-down judgment layer (placement, competition, slam entry): docs/JUDGMENT-LAYER.md.
 
 ## Hard rules
 
