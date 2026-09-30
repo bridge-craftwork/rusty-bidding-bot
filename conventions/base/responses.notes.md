@@ -146,8 +146,7 @@ Before this module we passed every one. Whole corpus: calls agreeing 66.4%
   hand's limit raise, natural 2♣ and game-values 2♣/2♦ are switched off
   here.
 - Responses after interference.
-- 2/1 game force and forcing 1NT (the 2/1 cards): the same module plays
-  them as Standard American for now.
+- 2/1 game force and forcing 1NT: built 2026-09-30 (below).
 
 ## Questions
 
@@ -316,6 +315,34 @@ With four spades, a five-card minor and 11-12, BBA responds 1S; we bid
 the minor at the two level. Now 1S, and 2m with four spades needs 13 or
 a six-card minor (test 41 keeps 2D with six). +52 by distance, +71 to
 the bidding side.
+
+## 2/1 game force and the forcing 1NT (Rick, 2026-09-30: "definitely fix 2/1")
+
+On cards with `major_openings.two_over_one.game_force` (the 21GF cards;
+derived from the system type) the two-over-one is **game forcing**
+(`sets forcing=game`) with opening values: 13+ total points with 12+ HCP
+by default (length counts, Rick 2026-09-23), 13+ HCP under
+`general.style = bba`. BBA (probe 2026-09-30, 21GF-DEFAULT, over 1S, 1H
+and 1D): 2/1 from 13 HCP; 12 HCP with a five-card suit bids 1NT over a
+major and the invitational 2NT over 1D. The 1NT response over a major is
+6-12, forcing (`sets forcing=round`) when the card plays
+`one_nt_response.forcing` (21GF-DEFAULT; not 21GF-GIB). Standard American
+cards keep the 11+ one-round force.
+
+Around it: over 1D, 11-12 with clubs bids 2NT and 10-12 with six clubs
+3C (short of a game force); the "11+ with a longer minor: 2m first" gate
+on the one-level majors lets 11-12 bid the major on 2/1 cards. Opener's
+rebids over a forcing 1NT and responder's continuations: rebids.notes.md,
+responder-rebids.notes.md.
+
+Measured (IMPs vs BBA, par as the yardstick): random deals (20,000,
+21GF) +96, corpus +115; calls agreeing with BBA 80.4% -> 80.6% random,
+78.1% -> 78.3% corpus; "no rule in a live auction" 324 -> 316 random,
+2,669 -> 2,605 corpus; broken forces unchanged. Measuring responder's new
+11-12 minor raise in points instead of HCP scored +375 more on the corpus
+but overrode impossible-2s.bid's tested choices, so it counts HCP.
+
+Not measured yet: BBA's plain 13 HCP threshold as the default.
 
 ## Sources
 

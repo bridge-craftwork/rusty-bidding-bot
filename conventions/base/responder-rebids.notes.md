@@ -467,6 +467,15 @@ A small loss group remains, 1H-2D-2H-3H with 16 support points reaching
 a failing slam (-13 on 9 boards). Thresholds: the textbook 15-16 for
 slam interest opposite an opening, not tuned. See slam-entry.notes.md.
 
+## After a game-forcing 2/1 and a forcing 1NT (2026-09-30)
+
+After a game-forcing two-over-one the 11-12 invitations and the sign-off
+preference are off (`!we.gf`); a preference and a rebid of a six-card
+suit keep the force. After the 6-12 1NT of the 2/1 cards the 11-12 hands
+invite: 2NT, 3M with three-card support (the limit raise through 1NT),
+two or three after 2M, and a raise of opener's minor with 11-12 HCP.
+Figures: responses.notes.md.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

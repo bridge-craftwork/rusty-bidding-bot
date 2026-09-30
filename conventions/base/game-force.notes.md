@@ -12,7 +12,7 @@ creates it:
 
 | trigger | where | status |
 |---|---|---|
-| a call whose meaning forces (2/1 on a 2/1 card, strong jump shift, reverse ...) | the rule's `sets forcing=game` | 2/1: next (responses.bid plays it as one round today) |
+| a call whose meaning forces (2/1 on a 2/1 card, strong jump shift, reverse ...) | the rule's `sets forcing=game` | 2/1 built 2026-09-30 (responses.notes.md) |
 | fourth suit forcing, game-forcing variant | a new module, the card's `fourth_suit_forcing.game_force` | not built: the fourth suit is natural today |
 | XYZ 2D | a new module | not built |
 | responder's third bid at the three level, below game (3C-3S), uncontested | `force game` here | built |

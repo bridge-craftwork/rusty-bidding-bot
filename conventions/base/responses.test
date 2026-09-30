@@ -91,3 +91,16 @@ N AJ43.J42.A98.T98      | 1H P    | 2H     | bba: flat 10, three hearts: raise, 
 N KQ32.432.Q32.A32      | 1H P    | 1S     | bba: 11 with three hearts: 1S first (probe)
 # a two-level new suit: ten HCP and five hearts are enough over 1S
 N Q.K9653.KQT9.964      | 1S P    | 2H     | bba: 10 HCP, five hearts: 2H, not 1NT (Basic_Responses 178)
+
+# 2/1 game force (2026-09-30): on a 2/1 card the two-over-one is game
+# forcing with opening values (BBA from 13 HCP; ours 13 points with 12
+# HCP), and the 1NT response is 6-12, forcing when the card says so.
+card    21GF-DEFAULT
+dealer  N
+S 72.K84.A73.AQ952      | 1S P                                 | 2C     | 13 HCP: two over one, game forcing
+S 72.K84.Q73.AQ952      | 1S P                                 | 1NT    | 11 HCP: forcing 1NT, not a 2/1
+S 74.T84.A9.AKT743      | 1D P                                 | 3C     | six clubs, 11 HCP: short of the game-forcing 2C
+card    21GF-GIB
+S 72.K84.Q73.AQ952      | 1S P                                 | 1NT    | a 2/1 card without forcing 1NT: 1NT 6-12
+card    Basic-Bridge
+S 72.K84.Q73.AQ952      | 1S P                                 | 2C     | Standard American: 2C from 11, forcing one round

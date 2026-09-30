@@ -244,6 +244,19 @@ after 1M (P) 1y (P) | 1M (P) 2y (P)
 after 1m (P) 1N (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
+# A forcing 1NT (2/1 cards with `one_nt_response.forcing`, 6-12): opener
+# may not pass, so a balanced hand bids its longer minor, three cards if
+# need be, and 18-19 bids 2NT (2026-09-30, 2/1 game force).
+after 1M (P) 1N (P) when we.forcing = round
+  2C  "Forcing 1NT: three or more clubs"   shows C>=3, C>=D, suit_points<=18, M<=5
+      priority -1
+  2D  "Forcing 1NT: three or more diamonds"  shows D>=3, D>C, suit_points<=18, M<=5
+      priority -1
+  2N  "Forcing 1NT: 18-19, balanced"       shows balanced, hcp=18..19
+  # Six, or five when the hand has no three-card minor to bid (5-4-2-2
+  # with the other major): the forced rebid, read as either.
+  2M  "Rebids {M}: six, or five with no three-card minor, minimum"
+      shows M>=5, suit_points<=15, M>=6 | (C<=2, D<=2)
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19

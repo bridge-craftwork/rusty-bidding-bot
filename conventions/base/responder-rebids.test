@@ -196,3 +196,9 @@ E K54.AKQ4.QJ.KQ94      | P 1S P 2C P 2H P                     | 3H     | 19 HCP
 E 854.AJ74.Q2.KQ94      | P 1S P 2C P 2H P                     | 4H     | 12: raise to game, the minimum
 E K54.A4.QJ2.KQJ94      | P 1S P 2C P 2H P                     | 3S     | three spades and 16+ support points: agree, slam interest
 E K54.A4.Q72.QJ974      | P 1S P 2C P 2H P                     | 4S     | 12: game with support
+
+# After a game-forcing two-over-one responder may not stop below game.
+card    21GF-DEFAULT
+dealer  N
+S 72.K84.A73.AQ952      | 1S P 2C P 2S P                       | !P     | the 2/1 forced to game
+S Q72.K84.K73.QJ95      | 1S P 1N P 2C P                       | 3S     | three spades, 11: the limit raise through the forcing 1NT

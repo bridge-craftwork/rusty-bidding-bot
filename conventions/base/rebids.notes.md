@@ -639,3 +639,10 @@ responder's 6NT counted opener's 18-21; without the rule opener has only
 base.bid's bare 3NT after a jump shift over a minor). Kept for now. The
 proper fix is opener's natural rebids after a minor-suit jump shift
 (repeat the suit, raise, 2NT), which do not exist yet.
+
+## Over a forcing 1NT (2026-09-30, 2/1 game force)
+
+A forcing 1NT (6-12) may not be passed: a balanced minimum bids its longer
+minor, three cards if need be; 18-19 balanced bids 2NT; 2M is six, or five
+with no three-card minor (5-4-2-2 with the other major), one rule so that
+responder reads either (reading it as six contradicted the five).

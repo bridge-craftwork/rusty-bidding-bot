@@ -156,6 +156,18 @@ after 1x (P) 1N (P) 2z (P) when z is not x
       sets  ask=signoff
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
   3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
+# After the 6-12 1NT of the 2/1 cards (2026-09-30, 2/1 game force): the
+# 11-12 hands invite, and three-card support is a limit raise.
+after 1M (P) 1N (P) 2z (P) when z is not M, shown.hcp.max >= 11
+  2N  "Invitational: 11-12, no fit"        shows hcp=11..12, M<=2, z<=3   sets ask=nt_invite
+  3M  "Limit raise: three-card support, 10-12"   shows M=3, tp(M)=10..12   sets ask=invite(M)
+      priority 1
+  3z  "Raise: 4+ {z}, 11-12 HCP"           shows z>=4, hcp=11..12   sets ask=invite(z)   # the new band only: 9-10 with length is impossible-2s.bid's
+      when  z is C | z is D
+after 1M (P) 1N (P) 2M (P) when shown.hcp.max >= 11
+  2N  "Invitational: 11-12"                shows hcp=11..12, M<=2   sets ask=nt_invite
+  3M  "Invitational: two or three {M}, 11-12"   shows M>=2, hcp=11..12   sets ask=invite(M)
+      priority 1
 # The pass is in HCP: the 1NT response is 6-10 HCP, and with length
 # points a 1NT responder can count 11-12 and had no call. BBA raises
 # with a doubleton from 8 HCP (probes/resp-1H-1N-2H, 2026-09-25: 60 of
@@ -192,17 +204,28 @@ after 1x (P) 1N (P) 2N (P)
 # only the notrump bids count notrump points.
 after 1y (P) 2x (P) 2z (P) when x is not y
   2N  "Invitational, no fit: 11-12"        shows points=11..12, y<=2 | y is C | y is D
+      when  !we.gf
       sets  ask=nt_invite
   3N  "Game, no fit"                       shows points>=13, y<=2 | y is C | y is D
   3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, suit_points=11..12, y<=2 | y is C | y is D
+      when  !we.gf
       sets  ask=invite(x)
   2y  "Preference: 2+ {y}, nothing better to say"
       shows y>=2, suit_points<=12
+      when  !we.gf
       sets  ask=signoff
       priority -3                          # a ten-count with shape: no game bid fits
   P   "Minimum for the two-over-one: no game"
       shows suit_points<=12
       priority -5                          # opener rebid his own suit: nowhere to go
+  # A game-forcing two-over-one (2/1 cards, 2026-09-30): no invitations
+  # and no sign-off; a preference or the long suit again keeps it going.
+  3x  "Six or more {x}, game forcing"      shows x>=6
+      when  we.gf
+      priority -1
+  2y  "Preference: 2+ {y}, game forcing"   shows y>=2
+      when  we.gf
+      priority -3
 # Fast arrival (2026-09-30, slam entry, slam-entry.notes.md): the jump to
 # game is the minimum; with slam interest agree the suit below game and
 # force, so control bids and the keycard ask can follow. Random deals:
