@@ -24,6 +24,9 @@ pub struct ModuleRef {
     /// anywhere in the rule set may use them.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub defines: Vec<String>,
+    /// Its `force game` declarations, as written.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub forces: Vec<String>,
     pub rules: Vec<RuleRef>,
 }
 
@@ -142,6 +145,21 @@ pub fn entries(modules: &[Module]) -> Vec<ModuleRef> {
                         format!("{}{params} = {}", d.name, d.body)
                     })
                     .collect(),
+                forces: m
+                    .forces
+                    .iter()
+                    .map(|f| {
+                        let mut t = format!("force {}", f.level);
+                        if let Some(alts) = &f.after {
+                            let a: Vec<String> = alts.iter().map(|p| pattern(p)).collect();
+                            t.push_str(&format!(" after {}", a.join(" | ")));
+                        }
+                        if let Some(w) = &f.when {
+                            t.push_str(&format!(" when {w}"));
+                        }
+                        t
+                    })
+                    .collect(),
                 rules,
             }
         })
@@ -196,6 +214,9 @@ pub fn text(modules: &[ModuleRef], header: &str, active: Option<&dyn Fn(&str) ->
         }
         for d in &m.defines {
             out.push_str(&format!("   define {d}\n"));
+        }
+        for f in &m.forces {
+            out.push_str(&format!("   {f}\n"));
         }
         let mut last: Option<(&Vec<String>, &Vec<String>)> = None;
         for r in &m.rules {

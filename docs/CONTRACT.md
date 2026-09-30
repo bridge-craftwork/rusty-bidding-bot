@@ -15,7 +15,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.3.0 (rule language 1)`), and so does the last line of
+(`rbb 0.4.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
@@ -25,7 +25,7 @@ its root, `conventions.toml`:
 name = "rusty-bidding-bot"
 description = "The base system and conventions, switched on by the convention card"
 language = 1          # required: the rule language version
-engine = "0.3.0"      # optional: the engine it was developed against (information only)
+engine = "0.4.0"      # optional: the engine it was developed against (information only)
 ```
 
 - A manifest that asks for a language this engine does not read refuses
@@ -233,8 +233,9 @@ totals and last bid, `favourable` / `unfavourable`, `captain`,
 `we.tp(x)` are now written out as `hcp + partner.hcp` and
 `tp(x) + partner.tp(x)` before a rule is used, which is what they meant
 while choosing; how an unchosen call's `we.tp` resolves could differ, and
-on the corpus nothing changed (170,633 boards, 2026-09-30). This
-repository's manifest names `engine = "0.3.0"`.
+on the corpus nothing changed (170,633 boards, 2026-09-30). Engine
+0.4.0 adds the `force game` declaration (LANGUAGE.md §3) and the `bids`
+term. This repository's manifest names `engine = "0.4.0"`.
 
 What the
 engine *knows* may also get sharper within a version (the deck limits,
@@ -418,6 +419,7 @@ Bare or with `me.`. Public, so fine in a context's `when`, except the judgment h
 | `opening` | no one has bid yet |
 | `last` | my own last call (`me.last`); compare with a call: `me.last=1N` |
 | `passed_hand` | I have called, and only passed |
+| `bids` | how many bids I have made, not counting passes and doubles (`me.bids`) |
 | `has_bid` | I have made a bid, not only passes or doubles (`me.has_bid`) |
 | `seat` | my seat from the dealer, 1 to 4 |
 | `vul` | my side is vulnerable |
@@ -459,6 +461,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.length_points` | cards beyond four, as far as shown |
 | `partner.last` | that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`) |
 | `partner.opened` | that seat made the opening bid |
+| `partner.bids` | how many bids that seat has made |
 | `partner.has_bid` | that seat has made a bid, not only passes or doubles |
 | `partner.jumped` | that seat's last bid was at least a level above the cheapest in its strain |
 | `partner.denied(x)` | in the control-bid dialogue that seat skipped x |

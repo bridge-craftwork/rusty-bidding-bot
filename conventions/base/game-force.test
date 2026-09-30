@@ -1,0 +1,7 @@
+# The auction's own game forces (game-force.bid): after them no one may
+# pass below game.
+card    21GF-DEFAULT
+dealer  N
+# seat hand             | auction                              | expect | why
+# Responder's 3S after 1x-1y-2NT forced to game: opener may not pass 3S.
+N AK2.K4.AQ62.KJ73      | 1C P 1S P 2N P 3S P                  | !P     | 3S is forcing to game

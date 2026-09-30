@@ -1,0 +1,28 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Wolff sign-off (Rick, 2026-09-30: "there is a convention where 3C there
+# is to stop in part score"). After 1x-1y-2NT (18-19), responder's 3C
+# asks opener to bid 3D; responder passes with diamonds or signs off in
+# his major. Every other call but pass forces to game (game-force.bid).
+
+module wolff "Wolff sign-off after opener's 2NT rebid"
+  card   other_conventions.wolff_signoff.play
+  needs  base
+  skill  bidding_conventions/wolff_signoff
+
+after 1x (P) 1y (P) 2N (P)
+  3C  "Wolff: relay to 3♦, to sign off"   alert
+      shows points<=6, D>=6 | (y>=6, y is H) | (y>=6, y is S)
+      when  y is not C
+      sets  ask=wolff
+      artificial
+      priority 1
+
+when asked wolff
+  3D  "Wolff: the forced 3♦"   alert
+      artificial
+
+when answered wolff, partner.last=3D
+  P   "To play in 3♦"                  shows D>=6
+  3y  "To play in {y}"                 shows y>=6
+      when  y is H | y is S

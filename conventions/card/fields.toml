@@ -456,6 +456,7 @@
 "xyz"                      = { kind = "bool", label = "XYZ" }
 "sos_redouble.play"        = { kind = "bool", label = "SOS redouble" }
 "ingberman_2nt.play"       = { kind = "bool", label = "Ingberman 2NT" }
+"wolff_signoff.play"       = { kind = "bool", label = "Wolff sign-off", desc = "After 1x-1y-2NT, responder's 3♣ asks opener to bid 3♦, to pass or sign off in a suit; every other call but pass forces to game. No .bbsa key (BBA does not play it).", skill = "bidding_conventions/wolff_signoff" }
 # --- begin: Bridge-Classroom card fields (bc-export) ---
 "weak_jump_shifts_not_in_comp" = { kind = "bool", label = "Weak jump shifts (not in competition)" }
 "weak_jump_shifts_in_comp" = { kind = "bool", label = "Weak jump shifts in competition" }

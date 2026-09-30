@@ -27,7 +27,26 @@ pub struct Module {
     /// module of the rule set.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub defines: Vec<Define>,
+    /// State the auction itself creates (`force game after ... when ...`).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub forces: Vec<Force>,
     pub contexts: Vec<Context>,
+}
+
+/// `force game [after <pattern>] [when <condition>]`: a call made where
+/// the pattern and condition hold puts the caller's side in a game force,
+/// whichever rule made or explains it. `call` in the condition is the
+/// call being made (`!call = P`, `call >= 3C`); the pattern matches the
+/// auction before it, as a context's does.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Force {
+    /// `game` (the only level so far).
+    pub level: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub after: Option<Vec<Vec<PatternCall>>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub when: Option<Expr>,
+    pub line: usize,
 }
 
 /// `define name[(x, y)] = <condition>`: a named condition (or value) any

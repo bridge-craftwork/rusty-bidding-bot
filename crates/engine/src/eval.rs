@@ -803,6 +803,7 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "passed_hand" => Val::Bool(Tri::from_bool(self.pos.passed_hand(self.actor))),
+            "bids" => Val::Num(Range::point(self.pos.bids_of(self.actor))),
             // `me.has_bid`: I have made a bid, not only passes or doubles.
             "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(self.actor))),
             "seat" => {
@@ -1009,6 +1010,7 @@ impl<'a> Ctx<'a> {
                 .cloned()
                 .map_or(Val::Nothing, Val::Call),
             "opened" => Val::Bool(Tri::from_bool(self.pos.opener() == Some(seat))),
+            "bids" => Val::Num(Range::point(self.pos.bids_of(seat))),
             "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(seat))),
             // `partner.jumped`: their last bid skipped a level in its strain.
             "jumped" => Val::Bool(Tri::from_bool(self.pos.jumped(seat))),
@@ -1804,6 +1806,10 @@ const STATE_TERMS: &[Term] = &[
     ),
     t("passed_hand", "I have called, and only passed"),
     t(
+        "bids",
+        "how many bids I have made, not counting passes and doubles (`me.bids`)",
+    ),
+    t(
         "has_bid",
         "I have made a bid, not only passes or doubles (`me.has_bid`)",
     ),
@@ -1881,6 +1887,7 @@ const SEAT_ATTRS: &[Term] = &[
         "that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`)",
     ),
     t("opened", "that seat made the opening bid"),
+    t("bids", "how many bids that seat has made"),
     t(
         "has_bid",
         "that seat has made a bid, not only passes or doubles",
@@ -2337,6 +2344,34 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
         }
         for c in &m.contexts {
             walk(m, c, &params, &defines, &mut out);
+        }
+        // A force is judged when a call is made, by anyone reading it: its
+        // condition is public. `call` is the call being made.
+        let mut fparams = params.clone();
+        fparams.push("call");
+        for f in &m.forces {
+            let Some(w) = &f.when else { continue };
+            let diag = |message: String| bidspec::Diagnostic {
+                file: m.file.clone(),
+                line: f.line,
+                col: 0,
+                message,
+            };
+            let mut errors = Vec::new();
+            let w = defines.expand(w, &mut errors);
+            let mut msgs = Vec::new();
+            check_expr(&w, &fparams, &mut msgs);
+            let mut terms = Vec::new();
+            hand_terms(&w, &mut terms);
+            terms.dedup();
+            if !terms.is_empty() {
+                msgs.push(format!(
+                    "{} in a `force` depends on the caller's hand: a force is public, \
+                     judged the same by everyone who reads the call",
+                    terms.join(", ")
+                ));
+            }
+            out.extend(errors.into_iter().chain(msgs).map(diag));
         }
     }
     out.extend(crate::engine::check_sets(modules));

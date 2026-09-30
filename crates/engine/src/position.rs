@@ -125,6 +125,13 @@ impl Position {
             .map(|i| &self.calls[i])
     }
 
+    /// How many bids `d` has made (not passes, doubles or redoubles).
+    pub fn bids_of(&self, d: Direction) -> i32 {
+        (0..self.calls.len())
+            .filter(|&i| self.caller(i) == d && self.calls[i].is_bid())
+            .count() as i32
+    }
+
     /// Has `d` made a bid (not only passes, doubles or redoubles)?
     pub fn has_bid(&self, d: Direction) -> bool {
         (0..self.calls.len()).any(|i| self.caller(i) == d && self.calls[i].is_bid())

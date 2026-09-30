@@ -147,6 +147,22 @@ or not their module is active; a name may be defined once, may not be a
 term, and may not use itself. The reference (`rbb bid reference`) prints
 rules as written. Engine 0.3.0.
 
+**Forces from the shape of the auction.** `force game [after <auction>]
+[when <condition>]` at the left margin puts the caller's side in a game
+force (`we.forcing = game`) whenever a call is made where the pattern and
+condition hold, whichever rule made or explains the call. The pattern
+matches the auction before the call, as a context's does; `call` is the
+call being made. The condition is public (no terms of the caller's hand).
+A rule whose own meaning forces says so with `sets forcing=game`; `force`
+is for what belongs to the auction (base/game-force.bid):
+
+```
+force game when partner.opened, !they.bid, me.bids = 2, call >= 3C, call <= 3S
+force game after 1x (P) 1y (P) 2N (P) when !call = P, !(wolff, call = 3C)
+```
+
+Engine 0.4.0.
+
 ## 4. Contexts
 
 A **context** says when a group of rules applies. Rules are indented under

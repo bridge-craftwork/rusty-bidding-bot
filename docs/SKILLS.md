@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-58 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 17 proposed, 0 unknown. 45 modules declare a skill; 60 card fields carry one.
+59 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 18 proposed, 0 unknown. 47 modules declare a skill; 61 card fields carry one.
 
 ### The map
 
@@ -68,8 +68,9 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/stayman` (Stayman) | taxonomy | `notrump.stayman.play`, `notrump.stayman.forcing`, `notrump.stayman.garbage`, `notrump.stayman.puppet_1nt`, `notrump.two_nt.puppet` | `stayman`, `two-nt-responses` |
 | `bidding_conventions/strong_2c` (Strong 2♣) | taxonomy | `two_level.two_clubs.meaning` | `strong-openings` |
 | `bidding_conventions/super_accept` (Super-Accepting a Transfer) | proposed | `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton` | `super-accept`, `superaccept-doubleton` |
-| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force` | — |
+| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force` | `game-force` |
 | `bidding_conventions/weak_2s` (Weak Twos) | taxonomy | `two_level.two_diamonds.meaning`, `two_level.two_hearts.meaning`, `two_level.two_spades.meaning` | `preempts`, `weak-two-responses` |
+| `bidding_conventions/wolff_signoff` (Wolff Sign-off) | proposed | `other_conventions.wolff_signoff.play` | `wolff` |
 | `competitive_bidding/advancing_overcalls` (Responding to Overcalls) | lessons only | — | `advances` |
 | `competitive_bidding/balancing` (Balancing) | lessons only | — | `balancing` |
 | `competitive_bidding/cappelletti` (Cappelletti over 1NT) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `cappelletti` |
@@ -108,7 +109,6 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 **Skills with a card field but no module** (the card can say we play it; no rules bid it):
 
 - `bidding_conventions/help_suit_game_try`: `other_conventions.help_suit_game_tries.play`
-- `bidding_conventions/two_over_one`: `major_openings.two_over_one.game_force`
 - `competitive_bidding/lebensohl`: `notrump.lebensohl.over_interference`, `competitive.lebensohl_weak_twos.play`
 
 **Conventions a module declares but no card field carries** (always on, or switched by a field not yet tagged; `bidding_conventions` and `competitive_bidding` only, since the course-level skills have no field):
@@ -135,6 +135,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `bidding_conventions/minor_suit_transfers` (proposed): `notrump.minor_transfers`
 - `bidding_conventions/smolen` (proposed): `notrump.smolen.play`
 - `bidding_conventions/super_accept` (proposed): `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton`
+- `bidding_conventions/wolff_signoff` (proposed): `other_conventions.wolff_signoff.play`
 - `competitive_bidding/cappelletti` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`
 - `competitive_bidding/defense_vs_1nt` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`
 - `competitive_bidding/meckwell` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`

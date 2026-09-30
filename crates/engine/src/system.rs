@@ -43,8 +43,20 @@ pub struct System {
     pub modules: Vec<String>,
     pub params: Vec<HashMap<String, Val>>,
     pub rules: Vec<RuleEntry>,
+    /// The active modules' `force` declarations.
+    pub forces: Vec<ForceEntry>,
     /// Modules not active, and why.
     pub inactive: Vec<(String, String)>,
+}
+
+/// A `force game` declaration of an active module, its condition
+/// expanded (`macros`).
+#[derive(Debug, Clone)]
+pub struct ForceEntry {
+    pub after: Option<Vec<Vec<PatternCall>>>,
+    pub when: Option<Expr>,
+    pub module: usize,
+    pub source: RuleRef,
 }
 
 fn literal_value(l: &Literal) -> Value {
@@ -127,6 +139,18 @@ impl System {
                 params.insert(p.name.clone(), param_value(p));
             }
             sys.params.push(params);
+            for f in &m.forces {
+                sys.forces.push(ForceEntry {
+                    after: f.after.clone(),
+                    when: f.when.as_ref().map(|w| defines.expand(w, &mut Vec::new())),
+                    module: idx,
+                    source: RuleRef {
+                        module: m.name.clone(),
+                        file: m.file.clone(),
+                        line: f.line,
+                    },
+                });
+            }
             for ctx in &m.contexts {
                 sys.flatten(ctx, &mut Vec::new(), &mut Vec::new(), idx, m, &defines);
             }
