@@ -209,3 +209,10 @@ card    21GF-DEFAULT slam.gerber.play=false
 dealer  N
 S K83.QJ4.K872.Q95      | 2C P 2D P 2N P                       | 4NT    | 11 facing 22-23: 33 on his floor, quantitative
 S K83.Q54.K872.J95      | 2C P 2D P 2N P                       | 3NT    | 9: 31, game only
+
+# After a game-forcing 2/1, no fit: 3NT is the minimum (fast arrival),
+# 2NT with 16+ lets opener count slam (2026-09-30).
+card    21GF-DEFAULT
+dealer  N
+S K3.Q84.KJ72.AQJ5      | 1S P 2C P 2H P                       | 2NT    | 16: slow, game forcing
+S K3.Q84.KJ72.KJ95      | 1S P 2C P 2H P                       | 3NT    | 13: fast arrival

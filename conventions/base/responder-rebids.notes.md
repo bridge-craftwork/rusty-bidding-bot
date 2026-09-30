@@ -485,6 +485,16 @@ without a known major fit: over-3nt.bid's calibrated numbers. Random
 deals, tuning 100k +48, confirmation 20k +14; corpus +132. Gerber, where
 played, comes first.
 
+## Fast arrival in notrump after a game-forcing 2/1 (2026-09-30)
+
+In a game force responder's "Game, no fit" 3NT had no top (100,000 random
+deals: 482 boards short of slam, responder the stronger hand in 379). Now
+3NT is 13-15 and 2NT (game forcing) 16+; opener counts slam over the 2NT
+(6NT with 33 points on responder's floor, quantitative 4NT with 31-32,
+3NT with no extras; rebids.bid). Random deals: tuning +6, confirmation
+-19 (flat); corpus +318. Most of what is left are 29-32 HCP slams par
+finds double dummy.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

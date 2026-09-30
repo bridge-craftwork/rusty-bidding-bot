@@ -317,6 +317,19 @@ after 1m (P) 2N (P)
   P   "Declines: 12-13"                    shows hcp<=13
       priority -5
 
+# Responder's game-forcing 2NT after a two-over-one and opener's rebid
+# (16+, no fit: responder-rebids.bid): opener counts slam on it, with
+# over-3nt.bid's numbers for this shape (2026-09-30).
+after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
+  6N  "Slam: 33+ points between us (partner at his minimum)"
+      shows points + partner.points.min >= 33
+      priority 1
+  4N  "Quantitative: 31-32 points between us"
+      shows points + partner.points.min >= 31
+      sets  ask=quant
+      priority 1
+  3N  "Game: no extras"                    shows points + partner.points.min <= 30
+
 # ── After a two-over-one response (forcing one round) ────────────────
 after 1M (P) 2x (P) when x is not M
   2M  "Rebids {M}: 5+, minimum"            shows M>=5, suit_points<=15

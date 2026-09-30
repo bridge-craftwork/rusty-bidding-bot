@@ -207,6 +207,15 @@ after 1y (P) 2x (P) 2z (P) when x is not y
       when  !we.gf
       sets  ask=nt_invite
   3N  "Game, no fit"                       shows points>=13, y<=2 | y is C | y is D
+      when  !we.gf
+  # In a game force (2/1 cards) 3NT is the minimum, fast arrival; with
+  # more, 2NT keeps the auction low for opener to count slam (2026-09-30,
+  # random deals: responder's 3NT with the stronger hand, 482 boards short
+  # of slam in 100,000).
+  3N  "Game, no fit: 13-15 (fast arrival)"  shows points=13..15, y<=2 | y is C | y is D
+      when  we.gf
+  2N  "Game forcing, no fit: 16+"          shows points>=16, y<=2 | y is C | y is D, z<=3
+      when  we.gf
   3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, suit_points=11..12, y<=2 | y is C | y is D
       when  !we.gf
       sets  ask=invite(x)
