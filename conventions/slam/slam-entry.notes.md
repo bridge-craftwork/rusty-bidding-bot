@@ -87,6 +87,52 @@ a strong 2C.
 - Calibrate `slam_interest` (31) and the fit ask on a second, disjoint
   sample (`rpdd_sample.py --offset`), 100,000 deals.
 
+## Calibration of the slam thresholds (2026-09-30)
+
+Rick approved calibrating on two random samples. **Tuning set**: 100,000
+Pavlicek deals (`rpdd_sample.py --count 100000 --offset 1`), bid by BBA
+with 21GF-DEFAULT / 21GF-GIB. **Confirmation set**: the earlier 20,000
+(offset 0, disjoint). The corpus as a third. Matchpoint-scored deals,
+IMPs vs BBA with double-dummy par as the yardstick.
+
+Double dummy, random deals (20k), P(small slam makes) by the side's HCP:
+with an eight-card fit 68% at 30, 80% at 31, 92% at 32, 100% at 33;
+without one, 6NT 55% at 31, 73% at 32, 93% at 33. In total points
+(length counted) about two points higher (8-card fit: 51% at 31, 67% at
+32, 86% at 33): the textbook 33 is right when it is the real total, but
+our rules count it on partner's *floor*.
+
+| variant (vs base) | tuning 100k | corpus | confirmation 20k |
+|---|---:|---:|---:|
+| slam values 33 -> 31 on partner's floor | +687 | +1,408 | -45 |
+| slam values 33 -> 32 | +408 | +1,118 | |
+| slam values 33 -> 30 | +232 | | |
+| slam interest 31 -> 30 | +211 | -14 | +2 |
+| over 3NT one point lower (6NT 33, 4NT 31) | -1,797 | | |
+| responder after opener's new suit one lower | +52 | | |
+| responder's 2/1 slam-interest splits one lower | +15 | | |
+| midpoint of partner's range (values / interest) | +38 / +2 | | |
+
+Where the change bites (tuning set, new slams by the side's real HCP):
+at 31, 218 new slams at 29 HCP or less make 59% double dummy (likely
+below break-even at the table), 75 at 30-31 make 85%; at 32, 74 at 29 or
+less make 65%, 40 at 30-31 make 83%.
+
+**Adopted: slam values 32 on partner's floor** (`slam_values`,
+`fit_slam_values`): both larger sets agree, and it keeps most new slams
+in sound territory; 31 scores more but is carried by double-dummy-lucky
+slams, and the 20k set (noise about +-260) does not support it. Slam
+interest stays 31, over-3NT stays (lower is clearly worse), the rest are
+within noise.
+
+Two control-bid gaps surfaced at 32 (control-bids.test "partner stopped
+in game over my control bid"): after I bypassed a suit and partner
+signed off in game, neither a control bid past game nor the general
+game-force keycard ask may go on. Both now stop.
+
+Final (32 plus the two fixes): tuning +412, corpus +1,121,
+confirmation -13; no new "no rule" or broken-force boards.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point

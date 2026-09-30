@@ -198,7 +198,10 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
 # still go on past game with first-round controls, promising every suit
 # partner has denied; otherwise pass.
 
-when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H | trump is S)
+# Not when I bypassed a suit myself: partner's sign-off says he cannot
+# cover it, and no control of mine past game can (2026-09-30; the case
+# surfaced when slam_values moved to 32).
+when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H | trump is S), !me.denied(C), !me.denied(D), !me.denied(H), !me.denied(S)
   cheapest(C)  "Control bid in ♣ past game: first-round control"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), (trump is H, cheapest_rank(C) < 27) | (trump is S, cheapest_rank(C) < 28)
       when  slam_values, first_round(C), denials_promised_first

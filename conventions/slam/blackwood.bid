@@ -67,7 +67,7 @@ when we.trump is suit, !asked, we.forcing = none | we.forcing = round
       artificial
       priority 1
 
-when we.trump is suit, !asked, we.forcing = game
+when we.trump is suit, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
   4N  "Blackwood: how many aces?"
       when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=aces

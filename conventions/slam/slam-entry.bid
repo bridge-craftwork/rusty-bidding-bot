@@ -16,8 +16,10 @@ module slam-entry "Slam entry: the conditions the slam modules share"
 
 # ── Values ────────────────────────────────────────────────────────────
 
-# Facing a game force: 33 on partner's floor, or 18 of my own.
-define slam_values = we.tp(trump).min >= 33 | tp(trump) >= 18
+# Facing a game force: 32 on partner's floor, or 18 of my own. Partner's
+# floor understates him, so one point under the textbook 33 (calibrated
+# 2026-09-30 on random deals and the corpus: slam-entry.notes.md).
+define slam_values = we.tp(trump).min >= 32 | tp(trump) >= 18
 
 # Facing a limited hand (a raise with a top): 33 on partner's maximum,
 # and a hand of four losers or fewer.
@@ -68,10 +70,10 @@ define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H),
 define shown_fit(x) = shown.x.min + partner.x.min >= 8 | partner.x.min >= 6
 
 # Slam values with x as trump before it is agreed: my support points and
-# partner's shown floor make 33, or, when he has limited his hand to a
+# partner's shown floor make 32 (as `slam_values`), or, when he has limited his hand to a
 # range of seven points or less (a preempt, a weak two), his top does and
 # my hand has four losers or fewer (as `slam_values_limited`).
-define fit_slam_values(x) = tp(x) + partner.points.min >= 33 | (tp(x) + partner.points.max >= 33, losers <= 4, partner.points.max - partner.points.min <= 6)
+define fit_slam_values(x) = tp(x) + partner.points.min >= 32 | (tp(x) + partner.points.max >= 33, losers <= 4, partner.points.max - partner.points.min <= 6)
 
 # Two side suits, beside t, of 2+ cards without the ace or king.
 define bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)
