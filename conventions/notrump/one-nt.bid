@@ -13,15 +13,19 @@ module notrump-base "1NT opening and natural responses"
   param  systems_on = nt_overcalls.direct.systems_on default true
   param  vs_2c   = notrump.transfers.vs_2c default false
   param  style   = general.style
+  param  five_major = notrump.one_nt.five_card_major default sometimes
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
 # HCP short opens 1NT when its extras bring it to the range in total points.
+# A five-card major only as the card allows (`one_nt.five_card_major`):
+# BBA opens 1NT with one only with "1NT opening shape 5 major"; its bare
+# SAYC card (probe 2026-09-30) opens the major.
 when opening
   1N  "{nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
-      shows hcp=nt_min..nt_max, balanced
+      shows hcp=nt_min..nt_max, balanced, five_major is not never | (H<=4, S<=4)
   1N  "{nt_min}-{nt_max} HCP, balanced (1 HCP light with extras)"  announce "{nt_min} to {nt_max}"
-      shows hcp=nt_min-1, points>=nt_min, balanced
+      shows hcp=nt_min-1, points>=nt_min, balanced, five_major is not never | (H<=4, S<=4)
       when one_less
 
 # Responder. Strength bands are total points measured against opener's
