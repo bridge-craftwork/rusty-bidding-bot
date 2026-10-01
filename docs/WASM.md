@@ -1,8 +1,9 @@
 # rusty-bidding-bot in the browser (WASM API)
 
 `crates/wasm` (crate `rbb-wasm`) builds the engine for the browser. The rules
-(`conventions/**/*.bid`), their manifest and card vocabulary
-(`conventions/conventions.toml`, `conventions/card/*.toml`) and the stock
+(`conventions/**/*.bid`), their manifest (`conventions/conventions.toml`),
+the card vocabulary (the standard one from convention-card, via
+`bridge_card::standard`, unless the rules bring their own `card/*.toml`) and the stock
 convention cards are compiled into the `.wasm` file: nothing is fetched or
 read at run time. A caller may also supply a rule set of its own as text
 ([Rule sets supplied at run time](#rule-sets-supplied-at-run-time)). The API
@@ -242,7 +243,7 @@ with `file`, `line` and `col` (`"rules: demo/one-nt.bid:6: unknown term
 ..."`), in the other texts starting with the field (`"fields: ..."`, with
 the `line` of a TOML syntax error). When only some of the texts are given,
 the embedded ones fill in and must fit: an error in one of them names it
-(`"bbsa_map: the embedded conventions/card/bbsa-map.toml (not given): ..."`).
+(`"bbsa_map: the embedded convention-card/spec/formats/bbsa-map.toml (not given): ..."`).
 
 Cards are read in the supplied vocabulary (stock cards too). A compiled
 rule set is identified by a hash of all its texts (`rules_id`); the last

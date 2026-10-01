@@ -66,7 +66,7 @@ development, and may later move to its own repo together with the card editor.
 
 | Path | Crate | Role |
 |---|---|---|
-| `crates/bridge-card` | `bridge-card` | Convention card schema (serde + generated JSON Schema), `.bbsa` importer |
+| (convention-card repo) | `bridge-card` | Convention card schema, the standard vocabulary, `.bbsa` importer: a git dependency at a tag ([The convention card](#the-convention-card)) |
 | `crates/bidspec` | `bidspec` | Rule language: lexer, parser, AST, JSON IR, validation |
 | `conventions/` | — | `.bid` files: base systems and conventions |
 | `crates/engine` | `rbb-engine` | Rule interpreter, auction state, inference |
