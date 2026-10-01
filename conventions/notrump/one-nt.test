@@ -58,3 +58,10 @@ dealer  S
 N .AJ2.AQ72.AQ8743      | 1NT P 3C P 4C P  | 6C  | 17 with the club fit known: slam
 N 72.A4.AQ72.KQ874      | 1NT P 3C P 4C P  | 5C  | 15: game in the fit
 N A.AQ2.AQ752.K532      | 1NT P 3D P 3NT P | 6NT | no fit, 19: slam values anyway
+
+# A five-card major in 1NT only as the card allows (2026-09-30).
+card    Basic-Bridge notrump.one_nt.five_card_major=never
+dealer  S
+S A2.KQJ63.K82.Q93      |                                      | 1H     | never: open the major
+card    Basic-Bridge
+S A2.KQJ63.K82.Q93      |                                      | 1NT    | Basic-Bridge plays "1NT opening shape 5 major"
