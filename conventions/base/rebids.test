@@ -299,3 +299,12 @@ S AK7653.Q5.96.QJ2      | 1S P 1NT P 2S P 3S P     | P      | 12 HCP: declines
 S AQJ932.K53.A95.8      | 1S P 1NT P 2S P 3S P     | 4S     | 14 HCP and a singleton: accepts
 S AKJ4.J974.52.K75      | 1C P 1S P 2S P 3S P      | P      | 12 HCP: declines
 S KQ98.K5.985.AQ42      | 1C P 1S P 2S P 3S P      | 4S     | 14 HCP: accepts
+
+# Opposite a raise that can hold 12 (no limit raise on the card,
+# 2026-09-30) opener invites from 15 support points.
+card    Basic-Bridge major_openings.jump_raise.inv=false
+dealer  S
+S AKJ54.A72.Q97.65      | 1S P 2S P                | 3S     | 15 with the fit: invites a raise of 6-12
+S AQJ54.A72.Q97.65      | 1S P 2S P                | P      | 14: no game opposite 12
+card    Basic-Bridge
+S AKJ54.A72.Q97.65      | 1S P 2S P                | P      | 15 opposite a raise of 6-10: no game

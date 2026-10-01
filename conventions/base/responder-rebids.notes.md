@@ -515,6 +515,17 @@ rebidding 1♥ with four hearts (rebids.notes.md, "Up the line without
 Walsh"), where the measurements are. BBA on the vanilla set over 1NT:
 pass 30, 3NT 15 (13-17 HCP), 2NT 6; over 2♠: pass 27, 4♠ 18, 3♠ 10.
 
+## 1♠-1NT-2m-2♥: six hearts to play (2026-09-30)
+
+A 1NT responder with six or more hearts, a singleton or void spade and
+6-10 HCP had no call over opener's 2♣ or 2♦ (vanilla SAYC random set:
+`J.AT75432.6.QJ53`, `8.JT8762.6.AK986`; BBA bids 2♥, the standard
+"too weak to bid them at once"). 2♥ now, `ask=signoff`. Capped at 10
+HCP so that the 11-12 of a forcing 1NT keep their invitations: uncapped,
+21GF hands with 11-12 that bid 2NT moved to 2♥ (−42 on 60 corpus
+boards). Corpus, cards with the limit raise: +59 on the 33 boards that used
+to pass 2m.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and
@@ -522,7 +533,9 @@ pass 30, 3NT 15 (13-17 HCP), 2NT 6; over 2♠: pass 27, 4♠ 18, 3♠ 10.
   stoppers 2026-09-25), and the tickets named there.
 - **BBA evidence:** corpus auctions only, as quoted in each section; no
   `probes/*.toml` spec yet for this module. The vanilla SAYC random set
-  for 1♣-1♦-1♥-1♠ (2026-09-30).
+  for 1♣-1♦-1♥-1♠ and 1♠-1NT-2m-2♥ (2026-09-30).
+- **Book practice:** 1♠-1NT-2m-2♥ as a weak six-card heart suit is
+  standard practice, not yet cited.
 - **Corpus measurements:** the par and side-IMP figures given with each
   change.
 - **Book practice:** the Standard American responder's rebids (weak,

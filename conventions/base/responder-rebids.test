@@ -222,3 +222,10 @@ card    21GF-DEFAULT
 dealer  N
 S K3.Q84.KJ72.AQJ5      | 1S P 2C P 2H P                       | 2NT    | 16: slow, game forcing
 S K3.Q84.KJ72.KJ95      | 1S P 2C P 2H P                       | 3NT    | 13: fast arrival
+
+# Six hearts too weak to bid them over 1S (2026-09-30, random deals,
+# SAYC-bare; BBA bids 2H).
+card    Basic-Bridge
+dealer  S
+N 8.JT8762.6.AK986      | 1S P 1NT P 2D P                      | 2H     | six hearts, short spades: to play
+N J.AT75432.6.QJ53      | 1S P 1NT P 2C P                      | 2H     | seven hearts and four clubs: hearts all the same

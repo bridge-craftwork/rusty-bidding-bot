@@ -344,6 +344,77 @@ but overrode impossible-2s.bid's tested choices, so it counts HCP.
 
 Not measured yet: BBA's plain 13 HCP threshold as the default.
 
+## A card without the limit raise: 2M takes 6-12 (2026-09-30)
+
+On the vanilla SAYC random set (95,558 deals BBA bid with a bare SAYC
+card) responder had no call after 1♠ on 355 boards and after 1♥ on 149.
+The card's `.bbsa` (SAYC-bare: `System type = 1`, every toggle off)
+says "1M-3M inviting = 0", "1M-3M blocking = 0", "Mixed raise = 0" and
+"Bergen = 0", and the import reads that literally: no jump raise of any
+kind, so the limit raise is off. BBA itself plays Bergen raises on that
+card all the same (`.rbb-cache/random/README.md`). With the limit raise
+off nothing else took 10-12 support points with a fit
+(`983.AJT2.KT742.4` over 1♠: 2♠ stopped at 10, no 3♠, no new suit).
+The same hole was open on every card without the limit raise: the
+corpus cards Precision, Precision-14-16, 21GF-GIB-Bergen and
+21GF-WJS-MSS (weak or mixed jump raises and Bergen, none of which the
+rules play yet).
+
+What BBA does on that card (its own auctions, `ref.py` on the vanilla
+set): it never bids 1♠-3♠; with three trumps it raises to 2♠ up to
+11-12 HCP (2♠ by HCP: 5:50 6:377 7:336 8:400 9:412 10:371 11:254 12:42)
+and bids a new suit with 11-12 and shortness. Its four-trump limit raises
+went to Bergen 3♦ and were filtered out of the set, so it says nothing
+about four trumps.
+
+The rules, when the card plays no limit raise (`!limit_raise`):
+
+- **2M is 6-12 support points** (the default's 2M rule, widened in the
+  same rule so partner reads one range; BBA style: 6-12 HCP). Three
+  trumps with 11-12 and a four-card side suit still bid the new suit
+  first (then 4M, responder-rebids.bid), as with the limit raise: on
+  the vanilla set those boards scored +357 against BBA's 2♠ (2♣/2♦ then
+  game, 326 boards). Four trumps and 10-12 raise to 2M too: no evidence
+  either way (BBA's boards were filtered), and the opener's game try
+  below catches the 12s.
+- **Opener invites from 15** (rebids.bid): opposite a raise whose
+  `partner.tp(M).max` is 11 or more, 3M is 15-18 (17-18 otherwise) and
+  the pass up to 14. Measured on the vanilla set against the plain
+  widened raise (−41,490; before the rebase onto 1199c40): invite
+  15-18 −41,131; 16-18 with responder
+  accepting from 10 −41,375; 15-18 accepting from 10 −41,357; 14-18
+  −41,224. Responder keeps accepting from 9.
+- Over 1♥ with four spades, a heart fit and 11-12 support points
+  (`KJ43.K82.Q93.Q54`) the widened 2♥ now outranks 1♠ (by
+  descriptiveness), where the 1♠ rule's `!limit_raise` clause had let
+  1♠ in: +296 on 98 corpus boards on the no-limit-raise cards. Over 1♠
+  the two-level new suit still comes first (`K92.A82.KQ93.854` 2♦).
+
+**Rick, 2026-09-30:** vanilla SAYC plays the limit raise (the
+comparison adds `--set major_openings.jump_raise.inv=true`); the rules
+keep this fallback, because the engine must not leave a hole on any card
+without the limit raise.
+
+Measured (IMPs vs BBA, double-dummy par as the yardstick; on main
+1199c40, with the 1♠-1NT-2m-2♥ rule of responder-rebids.bid, which is
+all that moves on cards with the limit raise):
+
+| set | before | after | change | no-rule boards |
+|---|---|---|---|---|
+| vanilla SAYC with the limit raise (Rick's card) | −36,747 | −36,678 | +69 | 371 → 362 |
+| vanilla SAYC as imported (no limit raise) | −37,952 | −36,806 | **+1,146** | 876 → 362 |
+| corpus (342 scenarios) | −92,854 | −91,712 | **+1,142** | 1,694 → 1,442 |
+| 21GF random, 100,000 boards | −43,589 | −43,518 | +71 | 835 → 827 |
+
+Without the limit raise the fallback comes within 128 IMPs of playing
+it (−36,806 against −36,678). Calls agreeing with BBA on the imported
+card 82.5% → 82.4%, mostly the invitation from 15, where BBA passes. On the corpus the widened raise moved only
+the four cards above; 21GF moved only by the 2♥ rule.
+
+Not built: weak and mixed jump raises (`major_openings.jump_raise.weak`,
+`.mixed`) and Bergen. A card that plays one of them without the limit
+raise gets this widened 2M for the invitational hands.
+
 ## Sources
 
 - **The system:** Standard American responses as BBA's Basic-Bridge card
@@ -367,3 +438,8 @@ Not measured yet: BBA's plain 13 HCP threshold as the default.
 - **Where we differ:** "Accepted differences from BBA"; the invitational
   jump shift, where par beat BBA's 10-12 HCP range and ours stays
   (2026-09-25).
+- **No limit raise on the card (2026-09-30):** BBA's own auctions on the
+  vanilla SAYC random set (`.rbb-cache/random/README.md`) for 2M up to
+  12; the thresholds measured on that set, the corpus and the 21GF
+  random set (the section above). No probe: BBA's bare card answers the
+  four-trump hands with Bergen, so it cannot show a plain-SAYC choice.

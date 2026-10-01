@@ -738,6 +738,16 @@ about 1,570 calls) and a few 12-14 hands with a singleton, rebidding
 as the 12-14 balanced rebid. After 1♣-1♦ the same 102 calls are now read
 by the no-major 1NT on a non-Walsh card instead of the Walsh one.
 
+## Opposite a raise to 12 (2026-09-30)
+
+On a card without the limit raise 1M-2M is 6-12 support points
+(responses.notes.md, "A card without the limit raise"). Opener reads it
+from `partner.tp(M).max` and invites from 15 instead of 17: 3M 15-18,
+pass up to 14 (majors only; the minors' raise is unchanged). Of the
+invitation ranges tried on the vanilla set, 15-18 with responder still
+accepting from 9 scored best (+359 over no change); measured with the
+widened raise there.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -746,7 +756,9 @@ by the no-major 1NT on a non-Walsh card instead of the Walsh one.
   the major invitation (2026-09-30); for 1♣-1♦ without Walsh the vanilla
   set and `probes/rebid-1C-1D-21GF.toml` / `rebid-1C-1D-walsh.toml`
   (2026-09-30), which show BBA's `walsh.play` switch deciding opener's
-  rebid, not responder's.
+  rebid, not responder's. The invitation opposite a raise to 12 has no
+  BBA evidence (BBA does not widen its raise): it is measured on the
+  vanilla set (2026-09-30).
 - **Book practice:** 1♣-1♦ then a four-card major up the line is
   standard SAYC practice, not yet cited to a book; the Walsh 1NT that may hide a major
   is Rick's modern default (2026-09-24).
