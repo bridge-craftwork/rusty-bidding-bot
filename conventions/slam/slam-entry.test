@@ -7,7 +7,8 @@ dealer  S
 N AK3.AK7.AKQ4.AT5      | 3S P                                 | 4NT    | 26 HCP facing a preempt's seven spades: ask, agreeing spades
 dealer  N
 N AK4.K5.Q32.AQJ85      | 1C P 2S P                            | 3S     | 17 facing a strong jump shift: agree spades slowly, slam interest
-N Q74.K5.Q32.AQJ85      | 1C P 2S P                            | 4S     | 12: fast arrival, the minimum
+N Q74.K5.Q32.AJ985      | 1C P 2S P                            | 4S     | 12: fast arrival, the minimum
+N Q74.K5.Q32.AQJ85      | 1C P 2S P                            | 3S     | 14 facing 15+ and five spades (his length counts): slam interest
 N KQ3.AK9863.Q5.A7      | 1H P 2S P                            | 3S     | 20 facing a jump shift: no jump to 4H opposite a game force
 N KQ3.AK9863.Q5.A7      | 1H P 1S P                            | 4H     | a one-level response: the jump to game stands
 
