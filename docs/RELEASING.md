@@ -71,8 +71,8 @@ commits: CI builds with `--locked` against the git pins.
   build, `bid check`, `cargo test --workspace --release` (the workbench's
   tests only when it changes) and the WASM package (artifact
   `rbb-wasm-pkg`); the web site job only when `web/` or `crates/wasm/`
-  changes. Pushes to main run all of it
-  and leave `rbb` (artifact `rbb-linux`) for the rules-only runs. A
+  changes. Pushes to main run the engine checks (the
+  workbench's tests too only when it changed) and leave `rbb` (artifact `rbb-linux`) for the rules-only runs. A
   newer push to the same pull request cancels the older run.
 - `.github/workflows/release.yml`: on a tag `v*` (or run by hand), first
   `bid check` and `cargo test --workspace --release` on Linux, macOS and

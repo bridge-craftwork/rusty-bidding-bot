@@ -118,11 +118,12 @@ jobs:
       # Optimised: the tests bid thousands of positions, which a debug
       # build runs several times slower than it compiles.
       # The workbench (a GUI: egui and its graphics stack) is most of the
-      # compile time; its tests run when it changes, and on main.
+      # compile time (273 s optimised, cold); its tests run only when it
+      # changes, on pull requests and on main alike.
       - name: Tests
         run: cargo test --locked --workspace --release --exclude rbb-workbench
       - name: Workbench tests
-        if: github.event_name == 'push' || needs.changes.outputs.workbench == 'true'
+        if: needs.changes.outputs.workbench == 'true'
         run: cargo test --locked --release -p rbb-workbench
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push'
