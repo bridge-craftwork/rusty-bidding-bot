@@ -279,6 +279,51 @@ arguments in each header: `probes/slam-1N-3S-4S-resp.toml`,
 slam-1S-2S-opener:S:7 slam-1D-1H-4H-resp:H:16 slam-2C-2H-3H-resp:H:21
 slam-1H-2D-3H-resp:H:14 slam-1S-2D-3C-3S-opener:S:13`.
 
+## Phase B: slam without an ask (2026-09-30)
+
+**Direct slam in an agreed suit** (`direct_slam_values`, slam-entry.bid):
+on a card with no Blackwood and no RKCB (`no_ask`), with a suit agreed
+and the opponents silent, bid six when our support points on partner's
+floor plus my controls make 35, with 29 or more in support points. It
+ranks below every descriptive call and above base.bid's "Game reached"
+pass. Cards that ask are untouched: the corpus (-91,712) and the 21GF
+random set (-43,518) are identical before and after.
+
+Calibration on the vanilla set (IMPs vs BBA, double-dummy par; base
+-36,678; even/odd boards as a check):
+
+| variant | IMPs | even / odd |
+|---|---:|---:|
+| tp on floor >= 31 | +1,413 | |
+| tp >= 32 | +1,494 | +794 / +700 |
+| tp >= 33 | +1,203 | |
+| tp >= 32 and no two bare suits | +1,459 | |
+| tp >= 31, tp + controls >= 38 | +1,541 | |
+| tp >= 30, tp + controls >= 37 | +1,962 | |
+| tp >= 30, + controls >= 36 | +2,124 | |
+| tp >= 30, + controls >= 35 | +2,101 | |
+| tp >= 29, + controls >= 36 | +2,240 | |
+| **tp >= 29, + controls >= 35** | **+2,325** | +1,454 / +871 |
+| tp >= 28, + controls >= 35 | +2,340 | |
+| tp >= 29, + controls >= 34 | +1,652 | |
+
+Controls carry more in our rule than in BBA's choice (Phase A), because
+the count is on partner's *floor*: a hand with aces and kings is the one
+that can afford to count partner at his minimum. The bare-suit guard
+cost a little.
+
+| class (vanilla) | before | after |
+|---|---:|---:|
+| all boards | -36,678 (-0.38/bd) | -34,353 (-0.36/bd) |
+| uncontested, slam par (4,7xx boards) | -15,456 (-3.26/bd) | -11,398 (-2.42/bd) |
+| competitive, slam par (2,6xx) | -6,367 (-2.41/bd) | -5,890 (-2.21/bd) |
+| our slams (make double dummy) | 593 (81%) | 1,396 (75%) |
+
+BBA bids 4,228 slams (71%). The biggest gains: `1S 2C 2D 3S -> 6S` (36
+boards, +204), `2C 2N 3H 4H -> 6H` (+154), `1D 1S 4S -> 6S` (+137),
+`1H 2D 2H 3H -> 6H` (+124), `1D 1H 4H -> 6H` (+120); the worst,
+`1S 2H 2S 3S -> 6S` (30, -15). No new problems, no new misread calls.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point

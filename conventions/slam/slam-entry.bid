@@ -13,6 +13,9 @@
 module slam-entry "Slam entry: the conditions the slam modules share"
   skill  partnership_bidding/slam_bidding
   param  style = slam.cue_bids.style default first_or_second_round
+  param  bw    = slam.blackwood.standard default false
+  param  k1430 = slam.blackwood.rkcb_1430 default false
+  param  k0314 = slam.blackwood.rkcb_0314 default false
 
 # ── Values ────────────────────────────────────────────────────────────
 
@@ -102,3 +105,32 @@ when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
       shows we.fit(H).min >= 8, slam_interest(H)
       when  partner.H.min >= 3, under_game(H)   # public: a raise of partner's suit, never read into a natural bid
       sets  trump=H
+
+# ── Slam without an ask (Phase B, 2026-09-30) ─────────────────────────
+#
+# With no keycard or ace ask on the card, nothing past game read the
+# count: on the vanilla SAYC random set the slams BBA bid and we missed
+# stopped at base.bid's "Game reached" pass (2,917 boards, -10,007
+# IMPs). BBA jumps to slam on support points: my tp plus partner's
+# floor, 50% at 31-32 in six made-hand positions (slam-entry.notes.md,
+# Phase A), with aces and kings counting a little extra. So, with a suit
+# agreed and the values, bid it. Cards that ask (Blackwood, RKCB) keep
+# asking: the rule is off for them.
+#
+# The count is our support points on partner's floor plus my controls
+# (A 2, K 1), 35, with at least 29 in support points. Calibrated on the
+# vanilla set (notes): 32 in support points alone +1,494 IMPs, 33
+# +1,203, 31 +1,413; with controls 37 (tp 30+) +1,962, 36 +2,124, **35
+# +2,325**, 34 +1,652; both halves of the set agree. Below BBA's own
+# 31-32 because partner's floor understates him (as for slam_values).
+
+# No ace or keycard ask on the card.
+define no_ask = !bw, !k1430, !k0314
+
+# Slam values for a direct slam in an agreed suit.
+define direct_slam_values = we.tp(trump).min >= 29, we.tp(trump).min + controls >= 35
+
+when we.trump is suit, !they.bid, !asked, no_ask
+  6{trump}  "Slam: support points on partner's floor plus my controls make 35"
+      shows direct_slam_values
+      priority -10     # below every descriptive call; above base.bid's "Game reached" pass
