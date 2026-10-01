@@ -35,6 +35,13 @@ pub struct ParTally {
     /// Sum over boards of (reference's IMP distance from par) minus (ours).
     /// Positive: our contracts were closer to par.
     pub imps_vs_reference: i64,
+    /// Sum over boards of the reference table's errors minus ours
+    /// (`par::table_errors`: an overbid taken as doubled, each side charged
+    /// with its own errors). Positive: we made fewer. Split into contract
+    /// and doubling errors.
+    pub errors_vs_reference: i64,
+    pub contract_errors_vs_reference: i64,
+    pub doubling_errors_vs_reference: i64,
 }
 
 #[derive(Debug, Clone, Default, Serialize)]
@@ -124,6 +131,12 @@ impl Stats {
                 std::cmp::Ordering::Equal => self.par.equal += 1,
             }
             self.par.imps_vs_reference += (reference - ours) as i64;
+            let (r, o) = (&p.reference_errors, &p.ours_errors);
+            self.par.errors_vs_reference += (r.total() - o.total()) as i64;
+            self.par.contract_errors_vs_reference +=
+                (r.contract_total() - o.contract_total()) as i64;
+            self.par.doubling_errors_vs_reference +=
+                (r.doubling_total() - o.doubling_total()) as i64;
         }
     }
 

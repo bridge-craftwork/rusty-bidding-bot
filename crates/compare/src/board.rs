@@ -111,6 +111,10 @@ pub struct ParComparison {
     pub par_contract: String,
     pub reference_ns: i32,
     pub ours_ns: i32,
+    /// Each table's errors by side, with an overbid taken as doubled
+    /// (`par::table_errors`).
+    pub reference_errors: crate::par::TableErrors,
+    pub ours_errors: crate::par::TableErrors,
 }
 
 /// Everything about one board, for statistics and for the A/B view.
@@ -458,10 +462,13 @@ fn par_of(
         a.final_contract()
     };
     let (par_ns, par_contract) = crate::par::par_ns(&dd, result.vul);
+    let (reference, ours) = (contract(&result.reference), contract(&result.ours));
     ParComparison {
         par_ns,
         par_contract,
-        reference_ns: crate::par::score_ns(contract(&result.reference).as_ref(), &dd, result.vul),
-        ours_ns: crate::par::score_ns(contract(&result.ours).as_ref(), &dd, result.vul),
+        reference_ns: crate::par::score_ns(reference.as_ref(), &dd, result.vul),
+        ours_ns: crate::par::score_ns(ours.as_ref(), &dd, result.vul),
+        reference_errors: crate::par::table_errors(reference.as_ref(), &dd, result.vul, par_ns),
+        ours_errors: crate::par::table_errors(ours.as_ref(), &dd, result.vul, par_ns),
     }
 }
