@@ -26,3 +26,8 @@ S KQT5.84.T7.AJ852      | 1D 1S 2C 2S P P      | X   | four good spades and 20 k
 # Not their artificial bids: Stayman shows no clubs.
 dealer  N
 W AKQ.83.9762.KQJ9      | 1NT P 2C            | !X  | Stayman is not a contract
+# Not over partner's 1NT: 22 between us, but they came in with shape
+# (Random_Pavlicek_21GF 8379).
+dealer  N
+vul     None
+S J74.J96.8432.A62      | 1NT P P 2H P P      | P   | partner's notrump: no penalty double

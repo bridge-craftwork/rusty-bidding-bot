@@ -33,7 +33,12 @@ define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !m
 # for takeout first (the reopening doubles over a preempt read it so).
 define partner_shown = partner.hcp.min>=4
 
-define pen_spot(x) = natural_theirs(x), settled(x), partner_shown
+# Not over partner's notrump opening (one bid, a range of four points or
+# less): they came in with shape against a balanced hand, and the double
+# lost (21GF random set, 2026-10-01).
+define partner_nt = partner.opened, partner.bids=1, partner.hcp.min>=12, partner.hcp.max - partner.hcp.min <= 3
+
+define pen_spot(x) = natural_theirs(x), settled(x), partner_shown, !partner_nt
 
 when they.bid, direct | passed_round, !asked, they.level>=2, !responder_first
   X   "Penalty: they are too high in spades"

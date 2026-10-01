@@ -28,6 +28,8 @@ Only where it is a contract:
 - partner has shown values (`partner.hcp.min >= 4`): with partner
   silent, a strong hand with their suit doubles for takeout first (the
   reopening doubles over a preempt read the double so);
+- not over partner's notrump opening (one bid, a range of four points
+  or less): they came in with shape against a balanced hand;
 - not responder's first call over their overcall (the double is
   negative there).
 
@@ -92,19 +94,41 @@ Vanilla SAYC random (95,558 deals, both halves):
 | **good four at 20, 3 at 21, any at 22** | **+191** | **+1,434** | 409 | +680 |
 | the same at priority -5 | +104 | +1,495 | 472 | +673 |
 | notrump at 17 instead of 21 | −721 | +2,060 | 694 | |
-| **+ partner has shown values (committed)** | **+191** | **+1,322** | 375 | +638 |
+| + partner has shown values | +191 | +1,322 | 375 | +638 |
+| **+ not over partner's notrump opening (committed)** | **+196** | **+1,315** | 348 | +622 |
 
-Committed: halves even +78 / +700, odd +113 / +622. 375 doubles: 315
-went down (117 two down, 67 three), 60 made; the doubled side ran on
-20 boards. par_blame, main → committed: "W let them play (no double)"
-6,614 / 41,325 → 6,360 / 39,019; "W doubled, par was to bid on" 185 /
-1,174 → 369 / 2,536 (BBA 1,009 / 6,335). Most of the new guard boards
-were "let them play" before: we hold the balance, they are in a
-partscore or a sacrifice, par is our game or slam, and the double
-collects part of it instead of nothing.
+The notrump exclusion was found on the 21GF set (below: 69 boards after
+our 1NT, −285 par, −42 side) and confirmed on vanilla and the corpus.
+With the partner-shown condition, 375 vanilla doubles: 315 went down
+(117 two down, 67 three), 60 made; the doubled side ran on 20 boards.
 
-Corpus and 21GF random: see the commit message of the measuring commit
-(and the table below once filled in).
+The committed rules on all three sets (against main; par vs BBA and
+side IMPs, each with its even / odd halves; "below par" and the split
+from `penalty_x.py`):
+
+| set | par vs BBA | side IMPs | doubles | par: above / at-or-below | below par |
+|---|---|---|---|---|---|
+| vanilla SAYC random | +196 (+83 / +113) | +1,315 (+687 / +628) | 348 | −101 / +319 | +622 |
+| 21GF random (100,000) | +152 (+26 / +126) | +1,929 (+973 / +956) | 493 | −239 / +413 | +885 |
+| full corpus (161,477) | +157 (+105 / +52) | +4,256 (+1,923 / +2,333) | 900 | −600 / +831 | +1,883 |
+
+par_blame, main → committed (IMPs from par; BBA in brackets):
+
+| set | W let them play (no double) | W doubled, par was to bid on |
+|---|---|---|
+| vanilla | 6,614 / 41,325 → 6,378 / 39,144 (4,373 / 23,481) | 185 / 1,174 → 355 / 2,457 (1,011 / 6,341) |
+| 21GF | 7,439 / 49,343 → 7,120 / 46,522 (4,732 / 25,643) | 222 / 1,423 → 443 / 3,003 (1,082 / 6,834) |
+| corpus | 9,139 / 65,220 → 8,530 / 59,678 (5,633 / 32,825) | 509 / 3,480 → 924 / 6,640 (2,147 / 14,911) |
+
+The guard roughly doubles but stays under half of BBA's. Most of the new
+guard boards were "let them play" before: we hold the balance, they are
+in a partscore or a sacrifice, par is our game or slam, and the double
+collects part of it instead of nothing (the "let them play" drop is
+larger than the guard's rise on every set).
+
+"Calls read as a higher rule": corpus 20,029 → 20,078, 21GF 14,719 →
+14,729. Most are two-suited-overcalls.bid's own penalty double (-19)
+read as this one (-6), the same meaning.
 
 ## For Rick
 
@@ -113,8 +137,10 @@ Corpus and 21GF random: see the commit message of the measuring commit
    pass already beats par and the double "moves away" from it. Side IMPs
    play our engine on both sides, and the doubled side rarely runs.
    `penalty_x.py`'s "below par" counts only the doubler's shortfall.
-   Where all three agree (vanilla) the rule is clearly right; on the
-   corpus and 21GF they split exactly on the "doubler above par" boards.
+   With the committed rules all three agree on every set; on the way,
+   variants split exactly on the "doubler above par" boards (par loses
+   there by construction). Should penalty-double work be judged by side
+   IMPs plus "below par", with par distance only as a guard?
 2. **Trump stacks at lower strength.** Five trumps or a good four with
    8-16 known between us gain double dummy (+2,459 side) but lose par
    (−2,416), much of it the artefact above; left out.
