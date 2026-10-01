@@ -21,6 +21,10 @@ dealer  N
 S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | 6H     | 14 facing a jump to game, three controls in aces: slam
 S 98.QJ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | 9: game is enough
 S K8.AQ75.A93.Q982      | 1C P 1H P 4H P                       | 6H     | 14 with five controls facing the jump to game
+# Declarer points for the long-trump hand, support points for the other;
+# 4-4, both support points (Rick, 2026-10-01).
+S 5.AQ75.K932.Q982      | 1D P 1H P 4H P                       | 6H     | 4-4: my singleton counts (14 support points + 19 + 3 controls)
+S 5.AQ752.K93.Q982      | 1D P 1H P 4H P                       | P      | five hearts facing four: the long hand counts length, not the singleton
 
 # The same hand on a card that asks: the direct slam is off (no ask either:
 # it needs 33 on partner's maximum and four losers).
