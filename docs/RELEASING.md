@@ -55,11 +55,38 @@ cargo build --release -p rbb-cli        # target/release/rbb
 crates/wasm/build.sh                    # crates/wasm/pkg/
 ```
 
-The git dependencies (bridge-types, bridge-encodings, bridge-solver) are
-public and pinned in the committed `Cargo.lock`. If you use the local-dev
-`[patch]` pattern from bridge-rulebot (a gitignored `.cargo/config.toml`
-pointing them at sibling checkouts), keep its `Cargo.lock` changes out of
-commits: CI builds with `--locked` against the git pins.
+The git dependencies (bridge-types, bridge-encodings, bridge-solver, and
+bridge-card from convention-card) are public and pinned in the committed
+`Cargo.lock`; CI builds with `--locked` against those pins.
+
+### Building against local checkouts
+
+To work on a sibling crate and this repo together (say a convention-card
+change), point cargo at the checkout with a gitignored
+`.cargo/config.toml`:
+
+```toml
+[patch."https://github.com/bridge-craftwork/convention-card"]
+bridge-card = { path = "../convention-card/crates/bridge-card" }
+```
+
+and then build with **`./dev-build.sh`, not bare cargo** (ported from
+bridge-rulebot): with a patch in place, bare cargo either rewrites the
+committed `Cargo.lock` with local-path entries (same version as the pin,
+as bridge-card 0.1.0 is) or silently builds the pinned revision instead
+(different version). The script keeps a separate local lock
+(`.cargo/dev.lock`), swaps it in around the cargo call, checks that each
+patched crate resolved to its checkout, and leaves `Cargo.lock` alone:
+
+```sh
+./dev-build.sh build --release -p rbb-cli
+./dev-build.sh test --workspace
+./dev-build.sh --ci test --workspace    # CI parity: patches off, the git pins
+```
+
+Without a patch config it is plain cargo. When the sibling change is
+released (a tag there), move the pin here in `Cargo.toml` and commit the
+re-resolved `Cargo.lock`.
 
 ## Releases (GitHub Actions)
 

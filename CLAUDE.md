@@ -27,6 +27,13 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
 
 ## Commands
 
+- **Local sibling checkouts:** when `.cargo/config.toml` carries `[patch]`
+  overrides (bridge-card from `../convention-card`, bridge-types, ...),
+  build and test with `./dev-build.sh <cargo args>`, never bare cargo,
+  which would rewrite `Cargo.lock` or ignore the patch (docs/RELEASING.md,
+  "Building against local checkouts"). Without such a config bare cargo is
+  fine; that is the default.
+
 - `cargo test --workspace`
 - `cargo run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
   passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
