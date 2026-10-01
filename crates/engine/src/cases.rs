@@ -327,68 +327,110 @@ fn load_card_file(
 pub fn run(files: &[PathBuf], rules: &Path, cards_dir: &Path) -> Result<Vec<Outcome>, Vec<String>> {
     let rules = crate::load_rules(rules)
         .map_err(|d| d.iter().map(|d| d.to_string()).collect::<Vec<_>>())?;
-    let mut engines: HashMap<(String, PathBuf), Engine> = HashMap::new();
+    // The files are independent: run them on all cores, each thread with
+    // its own engines, and put the results back in file order.
+    let threads = std::thread::available_parallelism()
+        .map_or(1, |n| n.get())
+        .clamp(1, files.len().max(1));
+    let mut per_file: Vec<(Vec<Outcome>, Vec<String>)> = Vec::new();
+    std::thread::scope(|scope| {
+        let handles: Vec<_> = (0..threads)
+            .map(|t| {
+                let rules = &rules;
+                scope.spawn(move || {
+                    let mut engines: HashMap<(String, PathBuf), Engine> = HashMap::new();
+                    files
+                        .iter()
+                        .enumerate()
+                        .filter(|(i, _)| i % threads == t)
+                        .map(|(i, f)| (i, run_file(f, rules, cards_dir, &mut engines)))
+                        .collect::<Vec<_>>()
+                })
+            })
+            .collect();
+        let mut all: Vec<(usize, (Vec<Outcome>, Vec<String>))> = handles
+            .into_iter()
+            .flat_map(|h| h.join().expect("a .test thread panicked"))
+            .collect();
+        all.sort_by_key(|(i, _)| *i);
+        per_file = all.into_iter().map(|(_, r)| r).collect();
+    });
     let mut outcomes = Vec::new();
     let mut errors = Vec::new();
-    for file in files {
-        let text = match std::fs::read_to_string(file) {
-            Ok(t) => t,
-            Err(e) => {
-                errors.push(format!("{}: {e}", file.display()));
-                continue;
-            }
-        };
-        let cases = match parse(&text, &file.display().to_string()) {
-            Ok(c) => c,
-            Err(e) => {
-                errors.extend(e);
-                continue;
-            }
-        };
-        let dir = file.parent().unwrap_or(Path::new(".")).to_path_buf();
-        for case in cases {
-            let key = (case.card.clone(), dir.clone());
-            if !engines.contains_key(&key) {
-                match load_card(&rules.vocab, &case.card, &dir, cards_dir) {
-                    Ok(card) => {
-                        engines.insert(key.clone(), Engine::new(&card, &card, &rules));
-                    }
-                    Err(e) => {
-                        errors.push(format!("{}:{}: {e}", case.file, case.line));
-                        continue;
-                    }
-                }
-            }
-            let engine = &engines[&key];
-            let hand = Hand::from_pbn(&case.hand).expect("checked when parsed");
-            let d = engine.bid(&hand, case.dealer, case.vul, case.scoring, &case.auction);
-            let trace = d
-                .candidates
-                .iter()
-                .map(|c| {
-                    format!(
-                        "    {:5} {:5.3} {}",
-                        c.call.to_pbn(),
-                        c.descriptiveness,
-                        c.outcome
-                    )
-                })
-                .collect::<Vec<_>>()
-                .join("\n");
-            outcomes.push(Outcome {
-                passed: case.expect.accepts(&d.call),
-                got: d.call,
-                explanation: d.explanation,
-                trace,
-                case,
-            });
-        }
+    for (o, e) in per_file {
+        outcomes.extend(o);
+        errors.extend(e);
     }
     if errors.is_empty() {
         Ok(outcomes)
     } else {
         Err(errors)
     }
+}
+
+/// One `.test` file's cases, with engines shared across the files a thread
+/// runs (one per card and directory).
+fn run_file(
+    file: &Path,
+    rules: &crate::RuleSet,
+    cards_dir: &Path,
+    engines: &mut HashMap<(String, PathBuf), Engine>,
+) -> (Vec<Outcome>, Vec<String>) {
+    let mut outcomes = Vec::new();
+    let mut errors = Vec::new();
+    let text = match std::fs::read_to_string(file) {
+        Ok(t) => t,
+        Err(e) => {
+            errors.push(format!("{}: {e}", file.display()));
+            return (outcomes, errors);
+        }
+    };
+    let cases = match parse(&text, &file.display().to_string()) {
+        Ok(c) => c,
+        Err(e) => {
+            errors.extend(e);
+            return (outcomes, errors);
+        }
+    };
+    let dir = file.parent().unwrap_or(Path::new(".")).to_path_buf();
+    for case in cases {
+        let key = (case.card.clone(), dir.clone());
+        if !engines.contains_key(&key) {
+            match load_card(&rules.vocab, &case.card, &dir, cards_dir) {
+                Ok(card) => {
+                    engines.insert(key.clone(), Engine::new(&card, &card, rules));
+                }
+                Err(e) => {
+                    errors.push(format!("{}:{}: {e}", case.file, case.line));
+                    continue;
+                }
+            }
+        }
+        let engine = &engines[&key];
+        let hand = Hand::from_pbn(&case.hand).expect("checked when parsed");
+        let d = engine.bid(&hand, case.dealer, case.vul, case.scoring, &case.auction);
+        let trace = d
+            .candidates
+            .iter()
+            .map(|c| {
+                format!(
+                    "    {:5} {:5.3} {}",
+                    c.call.to_pbn(),
+                    c.descriptiveness,
+                    c.outcome
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        outcomes.push(Outcome {
+            passed: case.expect.accepts(&d.call),
+            got: d.call,
+            explanation: d.explanation,
+            trace,
+            case,
+        });
+    }
+    (outcomes, errors)
 }
 
 #[cfg(test)]
