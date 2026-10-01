@@ -8,6 +8,7 @@ use serde::Serialize;
 
 use crate::eval::Val;
 use crate::knowledge::Range;
+use crate::macros::{qualified, Defines};
 
 /// Where a rule came from.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
@@ -29,6 +30,11 @@ pub struct RuleEntry {
     pub source: RuleRef,
     /// Position in load order, the last tie-breaker.
     pub order: usize,
+    /// The terms of its `shows` that read the board's conditions
+    /// (vulnerability, scoring, seat), which the calls alone do not fix.
+    pub board_terms: Vec<Expr>,
+    /// Its `shows` counts a condition in arithmetic (`+ doubler_four(x)`).
+    pub counts_conditions: bool,
 }
 
 /// The active rules for one partnership.
@@ -37,8 +43,20 @@ pub struct System {
     pub modules: Vec<String>,
     pub params: Vec<HashMap<String, Val>>,
     pub rules: Vec<RuleEntry>,
+    /// The active modules' `force` declarations.
+    pub forces: Vec<ForceEntry>,
     /// Modules not active, and why.
     pub inactive: Vec<(String, String)>,
+}
+
+/// A `force game` declaration of an active module, its condition
+/// expanded (`macros`).
+#[derive(Debug, Clone)]
+pub struct ForceEntry {
+    pub after: Option<Vec<Vec<PatternCall>>>,
+    pub when: Option<Expr>,
+    pub module: usize,
+    pub source: RuleRef,
 }
 
 fn literal_value(l: &Literal) -> Value {
@@ -94,22 +112,47 @@ impl System {
                 break;
             }
         }
+        let param_value = |p: &bidspec::ast::Param| {
+            let v = card
+                .effective(&p.path)
+                .map(to_val)
+                .or_else(|| p.default.as_ref().map(|d| to_val(&literal_value(d))));
+            // A param the card leaves unset, with no default, is Nothing:
+            // `style is bba` is then simply false.
+            v.unwrap_or(Val::Nothing)
+        };
+        // Definitions are inlined into the rules that use them, reading
+        // their own module's parameters under qualified names, active or
+        // not (see `macros`).
+        let defines = Defines::new(modules);
+        let mut defined: HashMap<String, Val> = HashMap::new();
+        for m in modules.iter().filter(|m| !m.defines.is_empty()) {
+            for p in &m.params {
+                defined.insert(qualified(&m.name, &p.name), param_value(p));
+            }
+        }
         for m in modules.iter().filter(|m| active.contains(m.name.as_str())) {
             let idx = sys.modules.len();
             sys.modules.push(m.name.clone());
-            let mut params = HashMap::new();
+            let mut params = defined.clone();
             for p in &m.params {
-                let v = card
-                    .effective(&p.path)
-                    .map(to_val)
-                    .or_else(|| p.default.as_ref().map(|d| to_val(&literal_value(d))));
-                // A param the card leaves unset, with no default, is Nothing:
-                // `style is bba` is then simply false.
-                params.insert(p.name.clone(), v.unwrap_or(Val::Nothing));
+                params.insert(p.name.clone(), param_value(p));
             }
             sys.params.push(params);
+            for f in &m.forces {
+                sys.forces.push(ForceEntry {
+                    after: f.after.clone(),
+                    when: f.when.as_ref().map(|w| defines.expand(w, &mut Vec::new())),
+                    module: idx,
+                    source: RuleRef {
+                        module: m.name.clone(),
+                        file: m.file.clone(),
+                        line: f.line,
+                    },
+                });
+            }
             for ctx in &m.contexts {
-                sys.flatten(ctx, &mut Vec::new(), &mut Vec::new(), idx, m);
+                sys.flatten(ctx, &mut Vec::new(), &mut Vec::new(), idx, m, &defines);
             }
         }
         sys
@@ -122,30 +165,54 @@ impl System {
         conditions: &mut Vec<Expr>,
         module: usize,
         m: &Module,
+        defines: &Defines,
     ) {
+        // Problems expanding are reported when the rules are loaded
+        // (`check_terms`); here the term is left as written.
+        let expand = |e: &Expr| defines.expand(e, &mut Vec::new());
         let (np, nc) = (patterns.len(), conditions.len());
         if let Some(p) = &ctx.after {
             patterns.push(p.clone());
         }
         if let Some(w) = &ctx.when {
-            conditions.push(w.clone());
+            conditions.push(expand(w));
         }
         for rule in &ctx.rules {
+            let mut rule = rule.clone();
+            for e in [
+                &mut rule.shows,
+                &mut rule.when,
+                &mut rule.denies,
+                &mut rule.prefer,
+            ]
+            .into_iter()
+            .flatten()
+            {
+                *e = expand(e);
+            }
+            let line = rule.line;
+            let mut board_terms = Vec::new();
+            if let Some(e) = &rule.shows {
+                crate::eval::board_terms(e, &mut board_terms);
+            }
+            let counts_conditions = rule.shows.as_ref().is_some_and(crate::eval::counts_conditions);
             self.rules.push(RuleEntry {
-                rule: rule.clone(),
+                rule,
                 patterns: patterns.clone(),
                 conditions: conditions.clone(),
                 module,
                 source: RuleRef {
                     module: m.name.clone(),
                     file: m.file.clone(),
-                    line: rule.line,
+                    line,
                 },
                 order: self.rules.len(),
+                board_terms,
+                counts_conditions,
             });
         }
         for child in &ctx.contexts {
-            self.flatten(child, patterns, conditions, module, m);
+            self.flatten(child, patterns, conditions, module, m, defines);
         }
         patterns.truncate(np);
         conditions.truncate(nc);
@@ -251,6 +318,9 @@ pub fn check_card_refs(modules: &[Module], registry: &bridge_card::Registry) -> 
         }
         let mut found = Vec::new();
         m.contexts.iter().for_each(|c| ctx(c, &options, &mut found));
+        for d in &m.defines {
+            walk(&d.body, d.line, &options, &mut found);
+        }
         errors.extend(
             found
                 .into_iter()

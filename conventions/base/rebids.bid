@@ -219,6 +219,14 @@ after 1C (P) 1N (P)
 # rebid at all and passed a forcing response. BBA plays these as 3NT with
 # a long minor ("calculated bid: 18 to 21 total points, 6+ clubs"), and
 # game in a long major.
+#
+# A major's jump to game is not made once the response forced to game (a
+# two-over-one, a strong jump shift): there the jump to game is the
+# minimum (fast arrival), and with 19+ opposite a game force slam is in
+# the air (2026-09-30, random deals: 1H 2S 4H with 20 HCP facing 15,
+# where responder passed 35 between us). The minor's 3NT stays: its
+# 18-21 is what over-3nt.bid counts to 6NT, and without it opener had
+# only base.bid's bare 3NT (corpus: -1,027 on 465 boards).
 after 1m (P) 1y (P) | 1m (P) 2y (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
@@ -226,16 +234,29 @@ after 1m (P) 1y (P) | 1m (P) 2y (P)
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
-      when  y is not M, style is not bba
+      when  y is not M, style is not bba, !we.gf
   4M  "Game (BBA): seven {M} and 13+, or six and 19+"
       shows M>=6, (M>=7, hcp>=13) | hcp>=19
-      when  y is not M, style is bba
+      when  y is not M, style is bba, !we.gf
 # The same two rules after a 1NT response. They cannot share the context
 # above: `y` is bound by the other alternatives only, and a `when` that
 # names it can never be decided after 1NT, so the rules never fired.
 after 1m (P) 1N (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
+# A forcing 1NT (2/1 cards with `one_nt_response.forcing`, 6-12): opener
+# may not pass, so a balanced hand bids its longer minor, three cards if
+# need be, and 18-19 bids 2NT (2026-09-30, 2/1 game force).
+after 1M (P) 1N (P) when we.forcing = round
+  2C  "Forcing 1NT: three or more clubs"   shows C>=3, C>=D, suit_points<=18, M<=5
+      priority -1
+  2D  "Forcing 1NT: three or more diamonds"  shows D>=3, D>C, suit_points<=18, M<=5
+      priority -1
+  2N  "Forcing 1NT: 18-19, balanced"       shows balanced, hcp=18..19
+  # Six, or five when the hand has no three-card minor to bid (5-4-2-2
+  # with the other major): the forced rebid, read as either.
+  2M  "Rebids {M}: six, or five with no three-card minor, minimum"
+      shows M>=5, suit_points<=15, M>=6 | (C<=2, D<=2)
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
@@ -295,6 +316,19 @@ after 1m (P) 2N (P)
   3N  "Accepts: 14+"                       shows hcp>=14
   P   "Declines: 12-13"                    shows hcp<=13
       priority -5
+
+# Responder's game-forcing 2NT after a two-over-one and opener's rebid
+# (16+, no fit: responder-rebids.bid): opener counts slam on it, with
+# over-3nt.bid's numbers for this shape (2026-09-30).
+after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
+  6N  "Slam: 33+ points between us (partner at his minimum)"
+      shows points + partner.points.min >= 33
+      priority 1
+  4N  "Quantitative: 31-32 points between us"
+      shows points + partner.points.min >= 31
+      sets  ask=quant
+      priority 1
+  3N  "Game: no extras"                    shows points + partner.points.min <= 30
 
 # ── After a two-over-one response (forcing one round) ────────────────
 after 1M (P) 2x (P) when x is not M

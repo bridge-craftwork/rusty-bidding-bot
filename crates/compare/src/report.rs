@@ -62,6 +62,9 @@ pub struct Stats {
     pub boards_with_problems: usize,
     /// Boards where our engine had no rule somewhere in a live auction.
     pub boards_with_no_rule: usize,
+    /// Our own calls read by a higher rule than the one that chose them
+    /// (`BoardResult::read_as`).
+    pub read_as: usize,
     /// Boards by the reference's scoring and generator.
     pub boards_by_scoring: BTreeMap<String, usize>,
     pub boards_by_generator: BTreeMap<String, usize>,
@@ -76,6 +79,7 @@ impl Stats {
         self.boards_with_problems += (!b.problems.is_empty()) as usize;
         self.boards_with_no_rule +=
             b.problems.iter().any(|p| p.kind == ProblemKind::NoRule) as usize;
+        self.read_as += b.read_as.len();
         let scoring = scoring_name(b);
         *self.boards_by_scoring.entry(scoring.clone()).or_default() += 1;
         *self
@@ -193,6 +197,26 @@ pub struct Summary {
     pub divergences: Vec<Divergence>,
     /// Most frequent first.
     pub problems: Vec<ProblemPoint>,
+    /// Our calls read by a higher rule than chose them, by (chosen rule,
+    /// rule read as, call). Most frequent first.
+    pub read_as: Vec<ReadAsPoint>,
+}
+
+/// A (chosen rule, rule read as, call) that occurs in our auctions: a call
+/// partner reads by a higher rule than the one that chose it.
+#[derive(Debug, Clone, Serialize)]
+pub struct ReadAsPoint {
+    /// `file:line` of the rule that chose the call, and its priority.
+    pub chosen: String,
+    pub chosen_priority: Option<i64>,
+    /// `file:line` of the rule the call was read as (None: none).
+    pub read: Option<String>,
+    pub read_priority: Option<i64>,
+    pub call: String,
+    pub count: usize,
+    /// Up to five board indices, for the A/B view.
+    pub examples: Vec<usize>,
+    pub scenarios: Vec<String>,
 }
 
 /// A place in our auctions where a problem of one kind occurs.
@@ -375,6 +399,34 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
     problems.sort_by(|a, b| {
         (b.count, &a.auction, &a.call, a.kind).cmp(&(a.count, &b.auction, &b.call, b.kind))
     });
+    let mut reads: HashMap<(String, Option<String>, String), ReadAsPoint> = HashMap::new();
+    for (i, b) in boards.iter().enumerate() {
+        for r in &b.read_as {
+            let e = reads
+                .entry((r.chosen.clone(), r.read.clone(), r.call.clone()))
+                .or_insert_with(|| ReadAsPoint {
+                    chosen: r.chosen.clone(),
+                    chosen_priority: r.chosen_priority,
+                    read: r.read.clone(),
+                    read_priority: r.read_priority,
+                    call: r.call.clone(),
+                    count: 0,
+                    examples: Vec::new(),
+                    scenarios: Vec::new(),
+                });
+            e.count += 1;
+            if e.examples.len() < 5 && !e.examples.contains(&i) {
+                e.examples.push(i);
+            }
+            if !e.scenarios.contains(&b.scenario) {
+                e.scenarios.push(b.scenario.clone());
+            }
+        }
+    }
+    let mut read_as: Vec<ReadAsPoint> = reads.into_values().collect();
+    read_as.sort_by(|a, b| {
+        (b.count, &a.chosen, &a.read, &a.call).cmp(&(a.count, &b.chosen, &b.read, &b.call))
+    });
     let mut divergences: Vec<Divergence> = points.into_values().collect();
     divergences.sort_by(|a, b| {
         (b.count, &a.auction, &a.reference, &a.ours).cmp(&(
@@ -389,5 +441,6 @@ pub fn summarize(boards: &[BoardResult]) -> Summary {
         scenarios,
         divergences,
         problems,
+        read_as,
     }
 }

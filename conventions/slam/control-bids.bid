@@ -60,28 +60,28 @@ module control-bids "Control bids before the keycard ask"
 when we.trump is suit, !asked, !answered control, (trump is H | trump is S), we.forcing = game
   cheapest(C)  "Control bid in ♣"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), under_game(C)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values, side_suit_uncontrolled, controlled(C), denials_promised
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 12
   cheapest(D)  "Control bid in ♦"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), under_game(D)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values, side_suit_uncontrolled, controlled(D), denials_promised
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 12
   cheapest(H)  "Control bid in ♥"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), under_game(H)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values, side_suit_uncontrolled, controlled(H), denials_promised
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 12
   cheapest(S)  "Control bid in ♠"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), under_game(S)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values, side_suit_uncontrolled, controlled(S), denials_promised
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)
@@ -94,28 +94,28 @@ when we.trump is suit, !asked, !answered control, (trump is H | trump is S), we.
 when we.trump is suit, !asked, !answered control, (trump is H | trump is S), (we.forcing = none | we.forcing = round)
   cheapest(C)  "Control bid in ♣"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), under_game(C)
-      when  we.tp(trump).max >= 33, losers <= 4, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values_limited, side_suit_uncontrolled, controlled(C), denials_promised
       sets  ask=control(C), ladder=control, forcing=game
       artificial
       prefer 0 - cheapest_rank(C)
       priority 12
   cheapest(D)  "Control bid in ♦"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), under_game(D)
-      when  we.tp(trump).max >= 33, losers <= 4, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values_limited, side_suit_uncontrolled, controlled(D), denials_promised
       sets  ask=control(D), ladder=control, forcing=game
       artificial
       prefer 0 - cheapest_rank(D)
       priority 12
   cheapest(H)  "Control bid in ♥"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), under_game(H)
-      when  we.tp(trump).max >= 33, losers <= 4, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values_limited, side_suit_uncontrolled, controlled(H), denials_promised
       sets  ask=control(H), ladder=control, forcing=game
       artificial
       prefer 0 - cheapest_rank(H)
       priority 12
   cheapest(S)  "Control bid in ♠"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), under_game(S)
-      when  we.tp(trump).max >= 33, losers <= 4, (trump is not C, !(has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))) | (trump is not D, !(has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))) | (trump is not H, !(has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))) | (trump is not S, !(has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3)))), (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  slam_values_limited, side_suit_uncontrolled, controlled(S), denials_promised
       sets  ask=control(S), ladder=control, forcing=game
       artificial
       prefer 0 - cheapest_rank(S)
@@ -132,56 +132,56 @@ when we.trump is suit, !asked, !answered control, (trump is H | trump is S), (we
 when we.trump is suit, asked control(t), (trump is H | trump is S)
   cheapest(C)  "Control bid in ♣"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), under_game(C)
-      when  (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  controlled(C), denials_promised
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 12
   cheapest(D)  "Control bid in ♦"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), under_game(D)
-      when  (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  controlled(D), denials_promised
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 12
   cheapest(H)  "Control bid in ♥"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), under_game(H)
-      when  (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  controlled(H), denials_promised
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 12
   cheapest(S)  "Control bid in ♠"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), under_game(S)
-      when  (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3)))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3)))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3)))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))))
+      when  controlled(S), denials_promised
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)
       priority 12
   cheapest(C)  "Control bid in ♣ past game: first-round control"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), !under_game(C), (trump is H, cheapest_rank(C) < 27) | (trump is S, cheapest_rank(C) < 28)
-      when  (has(A,C) | (C<=0, partner.C.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  first_round(C), denials_promised_first
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 10
   cheapest(D)  "Control bid in ♦ past game: first-round control"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), !under_game(D), (trump is H, cheapest_rank(D) < 27) | (trump is S, cheapest_rank(D) < 28)
-      when  (has(A,D) | (D<=0, partner.D.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  first_round(D), denials_promised_first
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 10
   cheapest(H)  "Control bid in ♥ past game: first-round control"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), !under_game(H), (trump is H, cheapest_rank(H) < 27) | (trump is S, cheapest_rank(H) < 28)
-      when  (has(A,H) | (H<=0, partner.H.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  first_round(H), denials_promised_first
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 10
   cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), !under_game(S), (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
-      when  (has(A,S) | (S<=0, partner.S.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)
@@ -198,31 +198,34 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
 # still go on past game with first-round controls, promising every suit
 # partner has denied; otherwise pass.
 
-when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H | trump is S)
+# Not when I bypassed a suit myself: partner's sign-off says he cannot
+# cover it, and no control of mine past game can (2026-09-30; the case
+# surfaced when slam_values moved to 32).
+when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H | trump is S), !me.denied(C), !me.denied(D), !me.denied(H), !me.denied(S)
   cheapest(C)  "Control bid in ♣ past game: first-round control"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), (trump is H, cheapest_rank(C) < 27) | (trump is S, cheapest_rank(C) < 28)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (has(A,C) | (C<=0, partner.C.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  slam_values, first_round(C), denials_promised_first
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 10
   cheapest(D)  "Control bid in ♦ past game: first-round control"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), (trump is H, cheapest_rank(D) < 27) | (trump is S, cheapest_rank(D) < 28)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (has(A,D) | (D<=0, partner.D.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  slam_values, first_round(D), denials_promised_first
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 10
   cheapest(H)  "Control bid in ♥ past game: first-round control"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), (trump is H, cheapest_rank(H) < 27) | (trump is S, cheapest_rank(H) < 28)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (has(A,H) | (H<=0, partner.H.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  slam_values, first_round(H), denials_promised_first
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 10
   cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18, (has(A,S) | (S<=0, partner.S.min<=3)), (trump is C | !partner.denied(C) | (has(A,C) | (C<=0, partner.C.min<=3))), (trump is D | !partner.denied(D) | (has(A,D) | (D<=0, partner.D.min<=3))), (trump is H | !partner.denied(H) | (has(A,H) | (H<=0, partner.H.min<=3))), (trump is S | !partner.denied(S) | (has(A,S) | (S<=0, partner.S.min<=3)))
+      when  slam_values, first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)

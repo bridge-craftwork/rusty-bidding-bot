@@ -88,6 +88,7 @@
 "bidding_conventions/minor_suit_transfers" = "Minor-Suit Transfers over 1NT"
 "bidding_conventions/smolen" = "Smolen"
 "bidding_conventions/super_accept" = "Super-Accepting a Transfer"
+"bidding_conventions/wolff_signoff" = "Wolff Sign-off"
 "competitive_bidding/cappelletti" = "Cappelletti over 1NT"
 "competitive_bidding/defense_vs_1nt" = "Defending against 1NT"
 "competitive_bidding/defense_vs_preempts" = "Defending against Preempts"

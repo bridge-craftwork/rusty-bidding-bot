@@ -76,6 +76,26 @@ side IMPs), adopted on Rick's ruling. Keeping the LoTT out of the whole
 game force was worse: it sent a hand with a singleton heart jack to 3NT
 (the 4♦ case in total-tricks.test).
 
+## Three rules instead of twelve (2026-09-30)
+
+The judgment layer's Phase 0 (docs/JUDGMENT-LAYER.md) rewrote the file
+with named conditions: `doubler_four(x)` (partner's three counts four
+after a shape takeout double of their major) and `lott_trumps(x)`
+(`we.fit(x).min + doubler_four(x) - unfavourable`, a condition counting 1
+or 0). One rule per level, with a guard, `doubler_four(x) |
+!doubler_four(x)`, that keeps the old behaviour of firing only once the
+double's shape is known either way. On the full corpus our calls did not
+change (170,633 boards, identical auctions and replays); only the
+explanations did: the "a trick hedged vulnerable" and "partner's double
+counted as four" wordings are gone from 577 calls, which now read as the
+plain level. The context uses `they.still_bidding` for `!lho.last=P |
+!rho.last=P` (the same test).
+
+Measuring it exposed a cache bug in the engine: descriptiveness was
+cached by rule and calls only, so a `shows` reading the vulnerability
+(`unfavourable`) took whichever board filled the cache first when boards
+are bid in parallel. The key now carries the values of such terms.
+
 ## Sources
 
 - **The principle:** the Law of Total Tricks (LoTT), compete to the level

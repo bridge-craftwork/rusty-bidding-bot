@@ -20,6 +20,13 @@ pub struct ModuleRef {
     /// The teaching skills it declares (`skill` lines).
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub skills: Vec<String>,
+    /// Its named conditions, as written: `name(x) = condition`. Rules
+    /// anywhere in the rule set may use them.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub defines: Vec<String>,
+    /// Its `force game` declarations, as written.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub forces: Vec<String>,
     pub rules: Vec<RuleRef>,
 }
 
@@ -126,6 +133,33 @@ pub fn entries(modules: &[Module]) -> Vec<ModuleRef> {
                     .collect(),
                 needs: m.needs.clone(),
                 skills: m.skills.iter().map(|s| s.path.clone()).collect(),
+                defines: m
+                    .defines
+                    .iter()
+                    .map(|d| {
+                        let params = if d.params.is_empty() {
+                            String::new()
+                        } else {
+                            format!("({})", d.params.join(", "))
+                        };
+                        format!("{}{params} = {}", d.name, d.body)
+                    })
+                    .collect(),
+                forces: m
+                    .forces
+                    .iter()
+                    .map(|f| {
+                        let mut t = format!("force {}", f.level);
+                        if let Some(alts) = &f.after {
+                            let a: Vec<String> = alts.iter().map(|p| pattern(p)).collect();
+                            t.push_str(&format!(" after {}", a.join(" | ")));
+                        }
+                        if let Some(w) = &f.when {
+                            t.push_str(&format!(" when {w}"));
+                        }
+                        t
+                    })
+                    .collect(),
                 rules,
             }
         })
@@ -178,6 +212,12 @@ pub fn text(modules: &[ModuleRef], header: &str, active: Option<&dyn Fn(&str) ->
         if !m.skills.is_empty() {
             out.push_str(&format!("   skills: {}\n", m.skills.join(", ")));
         }
+        for d in &m.defines {
+            out.push_str(&format!("   define {d}\n"));
+        }
+        for f in &m.forces {
+            out.push_str(&format!("   {f}\n"));
+        }
         let mut last: Option<(&Vec<String>, &Vec<String>)> = None;
         for r in &m.rules {
             if last != Some((&r.after, &r.context)) {
@@ -227,5 +267,32 @@ mod tests {
         assert!(t.contains("after 1N (P)"), "{t}");
         assert!(t.contains("2C     Stayman  [alert]"), "{t}");
         assert!(t.contains("shows hcp>=8"), "{t}");
+    }
+
+    #[test]
+    fn definitions_are_listed_with_their_module() {
+        let src = "module demo \"Demo\"\n\ndefine held(x) = has(A,x) | x<=0\n\
+                   define game = hcp>=13\n  balanced\n";
+        let m = crate::parse(src, "demo.bid").unwrap();
+        assert_eq!(m.defines.len(), 2);
+        assert_eq!(m.defines[0].params, ["x"]);
+        let t = text(&entries(&[m]), "test", None);
+        assert!(t.contains("define held(x) = has(A,x) | x<=0"), "{t}");
+        assert!(t.contains("define game = hcp>=13, balanced"), "{t}");
+    }
+
+    #[test]
+    fn bad_definitions_are_reported() {
+        for (src, msg) in [
+            ("define X = hcp>=1", "two characters or more"),
+            ("define held(xy) = has(A,xy)", "suit variables"),
+            ("define held(x, x) = has(A,x)", "twice"),
+            ("define held hcp>=1", "`=`"),
+            ("define held =", "needs a condition"),
+        ] {
+            let full = format!("module demo \"Demo\"\n\n{src}\n");
+            let err = crate::parse(&full, "demo.bid").unwrap_err();
+            assert!(err.iter().any(|d| d.message.contains(msg)), "{src}: {err:?}");
+        }
     }
 }

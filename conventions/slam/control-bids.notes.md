@@ -261,6 +261,22 @@ covered.
 
 What is left is mostly spade Jacoby auctions (1S-2NT, 118 boards).
 
+## Shared conditions named in slam-entry.bid (2026-09-30)
+
+The long conditions of control-bids.bid (up to 1,300 characters a line) are now
+named conditions in `slam/slam-entry.bid`: `slam_values`,
+`slam_values_limited`, `controlled(x)`, `first_round(x)`,
+`side_suit_uncontrolled`, `two_bare_suits`, `denials_promised`,
+`all_covered` and their variants. Each is exactly the condition it
+replaced; a definition reads `style` from slam-entry.bid, which names the
+same card field and default (`slam.cue_bids.style`,
+`first_or_second_round`). The full corpus bids identically
+(docs/JUDGMENT-LAYER.md, Phase 0). `two_bare_suits` uses the new
+`bare(x)` (a side suit of 2+ cards without the ace or king), which, like
+`has`, is not recorded when a call is read, so the ask's negative
+inference is unchanged; `bare_suits <= 1` would say the same but would
+add that denial, a change to measure on its own.
+
 ## Sources
 
 - **The convention:** control (cue) bids once a suit is agreed in a game

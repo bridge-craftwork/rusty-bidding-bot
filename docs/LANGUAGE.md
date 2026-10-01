@@ -123,6 +123,46 @@ have (`style is four-way`), which would otherwise never match. Another
 module can read the same field: `one-nt.bid` turns off its natural 2NT when
 2NT is a transfer.
 
+**Named conditions.** `define` at the left margin names a condition (or a
+value) that any rule of the rule set may use, in any module:
+
+```
+define controlled(x) = has(A,x) | (x<=0, partner.x.min<=3) | (style is first_or_second_round, has(K,x) | (x<=1, partner.x.min<=3))
+define slam_values = we.tp(trump).min >= 33 | tp(trump) >= 18
+
+when we.trump is suit, !asked, we.forcing = game
+  4N  "Keycard ask in {trump}"
+      when  slam_values, controlled(C), controlled(D)
+```
+
+A definition takes suit parameters (one lower-case letter, or `M`); the
+arguments are a suit, a suit variable or `trump`. Its condition may
+continue on indented lines, each one more part (joined like `,`). The
+engine inlines it where it is used (so a rule reads, is read and resolves
+exactly as if the condition were written out), with the definition's card
+parameters read from its **own** module (`style` above is
+`slam-entry.bid`'s `slam.cue_bids.style`, whatever `style` means in the
+module that uses it). Definitions are shared across the rule set whether
+or not their module is active; a name may be defined once, may not be a
+term, and may not use itself. The reference (`rbb bid reference`) prints
+rules as written. Engine 0.3.0.
+
+**Forces from the shape of the auction.** `force game [after <auction>]
+[when <condition>]` at the left margin puts the caller's side in a game
+force (`we.forcing = game`) whenever a call is made where the pattern and
+condition hold, whichever rule made or explains the call. The pattern
+matches the auction before the call, as a context's does; `call` is the
+call being made. The condition is public (no terms of the caller's hand).
+A rule whose own meaning forces says so with `sets forcing=game`; `force`
+is for what belongs to the auction (base/game-force.bid):
+
+```
+force game when partner.opened, !they.bid, me.bids = 2, call >= 3C, call <= 3S
+force game after 1x (P) 1y (P) 2N (P) when !call = P, !(wolff, call = 3C)
+```
+
+Engine 0.4.0.
+
 ## 4. Contexts
 
 A **context** says when a group of rules applies. Rules are indented under
@@ -211,7 +251,8 @@ The explanation string interpolates the same way: `"Keycard ask in {trump}"`.
 | `hcp`, `tp(x)`, `controls`, `losers`, `tens` | point counts; `tp` = total points with `x` as trump; `tens` = tens held |
 | `S H D C`, `M`, `x` | length of that suit |
 | `balanced`, `semibalanced`, `shape 5-4-x-x`, `shape 4333`, `shortest`, `longest` | shape |
-| `stop(x)`, `quality(x) >= good`, `has(Q, x)` | suit holdings |
+| `stop(x)`, `quality(x) >= good`, `has(Q, x)`, `bare(x)`, `bare_suits` | suit holdings; `bare(x)`: a side suit of 2+ cards without the ace or king |
+| `quick_tricks` | A-K 2, A-Q 1½, A 1, K-Q 1, K-x ½ (whole part) |
 | `keycards(x)` | aces + trump king, with `x` as trump |
 
 **Other seats** use the same terms with a prefix: `partner.`, `lho.`, `rho.`.
@@ -219,8 +260,28 @@ Their values are **ranges**, so a comparison means "known to be true":
 `partner.S >= 3` holds only if partner has *shown* 3+ spades. Use
 `maybe partner.S >= 3` for "not ruled out", and `.min` / `.max` for arithmetic.
 
-**Partnership totals**, `we.hcp` and `we.keycards(x)`, combine my exact hand
-with partner's range. Example: `we.hcp.min >= 25`.
+**Partnership totals** add my exact hand to partner's range, and are
+written out that way before a rule is used: `we.fit(x)` is
+`x + partner.x`, `we.points` is `points + partner.points`, `we.hcp` is
+`hcp + partner.hcp`, `we.tp(x)` is `tp(x) + partner.tp(x)`, and `.min` /
+`.max` take partner's end (`we.fit(S).min >= 8` is
+`S + partner.S.min >= 8`: a known eight-card fit). So a `shows` with them
+is still a condition on my own hand, and partner reads it.
+`safe_level(x)` is `we.fit(x).min - 6`, the level the Law of Total Tricks
+makes safe. `we.keycards(x)` is my keycards plus partner's answer, within
+the deck's five. Remember that a range compares as known: `we.fit(S) <= 7`
+holds only once partner's length is known, and "no known fit" is
+`we.fit(S).min <= 7`.
+
+**Opponents' totals and last bid:** `they.hcp` and `they.fit(x)` (both
+opponents' ranges added), `they.level` and `they.strain` (their last bid;
+the strain is usable as a suit), `they.still_bidding` (one of their last
+calls is not a pass) and `they.game_reached`.
+
+**Conditions as numbers.** In arithmetic a condition counts 1 when it holds
+and 0 when it does not (a range 0..1 while it is unknown), so a count can
+carry its adjustments: `we.fit(x).min + doubler_four(x) - unfavourable = 9`
+(total-tricks.bid). Engine 0.3.0.
 
 **Points.** Kept in quarter points and compared by their whole part
 (`points=8..9` means 8 up to 9¾). Rick's model is three measures, with each
@@ -268,7 +329,10 @@ prints "Invitational: 8-9 total points" after a 15-17 1NT.
 `answered <kind>` (partner answered my question), `partner.last`,
 `partner.opened`, `lho.opened`, `rho.opened` (there is no form for my own
 opening: write `!lho.opened, !rho.opened` with `they.bid`), `they.bid`,
-`seat`, `passed_hand`, `vul`, `they.vul`,
+`seat`, `passed_hand`, `vul`, `they.vul`, `favourable` (we are not
+vulnerable, they are), `unfavourable`, `captain` (I place the contract:
+partner has limited his hand to a range of four points or less, 12-15, and
+mine is wider; or partner has answered my question),
 `we.keycards(t)` (my keycards plus partner's answer, within the deck limit),
 `imps` (IMPs and other total-point scoring), `matchpoints` (matchpoints and
 board-a-match), `me.last` (my own last call). A last call compares with a
@@ -355,11 +419,15 @@ without changing the rule files.
 
 ### Judgment hooks
 
-Some decisions are better written in Rust than as conditions: "is slam
-worth trying", "invite or bid game", hand upgrades. These are **named
-evaluators** registered by the engine and used like terms:
-`when slam_try`, `prefer upgrade(hcp)`. The language stays small, and the
-hard judgment code is in one place that can be tested.
+This section first proposed judgment in Rust: named evaluators registered
+by the engine and used like terms (`when slam_try`). Rick decided
+otherwise (2026-09-30, docs/JUDGMENT-LAYER.md): **the engine measures,
+the rules judge**. Combined ranges, fits and holdings are terms; the
+thresholds (25 for game, 33 for slam, no two bare suits, the vulnerability
+hedge) are written in the rules as named conditions (`define`, section 3),
+where they can be read, cited and tuned. `slam_try` and `grand_try` remain
+as placeholders (combined HCP 31 and 35) until the judgment layer replaces
+them.
 
 ## 8. Interpreting other players' calls
 

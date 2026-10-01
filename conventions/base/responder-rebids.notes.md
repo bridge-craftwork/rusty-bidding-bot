@@ -444,6 +444,57 @@ strong-openings.bid's (responder's rebid after 2C–positive–2NT).
   them 2C P 2D ...).
 - To the side that changed its call: +285.
 
+## The ladder written with the partnership sums (2026-09-30)
+
+The notrump ladder's conditions now use `we.points` and `we.fit(x)`
+(`we.points.min >= 25` for `points + partner.points.min >= 25`,
+`we.fit(S).min <= 7` for `S + partner.S.min <= 7`). The engine writes
+them out the old way before the rules are used, so nothing changed: the
+full corpus bids identically (docs/JUDGMENT-LAYER.md, Phase 0). The other
+24 places that add partner's minimum by hand are left for when their
+modules are next touched.
+
+## Fast arrival after a two-over-one (2026-09-30)
+
+After 1y-2x-2z responder had no raise of opener's second suit, and
+"Game with support" (4M) had no top: on random deals responder jumped
+to game with 19 HCP and 33 between the hands. Now the jump to game is
+the minimum (4z with 11-14 points, 4M with 11-15 support points) and
+the slam-interest hand agrees below game and forces (3z with 15+, 3M
+with 16+), so control bids and the keycard ask follow. Random deals
+(20,000, 21GF): +265 IMPs vs BBA, par as the yardstick; corpus +2,166.
+A small loss group remains, 1H-2D-2H-3H with 16 support points reaching
+a failing slam (-13 on 9 boards). Thresholds: the textbook 15-16 for
+slam interest opposite an opening, not tuned. See slam-entry.notes.md.
+
+## After a game-forcing 2/1 and a forcing 1NT (2026-09-30)
+
+After a game-forcing two-over-one the 11-12 invitations and the sign-off
+preference are off (`!we.gf`); a preference and a rebid of a six-card
+suit keep the force. After the 6-12 1NT of the 2/1 cards the 11-12 hands
+invite: 2NT, 3M with three-card support (the limit raise through 1NT),
+two or three after 2M, and a raise of opener's minor with 11-12 HCP.
+Figures: responses.notes.md.
+
+## Slam over partner's notrump in the ladder (2026-09-30)
+
+The notrump ladder stopped at 3NT with 33 between the hands (2C 2D 2NT
+3NT on random deals). It now bids 6NT with 34 HCP on partner's floor and
+a quantitative 4NT with 32-33 (answered by one-nt.bid's `asked quant`),
+without a known major fit: over-3nt.bid's calibrated numbers. Random
+deals, tuning 100k +48, confirmation 20k +14; corpus +132. Gerber, where
+played, comes first.
+
+## Fast arrival in notrump after a game-forcing 2/1 (2026-09-30)
+
+In a game force responder's "Game, no fit" 3NT had no top (100,000 random
+deals: 482 boards short of slam, responder the stronger hand in 379). Now
+3NT is 13-15 and 2NT (game forcing) 16+; opener counts slam over the 2NT
+(6NT with 33 points on responder's floor, quantitative 4NT with 31-32,
+3NT with no extras; rebids.bid). Random deals: tuning +6, confirmation
+-19 (flat); corpus +318. Most of what is left are 29-32 HCP slams par
+finds double dummy.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

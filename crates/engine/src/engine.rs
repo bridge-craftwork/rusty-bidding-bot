@@ -327,8 +327,20 @@ impl Engine {
         let Some(shows) = &entry.rule.shows else {
             return 0.0;
         };
+        // The calls fix everything a `shows` can read except the board's
+        // conditions; a rule that reads those (`unfavourable`, `imps`) is
+        // keyed on their values too, or boards bid in parallel would share
+        // whichever came first.
+        let board: Vec<String> = {
+            let ctx = self.ctx(pos, actor, None, entry);
+            entry
+                .board_terms
+                .iter()
+                .map(|t| format!("{:?}", ctx.eval(t, &mut c.b.clone())))
+                .collect()
+        };
         let key = format!(
-            "{}|{}|{}|{:?}|{:?}",
+            "{}|{}|{}|{:?}|{:?}|{board:?}",
             side(actor),
             c.entry,
             c.call,
@@ -342,6 +354,18 @@ impl Engine {
         if ids.is_empty() {
             ids = Arc::new((0..self.pool.len() as u32).collect());
         }
+        // A condition counted in arithmetic (`+ doubler_four(x)`) would be
+        // judged again for every hand: what the auction already settles is
+        // settled once.
+        let folded;
+        let shows = if entry.counts_conditions {
+            folded = self
+                .ctx(pos, actor, None, entry)
+                .fold_public(shows, &mut c.b.clone());
+            &folded
+        } else {
+            shows
+        };
         let mut pass = 0usize;
         let private = PrivateCache::default();
         // One copy of the bindings for the whole pool, restored only when
@@ -556,6 +580,32 @@ impl Engine {
                 &mut warnings,
             );
             pos.sides[side(caller)] = st;
+        }
+        // The auction's own game forces (`force game after ... when ...`),
+        // whichever rule made or explains the call.
+        if sys.forces.iter().any(|f| {
+            let ctx = Ctx {
+                pos,
+                actor: caller,
+                hand: None,
+                params: &sys.params[f.module],
+                valuation: self.valuation[side(caller)],
+                private: None,
+            };
+            let mut b = Bindings::new();
+            if let Some(alts) = &f.after {
+                if !match_any(alts, &pos.calls, &ctx, &mut b) {
+                    return false;
+                }
+            }
+            b.insert("call".into(), Val::Call(call.clone()));
+            f.when.as_ref().is_none_or(|w| ctx.cond(w, &mut b) == Ok(Tri::True))
+        }) {
+            let st = &mut pos.sides[side(caller)];
+            if st.forcing != Forcing::Game {
+                st.forcing = Forcing::Game;
+                st.forcing_by = Some(caller);
+            }
         }
         step.knowledge = k.clone();
         step.warnings = warnings;
@@ -1281,6 +1331,25 @@ fn expand(
                 )
             })
             .collect(),
+        // `cheapest(w)` with `w` not yet bound: one candidate per suit, as
+        // `2x` expands (before, no call at all, so the rule never applied).
+        CallSpec::Relative {
+            func,
+            arg: Some(arg),
+        } if (func == "cheapest" || func == "jump")
+            && crate::eval::is_variable(arg)
+            && !b.contains_key(arg)
+            && !ctx.params.contains_key(arg) =>
+        {
+            (0..4)
+                .filter(|&s| var_allows(arg, s))
+                .flat_map(|s| {
+                    let mut nb = b.clone();
+                    nb.insert(arg.clone(), Val::Suit(s));
+                    expand(spec, ctx, nb, auction)
+                })
+                .collect()
+        }
         CallSpec::Relative {
             func,
             arg: Some(arg),

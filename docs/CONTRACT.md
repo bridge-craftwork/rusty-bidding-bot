@@ -15,7 +15,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.2.0 (rule language 1)`), and so does the last line of
+(`rbb 0.4.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
@@ -25,7 +25,7 @@ its root, `conventions.toml`:
 name = "rusty-bidding-bot"
 description = "The base system and conventions, switched on by the convention card"
 language = 1          # required: the rule language version
-engine = "0.2.0"      # optional: the engine it was developed against (information only)
+engine = "0.4.0"      # optional: the engine it was developed against (information only)
 ```
 
 - A manifest that asks for a language this engine does not read refuses
@@ -225,6 +225,18 @@ new language version, and this repository's manifest names `engine =
 rules load; `rbb bid check` warns about one that `card/skills.toml` does
 not list. The same goes for the `skill` attribute of a card field.
 
+Engine 0.3.0 adds, the same way: named conditions (`define`, LANGUAGE.md
+§3), conditions counted as 1 or 0 in arithmetic, and the terms of the
+judgment layer's Phase 0 (`we.fit(x)`, `we.points`, the opponents'
+totals and last bid, `favourable` / `unfavourable`, `captain`,
+`safe_level(x)`, `quick_tricks`, `bare(x)`, `bare_suits`). `we.hcp` and
+`we.tp(x)` are now written out as `hcp + partner.hcp` and
+`tp(x) + partner.tp(x)` before a rule is used, which is what they meant
+while choosing; how an unchosen call's `we.tp` resolves could differ, and
+on the corpus nothing changed (170,633 boards, 2026-09-30). Engine
+0.4.0 adds the `force game` declaration (LANGUAGE.md §3) and the `bids`
+term. This repository's manifest names `engine = "0.4.0"`.
+
 What the
 engine *knows* may also get sharper within a version (the deck limits,
 how a range narrows): rules read it through the same terms, but a call can
@@ -303,6 +315,38 @@ These are the habits the rule set in this repository follows
   - Write later rounds against state (`asked`, `answered`, `we.trump`,
     `strength` bands), not against listed auctions (LANGUAGE.md §10).
   - Use `priority` sparingly, and say why in a trailing comment.
+  - Name a condition that recurs (`define`, LANGUAGE.md §3) rather than
+    copying it; judgment thresholds belong in named conditions, where
+    they can be cited and tuned.
+- **Priority bands.** Priority ranks first, so a band says which layer a
+  rule belongs to (docs/JUDGMENT-LAYER.md §4):
+
+  | band | layer | today |
+  |---|---|---|
+  | +1 … +20 | overrides inside a dialogue | control-bid stop-in-game (20), keycard ask in a control dialogue (11-15), control bids (10-12), keycard ask over a limit raise (1) |
+  | 0 … −3 | sequence rules and question-and-answer | the default |
+  | −4 … −15 | **judgment**: competition, placement, slam entry | Law of Total Tricks −4, notrump ladder −8/−9, over-3NT −10; sequence modules' own closing passes (−5 … −10) sit here too |
+  | −16 … −45 | keep-alive sign-offs in a force | slam-catch game −20, base.bid game in a known fit −38 … −41, game −40 |
+  | −20 now, ≤ −50 proposed | silence ("nothing more to say") | the defending side and after-interference passes at −20; base.bid "Game reached" at −50 |
+
+  A judgment rule sits below every sequence rule that describes the hand,
+  and above silence. Two cautions. The silence passes at −20 share a
+  number with slam-catch's sign-off, so a judgment rule written below −20
+  loses to them; they are not yet moved to −50, because there they meet
+  base.bid's "Game reached" pass (tried 2026-09-30: 6,942 passes read by
+  the other rule, 20 calls changed off our own auctions), so the move is a
+  measured rule change of its own. And a sequence module's closing pass is
+  either a judgment ("minimum: no game", which should outrank the layer)
+  or silence (which should sit below it): say which in its comment.
+- **A judgment call must not be read as another rule.** Partner reads a
+  call as the highest-priority rules for it whose contexts hold
+  (LANGUAGE.md §8). A fallback rule that bids a call a higher rule also
+  offers in the same position is read as the higher rule, which is what
+  its hand did *not* have. Keep a judgment rule off calls that sequence
+  rules give a meaning in the same position (Rick, 2026-09-30: discipline
+  and a count, no engine change). `rbb compare` counts our calls read as
+  a higher-priority rule than the one that chose them, with the top
+  pairs, so a new judgment rule that adds to the count shows up.
   - Comments say why, with the source: a ruling (`Rick, 2026-09-24`), a
     probe, a corpus figure. Longer evidence belongs in the notes.
 
@@ -348,6 +392,8 @@ Exact while I choose a call; what I have shown when my call is being read. Bare 
 | `bba_stay_sgame_imp_points` | `bba_stay_sgame_points` at IMPs |
 | `controls` | controls: ace 2, king 1 |
 | `losers` | losing-trick count |
+| `quick_tricks` | quick tricks, whole part: A-K 2, A-Q 1½, A 1, K-Q 1, K-x ½ (Culbertson) |
+| `bare_suits` | how many side suits are `bare(x)`: 2+ cards without the ace or king |
 
 ### Functions of my own hand
 
@@ -361,6 +407,8 @@ Bare or with `me.`. `x` is a suit, a suit variable or `trump`.
 | `quality(x)` | top honours (A, K, Q) in x: poor 0, fair 1, good 2, excellent 3 |
 | `top5(x)` | how many of A K Q J T are held in x |
 | `stop(x)` | a stopper in x: A, Kx, Qxx or Jxxx |
+| `bare(x)` | x is a side suit (not the agreed trump) of 2+ cards without the ace or king |
+| `safe_level(x)` | the level our trumps make safe, the Law of Total Tricks: `we.fit(x).min - 6` |
 
 ### Auction state
 
@@ -371,12 +419,16 @@ Bare or with `me.`. Public, so fine in a context's `when`, except the judgment h
 | `opening` | no one has bid yet |
 | `last` | my own last call (`me.last`); compare with a call: `me.last=1N` |
 | `passed_hand` | I have called, and only passed |
+| `bids` | how many bids I have made, not counting passes and doubles (`me.bids`) |
 | `has_bid` | I have made a bid, not only passes or doubles (`me.has_bid`) |
 | `seat` | my seat from the dealer, 1 to 4 |
 | `vul` | my side is vulnerable |
 | `game_reached` | our side's last bid is game or higher and it is our contract |
 | `imps` | IMPs or other total-point scoring |
 | `matchpoints` | matchpoints or board-a-match |
+| `favourable` | we are not vulnerable and they are |
+| `unfavourable` | we are vulnerable and they are not |
+| `captain` | I place the contract: partner's shown points span 4 or fewer (12-15) and mine more, or partner has answered my question |
 | `trump` | `we.trump` |
 | `slam_try` | judgment hook: slam is worth trying (placeholder: combined HCP >= 31) |
 | `grand_try` | judgment hook: grand slam is worth trying (placeholder: combined HCP >= 35) |
@@ -409,6 +461,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.length_points` | cards beyond four, as far as shown |
 | `partner.last` | that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`) |
 | `partner.opened` | that seat made the opening bid |
+| `partner.bids` | how many bids that seat has made |
 | `partner.has_bid` | that seat has made a bid, not only passes or doubles |
 | `partner.jumped` | that seat's last bid was at least a level above the cheapest in its strain |
 | `partner.denied(x)` | in the control-bid dialogue that seat skipped x |
@@ -421,6 +474,10 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.keycards(x)` | not tracked: 0..40 (see `we.keycards`) |
 | `partner.controls` | not tracked: 0..40 |
 | `partner.losers` | not tracked: 0..40 |
+| `partner.quick_tricks` | not tracked: 0..40 |
+| `partner.bare_suits` | not tracked: 0..4 |
+| `partner.bare(x)` | not tracked: unknown |
+| `partner.trump` | length in our agreed suit (`partner.trump.min`) |
 | `partner.quality(x)` | not tracked: 0..40 |
 | `partner.top5(x)` | not tracked: 0..40 |
 
@@ -431,8 +488,10 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `we.trump` | the agreed strain (`is suit`, `is notrump`, `is none`), usable as a suit |
 | `we.forcing` | `none`, `round` or `game` |
 | `we.gf` | we are in a game force (`we.forcing = game`) |
-| `we.hcp` | my HCP plus partner's range |
-| `we.tp(x)` | my support points with x as trump plus partner's |
+| `we.hcp` | my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends) |
+| `we.points` | my points plus partner's range: `points + partner.points` |
+| `we.fit(x)` | my length in x plus partner's range: `x + partner.x`; `.min` is the known fit |
+| `we.tp(x)` | my support points with x as trump plus partner's: `tp(x) + partner.tp(x)` |
 | `we.keycards(x)` | my keycards plus partner's answer, within the deck's five |
 
 ### The opponents
@@ -441,6 +500,12 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 |---|---|
 | `they.bid` | the opponents have bid or doubled |
 | `they.vul` | the opponents are vulnerable |
+| `they.hcp` | LHO's and RHO's HCP ranges added |
+| `they.fit(x)` | LHO's and RHO's lengths in x added |
+| `they.level` | the level of the opponents' last bid (none before they bid) |
+| `they.strain` | the strain of the opponents' last bid, usable as a suit |
+| `they.still_bidding` | one of the opponents' last calls is not a pass (or one has not called yet) |
+| `they.game_reached` | the opponents' last bid is game or higher and it is their contract |
 
 ### Other names
 

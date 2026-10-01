@@ -1,0 +1,13 @@
+# Fourth suit forcing: the ask and opener's answers.
+card    21GF-DEFAULT
+dealer  N
+# seat hand             | auction                              | expect | why
+S AQ82.984.K74.A75      | 1H P 1S P 2C P                       | 2D     | game values, no heart fit, no diamond stopper
+N KJ3.AKJ52.7.K984      | 1H P 1S P 2C P 2D P                  | 2S     | three spades come first
+N 3.AKJ52.K7.KJ984      | 1H P 1S P 2C P 2D P                  | 2NT    | a diamond stopper
+N K3.AKJ52.Q7.K984      | 1H P 1S P 2C P 2D P                  | 2H     | no stopper: five hearts
+S AQ82.984.K74.A75      | 1H P 1S P 2C P 2D P 2H P             | !P     | forcing to game on this card
+
+# Without the convention the fourth suit is natural, and this hand bids 3NT.
+card    Basic-Bridge
+S AQ82.984.K74.A75      | 1H P 1S P 2C P                       | 3NT    | no fourth suit forcing

@@ -23,7 +23,44 @@ pub struct Module {
     /// not change what the module does.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skills: Vec<SkillRef>,
+    /// Named conditions (`define name(x) = <condition>`), usable in any
+    /// module of the rule set.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub defines: Vec<Define>,
+    /// State the auction itself creates (`force game after ... when ...`).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub forces: Vec<Force>,
     pub contexts: Vec<Context>,
+}
+
+/// `force game [after <pattern>] [when <condition>]`: a call made where
+/// the pattern and condition hold puts the caller's side in a game force,
+/// whichever rule made or explains it. `call` in the condition is the
+/// call being made (`!call = P`, `call >= 3C`); the pattern matches the
+/// auction before it, as a context's does.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Force {
+    /// `game` (the only level so far).
+    pub level: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub after: Option<Vec<Vec<PatternCall>>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub when: Option<Expr>,
+    pub line: usize,
+}
+
+/// `define name[(x, y)] = <condition>`: a named condition (or value) any
+/// rule in the rule set may use as `name` or `name(S)`. The engine
+/// inlines it where it is used, with each parameter replaced by the
+/// argument (a suit, a suit variable or `trump`). Card parameters in the
+/// body are the defining module's own.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Define {
+    pub name: String,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub params: Vec<String>,
+    pub body: Expr,
+    pub line: usize,
 }
 
 /// `skill <path>`

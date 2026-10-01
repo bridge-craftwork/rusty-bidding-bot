@@ -149,6 +149,8 @@ impl<'a> Parser<'a> {
             needs: Vec::new(),
             params: Vec::new(),
             skills: Vec::new(),
+            defines: Vec::new(),
+            forces: Vec::new(),
             contexts: Vec::new(),
         };
         for node in &first.children {
@@ -161,6 +163,16 @@ impl<'a> Parser<'a> {
                         module.contexts.push(ctx);
                     }
                 }
+                Some("force") => {
+                    if let Some(f) = self.force(node) {
+                        module.forces.push(f);
+                    }
+                }
+                Some("define") => {
+                    if let Some(d) = self.define(node) {
+                        module.defines.push(d);
+                    }
+                }
                 Some("module") => self.error(node.line, Some(0), "only one module per file"),
                 Some(w) if HEADERS.contains(&w) => {
                     self.error(node.line, Some(0), format!("`{w}` must be indented under `module`"))
@@ -168,7 +180,7 @@ impl<'a> Parser<'a> {
                 _ => self.error(
                     node.line,
                     Some(0),
-                    "expected a context (`after <auction>` or `when <condition>`) at the left margin",
+                    "expected a context (`after <auction>` or `when <condition>`), a `define` or a `force` at the left margin",
                 ),
             }
         }
@@ -292,6 +304,124 @@ impl<'a> Parser<'a> {
         }
     }
 
+    /// `define name[(x, y)] = <condition>`, the condition continuing on
+    /// indented lines, each one more part of it (joined like `,`).
+    fn define(&mut self, node: &Node) -> Option<Define> {
+        let lines = self.lines;
+        let line = node.line;
+        let l = &lines[line];
+        let toks = &l.toks[1..];
+        let mut c = Cursor::new(toks, l.code);
+        let head = expr::define_head(&mut c);
+        let (name, params) = match head {
+            Ok(h) => h,
+            Err(e) => {
+                self.perror(line, e);
+                return None;
+            }
+        };
+        let mut parts = Vec::new();
+        if !c.at_end() {
+            match expr::expr(&mut c).and_then(|e| c.expect_end("in the definition").map(|_| e)) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(line, e);
+                    return None;
+                }
+            }
+        }
+        for child in &node.children {
+            let cl = &lines[child.line];
+            if let Some(g) = child.children.first() {
+                self.error(g.line, Some(0), "unexpected indentation in a definition");
+            }
+            match self.condition(&cl.toks, cl.code) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(child.line, e);
+                    return None;
+                }
+            }
+        }
+        let body = match parts.len() {
+            0 => {
+                self.error(line, None, "a definition needs a condition after `=`");
+                return None;
+            }
+            1 => parts.pop().unwrap(),
+            _ => Expr::And { all: parts },
+        };
+        Some(Define {
+            name,
+            params,
+            body,
+            line: l.no,
+        })
+    }
+
+    /// `after <patterns> [when <condition>]` (when `after`), or a bare
+    /// condition: the tokens after the keyword of a context line.
+    #[allow(clippy::type_complexity)]
+    fn after_when(
+        &self,
+        after: bool,
+        toks: &[Token],
+        code: &str,
+    ) -> Result<(Option<Vec<Vec<PatternCall>>>, Option<Expr>), PError> {
+        if !after {
+            return self.condition(toks, code).map(|w| (None, Some(w)));
+        }
+        let split = toks
+            .iter()
+            .position(|t| t.tok == Tok::Word("when".into()))
+            .unwrap_or(toks.len());
+        let pattern = self.patterns(&toks[..split], code)?;
+        let when = if split < toks.len() {
+            Some(self.condition(&toks[split + 1..], code)?)
+        } else {
+            None
+        };
+        Ok((Some(pattern), when))
+    }
+
+    /// `force game [after <pattern>] [when <condition>]`.
+    fn force(&mut self, node: &Node) -> Option<Force> {
+        let lines = self.lines;
+        let line = node.line;
+        let l = &lines[line];
+        if let Some(c) = node.children.first() {
+            self.error(c.line, Some(0), "unexpected indentation under `force`");
+        }
+        let level = match l.toks.get(1).map(|t| &t.tok) {
+            Some(Tok::Word(w)) if w == "game" => w.clone(),
+            _ => {
+                self.error(line, None, "expected `force game after <auction> [when <condition>]`");
+                return None;
+            }
+        };
+        let rest = &l.toks[2..];
+        let after = match rest.first().map(|t| &t.tok) {
+            Some(Tok::Word(w)) if w == "after" => true,
+            Some(Tok::Word(w)) if w == "when" => false,
+            _ => {
+                self.error(line, None, "expected `after` or `when` after `force game`");
+                return None;
+            }
+        };
+        match self.after_when(after, &rest[1..], l.code) {
+            Ok((after, when)) => Some(Force {
+                level,
+                after,
+                when,
+                line: l.no,
+            }),
+            Err(e) => {
+                self.perror(line, e);
+                None
+            }
+        }
+    }
+
     fn context(&mut self, node: &Node) -> Option<Context> {
         let lines = self.lines;
         let line = node.line;
@@ -304,27 +434,15 @@ impl<'a> Parser<'a> {
             contexts: Vec::new(),
             line: l.no,
         };
-        let parsed = if l.first_word() == Some("after") {
-            let split = toks
-                .iter()
-                .position(|t| t.tok == Tok::Word("when".into()))
-                .unwrap_or(toks.len());
-            let pattern = self.patterns(&toks[..split], l.code);
-            let when = if split < toks.len() {
-                Some(self.condition(&toks[split + 1..], l.code))
-            } else {
-                None
-            };
-            pattern.and_then(|p| {
-                ctx.after = Some(p);
-                when.transpose().map(|w| ctx.when = w)
-            })
-        } else {
-            self.condition(toks, l.code).map(|w| ctx.when = Some(w))
-        };
-        if let Err(e) = parsed {
-            self.perror(line, e);
-            return None;
+        match self.after_when(l.first_word() == Some("after"), toks, l.code) {
+            Ok((after, when)) => {
+                ctx.after = after;
+                ctx.when = when;
+            }
+            Err(e) => {
+                self.perror(line, e);
+                return None;
+            }
         }
         for child in &node.children {
             match lines[child.line].first_word() {

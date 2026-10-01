@@ -1,0 +1,12 @@
+# Wolff sign-off: the relay, the forced 3D and the sign-offs.
+card    21GF-DEFAULT other_conventions.wolff_signoff.play=true
+dealer  N
+# seat hand             | auction                              | expect | why
+S 8.QJ9853.742.863      | 1C P 1H P 2N P                       | 3C     | a weak six-card heart suit: relay to sign off
+N AK2.K4.AQ62.KJ73      | 1C P 1H P 2N P 3C P                  | 3D     | the forced relay
+S 8.QJ9853.742.863      | 1C P 1H P 2N P 3C P 3D P             | 3H     | sign off in hearts
+S 8.J85.QJ9742.863      | 1C P 1H P 2N P 3C P 3D P             | P      | diamonds: play 3D
+
+# Without the convention the weak hand has only a pass.
+card    21GF-DEFAULT
+S 8.QJ9853.742.863      | 1C P 1H P 2N P                       | P      | no Wolff: pass 2NT

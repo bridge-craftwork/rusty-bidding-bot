@@ -1,7 +1,8 @@
 # A judgment layer: top-down rules
 
-Status: **proposal, 2026-09-29.** Nothing here is built. Rick approved
-writing it up; the decisions it needs are listed at the end.
+Status: **proposal, 2026-09-29; Phase 0 built 2026-09-30** (see "Phase 0:
+what was built" at the end). Rick approved writing it up; his decisions
+are listed at the end.
 
 Rick's framing: "we have a lot [of .bid files] that are bottom up, where
 we start with opening bids and manage sequences from there, and others
@@ -457,7 +458,9 @@ make it common. The options:
 1. **Rule discipline plus a lint.** A judgment rule may not claim a call
    that a higher rule offers in the same position. `compare` can count
    the positions where that happens ("judgment call read as …").
-   Cheap, and it can come first.
+   Cheap, and it can come first. `compare` now prints it: "calls read
+   as a higher rule than chose them", with the top (chosen rule ->
+   read-as rule, call) pairs, and `read_as` in `--json`.
 2. **Engine: read a fallback as the union** of the top rule and each
    lower rule for the same call, each branch carrying the denial of what
    outranks it. This is correct in principle. It changes how existing
@@ -645,3 +648,51 @@ docs/CONTRACT.md` regenerated. Then Phase 1 (slam entry), then Phase 3
 (penalty doubles), then Phase 2. Work pattern: CLAUDE.md, the
 controller/agent memory, compare JSONs in the SSD scratchpad (the X10
 drive is corrupt), both yardsticks, random deals alongside the corpus.
+
+## Phase 0: what was built (2026-09-30)
+
+Engine 0.3.0, rule language 1 unchanged. **Our calls did not change**:
+the full corpus (170,633 boards) gives identical auctions and identical
+replays of BBA's; only 577 LoTT explanations changed wording.
+
+- **Terms** (docs/CONTRACT.md, Term reference): `we.fit(x)`,
+  `we.points`, and `we.hcp` / `we.tp(x)` as *sums written out*: the
+  engine rewrites `we.fit(S).min` into `S + partner.S.min` before a rule
+  is used, so a `shows` still resolves to a condition on my own hand;
+  `safe_level(x)`; `they.hcp`, `they.fit(x)`, `they.level`,
+  `they.strain`, `they.still_bidding`, `they.game_reached`;
+  `favourable`, `unfavourable`; `captain` (decision 2: partner's shown
+  points span 4 or fewer and mine more, or partner answered my
+  question); `quick_tricks`, `bare(x)`, `bare_suits`; `partner.trump`.
+  Not built: `we.stopped(x)` and stopper knowledge (Phase 5), `we.tp` for
+  the hand with fewer trumps (question 9).
+- **Named conditions**: `define name(x) = condition` (LANGUAGE.md §3),
+  shared across the rule set, reading their own module's card
+  parameters, inlined by the engine (`crates/engine/src/macros.rs`), and
+  checked at load (duplicates, clashes with terms, arity, cycles). A
+  condition counts 1 or 0 in arithmetic.
+- **Rewrites**: total-tricks.bid from 12 rules to 3 (`lott_trumps(x) =
+  we.fit(x).min + doubler_four(x) - unfavourable`); the notrump ladder
+  with `we.points` / `we.fit`; the keycard, Blackwood and control-bid
+  conditions as named conditions in the new `slam/slam-entry.bid` (every
+  line over 150 characters is gone). The other 24 hand-written
+  `x + partner.x.min` sums are left for when their modules are next
+  touched.
+- **Priority bands** are in docs/CONTRACT.md Part 2, with the rule that a
+  judgment call must not be read as another rule. **The silence passes
+  were not moved**: at −50 they tie with base.bid's "Game reached" pass,
+  which then reads 6,942 of them, and 20 calls off our own auctions
+  change. §4's "moving them changes nothing now" is wrong; the move is a
+  measured rule change for a later phase.
+- **The lint** (decision 3): `compare` counts our own calls that partner
+  reads as a higher-priority rule than the one that chose them, with the
+  top pairs (`read_as` in `--json`).
+- **A bug found on the way**: descriptiveness was cached by rule and calls
+  only, so a `shows` that reads the vulnerability took the value of
+  whichever board filled the cache first (boards are bid in parallel).
+  The merged LoTT reads `unfavourable`, and six replay calls flipped
+  between runs. The key now carries the values of such terms, and a
+  `shows` that counts conditions has its publicly settled parts folded
+  once instead of per sample hand (compare time within a few percent of
+  before).
+

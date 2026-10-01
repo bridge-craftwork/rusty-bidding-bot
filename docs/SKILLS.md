@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-58 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 17 proposed, 0 unknown. 44 modules declare a skill; 60 card fields carry one.
+59 skills named: 36 in Bridge-Classroom's taxonomy, 5 used only by lessons, 18 proposed, 0 unknown. 48 modules declare a skill; 61 card fields carry one.
 
 ### The map
 
@@ -50,7 +50,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/blackwood` (Blackwood) | taxonomy | `slam.blackwood.standard` | `blackwood` |
 | `bidding_conventions/control_bids` (Control (Cue) Bids) | proposed | `slam.cue_bids.play` | `control-bids` |
 | `bidding_conventions/drury` (Drury) | proposed | `major_openings.drury.play`, `major_openings.drury.two_d` | `drury` |
-| `bidding_conventions/fourth_suit_forcing` (Fourth Suit Forcing) | taxonomy | `other_conventions.fourth_suit_forcing.play`, `other_conventions.fourth_suit_forcing.one_round`, `other_conventions.fourth_suit_forcing.game_force` | `responder-rebids` |
+| `bidding_conventions/fourth_suit_forcing` (Fourth Suit Forcing) | taxonomy | `other_conventions.fourth_suit_forcing.play`, `other_conventions.fourth_suit_forcing.one_round`, `other_conventions.fourth_suit_forcing.game_force` | `fourth-suit-forcing`, `responder-rebids` |
 | `bidding_conventions/gerber` (Gerber) | proposed | `slam.gerber.play` | `gerber` |
 | `bidding_conventions/help_suit_game_try` (Help Suit Game Try) | taxonomy | `other_conventions.help_suit_game_tries.play` | — |
 | `bidding_conventions/impossible_2s` (Impossible 2♠) | proposed | `major_openings.impossible_2s.play` | `impossible-2s` |
@@ -68,8 +68,9 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/stayman` (Stayman) | taxonomy | `notrump.stayman.play`, `notrump.stayman.forcing`, `notrump.stayman.garbage`, `notrump.stayman.puppet_1nt`, `notrump.two_nt.puppet` | `stayman`, `two-nt-responses` |
 | `bidding_conventions/strong_2c` (Strong 2♣) | taxonomy | `two_level.two_clubs.meaning` | `strong-openings` |
 | `bidding_conventions/super_accept` (Super-Accepting a Transfer) | proposed | `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton` | `super-accept`, `superaccept-doubleton` |
-| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force` | — |
+| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force` | `game-force` |
 | `bidding_conventions/weak_2s` (Weak Twos) | taxonomy | `two_level.two_diamonds.meaning`, `two_level.two_hearts.meaning`, `two_level.two_spades.meaning` | `preempts`, `weak-two-responses` |
+| `bidding_conventions/wolff_signoff` (Wolff Sign-off) | proposed | `other_conventions.wolff_signoff.play` | `wolff` |
 | `competitive_bidding/advancing_overcalls` (Responding to Overcalls) | lessons only | — | `advances` |
 | `competitive_bidding/balancing` (Balancing) | lessons only | — | `balancing` |
 | `competitive_bidding/cappelletti` (Cappelletti over 1NT) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `cappelletti` |
@@ -98,7 +99,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `partnership_bidding/rebids` (Rebids by Opener or Responder) | lessons only | — | `rebids` |
 | `partnership_bidding/responders_rebid` (Responder's Rebid) | lessons only | — | `responder-rebids` |
 | `partnership_bidding/roman_key_card` (Roman Key Card (Partnership)) | taxonomy | — | `rkcb-1430` |
-| `partnership_bidding/slam_bidding` (Slam Bidding) | lessons only | — | `control-bids`, `over-3nt`, `slam-catch` |
+| `partnership_bidding/slam_bidding` (Slam Bidding) | lessons only | — | `control-bids`, `over-3nt`, `slam-catch`, `slam-entry` |
 | `partnership_bidding/stayman_transfers` (Stayman & Transfers (Partnership)) | taxonomy | — | `jacoby-transfers`, `stayman` |
 | `partnership_bidding/two_club` (Two Club (Partnership)) | taxonomy | — | `strong-openings` |
 | `partnership_bidding/weak_twos` (Weak Twos (Partnership)) | taxonomy | — | `preempts`, `weak-two-responses` |
@@ -108,7 +109,6 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 **Skills with a card field but no module** (the card can say we play it; no rules bid it):
 
 - `bidding_conventions/help_suit_game_try`: `other_conventions.help_suit_game_tries.play`
-- `bidding_conventions/two_over_one`: `major_openings.two_over_one.game_force`
 - `competitive_bidding/lebensohl`: `notrump.lebensohl.over_interference`, `competitive.lebensohl_weak_twos.play`
 
 **Conventions a module declares but no card field carries** (always on, or switched by a field not yet tagged; `bidding_conventions` and `competitive_bidding` only, since the course-level skills have no field):
@@ -135,6 +135,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `bidding_conventions/minor_suit_transfers` (proposed): `notrump.minor_transfers`
 - `bidding_conventions/smolen` (proposed): `notrump.smolen.play`
 - `bidding_conventions/super_accept` (proposed): `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton`
+- `bidding_conventions/wolff_signoff` (proposed): `other_conventions.wolff_signoff.play`
 - `competitive_bidding/cappelletti` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`
 - `competitive_bidding/defense_vs_1nt` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`
 - `competitive_bidding/meckwell` (proposed): `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system`

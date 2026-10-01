@@ -266,3 +266,15 @@ dealer  E
 vul     NS
 E K2.A9.AT.AKJ9742      | 1C P 2C P                            | 3NT    | seven clubs to the AKJ with support, every suit stopped: nine tricks
 E K2.A9.AT.AKJ9742      | 1C 1S 3C 4S                          | 5C     | 19 and seven clubs opposite the preemptive raise
+
+# Over a forcing 1NT opener may not pass: a balanced minimum bids a
+# three-card minor (2026-09-30, 2/1 game force).
+card    21GF-DEFAULT
+dealer  N
+N AKJ52.K84.73.Q52      | 1S P 1N P                            | 2C     | three clubs: the forced rebid
+
+# Over responder's game-forcing 2NT (16+) after a 2/1: opener counts slam.
+card    21GF-DEFAULT
+dealer  N
+N AKJ52.KQ84.A3.Q2      | 1S P 2C P 2H P 2N P                  | 6NT    | 19 facing 16+: 33 on his floor
+N AJ852.KQ84.Q3.Q2      | 1S P 2C P 2H P 2N P                  | 4NT    | 15 points: 31, quantitative

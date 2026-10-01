@@ -49,10 +49,8 @@ module blackwood "Blackwood (standard)"
 #    `we.tp(trump).max` says nothing; what is known is partner's floor.
 #    33 between us on that floor is the test, and where the trump
 #    agreement recorded no support points for partner the fallback is my
-#    own 18, a game force being worth about 13. (`we.tp(trump).min` would
-#    be the way to write the first half, but the engine does not treat
-#    `we.tp` as depending on my hand and drops the candidate before the
-#    hand is looked at -- see slam-catch.notes.md, "For Rick".) Here the
+#    own 18, a game force being worth about 13 (`slam_values`, named in
+#    slam-entry.bid with the other shared conditions). Here the
 #    ask ranks *behind* the system's descriptive calls: shortness, a
 #    second suit and a control bid all say more than 4NT does, and the
 #    ask is what is left when they are used up.
@@ -63,18 +61,35 @@ module blackwood "Blackwood (standard)"
 
 when we.trump is suit, !asked, we.forcing = none | we.forcing = round
   4N  "Blackwood: how many aces?"
-      when  we.tp(trump).max >= 33, losers <= 4     # 33 facing partner's maximum
-      when  !((trump is not C, C>=2, !has(A,C), !has(K,C), trump is not D, D>=2, !has(A,D), !has(K,D)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not C, C>=2, !has(A,C), !has(K,C), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not H, H>=2, !has(A,H), !has(K,H)) | (trump is not D, D>=2, !has(A,D), !has(K,D), trump is not S, S>=2, !has(A,S), !has(K,S)) | (trump is not H, H>=2, !has(A,H), !has(K,H), trump is not S, S>=2, !has(A,S), !has(K,S)))  # and no two bare side suits
+      when  slam_values_limited     # 33 facing partner's maximum
+      when  !two_bare_suits  # and no two bare side suits
       sets  ask=aces
       artificial
       priority 1
 
-when we.trump is suit, !asked, we.forcing = game
+when we.trump is suit, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
   4N  "Blackwood: how many aces?"
-      when  tp(trump) + partner.tp(trump).min >= 33 | tp(trump) >= 18  # 33 on partner's floor, or 18 of my own
+      when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=aces
       artificial
       priority -1                      # after any natural 4NT
+
+# A fit known but not agreed (docs/JUDGMENT-LAYER.md, Phase 1): partner's
+# game raise, his preempt, a transfer completed. No rule set `trump`, so
+# the asks above never saw it. The ask agrees the major on the way.
+# Majors only for now: the sign-offs after an answer are awkward in a
+# minor.
+when we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
+  4N  "Blackwood, agreeing ♠: how many aces?"
+      when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=aces
+      artificial
+      priority 1
+  4N  "Blackwood, agreeing ♥: how many aces?"
+      when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=aces
+      artificial
+      priority 1
 
 # After a control-bid exchange (`control-bids.bid`, when the card plays
 # them). `asked control(t)` is partner's control bid; `answered control(u)`
@@ -89,14 +104,14 @@ when we.trump is suit, !asked, we.forcing = game
 # comes first (priority 12), the ask before one past game (10).
 when we.trump is suit, asked control(t)
   4N  "Blackwood: how many aces?"
-      when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C) | me.denied(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D) | me.denied(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H) | me.denied(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S) | me.denied(S))
+      when  all_covered
       sets  ask=aces
       artificial
       priority 11
 
 when we.trump is suit, answered control(t), partner.last = 4{trump}
   4N  "Blackwood: how many aces?"
-      when  (trump is C | (has(A,C) | (C<=0, partner.C.min<=3) | (style is first_or_second_round, has(K,C) | (C<=1, partner.C.min<=3))) | partner.cued(C)), (trump is D | (has(A,D) | (D<=0, partner.D.min<=3) | (style is first_or_second_round, has(K,D) | (D<=1, partner.D.min<=3))) | partner.cued(D)), (trump is H | (has(A,H) | (H<=0, partner.H.min<=3) | (style is first_or_second_round, has(K,H) | (H<=1, partner.H.min<=3))) | partner.cued(H)), (trump is S | (has(A,S) | (S<=0, partner.S.min<=3) | (style is first_or_second_round, has(K,S) | (S<=1, partner.S.min<=3))) | partner.cued(S))
+      when  all_covered_by_us
       sets  ask=aces
       artificial
       priority 15
