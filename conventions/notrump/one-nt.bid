@@ -14,6 +14,7 @@ module notrump-base "1NT opening and natural responses"
   param  vs_2c   = notrump.transfers.vs_2c default false
   param  style   = general.style
   param  five_major = notrump.one_nt.five_card_major default sometimes
+  param  jacoby  = notrump.transfers.jacoby default true
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -132,6 +133,63 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
       shows bba_nt_imp_points<=7
       when  imps, style is bba, partner.hcp.min>=15, partner.hcp.max<=17
       priority -10
+
+# Natural major-suit responses when the card plays no transfers
+# (`notrump.transfers.jacoby` off; one-nt.notes.md, "Natural majors
+# without transfers", probes/nt-van-*.toml). 2M is to play with five or
+# more and no game interest; 3M is five or more and game values, forcing:
+# opener raises to 4M with three or more, else bids 3NT. With 5-5 the
+# higher suit. 5-4 in the majors goes through Stayman (stayman.bid), and
+# bids 3M over the 2♦ denial.
+after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
+  3S  "Five or more spades, game forcing"
+      shows S>=5, S>=H, strength>=game
+      when  !jacoby
+      sets  forcing=game, ask=choose_game(S)
+  3H  "Five or more hearts, game forcing"
+      shows H>=5, H>S, strength>=game
+      when  !jacoby
+      sets  forcing=game, ask=choose_game(H)
+  4S  "To play: seven or more spades, short of a game force"
+      shows S>=7, S>=H, strength=invite
+      when  !jacoby
+      priority 1                       # ahead of the invitational Stayman (stayman.bid)
+  4H  "To play: seven or more hearts, short of a game force"
+      shows H>=7, H>S, strength=invite
+      when  !jacoby
+      priority 1
+  2S  "To play: five or more spades, no game interest"
+      shows S>=5, S>=H, strength=signoff | (strength=invite, hcp<=6)
+      when  !jacoby
+  2H  "To play: five or more hearts, no game interest"
+      shows H>=5, H>S, strength=signoff | (strength=invite, hcp<=6)
+      when  !jacoby
+
+# Opener after the signoff: pass (BBA passed 641 of 642 on the vanilla set).
+after 1N (P) 2H (P) | 1N (P) 2S (P) | (1x) 1N (P) 2H (P) | (1x) 1N (P) 2S (P) | (1x) P (P) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2S (P) | (1x) 1N (X) 2H (P) | (1x) 1N (X) 2S (P) | (1x) P (P) 1N (X) 2H (P) | (1x) P (P) 1N (X) 2S (P) when !jacoby
+  P   "Partner's signoff"
+
+# Opener chooses the game: four of the major with three or more (an
+# eight-card fit), 3NT with two, whatever the strength (BBA, every one of
+# 800 probe hands: probes/nt-van-3h-opener.toml, nt-van-3s-opener.toml).
+when asked choose_game(M)
+  4M  "Three or more {M}: game in the fit"   shows M>=3
+  3N  "Two {M}: 3NT"                         shows M<=2
+
+# Responder after the choice: with six, 3NT goes back to the major (an
+# eight-card fit again); slam values bid it.
+when answered choose_game(M), partner.last=3N
+  6M  "Slam: six or more {M}, slam values"   shows M>=6, strength>=slam
+  6N  "Slam values, no fit"                  shows M<=5, strength>=slam
+  4N  "Quantitative, no fit"                 shows M<=5, balanced, strength=slam_invite
+      sets  ask=quant
+  4M  "Six or more {M}: game in the fit"     shows M>=6, strength<=slam_invite
+  P   "No fit: play 3NT"                     shows M<=5, strength<=slam_invite
+when answered choose_game(M), partner.last=4{M}
+  6M  "Slam in the fit"                      shows strength>=slam
+  6M  "Slam in the fit, counting shortness"  shows tp(M)>=33-partner.points.min
+  P   "Game in the fit"                      shows strength<=slam_invite
+      priority -1
 
 # Opener answers the natural 3m slam try (six of the minor, slam-invite
 # values): slam with a fit and a maximum, else 3NT (it had no rule;

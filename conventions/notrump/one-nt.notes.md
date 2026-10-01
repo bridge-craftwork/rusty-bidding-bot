@@ -509,6 +509,78 @@ of the minor with a fit and a minimum (forcing; responder bids six from
 slam values, else passes). Full corpus +1,943 by par distance, +3,630 by
 side (481 boards).
 
+## Natural majors without transfers (2026-09-30)
+
+On the vanilla SAYC random set (BBA's bare SAYC card, our side with
+`notrump.transfers.jacoby=false`; `.rbb-cache/random/README.md`) a hand
+with a five-card major had no call of its own over 1NT: game values bid
+3NT through the "no better call" fallback (which partner then read as
+the 3NT that denies a major, 1,436 calls), weak hands passed 1NT, and
+`1NT P 3H P` / `1NT P 3S P` (BBA's auctions) had no rule for opener.
+The biggest divergence points of the set: BBA 3♠/3♥, ours 3NT, 765
+boards and −1,361 IMPs at `1NT P`, the same again after a pass.
+
+Now, only when the card plays no Jacoby transfers (`when !jacoby`):
+
+- **2♥/2♠: to play**, five or more, no game interest (signoff strength,
+  or invitational by our count with at most 6 HCP). With 5-5 the spades.
+  Opener passes.
+- **3♥/3♠: five or more and game values, forcing** (`choose_game(M)`).
+  Opener bids 4M with three or more, 3NT with two. Responder goes back
+  to 4M over 3NT with six; with slam values 6M/6NT, 4NT quantitative
+  with slam-invite values and no fit. Over 4M he bids 6M with slam
+  values, or with 33 support points between the hands (`tp(M)`, as
+  after Stayman).
+- **4♥/4♠: to play** with seven or more and less than game values.
+- **Invitational with five (7+ HCP):** Stayman, then 2M over 2♦, or 2♠
+  over 2♥; 5-4 in the majors with game values goes through Stayman and
+  bids 3M (the five-card suit) over 2♦ (stayman.bid, stayman.notes.md).
+
+BBA (bare SAYC, matchpoints; `probes/nt-van-5m-resp.toml`, 800 random
+responder hands with a five-card or longer major opposite a balanced
+15-17 without one; `probes/nt-van-3h-opener.toml`,
+`probes/nt-van-3s-opener.toml`, 400 opener hands each):
+
+| responder | BBA |
+|---|---|
+| 0-6 HCP, five or six | 2M (all 140 hands with five) |
+| 7-8 HCP, five | 2♣ (97 of 97), then 2M |
+| 9 HCP, five | 2♣ without two tens, 3M with two (BBA's half point a ten) |
+| 10-16 HCP, five | 3M (299 of 302), 5-4 in the majors too |
+| six, 7-8 HCP | 2♣ or 3M, about half each; 9+ 3M |
+| seven, 5-6 HCP | 4M mostly; 7+ 3M |
+
+Opener over 3M: 4M with three or four of the major, 3NT with two, in
+every one of the 800 hands, whatever its strength and whatever the
+other major (4-2 bids 3NT too). Over 3NT, in BBA's auctions on the vanilla
+set, responder with five passes (214 of 241; 6NT with 11) and with six
+or more bids 4M (125 of 168) or six (32).
+
+Where we differ: our game line is our own count (total points, a fifth
+card worth something), so 9 HCP with a five-card major is mostly game
+for us and an invitation for BBA, and the reverse at the edges; 5-4 in
+the majors starts with Stayman (as with transfers) where BBA bids 3M
+at once. Both are roughly even against par (3M/2♣ either way: about
+230 boards, +100 IMPs to us). BBA has no 4M from responder with six and
+game values (3M, then 4M over 3NT); neither do we.
+
+Measured (vs BBA, double-dummy par as the yardstick):
+
+| set | before | after | change |
+|---|---|---|---|
+| vanilla SAYC, 95,558 boards | −42,209 | −38,655 | **+3,554** |
+| corpus (342 scenarios) | −93,855 | −93,855 | 0 (identical) |
+| 21GF random, 100,000 boards | −43,948 | −43,948 | 0 (identical) |
+
+On the vanilla set the first version (3M, 2M, opener's choice, the
+Stayman routes) gained +3,176; capping the 2M signoff and the
+invitational Stayman at 6/7 HCP, as BBA, and the support-point slam
+over 4M added +317, and keeping opener from reading 2♠ over 2♥ as six
+spades +61. Divergence points at `1NT P` (after any passes): 3,184
+boards and −1,995 IMPs before, 1,396 and +675 after. `1NT P 3H P` and
+`1NT P 3S P` no longer appear among the no-rule positions. The corpus
+and 21GF play transfers, so nothing there moves.
+
 ## Sources
 
 - **The system:** a 15-17 1NT opening and natural responses (2NT
@@ -531,7 +603,14 @@ side (481 boards).
   `probes/pools/bba-1nt-15-17-with-5422.txt`.
 - **Corpus measurements:** the slam jump (+2,543), length points, opener's
   count, the minor slam tries (2026-09-25, 2026-09-27) and the
-  double-dummy slam calibration.
+  double-dummy slam calibration; the natural majors without transfers on
+  the vanilla SAYC random set (2026-09-30).
+- **Natural majors without transfers:** 2M weak, 3M forcing and 4M to
+  play are the SAYC booklet's responses to 1NT without transfers
+  (standard practice, not yet cited to the page); thresholds and
+  opener's choice from `probes/nt-van-5m-resp.toml`,
+  `probes/nt-van-3h-opener.toml` and `probes/nt-van-3s-opener.toml`
+  (bare SAYC, 2026-09-30).
 - **Where we differ:** BBA's finer valuation, flat 8-counts, tens with a
   five-card minor, and 16-17 opposite 15-17 ("Accepted differences from
   BBA").
