@@ -33,6 +33,10 @@ S 84.KQJ85.972.Q53      | 2C P 2H P 3H P                       | 4H     | 7: gam
 # trump in standard, but two hearts make the fit (Rick, 2026-10-01).
 S A8.Q7.AKJ93.Q982      | 1H P 2D P 3H P                       | 6H     | 16 + a doubleton (support points, two trumps) + 16, five controls
 S A8.Q7.KJ932.Q982      | 1H P 2D P 3H P                       | 4H     | 12: game
+# The hand that sees the fit counts as the short hand: two hearts facing
+# partner's six-card rebid (Rick, 2026-10-01).
+N AKJ65.Q4.5.AKQ43      | 1S P 2H P 3C P 3H P                  | 6H     | 19 + shortness capped at two trumps + his 11, six controls
+N AKJ65.Q4.5.KJ943      | 1S P 2H P 3C P 3H P                  | 4H     | 15: game in the fit
 
 # The same hand on a card that asks: the direct slam is off (no ask either:
 # it needs 33 on partner's maximum and four losers).
