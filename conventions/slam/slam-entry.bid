@@ -40,11 +40,17 @@ define shorter(t) = (t is C, C < partner.C.min) | (t is D, D < partner.D.min) | 
 
 # The count on partner's floor, by role. Partner as the long hand counts
 # his shown points (HCP + length), or his HCP and the length he has shown
-# when no call showed points: either is a floor.
+# when no call showed points: either is a floor. As the short hand (or
+# with equal length) his support points when a raise showed them, else
+# the points he showed (`_p`): a call that shows total points leaves
+# his HCP floor, and so `partner.tp`, near zero (1S-2D-3C-3S: 13+
+# points). Each condition takes the better of the floors.
 define count_long(t)    = hcp + length_points + partner.tp(t).min
+define count_long_p(t)  = hcp + length_points + partner.points.min
 define count_short(t)   = tp(t) + partner.points.min
 define count_short_l(t) = tp(t) + partner.hcp.min + partner.length_points.min
 define count_equal(t)   = tp(t) + partner.tp(t).min
+define count_equal_p(t) = tp(t) + partner.points.min
 
 # The same on partner's maximum.
 define count_long_max(t)  = hcp + length_points + partner.tp(t).max
@@ -56,8 +62,8 @@ define count_equal_max(t) = tp(t) + partner.tp(t).max
 # support points; the long hand, which no longer counts its shortness,
 # needs two less, the short hand one less (calibrated 2026-10-01 on the
 # corpus and the 21GF random set: slam-entry.notes.md).
-define slam_count_interest(t) = (longer(t), count_long(t) >= 29) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 31)
-define slam_count(t) = (longer(t), count_long(t) >= 30) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 32)
+define slam_count_interest(t) = (longer(t), count_long(t) >= 29) | (longer(t), count_long_p(t) >= 29) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 31) | (!longer(t), !shorter(t), count_equal_p(t) >= 31)
+define slam_count(t) = (longer(t), count_long(t) >= 30) | (longer(t), count_long_p(t) >= 30) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 32) | (!longer(t), !shorter(t), count_equal_p(t) >= 32)
 define slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), count_short_max(t) >= 32) | (!longer(t), !shorter(t), count_equal_max(t) >= 33)
 
 # ── Values ────────────────────────────────────────────────────────────
@@ -183,7 +189,7 @@ when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
 define no_ask = !bw, !k1430, !k0314
 
 # Slam values for a direct slam: the count 28, and 35 with my controls.
-define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35)
+define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)
 define direct_slam_values = direct_count(trump)
 
 when we.trump is suit, !they.bid, !asked, no_ask

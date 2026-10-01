@@ -37,6 +37,10 @@ S A8.Q7.KJ932.Q982      | 1H P 2D P 3H P                       | 4H     | 12: ga
 # partner's six-card rebid (Rick, 2026-10-01).
 N AKJ65.Q4.5.AKQ43      | 1S P 2H P 3C P 3H P                  | 6H     | 19 + shortness capped at two trumps + his 11, six controls
 N AKJ65.Q4.5.KJ943      | 1S P 2H P 3C P 3H P                  | 4H     | 15: game in the fit
+# Partner's points as his floor when he showed points, not support points:
+# responder's 3S after 1S-2D-3C is 13+ total points.
+N AKJ65.5.Q4.AKJ43      | 1S P 2D P 3C P 3S P                  | 6S     | 19 + two length + his 13, seven controls
+N KJ865.5.Q4.KQJ43      | 1S P 2D P 3C P 3S P                  | 4S     | 14: game
 
 # The same hand on a card that asks: the direct slam is off (no ask either:
 # it needs 33 on partner's maximum and four losers).
