@@ -324,6 +324,37 @@ boards, +204), `2C 2N 3H 4H -> 6H` (+154), `1D 1S 4S -> 6S` (+137),
 `1H 2D 2H 3H -> 6H` (+124), `1D 1H 4H -> 6H` (+120); the worst,
 `1S 2H 2S 3S -> 6S` (30, -15). No new problems, no new misread calls.
 
+## How well a count predicts BBA (2026-09-30)
+
+Rick asked how often support points plus controls predict BBA's slam
+call. On the six Phase A grids (4,800 made hands), scoring each threshold
+on hands it was not fitted to (5-fold):
+
+| predictor | agrees with BBA |
+|---|---:|
+| BBA's usual call in the position, no count | 78.4% |
+| `direct_slam_values` as built (tp 29+, +controls 35) | 82.4% |
+| tp + partner's floor >= 32, one threshold | 86.2% |
+| best threshold per position: HCP / tp / tp + controls | 85.0 / 87.0 / 87.7% |
+| Zar points / 5-4-3-2-1 / losing tricks | 87.2 / 84.3 / 82.9% |
+| logistic / boosted trees over every card | 88.1 / 89.0% |
+
+No count gets past about 89%. The rule as built agrees less than the
+plain 32 threshold, but par prefers it (+2,325 against +1,494): it was
+tuned on par, not on agreement.
+
+The rest is not noise. Over 1NT-3S-4S, 77 borderline hands got the same
+call from BBA twice, again with a different partner hand, and again after
+a spot-card change (0 of 77 changed). Single-card surveys show placement
+mattering at the same HCP and shape: AKT765.74.A6.K97 passes, but moving
+the ♠A to clubs or the ♠K to diamonds bids 6♠ (a top honour counts for
+more outside trumps); a singleton heart bids 6♠ too; AJT54.A4.AJ42.95
+bids 6♠ but passes without its fifth spade or any spade honour. A
+"controls outside trumps" term did not help across the 4,800 hands, which
+points to a suit-by-suit trick count against partner's shown holding
+rather than a points formula. Next (Rick, option 3): reconstruct that
+valuation with surveys, and test it against our count on par.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point
