@@ -10,6 +10,8 @@ module stayman "Stayman"
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c = notrump.transfers.vs_2c default false
   param  style = general.style
+  param  jacoby = notrump.transfers.jacoby default true
+  param  smolen = notrump.smolen.play default false
 
 after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
@@ -36,6 +38,16 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
       sets  forcing=round, ask=majors
       artificial
       priority 1
+
+  # Without transfers an invitational hand with a five-card major starts
+  # with Stayman and bids two of the major over 2♦ (BBA, bare SAYC: 7-8
+  # HCP with five, probes/nt-van-5m-resp.toml). Below the 4-card-major
+  # rule, which partner reads 2♣ by: the answer is the same.
+  2C  "Stayman: invitational with a five-card major"  alert
+      shows H>=5 | S>=5, strength=invite, hcp>=7
+      when  !jacoby, style is not bba
+      sets  forcing=round, ask=majors
+      artificial
 
 # Opener. With both majors the first rule that fits (2H) wins.
 after 1N (P) 2C (P) | (1x) 1N (P) 2C (P) | (1x) P (P) 1N (P) 2C (P) | (1x) 1N (X) 2C (P) | (1x) P (P) 1N (X) 2C (P)
@@ -64,6 +76,25 @@ when answered majors
   2S  "Five spades, four hearts, invitational"   shows S=5, H=4, hcp>=23-partner.hcp.min, hcp<=24-partner.hcp.min
       when  partner.last=2D, style is bba
       sets  ask=spades_invite
+  # Without transfers: an invitation with five (or more) in a major,
+  # after 2C with that hand (above). Over 2♥ the spades are new; over a
+  # 4-card answer in the five-card major responder raises instead.
+  2H  "Five or more hearts, invitational"   shows H>=5, H>S, strength=invite
+      when  partner.last=2D, !jacoby, style is not bba
+      sets  ask=invite(H)
+  2S  "Five or more spades, invitational"   shows S>=5, strength=invite
+      when  partner.last=2D | partner.last=2H, !jacoby, style is not bba
+      when  H<=3                    # with four hearts: Smolen's 2S over 2D, a raise over 2H
+      sets  ask=invite(S)
+  # Without transfers or Smolen, 5-4 in the majors with game values bids
+  # the five-card major over the denial, forcing: opener chooses 4M or
+  # 3NT as over 1NT-3M (one-nt.bid, `choose_game`).
+  3S  "Five spades, game forcing"   shows S>=5, S>=H, strength>=game
+      when  partner.last=2D, !jacoby, !smolen
+      sets  forcing=game, ask=choose_game(S)
+  3H  "Five hearts, game forcing"   shows H>=5, H>S, strength>=game
+      when  partner.last=2D, !jacoby, !smolen
+      sets  forcing=game, ask=choose_game(H)
   6H  "Slam in the heart fit"                     shows H>=4, strength=slam   when partner.H>=4
   6S  "Slam in the spade fit"                     shows S>=4, strength=slam   when partner.S>=4
   4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4, style is not bba

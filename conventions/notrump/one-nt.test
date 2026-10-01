@@ -65,3 +65,29 @@ dealer  S
 S A2.KQJ63.K82.Q93      |                                      | 1H     | never: open the major
 card    Basic-Bridge
 S A2.KQJ63.K82.Q93      |                                      | 1NT    | Basic-Bridge plays "1NT opening shape 5 major"
+
+# Natural majors without transfers (2026-09-30; probes/nt-van-*.toml,
+# BBA's bare SAYC card).
+card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never
+dealer  N
+S KQJ54.K32.Q54.32      | 1NT P            | 3S     | five spades and game values: forcing
+S 54.AQJ54.K32.Q54      | 1NT P            | 3H     | five hearts and game values: forcing
+S KQ973.T.AK854.87      | 1NT P            | 3S     | 5-5 with the minor: the major first
+S AQ9752.2.Q942.T2      | 1NT P            | 3S     | six spades, 8 HCP: game (BBA too)
+S Q9854.32.J54.932      | 1NT P            | 2S     | weak with five spades: to play
+S 632.KJ7432.T8.76      | 1NT P            | 2H     | weak with six hearts: to play
+S 97654.AT953.864.      | 1NT P            | 2S     | weak 5-5 in the majors: spades
+S T73.AT653.Q732.6      | 1NT P            | 2H     | 6 HCP with five: to play, as BBA
+S .QT98542.65.K654      | 1NT P            | 4H     | seven hearts, 5 HCP: game to play (BBA)
+S KQJ53.73.J95.T96      | 1NT P            | 2C     | invitational with five: Stayman first
+N KQ2.J32.AK54.Q32      | 1NT P 3H P       | 4H     | three hearts: game in the fit
+N KQ32.J2.AK54.Q32      | 1NT P 3H P       | 3NT    | two hearts, four spades: 3NT (BBA)
+N Q7.AK2.AK54.Q632      | 1NT P 3S P       | 3NT    | two spades, a maximum: still 3NT
+N K72.AQ74.K54.A32      | 1NT P 3S P       | 4S     | three spades: game in the fit
+N KQ2.J32.AK54.Q32      | 1NT P 2H P       | P      | partner signed off
+S 2.AQJ752.K42.432      | 1NT P 3H P 3NT P | 4H     | six hearts: back to the major
+S 2.AQ752.KJ4.K432      | 1NT P 3H P 3NT P | P      | five: 3NT
+# Without Blackwood (bare SAYC); with it the slam-entry layer asks.
+card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never slam.blackwood.standard=false
+S AQJ65.K42.8.AQ82      | 1NT P 3S P 4S P  | 6S     | 16 and a singleton in the fit: slam
+S AT643.AT3.KT52.K      | 1NT P 3S P 4S P  | P      | 14, no more: game

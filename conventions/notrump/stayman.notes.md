@@ -499,6 +499,26 @@ the count, and its fit, pass.
 - Identical auctions: +45, -5.
 - The default is unchanged.
 
+## Without transfers (2026-09-30)
+
+With `notrump.transfers.jacoby` off (BBA's bare SAYC card) two hands
+that would transfer use Stayman instead (one-nt.notes.md, "Natural
+majors without transfers"):
+
+- **Invitational with a five-card major** (7+ HCP and invitational by
+  our count): 2♣, then 2M over 2♦ (five or more, `ask=invite(M)`,
+  answered by the base rule in rebids.bid), or 2♠ over 2♥ with at most
+  three hearts. Over an answer in the five-card major responder raises.
+  BBA bids 2♣ with every 7-8 HCP five-card major in
+  `probes/nt-van-5m-resp.toml` and then two of the major. The new 2♣
+  rule sits below the four-card-major one, so partner reads 2♣ the
+  usual way; the answer does not change. Over 2♦, 2♠ with five spades
+  and four hearts is still the Smolen-style invitation above.
+- **5-4 in the majors with game values** (no Smolen): 2♣, then three of
+  the five-card major over 2♦, forcing; opener bids 4M with three, 3NT
+  with two (`choose_game`, one-nt.bid). Before, responder bid 3NT and
+  lost the 5-3 fit. BBA bids 3M directly with these hands.
+
 ## Sources
 
 - **The convention:** 2♣ Stayman over 1NT, non-forcing, with the usual
@@ -518,7 +538,12 @@ the count, and its fit, pass.
   21GF-DEFAULT and 21GF-GIB corpora; BBA's meanings of its 3♣/3♦ read
   with `bba-cli --all-meanings`.
 - **Corpus measurements:** support and length points (+2,478), the
-  2026-09-24 rulings (+4,518), the `bba` style's fitted counts.
+  2026-09-24 rulings (+4,518), the `bba` style's fitted counts; the
+  routes without transfers on the vanilla SAYC random set (2026-09-30,
+  one-nt.notes.md).
+- **Without transfers:** 1NT-2♣-2♦-3M as five cards and forcing is
+  standard practice (SAYC), not yet cited to the page; the invitational
+  route is BBA's (`probes/nt-van-5m-resp.toml`).
 - **Where we differ:** 4-3-3-3 with a four-card major, 2NT after Stayman
   ("Accepted differences from BBA"); the default bids 3NT with 5-4 and a
   minor after 2♦, which par prefers, where BBA and the `bba` style bid

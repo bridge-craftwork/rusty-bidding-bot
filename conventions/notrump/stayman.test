@@ -101,3 +101,15 @@ S AK72.K54.QJ7.Q43      | 1NT P 2C P 2S P 3C P | 3H    | bba: flat minimum, thre
 N A965.42.K4.QT843      | 1NT P 2C P 2D P 3C P 4C P | P  | bba: 9 passes the raise
 N A98.AJ42.8.A9642      | 1NT P 2C P 2D P 3C P 4C P | 5C | bba: 13 bids the game
 N KQ93.J65.A.QT652      | 1NT P 2C P 2D P 3C P 3D P | 3NT | bba: 3NT over the minimum
+
+# Without transfers (2026-09-30): an invitation with five in a major goes
+# through Stayman, and 5-4 game hands bid the five-card major over 2♦.
+card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never
+dealer  N
+S KQJ53.73.J95.T96      | 1NT P 2C P 2D P  | 2S     | five spades, invitational
+S Q74.KQJ75.942.74      | 1NT P 2C P 2D P  | 2H     | five hearts, invitational
+S KQJ53.73.J95.T96      | 1NT P 2C P 2H P  | 2S     | five spades over 2H, invitational
+S AJ93.AJ982.J2.T7      | 1NT P            | 2C     | 5-4 in the majors, game values: Stayman
+S AJ93.AJ982.J2.T7      | 1NT P 2C P 2D P  | 3H     | then the five-card major, forcing
+N K72.Q4.AK54.A632      | 1NT P 2C P 2D P 3H P | 3NT | two hearts: 3NT
+N K72.Q84.AK54.A63      | 1NT P 2C P 2D P 3H P | 4H  | three hearts: game in the fit
