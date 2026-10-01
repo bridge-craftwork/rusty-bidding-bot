@@ -270,11 +270,14 @@ after 1M (P) 1N (P)
 # ── After a raise ────────────────────────────────────────────────────
 # With a fit found, opener counts support points tp(x): BBA bids game over a
 # simple raise with 16-18 and a singleton, but passes 14-15 with doubletons.
+# A raise that can hold 11-12 (a card without the limit raise:
+# responses.bid) is invited from 15 (responses.notes.md, 2026-09-30).
 after 1x (P) 2x (P)
-  P   "Minimum: no game"                   shows tp(x)<=16
+  P   "Minimum: no game"                   shows tp(x)<=16, tp(x)<=14 | x is C | x is D | partner.tp(x).max<=10
       when  style is not bba | x is C | x is D
       priority -5
-  3x  "Invitation: 17-18 with the fit"     shows tp(x)=17..18
+  3x  "Invitation: 17-18 with the fit (15-18 opposite a raise to 12)"
+      shows tp(x)=17..18 | (tp(x)=15..16, x is H | x is S, partner.tp(x).max>=11)
       when  style is not bba | x is C | x is D
 after 1M (P) 2M (P)
   4M  "Game: 19+ with the fit"             shows tp(M)>=19

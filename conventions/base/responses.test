@@ -104,3 +104,17 @@ card    21GF-GIB
 S 72.K84.Q73.AQ952      | 1S P                                 | 1NT    | a 2/1 card without forcing 1NT: 1NT 6-12
 card    Basic-Bridge
 S 72.K84.Q73.AQ952      | 1S P                                 | 2C     | Standard American: 2C from 11, forcing one round
+
+# No limit raise on the card (2026-09-30: a bare SAYC .bbsa without
+# "1M-3M inviting"): 2M is the only raise below game and takes 6-12
+# support points; three trumps and a side suit with 11-12 still bid it
+# first. Random deals, SAYC-bare (BBA bids 2M on all but the last).
+card    Basic-Bridge major_openings.jump_raise.inv=false
+dealer  N
+S KT43.KQ86.875.K7      | 1S P                                 | 2S     | four trumps, 11 HCP: no 3S to bid
+S 983.AJT2.KT742.4      | 1S P                                 | 2S     | three trumps and a singleton: 10 support points
+S 3.K72.AJ652.J843      | 1H P                                 | 2H     | 9 HCP and a singleton: 11 support points
+S K92.A82.KQ93.854      | 1S P                                 | 2D     | three trumps, 12 HCP and four diamonds: a new suit first
+S KJ43.K82.Q93.Q54      | 1H P                                 | 2H     | four spades, three hearts and 11: the raise before 1S
+card    Basic-Bridge
+S KT43.KQ86.875.K7      | 1S P                                 | 3S     | the same four-trump 11 with the limit raise played

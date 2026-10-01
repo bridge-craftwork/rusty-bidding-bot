@@ -205,7 +205,12 @@ after 1S (P)
   3H  "Invitational jump shift: 10-12, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js
 
 after 1M (P)
-  2M  "Raise: 6-10 support points, 3+ {M}"  shows M>=3, tp(M)=6..10, hcp>=6, M=3 | tp(M)<=9 | shortest>=3
+  # Without the limit raise (a card with no "1M-3M inviting") 2M is the
+  # only raise below game: it takes the 11-12 hands too, as BBA does on
+  # such a card (responses.notes.md, 2026-09-30). Opener reads the wider
+  # range from partner.tp(M) (rebids.bid).
+  2M  "Raise: 6-10 support points, 3+ {M} (6-12 when no limit raise is played)"
+      shows M>=3, hcp>=6, (tp(M)=6..10, M=3 | tp(M)<=9 | shortest>=3) | (!limit_raise, tp(M)<=12)
       when  style is not bba
       sets trump=M
   4M  "Preemptive raise: 5+ {M}, weak" shows M>=5, hcp=5..9
@@ -228,8 +233,8 @@ after 1M (P)
   # and with a singleton or void (or 9-10 with a five-card suit and a
   # doubleton, or four controls) straight to game. A new suit, forcing:
   # 11 HCP with four trumps, 12 with three and a doubleton, else 13.
-  2M  "Raise (BBA): 3+ {M}, 6-10 HCP flat or 6-8 with shortness"
-      shows M>=3, hcp>=5, tp(M)<=11, (M=3, hcp>=6, hcp<=10, hcp<=8 | shortest>=3) | (M>=4, hcp<=8, tp(M) + M <= 14)
+  2M  "Raise (BBA): 3+ {M}, 6-10 HCP flat or 6-8 with shortness (6-12 when no limit raise is played)"
+      shows M>=3, hcp>=5, (tp(M)<=11, (M=3, hcp>=6, hcp<=10, hcp<=8 | shortest>=3) | (M>=4, hcp<=8, tp(M) + M <= 14)) | (!limit_raise, hcp=6..12)
       when  style is bba
       sets trump=M
   3M  "Limit raise (BBA): three {M} and 11-12 flat or 9-11 with shortness, or four and 9-10"
