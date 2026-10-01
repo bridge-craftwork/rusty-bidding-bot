@@ -39,6 +39,7 @@ jobs:
     outputs:
       engine: ${{ steps.filter.outputs.engine }}
       rules: ${{ steps.filter.outputs.rules }}
+      workbench: ${{ steps.filter.outputs.workbench }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -56,6 +57,9 @@ jobs:
             rules:
               - 'conventions/**'
               - 'docs/SKILLS.md'
+            workbench:
+              - 'crates/workbench/**'
+              - 'Cargo.lock'
 
   rules:
     name: Rules (rbb from main)
@@ -108,8 +112,13 @@ jobs:
         run: target/release/rbb bid check
       # Optimised: the tests bid thousands of positions, which a debug
       # build runs several times slower than it compiles.
+      # The workbench (a GUI: egui and its graphics stack) is most of the
+      # compile time; its tests run when it changes, and on main.
       - name: Tests
-        run: cargo test --locked --workspace --release
+        run: cargo test --locked --workspace --release --exclude rbb-workbench
+      - name: Workbench tests
+        if: github.event_name == 'push' || needs.changes.outputs.workbench == 'true'
+        run: cargo test --locked --release -p rbb-workbench
       - uses: actions/upload-artifact@v4
         if: github.event_name == 'push'
         with:
