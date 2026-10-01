@@ -261,6 +261,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 **Modules with no skill:**
 
 - `nt-interference`
+- `penalty-doubles`
 - `their-1nt-overcall`
 
 **Card fields tagged with a skill not in Bridge-Classroom's taxonomy** (proposed, used only by lessons, or unknown):

@@ -1,0 +1,33 @@
+# Penalty doubles by judgment (penalty-doubles.notes.md, 2026-10-01).
+card    Basic-Bridge
+# They sacrifice over our cue-bid raise: partner's limit raise or better
+# and my opener make 22+ between us (Random_Pavlicek_SAYCvanilla 264).
+dealer  W
+vul     None
+E A93.A8765.AQ.AT3      | 1H 2S 3S 4S P P     | X   | 22+ between us: they are too high
+# Passed round to me at the two level: my 15, partner's overcall, three
+# of their trumps (Random_Pavlicek_SAYCvanilla 1106).
+dealer  E
+vul     NS
+N QJ42.QJ4.AJ8.K42      | P 1C 1D 1S 2D P P   | X   | 21+ between us, three diamonds
+# Partner's 1NT overcall and my 8: 23 between us whatever my clubs
+# (Random_Pavlicek_SAYCvanilla 5260).
+dealer  W
+vul     NS
+W J542.9643.AQJ.54      | P 1H 1N 3C          | X   | 23+ between us: they are too high
+# Partner answered it: he sits.
+E K97.QT8.JT93.KJ6      | P 1H 1N 3C X P      | P   | partner doubled for penalty
+# Not with less: 20 known between us and four small trumps. With two of
+# the top three it is a double.
+dealer  N
+vul     None
+S 8653.A4.K7.QJ852      | 1D 1S 2C 2S P P      | !X  | four small and 20 known: not a penalty double
+S KQT5.84.T7.AJ852      | 1D 1S 2C 2S P P      | X   | four good spades and 20 known
+# Not their artificial bids: Stayman shows no clubs.
+dealer  N
+W AKQ.83.9762.KQJ9      | 1NT P 2C            | !X  | Stayman is not a contract
+# Not over partner's 1NT: 22 between us, but they came in with shape
+# (Random_Pavlicek_21GF 8379).
+dealer  N
+vul     None
+S J74.J96.8432.A62      | 1NT P P 2H P P      | P   | partner's notrump: no penalty double
