@@ -927,6 +927,13 @@ fn compare(
             t.par.imps_vs_reference,
             t.par.imps_vs_reference as f64 / t.boards.max(1) as f64
         );
+        println!(
+            "vs BBA, errors (an overbid taken as doubled, each side charged with its own): net {:+} IMPs to us, {:+.2} per board; contract {:+}, doubling {:+}",
+            t.par.errors_vs_reference,
+            t.par.errors_vs_reference as f64 / t.boards.max(1) as f64,
+            t.par.contract_errors_vs_reference,
+            t.par.doubling_errors_vs_reference
+        );
         let solved = t.boards.saturating_sub(t.dd_tables);
         println!(
             "  double-dummy tables: {} read from the corpus files, {solved} boards without one",

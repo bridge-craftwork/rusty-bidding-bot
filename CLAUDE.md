@@ -102,6 +102,16 @@ local checkouts").
   where the contracts differ, BBA's IMP distance from par minus ours.
   Positive means ours was closer. It is not our distance from par. Notes
   written before 2026-09-25 call it "par".
+  **"vs BBA, errors"** (Rick, 2026-10-01; `par::table_errors`) charges
+  each side with its own errors instead: a contract that goes down
+  undoubled and beats par that way is taken as doubled, the **contract
+  error** (assumed result against par) goes to the side it leaves worse
+  off, the **doubling error** (actual against assumed: not doubling, a
+  double of a making contract, a redouble into a set) to the side the
+  actual result leaves worse off. Two errors at a table add instead of
+  cancelling, and a penalty double of an overbid is no longer a loss.
+  The JSON has both tables' errors per board (`reference_errors`,
+  `ours_errors`: `contract` and `doubling`, each `[NS, EW]`).
   `--set general.style=bba` plays BBA's treatments where we have them
   (docs/DESIGN.md, "Treatments"), for A/B tests; `--set path=value` works
   for any card field, on both sides.
@@ -134,13 +144,14 @@ local checkouts").
   `probes/grid_tally.py <name> [--by hcp] [--diff]` tallies the run;
   `probes/grid_diff.py <name> --key "L[0]" --key h` groups the
   disagreements.
-- **Judging a change:** the corpus par figure is distance from par, which
-  suits uncontested auctions but counts a successful competitive call
-  as a loss. For competitive changes also run
-  `probes/tools/sideimps.py BASE.json VARIANT.json` on two
-  `compare --json` runs: double-dummy IMPs to the side that made the
-  first differing call. Report both; act where they agree
-  (overcalls.notes.md, "For Rick: which yardstick").
+- **Judging a change:** distance from par suits uncontested auctions
+  but counts a successful competitive call or a penalty double of an
+  overbid as a loss. For competitive and doubling changes judge by the
+  **errors** line (each side charged with its own errors, an overbid taken
+  as doubled; Rick, 2026-10-01) and report distance from par beside it.
+  `probes/tools/sideimps.py BASE.json VARIANT.json` (IMPs to the side
+  that made the first differing call) predates it and is flattered by
+  weak runouts; use it only as a third opinion.
   Corpus tables mix cards (1NT ranges, transfer structures): restrict
   them to one card.
 - `./dev-build.sh run -q --release -p rbb-cli -- bid-pbn -i in.pbn -o out.pbn --ns-card X.bbsa --ew-card Y.bbsa`:
