@@ -229,3 +229,11 @@ card    Basic-Bridge
 dealer  S
 N 8.JT8762.6.AK986      | 1S P 1NT P 2D P                      | 2H     | six hearts, short spades: to play
 N J.AT75432.6.QJ53      | 1S P 1NT P 2C P                      | 2H     | seven hearts and four clubs: hearts all the same
+
+# Responder over opener's 2NT rebid (18-19) with slam values: the notrump
+# catch-all's quantitative 4NT and 6NT (2026-09-30, slam-entry.notes.md).
+card    Basic-Bridge
+dealer  N
+S KQ5.A92.KJ84.Q73      | 1C P 1D P 2N P                       | 4NT    | 16 facing 18-19: quantitative (34-35 between us)
+S KQ5.A92.KJ84.AQ3      | 1C P 1D P 2N P                       | 6NT    | 18 facing 18-19: slam
+S K95.A92.QJ84.Q73      | 1C P 1D P 2N P                       | 3NT    | 12: game

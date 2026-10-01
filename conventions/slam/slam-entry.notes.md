@@ -133,6 +133,228 @@ game-force keycard ask may go on. Both now stop.
 Final (32 plus the two fixes): tuning +412, corpus +1,121,
 confirmation -13; no new "no rule" or broken-force boards.
 
+## Phase A: what BBA's slam decision turns on (2026-09-30)
+
+Rick (2026-09-30): "for slam bidding, probe BBA to see what it's using —
+this may be more than HCP or total points." Measured on the **vanilla
+SAYC random set** (95,558 Pavlicek deals bid by BBA with a bare SAYC
+card that plays no Blackwood, so 4NT is natural), where boards with a
+slam par cost -21,800 of our -36,678 IMPs vs BBA.
+
+### Where BBA goes past game (the vanilla set)
+
+BBA's first slam-going call (4NT, 5M, 5NT, a six or a seven), on the
+5,214 boards that have one, and what those boards cost us:
+
+| BBA's call | boards | IMPs vs BBA | we reached slam |
+|---|---:|---:|---:|
+| a direct six of a suit | 3,329 | -9,611 | 185 |
+| 6NT | 581 | -1,674 | 182 |
+| 5M | 696 | -761 | 7 |
+| 4NT | 548 | -429 | 17 |
+| a seven | 55 | -385 | 12 |
+
+So BBA **jumps to slam** ("calculated bid" in its meanings); it almost
+never asks. 3,449 of the boards are uncontested (-9,934). By opening:
+a one-level suit opening, opener's side -9,418 (3,477 boards); 2♣
+-1,834 (524); responder's side after a suit opening -911; 2NT -286;
+1NT -41 (our notrump ladders already agree). The single positions are
+small (the largest: `1S P 2D P 3C P 3S P -> 6S` 16 boards, -133;
+`1S P 2D P 2S P 3S P 4S P -> 6S` 21, -116; `2C P 2H P 3H P -> 6H` 28,
+-94; `2N P 3D P 3H P -> 6H` 22, -79): the loss is spread over hundreds
+of positions, so it needs a general rule, not patterns.
+
+Where *our* auction stopped, on the boards where BBA bid a slam and our
+uncontested auction did not: **base.bid's "Game reached: nothing more
+to say" passed on 2,917 boards (-10,007 IMPs)**, everything else under
+60 boards. The commonest of our auctions there: partner's 3NT after a
+new-suit rebid (`1H P 1S P 2C P 3N`, `1D P 1S P 2C P 3N`), partner's
+4M in an agreed fit (`1H P 2D P 2H P 3H P 4H`, `1S P 2D P 2S P 3S P
+4S`, `1S P 2C P 4S`, `1D P 1S P 4S`, `1D P 1H P 4H`), 2♣ auctions
+ending in 3NT, and responder's 3NT over opener's 2NT rebid
+(`1C P 1D P 2N P 3N`).
+
+### What decides it: made hands
+
+Six positions with a fit, 800 random hands each for the player who
+decides (probes below), MP and IMP. Partner's floor is BBA's own
+meaning of partner's last call (from `bba_alert` one round earlier, in
+BBA's "total points"):
+
+| position (decider) | partner's call per BBA | BBA slam | ours |
+|---|---|---:|---:|
+| `1NT 3S 4S` (responder) | 15-17, three spades | 29% | 27% |
+| `1S 2S` (opener) | 7-9 | 4% | 0 |
+| `1D 1H 4H` (responder) | 16-21, four hearts | 25% | 0 |
+| `2C 2H 3H` (responder, 2H a positive) | 21-37 | 82% | 0 |
+| `1H 2D 3H` (responder) | 14-20, six hearts | 22% | 0 |
+| `1S 2D 3C 3S` (opener) | 13-29, three spades | 31% | 0 (we pass 3S) |
+
+Which measure of the decider's hand carries BBA's decision
+(`probes/tools/slam_measures.py`, logistic fit with one intercept per
+position, log-likelihood per decision, null -0.493; higher is better):
+
+| measure | LL |
+|---|---:|
+| losers (LTC) | -0.369 |
+| controls (A 2, K 1) | -0.358 |
+| HCP | -0.335 |
+| HCP and losers | -0.304 |
+| points (HCP + length) | -0.311 |
+| **tp(trump)** (HCP + shortness 5/3/1, capped by trumps) | **-0.288** |
+| tp + controls | -0.277 |
+| tp, controls and losers (three weights) | -0.272 |
+| free card values (A, K, Q, J, shortness, length, bare suits) | -0.269 |
+
+**BBA counts support points, not HCP.** Shortness is most of the gain
+over HCP (-0.335 to -0.288); controls add a little (-0.277), losers on
+top of that almost nothing. The free fit values the cards, in HCP with a
+king = 3, at A 4.5, K 3.0, Q 1.6, J 0.6, shortness +0.7 a point, length
++0.6 a card, a bare side suit -0.5: aces and kings count a little more
+than 4-3-2-1, queens and jacks less (one ace is worth about a point
+more than four HCP of queens and jacks).
+
+**The threshold is the one we already use.** Pooled over the six
+positions, BBA's slam rate by my tp plus partner's floor:
+
+| tp + partner's floor | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| BBA bids slam | 3% | 12% | 20% | 41% | 57% | 75% | 84% | 90% | 96% |
+
+The 50% point is 31-32 in every position (my tp at BBA's switch,
+partner's floor: 17+15, 24+7, 15+16, 10+21, 17+14, 19+13). Our
+`slam_values` is 32 on partner's floor. Counted in HCP instead, the curve
+is wider (50% at 29, LL -0.341 against -0.311 pooled without
+intercepts). Controls at a fixed count move the rate by about one point
+of count per five or six controls, which is within the noise of a rule.
+
+Scoring and vulnerability: IMPs bid slightly more slams than matchpoints
+(23 more of 800 hands in `1NT 3S 4S`, 17 in `1D 1H 4H`, 7 or fewer
+elsewhere); vulnerability changed nothing (`1D 1H 4H` at IMPs, none vs
+both vulnerable: identical).
+
+**Without a fit** (6NT): HCP is the measure. Over `1C 1D 2NT` (opener
+18-19) BBA bids 6NT from 15 HCP (30/37) and often at 13-14 (47/117),
+i.e. 31-33 combined, and bids a suit rather than 6NT with an unbalanced
+hand; **we bid 3NT on all 800 hands**. Over a 2NT opening (20-21) we
+already agree (6NT at 12-17 on balanced hands, a point more eager than
+BBA).
+
+So what we lack is not the count but **a place where the count is
+asked**: with no ask convention on the card, nothing past game reads
+`slam_values` (the keycard asks are card-gated), and responder's 3NT
+over a 2NT rebid never looks at slam.
+
+### Other findings
+
+- **4NT on this card** is natural: over `2C P 2D P` "balanced, 28-30
+  total points" (then 6NT or pass), over `1D P 1H P 3N P 4D P` "calculated
+  bid, 18-21" (a sign-off below 6D). It is never an ask.
+- **`1S 2D 3C 3S`**: BBA reads responder's 3S as **13-29 with three
+  spades** (forcing, slam-interested; 4S would be 11-12) and opener never
+  passes it (4S 447, 6S 228, 3NT 106 of 800). We pass it on every hand.
+- **`1H 3H`**: BBA's bare SAYC never makes this jump raise on the vanilla
+  set, and over a forced 1H-3H it passed with 13-21 (658 of 800): it
+  reads 3H as weak, unlike our vanilla card (Rick's ruling: limit raise).
+  No slam probe there.
+- **The 2♣ opening** (`probes/slam-open-2c.toml`, 600 hands of 18-24
+  HCP with a five-card suit): BBA opens 2♣ on every 22+; with 18-21 it
+  opens 2♣ mostly with a six-card suit, on half the hands with 22 total
+  points (HCP + length; 11 of 23, 10 of 22 with four losers or fewer)
+  and on 9 of 11 with 23, rarely with 5-4 or 5-5 below 23. We require 23
+  total points and four losers (strong-openings.bid), so BBA opens 2♣ a
+  point lighter with a six-card suit: `KQT875.A.AKQ.Q82` (20 HCP, 22
+  total) is one of those. strong-openings.notes.md measured 23 as better
+  on the corpus; not changed here.
+
+Probes (card `bare:sayc` for BBA; `our` = the vanilla settings), all
+made with `probes/gen_hands.py ... --card bare:sayc --max-major 13
+--min-len 0 --max-len 13 --scoring MP IMP --partner-any-shape` and the
+arguments in each header: `probes/slam-1N-3S-4S-resp.toml`,
+`slam-1S-2S-opener.toml`, `slam-1D-1H-4H-resp.toml`,
+`slam-2C-2H-3H-resp.toml`, `slam-1H-2D-3H-resp.toml`,
+`slam-1S-2D-3C-3S-opener.toml`, `slam-2N-resp.toml`,
+`slam-1C-1D-2N-resp.toml`, `slam-open-2c.toml`. The measures:
+`probes/tools/slam_measures.py slam-1N-3S-4S-resp:S:15
+slam-1S-2S-opener:S:7 slam-1D-1H-4H-resp:H:16 slam-2C-2H-3H-resp:H:21
+slam-1H-2D-3H-resp:H:14 slam-1S-2D-3C-3S-opener:S:13`.
+
+## Phase B: slam without an ask (2026-09-30)
+
+**Direct slam in an agreed suit** (`direct_slam_values`, slam-entry.bid):
+on a card with no Blackwood and no RKCB (`no_ask`), with a suit agreed
+and the opponents silent, bid six when our support points on partner's
+floor plus my controls make 35, with 29 or more in support points. It
+ranks below every descriptive call and above base.bid's "Game reached"
+pass. Cards that ask are untouched: the corpus (-91,712) and the 21GF
+random set (-43,518) are identical before and after.
+
+Calibration on the vanilla set (IMPs vs BBA, double-dummy par; base
+-36,678; even/odd boards as a check):
+
+| variant | IMPs | even / odd |
+|---|---:|---:|
+| tp on floor >= 31 | +1,413 | |
+| tp >= 32 | +1,494 | +794 / +700 |
+| tp >= 33 | +1,203 | |
+| tp >= 32 and no two bare suits | +1,459 | |
+| tp >= 31, tp + controls >= 38 | +1,541 | |
+| tp >= 30, tp + controls >= 37 | +1,962 | |
+| tp >= 30, + controls >= 36 | +2,124 | |
+| tp >= 30, + controls >= 35 | +2,101 | |
+| tp >= 29, + controls >= 36 | +2,240 | |
+| **tp >= 29, + controls >= 35** | **+2,325** | +1,454 / +871 |
+| tp >= 28, + controls >= 35 | +2,340 | |
+| tp >= 29, + controls >= 34 | +1,652 | |
+
+Controls carry more in our rule than in BBA's choice (Phase A), because
+the count is on partner's *floor*: a hand with aces and kings is the one
+that can afford to count partner at his minimum. The bare-suit guard
+cost a little.
+
+| class (vanilla) | before | after |
+|---|---:|---:|
+| all boards | -36,678 (-0.38/bd) | -34,353 (-0.36/bd) |
+| uncontested, slam par (4,7xx boards) | -15,456 (-3.26/bd) | -11,398 (-2.42/bd) |
+| competitive, slam par (2,6xx) | -6,367 (-2.41/bd) | -5,890 (-2.21/bd) |
+| our slams (make double dummy) | 593 (81%) | 1,396 (75%) |
+
+BBA bids 4,228 slams (71%). The biggest gains: `1S 2C 2D 3S -> 6S` (36
+boards, +204), `2C 2N 3H 4H -> 6H` (+154), `1D 1S 4S -> 6S` (+137),
+`1H 2D 2H 3H -> 6H` (+124), `1D 1H 4H -> 6H` (+120); the worst,
+`1S 2H 2S 3S -> 6S` (30, -15). No new problems, no new misread calls.
+
+## How well a count predicts BBA (2026-09-30)
+
+Rick asked how often support points plus controls predict BBA's slam
+call. On the six Phase A grids (4,800 made hands), scoring each threshold
+on hands it was not fitted to (5-fold):
+
+| predictor | agrees with BBA |
+|---|---:|
+| BBA's usual call in the position, no count | 78.4% |
+| `direct_slam_values` as built (tp 29+, +controls 35) | 82.4% |
+| tp + partner's floor >= 32, one threshold | 86.2% |
+| best threshold per position: HCP / tp / tp + controls | 85.0 / 87.0 / 87.7% |
+| Zar points / 5-4-3-2-1 / losing tricks | 87.2 / 84.3 / 82.9% |
+| logistic / boosted trees over every card | 88.1 / 89.0% |
+
+No count gets past about 89%. The rule as built agrees less than the
+plain 32 threshold, but par prefers it (+2,325 against +1,494): it was
+tuned on par, not on agreement.
+
+The rest is not noise. Over 1NT-3S-4S, 77 borderline hands got the same
+call from BBA twice, again with a different partner hand, and again after
+a spot-card change (0 of 77 changed). Single-card surveys show placement
+mattering at the same HCP and shape: AKT765.74.A6.K97 passes, but moving
+the ♠A to clubs or the ♠K to diamonds bids 6♠ (a top honour counts for
+more outside trumps); a singleton heart bids 6♠ too; AJT54.A4.AJ42.95
+bids 6♠ but passes without its fifth spade or any spade honour. A
+"controls outside trumps" term did not help across the 4,800 hands, which
+points to a suit-by-suit trick count against partner's shown holding
+rather than a points formula. Next (Rick, option 3): reconstruct that
+valuation with surveys, and test it against our count on par.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point
@@ -141,3 +363,8 @@ confirmation -13; no new "no rule" or broken-force boards.
   slam-catch.notes.md for the 33 support-point threshold.
 - The 18-point fallback facing a game force: rkcb-1430.bid, "The ask".
 - Combined 33 points for a small slam: standard practice, not yet cited.
+- BBA's slam decision, measured by made hands on the bare SAYC card
+  (2026-09-30, "Phase A" above, the `probes/slam-*.toml` specs and
+  `probes/tools/slam_measures.py`): support points on partner's floor,
+  50% at 31-32; the vanilla random set (95,558 deals) for where it
+  matters.

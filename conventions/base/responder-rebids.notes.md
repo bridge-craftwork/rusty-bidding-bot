@@ -526,6 +526,19 @@ HCP so that the 11-12 of a forcing 1NT keep their invitations: uncapped,
 boards). Corpus, cards with the limit raise: +59 on the 33 boards that used
 to pass 2m.
 
+## Slam over opener's 2NT rebid (2026-09-30)
+
+`1x 1y 2NT`'s "Game: 7+" took every hand of 7 or more, so the notrump
+catch-all's quantitative 4NT and 6NT (32-33 / 34 on opener's floor)
+never got a look: over `1C 1D 2NT` we bid 3NT on all 800 made hands of
+`probes/slam-1C-1D-2N-resp.toml`, where BBA bids 6NT from 15 HCP and
+often at 13-14 (slam-entry.notes.md, Phase A). The 3NT now stops at 31
+between us. IMPs vs BBA: vanilla random set +458 (both halves), corpus
++312, 21GF random +92. Five vanilla boards (21 corpus) now show a
+"contradiction" where opener declines the quantitative 4NT with a
+minimum (`1H 1S 2NT 4NT P`): the same reading as the existing 4NT over
+partner's 3NT; left as it is.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

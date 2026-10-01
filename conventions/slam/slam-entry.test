@@ -14,3 +14,16 @@ N KQ3.AK9863.Q5.A7      | 1H P 1S P                            | 4H     | a one-
 card    21GF-SPECIALS2
 dealer  N
 S KJT5.KT8.AKQ92.Q      | 1C P 1D P 1N P 2S P 4S P             | 4NT    | partner's 4S shows the fit (my 2S had four): ask with 19 facing 12-14
+
+# Slam without an ask: support points on partner's floor plus controls.
+card    Basic-Bridge slam.blackwood.standard=false
+dealer  N
+S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | 6H     | 14 facing a jump to game, three controls in aces: slam
+S 98.QJ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | 9: game is enough
+S K8.AQ75.A93.Q982      | 1C P 1H P 4H P                       | 6H     | 14 with five controls facing the jump to game
+
+# The same hand on a card that asks: the direct slam is off (no ask either:
+# it needs 33 on partner's maximum and four losers).
+card    Basic-Bridge
+dealer  N
+S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | Blackwood on the card: no direct slam
