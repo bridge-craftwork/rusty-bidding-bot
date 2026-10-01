@@ -177,6 +177,7 @@ after 1x (P) 1N (P) 2x (P)
       priority -5
   3x  "Raise: 3+ {x}, maximum for the 1NT response"
       shows x>=3, points>=10   sets ask=invite(x)
+      when  x is C | x is D                # 1M-1NT denied three: partner read 3M as this, with no fit
   3x  "Raise: 2+ {x}, 8-10: invites game"
       shows x>=2, hcp>=8   sets ask=invite(x)
       when  x is H | x is S                # over a minor, 3m rarely reaches game

@@ -108,7 +108,8 @@ point at notrump.
   3NT. BBA invites with the 9 (probe table above), so this departs from
   it. Counting the old way (the fifth card not counted for these two
   calls only) cost 71 IMPs on the corpus and 14 on Basic_*: kept.
-- **Opener accepts with 16 in the fit.** `when asked invite(M)` now bids
+- **Opener accepts with 16 in the fit.** `when asked invite(M)` (in
+  rebids.bid since 2026-09-30, so that it works without transfers) now bids
   4M with an eight-card fit and 16 opposite 8–9 (`points>=24-...`), and
   3NT without a fit still needs 17. The rule also answers the Stayman
   raise (`1NT 2C 2H 3H`) and other modules' suit invitations. Corpus par

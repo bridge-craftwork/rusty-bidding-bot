@@ -451,12 +451,41 @@ when asked signoff, partner.opened
   P   "Nothing to add: partner's rebid was a minimum"
       priority -5
 
+# ── Answering an invitation in a major ───────────────────────────────
+# Any invitation in a major sets `ask=invite(M)`: responder's invitational
+# raise or jump in a suit auction, 2NT or 3M after a transfer, a raise
+# after Stayman. Play in the major with an eight-card fit, which is 3+
+# cards opposite five and 2+ opposite six. Without a fit accept only when
+# game is certain (17 opposite 8-9); with the fit one point less is
+# enough (16), which par prefers by 1,300 IMPs over the corpus. Until
+# 2026-09-30 this lived in jacoby-transfers.bid, so a card without
+# transfers had no answer to 1♦-1♥-2♥-3♥ and its relatives
+# (rebids.notes.md, "The major invitation without transfers").
+when asked invite(M)
+  4M  "Accepts, in the fit"             shows M>=8-partner.M.min, points>=24-partner.points.min
+  3N  "Accepts, no fit"                 shows M<8-partner.M.min, strength>=game
+  3M  "Declines, in the fit"            shows M>=8-partner.M.min, points<=23-partner.points.min
+  P   "Declines"                        shows strength<=invite, (M<8-partner.M.min | points<=23-partner.points.min)
+
+# When the invitation was a raise it showed support points, not total
+# points, so `partner.points` above stays at the one-level response's 6
+# and opener never accepted (1♣-1♠-2♠-3♠ with 14). Opposite a raise
+# showing 10+ support points opener counts his own the same way: game
+# from 25 between them, 14 opposite 11-12, as BBA (rebids.notes.md).
+when asked invite(M), partner.tp(M).min>=10
+  4M  "Accepts: 25 support points between us"   shows M>=8-partner.M.min, tp(M)>=25-partner.tp(M).min
+      priority 1
+  P   "Declines: a minimum"                     shows M>=8-partner.M.min, tp(M)<=24-partner.tp(M).min
+      priority 1
+
+# Responder after opener declines in three of the major: pass.
+when answered invite(M), partner.last=3{M}
+  P   "Partner declined: play three of the major"
+
 # ── Answering an invitation in a minor ───────────────────────────────
-# Responder's invitational raise or jump sets `ask=invite(x)`. A major
-# invitation is answered where the same question is answered after a
-# transfer (`when asked invite(M)`, jacoby-transfers.bid); a minor one
-# had no answer anywhere, so opener passed a live auction. Opposite
-# 10-12, opener needs 14 to go on, and there is no game below 5 of a
+# Responder's invitational raise or jump sets `ask=invite(x)`. A minor
+# invitation had no answer anywhere, so opener passed a live auction.
+# Opposite 10-12, opener needs 14 to go on, and there is no game below 5 of a
 # minor: 3NT with the values and a shape for it, 5 of the minor with
 # real extras, otherwise pass.
 when asked invite(m)

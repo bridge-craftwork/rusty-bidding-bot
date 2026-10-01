@@ -495,6 +495,15 @@ deals: 482 boards short of slam, responder the stronger hand in 379). Now
 -19 (flat); corpus +318. Most of what is left are 29-32 HCP slams par
 finds double dummy.
 
+## 1M-1NT-2M-3M is the two-card raise (2026-09-30)
+
+`after 1x (P) 1N (P) 2x (P)` had two raises: "3+ {x}, maximum for the
+1NT response" and, below it, "2+ {x}, 8-10" for the majors. Over a major
+the first cannot happen (the 1NT response denied three), but partner read
+3M as it all the same and so saw no fit. It is now for minors only.
+Measured with the move of the major-invitation answer (rebids.notes.md,
+"The major invitation without transfers").
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and

@@ -192,10 +192,8 @@ went the wrong way, both small and both outside these auctions:
 
 ### Open questions
 
-- `when asked invite(M)` lives in jacoby-transfers.bid, so a card with
-  transfers switched off has no answer to a major invitation in a suit
-  auction. It is a state rule and belongs in a base file (here, or
-  responses). Moving it needs an owner for that file.
+- ~~`when asked invite(M)` lives in jacoby-transfers.bid~~: moved here
+  2026-09-30 ("The major invitation without transfers").
 - Opener's 2NT at the third call: BBA bids it with 17 and 4-4-1-4 after
   1♦-1♥-1♠-1NT. We have no rule for it (a 17-count that has already
   shown two suits). Is 2NT right, or is pass?
@@ -646,3 +644,53 @@ A forcing 1NT (6-12) may not be passed: a balanced minimum bids its longer
 minor, three cards if need be; 18-19 balanced bids 2NT; 2M is six, or five
 with no three-card minor (5-4-2-2 with the other major), one rule so that
 responder reads either (reading it as six contradicted the five).
+
+## The major invitation without transfers (2026-09-30)
+
+On the vanilla SAYC random set (`.rbb-cache/random/README.md`: BBA's bare
+SAYC card, transfers off on our side) opener had no rule after
+1♦-1♥-2♥-3♥, 1♠-1NT-2♠-3♠, 1♣-1♠-2♠-3♠ and every other invitation in
+a major: about 3,000 of the 4,675 no-rule boards. Responder's invitations
+set `ask=invite(M)`, and the only answer to that question was in
+jacoby-transfers.bid, a module a card without transfers switches off. The
+two state rules (`when asked invite(M)` and responder's pass after the
+decline) now live here, unchanged.
+
+Two fixes came with it, because the transfer answer had never seen a suit
+auction:
+
+- **A raise shows support points.** Responder's 3M raise shows
+  `tp(M)=11..12`, not `points`, so `points>=24-partner.points.min` read
+  responder as the 6 of the one-level response and opener never accepted.
+  New rules ahead of it, for invitations that showed 10+ support points
+  (`partner.tp(M).min>=10`): game from 25 support points between us, 14
+  opposite 11-12. BBA's decisions on the vanilla set agree at that line:
+  it declines AJ2.KT94.Q543.Q2, AQ52.Q83.KJ9.JT4, AQ76.Q54.A76.J74 (12-13,
+  no shortness) and accepts KJ73.KQ75.A642.8, KQ98.K5.985.AQ42,
+  Q8.KQ97.AJ652.J3 (14+ counting shortness).
+- **1M-1NT-2M-3M** was read by the "3+ {x}, maximum for the 1NT response"
+  rule, which a 1M-1NT responder (two at most) cannot hold, so opener
+  saw no fit. That rule is now for minors (responder-rebids.bid).
+
+Measured (vs BBA, double-dummy par as the yardstick):
+
+| set | before | after | change |
+|---|---|---|---|
+| vanilla SAYC, 95,558 boards | −45,508 | −42,209 | **+3,299** |
+| corpus (342 scenarios) | −95,102 | −93,855 | **+1,247** |
+| 21GF random, 100,000 boards | −44,476 | −43,948 | **+528** |
+
+The move alone changed nothing on the corpus or 21GF (both play
+transfers); the gains there are the two fixes. No-rule boards on the
+vanilla set 4,675 → 1,641.
+
+## Sources
+
+- **Rick's rulings**, dated in the sections above.
+- **BBA evidence:** the Basic_* and 21GF corpora, `bba-cli --all-meanings`
+  and the probes named in each section; the vanilla SAYC random set for
+  the major invitation (2026-09-30).
+- **Corpus measurements:** the par figures given with each change.
+- **Book practice:** opener's rebids (Standard American: 1NT 12-14, the
+  jump rebid and jump raise 16-18, reverses 17+, accepting a limit raise
+  with 14 or more) are standard practice, not yet cited to a book.
