@@ -173,6 +173,11 @@ when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
 # and support points for the other (`count_*` above): 28 on partner's
 # floor, and 35 with my controls. Par scores it level with the support
 # points it replaced (+31 IMPs on the vanilla set, both halves).
+#
+# It ranks above the descriptive calls (priority 1, 2026-10-01): with the
+# values, jump to slam at once, as BBA's "calculated bid" does, rather
+# than describe and stop in game. Vanilla +596 IMPs against -10 (below
+# every descriptive call), both halves.
 
 # No ace or keycard ask on the card.
 define no_ask = !bw, !k1430, !k0314
@@ -184,4 +189,33 @@ define direct_slam_values = direct_count(trump)
 when we.trump is suit, !they.bid, !asked, no_ask
   6{trump}  "Slam: our count on partner's floor plus my controls make 35"
       shows direct_slam_values
-      priority -10     # below every descriptive call; above base.bid's "Game reached" pass
+      priority 1
+
+# ── A fit known but not agreed: the direct slam (2026-10-01) ──────────
+#
+# 1H-2D-3H (six hearts, 16-18) does not set hearts in standard bidding,
+# but responder with two knows the fit (Rick, 2026-10-01); the same when
+# a new suit shows me partner's four-card suit (1S-2D-3C with four
+# clubs). The hand that sees the fit counts as the role says: the short
+# hand support points on partner's declarer points. Bid six on the
+# direct count. Reworks the held-back version (branch
+# slam-fit-not-agreed, which counted my support points on partner's
+# points in every case).
+#
+# Above the descriptive calls, as the agreed-suit slam: at -10 (only once
+# game is reached) +809 IMPs on the vanilla set, at 1 +3,122. Not when my
+# own range is four points or less (1NT, 2NT, a jump rebid): partner is
+# then the captain (+54). Vanilla calibration (slam-entry.notes.md).
+when we.trump is none, !they.bid, !asked, no_ask, !(shown.hcp.max - shown.hcp.min <= 4)
+  6S  "Slam in the spade fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(S).min >= 8, direct_count(S)
+      priority 1
+  6H  "Slam in the heart fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(H).min >= 8, direct_count(H)
+      priority 1
+  6D  "Slam in the diamond fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(D).min >= 8, direct_count(D)
+      priority 1
+  6C  "Slam in the club fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(C).min >= 8, direct_count(C)
+      priority 1

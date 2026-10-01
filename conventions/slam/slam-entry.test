@@ -29,6 +29,10 @@ S 5.AQ752.K93.Q982      | 1D P 1H P 4H P                       | P      | five h
 # 2C-2H-3H: the raise is 22+ (Rick, 2026-10-01), not the 2C floor of 17.
 S 84.KQJ85.K72.Q53      | 2C P 2H P 3H P                       | 6H     | 10 + a fifth heart + 22, three controls
 S 84.KQJ85.972.Q53      | 2C P 2H P 3H P                       | 4H     | 7: game
+# A fit known but not agreed: 1H-2D-3H (six hearts, 16-18 points) sets no
+# trump in standard, but two hearts make the fit (Rick, 2026-10-01).
+S A8.Q7.AKJ93.Q982      | 1H P 2D P 3H P                       | 6H     | 16 + a doubleton (support points, two trumps) + 16, five controls
+S A8.Q7.KJ932.Q982      | 1H P 2D P 3H P                       | 4H     | 12: game
 
 # The same hand on a card that asks: the direct slam is off (no ask either:
 # it needs 33 on partner's maximum and four losers).
