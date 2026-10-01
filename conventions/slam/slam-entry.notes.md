@@ -673,9 +673,9 @@ opponents out).
   tricks once trumps are drawn, so the hand is valued by counting tricks,
   not by summing points. The trigger is a long running side suit. "For
   now let's focus on the point counts."
-- For Rick: on cards with no ask (vanilla SAYC) the direct slam now
-  outranks every descriptive call. Par likes it by a wide margin and it
-  is how BBA bids (a calculated six); is that the style wanted?
+- On cards with no ask (vanilla SAYC) the direct slam outranks every
+  descriptive call: par likes it by a wide margin and it is how BBA bids
+  (a calculated six). **Rick, 2026-10-01: keep it.**
 - The jump to slam facing a balanced, limited partner (`1N 2C 2H -> 6H`,
   `1H 1S 1N -> 6H`) loses where it fires, but excluding it costs more
   than it saves; a narrower guard (equal length facing 1NT?) is open.
