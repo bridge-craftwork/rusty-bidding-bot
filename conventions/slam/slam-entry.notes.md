@@ -355,6 +355,153 @@ points to a suit-by-suit trick count against partner's shown holding
 rather than a points formula. Next (Rick, option 3): reconstruct that
 valuation with surveys, and test it against our count on par.
 
+## BBA's count, reconstructed (option 3, 2026-09-30)
+
+### What the BBA issues say
+
+The 167 slam issues on github.com/EdwardPiwowar/BBA (public discussion of
+behaviour; 128 opened by Thorvald Aagaard, the author Edward Piwowar
+answering). Most reports are screenshots, so the text carries the
+complaints and Edward's answers. **Edward's statements:**
+
+- **A trick estimate, not a point count**: "BBA conducts a single dummy
+  analysis before each bid. For this purpose, it simulates the cards of
+  all players and checks likely tricks. Tricks are slightly adjusted
+  according to additional criteria. Traditional losers are not counted.
+  Keycards are only needed for rules." (#706, 2024-07-16; the opponents'
+  bidding shapes their hands too). "Generally, bots count tricks" (#245,
+  2024-02-26); "We have 9 HCP in hearts and only 2 tricks" (#638,
+  2024-09-12).
+- **Deterministic**: "BBA is purely rule-based and does not sample"
+  (#297, 2024-03-27); no multiple deals or double dummy, for speed (#608,
+  2024-08-23). The "simulation" is a constructed layout: a bug report
+  shows it placing honours and lengths in the other hands ("the BOT added
+  the king to void. He forgot to lengthen the suit", #178, 2024-01-09).
+  Matches our test: partner's cards and spot cards never change the call.
+- **A threshold on that estimate**: with a suit agreed the slam is a
+  "calculated bid" (#416, 2024-04-28); "S has 11 tricks but he estimates
+  that he will earn more, so he bids 6" (#363, 2024-04-17); "BBA will
+  calculate 6 for a slightly different or slightly stronger hand" (#644,
+  2024-06-25); "E needs 1 small point to slam try" (#839, 2024-09-10).
+  Edward accepts borderline errors both ways ("It's impossible to avoid
+  missed slams", #363).
+- **Other counts**: an internal adjusted HCP and total points exist
+  ("AdjustedHCP are not available to the manager", #1226; total points
+  "each program counts them differently", #1240, both 2025-04-11); voids
+  are counted "in a rather complicated way" (#656, 2024-07-01); honours
+  in partner's suits are hard to discount (#1300, 2025-05-09).
+- **Notrump and grand slams**: 6NT needs 33 HCP between the hands, on
+  partner's maximum ("11HCP+21HCP<33HCP", #1000, 2024-11-12); a grand
+  "usually when counts 13 tricks" (#1236, 2025-04-10), or on the odds of
+  a missing king (#1163, 2025-03-10).
+- **Asking**: the weak hand asks only with a clear slam (#55,
+  2023-11-29); no 4NT invitation when the count already says slam (#446,
+  2024-05-05). Matchpoints are BBA's default scoring (#225).
+
+**Testers' requests** (not BBA's rules): brakes on minimum hands and on
+the limited hand driving to slam (Thorvald #799, #723, #739, #363, #1291);
+wasted values opposite a singleton (#1041, after which Edward made BBA
+"less optimistic in this situation"); a grand only on 13 counted tricks
+(#89); a splinter count with the ace of the short suit at 0.8, its king
+0.3, its queen and jack 0 (ThePokerDude, #644).
+
+### Placement surveys
+
+`probes/slam-var-*.toml` (`probes/tools/slam_count.py variants`): in each
+of the six Phase A positions, 40 borderline hands (BBA bids slam on
+10-90% of the hands with the same count), half bidding slam and half
+not, each with every variant that moves one honour to another suit (same
+HCP and shape) or one spot card to another suit: 4,982 hands.
+`slam_count.py moves` gives how often each move changes BBA's call (+1:
+the variant bids slam and the base did not):
+
+| move | effect |
+|---|---:|
+| an ace or king into or out of trumps, or between side suits | -0.04 to +0.01 |
+| the trump queen to a side suit / a side queen into trumps | **-0.21 / +0.08** |
+| the trump jack to a side suit | -0.09 |
+| a trump to a side suit, leaving four trumps | **-0.19 to -0.43** |
+| a side card into five trumps (a doubleton becomes a singleton) | +0.38 |
+| a side suit's spot to a singleton (singleton gone) | -0.21 to -0.42 |
+
+So an ace or a king is worth the same in trumps as outside (the
+AKT765.74.A6.K97 case above is local, not a rule); the trump queen and
+jack are worth more than side ones; trump length and shortness count.
+
+### The count
+
+Fitted on the 4,800 random hands (a logistic on card features plus
+partner's floor), in points of partner's floor: an ace 3.9, a king 2.7,
+a queen 1.3 and a jack 0.4 outside trumps (in trumps 1.75 and 0.85; a
+point of HCP is 0.9), a void 2.1, a singleton 1.3 and a doubleton 0.2 (a
+singleton king nothing extra), each side card beyond four 0.8. In the two positions with a
+partner's suit, an ace there is worth about 1.8 and a king 1.2, a
+singleton there 1.6 (3.9 elsewhere). Rounded to half points:
+
+> HCP, plus half a point for each ace, minus half a point for each queen
+> and jack outside trumps; plus 2 for a void, 1 for a singleton other than
+> the king, 1 for each card beyond four in a side suit. Slam from 30 with
+> partner's floor.
+
+It agrees with BBA a little more than support points do, and the rest is
+not reachable by any count (`slam_count.py agree`; 5-fold, one threshold
+on count + BBA's floor; the variants never fitted):
+
+| count | random hands | placement variants |
+|---|---:|---:|
+| `direct_slam_values` (tp 29+, + controls 35) | 82.4% | 65.6% |
+| HCP | 85.0% | 67.6% |
+| support points (tp) | 86.2% | 71.5% |
+| **reconstructed count** | **87.7%** | **72.8%** |
+| a free logistic / boosted trees over every card | 88.1-88.5 / 89.0% | |
+
+The ceiling is the construction Edward describes: how my honours combine
+with the cards it gives partner is an interaction no per-card count holds.
+
+### On par: the built rule stays
+
+Written in the engine's terms (`keycards(N)` for the aces, conditions as
+numbers for the side queens and jacks, shortness and length, in half
+points) as an alternative to `direct_slam_values`, on our floor
+`partner.tp(trump).min`. Vanilla set, IMPs vs BBA against the built rule
+(base -33,895; even / odd boards):
+
+| variant | IMPs | even / odd |
+|---|---:|---:|
+| reconstructed count, 28 / 29 / 30 / 31 | -3,035 / -946 / **-570** / -808 | (30) -271 / -299 |
+| reconstructed 28 or 29, plus controls 35 | -240 / -297 | |
+| tp with the card corrections (A +½, side Q/J -½), + controls 35 | -203 | |
+| the same, + controls 35½ | -43 | +13 / -56 |
+| built, minus a side suit of three small | -4 | |
+| built, plus side length | -54 | |
+| built, plus the trump queen | -285 | |
+| built, shortness in partner's four-card suit not counted | -49 | |
+
+Corpus (-91,400) and the 21GF random set (-43,426): unchanged by the
+reconstructed count, as by the rule (no ask on those cards).
+
+**Par prefers the built rule**, so it stays: BBA's count values shortness
+less than support points do and controls less than our rule does, and
+both cost on par. Agreement with BBA is not what limits us here: on the
+grids, our own calls agree with BBA's on 76.0% of the hands with the
+built rule and 74.8% with the reconstructed count, because what differs
+most is **partner's floor as we read it** (after `1D 1H 4H` we count
+opener at 19, BBA at 16; after `2C 2H 3H` 17 against 21) and **where no
+suit is agreed** (`1H 2D 3H`, `1S 2D 3C 3S`: the direct slam never
+applies in our auction).
+
+### Open (for Rick)
+
+- Partner's floor: should `partner.tp` after a jump to game over a
+  one-level response (19) and after 2C-2H-3H (17) move toward BBA's 16
+  and 21? It moves every slam decision in those auctions, not only this
+  rule.
+- A direct slam where the fit is shown but not agreed (`1H 2D 3H`, opener's
+  six-card suit): `shown_fit(x)` as the 4NT ask already uses.
+- The construction itself (partner's expected cards from his shown
+  ranges, then a trick count) is beyond the rule language; worth it only
+  if a measured position shows the count is what loses.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point
@@ -368,3 +515,15 @@ valuation with surveys, and test it against our count on par.
   `probes/tools/slam_measures.py`): support points on partner's floor,
   50% at 31-32; the vanilla random set (95,558 deals) for where it
   matters.
+- BBA's method, in its author's words (Edward Piwowar, public issues on
+  github.com/EdwardPiwowar/BBA, read 2026-09-30): a deterministic single
+  dummy trick estimate over constructed hands (#706, #297, #608, #178),
+  slam as a calculated bid on a threshold (#416, #363, #644, #839), 33 HCP
+  for 6NT (#1000), a grand on 13 counted tricks (#1236). Testers'
+  requests from the same issues (Thorvald Aagaard, ThePokerDude: #799,
+  #723, #1041, #89, #644) are marked as theirs above. Behaviour only; no
+  BBA code was read.
+- The reconstructed count and its agreement with BBA: placement surveys
+  `probes/slam-var-*.toml` and `probes/tools/slam_count.py` (2026-09-30);
+  par on the vanilla set, the corpus and the 21GF random set (same date).
+  Par kept the built rule.
