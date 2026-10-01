@@ -22,7 +22,7 @@ struct Args {
     #[arg(long, default_value = "conventions")]
     rules: PathBuf,
     /// Where `.test` files look up card names.
-    #[arg(long, default_value = "crates/bridge-card/tests/fixtures/bbsa")]
+    #[arg(long, default_value = "cards/bbsa")]
     cards: PathBuf,
     /// At most this many boards per scenario.
     #[arg(short, long)]

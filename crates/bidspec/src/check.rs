@@ -26,11 +26,12 @@ pub fn check(module: &Module, registry: &Registry) -> Vec<Diagnostic> {
             message,
         })
     };
-    let mut check_path = |line: usize, path: &str, value: Option<&Literal>| match registry.get(path)
+    let mut check_path = |line: usize, path: &str, value: Option<&Literal>| {
+        match registry.get(path)
     {
         None => report(
             line,
-            format!("unknown card field `{path}` (see card/fields.toml in the rules)"),
+            format!("unknown card field `{path}` (see the card fields: convention-card spec/fields.toml)"),
         ),
         Some(field) => {
             if field.path != path {
@@ -45,6 +46,7 @@ pub fn check(module: &Module, registry: &Registry) -> Vec<Diagnostic> {
                 }
             }
         }
+    }
     };
     for cond in &module.card {
         check_path(cond.line, &cond.path, cond.value.as_ref());

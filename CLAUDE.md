@@ -9,9 +9,9 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   (`bba-mac-private/decompile/` and similar) or model code on it. BBA is used
   only as a black box via `bba-cli` outputs and `.bbsa` imports. See
   CONTRIBUTING.md.
-- **Convention layer is engine-independent.** `crates/bridge-card`,
-  `crates/bidspec`, and `conventions/` must never depend on `rbb-engine` or
-  `rbb-cli`; they are expected to move to their own repo with the card editor.
+- **Convention layer is engine-independent.** `bridge-card` (now in the
+  convention-card repo), `crates/bidspec`, and `conventions/` must never
+  depend on `rbb-engine` or `rbb-cli`.
 
 ## Related repos (sibling checkouts, `../<repo>`)
 
@@ -49,8 +49,9 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
 - Teaching skills (docs/SKILLS.md): each module names the Bridge-Classroom
   skills it implements (`skill bidding_conventions/stayman` header lines),
   each convention's card field its skill (`skill = ...` in fields.toml);
-  the card field is the canonical convention ID. Known paths:
-  `conventions/card/skills.toml` (add a new one under `[proposed]`). After
+  the card field is the canonical convention ID. Known paths: the standard
+  conventions and skills in convention-card's `spec/conventions/` (a new one
+  is a pull request there). After
   changing any, run `rbb bid skills --doc docs/SKILLS.md` (a test checks
   the doc).
 - `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
@@ -178,12 +179,13 @@ commands instead of running them).
 
 ## Card fields
 
-The card vocabulary belongs to the rules: add or change card fields in
-`conventions/card/fields.toml`, and `.bbsa` mappings in
-`conventions/card/bbsa-map.toml`. Every consumer reads them from the rules
-directory it was given (`--rules DIR`, default `conventions`; the embedded
-copy in `rbb-assets` for the release `rbb` and the WASM), and a card is
-always read in its rule set's vocabulary (`rbb_engine::RuleSet`), so a new
-field needs no Rust change. `rbb bid check` and `cargo test` validate both
-files. Do not guess the meaning of an unmapped `.bbsa` key: leave it in
-passthrough and ask.
+The card vocabulary is the standard one in the [convention-card](https://github.com/bridge-craftwork/convention-card) repo
+(`spec/fields.toml`, `spec/formats/bbsa-map.toml`, `spec/conventions/`),
+which the `bridge-card` crate carries at the tag `Cargo.toml` pins
+(`bridge_card::standard`). Add or change a card field, a `.bbsa` mapping or a
+convention there, by pull request; then cut a tag there and move the pin here.
+A conventions directory may still bring its own `card/fields.toml` and
+`card/bbsa-map.toml` (`rbb_engine::rules_vocabulary`), and a card is always
+read in its rule set's vocabulary (`rbb_engine::RuleSet`). Do not guess the
+meaning of an unmapped `.bbsa` key: leave it in passthrough and ask. The stock
+`.bbsa` cards are in `cards/bbsa/`.

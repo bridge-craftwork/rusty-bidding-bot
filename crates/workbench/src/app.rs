@@ -1919,7 +1919,7 @@ mod tests {
     fn cases_rerun_only_what_changed() {
         let here = Path::new(env!("CARGO_MANIFEST_DIR"));
         let rules = here.join("../../conventions");
-        let cards = here.join("../bridge-card/tests/fixtures/bbsa");
+        let cards = here.join("../../cards/bbsa");
         let cache = CaseCache::default();
         let first = run_cases(&rules, &cards, &cache).expect("the cases run");
         assert!(first.len() > 100);
@@ -1959,7 +1959,7 @@ mod tests {
             .expect("a divergent fixture board");
         let mut app = App::new(
             opts,
-            here.join("../bridge-card/tests/fixtures/bbsa"),
+            here.join("../../cards/bbsa"),
             String::new(),
             TicketOptions {
                 repo: Some("o/r".into()),

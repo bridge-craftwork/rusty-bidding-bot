@@ -7,6 +7,8 @@ license.workspace = true
 repository.workspace = true
 build = "build.rs"
 
-# Data only: no dependencies, so the convention layer's independence from the
-# engine is untouched (this crate holds text, the engine compiles it).
+# Data only, so the convention layer's independence from the engine is
+# untouched (this crate holds text, the engine compiles it). bridge-card, also
+# convention layer, supplies the standard card vocabulary's text.
 [dependencies]
+bridge-card.workspace = true

@@ -3,11 +3,11 @@
 //! `RULE_FILES` holds every `conventions/**/*.bid`, named and ordered as
 //! `rbb_engine::load_rules("conventions")` names and orders them, `MANIFEST`
 //! the manifest (`conventions/conventions.toml`), and
-//! `FIELDS` / `BBSA_MAP` the rules' card vocabulary
-//! (`conventions/card/fields.toml`, `bbsa-map.toml`), so
+//! `FIELDS` / `BBSA_MAP` the card vocabulary (the standard one, convention-card's
+//! `spec/` via `bridge_card::standard`, unless the rules bring their own), so
 //! `rbb_engine::compile_rules(MANIFEST, FIELDS, BBSA_MAP, RULE_FILES)` gives the same
 //! rule set as loading the directory. `CARDS` holds the stock `.bbsa` cards
-//! (`crates/bridge-card/tests/fixtures/bbsa`), which are read in that
+//! (`cards/bbsa`), which are read in that
 //! vocabulary. Nothing here needs a filesystem at run time: this is what
 //! the release `rbb` and the WASM build bid with.
 
@@ -29,8 +29,8 @@ mod tests {
             .iter()
             .all(|(n, _)| n.starts_with("conventions/")));
         assert_eq!(MANIFEST.unwrap().0, "conventions/conventions.toml");
-        assert_eq!(FIELDS.0, "conventions/card/fields.toml");
-        assert_eq!(BBSA_MAP.0, "conventions/card/bbsa-map.toml");
+        assert_eq!(FIELDS.0, "convention-card/spec/fields.toml");
+        assert_eq!(BBSA_MAP.0, "convention-card/spec/formats/bbsa-map.toml");
         assert!(FIELDS.1.contains("[notrump"));
         assert!(card("21GF-DEFAULT").is_some());
         assert_eq!(RULES_ID.len(), 16);

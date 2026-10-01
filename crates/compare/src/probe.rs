@@ -722,7 +722,7 @@ mod tests {
     #[test]
     fn bare_card_turns_everything_off() {
         let rules = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../conventions");
-        let vocab = Vocabulary::load(&rules).unwrap();
+        let vocab = rbb_engine::rules_vocabulary(&rules).unwrap();
         let text = card_text("bare:2/1", Path::new("."), &[("Texas".into(), 1)], &vocab).unwrap();
         let entries = bbsa::parse(&text).unwrap();
         assert!(entries.iter().any(|(k, v)| k == "Texas" && *v == 1));
