@@ -107,7 +107,8 @@ when opening, seat<=3
 #   9 support points (HCP and shortness), with two and 15 HCP;
 # - over 3m, a preemptive 4m with three trumps and less than 12, and 5m
 #   with four and a singleton or 12+ (15+ with three and a singleton);
-#   strong hands without a fit pass: no 3NT on a preempt. Vulnerable, 4m is
+#   strong hands without a fit pass (3NT and a long major: 2026-09-30,
+#   below and preempts.notes.md). Vulnerable, 4m is
 #   invitational (9-14, two trumps will do), weak hands pass, and 5m wants
 #   15, or 12 with four trumps and a singleton. (BBA follows relative
 #   vulnerability, and is mixed at equal; keying on ours alone scores
@@ -117,6 +118,13 @@ after 3H (P)
 after 3S (P)
   4S  "Raise to game"  shows S>=4 | (S=3, tp(S)>=9) | (S=2, hcp>=15)
 after 3C (P)
+  3N  "To play: 16+, the ace or king of clubs, the side suits stopped"
+      shows hcp>=16, has(A,C) | has(K,C), stop(S), stop(H), stop(D)
+      priority 2
+  4H  "To play: seven hearts"    shows H>=7, hcp>=12
+      priority 2
+  4S  "To play: seven spades"    shows S>=7, hcp>=12
+      priority 2
   5C  "Game in clubs: 17+ and a doubleton"  shows C>=2, hcp>=17
       priority 1
   5C  "Game in clubs"  shows C>=4, shortest<=1 | hcp>=12 | (C>=3, hcp>=15, shortest<=1)
@@ -130,6 +138,13 @@ after 3C (P)
   4C  "Invitational raise"  shows C>=2, hcp=9..14
       when  vul
 after 3D (P)
+  3N  "To play: 16+, the ace or king of diamonds, the side suits stopped"
+      shows hcp>=16, has(A,D) | has(K,D), stop(S), stop(H), stop(C)
+      priority 2
+  4H  "To play: seven hearts"    shows H>=7, hcp>=12
+      priority 2
+  4S  "To play: seven spades"    shows S>=7, hcp>=12
+      priority 2
   5D  "Game in diamonds: 17+ and a doubleton"  shows D>=2, hcp>=17
       priority 1
   5D  "Game in diamonds"  shows D>=4, shortest<=1 | hcp>=12 | (D>=3, hcp>=15, shortest<=1)
@@ -142,3 +157,16 @@ after 3D (P)
       priority 1
   4D  "Invitational raise"  shows D>=2, hcp=9..14
       when  vul
+
+# Responder passes everything else (2026-09-30): a misfit, a weak hand,
+# or a strong one without a fit and without 3NT. Before this rule the
+# pass was the engine's "no rule" (vanilla SAYC: ~490 boards).
+after 3x (P) when x is not N
+  P   "No game: no fit, or not enough"
+      priority -10
+
+# The preempter after partner's raise to four of the minor: pass. BBA
+# passed all 45 times on the vanilla SAYC set, 6-10 HCP.
+after 3x (P) 4x (P) when x is C | x is D
+  P   "Partner's raise: nothing more to say"
+      priority -10

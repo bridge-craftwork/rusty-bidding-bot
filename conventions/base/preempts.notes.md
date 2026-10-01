@@ -280,6 +280,62 @@ Corpus par:
 | Relative vulnerability | -163,691 |
 | Split on our vulnerability | -163,528 (adopted) |
 
+## Responder's pass, 3NT and a long major; the preempter after 4m (2026-09-30)
+
+The rules above had no pass: with a hand that fits none of the raises
+the engine fell back to "no rule in a live auction" and passed (vanilla
+SAYC set: 3S P 128, 3D P 89, 3H P 86, 3C P 74, and the same after a
+leading pass). What BBA does after 3x-(P) on the vanilla SAYC set
+(bare SAYC card, 95,558 random deals, BBA's own auctions):
+
+| Preempt | BBA's calls |
+|---|---|
+| 3♠ | P 240, 4♠ 136, 6♠ 4, others 3 |
+| 3♥ | P 171, 4♥ 128, 6♥ 5, 3♠ 2, 6NT 1 |
+| 3♦ | P 264, 4♦ 31, 5♦ 31, 3NT 15, 3♥ 12, 3♠ 7, 6♦ 3, 4♥ 3, 4♠ 1 |
+| 3♣ | P 301, 4♣ 38, 5♣ 31, 3NT 14, 3♥ 11, 3♠ 5, 4♠ 5, 6♣ 5, 3♦ 4, 4♥ 3 |
+
+BBA's passes run from 1 to 20 HCP: misfits and strong hands without a
+fit alike. So:
+
+- **Pass** is a rule now, the lowest of the responses: "no game: no fit,
+  or not enough".
+- **3NT over a minor** (BBA 15-26 HCP, nearly always with the ace or
+  king of partner's suit and the side suits held): from 16 with the ace
+  or king of the minor and a stopper in each side suit, ahead of 5m.
+  This corrects the 2026-09-25 note "BBA never bids 3NT on a preempt":
+  it does, on the bare SAYC card. `probes/preempt-resp-3D-strong.toml`
+  (400 hands, 14-22 HCP, at most three diamonds, love all and all
+  vulnerable) shows BBA's 3NT is not the same test: of our 60 3NTs per
+  column BBA bid 3NT 14 (love all) and 23 (vulnerable), passing 24/17 and
+  bidding 5♦ 21/13; it bid 3NT on 6/17 hands we do not (some with three
+  aces and no diamond honour). Par decides: the 3NTs gain (below). The
+  16-HCP floor is a judgment call, not BBA's line.
+- **Four of a major over a minor** with seven cards and 12+: to play
+  (BBA: 4♥/4♠ with 7-8 card suits, 12-20 HCP).
+- **The preempter passes the raise to 4m** (BBA passed all 45 times on
+  the vanilla set, 6-10 HCP). Over a major the raise is game and base.bid's
+  "game reached" pass already applies.
+
+Not built: BBA's forcing new suit over a minor (3♥/3♠ with a good
+six-card major and 14+, ~35 boards in the vanilla set) and the
+preempter's answers to it; slams (6M with 19-21+). The rules have no
+card parameters, so the vanilla and 21GF cards respond alike.
+
+**Measured** (vs BBA in IMPs with par as yardstick; calls agreeing; no
+rule in a live auction):
+
+| Set | vs BBA before | after | calls agreeing | no rule |
+|---|---|---|---|---|
+| vanilla SAYC (95,558) | −42,209 | −42,147 (+62) | 798,209 → 798,225 | 1,641 → 1,097 |
+| corpus | −93,855 | −93,830 (+25) | 1,396,350 → 1,396,335 | 2,607 → 1,694 |
+| 21GF random | −43,948 | −43,892 (+56) | 842,275 → 842,282 | 1,378 → 835 |
+
+`sideimps.py` on the vanilla set: 41 boards changed, +94 IMPs to the side
+that changed its call (3C P 18 boards, 3D P 23), par distance +62. All
+the changed boards diverge over a minor: the pass rules make the call the
+engine made anyway, and the gain is the 3NT and 4M rules.
+
 ## Sources
 
 - **Rick's rulings:** the opening guidelines (weak two 4-9 with six;
@@ -293,11 +349,15 @@ Corpus par:
 - **BBA probes:** `rbb probe` with the opener's hand fixed, one feature at
   a time (2026-09-24, command lines and hands in the section); responder
   to a three-level preempt, `probes/preempt-resp-3S.toml` and
-  `probes/preempt-resp-3C.toml` (2026-09-25).
+  `probes/preempt-resp-3C.toml` (2026-09-25); strong hands over 3♦ on
+  the bare SAYC card, `probes/preempt-resp-3D-strong.toml` (2026-09-30).
+- **Vanilla SAYC set:** BBA's calls after 3x-(P) and after 3m-4m
+  (2026-09-30, section above).
 - **BBA evidence:** Basic_Weak_2, Basic_What_To_Open and the Basic_*
   corpus (ten-counts, side majors, six-four minors).
 - **Corpus measurements:** the opening rules, the rule of 20, the 10-HCP
-  weak two, the side four-card major trial, and the responder rules split
+  weak two, the side four-card major trial, the responder's pass, 3NT
+  and 4M over a minor (2026-09-30), and the responder rules split
   on vulnerability.
 - **Where we differ:** "Accepted differences from BBA", and the default's
   departures listed at the end of "BBA treatment".
