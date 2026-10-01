@@ -9,13 +9,12 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  # Linux only here: macOS is where the code is written and tested
+  # locally, and the full Linux / macOS / Windows matrix runs before every
+  # release (release.yml), where the binaries for those platforms are built.
   test:
-    name: Test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: Test (ubuntu-latest)
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable

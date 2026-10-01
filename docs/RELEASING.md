@@ -64,9 +64,11 @@ commits: CI builds with `--locked` against the git pins.
 ## Releases (GitHub Actions)
 
 - `.github/workflows/ci.yml`: on pushes to main and pull requests, `bid
-  check` and `cargo test --workspace` on Linux, macOS and Windows, and the
-  WASM package (artifact `rbb-wasm-pkg`).
-- `.github/workflows/release.yml`: on a tag `v*` (or run by hand), builds
+  check` and `cargo test --workspace` on Linux, the WASM package (artifact
+  `rbb-wasm-pkg`) and the web site.
+- `.github/workflows/release.yml`: on a tag `v*` (or run by hand), first
+  `bid check` and `cargo test --workspace` on Linux, macOS and Windows; then
+  (only if they pass) builds
   `rbb` for `x86_64-unknown-linux-gnu`, `x86_64-pc-windows-msvc`,
   `x86_64-apple-darwin` and `aarch64-apple-darwin`, signs and notarizes the
   macOS binaries, builds the WASM package, and attaches
