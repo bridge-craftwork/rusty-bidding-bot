@@ -29,16 +29,17 @@ define pen_suit(x) = (good_trumps(x), we.hcp.min>=20) | (x>=3, we.hcp.min>=21) |
 # Responder's first call over their overcall: the double is negative.
 define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !me.last=XX
 
-# Partner has shown values: alone, a strong hand with their suit doubles
-# for takeout first (the reopening doubles over a preempt read it so).
-define partner_shown = partner.hcp.min>=4
+# Partner need not have shown values: with 22 known in my own hand (or
+# 20-21 with their trumps) the double stands alone. A condition that
+# partner had shown 4+ was a par artefact: it lost on the errors
+# yardstick on all three sets (penalty-doubles.notes.md, 2026-10-01).
 
 # Not over partner's notrump opening (one bid, a range of four points or
 # less): they came in with shape against a balanced hand, and the double
 # lost (21GF random set, 2026-10-01).
 define partner_nt = partner.opened, partner.bids=1, partner.hcp.min>=12, partner.hcp.max - partner.hcp.min <= 3
 
-define pen_spot(x) = natural_theirs(x), settled(x), partner_shown, !partner_nt
+define pen_spot(x) = natural_theirs(x), settled(x), !partner_nt
 
 when they.bid, direct | passed_round, !asked, they.level>=2, !responder_first
   X   "Penalty: they are too high in spades"

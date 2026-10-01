@@ -31,3 +31,14 @@ W AKQ.83.9762.KQJ9      | 1NT P 2C            | !X  | Stayman is not a contract
 dealer  N
 vul     None
 S J74.J96.8432.A62      | 1NT P P 2H P P      | P   | partner's notrump: no penalty double
+# Partner silent, 22 in my own hand: a double of their game is for
+# penalty, not left to a sequence that passes (Random_Pavlicek_SAYCvanilla
+# 6129; the partner-has-shown-values condition dropped, 2026-10-01).
+dealer  N
+vul     None
+S K.KT.AKQ5.KQ8753      | P 5D                | X   | 22 in my hand: they are too high
+# My takeout double, partner ran, they bid on: the second double is for
+# penalty (Random_Pavlicek_SAYCvanilla 74599).
+dealer  S
+vul     Both
+E AKJ.A.AT73.AK642      | 1H P P X 2H P P     | X   | 22 in my hand, passed round to me
