@@ -35,7 +35,7 @@ jobs:
       - name: Rule files
         run: cargo run --locked -q -p rbb-cli -- bid check
       - name: Tests
-        run: cargo test --locked --workspace
+        run: cargo test --locked --workspace --release
 
   build-release:
     name: Build ${{ matrix.asset }}

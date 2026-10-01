@@ -1,35 +1,126 @@
 name: CI
 
+# Two kinds of change, two kinds of check (Rick, 2026-09-30: rules and
+# engine will be separate repositories; a rules-only change should not
+# build the engine):
+#
+# - rules only (conventions/, docs/SKILLS.md): the rbb binary built on
+#   main checks and tests the rules - every .test file, since a change to
+#   one module can change another's calls - in about a minute;
+# - engine (crates/, Cargo.*, cards/, web/, scripts/, the workflows): one
+#   optimised build, then the whole test suite, the WASM package and the
+#   web site.
+#
+# Pushes to main always run the engine checks, and leave the rbb binary
+# (artifact rbb-linux) for rules-only pull requests to use. Linux only:
+# the full Linux / macOS / Windows matrix runs before a release
+# (release.yml).
+
 on:
   push:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: read
+
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  # Linux only here: macOS is where the code is written and tested
-  # locally, and the full Linux / macOS / Windows matrix runs before every
-  # release (release.yml), where the binaries for those platforms are built.
-  test:
-    name: Test (ubuntu-latest)
+  changes:
+    name: What changed
+    runs-on: ubuntu-latest
+    outputs:
+      engine: ${{ steps.filter.outputs.engine }}
+      rules: ${{ steps.filter.outputs.rules }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            engine:
+              - 'crates/**'
+              - 'Cargo.toml'
+              - 'Cargo.lock'
+              - 'cards/**'
+              - 'web/**'
+              - 'scripts/**'
+              - '.github/**'
+            rules:
+              - 'conventions/**'
+              - 'docs/SKILLS.md'
+
+  rules:
+    name: Rules (rbb from main)
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.rules == 'true' && needs.changes.outputs.engine != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # The binary from the latest successful run on main; built here if
+      # there is none (a first run, or the artifact expired).
+      - name: rbb from main
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push \
+                 --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          if [ -n "$id" ] && gh run download "$id" --repo "$GITHUB_REPOSITORY" --name rbb-linux --dir bin; then
+            chmod +x bin/rbb
+          else
+            echo "no rbb artifact on main: building one"
+            cargo build --locked --release -p rbb-cli
+            mkdir -p bin && cp target/release/rbb bin/rbb
+          fi
+          bin/rbb --version
+      - name: Rule files
+        run: bin/rbb bid check
+      - name: Every .test file
+        run: bin/rbb bid test
+      - name: docs/SKILLS.md is current
+        run: |
+          bin/rbb bid skills --doc docs/SKILLS.md
+          git diff --exit-code docs/SKILLS.md
+
+  engine:
+    name: Engine (build and tests)
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.engine == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      # The git dependencies (bridge-types, bridge-encodings, bridge-solver)
-      # are public and pinned by the committed Cargo.lock; --locked fails
-      # rather than re-resolve. No local [patch] exists here (that pattern
-      # lives in a gitignored .cargo/config.toml on a developer's machine).
+      # The git dependencies (bridge-types, bridge-encodings, bridge-solver,
+      # bridge-card) are public and pinned by the committed Cargo.lock;
+      # --locked fails rather than re-resolve. No local [patch] exists here
+      # (that pattern lives in a gitignored .cargo/config.toml).
+      - name: Build rbb
+        run: cargo build --locked --release -p rbb-cli
       - name: Rule files
-        run: cargo run --locked -q -p rbb-cli -- bid check
+        run: target/release/rbb bid check
+      # Optimised: the tests bid thousands of positions, which a debug
+      # build runs several times slower than it compiles.
       - name: Tests
-        run: cargo test --locked --workspace
+        run: cargo test --locked --workspace --release
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'push'
+        with:
+          name: rbb-linux
+          path: target/release/rbb
+          retention-days: 90
 
   wasm:
     name: WASM package
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.engine == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +139,8 @@ jobs:
 
   web:
     name: Web site
+    needs: changes
+    if: github.event_name == 'push' || needs.changes.outputs.engine == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
