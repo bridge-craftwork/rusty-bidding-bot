@@ -9,3 +9,6 @@
 .wrangler/
 .playwright-mcp/
 __pycache__/
+
+# Editor/tool session log
+/activity-log.json
