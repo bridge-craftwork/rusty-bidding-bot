@@ -64,10 +64,11 @@ after 1N (X) XX (2y) P (P)
   X   "Penalty"                                  shows y>=4 | hcp>=9
   P   "Nothing more"                             priority -5
 
-# Over a 2♣ overcall nothing new is needed: the double is Stayman
-# (stayman.bid), the transfers keep their calls (jacoby-transfers.bid,
-# minor-transfers.bid, texas-transfers.bid) and the natural notrump
-# calls and the pass are in one-nt.bid.
+# Over a 2♣ overcall with `vs_2c` on nothing new is needed: the double
+# is Stayman (stayman.bid), the transfers keep their calls
+# (jacoby-transfers.bid, minor-transfers.bid, texas-transfers.bid) and
+# the natural notrump calls and the pass are in one-nt.bid. With it off,
+# a natural 2♣ has its own rules below.
 
 # ── They overcalled 2♦, 2♥ or 2♠ ─────────────────────────────────────
 # Their natural two-level overcall (2026-09-25; nt-interference.notes.md,
@@ -163,6 +164,113 @@ after 1N (2y) 3z (P) when y is not C, z is not y, z is not N, lho.y>=4, (maybe l
 after 1N (2y) 2z (P) when y is not C, z is not N, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   P   "Partner's suit, to play"
 after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  3N  "Accepts: a maximum"             shows hcp>=16
+  P   "Declines: a minimum"            shows hcp<=15
+
+# ── Their natural 2♣, transfers off (2026-09-30) ─────────────────────
+# With `vs_2c` off there is no Stayman by double and no transfer, and a
+# natural 2♣ (five or more clubs: `rho.C>=5`, which DONT, Meckwell,
+# Cappelletti and Landy 2♣ never show) is met as BBA meets it on bare
+# SAYC (nt-interference.notes.md, probes/nt-2C-nat-resp.toml): no
+# negative double. A five-card suit at the two level is to play, 2NT
+# invites with a club stopper, 3NT is game with one. A weak hand with
+# four of a major passes and leaves it to opener's reopening double.
+# Game values are ours, not BBA's (which passes some 13-16 counts): a
+# five-card suit at the three level forces to game, and the cue-bid is
+# Stayman forcing to game, with a four-card major or no club stopper.
+after 1N (2C) when !vs_2c, rho.C>=5
+  2S  "Natural, to play: five or more spades"     shows S>=5, S>=H, hcp>=4, points<=9
+  2H  "Natural, to play: five or more hearts"     shows H>=5, H>S, hcp>=4, points<=9
+  2D  "Natural, to play: five or more diamonds"   shows D>=5, H<=4, S<=4, hcp>=4, points<=9
+  2N  "Invitational: 8-9 HCP, a club stopper"     shows hcp=8..9, stop(C), H<=4, S<=4
+      sets  ask=nt_invite
+  3N  "Game: 10+ HCP, a club stopper"             shows hcp>=10, stop(C), H<=3, S<=3
+  3C  "Cue-bid: Stayman, forcing to game (a four-card major, or no club stopper)"
+      alert  artificial
+      shows  hcp>=10, H<=4, S<=4, H=4 | S=4 | !stop(C)
+      sets   forcing=game
+      priority 1
+  3D  "Natural, forcing to game: five or more diamonds"   shows D>=5, points>=10
+      sets  forcing=game
+      priority 2
+  3H  "Natural, forcing to game: five or more hearts"     shows H>=5, H>S, points>=10
+      sets  forcing=game
+      priority 2
+  3S  "Natural, forcing to game: five or more spades"     shows S>=5, S>=H, points>=10
+      sets  forcing=game
+      priority 2
+  4H  "Game: six or more hearts"   shows H>=6, H>S, points>=9
+      priority 3
+  4S  "Game: six or more spades"   shows S>=6, S>=H, points>=9
+      priority 3
+  P   "Nothing to say over their 2♣ (or clubs: waiting for the reopening double)"
+      priority -10
+
+# Opener after responder's call.
+after 1N (2C) 2z (P) when !vs_2c, lho.C>=5, z is not N
+  P   "Partner's suit, to play"
+after 1N (2C) 2N (P) when !vs_2c, lho.C>=5
+  3N  "Accepts: a maximum"             shows hcp>=16
+  P   "Declines: a minimum"            shows hcp<=15
+after 1N (2C) 3z (P) when !vs_2c, lho.C>=5, z is not C
+  4{z}  "Three-card support: game in the major"   shows z>=3
+        when  z is H | z is S
+  3N    "Game in notrump"
+        priority -1
+# The cue-bid: a four-card major, else 3NT with a club stopper, else 3♦.
+after 1N (2C) 3C (P) when !vs_2c, lho.C>=5
+  3H  "Four hearts"                         shows H>=4
+  3S  "Four spades, not four hearts"        shows S>=4, H<=3
+  3N  "No four-card major, a club stopper"  shows H<=3, S<=3, stop(C)
+  3D  "No four-card major, no club stopper" shows H<=3, S<=3
+      priority -1
+after 1N (2C) 3C (P) 3M (P) when !vs_2c, rho.C>=5
+  4M  "Game in the fit"                     shows M>=4
+  3S  "Four spades, not four hearts"        shows S>=4
+      when  M is H
+  3N  "No fit: game in notrump"
+      priority -1
+after 1N (2C) 3C (P) 3H (P) 3S (P) when !vs_2c, lho.C>=5
+  4S  "Four spades too: game in the fit"    shows S>=4
+  3N  "Game in notrump"                     priority -1
+after 1N (2C) 3C (P) 3D (P) when !vs_2c, rho.C>=5
+  3N  "Game in notrump: the best we have"
+after 1N (2C) 3C (P) 3N (P) | 1N (2C) 3C (P) 3H (P) 3N (P) | 1N (2C) 3C (P) 3S (P) 3N (P) when !vs_2c
+  P   "Game reached"
+
+# They raised their clubs: compete in partner's major with four, accept
+# the invitation with a maximum, otherwise pass.
+after 1N (2C) 2M (3C) when !vs_2c, lho.C>=5
+  3M  "Four-card support: competing"   shows M>=4
+  P   "Nothing more to say"            priority -5
+after 1N (2C) 2N (3C) when !vs_2c, lho.C>=5
+  3N  "Accepts: a maximum"             shows hcp>=16
+  P   "Declines: a minimum"            priority -5
+# Any other raise of their clubs over partner's two-level call, and
+# their next club bid after we compete: we have said what we have.
+after 1N (2C) 2z (3C) | 1N (2C) 2z (4C) when !vs_2c, lho.C>=5
+  P   "Partner's call said it: nothing more"   priority -10
+after 1N (2C) 2M (3C) 3M (4C) when !vs_2c, rho.C>=5
+  P   "We have competed: nothing more"         priority -10
+
+# Responder passed: with two clubs opener reopens with a double (BBA,
+# 32 of 32 two-club openers in the vanilla corpus; none with three).
+# Responder passes for penalties with four clubs, else names a suit.
+after 1N (2C) P (P) when !vs_2c, lho.C>=5
+  X   "Reopening double: two clubs or fewer"   shows C<=2
+      priority 1
+after 1N (2C) P (P) X (P) when !vs_2c, rho.C>=5
+  P   "Four or more clubs: defends"             shows C>=4
+      priority 1
+  2N  "8-9 HCP, a club stopper"                 shows hcp>=8, stop(C), H<=3, S<=3
+  2H  "Four or more hearts"                     shows H>=4, H>=S
+  2S  "Four or more spades"                     shows S>=4, S>H
+  2D  "Four or more diamonds"                   shows D>=4
+      priority -1
+  2D  "Nothing better"                          priority -5
+after 1N (2C) P (P) X (P) 2z (P) when !vs_2c, lho.C>=5, z is not N
+  P   "Partner's suit, to play"
+after 1N (2C) P (P) X (P) 2N (P) when !vs_2c, lho.C>=5
   3N  "Accepts: a maximum"             shows hcp>=16
   P   "Declines: a minimum"            shows hcp<=15
 
