@@ -34,5 +34,14 @@ rustup target list --installed 2>/dev/null | grep -q wasm32-unknown-unknown || {
     rustup target add wasm32-unknown-unknown
 }
 
+# wasm-pack runs cargo itself, so with the gitignored [patch] overrides in
+# .cargo/config.toml (local sibling checkouts; dev-build.sh) cargo would
+# rewrite the committed Cargo.lock with local-path entries. Keep the lock
+# as it was before the build.
+lock=../../Cargo.lock
+saved=$(mktemp)
+cp "$lock" "$saved"
+trap 'cp "$saved" "$lock"; rm -f "$saved"' EXIT
+
 wasm-pack build --target web "$profile" --out-dir "$out" --out-name rbb_wasm
 ls -l "$out"/rbb_wasm_bg.wasm

@@ -27,21 +27,31 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
 
 ## Commands
 
-- **Local sibling checkouts:** when `.cargo/config.toml` carries `[patch]`
-  overrides (bridge-card from `../convention-card`, bridge-types, ...),
-  build and test with `./dev-build.sh <cargo args>`, never bare cargo,
-  which would rewrite `Cargo.lock` or ignore the patch (docs/RELEASING.md,
-  "Building against local checkouts"). Without such a config bare cargo is
-  fine; that is the default.
+**Use `./dev-build.sh` for local builds, not bare cargo** (as in the other
+bridge-craftwork Rust repos). This repo depends on sibling crates
+(`bridge-types`, `bridge-encodings`, `bridge-solver`, and `bridge-card` from
+`convention-card`) as git dependencies, with gitignored `[patch]` overrides in
+`.cargo/config.toml` redirecting them to the local checkouts in `../`. Bare
+cargo with those patches either silently builds the GitHub revisions or, when
+the patch takes effect, rewrites `Cargo.lock` with local-path entries that must
+never be committed (CI has no sibling checkouts). The script keeps a separate
+local lock (`.cargo/dev.lock`), verifies each patched crate resolved to its
+checkout, and leaves the committed `Cargo.lock` untouched. For CI parity
+(patches off, the committed lock's git pins) use `./dev-build.sh --ci <args>`.
+`cargo fmt` resolves nothing, so bare cargo is fine for it.
+`crates/wasm/build.sh` restores `Cargo.lock` after its `wasm-pack` run for the
+same reason. To get a sibling change into CI: push and tag it there, move the
+pin here, and commit the re-resolved lock (docs/RELEASING.md, "Building against
+local checkouts").
 
-- `cargo test --workspace`
-- `cargo run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
+- `./dev-build.sh test --workspace`
+- `./dev-build.sh run -q -p rbb-cli -- card import-bbsa <file.bbsa>`: card JSON on stdout,
   passthrough report on stderr. Also `export-bbsa`, `check`, `schema`.
-- `cargo run -q -p rbb-cli -- card coverage <file.bbsa>...`: how much of each
+- `./dev-build.sh run -q -p rbb-cli -- card coverage <file.bbsa>...`: how much of each
   card the rules read — settings honoured, settings ignored, `.bbsa` keys with
   no field (`-v` lists them). `compare --min-coverage 50` restricts the
   comparison to scenarios whose cards we cover that well.
-- `cargo run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
+- `./dev-build.sh run -q -p rbb-cli -- bid check`: parse and check every `.bid` file in
   `conventions/`; `bid compile <file>` prints the JSON IR.
 - docs/CONTRACT.md is the contract between engine and conventions (they
   will split into two repos): what the engine promises, what a good
@@ -61,9 +71,9 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   is a pull request there). After
   changing any, run `rbb bid skills --doc docs/SKILLS.md` (a test checks
   the doc).
-- `cargo run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
+- `./dev-build.sh run -q -p rbb-cli -- bid test [paths]`: run the `<module>.test` cases
   (`seat hand | auction | expect | why`) next to the modules; `-v` lists passes.
-  `cargo test` runs them too. Put call expectations there, not in Rust tests.
+  `./dev-build.sh test` runs them too. Put call expectations there, not in Rust tests.
 - **Par decides, BBA teaches**: where agreement with BBA and distance from
   double-dummy par disagree, par wins, and the trade goes in the notes and
   the commit message (docs/DESIGN.md).
@@ -74,9 +84,9 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   Rick's dated rulings, probe specs, corpus measurements) and where they
   differ from that source; "standard practice, not yet cited" when that
   is the truth (docs/CONTRACT.md, Part 2).
-- `cargo run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
+- `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything).
-- `cargo run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
+- `./dev-build.sh run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
   compare with BBA's auctions in `../Practice-Bidding-Scenarios` (all 342
   scenarios in ~45 s in release). The top divergence points are the work
   queue. Par comes free for boards whose corpus file carries an
@@ -103,7 +113,7 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   them (a judgment or fallback rule claiming a call a higher rule
   offers; docs/JUDGMENT-LAYER.md §4), with the top (chosen -> read as)
   pairs; `read_as` in `--json`.
-- `cargo run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
+- `./dev-build.sh run -q --release -p rbb-cli -- probe --hand S=<S.H.D.C> --vary-tens --prefix "1NT Pass 2NT Pass" --dealer S`:
   ask bba-cli how it bids chosen hands and compare (`--ns-card bare:2/1`,
   `--set Texas=0`, `--script file.dlr`, `--scoring IMP`).
   **Find what a decision turns on by making hands, not by searching the
@@ -133,7 +143,7 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   (overcalls.notes.md, "For Rick: which yardstick").
   Corpus tables mix cards (1NT ranges, transfer structures): restrict
   them to one card.
-- `cargo run -q --release -p rbb-cli -- bid-pbn -i in.pbn -o out.pbn --ns-card X.bbsa --ew-card Y.bbsa`:
+- `./dev-build.sh run -q --release -p rbb-cli -- bid-pbn -i in.pbn -o out.pbn --ns-card X.bbsa --ew-card Y.bbsa`:
   bid every deal of a PBN file, written in bba-cli's layout (`[Auction]`,
   `[Note]`s for alerts, `--all-meanings` for every call). Uses the rules
   compiled into the binary unless `--rules`; cards may be stock names
@@ -148,7 +158,7 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   dealer3, `reference.txt`; `node web/scripts/test.mjs web/dist` tests
   its `window.rustyBiddingBot` contract. Serve with
   `python3 -m http.server -d web/dist`.
-- `cargo run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
+- `./dev-build.sh run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`).
 

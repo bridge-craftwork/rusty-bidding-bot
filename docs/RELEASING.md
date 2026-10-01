@@ -51,7 +51,7 @@ no deal could be bid.
 ## Building locally
 
 ```sh
-cargo build --release -p rbb-cli        # target/release/rbb
+./dev-build.sh build --release -p rbb-cli   # target/release/rbb
 crates/wasm/build.sh                    # crates/wasm/pkg/
 ```
 
@@ -61,22 +61,29 @@ bridge-card from convention-card) are public and pinned in the committed
 
 ### Building against local checkouts
 
-To work on a sibling crate and this repo together (say a convention-card
-change), point cargo at the checkout with a gitignored
-`.cargo/config.toml`:
+As in the other bridge-craftwork Rust repos, a developer's checkout keeps a
+gitignored `.cargo/config.toml` that patches every sibling git dependency to
+its local checkout in `../`:
 
 ```toml
-[patch."https://github.com/bridge-craftwork/convention-card"]
+[patch.'https://github.com/bridge-craftwork/bridge-types']
+bridge-types = { path = "../bridge-types" }
+[patch.'https://github.com/bridge-craftwork/bridge-encodings']
+bridge-encodings = { path = "../bridge-encodings" }
+[patch.'https://github.com/bridge-craftwork/bridge-solver']
+bridge-solver = { path = "../bridge-solver" }
+[patch.'https://github.com/bridge-craftwork/convention-card']
 bridge-card = { path = "../convention-card/crates/bridge-card" }
 ```
 
-and then build with **`./dev-build.sh`, not bare cargo** (ported from
-bridge-rulebot): with a patch in place, bare cargo either rewrites the
-committed `Cargo.lock` with local-path entries (same version as the pin,
-as bridge-card 0.1.0 is) or silently builds the pinned revision instead
-(different version). The script keeps a separate local lock
-(`.cargo/dev.lock`), swaps it in around the cargo call, checks that each
-patched crate resolved to its checkout, and leaves `Cargo.lock` alone:
+and builds with **`./dev-build.sh`, not bare cargo**: with the patches
+present, bare cargo either rewrites the committed `Cargo.lock` with
+local-path entries (a patch of the same version as the pin) or silently
+builds the pinned revisions (a different version). The script keeps a
+separate local lock (`.cargo/dev.lock`), swaps it in around the cargo call,
+checks that each patched crate resolved to its checkout, and leaves
+`Cargo.lock` alone; `crates/wasm/build.sh` restores `Cargo.lock` after its
+`wasm-pack` run:
 
 ```sh
 ./dev-build.sh build --release -p rbb-cli
@@ -84,9 +91,11 @@ patched crate resolved to its checkout, and leaves `Cargo.lock` alone:
 ./dev-build.sh --ci test --workspace    # CI parity: patches off, the git pins
 ```
 
-Without a patch config it is plain cargo. When the sibling change is
-released (a tag there), move the pin here in `Cargo.toml` and commit the
-re-resolved `Cargo.lock`.
+A fresh clone without the siblings (or without the config) builds the
+pinned revisions, and the script is plain cargo. To get a sibling change
+into CI, push (and for convention-card tag) it there, move the pin here,
+and commit the re-resolved `Cargo.lock` (`./dev-build.sh --ci update -p
+<crate>`).
 
 ## Releases (GitHub Actions)
 
@@ -141,7 +150,7 @@ online the first time it runs.
 By hand, on a Mac whose login keychain has the certificate:
 
 ```sh
-cargo build --release -p rbb-cli
+./dev-build.sh --ci build --release -p rbb-cli   # the pinned revisions, as CI ships
 SIGN_LOCAL=1 APPLE_ID=... APPLE_ID_PASSWORD=... APPLE_TEAM_ID=... \
   scripts/macos-sign.sh target/release/rbb
 ```
