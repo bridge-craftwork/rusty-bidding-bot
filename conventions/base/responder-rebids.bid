@@ -157,7 +157,7 @@ after 1x (P) 1M (P) 3M (P)
 after 1x (P) 1y (P) 2N (P)
   P   "Weak: no game"                      shows points<=6
       priority -5
-  3N  "Game: 7+"                           shows points>=7, y<=5 | y is C | y is D
+  3N  "Game: 7+"                           shows points>=7, y<=5 | y is C | y is D, hcp + partner.hcp.min <= 31   # with more, the catch-all below looks at slam
 after 1x (P) 1M (P) 2N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=7
 

@@ -36,7 +36,7 @@ N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4C     | 15 balanced
 
 # "Gerber only for NT openings" (21GF-MSS): no Gerber over the rebid.
 card    21GF-MSS
-N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 3NT    | 4C is not Gerber here (the 3NT is responder-rebids.bid's)
+N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4NT    | 4C is not Gerber here: 33 between us, the catch-all's quantitative 4NT (responder-rebids.bid)
 
 # No Gerber on the card (Basic-Bridge): 6NT directly, as before.
 card    Basic-Bridge
