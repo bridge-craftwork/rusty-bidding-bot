@@ -278,3 +278,15 @@ card    21GF-DEFAULT
 dealer  N
 N AKJ52.KQ84.A3.Q2      | 1S P 2C P 2H P 2N P                  | 6NT    | 19 facing 16+: 33 on his floor
 N AJ852.KQ84.Q3.Q2      | 1S P 2C P 2H P 2N P                  | 4NT    | 15 points: 31, quantitative
+
+# ── The major invitation without transfers (2026-09-30) ──────────────
+# Vanilla SAYC random deals (BBA bare SAYC); the answer used to live in
+# jacoby-transfers.bid, so with transfers off opener had no rule.
+card    Basic-Bridge notrump.transfers.jacoby=false
+dealer  S
+S AJ2.KT94.Q543.Q2      | 1D P 1H P 2H P 3H P      | P      | 12 HCP: a minimum declines
+S KJ73.KQ75.A642.8      | 1D P 1H P 2H P 3H P      | 4H     | 13 HCP and a singleton: accepts
+S AK7653.Q5.96.QJ2      | 1S P 1NT P 2S P 3S P     | P      | 12 HCP: declines
+S AQJ932.K53.A95.8      | 1S P 1NT P 2S P 3S P     | 4S     | 14 HCP and a singleton: accepts
+S AKJ4.J974.52.K75      | 1C P 1S P 2S P 3S P      | P      | 12 HCP: declines
+S KQ98.K5.985.AQ42      | 1C P 1S P 2S P 3S P      | 4S     | 14 HCP: accepts
