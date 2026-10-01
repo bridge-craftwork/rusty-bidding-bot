@@ -225,3 +225,104 @@ run) back below the baseline (2,835 before, 2,795 after). Still open:
 Lebensohl (on for 21GF-DEFAULT) over their two-level calls; a cue-bid
 structure over Landy/Multi-Landy 2♣ (we keep Stayman by double);
 opener's rebids when their advancer bids over our double (a pass).
+
+## Their natural 2♣, transfers off (2026-09-30)
+
+With `notrump.transfers.vs_2c` off (the vanilla SAYC card; no stock
+corpus card) nothing applied after a natural 2♣: the 2♦/2♥/2♠ rules are
+gated `y is not C` and the 2♣ systems-on rules need the switch. On the
+95,558 vanilla SAYC deals that was 156 no-rule boards at `1NT (2C)` and
+54 more at `1NT (2C) 2NT (P)`.
+
+The rules apply only when the 2♣ showed five or more clubs
+(`rho.C>=5`): DONT and Meckwell 2♣ promise only four, Cappelletti's 2♣
+an unknown suit, Landy the majors, so their 2♣ is untouched (a test
+holds this for Cappelletti on 21GF-DEFAULT).
+
+**What BBA plays** (bare SAYC, `probes/nt-2C-nat-resp.toml`, 400 random
+responders, with BBA's own meanings from the grid's `bba_alert`):
+
+| call | BBA |
+|---|---|
+| X | never bid (0 of 400; 0 of 270 in the vanilla corpus): no negative double |
+| 2♦/2♥/2♠ | five or more, "4 to 9 total points", to play |
+| 2NT | 8-9, a club stopper |
+| 3NT | 9-15, a club stopper |
+| 3♦ | five or more diamonds, 9-13 |
+| 4♥/4♠ | six or more, "6 to 13 total points" |
+| 3♣ | artificial, two 16-counts |
+| Pass | 0-9, but also 10-16 counts with no club stopper (QT.Q862.AKQ8.Q95, 15, passes) and long clubs |
+
+Opener (vanilla corpus): after responder's pass he **reopens with a
+double holding two clubs** (32 of 32 two-club hands; never with three),
+and responder passes it with four or more clubs or names a four-card
+suit. After 2NT he bids 3NT with 16 (2 of 2) and passes 15 (4 of 4).
+After a two-level suit he passes; after 3♦ he bids 3NT.
+
+**Ours.** BBA's low end, as it is: two-level suits from 4 HCP and at
+most 9 points, 2NT 8-9 with a club stopper, 3NT from 10 with one, a weak
+hand with a four-card major passes and relies on the reopening double,
+and the reopening double itself. BBA's high end we do not copy: it has
+no forcing call short of game, so it passes or bids a non-forcing 2♠
+with 13-16 counts. Ours, standard practice rather than BBA:
+
+- a five-card suit at the three level forces to game (3♦ non-jump, 3♥/3♠
+  jumps); opener raises a major with three, else 3NT;
+- **3♣ cue-bid: Stayman, forcing to game**, with a four-card major or
+  without a club stopper. Opener shows a four-card major (hearts first),
+  else 3NT with a club stopper, else 3♦; responder raises a fit, shows
+  four spades over 3♥, else 3NT;
+- four of a major with six cards and 9+ points (BBA from about 6-7 HCP;
+  our cut is a judgment call, between BBA's and the natural block's 10);
+- when they raise clubs over a two-level call opener competes in a major
+  with four and accepts 2NT with 16-17; otherwise passes.
+
+**Measured** (baseline main 16e3f68, same binary):
+
+| set | vs BBA before | after | no-rule before | after |
+|---|---|---|---|---|
+| vanilla SAYC (95,558) | -42,209 | -42,106 (+103) | 1,641 | 1,425 |
+| PBS corpus | -93,855 | -93,855 | 2,607 | 2,607 |
+| 21GF random | -43,948 | -43,948 | 1,378 | 1,378 |
+
+Calls agreeing on vanilla 798,209 → 798,399. The corpus and the 21GF set
+do not move: every card there keeps `vs_2c` on or plays an artificial
+2♣. `sideimps.py` on the vanilla runs: 266 boards changed, **+548 IMPs
+to the side that changed its call**, +103 by par distance. By call:
+
+| change | boards | side IMPs | par distance |
+|---|---|---|---|
+| opener's reopening double (P → X) | 53 | +172 | -90 |
+| responder's 2♦/2♥/2♠ (from pass, 2NT or a 3-level preempt) | 136 | +190 | +12 |
+| 2NT / 3NT / 3♣ / three-level suits / 4M | 66 | +182 | +168 |
+| opener accepts 2NT (P → 3NT) | 11 | +4 | +13 |
+
+The yardsticks disagree on the **reopening double** (and, mildly, on
+the two-level diamonds: +58 side, -45 par): it often ends in 2♣ doubled
+beaten by more than our par contract, or pushes them, which par distance
+counts as a loss. It is the competitive call the side yardstick exists
+for, and BBA's call; kept, flagged for Rick (overcalls.notes.md, "For
+Rick: which yardstick").
+
+Still open: a weak six-card major (5-6 HCP) bids 2♥/2♠ where BBA jumps
+to game; a five-card major with 9 HCP and 10 points forces with 3♥ where
+BBA bids 3NT (5 boards, -9).
+
+## Sources
+
+- **The structure over interference:** standard practice, not yet cited
+  (Stayman by double and transfers over 2♣ follow the card's switches,
+  BBA's play on every corpus card that sets them). Over a natural 2♣
+  with the switch off: natural two-level suits to play, the cue-bid as
+  game-forcing Stayman, three-level suits forcing: standard practice,
+  not yet cited; the reopening double with shortness in their suit is
+  BBA's (vanilla corpus).
+- **BBA probes:** `rbb probe --prefix "1NT X"` on Basic-Bridge (not kept);
+  `probes/nt-2D-resp.toml`, `nt-2H-resp.toml`, `nt-2S-resp.toml` (natural
+  2♦/2♥/2♠, Basic-Bridge); `probes/nt-2C-nat-resp.toml` (natural 2♣,
+  bare SAYC), meanings from the grid's `bba_alert`.
+- **Corpus measurements:** Opps_Double_1_NT (escape cut), the full corpus
+  (2026-09-23, -25, -28), the vanilla SAYC random set (2026-09-30).
+- **Where we differ from BBA:** Stayman over 2♣ with game values; game
+  forcing calls over a natural 2♣ where BBA passes or bids 2♠; 4♥/4♠ with
+  six from 9 points ("Accepted differences", the 2026-09-30 section).

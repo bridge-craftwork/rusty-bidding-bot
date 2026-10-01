@@ -89,3 +89,36 @@ N 954.K82.Q873.J54      | 1NT 2NT         | P   | 6: nothing to say
 S AQ3.K984.AJ52.K9      | 1NT 2C X 2D     | 2H  | Stayman through their relay: four hearts
 S AQ3.K98.AJ52.K94      | 1NT 2C X 2D     | X   | no major, four diamonds: penalty
 S AQ3.K984.AJ52.K9      | 1NT X 2S P      | P   | partner's escape: to play
+
+# ── Their natural 2♣, transfers off (2026-09-30; probes/nt-2C-nat-resp,
+# vanilla SAYC corpus). Basic-Bridge plays a natural defence, so their
+# 2♣ shows five clubs; with `vs_2c` off nothing of the 1NT structure
+# survives and BBA (bare SAYC) plays no negative double.
+card    Basic-Bridge notrump.transfers.vs_2c=false
+dealer  S
+N J965.T62.K64.J76      | 1NT 2C       | P   | 5 HCP, four spades: pass, opener may reopen (BBA)
+N KJ65.K964.JT85.J      | 1NT 2C       | P   | 9 HCP, both majors, no club stopper: pass (BBA)
+N A85.K873.82.Q762      | 1NT 2C       | 2NT | 9 HCP, a club stopper: invites (BBA)
+N 64.965.AKT53.T87      | 1NT 2C       | 2D  | five diamonds, 7: to play (BBA)
+N T74.QT953.987.Q7      | 1NT 2C       | 2H  | five hearts, 4: to play (BBA)
+N KQ53.Q843.953.K8      | 1NT 2C       | 3C  | 10 HCP, four-card majors: the Stayman cue-bid (BBA 3NT)
+N KT8.K94.KJT52.65      | 1NT 2C       | 3D  | five diamonds, 10: forcing to game (BBA)
+N A93.KT5.Q74.KJ82      | 1NT 2C       | 3NT | 13 HCP, a club stopper, no major: game
+N AQ932.A5.K843.85      | 1NT 2C       | 3S  | five spades, 13: forcing (BBA 2♠, to play)
+N AQ7632.T6.3.9842      | 1NT 2C       | 2S  | six spades but 6 HCP, 8 points: to play (BBA 4♠)
+N J95.KJ8543.K7.K7      | 1NT 2C       | 4H  | six hearts, 11: game (BBA)
+S AK43.T73.AJ86.A3      | 1NT 2C P P   | X   | two clubs: the reopening double (BBA)
+S Q43.A86.AK32.K42      | 1NT 2C P P   | P   | three clubs: let them play (BBA)
+N 9.Q.QJ.AKJT97654      | 1NT 2C P P X P | P | clubs: defends (BBA)
+N Q854.QT92.T87.76      | 1NT 2C P P X P | 2H | four hearts (BBA 2♠)
+S QJ93.A53.AQ7.QJT      | 1NT 2C 3D P  | 3NT | a club stopper: game in notrump (BBA)
+S AK74.975.AK4.Q92      | 1NT 2C 2NT P | 3NT | 16 HCP: accepts (BBA passes)
+S AT82.K62.AKT7.J2      | 1NT 2C 2NT P | P   | 15: declines (BBA)
+S Q863.KQ76.AKT.JT      | 1NT 2C 3C P  | 3H  | the cue-bid: four hearts
+S AQ7.QJT.A654.KT4      | 1NT 2C 3C P  | 3NT | the cue-bid: no major, a club stopper
+
+# A 2♣ that does not show clubs (Cappelletti on 21GF-DEFAULT) is not
+# read as natural: with `vs_2c` off nothing here applies.
+card    21GF-DEFAULT notrump.transfers.vs_2c=false
+dealer  S
+N T74.QT953.987.Q7      | 1NT 2C       | P   | Cappelletti 2♣: the natural rules stay out
