@@ -63,10 +63,21 @@ commits: CI builds with `--locked` against the git pins.
 
 ## Releases (GitHub Actions)
 
-- `.github/workflows/ci.yml`: on pushes to main and pull requests, `bid
-  check` and `cargo test --workspace` on Linux, macOS and Windows, and the
-  WASM package (artifact `rbb-wasm-pkg`).
-- `.github/workflows/release.yml`: on a tag `v*` (or run by hand), builds
+- `.github/workflows/ci.yml`, Linux only. A pull request that changes only
+  rules (`conventions/`, `docs/SKILLS.md`) is checked with the `rbb` built
+  on main: `bid check`, every `.test` file, and docs/SKILLS.md, in about a
+  minute, with no engine build. One that changes the engine (`crates/`,
+  `Cargo.*`, `cards/`, `web/`, `scripts/`, the workflows) gets an optimised
+  build, `bid check`, `cargo test --workspace --release` (the workbench's
+  tests only when it changes) and the WASM package (artifact
+  `rbb-wasm-pkg`); the web site job only when `web/` or `crates/wasm/`
+  changes. Pushes to main run all of it
+  and leave `rbb` (artifact `rbb-linux`) for the rules-only runs. A
+  newer push to the same pull request cancels the older run.
+- `.github/workflows/release.yml`: on a tag `v*` (or run by hand), first
+  `bid check` and `cargo test --workspace --release` on Linux, macOS and
+  Windows; then
+  (only if they pass) builds
   `rbb` for `x86_64-unknown-linux-gnu`, `x86_64-pc-windows-msvc`,
   `x86_64-apple-darwin` and `aarch64-apple-darwin`, signs and notarizes the
   macOS binaries, builds the WASM package, and attaches
