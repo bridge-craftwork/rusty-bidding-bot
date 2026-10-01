@@ -19,6 +19,7 @@ module rebids "Opener's rebid"
   param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
   param  support_x = doubles.support.play default false
   param  support_through = doubles.support.through
+  param  walsh = minor_openings.walsh.play default true
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
@@ -71,18 +72,19 @@ after 1x (P) 1M (P)
 # 17+ with the first suit longer; a jump in a new suit 19+, game forcing.
 after 1C (P) 1D (P)
   # Walsh (Rick, 2026-09-24; the modern default): balanced 12-14 rebids
-  # 1NT even with one or both four-card majors. Standard bids a four-card
-  # major up the line, balanced or not.
+  # 1NT even with one or both four-card majors. Standard, and any card
+  # with the Walsh switch off (minor_openings.walsh.play, as BBA reads
+  # it), bids a four-card major up the line, balanced or not.
   1N  "12-14 HCP, balanced (Walsh: a major may be hidden)"   shows balanced | shape 5-4-2-2, hcp=12..14
-      when  style is not bba, style is not standard
+      when  style is not bba, style is not standard, walsh
       priority 2
   1N  "12-14 HCP, balanced, no four-card major"   shows balanced | shape 5-4-2-2, hcp=12..14, H<=3, S<=3
-      when  style is standard
+      when  style is standard | !walsh
       priority 2
   1H  "4+ hearts, up to 18"                shows H>=4, suit_points<=18, H>=S
-      when  style is not bba | S>=4
+      when  style is not bba | S>=4 | !walsh
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18, S>H
-      when  style is not bba
+      when  style is not bba | !walsh
   2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
       when  style is not bba
   2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
@@ -92,7 +94,7 @@ after 1C (P) 1D (P)
   # singleton; 1H only with both majors; a jump shift from 18.
   1N  "BBA: 12-17, no six clubs, not both majors"
       shows hcp=12..17, H<=4, S<=4, H<=3 | S<=3, C<=5, D<=4, shortest>=2 | C=5
-      when  style is bba
+      when  style is bba, walsh               # Walsh off: up the line, as above
       priority 2
   2H  "Jump shift (BBA): 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game
       when  style is bba
