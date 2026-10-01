@@ -154,6 +154,21 @@ Measured (after the catch-all change in responder-rebids.bid):
 - The 2C-opened boards over all scenarios (either auction opened 2C,
   5,401 boards): vs BBA -11,726 → -11,226.
 
+## Opener's raise of a positive shows 22+ (2026-10-01)
+
+Rick (2026-10-01): after 2C-2H (a natural positive) opener's 3H is the
+balanced 22-24 hand that was going to rebid 2NT; with a long suit and
+fewer HCP opener shows his own suit. BBA raises on every 22+ hand with
+three hearts, even 75.AKQ.AKQ95.AT9 with five diamonds (272 of 272 in
+`probes/slam-2C-2H-opener.toml`, alert "21+ total points"); with 18-21
+it bids 3H or 4H ("19-20", fast arrival), never its own suit. We read
+the raise at the 2C floor (17) and bid our own suit on a third of the
+22+ hands. The raise now shows 22+ and outranks the own suit, for every
+positive (`2C 2y` / `2C 3y`). Vanilla +60 IMPs vs BBA, corpus +97, 21GF
+random +40, both halves positive; responder's slams after 2C-2H-3H are
+slam-entry's (slam-entry.notes.md, "Declarer points and support
+points").
+
 ## Sources
 
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
@@ -182,3 +197,5 @@ Measured (after the catch-all change in responder-rebids.bid):
   unbalanced triggers alternatives; the rules require both, because
   that measures about 1,000 IMPs better (open question for Rick). From
   BBA: see "Accepted differences from BBA".
+- **Rick's guidance (2026-10-01):** the raise of a positive is the 22+
+  hand; `probes/slam-2C-2H-opener.toml` (BBA bare SAYC) for BBA's raise.
