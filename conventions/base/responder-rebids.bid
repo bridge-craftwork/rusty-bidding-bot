@@ -170,6 +170,11 @@ after 1x (P) 1N (P) 2z (P) when z is not x
       sets  ask=signoff
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
   3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
+# Six hearts too weak for 2H at once, opposite 1S and a minor: to play
+# (2026-09-30, random deals: J.AT75432.6.QJ53 had no call; BBA 2H).
+after 1S (P) 1N (P) 2m (P)
+  2H  "Six or more hearts, short in spades, 6-10: to play"   shows H>=6, S<=1, hcp<=10
+      sets  ask=signoff
 # After the 6-12 1NT of the 2/1 cards (2026-09-30, 2/1 game force): the
 # 11-12 hands invite, and three-card support is a limit raise.
 after 1M (P) 1N (P) 2z (P) when z is not M, shown.hcp.max >= 11
