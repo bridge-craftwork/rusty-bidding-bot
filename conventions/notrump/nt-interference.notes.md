@@ -301,8 +301,7 @@ The yardsticks disagree on the **reopening double** (and, mildly, on
 the two-level diamonds: +58 side, -45 par): it often ends in 2♣ doubled
 beaten by more than our par contract, or pushes them, which par distance
 counts as a loss. It is the competitive call the side yardstick exists
-for, and BBA's call; kept, flagged for Rick (overcalls.notes.md, "For
-Rick: which yardstick").
+for, and BBA's call. **Rick, 2026-09-30: keep it.**
 
 Still open: a weak six-card major (5-6 HCP) bids 2♥/2♠ where BBA jumps
 to game; a five-card major with 9 HCP and 10 points forces with 3♥ where
