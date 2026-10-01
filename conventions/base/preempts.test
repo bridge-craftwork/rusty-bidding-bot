@@ -57,3 +57,19 @@ S 9.84.8642.AQT654      |            | 3C     | bba: six clubs and four diamonds
 S 9.84.AQT654.K642      |            | 2D     | bba: nine with six-four: 2D
 vul     All
 S 9.84.AQT654.8642      |            | 2D     | bba: vulnerable, six-four opens 2D
+
+# ── Responder to a three-level preempt: pass without a reason to bid
+# (2026-09-30), 3NT or a long major over a minor, and the preempter
+# passes the raise to four of the minor.
+card    Basic-Bridge
+dealer  S
+vul     None
+N 874.653.8.QT9875      | 3S P       | P      | a misfit: pass
+N K9.QT92.Q87.K965      | 3S P       | P      | two trumps and 10 HCP: pass
+N .AKT54.K953.J875      | 3S P       | P      | a void in partner's suit, 11 HCP: pass
+N AT754.AK43.KQ86.      | 3C P       | P      | 16 with a void in clubs and no 3NT: pass
+N AQ62.K5.A3.AQ952      | 3D P       | 3N     | 19, the diamond ace, the side suits stopped: 3NT
+N AK84.Q98.A864.A4      | 3C P       | 3N     | 17, the club ace, the side suits stopped: 3NT
+N J73.AKQT965.4.A6      | 3D P       | 4H     | seven hearts and 14: 4H to play
+S 85.432.AQJT632.Q      | 3D P 4D P  | P      | partner's raise: pass
+S A8.J3.92.AT97642      | 3C P 4C P  | P      | partner's raise: pass
