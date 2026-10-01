@@ -25,13 +25,14 @@ Only where it is a contract:
 - it will stand: passed round to me, or they have a fit (seven or more
   shown), or they have bid game. Directly over a new suit the auction
   may be forcing;
-- partner has shown values (`partner.hcp.min >= 4`): with partner
-  silent, a strong hand with their suit doubles for takeout first (the
-  reopening doubles over a preempt read the double so);
 - not over partner's notrump opening (one bid, a range of four points
   or less): they came in with shape against a balanced hand;
 - not responder's first call over their overcall (the double is
   negative there).
+
+Partner need not have shown values: a condition that he had
+(`partner.hcp.min >= 4`) was dropped on 2026-10-01, when the errors
+yardstick found it a par artefact (below, "Re-judged by errors").
 
 Priority -6: above the silence passes (-10, -20), below every sequence
 rule and the LoTT (-4). It sets `ask=penalty`; partner sits (priority
@@ -130,28 +131,122 @@ larger than the guard's rise on every set).
 14,729. Most are two-suited-overcalls.bid's own penalty double (-19)
 read as this one (-6), the same meaning.
 
+## Re-judged by errors (2026-10-01)
+
+Rick's errors yardstick (`compare`'s "vs BBA, errors" line, PR #29):
+each side charged with its own errors, a contract that goes down
+undoubled and beats par that way taken as doubled. Every variant below
+was measured against main 0717d3f on the vanilla set and split with
+`probes/tools/errors_diff.py` (positive: the variant makes fewer
+errors). Columns: boards changed, the errors line with its even / odd
+halves, per board, its contract and doubling parts, then distance from
+par and side IMPs (third opinion only).
+
+Main on vanilla: by distance −29,290; by errors −35,671 (contract
+−31,517, doubling −4,154).
+
+| variant (vanilla) | boards | errors (even / odd) | per bd | contract | doubling | par | side |
+|---|---|---|---|---|---|---|---|
+| the rule off (value of the committed rule, negated) | 358 | −1,002 (−499 / −503) | −2.80 | +92 | −1,094 | −196 | −1,315 |
+| good four at 19 | 17 | +9 (+11 / −2) | +0.53 | −15 | +24 | −30 | +48 |
+| good four at 21 (= three at 21) | 18 | +19 (+34 / −15) | +1.06 | +19 | 0 | +36 | −25 |
+| three at 20 | 148 | −296 (−64 / −232) | −2.00 | −75 | −221 | −330 | −146 |
+| three at 22 (= no three-card clause) | 77 | −106 (−45 / −61) | −1.38 | +30 | −136 | −10 | −186 |
+| anything at 21 | 116 | −98 (−124 / +26) | −0.84 | −50 | −48 | −155 | +57 |
+| anything at 23 | 86 | −152 (−58 / −94) | −1.77 | −8 | −144 | −66 | −201 |
+| "anything" at 22 needs two trumps | 106 | −315 (−171 / −144) | −2.97 | −11 | −304 | −117 | −336 |
+| good four = two of the top three only | 2 | −12 (−5 / −7) | | 0 | −12 | −1 | −12 |
+| any five counts as good | 1 | −8 | | −8 | 0 | −8 | +12 |
+| four small at 20 | 35 | −20 (−27 / +7) | −0.57 | −42 | +22 | −74 | +61 |
+| **stacks:** five at 19 | 7 | −4 (−8 / +4) | | −24 | +20 | −22 | +51 |
+| five at 18 | 25 | −70 (−42 / −28) | −2.80 | −88 | +18 | −98 | +131 |
+| five at 16 | 66 | −245 (−105 / −140) | −3.71 | −174 | −71 | −254 | +176 |
+| five or good four at 16 | 134 | −349 (−190 / −159) | −2.60 | −255 | −94 | −456 | +268 |
+| five at 12, good four at 16 | 320 | −1,046 (−578 / −468) | −3.27 | −520 | −526 | −819 | +289 |
+| five or good four at 8 | 443 | −1,495 (−818 / −677) | −3.37 | −672 | −823 | −942 | +320 |
+| **notrump** at 17 | 284 | −661 (−406 / −255) | −2.33 | −535 | −126 | −910 | +629 |
+| notrump at 19 | 52 | −108 (−52 / −56) | −2.08 | −123 | +15 | −170 | +169 |
+| notrump at 20 | 10 | +1 (+4 / −3) | | −19 | +20 | −31 | +47 |
+| notrump at 22 | 1 | −5 | | 0 | −5 | −5 | −5 |
+| **exclusions:** partner's notrump allowed | 38 | +2 (−9 / +11) | +0.05 | −30 | +32 | −5 | +7 |
+| "will stand" dropped | 66 | +10 (+22 / −12) | +0.15 | −90 | +100 | −160 | +290 |
+| "will stand" without the fit clause | 84 | −134 (−112 / −22) | −1.60 | +19 | −153 | +27 | −200 |
+| "will stand" with a fit of eight | 14 | −49 (−50 / +1) | | −9 | −40 | −15 | −54 |
+| **partner need not have shown values (kept)** | 39 | **+94 (+7 / +87)** | +2.41 | −12 | +106 | 0 (−5 / +5) | +112 |
+| kept + good four at 19 | 68 | +112 (+24 / +88) | +1.65 | −38 | +150 | −53 | +164 |
+| kept + good four at 21 | 52 | +104 (+51 / +53) | +2.00 | +10 | +94 | +42 | +84 |
+| kept + partner's notrump allowed | 77 | +96 (−2 / +98) | +1.25 | −42 | +138 | −5 | +119 |
+| kept + "will stand" dropped | 118 | +97 (+36 / +61) | +0.82 | −116 | +213 | −199 | +420 |
+| kept + anything at 21 | 198 | +65 (−81 / +146) | +0.33 | −53 | +118 | −146 | +260 |
+| kept + notrump at 20 | 49 | +95 (+11 / +84) | +1.94 | −31 | +126 | −31 | +159 |
+| kept + good four at 21 + notrump at 20 | 62 | +105 (+55 / +50) | +1.69 | −9 | +114 | +11 | +131 |
+| kept + stacks at 16 | 334 | −434 (−307 / −127) | −1.30 | −513 | +79 | −864 | +550 |
+
+What it says:
+- **The rule survives the new yardstick.** Switching it off costs
+  1,002 IMPs on vanilla (both halves), 1,493 on 21GF and 2,796 on the
+  corpus, almost all doubling errors (the opponents' sacrifices and
+  overbids left undoubled).
+- **The thresholds hold** (20 / 21 / 22, notrump 21): every move of
+  one point either way loses or splits the halves. With "partner has
+  shown values" dropped, good four at 21 instead of 20 gains a little
+  on vanilla (+10) but loses on 21GF (−29) and the corpus (−145).
+- **The trump conditions hold**: Rick's standard as it is; narrowing
+  it to two of the top three, or widening it to any five, changes a
+  handful of boards and loses.
+- **"Partner has shown values" was a par artefact**: dropping it is
+  level by distance on vanilla (0) but +94 by errors, +106 of it
+  doubling errors, and it gains on 21GF and the corpus: dropped. The new doubles are big hands, 20+ HCP in my own
+  hand, doubling their preempt or game directly or doubling again after
+  my takeout double was run from; partner sits.
+- The other two exclusions stay: allowing partner's notrump, or
+  dropping "the contract will stand", does not gain on both halves.
+
+A caution on reading the split: our engine plays both sides, so when a
+double collects more than the undoubled contract, the doubled side's
+contract error grows by the same move (an overbid that was already
+worse than par undoubled is not taken as doubled). That is the
+"contract" loss in the stack and notrump rows. The doubler's own errors
+alone tell the same story there: five or good four at 8 adds 823 IMPs
+of doubling errors to the doubler; notrump at 17, 126.
+
+Kept on the three sets (main → kept; boards where the auction changed,
+the errors line with halves, per board, contract / doubling):
+
+| set | by distance | by errors (contract, doubling) | change by errors | boards | per bd | contract / doubling | par / side |
+|---|---|---|---|---|---|---|---|
+| vanilla SAYC random | −29,290 → −29,290 | −35,671 (−31,517, −4,154) → −35,577 (−31,529, −4,048) | +94 (+7 / +87) | 39 | +2.41 | −12 / +106 | 0 / +112 |
+| 21GF random | −43,000 → −42,940 | −51,356 (−43,857, −7,499) → −51,082 (−43,861, −7,221) | +274 (+110 / +164) | 63 | +4.35 | −4 / +278 | +60 / +247 |
+| full corpus | −90,676 → −90,583 | −100,458 (−93,859, −6,599) → −99,999 (−93,853, −6,146) | +459 (+249 / +210) | 120 | +3.83 | +6 / +453 | +93 / +429 |
+
+Our doubling errors move toward BBA's, not past them: we still make
+4,048 (vanilla), 7,221 (21GF) and 6,146 (corpus) IMPs more doubling
+errors than BBA (with the rule off: 5,248, 9,135, 9,945).
+
 ## For Rick
 
-1. **Which yardstick for penalty doubles.** Distance from par cannot
-   reward a double of an overbid: when the opponents go past par, our
-   pass already beats par and the double "moves away" from it. Side IMPs
-   play our engine on both sides, and the doubled side rarely runs.
-   `penalty_x.py`'s "below par" counts only the doubler's shortfall.
-   With the committed rules all three agree on every set; on the way,
-   variants split exactly on the "doubler above par" boards (par loses
-   there by construction). Should penalty-double work be judged by side
-   IMPs plus "below par", with par distance only as a guard?
-2. **Trump stacks at lower strength.** Five trumps or a good four with
-   8-16 known between us gain double dummy (+2,459 side) but lose par
-   (−2,416), much of it the artefact above; left out.
-3. **Four small.** With 22+ between us four small gains (+3.49 a board,
-   oracle); the rule counts it as "anything at 22". Your 2026-09-23
-   ruling was about responder's double after our redouble.
-4. **Partner's shown range.** The known minimum is the binding limit:
-   a pass of their opening shows 0-30 in the engine. Narrowing passes
-   (no overcall, no double: about 0-11 or so) would let the rule fire
-   far more often; that is engine knowledge, not this module.
-5. **Penalty-double style** (JUDGMENT-LAYER.md question 6) is still
+1. **Which yardstick for penalty doubles.** Answered by the errors
+   yardstick (2026-10-01): penalty-double work is now judged by it.
+   It and distance from par agree on every kept change above; they
+   split on the stacks and notrump at 17, where both say no.
+   One thing to look at: in our self-play a double of an overbid that
+   was already worse than par undoubled moves the doubled side's
+   contract error by the same amount it gains (see the caution above).
+   Should the assumed result take *every* failing undoubled contract
+   as doubled, not only those that beat par that way?
+2. **Trump stacks at lower strength** (+2,459 side, −2,416 par before):
+   by errors they lose at every strength tried, five at 19 down to
+   five-or-good-four at 8 (−4 to −1,495 IMPs, both halves); the
+   doubler's own doubling errors grow too. Left out.
+3. **Four small.** Four small at 20 loses (−20, halves split); the rule
+   still counts four small as "three or more" at 21.
+4. **Partner's shown range.** Still the binding limit (a pass of their
+   opening shows 0-30 in the engine); engine knowledge, not this module.
+   Dropping "partner has shown values" (kept) is the module's side of it.
+5. **Their notrump from 17** (−910 par, +667 side before): −661 by
+   errors (−406 / −255), 535 of it contract errors; 19 loses too, 20 is
+   level (+1), 22 loses. It stays at 21.
+6. **Penalty-double style** (JUDGMENT-LAYER.md question 6) is still
    open: this rule doubles only where no other double is defined, so it
    does not need the hierarchy yet.
 
@@ -170,4 +265,6 @@ read as this one (-6), the same meaning.
 - **Measurements:** the tables above, from `rbb compare` on
   Random_Pavlicek_SAYCvanilla with the vanilla `--set` list, the
   `rbb call` replay of 15,000 positions, `probes/tools/sideimps.py`,
-  `probes/tools/par_blame.py` and `probes/tools/penalty_x.py`.
+  `probes/tools/par_blame.py`, `probes/tools/penalty_x.py`, and
+  `probes/tools/errors_diff.py` for the re-judgment by errors
+  (Rick's yardstick, 2026-10-01).
