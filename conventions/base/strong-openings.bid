@@ -111,8 +111,14 @@ after 2C (P) 2N (P) 3H (P) | 2C (P) 3C (P) 3H (P) | 2C (P) 3D (P) 3H (P)
   4H  "Support for hearts: slam values opposite 2C"   shows H>=3   sets trump=H, forcing=game
       priority 1
 
+# The raise is the 22+ hand (Rick, 2026-10-01): the balanced 22-24 that
+# was going to rebid 2NT, or any 22+ with three trumps, even with a suit
+# of its own (BBA raises on all of them: probes/slam-2C-2H-opener.toml).
+# A lighter 2C, opened on playing tricks, has a long suit and shows it.
+# So responder counts the raise as 22, not the 2C floor of 17.
 after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
-  cheapest(y) "Raise: three or more {y}"      shows y>=3   sets trump=y
+  cheapest(y) "Raise: three or more {y}, 22+"  shows y>=3, hcp>=22   sets trump=y
+      priority 1
   cheapest(S) "Five or more spades"           shows S>=5   when y is not S
   cheapest(H) "Five or more hearts"           shows H>=5   when y is not H
   cheapest(D) "Five or more diamonds"         shows D>=5   when y is not D

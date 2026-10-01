@@ -17,16 +17,67 @@ module slam-entry "Slam entry: the conditions the slam modules share"
   param  k1430 = slam.blackwood.rkcb_1430 default false
   param  k0314 = slam.blackwood.rkcb_0314 default false
 
+# ── The count: declarer points and support points (2026-10-01) ───────
+#
+# Rick (2026-10-01): "point count for any auction is normally declarer
+# points for the hand with longer trumps, and support points for the
+# other hand. With 4-4 fits both hands can use support points." The
+# long-trump hand counts HCP + length (one a card beyond four, in every
+# suit), not its own shortness; the short hand counts HCP + shortness
+# (`tp(t)`, capped by its trumps). `we.tp(t)` counted shortness in both
+# hands, which double counts.
+#
+# Trump lengths are compared with what partner has shown (`partner.t.min`):
+# longer than that, I am the long hand; shorter, partner is; equal, both
+# count support points (4-4, 5-5). A raiser shows the length he raised
+# with, so the raiser is the support hand unless I hold no more trumps.
+
+# Written suit by suit: `trump > ...` (the agreed suit's length as a bare
+# comparison) holds for my own hand but cannot be read for partner's, so
+# a call conditioned on it would be read as no rule.
+define longer(t)  = (t is C, C > partner.C.min) | (t is D, D > partner.D.min) | (t is H, H > partner.H.min) | (t is S, S > partner.S.min)
+define shorter(t) = (t is C, C < partner.C.min) | (t is D, D < partner.D.min) | (t is H, H < partner.H.min) | (t is S, S < partner.S.min)
+
+# The count on partner's floor, by role. Partner as the long hand counts
+# his shown points (HCP + length), or his HCP and the length he has shown
+# when no call showed points: either is a floor. As the short hand (or
+# with equal length) his support points when a raise showed them, else
+# the points he showed (`_p`): a call that shows total points leaves
+# his HCP floor, and so `partner.tp`, near zero (1S-2D-3C-3S: 13+
+# points). Each condition takes the better of the floors.
+define count_long(t)    = hcp + length_points + partner.tp(t).min
+define count_long_p(t)  = hcp + length_points + partner.points.min
+define count_short(t)   = tp(t) + partner.points.min
+define count_short_l(t) = tp(t) + partner.hcp.min + partner.length_points.min
+define count_equal(t)   = tp(t) + partner.tp(t).min
+define count_equal_p(t) = tp(t) + partner.points.min
+
+# The same on partner's maximum.
+define count_long_max(t)  = hcp + length_points + partner.tp(t).max
+define count_short_max(t) = tp(t) + partner.points.max
+define count_equal_max(t) = tp(t) + partner.tp(t).max
+
+# The count at the thresholds the slam conditions use. The textbook 33
+# (32 on partner's floor, `slam_values`) holds where both hands count
+# support points; the long hand, which no longer counts its shortness,
+# needs two less, the short hand one less (calibrated 2026-10-01 on the
+# corpus and the 21GF random set: slam-entry.notes.md).
+define slam_count_interest(t) = (longer(t), count_long(t) >= 29) | (longer(t), count_long_p(t) >= 29) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 31) | (!longer(t), !shorter(t), count_equal_p(t) >= 31)
+define slam_count(t) = (longer(t), count_long(t) >= 30) | (longer(t), count_long_p(t) >= 30) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 32) | (!longer(t), !shorter(t), count_equal_p(t) >= 32)
+define slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), count_short_max(t) >= 32) | (!longer(t), !shorter(t), count_equal_max(t) >= 33)
+
 # ── Values ────────────────────────────────────────────────────────────
 
-# Facing a game force: 32 on partner's floor, or 18 of my own. Partner's
-# floor understates him, so one point under the textbook 33 (calibrated
+# Facing a game force: the count on partner's floor (`slam_count`: 32
+# with support points in both hands), or 18 of my own. Partner's floor
+# understates him, so one point under the textbook 33 (calibrated
 # 2026-09-30 on random deals and the corpus: slam-entry.notes.md).
-define slam_values = we.tp(trump).min >= 32 | tp(trump) >= 18
+define slam_values = slam_count(trump) | tp(trump) >= 18
 
-# Facing a limited hand (a raise with a top): 33 on partner's maximum,
-# and a hand of four losers or fewer.
-define slam_values_limited = we.tp(trump).max >= 33, losers <= 4
+# Facing a limited hand (a raise with a top): the count on partner's
+# maximum (`slam_count_max`: 33 with support points in both hands), and
+# a hand of four losers or fewer.
+define slam_values_limited = slam_count_max(trump), losers <= 4
 
 # ── Controls ──────────────────────────────────────────────────────────
 
@@ -72,11 +123,11 @@ define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H),
 # ask agrees.
 define shown_fit(x) = shown.x.min + partner.x.min >= 8 | partner.x.min >= 6
 
-# Slam values with x as trump before it is agreed: my support points and
-# partner's shown floor make 32 (as `slam_values`), or, when he has limited his hand to a
+# Slam values with x as trump before it is agreed: the count on
+# partner's floor (as `slam_values`), or, when he has limited his hand to a
 # range of seven points or less (a preempt, a weak two), his top does and
 # my hand has four losers or fewer (as `slam_values_limited`).
-define fit_slam_values(x) = tp(x) + partner.points.min >= 32 | (tp(x) + partner.points.max >= 33, losers <= 4, partner.points.max - partner.points.min <= 6)
+define fit_slam_values(x) = slam_count(x) | (slam_count_max(x), losers <= 4, partner.points.max - partner.points.min <= 6)
 
 # Two side suits, beside t, of 2+ cards without the ace or king.
 define bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)
@@ -93,8 +144,8 @@ define two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(
 # jump shift or a reverse, where neither hand could count 33 on the
 # other's floor.
 
-# Slam interest: 31 between us on partner's floor.
-define slam_interest(x) = tp(x) + partner.points.min >= 31
+# Slam interest: the count on partner's floor, 31 (29 for the long hand).
+define slam_interest(x) = slam_count_interest(x)
 
 when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
   cheapest(S)  "Agrees ♠: slam interest"
@@ -123,14 +174,54 @@ when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
 # +1,203, 31 +1,413; with controls 37 (tp 30+) +1,962, 36 +2,124, **35
 # +2,325**, 34 +1,652; both halves of the set agree. Below BBA's own
 # 31-32 because partner's floor understates him (as for slam_values).
+#
+# Since 2026-10-01 the count is declarer points for the long-trump hand
+# and support points for the other (`count_*` above): 28 on partner's
+# floor, and 35 with my controls. Par scores it level with the support
+# points it replaced (+31 IMPs on the vanilla set, both halves).
+#
+# It ranks above the descriptive calls (priority 1, 2026-10-01): with the
+# values, jump to slam at once, as BBA's "calculated bid" does, rather
+# than describe and stop in game. Vanilla +596 IMPs against -10 (below
+# every descriptive call), both halves.
 
 # No ace or keycard ask on the card.
 define no_ask = !bw, !k1430, !k0314
 
-# Slam values for a direct slam in an agreed suit.
-define direct_slam_values = we.tp(trump).min >= 29, we.tp(trump).min + controls >= 35
+# Slam values for a direct slam: the count 28, and 35 with my controls.
+define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)
+define direct_slam_values = direct_count(trump)
 
 when we.trump is suit, !they.bid, !asked, no_ask
-  6{trump}  "Slam: support points on partner's floor plus my controls make 35"
+  6{trump}  "Slam: our count on partner's floor plus my controls make 35"
       shows direct_slam_values
-      priority -10     # below every descriptive call; above base.bid's "Game reached" pass
+      priority 1
+
+# ── A fit known but not agreed: the direct slam (2026-10-01) ──────────
+#
+# 1H-2D-3H (six hearts, 16-18) does not set hearts in standard bidding,
+# but responder with two knows the fit (Rick, 2026-10-01); the same when
+# a new suit shows me partner's four-card suit (1S-2D-3C with four
+# clubs). The hand that sees the fit counts as the role says: the short
+# hand support points on partner's declarer points. Bid six on the
+# direct count. Reworks the held-back version (branch
+# slam-fit-not-agreed, which counted my support points on partner's
+# points in every case).
+#
+# Above the descriptive calls, as the agreed-suit slam: at -10 (only once
+# game is reached) +809 IMPs on the vanilla set, at 1 +3,122. Not when my
+# own range is four points or less (1NT, 2NT, a jump rebid): partner is
+# then the captain (+54). Vanilla calibration (slam-entry.notes.md).
+when we.trump is none, !they.bid, !asked, no_ask, !(shown.hcp.max - shown.hcp.min <= 4)
+  6S  "Slam in the spade fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(S).min >= 8, direct_count(S)
+      priority 1
+  6H  "Slam in the heart fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(H).min >= 8, direct_count(H)
+      priority 1
+  6D  "Slam in the diamond fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(D).min >= 8, direct_count(D)
+      priority 1
+  6C  "Slam in the club fit: our count on partner's floor plus my controls make 35"
+      shows we.fit(C).min >= 8, direct_count(C)
+      priority 1

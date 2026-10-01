@@ -139,6 +139,11 @@ N A762.T9.K6.KQJ86      | 1D 1S X P 2D P   | 3NT | 13 with a spade stopper: game
 N J93.A76.T954.A63      | 1D 1S P P 1NT P  | 3NT | 9 opposite a reopening 18-19: game
 N J93.876.T954.J63      | 1D 1S P P 1NT P  | P   | 2: no game
 
+# ── After a two-over-one and opener's new suit at the three level (2026-10-01)
+N AQ8.73.AKJ93.Q98      | 1S P 2D P 3C P   | 3S  | 14 with three spades: forcing, room for slam (BBA 3S: 13+)
+N Q83.73.AQJ93.Q98      | 1S P 2D P 3C P   | 4S  | 11: the minimum (BBA 4S: 11-12)
+N 8.AKJ873.K42.Q53      | 1S P 2H P 3C P   | 3H  | six hearts, short spades: rebid them, forcing
+
 # ── Contested, after a one-level response and opener's minimum (2026-09-25)
 N AJ95.QJ.K9.QT432      | 1C 1D 1S P 2C P  | 3NT | 13 with diamonds held: game
 N AJ95.J2.K9.J9432      | 1C 1D 1S P 2C P  | 2NT/3C | 11: invites, in notrump or clubs

@@ -320,8 +320,15 @@ after 1M (P) 2x (P) 3x (P) when x is not M
   4M  "Game with support"                  shows tp(M)>=11, M>=3
 after 1y (P) 2x (P) 3z (P) when x is not y, z is not y, z is not x
   3N  "Game, no fit"                       shows points>=10, y<=2 | y is C | y is D
+# Opener's new suit at the three level: 3M agrees and is forcing with
+# 13 or more, 4M is the minimum (BBA: 3S 13+ total points, 4S 11-12,
+# probes/slam-1S-2D-3C-resp.toml; we had no 3M, 2026-10-01). Opener
+# then counts for slam with the suit agreed.
 after 1M (P) 2x (P) 3z (P) when x is not M, z is not M, z is not x
-  4M  "Game with support"                  shows tp(M)>=11, M>=3
+  3M  "Support, 13+: forcing, room for slam"  shows points>=13, M>=3   sets trump=M, forcing=game
+  4M  "Game with support: a minimum"       shows tp(M)>=11, points<=12, M>=3
+  3x  "Six or more {x}: forcing"           shows x>=6, M<=2   sets forcing=game
+      when  cheapest_rank(x) < 19            # still at the three level
 # Opener's 2NT (15-17 balanced) or jump rebid over a two-over-one: the
 # 2/1 was 11+, so game is there.
 after 1y (P) 2x (P) 2N (P) when x is not y

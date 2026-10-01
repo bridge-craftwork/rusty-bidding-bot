@@ -539,6 +539,26 @@ between us. IMPs vs BBA: vanilla random set +458 (both halves), corpus
 minimum (`1H 1S 2NT 4NT P`): the same reading as the existing 4NT over
 partner's 3NT; left as it is.
 
+## After a two-over-one and opener's three-level new suit (2026-10-01)
+
+1M-2x-3z had 4M, 3NT and pass only. BBA (`probes/slam-1S-2D-3C-resp.toml`,
+500 hands with three spades, bare SAYC): 3S with 13+ total points,
+forcing; 4S with 11-12 (we had no 3S at all,
+the gap Rick named, 2026-10-01). Now:
+
+- 3M "Support, 13+": agrees and forces to game (`points>=13`); opener
+  then counts for slam with the suit agreed (slam-entry's direct slam on
+  cards with no ask, the keycard ask otherwise).
+- 4M is the minimum (11+ support points, 12 or fewer points).
+- 3x with six of my suit and two or fewer of opener's major, forcing
+  (1S-2H-3C-3H): opener with two sees the fit and counts as the short
+  hand (Rick, 2026-10-01: the hand that sees the fit revalues).
+
+Vanilla +17 IMPs vs BBA (even +18 / odd -1), corpus +124 (+54 / +70),
+21GF random +56 (+37 / +19). We still bid 3S on some 11-12 hands where
+BBA bids 4S (63 of 500): our total points count tens and length a little
+differently.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and
@@ -554,3 +574,7 @@ partner's 3NT; left as it is.
 - **Book practice:** the Standard American responder's rebids (weak,
   invitational, game ranges; fourth suit and new minor forcing) are
   standard practice, not yet cited to a book.
+- **2026-10-01:** Rick's note of the missing 3S after 1S-2D-3C and the
+  revaluation of a fit seen through a new suit; BBA's 3S / 4S from
+  `probes/slam-1S-2D-3C-resp.toml`; vanilla, corpus and 21GF random
+  measurements as given.

@@ -7,7 +7,8 @@ dealer  S
 N AK3.AK7.AKQ4.AT5      | 3S P                                 | 4NT    | 26 HCP facing a preempt's seven spades: ask, agreeing spades
 dealer  N
 N AK4.K5.Q32.AQJ85      | 1C P 2S P                            | 3S     | 17 facing a strong jump shift: agree spades slowly, slam interest
-N Q74.K5.Q32.AQJ85      | 1C P 2S P                            | 4S     | 12: fast arrival, the minimum
+N Q74.K5.Q32.AJ985      | 1C P 2S P                            | 4S     | 12: fast arrival, the minimum
+N Q74.K5.Q32.AQJ85      | 1C P 2S P                            | 3S     | 14 facing 15+ and five spades (his length counts): slam interest
 N KQ3.AK9863.Q5.A7      | 1H P 2S P                            | 3S     | 20 facing a jump shift: no jump to 4H opposite a game force
 N KQ3.AK9863.Q5.A7      | 1H P 1S P                            | 4H     | a one-level response: the jump to game stands
 
@@ -21,6 +22,25 @@ dealer  N
 S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | 6H     | 14 facing a jump to game, three controls in aces: slam
 S 98.QJ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | 9: game is enough
 S K8.AQ75.A93.Q982      | 1C P 1H P 4H P                       | 6H     | 14 with five controls facing the jump to game
+# Declarer points for the long-trump hand, support points for the other;
+# 4-4, both support points (Rick, 2026-10-01).
+S 5.AQ75.K932.Q982      | 1D P 1H P 4H P                       | 6H     | 4-4: my singleton counts (14 support points + 19 + 3 controls)
+S 5.AQ752.K93.Q982      | 1D P 1H P 4H P                       | P      | five hearts facing four: the long hand counts length, not the singleton
+# 2C-2H-3H: the raise is 22+ (Rick, 2026-10-01), not the 2C floor of 17.
+S 84.KQJ85.K72.Q53      | 2C P 2H P 3H P                       | 6H     | 10 + a fifth heart + 22, three controls
+S 84.KQJ85.972.Q53      | 2C P 2H P 3H P                       | 4H     | 7: game
+# A fit known but not agreed: 1H-2D-3H (six hearts, 16-18 points) sets no
+# trump in standard, but two hearts make the fit (Rick, 2026-10-01).
+S A8.Q7.AKJ93.Q982      | 1H P 2D P 3H P                       | 6H     | 16 + a doubleton (support points, two trumps) + 16, five controls
+S A8.Q7.KJ932.Q982      | 1H P 2D P 3H P                       | 4H     | 12: game
+# The hand that sees the fit counts as the short hand: two hearts facing
+# partner's six-card rebid (Rick, 2026-10-01).
+N AKJ65.Q4.5.AKQ43      | 1S P 2H P 3C P 3H P                  | 6H     | 19 + shortness capped at two trumps + his 11, six controls
+N AKJ65.Q4.5.KJ943      | 1S P 2H P 3C P 3H P                  | 4H     | 15: game in the fit
+# Partner's points as his floor when he showed points, not support points:
+# responder's 3S after 1S-2D-3C is 13+ total points.
+N AKJ65.5.Q4.AKJ43      | 1S P 2D P 3C P 3S P                  | 6S     | 19 + two length + his 13, seven controls
+N KJ865.5.Q4.KQJ43      | 1S P 2D P 3C P 3S P                  | 4S     | 14: game
 
 # The same hand on a card that asks: the direct slam is off (no ask either:
 # it needs 33 on partner's maximum and four losers).

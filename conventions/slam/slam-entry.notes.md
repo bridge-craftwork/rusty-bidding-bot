@@ -11,8 +11,9 @@ put its rules.
 
 | name | meaning | used by |
 |---|---|---|
-| `slam_values` | facing a game force: 33 support points between us on partner's floor, or 18 of my own | keycard asks (rkcb, blackwood), opening control bids |
-| `slam_values_limited` | facing a limited hand: 33 on partner's maximum, four losers or fewer | the asks and control bids over a limit raise |
+| `slam_values` | facing a game force: the count on partner's floor (`slam_count`: declarer points for the long-trump hand, support points for the other; 32 with equal length, 31 for the short hand, 30 for the long; 2026-10-01), or 18 of my own | keycard asks (rkcb, blackwood), opening control bids |
+| `slam_values_limited` | facing a limited hand: the count on partner's maximum (`slam_count_max`: 33 / 32 / 31), four losers or fewer | the asks and control bids over a limit raise |
+| `direct_slam_values`, `direct_count(t)` | no ask on the card: the count 28 on partner's floor, 35 with my controls | the direct six, agreed or not |
 | `controlled(x)` | ace or void; with `first_or_second_round`, also king or singleton; shortness only when partner has not shown four of x | control bids, the ask in a control dialogue |
 | `first_round(x)` | ace or void (past game) | control bids past game |
 | `side_suit_uncontrolled` | a side suit I cannot control on my own | what sends a hand to control bids |
@@ -495,12 +496,192 @@ applies in our auction).
 - Partner's floor: should `partner.tp` after a jump to game over a
   one-level response (19) and after 2C-2H-3H (17) move toward BBA's 16
   and 21? It moves every slam decision in those auctions, not only this
-  rule.
+  rule. *2026-10-01:* 2C-2H-3H now shows 22+ (Rick); after 1D-1H-4H our
+  19 is right in dummy points, and the combined count was what double
+  counted ("Declarer points and support points" below).
 - A direct slam where the fit is shown but not agreed (`1H 2D 3H`, opener's
-  six-card suit): `shown_fit(x)` as the 4NT ask already uses.
+  six-card suit): `shown_fit(x)` as the 4NT ask already uses. *Built
+  2026-10-01* on the role count (below).
 - The construction itself (partner's expected cards from his shown
   ranges, then a trick count) is beyond the rule language; worth it only
   if a measured position shows the count is what loses.
+
+## Declarer points and support points (2026-10-01)
+
+Rick (2026-10-01): "construct a hand for partner" is the expert method;
+we will not reproduce BBA's construction, but count properly. Refined the
+same day: "point count for any auction is normally declarer points for
+the hand with longer trumps, and support points for the other hand. With
+4-4 fits both hands can use support points." `we.tp(t)` (my `tp(t)`
+plus `partner.tp(t)`) counted shortness in both hands. The controller's
+probe (`slam3/open-1D-1H.toml` in the session scratchpad, grid
+`open-1D-1H`): after 1D-1H BBA's 4H starts at 18-19 dummy points (HCP +
+shortness), as ours does (tp 19+); its alert "16-21" is HCP. So our
+reading of opener's 4H was right; the combined count was the problem.
+
+### The count (slam-entry.bid, "The count")
+
+- **Who is long** is decided from the lengths alone, the same in every
+  auction: my trumps against what partner has shown (`partner.t.min`).
+  More: I am the long hand and count declarer points (HCP + one a card
+  beyond four in every suit, `hcp + length_points`), partner support
+  points. Fewer: I count support points (`tp(t)`, shortness capped by my
+  trumps), partner declarer points. Equal: both support points (4-4,
+  5-5). A raiser shows the length he raised with, so the raiser is the
+  support hand unless I hold no more trumps than he showed. Partner may
+  hold more than he showed (a 1H response with five), and then I take
+  the long role wrongly.
+- **Partner's floor** in each role is the best of the floors his calls
+  give: as the long hand, his shown points, or his HCP floor plus the
+  length he has shown; as the short hand (or equal), his support points
+  when a raise showed them, else his shown points. The last matters
+  because a call that shows total points leaves his HCP floor, and so
+  `partner.tp`, near zero (1S-2D-3C-3S, 13+ points: opener never bid
+  slam after it; now 171 of BBA's 228 slams agree,
+  `probes/slam-1S-2D-3C-3S-opener.toml`).
+- `longer(t)` / `shorter(t)` are written suit by suit. `trump >
+  partner.trump.min` evaluates for my own hand but cannot be read for
+  partner's: a 4NT conditioned on it was read as "no rule"
+  (rkcb-1430.test, `1C P 2C P 4NT`). Worth an engine look: a bare
+  `trump` length in a comparison should either be readable for another
+  seat or be refused at load.
+
+### Thresholds, by role
+
+| count | equal length | short hand | long hand |
+|---|---:|---:|---:|
+| `slam_count` (slam values, on partner's floor) | 32 | 31 | 30 |
+| `slam_count_max` (facing a limited hand, on his top) | 33 | 32 | 31 |
+| `slam_count_interest` (fast arrival) | 31 | 31 | 29 |
+| `direct_count` (no ask: the count, and with my controls) | 28 / 35 | 28 / 35 | 28 / 35 |
+
+Equal length keeps the old numbers (it is the old count). The long hand,
+which no longer counts its shortness, needs two less; the short hand,
+whose partner now counts length, one less. At the old thresholds the
+role count cost -2,311 on the corpus and -371 on the 21GF set (the long
+hand stopped asking: 1S-2S and 1S-3S with 6-5 hands, blackwood.test).
+Calibration (IMPs vs BBA, double-dummy par; even / odd boards):
+
+| ask cards: long / short (slam, max, interest) | corpus | 21GF random |
+|---|---:|---:|
+| old thresholds everywhere | -2,311 | -371 |
+| long 30/32/30 | -425 | |
+| long 30/31/29 | -210 | -157 |
+| long 29/30/28 | -925 | |
+| long 30/31/29, short 33/34/32 | -488 | |
+| long 30/31/29, short 30/31/29 | +406 | -17 |
+| long 30/31/29, short 31/32/30 | +237 | +95 |
+| **long 30/31/29, short 31/32/31** | **+146** (+132 / +14) | **+115** (+100 / +15) |
+
+For the direct slam (vanilla) a uniform 28 / 35 was best: +31 over the
+old count at 29 / 35 (+12 / +19); separate long-hand thresholds (27/33
+to 29/34) and short-hand ones (28/35 to 31/37) all scored -50 to -580.
+So **par scores the role count about level with the double-counted
+one** for the direct slam, and a little better for the asks once
+recalibrated. Double dummy rewards ruffing values in both hands, which
+is likely why the old count did not lose.
+
+### 2C-2H-3H: the raise is 22+ (strong-openings.bid)
+
+Rick (2026-10-01): opener's raise is the balanced 22-24 that was going
+to rebid 2NT; with a long suit and fewer HCP opener shows his suit. BBA
+(`probes/slam-2C-2H-opener.toml`, 600 hands with three hearts, 18-26
+HCP): every 22+ raises to 3H (272/272, alert "21+ total points"), even
+75.AKQ.AKQ95.AT9 with five diamonds; 18-21 bids 3H or 4H (4H "19-20",
+fast arrival), never its own suit. We bid our own suit on a third of the
+22+ hands and read the raise at the 2C floor of 17. Now the raise
+outranks the own suit and shows 22+; lighter hands show their suit or
+agree hearts by fast arrival (slam-entry's rule). Responder after
+2C-2H-3H (`probes/slam-2C-2H-3H-resp.toml`): we now bid a slam on 601 of
+800 hands (BBA 654), none before.
+
+### A fit known but not agreed: the direct slam
+
+Rick (2026-10-01): 1H-2D-3H (6+ hearts, 16-18; BBA 15-17) does not set
+trump in standard, but a fit is implied for responder with 2+ hearts (in
+2/1 GF it sets trump). And (1S-2D-3C-3H and alike) when a new suit shows
+a fit, the hand that sees it revalues and may jump to slam. Built: with
+no trump set and an eight-card fit I know (`we.fit(x).min >= 8`), bid six
+on `direct_count(x)`. It reworks the held-back rule of branch
+`slam-fit-not-agreed` (19b81a7: `shown_fit` and 36 with controls on my
+support points plus partner's points), which counted every hand the
+short hand's way. Not when my own range is four points or less (1NT,
+2NT, a jump rebid: partner is captain), +54.
+
+**Priority.** At -10 (only once game is reached) it was +809 on the
+vanilla set; at 1, above the descriptive calls, +3,122: the slams come
+from jumping at once, BBA's "calculated bid", where describing ended in
+game. The agreed-suit direct slam moved to 1 as well: another +596. The
+largest single gains: `1H P -> 6H` (67 boards, +211), `1C 1S 2C -> 6C`
+(+145), `1D 1H 2H -> 6H` (+113), `1D 1S 3S -> 6S` (+107); the largest
+losses `1H 1S 1NT -> 6H` (15 boards, -101), `1N 2C 2H -> 6H` (26, -96),
+`1N 3S 4S -> 6S` (13, -61; one-nt.test's 14-count with six controls now
+bids 6S). Excluding a balanced, limited partner (1NT, 2NT) cost 411, so
+the rule keeps those. Both halves of the set agree throughout.
+
+### 1S-2D-3C: responder's 3S (responder-rebids.bid)
+
+BBA (`probes/slam-1S-2D-3C-resp.toml`, 500 hands with three spades): 3S
+with 13+ total points (forcing), 4S with 11-12. We had only 4S, 3NT and
+pass. Now 3M agrees and forces with 13+ points, 4M is the minimum; a
+six-card suit short in opener's major rebids at the three level
+(1S-2H-3C-3H), forcing, and opener with two sees the fit and counts as
+the short hand. Small: vanilla +17, corpus +124, 21GF +56.
+
+### Measurements
+
+IMPs vs BBA with double-dummy par. Each step on the one before:
+
+| step (commit) | vanilla | corpus | 21GF random |
+|---|---:|---:|---:|
+| role count, direct slam (ef30037) | +31 | 0 | 0 |
+| role count, ask cards (a3a418a) | -4 | +146 | +115 |
+| 2C-2H-3H shows 22+ (6f07ef3) | +60 | +97 | +40 |
+| unagreed direct slam, both direct slams at priority 1 (df78f4d) | +3,718 | 0 | 0 |
+| 1S-2D-3C: 3S, the six-card rebid (767fae5) | +17 | +124 | +56 |
+| partner's shown points as a floor (0ea7f12) | +587 | +200 | +63 |
+| **total** (even / odd) | **+4,409** (+2,272 / +2,137) | **+567** (+306 / +261) | **+274** (+198 / +76) |
+
+| class: boards, IMPs (per board) | vanilla before | vanilla after |
+|---|---:|---:|
+| all boards | 95,558, -33,895 (-0.35) | -29,486 (-0.31) |
+| uncontested, slam par | 4,687, -10,922 (-2.33) | 4,547, -1,319 (-0.29) |
+| competitive, slam par | 2,662, -5,875 (-2.21) | 2,649, -4,635 (-1.75) |
+| uncontested, below slam par | 44,631, -1,612 (-0.04) | -3,706 (-0.08) |
+| competitive, below slam par | 43,143, -15,591 (-0.36) | -16,198 (-0.38) |
+
+| class | corpus before | corpus after | 21GF before | 21GF after |
+|---|---:|---:|---:|---:|
+| all boards | -91,400 (-0.54) | -90,833 (-0.53) | -43,426 (-0.43) | -43,152 (-0.43) |
+| uncontested, slam par | 17,790, -52,367 (-2.94) | 17,762, -51,117 (-2.88) | 5,148, -11,774 (-2.29) | 5,119, -11,138 (-2.18) |
+| competitive, slam par | 6,718, -18,446 (-2.75) | 6,710, -18,387 (-2.74) | 3,380, -7,871 (-2.33) | 3,379, -7,766 (-2.30) |
+
+(Slam par: |par| 920 or more; the class is by BBA's auction, so its
+board count moves a little.) On the vanilla set we reach a six or seven
+on 3,617 boards (1,473 before); the slams that fail cost 2,700 on the
+boards whose par is below slam, against 10,843 won where it is a slam.
+The competitive yardstick (`probes/tools/sideimps.py`, vanilla, main to
+this branch): +6,759 IMPs to the side that changed its call, so the two
+agree (the direct slams are uncontested; jumping at once also keeps the
+opponents out).
+
+### Open
+
+- **Tricks rather than points** (Rick, 2026-10-01, recorded, not built):
+  the point count has exceptions, especially for slams. Opener bids 1♠;
+  responder has three spades and AKQJxxx in clubs. He expects seven club
+  tricks once trumps are drawn, so the hand is valued by counting tricks,
+  not by summing points. The trigger is a long running side suit. "For
+  now let's focus on the point counts."
+- On cards with no ask (vanilla SAYC) the direct slam outranks every
+  descriptive call: par likes it by a wide margin and it is how BBA bids
+  (a calculated six). **Rick, 2026-10-01: keep it.**
+- The jump to slam facing a balanced, limited partner (`1N 2C 2H -> 6H`,
+  `1H 1S 1N -> 6H`) loses where it fires, but excluding it costs more
+  than it saves; a narrower guard (equal length facing 1NT?) is open.
+- The long hand's thresholds are two lower: a 6-5 two-loser hand
+  opposite a raise asks again (blackwood.test) because 30 / 31 is low
+  enough, not because its length is valued as tricks (the first item).
 
 ## Sources
 
@@ -527,3 +708,19 @@ applies in our auction).
   `probes/slam-var-*.toml` and `probes/tools/slam_count.py` (2026-09-30);
   par on the vanilla set, the corpus and the 21GF random set (same date).
   Par kept the built rule.
+- Rick's guidance, 2026-10-01: declarer points for the long-trump hand,
+  support points for the other, both with a 4-4 fit; 2C-2H-3H is the 22+
+  hand; 1H-2D-3H implies the fit for responder's 2+ hearts; the hand that
+  sees a fit through a new suit revalues; responder's 3S after 1S-2D-3C;
+  the tricks-not-points exception (open). Dummy points (HCP + shortness)
+  and declarer points (HCP + length) as such: standard practice, not yet
+  cited.
+- Probes, 2026-10-01, BBA bare SAYC: `probes/slam-2C-2H-opener.toml`,
+  `probes/slam-1S-2D-3C-resp.toml`; the controller's `open-1D-1H` grid
+  (BBA's 4H over 1D-1H from 18-19 dummy points). Re-run with the new
+  rules: `slam-2C-2H-3H-resp`, `slam-1H-2D-3H-resp`,
+  `slam-1D-1H-4H-resp`, `slam-1S-2D-3C-3S-opener`.
+- Measurements, 2026-10-01: the vanilla SAYC random set (95,558 deals),
+  the corpus (170,633 boards) and the 21GF random set (100,000 deals),
+  IMPs vs BBA with double-dummy par, even / odd boards, and
+  `probes/tools/sideimps.py` on the vanilla set (tables above).
