@@ -102,6 +102,20 @@ after 1x (P) 1y (P) 1z (P)
   3N  "Game: 13+"                          shows points>=13, z<=3
 after 1x (P) 1y (P) 1M (P)
   4M  "Game raise: 4+ {M}, 13+"            shows M>=4, points>=13
+# Responder's 1♠ over 1♣-1♦-1♥ (above) is unlimited, and opener's
+# minimum answers (rebids.bid, "Responder bid a fourth suit at the one
+# level") set `ask=signoff`, which left a game-going responder only the
+# pass (2026-09-30: with a card that bids majors up the line this auction
+# is common). Game and invitations as after any minimum rebid.
+after 1x (P) 1y (P) 1z (P) 1M (P) 1N (P)
+  2N  "Invitational: 11-12"                shows points=11..12   sets ask=nt_invite
+  3N  "Game: 13+"                          shows points>=13
+after 1x (P) 1y (P) 1z (P) 1M (P) 2M (P)
+  3M  "Invitational: 11-12"                shows tp(M)=11..12   sets ask=invite(M)
+  4M  "Game: 13+"                          shows tp(M)>=13
+after 1x (P) 1y (P) 1z (P) 1M (P) 2x (P)
+  3N  "Game: 13+"                          shows points>=13
+
 # The fourth suit at the two level: natural unless the card plays fourth
 # suit forcing (`other_conventions.fourth_suit_forcing.play`, set by
 # Bridge-Classroom's cards; the .bbsa keys set only one_round/game_force,

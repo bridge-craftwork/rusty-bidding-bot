@@ -684,12 +684,72 @@ The move alone changed nothing on the corpus or 21GF (both play
 transfers); the gains there are the two fixes. No-rule boards on the
 vanilla set 4,675 → 1,641.
 
+## Up the line without Walsh (2026-09-30)
+
+Rick's Walsh ruling (2026-09-24) made the 1NT rebid after 1♣-1♦ hide a
+four-card major on every card that was not `standard`. BBA reads its own
+switch, `minor_openings.walsh.play`, as exactly this choice for opener:
+
+- **Switch on** (Basic-Bridge, 21GF-GIB, Precision; probe
+  `probes/rebid-1C-1D-walsh.toml`): balanced hands with one major rebid
+  1NT, 1♥ only with both majors (as the BBA treatment above).
+- **Switch off** (bare SAYC, 21GF-DEFAULT and most 21GF cards; probe
+  `probes/rebid-1C-1D-21GF.toml`; the vanilla SAYC set): a four-card
+  major up the line, balanced or not. On the vanilla set BBA's 1NT never
+  holds a four-card major (0 of 363); 1♥ has 1,037 hands (12-14 HCP 797),
+  1♠ 667, none of them with four hearts.
+
+Rule: the Walsh 1NT applies when the card plays Walsh
+(`walsh = minor_openings.walsh.play`, default on, so a card that does not
+say keeps Rick's default); with it off every style bids the major up the
+line and 1NT denies one, which is how responder reads it (`S 0-3 H 0-3`).
+Rick confirmed this reading of his ruling (2026-09-30): a card that
+turns Walsh off, 21GF-DEFAULT included, bids up the line.
+The `standard` style is unchanged (always up the line). The `bba` style
+follows the switch too: its 1NT with one major only when Walsh is on.
+
+Responder had no game after **1♣-1♦-1♥-1♠** and opener's minimum: 1NT
+and 2♠ set `ask=signoff`, so a 16-count passed 1NT. Rare while 1♥
+promised both majors; common once it does not. Responder now bids 3NT
+(13+) or 2NT (11-12) over 1NT, 4♠ or 3♠ over the raise, and 3NT over 2♣
+(responder-rebids.bid). BBA's own answer over 1NT on the vanilla set:
+pass 30, 3NT 15 (13-17 HCP), 2NT 6.
+
+Measured (vs BBA, double-dummy par as the yardstick; main f2954c7 →
+this change):
+
+| set | before | after | change |
+|---|---|---|---|
+| vanilla SAYC, 95,558 boards | −38,490 | −37,952 | **+538** |
+| corpus (342 scenarios) | −93,830 | −92,854 | **+976** |
+| 21GF random, 100,000 boards | −43,892 | −43,589 | **+303** |
+
+The up-the-line rebid alone (measured on the previous main, before the
+responder fix) was −55 on the vanilla set (+163 on 1♠, −218 on 1♥,
+mostly 1♣-1♦-1♥-1♠-1NT passed out with game values), +209 on the corpus
+and +28 on 21GF; the responder fix makes up the rest. Calls agreeing on
+the vanilla set 82.4% → 82.5%.
+
+Not this change: the "calls read as a higher rule" pair 1NT
+`rebids.bid:55 (-3) -> :51 (0)` (735 on the vanilla set, unchanged;
+also `-> :133` 274, `-> :122` 124) is mostly openers with 11 HCP (992 of
+about 1,570 calls) and a few 12-14 hands with a singleton, rebidding
+1NT through the "Minimum, no better rebid" fallback, which partner reads
+as the 12-14 balanced rebid. After 1♣-1♦ the same 102 calls are now read
+by the no-major 1NT on a non-Walsh card instead of the Walsh one.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
 - **BBA evidence:** the Basic_* and 21GF corpora, `bba-cli --all-meanings`
   and the probes named in each section; the vanilla SAYC random set for
-  the major invitation (2026-09-30).
+  the major invitation (2026-09-30); for 1♣-1♦ without Walsh the vanilla
+  set and `probes/rebid-1C-1D-21GF.toml` / `rebid-1C-1D-walsh.toml`
+  (2026-09-30), which show BBA's `walsh.play` switch deciding opener's
+  rebid, not responder's.
+- **Book practice:** 1♣-1♦ then a four-card major up the line is
+  standard SAYC practice, not yet cited to a book; the Walsh 1NT that may hide a major
+  is Rick's modern default (2026-09-24).
 - **Corpus measurements:** the par figures given with each change.
 - **Book practice:** opener's rebids (Standard American: 1NT 12-14, the
   jump rebid and jump raise 16-18, reverses 17+, accepting a limit raise

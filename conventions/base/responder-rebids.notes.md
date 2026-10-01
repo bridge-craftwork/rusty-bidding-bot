@@ -504,13 +504,25 @@ the first cannot happen (the 1NT response denied three), but partner read
 Measured with the move of the major-invitation answer (rebids.notes.md,
 "The major invitation without transfers").
 
+## Game after 1♣-1♦-1♥-1♠ and opener's minimum (2026-09-30)
+
+Responder's 1♠ here is unlimited, but opener's minimum answers (1NT,
+2♠, a six-card 2♣) set `ask=signoff`, and responder had nothing above
+the catch-all pass: a 16-count passed 1NT. Now, over 1NT: 2NT 11-12,
+3NT 13+; over the raise: 3♠ 11-12 support points, 4♠ 13+; over 2♣: 3NT
+13+. The auction became common when cards without Walsh started
+rebidding 1♥ with four hearts (rebids.notes.md, "Up the line without
+Walsh"), where the measurements are. BBA on the vanilla set over 1NT:
+pass 30, 3NT 15 (13-17 HCP), 2NT 6; over 2♠: pass 27, 4♠ 18, 3♠ 10.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (the ranges and
   invitations 2026-09-22, the ladder catch-all 2026-09-27, the minor-fit
   stoppers 2026-09-25), and the tickets named there.
 - **BBA evidence:** corpus auctions only, as quoted in each section; no
-  `probes/*.toml` spec yet for this module.
+  `probes/*.toml` spec yet for this module. The vanilla SAYC random set
+  for 1♣-1♦-1♥-1♠ (2026-09-30).
 - **Corpus measurements:** the par and side-IMP figures given with each
   change.
 - **Book practice:** the Standard American responder's rebids (weak,

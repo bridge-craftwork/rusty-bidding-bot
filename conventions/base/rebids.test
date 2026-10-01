@@ -212,6 +212,15 @@ S AJ5432.K32.K2.K2      | 1S P 2S P    | 3S     | bba: 14 with six trumps: game 
 card    Basic-Bridge general.style=standard
 S KT86.AK72.J9.Q87      | 1C P 1D P        | 1H     | standard: both majors, 1H up the line
 S KT86.A72.K9.Q873      | 1C P 1D P        | 1S     | standard: four spades, balanced, still 1S
+# ── 1C-1D with the Walsh switch off: majors up the line, as BBA (2026-09-30)
+card    Basic-Bridge minor_openings.walsh.play=false
+S KT86.AK72.J9.Q87      | 1C P 1D P        | 1H     | Walsh off: both majors, 1H up the line (probes/rebid-1C-1D-21GF.toml)
+S KT86.A72.K9.Q873      | 1C P 1D P        | 1S     | Walsh off: four spades, balanced 12, 1S
+S KJ2.AQ72.J92.KQ8      | 1C P 1D P        | 1H     | Walsh off: 4-4-3-3 with four hearts, 1H not 1NT
+S K8.AQ72.92.KJ873      | 1C P 1D P        | 1H     | Walsh off: four hearts and five clubs, 1H
+S KQ7.AJ3.QT7.7652      | 1C P 1D P        | 1NT    | Walsh off: 1NT denies a four-card major
+card    Basic-Bridge minor_openings.walsh.play=false general.style=bba
+S KT86.A72.K9.Q873      | 1C P 1D P        | 1S     | bba, Walsh off: up the line too (BBA on 21GF-DEFAULT)
 card    Basic-Bridge
 S KT86.A72.K9.Q873      | 1C P 1D P        | 1NT    | Walsh (default): balanced 12-14, 1NT with a major
 S K4.QJ7.AJ84.K984      | 1D P 1H P        | 1NT    | balanced 13 with four clubs: 1NT, not 2C (Rick)

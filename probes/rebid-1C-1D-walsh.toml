@@ -1,0 +1,22 @@
+# Opener's rebid after 1C-1D on Basic-Bridge (minor_openings.walsh.play
+# on): a balanced 12-14 with a four-card major, and both majors.
+# rebids.notes.md, "Up the line without Walsh (2026-09-30)".
+card    = "cards/bbsa/Basic-Bridge.bbsa"
+dealer  = "S"
+prefix  = "1C Pass 1D Pass"
+vuls    = ["None"]
+scoring = ["IMP"]
+partner = ["Q93.J52.AKT84.T6", "J5.Q86.KQT73.982", "T7.K64.AJ985.J53"]
+our     = []
+partner_auto = [6, 10]
+hands = [
+  "both majors 13 | KT86.AK72.J9.Q87",
+  "four hearts 15 | K86.AQ72.J9.KQ87",
+  "four hearts 16, 4-3-3-3 | KJ2.AQ72.J92.KQ8",
+  "four spades 12 | KT86.A72.K9.Q873",
+  "four spades 15 | AQ86.K72.Q9.KJ87",
+  "four spades 12, five clubs | KQ86.A7.92.QJ873",
+  "four hearts 13, five clubs | K8.AQ72.92.KJ873",
+  "no major 15 | KQ8.A72.J92.KQ87",
+  "both majors 15 | AJ86.AK72.Q9.J87",
+]
