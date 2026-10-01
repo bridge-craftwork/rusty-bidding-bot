@@ -539,12 +539,14 @@ reading of opener's 4H was right; the combined count was the problem.
   `partner.tp`, near zero (1S-2D-3C-3S, 13+ points: opener never bid
   slam after it; now 171 of BBA's 228 slams agree,
   `probes/slam-1S-2D-3C-3S-opener.toml`).
-- `longer(t)` / `shorter(t)` are written suit by suit. `trump >
-  partner.trump.min` evaluates for my own hand but cannot be read for
-  partner's: a 4NT conditioned on it was read as "no rule"
-  (rkcb-1430.test, `1C P 2C P 4NT`). Worth an engine look: a bare
-  `trump` length in a comparison should either be readable for another
-  seat or be refused at load.
+- `longer(t)` / `shorter(t)` compare `t` with `partner.t.min`. Until
+  2026-10-01 they were written suit by suit, because the engine judged
+  `trump > partner.trump.min` as public when it read the call for another
+  seat, which ruled the call out (a keycard 4NT read as "no rule",
+  rkcb-1430.test `1C P 2C P 4NT`). The engine now treats a bare `trump`
+  in a comparison as the caller's own length, as it does a suit letter
+  (Rick asked for the fix). No change on the vanilla set, the corpus or
+  21GF.
 
 ### Thresholds, by role
 

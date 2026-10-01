@@ -32,11 +32,8 @@ module slam-entry "Slam entry: the conditions the slam modules share"
 # count support points (4-4, 5-5). A raiser shows the length he raised
 # with, so the raiser is the support hand unless I hold no more trumps.
 
-# Written suit by suit: `trump > ...` (the agreed suit's length as a bare
-# comparison) holds for my own hand but cannot be read for partner's, so
-# a call conditioned on it would be read as no rule.
-define longer(t)  = (t is C, C > partner.C.min) | (t is D, D > partner.D.min) | (t is H, H > partner.H.min) | (t is S, S > partner.S.min)
-define shorter(t) = (t is C, C < partner.C.min) | (t is D, D < partner.D.min) | (t is H, H < partner.H.min) | (t is S, S < partner.S.min)
+define longer(t)  = t > partner.t.min
+define shorter(t) = t < partner.t.min
 
 # The count on partner's floor, by role. Partner as the long hand counts
 # his shown points (HCP + length), or his HCP and the length he has shown

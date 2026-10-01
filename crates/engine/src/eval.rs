@@ -1465,6 +1465,8 @@ impl<'a> Ctx<'a> {
                 }
                 match self.eval(e, b).ok()? {
                     Val::Suit(s) => Some(path_expr(SUITS[s])),
+                    // `trump`: the agreed suit, a length like a suit letter.
+                    Val::Strain(st) => suit_of_strain(st).map(|s| path_expr(SUITS[s])),
                     Val::Num(r) => r.as_point().map(|v| Expr::Int { value: v as i64 }),
                     Val::Bool(Tri::True) => Some(Expr::Int { value: 1 }),
                     Val::Bool(Tri::False) => Some(Expr::Int { value: 0 }),
@@ -1551,6 +1553,9 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                         || matches!(n, "slam_try" | "grand_try" | "strength" | "suit_strength")
                         || suit_index(n).is_some()
                         || matches!(b.get(n), Some(Val::Suit(_)))
+                        // Bare `trump` in a comparison or a sum is my
+                        // length in the agreed suit (`trump > partner.trump.min`).
+                        || n == "trump"
                 }
             }
         }
@@ -1665,6 +1670,7 @@ fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
                 Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
                     suit_index(&path[0].name).is_some()
                         || matches!(b.get(&path[0].name), Some(Val::Suit(_)))
+                        || (path[0].name == "trump" && !b.contains_key("trump"))
                 }
                 _ => false,
             };
@@ -2394,6 +2400,17 @@ mod term_tests {
         let mut out = Vec::new();
         check_expr(&when_of(expr), &["style"], &mut out);
         out
+    }
+
+    #[test]
+    fn bare_trump_in_a_comparison_is_my_own_length() {
+        // Read for another seat, `trump > partner.trump.min` is about the
+        // caller's hand: not public, so it cannot rule the call out.
+        let b = Bindings::new();
+        assert!(hand_dependent(&when_of("trump > partner.trump.min"), &b));
+        assert!(hand_dependent(&when_of("S > partner.S.min"), &b));
+        assert!(!hand_dependent(&when_of("partner.trump.min >= 3"), &b));
+        assert!(!hand_dependent(&when_of("we.trump is suit"), &b));
     }
 
     #[test]
