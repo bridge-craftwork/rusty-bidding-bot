@@ -703,6 +703,8 @@ Rule: the Walsh 1NT applies when the card plays Walsh
 (`walsh = minor_openings.walsh.play`, default on, so a card that does not
 say keeps Rick's default); with it off every style bids the major up the
 line and 1NT denies one, which is how responder reads it (`S 0-3 H 0-3`).
+Rick confirmed this reading of his ruling (2026-09-30): a card that
+turns Walsh off, 21GF-DEFAULT included, bids up the line.
 The `standard` style is unchanged (always up the line). The `bba` style
 follows the switch too: its 1NT with one major only when Walsh is on.
 
