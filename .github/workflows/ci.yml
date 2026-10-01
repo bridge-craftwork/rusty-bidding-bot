@@ -40,6 +40,7 @@ jobs:
       engine: ${{ steps.filter.outputs.engine }}
       rules: ${{ steps.filter.outputs.rules }}
       workbench: ${{ steps.filter.outputs.workbench }}
+      web: ${{ steps.filter.outputs.web }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3
@@ -60,6 +61,10 @@ jobs:
             workbench:
               - 'crates/workbench/**'
               - 'Cargo.lock'
+            web:
+              - 'web/**'
+              - 'crates/wasm/**'
+              - '.github/workflows/**'
 
   rules:
     name: Rules (rbb from main)
@@ -146,10 +151,12 @@ jobs:
           name: rbb-wasm-pkg
           path: crates/wasm/pkg
 
+  # The web site (native/WASM determinism, reference.txt drift): on
+  # main, and on pull requests that touch the site or the WASM crate.
   web:
     name: Web site
     needs: changes
-    if: github.event_name == 'push' || needs.changes.outputs.engine == 'true'
+    if: github.event_name == 'push' || needs.changes.outputs.web == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
