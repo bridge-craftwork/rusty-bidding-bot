@@ -93,11 +93,10 @@ fn par_comes_from_the_files_double_dummy_table() {
     for b in &report.boards {
         let dd = b.dd.expect("the file's double-dummy table");
         assert!(!dd.is_null());
-        assert_eq!(
-            b.par.is_some(),
-            !b.contracts_match(),
-            "par is scored where the contracts differ"
-        );
+        // Every board with a table gets par (how each table met par counts
+        // the boards whose contracts match too); only the differing ones
+        // are scored against BBA.
+        assert!(b.par.is_some(), "par on every board with a table");
         if b.board == "1" {
             // North-South make ten tricks in diamonds and nine in notrump.
             assert_eq!(dd.tricks(Direction::North, Strain::Diamonds), 10);
