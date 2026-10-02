@@ -22,9 +22,14 @@ define settled(x) = passed_round | they.fit(x).min>=7 | they.game_reached
 # the top three, or three of the top five.
 define good_trumps(x) = x>=4, quality(x)>=good | top5(x)>=3
 
+# They have bid game and I hold 17 or more: they have 23 at most between
+# them, whatever partner's silence hides (2026-10-02; 18 doubles fewer
+# contracts that make but gains less, notes).
+define big_hand_vs_game = they.game_reached, hcp>=17
+
 # What I hold in their suit against what we have shown between us
 # (we.hcp.min: my HCP and the bottom of partner's range).
-define pen_suit(x) = (good_trumps(x), we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22
+define pen_suit(x) = (good_trumps(x), we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22 | big_hand_vs_game
 
 # Responder's first call over their overcall: the double is negative.
 define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !me.last=XX
@@ -67,7 +72,7 @@ when they.bid, direct | passed_round, !asked, they.level>=2, !responder_first
 # which vs-1nt.bid and the defences answer).
 when they.bid, passed_round | (direct, they.game_reached), !asked, !responder_first, they.strain is N, lho.bids + rho.bids >= 2
   X   "Penalty: they are too high in notrump"
-      shows we.hcp.min>=21
+      shows we.hcp.min>=21 | big_hand_vs_game
       sets  ask=penalty
       priority -6
 

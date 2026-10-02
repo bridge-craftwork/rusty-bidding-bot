@@ -42,3 +42,10 @@ S K.KT.AKQ5.KQ8753      | P 5D                | X   | 22 in my hand: they are to
 dealer  S
 vul     Both
 E AKJ.A.AT73.AK642      | 1H P P X 2H P P     | X   | 22 in my hand, passed round to me
+# They bid game and I hold 17: they have 23 at most (2026-10-02). Not
+# with 16.
+dealer  N
+vul     None
+E AQ4.K5.KJ93.AJ62      | 1H P 2H P 4H        | X   | 17+ against their game
+E AQ4.K5.KJ93.QJ62      | 1H P 2H P 4H        | !X  | 16: not enough on my own
+W AQ4.K5.KJ93.AJ62      | 1NT P 3NT           | X   | 17+ against their 3NT
