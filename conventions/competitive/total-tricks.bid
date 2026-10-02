@@ -44,11 +44,18 @@ define minor_preempt(x) = !opened_minor(x) | x >= 6
 # Our trumps as the Law counts them, a trick fewer at unfavourable.
 define lott_trumps(x) = we.fit(x).min + doubler_four(x) - unfavourable
 
+# They are competing: the last bid or double at the table is theirs, made
+# over our side's last bid (RHO's call, or LHO's when partner and RHO have
+# both passed since). A lone overcall or opening that we have bid over,
+# and that neither of them has backed, is not competition (2026-10-02).
+define they_compete = !rho.last=P | (partner.last=P, !lho.last=P)
+
 when they.bid, they.still_bidding, !game_reached   # not once we have bid game (ticket b100)
   2x  "Total tricks: eight trumps between us: the two level"
       shows lott_trumps(x) = 8
       when  doubler_four(x) | !doubler_four(x)       # known either way: not while the double may be the strong one
       when  partner.x>=3, hcp>=5, we.hcp.min <= 24   # not clearly our hand
+      when  they_compete                             # the weak raise to two only against a bid (2026-10-02)
       sets  ask=signoff
       priority -4
   3x  "Total tricks: nine trumps between us: the three level"

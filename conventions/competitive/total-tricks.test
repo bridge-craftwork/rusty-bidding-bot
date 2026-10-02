@@ -11,6 +11,8 @@ vul     None
 # Not when they have stopped bidding, and not with a bare hand.
 S AJ82.4.KQ63.K872      | 1H X P 1S P      | P   | a minimum double: advancer's 0-8, nobody competing
 N 843.J72.932.T874      | 1D 1S P          | P   | 1 HCP: no raise on eight trumps alone
+N 843.QJ2.932.K874      | 1D 1S P          | P   | 6 HCP and eight trumps, but they are not competing: no weak raise (2026-10-02)
+N 843.QJ2.932.K874      | 1D 1S 2D         | 2S  | the same hand when RHO has raised: compete
 
 # Not once we have bid game: partner's 3NT is not pulled to a minor
 # below slam (Rick, Basic_Takeout_Double 100, ticket 2026-09-27).

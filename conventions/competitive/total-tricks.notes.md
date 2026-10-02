@@ -96,6 +96,38 @@ cached by rule and calls only, so a `shows` reading the vulnerability
 (`unfavourable`) took whichever board filled the cache first when boards
 are bid in parallel. The key now carries the values of such terms.
 
+## The weak raise to two only against a bid (2026-10-02)
+
+"Still bidding" (one of their last calls is not a pass) let the
+two-level rule raise partner's one-level overcall on 5-6 HCP and three
+trumps after `(1D) 1S (P)`: opener had bid once and responder passed,
+so nobody was competing. BBA on bare SAYC passes these (raises from
+about 9 HCP with three trumps, 7 with four). The two-level rule now also
+needs `they_compete`: the last bid or double at the table is theirs,
+made over our side's last bid (RHO's call, or LHO's when partner and RHO
+have passed since).
+
+Measured on top of the minor-raise change (errors yardstick, IMPs; even
+/ odd boards):
+
+| set | boards | errors | contract / doubling | distance from par | side IMPs |
+|---|---|---|---|---|---|
+| vanilla SAYC random | 218 | +152 (+114 / +38) | +19 / +133 | −16 | +200 |
+| corpus | 272 | +126 (+45 / +81) | +101 / +25 | +94 | +60 |
+| 21GF random | 189 | +152 (+121 / +31) | +29 / +123 | −5 | +175 |
+
+**The same restriction on all three levels was tried and not kept.** It
+gained on the errors line (+393 vanilla, +383 corpus, +426 21GF, both
+halves) but only through the doubling errors (+1,482 doubling against
+−1,089 contract on vanilla), and distance from par lost 753 / 916 / 679.
+By level: the two level gained on every count; the three and four levels
+lost on contract errors and par everywhere and gained only because our
+defenders, who double 3.4% of the chances against BBA's 13.8%, were no
+longer given a chance to miss a penalty double. A gain that depends on
+our weak doubling is not one to bank (penalty-doubles.notes.md), so the
+three and four levels stay as they were (e.g. (2♠) 3♥ (P) 4♥ with ten
+trumps, a raise they have not bid over yet, gained under both).
+
 ## Sources
 
 - **The principle:** the Law of Total Tricks (LoTT), compete to the level
@@ -112,3 +144,7 @@ are bid in parallel. The key now carries the values of such terms.
 - **Corpus measurements:** the variant table, judged by par distance and
   by side IMPs; "still bidding" is kept although the unrestricted rule
   scores more par, because the extra cases are wrong bridge.
+- **The two-level restriction** (2026-10-02): BBA's raises of a one-level
+  overcall on the vanilla SAYC random set (`(1x) 1S (P)`: 2♠ 196 hands
+  with three spades from about 9 HCP, pass 198 with 5-8), and the
+  measurements in its section.
