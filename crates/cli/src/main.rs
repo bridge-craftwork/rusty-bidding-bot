@@ -934,6 +934,31 @@ fn compare(
             t.par.contract_errors_vs_reference,
             t.par.doubling_errors_vs_reference
         );
+        let with_par: usize = t.par_classes.values().map(|c| c[0].boards).sum();
+        println!(
+            "how each table met par ({with_par} boards; IMPs are the table's errors):\n  {:48} {:>14} {:>8}   {:>14} {:>8}",
+            "", "BBA boards", "IMPs", "ours boards", "IMPs"
+        );
+        for (class, [r, o]) in &t.par_classes {
+            let pc = |n: usize| 100.0 * n as f64 / with_par.max(1) as f64;
+            println!(
+                "  {:48} {:>7} {:>5.1}% {:>8}   {:>7} {:>5.1}% {:>8}",
+                class.describe(),
+                r.boards,
+                pc(r.boards),
+                r.imps,
+                o.boards,
+                pc(o.boards),
+                o.imps
+            );
+        }
+        let [rd, od] = t.doubles;
+        let rate = |d: &rbb_compare::DoubleTally| 100.0 * d.taken as f64 / d.chances.max(1) as f64;
+        println!(
+            "penalty doubles (a contract bid above par that goes down is a chance):\n  BBA  doubled {} of {} chances ({:.1}%), doubled {} that made, bailed out {} times\n  ours doubled {} of {} chances ({:.1}%), doubled {} that made, bailed out {} times",
+            rd.taken, rd.chances, rate(&rd), rd.bad, rd.bailed_out,
+            od.taken, od.chances, rate(&od), od.bad, od.bailed_out
+        );
         let solved = t.boards.saturating_sub(t.dd_tables);
         println!(
             "  double-dummy tables: {} read from the corpus files, {solved} boards without one",
