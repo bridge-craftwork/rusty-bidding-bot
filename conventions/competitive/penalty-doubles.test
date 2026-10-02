@@ -49,3 +49,8 @@ vul     None
 E AQ4.K5.KJ93.AJ62      | 1H P 2H P 4H        | X   | 17+ against their game
 E AQ4.K5.KJ93.QJ62      | 1H P 2H P 4H        | !X  | 16: not enough on my own
 W AQ4.K5.KJ93.AJ62      | 1NT P 3NT           | X   | 17+ against their 3NT
+# They bid over our game: the side that bid game doubles with values and
+# two of their trumps (2026-10-02), also after partner's signoff.
+N A4.KQJ54.K93.T96      | 1H 2S 4H 4S         | X   | 12+ and two spades: they bid over our game
+N 4.KQJ54.K93.AT96      | 1H 2S 4H 4S         | !X  | one spade: not a penalty double
+S K32.A87.QJ4.8765      | 1H 2S 4H 4S P P     | X   | 20 known between us, three spades

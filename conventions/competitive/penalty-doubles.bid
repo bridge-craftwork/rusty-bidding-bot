@@ -76,5 +76,35 @@ when they.bid, passed_round | (direct, they.game_reached), !asked, !responder_fi
       sets  ask=penalty
       priority -6
 
+# They bid over our game: the side that bid game owns the hand, so the
+# player with values (12+ in my hand, or 20 known between us) and two of
+# their trumps doubles (2026-10-02). After partner's signoff too: the
+# signoff's "nothing to add" pass (rebids.bid, priority -5) would
+# otherwise sell out, so this double sits at -5.
+define our_game_bid = me.last=3N | me.last=4H | me.last=4S | me.last=5C | me.last=5D | me.last=5H | me.last=5S | partner.last=3N | partner.last=4H | partner.last=4S | partner.last=5C | partner.last=5D | partner.last=5H | partner.last=5S
+define over_our_game(x) = x>=2, hcp>=12 | we.hcp.min>=20
+
+when they.bid, direct | passed_round, !asked | asked signoff, our_game_bid, they.level>=4, they.strain is not N
+  X   "Penalty: they bid spades over our game"
+      shows over_our_game(S)
+      when  natural_theirs(S), !partner_nt
+      sets  ask=penalty
+      priority -5
+  X   "Penalty: they bid hearts over our game"
+      shows over_our_game(H)
+      when  natural_theirs(H), !partner_nt
+      sets  ask=penalty
+      priority -5
+  X   "Penalty: they bid diamonds over our game"
+      shows over_our_game(D)
+      when  natural_theirs(D), !partner_nt
+      sets  ask=penalty
+      priority -5
+  X   "Penalty: they bid clubs over our game"
+      shows over_our_game(C)
+      when  natural_theirs(C), !partner_nt
+      sets  ask=penalty
+      priority -5
+
 when asked penalty
   P   "Sitting for partner's penalty double"  priority -1
