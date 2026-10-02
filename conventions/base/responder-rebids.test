@@ -96,6 +96,12 @@ N 985.A2.986.K8542      | 1D 2H P P X P       | 3C     | five clubs for the reop
 N Q85.T9.J8753.T53      | 1H 2C P P X P       | 2D     | five diamonds for the reopening double
 N .AT743.Q9753.854      | 1S 2C P P X P       | 2H     | five hearts for the reopening double
 N JT8653.A6.4.J632      | 1D 2H P P X P       | 2S     | six spades for the reopening double
+# Passing it for penalty: four poor trumps need 8 HCP; good trumps or
+# five do not (penalty-doubles.notes.md, 2026-10-02).
+N 8653.Q7.J4.Q8632      | 1D 1S P P X P       | 2C     | four small spades and 5: bids the clubs, no penalty pass
+N 8653.K75.Q4.KJ63      | 1D 1S P P X P       | P      | four small spades and 9: leaves the double in
+N KQ53.875.J4.9863      | 1D 1S P P X P       | P      | two of the top three: leaves the double in
+N 97653.875.J4.Q86      | 1D 1S P P X P       | P      | five spades: leaves the double in
 N 85.J872.AKT.9874      | 1C 1D 1H P 1S P     | 1NT    | 6-10 with no fit for opener's second suit
 N J97632.Q84.AT.53      | 1D 1H 1S P 2C P     | 2S     | six spades, weak
 N AK984.32.J85.K65      | 1D 1H 1S P 2C P     | 2D     | preference back to opener's first suit

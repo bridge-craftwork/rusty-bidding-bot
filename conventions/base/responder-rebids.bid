@@ -473,10 +473,13 @@ after 1x (X) XX (1y) P (P) | 1x (X) XX (2y) P (P) | 1x (X) XX (3y) P (P) when y 
 # ── Opener reopened with a double ────────────────────────────────────
 # Opener's reopening double (rebids.bid) is takeout, so responder names
 # his longest suit at the cheapest level, passes it for penalty with
-# four of theirs, or goes back to opener's suit.
+# four of theirs, or goes back to opener's suit. Four poor cards of
+# theirs (not two of the top three or three of the top five) need 8 HCP
+# as well: with 7 or fewer, 43 of 58 one-level passes let them make it
+# (penalty-doubles.notes.md, 2026-10-02).
 after 1x (1y) P (P) X (P) | 1x (2y) P (P) X (P) | 1x (3y) P (P) X (P) when y is not x
   P   "Passes the reopening double: four or more {y}"
-      shows y>=4
+      shows y>=4, y>=5 | quality(y)>=good | top5(y)>=3 | hcp>=8
       priority 1
   cheapest(S) "Four or more spades for the reopening double"
       shows S>=4, S>=H, S>=D, S>=C
