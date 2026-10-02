@@ -33,10 +33,12 @@ module advances "Advancing partner's overcall"
   param  jump_raise = overcalls.responses.jump_raise default weak
 
 after (1x) 1y (P)
-  2{y} "Raise: 7-11 total points, three-card support"
-      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
-  3{y} "Preemptive raise: four-card support, less than 8 total points"
+  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+      shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
+  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
       shows y>=4, hcp+length_points<=7
+      shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
+      priority 1                        # before the raise to two, which a weak four-card hand also fits
       when  jump_raise is weak
   1S  "8+ total points, four or more spades"
       shows S>=4, hcp+length_points>=8
@@ -105,17 +107,21 @@ after (1x) P (P) 1y (P)
 # RHO has doubled or bid over the overcall. Support is still the first
 # thing to show, and raising at once takes bidding room from them.
 after (1x) 1y (X) | (1x) P (P) 1y (X)
-  2{y} "Raise: 7-11 total points, three-card support"
-      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
-  3{y} "Preemptive raise: four-card support, less than 8 total points"
+  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+      shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
+  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
       shows y>=4, hcp+length_points<=7
+      shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
+      priority 1                        # before the raise to two, which a weak four-card hand also fits
   P   "Nothing to say over their double"  priority -10
 
 after (1x) 1y (1z) | (1x) P (P) 1y (1z)
-  2{y} "Raise: 7-11 total points, three-card support"
-      shows y>=3, hcp+length_points>=7, hcp+length_points<=11
-  3{y} "Preemptive raise: four-card support, less than 8 total points"
+  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+      shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
+  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
       shows y>=4, hcp+length_points<=7
+      shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
+      priority 1                        # before the raise to two, which a weak four-card hand also fits
   1N  "8-11 total points, balanced, a stopper in {x}"
       shows balanced, hcp+length_points>=8, hcp+length_points<=11
       when  stop(x), y<=2
@@ -245,8 +251,11 @@ after (1x) 1y (P) 2z (P)
 # The overcaller again after (1x) 1y (2x) P (P): BBA rebids a six-card
 # suit with 12+ (2026-09-25). It also doubles for takeout with a
 # singleton in their suit and 13+; that double cost IMPs against par.
+# The rebid is at the two level: a one-level overcall outranks their
+# suit, so 2{y} is always there, and 3{y} was a jump. On bare SAYC BBA
+# rebids 2{y} with six from 10 HCP (2026-10-02, 88 hands).
 after (1x) 1y (2x) P (P)
-  3{y} "Six or more {y}, sound"               shows y>=6, hcp>=12
+  2{y} "Six or more {y}: competing"           shows y>=6, hcp>=10
   P   "Nothing more"                          priority -5
 
 # ── Advancer after partner's overcall of their 1NT ───────────────────

@@ -124,4 +124,17 @@ N K85.4.KQ98.QJ974      | 1D 1H 2H 3H P P  | P   | 11: the limit raise, they hav
 card    Basic-Bridge
 dealer  E
 vul     NS
-W 3.J73.9652.QT853      | 1C 1S                                | 3C     | five clubs and less than 8: preempt
+W 3.J73.952.QT8653      | 1C 1S                                | 3C     | six clubs and less than 8: preempt (nine trumps)
+W 3.J73.9652.QT853      | 1C 1S                                | P      | five clubs: eight trumps, not the three level (BBA on bare SAYC passes 108 of 134)
+
+# Raises of a minor over an overcall count the trumps (2026-10-02,
+# total-tricks.bid): five cards for a raise (eight trumps opposite
+# opener's three), six for the preemptive jump.
+card    Basic-Bridge
+dealer  N
+vul     None
+S QJ.K7.86532.8543          | 1C 2S   | P      | four clubs: seven trumps, no raise to the three level
+S QJ.K7.8653.85432          | 1C 2S   | 3C     | five clubs and 7 total points: raise
+S 982.KJ3.Q732.K42          | 1D 2C   | P      | three diamonds: no raise, even at the two level
+S 98.KJ3.Q7432.K42          | 1D 2C   | 2D     | five diamonds: raise
+S 9.83.8732.QJ7632          | 1C 1H   | 3C     | six clubs and 4 HCP: preempt

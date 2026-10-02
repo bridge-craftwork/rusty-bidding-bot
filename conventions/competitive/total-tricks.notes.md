@@ -96,6 +96,101 @@ cached by rule and calls only, so a `shows` reading the vulnerability
 (`unfavourable`) took whichever board filled the cache first when boards
 are bid in parallel. The key now carries the values of such terms.
 
+## The weak raise to two only against a bid (2026-10-02)
+
+"Still bidding" (one of their last calls is not a pass) let the
+two-level rule raise partner's one-level overcall on 5-6 HCP and three
+trumps after `(1D) 1S (P)`: opener had bid once and responder passed,
+so nobody was competing. BBA on bare SAYC passes these (raises from
+about 9 HCP with three trumps, 7 with four). The two-level rule now also
+needs `they_compete`: the last bid or double at the table is theirs,
+made over our side's last bid (RHO's call, or LHO's when partner and RHO
+have passed since).
+
+Measured on top of the minor-raise change (errors yardstick, IMPs; even
+/ odd boards):
+
+| set | boards | errors | contract / doubling | distance from par | side IMPs |
+|---|---|---|---|---|---|
+| vanilla SAYC random | 218 | +152 (+114 / +38) | +19 / +133 | −16 | +200 |
+| corpus | 272 | +126 (+45 / +81) | +101 / +25 | +94 | +60 |
+| 21GF random | 189 | +152 (+121 / +31) | +29 / +123 | −5 | +175 |
+
+**The same restriction on all three levels was tried and not kept.** It
+gained on the errors line (+393 vanilla, +383 corpus, +426 21GF, both
+halves) but only through the doubling errors (+1,482 doubling against
+−1,089 contract on vanilla), and distance from par lost 753 / 916 / 679.
+By level: the two level gained on every count; the three and four levels
+lost on contract errors and par everywhere and gained only because our
+defenders, who double 3.4% of the chances against BBA's 13.8%, were no
+longer given a chance to miss a penalty double. A gain that depends on
+our weak doubling is not one to bank (penalty-doubles.notes.md), so the
+three and four levels stay as they were (e.g. (2♠) 3♥ (P) 4♥ with ten
+trumps, a raise they have not bid over yet, gained under both).
+
+## Diagnosis: where "did not compete" comes from (2026-10-02)
+
+Vanilla SAYC random set (95,558 deals, BBA on bare SAYC), "how each
+table met par", class *did not compete or bid on (the side with par)*:
+ours 10,922 boards / 91,512 IMPs against BBA's 8,266 / 64,882 at main
+52174cf. `probes/tools/compete_diag.py` splits it (figures after the
+commits of this date; the split barely moved):
+
+| the side that should have bid | ours bds / IMPs | BBA bds / IMPs | gap |
+|---|---|---|---|
+| never came in | 3,717 / 28,894 | 2,533 / 18,480 | 10,414 |
+| came in only with a double | 548 / 4,929 | 400 / 3,281 | 1,648 |
+| had bid (opened or overcalled) | 6,759 / 58,327 | 5,333 / 43,121 | 15,206 |
+
+By the level of their last bid, where we had bid: one level 841 / 6,023
+against 262 / 1,612; **two level 3,066 / 24,557 against 1,541 /
+10,815**; three and four levels at parity; five level BBA worse.
+
+**The decisive pass is rarely the call that differs.** On 7,368 of our
+11,024 boards BBA's auction never reached our last pass at all; where
+it did, BBA passed too in most cases ("Defending: nothing more to say":
+BBA passes 2,174 of 2,833, bids 504, doubles 155). The first call where
+our auction left BBA's, on these boards (our errors minus BBA's):
+both sides in +10,227 (4,573 boards; mostly responder's and advancer's
+first call over interference: the negative double, free bids, raises);
+our first entry over their opening +6,523 (3,113); the opening +2,372
+(957).
+
+**par_blame's "Defending: nothing more to say"** ("W outbid, did not
+compete", 3,825 boards / 28,694 IMPs at main; 3,814 after): the rule is
+also the pass of the fourth seat at its *first* call, after (1x) P (1y),
+(1x) P (1NT) or (1x) P (2x), because `overcalls.bid` covers only the
+direct seat. Where BBA acted at a position this rule passed, 78% of
+the boards (5,187 of 6,609) and of the IMPs were such first entries.
+That is the one-level overcall decision, out of scope here (Rick's
+separate probe).
+
+**BBA's balancing over their fit loses on the errors yardstick.** At
+(1x) P (2x) P (P) BBA balances in 353 of 1,938 boards (X 128, a suit
+225), we never do; on the boards where that was the first difference
+BBA's balance did worse than our pass (X −142, 3♣ −68, 3♦ −13, 3♥ −27
+IMPs). No balancing rule was written.
+
+## Tried and not kept (2026-10-02)
+
+Each measured with `probes/tools/errors_diff.py` against the kept
+changes before it.
+
+- **Pushing a trick at favourable** (`lott_trumps` + favourable):
+  errors −2,756 on vanilla (both halves), but contract errors +1,805 and
+  distance from par +1,803. The whole loss is doubling errors (−4,561):
+  our defenders, who double 3.4% of the chances, failing to double the
+  extra level. For Rick: under competent doubling the push looks right.
+- **Opener over their balancing double**, 1x (P) P (X): the redouble with
+  17+ and the jump rebid with six and 17+ gained on vanilla (+433) and
+  21GF (+319) but not on the corpus (+9, halves +83 / −74), and distance
+  from par lost on all three (−254 / −170 / −259). BBA's lighter actions
+  (a six-card rebid at two, a second suit) lost 586 IMPs on 2♣ alone.
+- **Responder's raise over their takeout double from 6 total points**
+  (was 4; BBA passes 3-5): +65 on vanilla, contract −39, side IMPs −283.
+- **The two-level Law rule from 8 HCP** (was 5): +6 on vanilla,
+  contract −278, side IMPs −1,373.
+
 ## Sources
 
 - **The principle:** the Law of Total Tricks (LoTT), compete to the level
@@ -112,3 +207,11 @@ are bid in parallel. The key now carries the values of such terms.
 - **Corpus measurements:** the variant table, judged by par distance and
   by side IMPs; "still bidding" is kept although the unrestricted rule
   scores more par, because the extra cases are wrong bridge.
+- **The two-level restriction** (2026-10-02): BBA's raises of a one-level
+  overcall on the vanilla SAYC random set (`(1x) 1S (P)`: 2♠ 196 hands
+  with three spades from about 9 HCP, pass 198 with 5-8), and the
+  measurements in its section.
+- **The diagnosis** (2026-10-02): `probes/tools/compete_diag.py` on the
+  vanilla SAYC compare JSON; par_blame (`probes/tools/par_blame.py`) on
+  the same; the variants in "Tried and not kept", by
+  `probes/tools/errors_diff.py`.
