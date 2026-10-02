@@ -358,6 +358,49 @@ uses the same rule.
   1H (2C) 2D (P) 2H (Basic-Bridge, 64.AK8432.AK86.9) into 3D. Kept to
   the forcing cards.
 
+## Raising opener's minor counts the trumps (2026-10-02)
+
+Responder's raises of a minor over an overcall now count the trumps the
+way the Law of Total Tricks does (`minor_raise(x)`, `minor_preempt(x)`
+in `total-tricks.bid`). One of a minor promises three, so:
+
+- the simple raise (`1m (1y) 2m`, and `1m (2y) 3m` with 7-10) needs five,
+  eight trumps; it took three over a two-level overcall (six trumps at
+  the three level) and passed with four or fewer only over a one-level
+  one;
+- the preemptive jump (`1m (1y) 3m`) needs six, nine trumps; it took
+  five (eight trumps at the three level).
+
+Major raises are unchanged (three-card support; a third-seat 1♥ may be
+four cards, and requiring eight known trumps there lost IMPs).
+
+**Evidence.** BBA on bare SAYC (Random_Pavlicek_SAYCvanilla, 95,558
+deals) at `1C (1x)` with five clubs and under 8: pass 108, 3♣ 26; with
+six, 3♣ 12, pass 2. At `1D (1x)`, five diamonds: pass 109, 3♦ 2; six:
+3♦ 12. Over a two-level overcall, BBA's 3♣/3♦ raise has five cards (28 +
+25 hands); it passes with three or four (about 190 hands each), where
+we raised. Counting opener's minor as four (raising 1♣ with four at the
+two level, as BBA sometimes does) lost 158 IMPs over 1♣ and was neutral
+over 1♦, so it is not done.
+
+**Measured** (errors yardstick, IMPs; even / odd boards):
+
+| set | boards changed | errors | contract / doubling | distance from par | side IMPs |
+|---|---|---|---|---|---|
+| vanilla SAYC random | 975 | +1,010 (+396 / +614) | +537 / +473 | +115 | +215 |
+| corpus | 747 | +951 (+329 / +622) | +531 / +420 | +245 | +190 |
+| 21GF random | 856 | +1,043 (+397 / +646) | +513 / +530 | +190 | +283 |
+
+The largest single gains: `1D (2S) 3D` → pass (+142 vanilla, +251
+corpus), `1C (2H/2D) 3C` → pass, `1C/1D (1H) 3m` → pass. The largest
+loss: `1C (2S) 3C` → pass with four clubs (−65 vanilla).
+
+The ticket test from Basic_Overcall 469 (1♣ (1♠) 3♣ with five clubs,
+Basic-Bridge card) now passes; the case is rewritten with six clubs, and
+the five-club hand expects a pass. One consequence in `rebids.test`:
+after `1D (2S) 3D (P)` the raise now shows five, so opener with five
+holds ten trumps and the Law bids 4♦ (it passed before; still not 5♦).
+
 ## Sources
 
 - **The conventions:** negative doubles, the redouble, the cue-bid raise
@@ -378,3 +421,6 @@ uses the same rule.
   unbid four-card minor first, where BBA is inconsistent (for Rick);
   the redouble after their takeout double, where the two yardsticks
   disagree (2026-09-25, for Rick).
+- **The Law of Total Tricks** for the minor raises (2026-10-02): Larry
+  Cohen, *To Bid or Not to Bid* (1992); BBA's bare-SAYC raises on the
+  vanilla random set, and the measurements in that section.

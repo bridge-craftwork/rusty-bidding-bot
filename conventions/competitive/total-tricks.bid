@@ -30,6 +30,17 @@ module total-tricks "The Law of Total Tricks"
 # their major is known to be the shape double.
 define doubler_four(x) = ((lho.H>=5 | rho.H>=5), partner.S>=3, partner.D>=3, partner.C>=3) | ((lho.S>=5 | rho.S>=5), partner.H>=3, partner.D>=3, partner.C>=3), partner.x.min = 3
 
+# Raises of opener's minor in competition count the trumps the same way.
+# One of a minor promises three (the engine reads 1♣ as 1+, so the test is
+# what partner opened): a raise needs five for eight trumps, a preemptive
+# jump six for nine. BBA on bare SAYC raises 1m over an overcall with five
+# and jumps with six, not five; counting opener's minor as four (raising
+# with four) lost 158 IMPs over 1♣ (2026-10-02). A major opening is raised
+# with three as before (in third seat it may be four cards).
+define opened_minor(x)  = (x is C | x is D), partner.opened, partner.x.min <= 3
+define minor_raise(x)   = !opened_minor(x) | x >= 5
+define minor_preempt(x) = !opened_minor(x) | x >= 6
+
 # Our trumps as the Law counts them, a trick fewer at unfavourable.
 define lott_trumps(x) = we.fit(x).min + doubler_four(x) - unfavourable
 
