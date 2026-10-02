@@ -164,7 +164,11 @@ block here:
   be able to collect.
 - **opener's reopening double** (`1x (2y) P (P) X`): responder takes it
   out in his longest suit, passes it with four of theirs, or returns to
-  opener's suit.
+  opener's suit. From 2026-10-02 four poor ones (not two of the top
+  three or three of the top five) need 8 HCP to pass: with 7 or fewer,
+  43 of 58 one-level passes let them make it; doubling errors +317
+  vanilla, +217 corpus, +282 21GF (penalty-doubles.notes.md, "Doubling
+  more").
 - **opener's second suit over their call** (`1x (*) 1y (*) 1z/2z`), the
   mirror of the uncontested blocks above. Our own rules make a contested
   reverse forcing, and 58 corpus broken forces were responder with no
