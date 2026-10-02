@@ -159,6 +159,11 @@ local checkouts").
   overbid as a loss. For competitive and doubling changes judge by the
   **errors** line (each side charged with its own errors, an overbid taken
   as doubled; Rick, 2026-10-01) and report distance from par beside it.
+  Our engine plays both sides, so our weak doubling also judges our
+  bidding. Rick (2026-10-02): judge a **bidding** change (competing,
+  raising, overbidding) on its **contract** errors and distance from
+  par; judge a **doubling** change on its **doubling** errors. Report
+  the other half beside it.
   `probes/tools/sideimps.py BASE.json VARIANT.json` (IMPs to the side
   that made the first differing call) predates it and is flattered by
   weak runouts; use it only as a third opinion.
