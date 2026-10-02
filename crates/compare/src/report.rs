@@ -44,6 +44,26 @@ pub struct ParTally {
     pub doubling_errors_vs_reference: i64,
 }
 
+/// Boards in one `ParClass` and their errors (IMPs), for one engine.
+#[derive(Debug, Clone, Copy, Default, Serialize)]
+pub struct ClassTally {
+    pub boards: usize,
+    pub imps: i64,
+}
+
+/// One engine's penalty doubles over the boards (`parclass::TableClass`).
+#[derive(Debug, Clone, Copy, Default, Serialize)]
+pub struct DoubleTally {
+    /// Final contracts bid above par that went down.
+    pub chances: usize,
+    /// Of those, doubled.
+    pub taken: usize,
+    /// Doubles of contracts that made.
+    pub bad: usize,
+    /// Tables where a side bid on over a failing overbid instead of doubling.
+    pub bailed_out: usize,
+}
+
 #[derive(Debug, Clone, Default, Serialize)]
 pub struct Stats {
     pub name: String,
@@ -55,6 +75,10 @@ pub struct Stats {
     /// First divergence by call index (0 = the first call).
     pub first_divergence: BTreeMap<usize, usize>,
     pub par: ParTally,
+    /// How each table met par, every board with par: [BBA, ours].
+    pub par_classes: BTreeMap<crate::parclass::ParClass, [ClassTally; 2]>,
+    /// Penalty doubles: [BBA, ours].
+    pub doubles: [DoubleTally; 2],
     /// Boards whose reference file carried a double-dummy table.
     pub dd_tables: usize,
     pub runaway: usize,
@@ -121,6 +145,26 @@ impl Stats {
         // Par is tallied where the contracts differ: with a table from the
         // file every board has par, and scoring the identical ones would
         // only add ties.
+        if let Some(p) = &b.par {
+            for (i, (c, e)) in [
+                (&p.reference_class, &p.reference_errors),
+                (&p.ours_class, &p.ours_errors),
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                let t = &mut self.par_classes.entry(c.class).or_default()[i];
+                t.boards += 1;
+                t.imps += e.total() as i64;
+                let d = &mut self.doubles[i];
+                if let Some(taken) = c.double_chance {
+                    d.chances += 1;
+                    d.taken += taken as usize;
+                }
+                d.bad += c.bad_double as usize;
+                d.bailed_out += c.bailed_out as usize;
+            }
+        }
         if let (Some(p), false) = (&b.par, b.contracts_match()) {
             self.par.scored += 1;
             let ours = imps((p.ours_ns - p.par_ns).abs());

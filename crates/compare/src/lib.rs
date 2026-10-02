@@ -6,6 +6,7 @@
 mod board;
 pub mod grid;
 pub mod par;
+pub mod parclass;
 pub mod probe;
 mod report;
 mod scenario;
@@ -23,8 +24,8 @@ use serde::Serialize;
 
 pub use board::{par_for, BoardResult, ParComparison, Problem, ProblemKind, ReadAs};
 pub use report::{
-    contest, scoring_name, short, summarize, tally, Agreement, AuctionFilter, Contest, Divergence,
-    ParTally, ProblemPoint, ReadAsPoint, Stats, Summary,
+    contest, scoring_name, short, summarize, tally, Agreement, AuctionFilter, ClassTally, Contest,
+    Divergence, DoubleTally, ParTally, ProblemPoint, ReadAsPoint, Stats, Summary,
 };
 pub use scenario::{discover, Scenario};
 
@@ -161,12 +162,12 @@ pub fn run_with(
             r.ns_card = scenario.ns_card.clone();
             r.generator = scenario.generator.clone();
             r.ew_card = scenario.ew_card.clone();
-            // Par is worth having where the contracts differ. With a table
-            // in the file it costs nothing to look up; without one it means
-            // solving the deal, which is what `--par` asks for. Boards whose
-            // contracts match keep their table, so the workbench can work
-            // par out for a selected one without solving.
-            if !r.contracts_match() && (r.dd.is_some() || opts.par) {
+            // With a table in the file par costs nothing to look up, and
+            // every board gets it (how often each side reaches par counts
+            // the boards where the contracts match too). Without one it
+            // means solving the deal, which is what `--par` asks for, and
+            // only where the contracts differ.
+            if r.dd.is_some() || (!r.contracts_match() && opts.par) {
                 board::add_par(&mut r, board, &cache);
             }
             let n = done.fetch_add(1, Ordering::Relaxed) + 1;

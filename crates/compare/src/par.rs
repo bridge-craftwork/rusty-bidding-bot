@@ -6,11 +6,11 @@ use std::io::Write;
 use std::path::PathBuf;
 use std::sync::Mutex;
 
+#[cfg(test)]
+use bridge_types::Strain;
 use bridge_types::{
     Contract, DdTable, Deal, Direction, Doubled, FinalContract, Vulnerability, DECLARERS, STRAINS,
 };
-#[cfg(test)]
-use bridge_types::Strain;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -121,9 +121,10 @@ fn score_ns_as(c: &FinalContract, doubled: Doubled, dd: &DdTable, vul: Vulnerabi
 ///
 /// Distance from par is one absolute number per table, so two errors can
 /// cancel, and a penalty double of an overbid moves the result past par and
-/// counts as a loss. Instead, as in double-dummy par, a contract that goes
-/// down undoubled and would beat par that way is taken as doubled (the
-/// assumed result). The **contract error** is the IMPs between the assumed
+/// counts as a loss. Instead, as in double-dummy par, a contract bid above
+/// par that goes down undoubled is taken as doubled (the assumed result):
+/// above par means outranking every par contract, or beating par
+/// undoubled (a sacrifice that pays). The **contract error** is the IMPs between the assumed
 /// result and par, charged to the side it leaves worse off than par: the
 /// overbidder, or the side that should have bid on or sacrificed. The
 /// **doubling error** is the IMPs between the actual and the assumed result,
@@ -148,12 +149,14 @@ impl TableErrors {
     }
 }
 
-/// `TableErrors` for `contract` (None: passed out) against par `par_ns`.
+/// `TableErrors` for `contract` (None: passed out) against par `par_ns`,
+/// whose highest contract has rank `par_rank` (`par_rank()`).
 pub fn table_errors(
     contract: Option<&FinalContract>,
     dd: &DdTable,
     vul: Vulnerability,
     par_ns: i32,
+    par_rank: i32,
 ) -> TableErrors {
     let actual = score_ns(contract, dd, vul);
     let assumed = match contract {
@@ -170,8 +173,10 @@ pub fn table_errors(
                 }
                 // A redouble of a failing one: doubled.
                 (Doubled::Redoubled, false) => score_ns_as(c, Doubled::Doubled, dd, vul),
-                // Down undoubled, and better than par that way: doubled.
-                (Doubled::None, false) if mine(actual) > mine(par_ns) => {
+                // Down undoubled, bid above par: doubled.
+                (Doubled::None, false)
+                    if rank(c.level, c.strain) > par_rank || mine(actual) > mine(par_ns) =>
+                {
                     score_ns_as(c, Doubled::Doubled, dd, vul)
                 }
                 _ => actual,
@@ -205,6 +210,34 @@ pub fn par_ns(dd: &DdTable, vul: Vulnerability) -> (i32, String) {
     (p.score_ns, text)
 }
 
+/// A contract's rank in the bidding: 1♣ is 1, 7NT 35.
+pub(crate) fn rank(level: u8, strain: bridge_types::Strain) -> i32 {
+    (level as i32 - 1) * 5 + strain as i32 + 1
+}
+
+/// The par contracts as (level, strain); empty when par is a pass-out.
+pub fn par_contracts(dd: &DdTable, vul: Vulnerability) -> Vec<(u8, bridge_types::Strain)> {
+    bridge_solver::par::par(
+        dd,
+        vul.is_vulnerable(Direction::North),
+        vul.is_vulnerable(Direction::East),
+    )
+    .contracts
+    .iter()
+    .map(|c| (c.level, c.strain))
+    .collect()
+}
+
+/// The rank of the highest par contract; 0 when par is a pass-out. A
+/// contract that outranks it was bid above par.
+pub fn par_rank(dd: &DdTable, vul: Vulnerability) -> i32 {
+    par_contracts(dd, vul)
+        .iter()
+        .map(|&(l, s)| rank(l, s))
+        .max()
+        .unwrap_or(0)
+}
+
 /// The standard IMP scale.
 pub fn imps(diff: i32) -> i32 {
     const STEPS: [i32; 24] = [
@@ -229,6 +262,33 @@ mod tests {
         assert_eq!(imps(5000), 24);
     }
 
+    const FOUR_S: i32 = 19;
+
+    #[test]
+    fn ranks() {
+        assert_eq!(rank(1, Strain::Clubs), 1);
+        assert_eq!(rank(4, Strain::Spades), FOUR_S);
+        assert_eq!(rank(7, Strain::NoTrump), 35);
+    }
+
+    #[test]
+    fn an_overbid_worse_than_par_is_still_taken_as_doubled() {
+        // Par: North-South 4♠ +420. East-West bid 6♥ and take seven: -250
+        // undoubled is worse for them than par, but it was bid above par, so
+        // it counts as doubled (-1100): their contract error, and North-South
+        // pay for not doubling.
+        let mut dd = DdTable::new();
+        dd.set(Direction::East, Strain::Hearts, 7);
+        let c = contract(6, Strain::Hearts, Direction::East, false);
+        let e = table_errors(Some(&c), &dd, Vulnerability::None, 420, FOUR_S);
+        assert_eq!(e.contract, [0, imps(1100 - 420)]);
+        assert_eq!(e.doubling, [imps(1100 - 250), 0]);
+        let mut doubled = c;
+        doubled.doubled = true;
+        let e = table_errors(Some(&doubled), &dd, Vulnerability::None, 420, FOUR_S);
+        assert_eq!(e.doubling, [0, 0]);
+    }
+
     fn contract(level: u8, strain: Strain, declarer: Direction, doubled: bool) -> FinalContract {
         let mut c = FinalContract::new(level, strain, declarer);
         c.doubled = doubled;
@@ -241,13 +301,13 @@ mod tests {
         let mut dd = DdTable::new();
         dd.set(Direction::East, Strain::Hearts, 7);
         let five_h = contract(5, Strain::Hearts, Direction::East, false);
-        let e = table_errors(Some(&five_h), &dd, Vulnerability::None, 420);
+        let e = table_errors(Some(&five_h), &dd, Vulnerability::None, 420, FOUR_S);
         // Assumed doubled, -800 for them: 380 better than par for North-South,
         // East-West's error (9 IMPs). Undoubled, +200: North-South's (12).
         assert_eq!(e.contract, [0, 9]);
         assert_eq!(e.doubling, [12, 0]);
         let doubled = contract(5, Strain::Hearts, Direction::East, true);
-        let e = table_errors(Some(&doubled), &dd, Vulnerability::None, 420);
+        let e = table_errors(Some(&doubled), &dd, Vulnerability::None, 420, FOUR_S);
         assert_eq!(e.contract, [0, 9]);
         assert_eq!(e.doubling, [0, 0]);
     }
@@ -258,7 +318,13 @@ mod tests {
         let mut dd = DdTable::new();
         dd.set(Direction::North, Strain::Spades, 8);
         let c = contract(2, Strain::Spades, Direction::North, true);
-        let e = table_errors(Some(&c), &dd, Vulnerability::None, 110);
+        let e = table_errors(
+            Some(&c),
+            &dd,
+            Vulnerability::None,
+            110,
+            rank(2, Strain::Spades),
+        );
         assert_eq!(e.contract, [0, 0]);
         // +470 against +110: East-West's double cost them 8 IMPs.
         assert_eq!(e.doubling, [0, 8]);
@@ -270,7 +336,7 @@ mod tests {
         let mut dd = DdTable::new();
         dd.set(Direction::North, Strain::Spades, 9);
         let c = contract(4, Strain::Spades, Direction::North, false);
-        let e = table_errors(Some(&c), &dd, Vulnerability::None, 420);
+        let e = table_errors(Some(&c), &dd, Vulnerability::None, 420, FOUR_S);
         assert_eq!(e.contract, [10, 0]);
         assert_eq!(e.doubling, [0, 0]);
     }

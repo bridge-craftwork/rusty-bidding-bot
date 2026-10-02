@@ -111,7 +111,17 @@ local checkouts").
   actual result leaves worse off. Two errors at a table add instead of
   cancelling, and a penalty double of an overbid is no longer a loss.
   The JSON has both tables' errors per board (`reference_errors`,
-  `ours_errors`: `contract` and `doubling`, each `[NS, EW]`).
+  `ours_errors`: `contract` and `doubling`, each `[NS, EW]`). A contract
+  counts as above par when it outranks every par contract (or beats par
+  undoubled): DD fact, not a judgment of whether anyone would double.
+  **"how each table met par"** (`parclass`) puts every board with a DD
+  table in one class per engine: at par, short of slam / game / level,
+  wrong strain or declarer, overbid, did not compete, the other side's
+  overbid or missing sacrifice, passed out, a doubling error only; with
+  boards and the table's errors. **"penalty doubles"** counts the chances
+  (a contract above par that goes down), how many each engine doubled,
+  doubles of contracts that made, and bail-outs (bidding on over a failing
+  overbid instead of doubling). JSON: `reference_class`, `ours_class`.
   `--set general.style=bba` plays BBA's treatments where we have them
   (docs/DESIGN.md, "Treatments"), for A/B tests; `--set path=value` works
   for any card field, on both sides.

@@ -115,6 +115,9 @@ pub struct ParComparison {
     /// (`par::table_errors`).
     pub reference_errors: crate::par::TableErrors,
     pub ours_errors: crate::par::TableErrors,
+    /// How each table met par, and its penalty doubles (`parclass`).
+    pub reference_class: crate::parclass::TableClass,
+    pub ours_class: crate::parclass::TableClass,
 }
 
 /// Everything about one board, for statistics and for the A/B view.
@@ -463,12 +466,36 @@ fn par_of(
     };
     let (par_ns, par_contract) = crate::par::par_ns(&dd, result.vul);
     let (reference, ours) = (contract(&result.reference), contract(&result.ours));
+    let par = crate::par::par_contracts(&dd, result.vul);
+    let par_rank = par
+        .iter()
+        .map(|&(l, s)| crate::par::rank(l, s))
+        .max()
+        .unwrap_or(0);
+    let errors = |c: &Option<FinalContract>| {
+        crate::par::table_errors(c.as_ref(), &dd, result.vul, par_ns, par_rank)
+    };
+    let (reference_errors, ours_errors) = (errors(&reference), errors(&ours));
+    let class = |calls: &[Call], c: &Option<FinalContract>, e: &crate::par::TableErrors| {
+        crate::parclass::classify(
+            calls,
+            result.dealer,
+            c.as_ref(),
+            &dd,
+            result.vul,
+            &par,
+            par_ns,
+            e,
+        )
+    };
     ParComparison {
         par_ns,
         par_contract,
         reference_ns: crate::par::score_ns(reference.as_ref(), &dd, result.vul),
         ours_ns: crate::par::score_ns(ours.as_ref(), &dd, result.vul),
-        reference_errors: crate::par::table_errors(reference.as_ref(), &dd, result.vul, par_ns),
-        ours_errors: crate::par::table_errors(ours.as_ref(), &dd, result.vul, par_ns),
+        reference_class: class(&result.reference, &reference, &reference_errors),
+        ours_class: class(&result.ours, &ours, &ours_errors),
+        reference_errors,
+        ours_errors,
     }
 }
