@@ -62,3 +62,15 @@ dealer  E
 vul     EW
 N Q9.JT942.932.J84      | 1C 1NT X                             | 2D     | transfer to hearts, as over a pass
 S AKT7.KQ85.T74.KT      | 1C 1NT X 2D P                        | 2H     | completes the transfer
+
+# The raise counts trumps and points (2026-10-02, total-tricks.bid):
+# three-card support wants 8 total points; four raise to two at any
+# strength; the weak jump wants five, or four at favourable.
+card    Basic-Bridge
+dealer  E
+vul     None
+N K85.J72.Q932.T87          | 1D 1S P  | P      | three spades and 6 HCP: not enough to raise
+N Q854.J72.932.T87          | 1D 1S P  | 2S     | four spades and 3 HCP: raise once
+N Q854.J72.932.T87          | 1D 1S X  | 2S     | the same over their double
+vul     EW
+N Q854.J72.932.T87          | 1D 1S P  | 3S     | four spades at favourable: jump

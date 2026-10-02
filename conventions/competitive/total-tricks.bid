@@ -41,6 +41,13 @@ define opened_minor(x)  = (x is C | x is D), partner.opened, partner.x.min <= 3
 define minor_raise(x)   = !opened_minor(x) | x >= 5
 define minor_preempt(x) = !opened_minor(x) | x >= 6
 
+# Advancer's weak jump raise of a one-level overcall: the overcall is
+# often a bare five, and a weak hand has no defence to spare, so it jumps
+# with five trumps, or four at favourable. BBA on bare SAYC raises to two
+# with four and 5-9 HCP (169 hands where we jumped) and jumps mostly with
+# five or at favourable (2026-10-02).
+define weak_jump_raise(y) = y >= 5 | favourable
+
 # Our trumps as the Law counts them, a trick fewer at unfavourable.
 define lott_trumps(x) = we.fit(x).min + doubler_four(x) - unfavourable
 

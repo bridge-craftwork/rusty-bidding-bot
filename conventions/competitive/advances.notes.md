@@ -175,6 +175,44 @@ still gated by `nt_overcalls.direct.systems_on`. Ticket
 basic-takeout-double-b160: North, Q9.JT942.932.J84, transfers with 2♦
 (BBA too) instead of passing 1NT doubled.
 
+## Raising a one-level overcall: trumps and points (2026-10-02)
+
+Over a one-level overcall (RHO passing, doubling or bidding at the one
+level) the raises now count trumps the way BBA does:
+
+- **three-card support** raises to two with 8-11 total points (was
+  7-11);
+- **four-card support** raises to two at any strength up to 11;
+- the **weak jump** (under 8) needs five trumps, or four at favourable
+  vulnerability (`weak_jump_raise(y)` in `total-tricks.bid`); it took
+  four at any vulnerability.
+
+Unchanged over a two-level bid by RHO (`(1x) 1y (2z)`): letting the weak
+four-card hand raise to two there lost (−34 and −20 IMPs on the two
+commonest auctions), so that block keeps 7-11 with three.
+
+**Evidence** (vanilla SAYC random set, BBA on bare SAYC, the advancer of
+a one-level major overcall, any RHO action up to 2♦): with three hearts
+BBA raises to 2♥ from about 8 HCP and passes 5-7 (we raised 495 such
+hands); with four it raises to 2♥ with 2-11 HCP (169 hands where we
+jumped) and jumps mostly with five or at favourable. On the boards
+where this was the first difference, BBA's pass beat our raise by 729
+IMPs and its 2M beat our 3M by 362 (errors yardstick).
+
+**Measured** against the two previous changes (errors yardstick, IMPs;
+even / odd boards):
+
+| set | boards | errors | contract / doubling | distance from par | side IMPs |
+|---|---|---|---|---|---|
+| vanilla SAYC random | 690 | +582 (+328 / +254) | +88 / +494 | −100 | +215 |
+| corpus | 844 | +342 (+152 / +190) | +18 / +324 | −156 | +265 |
+| 21GF random | 630 | +715 (+377 / +338) | +178 / +537 | +56 | −42 |
+
+Most of the gain is in the doubling errors (the opponents, also us,
+missing a penalty double of the light raise), but the contract errors
+gain on all three sets as well, so the change is kept. Distance from
+par is mixed (for Rick, below).
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,
@@ -192,3 +230,8 @@ basic-takeout-double-b160: North, Q9.JT942.932.J84, transfers with 2♦
 - **Where we differ from BBA's stated meanings:** the raise of a
   two-level overcall asks for four trumps, as every BBA hand that raised
   had, although its meaning allows three (for Rick).
+- **Raising a one-level overcall** (2026-10-02): BBA's raises on the
+  vanilla SAYC random set (95,558 deals, bare SAYC) and the measurements
+  in that section; the Law of Total Tricks (Cohen, *To Bid or Not to
+  Bid*, 1992) hedged a trump for a weak hand, which is BBA's practice,
+  not the book's.
