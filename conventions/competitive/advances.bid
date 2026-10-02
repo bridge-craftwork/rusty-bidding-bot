@@ -251,8 +251,11 @@ after (1x) 1y (P) 2z (P)
 # The overcaller again after (1x) 1y (2x) P (P): BBA rebids a six-card
 # suit with 12+ (2026-09-25). It also doubles for takeout with a
 # singleton in their suit and 13+; that double cost IMPs against par.
+# The rebid is at the two level: a one-level overcall outranks their
+# suit, so 2{y} is always there, and 3{y} was a jump. On bare SAYC BBA
+# rebids 2{y} with six from 10 HCP (2026-10-02, 88 hands).
 after (1x) 1y (2x) P (P)
-  3{y} "Six or more {y}, sound"               shows y>=6, hcp>=12
+  2{y} "Six or more {y}: competing"           shows y>=6, hcp>=10
   P   "Nothing more"                          priority -5
 
 # ── Advancer after partner's overcall of their 1NT ───────────────────

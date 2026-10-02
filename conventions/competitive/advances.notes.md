@@ -213,6 +213,15 @@ missing a penalty double of the light raise), but the contract errors
 gain on all three sets as well, so the change is kept. Distance from
 par is mixed (for Rick, below).
 
+## The overcaller's rebid over their raise (2026-10-02)
+
+After `(1x) 1y (2x) P (P)` the six-card rebid was written as 3{y}, a
+jump: a one-level overcall always outranks their suit, so 2{y} is
+there. BBA on bare SAYC rebids 2{y} with six from 10 HCP (88 hands, 66
+of them where we jumped). Now 2{y}, 10+. Small and positive everywhere
+(errors yardstick): vanilla +43 over 38 boards, corpus +23 over 24,
+21GF +31 over 33; distance from par +7 / +2 / +1.
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,

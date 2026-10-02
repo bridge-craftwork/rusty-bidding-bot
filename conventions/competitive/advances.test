@@ -74,3 +74,10 @@ N Q854.J72.932.T87          | 1D 1S P  | 2S     | four spades and 3 HCP: raise o
 N Q854.J72.932.T87          | 1D 1S X  | 2S     | the same over their double
 vul     EW
 N Q854.J72.932.T87          | 1D 1S P  | 3S     | four spades at favourable: jump
+
+# The overcaller after (1x) 1y (2x) P (P): a six-card suit competes at
+# the two level, not with a jump (2026-10-02).
+card    Basic-Bridge
+dealer  W
+vul     None
+N AQT654.85.32.A98          | 1D 1S 2D P P | 2S | six spades and 10 HCP: compete once
