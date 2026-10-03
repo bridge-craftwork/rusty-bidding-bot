@@ -65,6 +65,14 @@ top when he has limited his hand, as a preempt does), 4NT agrees the
 major and asks (`sets trump=x`). Uncontested only. Evidence and figures:
 slam-entry.notes.md, "Phase 1".
 
+## The keycard suit (Rick, 2026-10-03)
+
+The same rulings as rkcb-1430.notes.md, "The keycard suit": with no
+notrump bid by us 4NT asks for aces with the agreed suit, else the last
+suit our side bid, agreed by the ask (1H-1S-2C-4NT on the Basic-Bridge
+card: aces, clubs agreed; it was quantitative); a major agreed after a
+minor was set replaces it. The rules mirror rkcb-1430.bid's.
+
 ## Sources
 
 - **The convention:** standard (plain) Blackwood with the usual ace
@@ -80,3 +88,4 @@ slam-entry.notes.md, "Phase 1".
 - **Corpus measurements:** the queen-ask gap (55 boards, -30 IMPs).
 - **Where we differ:** no queen ask after 4NT-5♣, where BBA asks for the
   trump queen with the next step (Gaps).
+- **Rick's rulings, 2026-10-03:** the keycard suit, as rkcb-1430.notes.md.

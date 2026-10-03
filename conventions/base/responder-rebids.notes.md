@@ -612,6 +612,58 @@ classification (fit.notes.md). Now 3NT whatever the level. Vanilla:
 doubling +19; on the corpus and 21GF, measured together with two
 changes not kept, the 4NT → 3NT first calls gave +126 and +38.
 
+## 1M-1y-1NT-3M agrees the major (Rick, 2026-10-03)
+
+> For invitational bids with a private fit, either it's something like
+> 1H-1S-1NT-3H, where the bid itself makes the agreement, or a
+> convention is used like 1H-1S-1NT-2C (XYZ)-2D-2H, which would be
+> invitational with H.
+
+1H-1S-1NT-3H was already the invitation with three hearts, and
+`agreed_fit` already held (five shown facing three), but no rule set
+`trump`. The 3M invitation and the 4M game (13+ support points) after
+opener's 1NT, and 4M after opener's new suit, now `sets trump=M`.
+Against the keycard-suit change:
+
+| set | boards changed | contract errors (even / odd) | errors | distance from par (even / odd) |
+|---|---:|---:|---:|---:|
+| vanilla | 0 | 0 | 0 | 0 |
+| corpus | 29 | +26 (−17 / +43) | +42 | +25 (−18 / +43) |
+| 21GF | 14 | +1 (+23 / −22) | +11 | +1 (+23 / −22) |
+
+Neutral within the noise (the halves disagree); kept because it states
+the agreement Rick ruled the call makes. Opener's 4NT over the
+invitation still has no rule: he is answering it (`asked invite`), and
+the invitation's answers have no 4NT.
+
+XYZ (1H-1S-1NT-2C-2D-2H, invitational in hearts) is not played: after
+1NT our 2C is new minor forcing or natural (`new-minor-forcing.bid`).
+
+## Notrump jumps stop at 3NT (2026-10-03)
+
+The 2026-10-02 fix above was one case of many: every natural `jump(N)`
+landed on 4NT once the cheapest notrump bid was 3NT, as a "16-18
+balanced with a stopper" over partner's three-level free bid in
+competition (1H (2S) 3D (P) 4NT) or "Game: 13+" over opener's 2NT
+answer to a negative double (1C (1D) X (2D) 2NT (P) 4NT). With no
+notrump bid by us, 4NT is keycard (Rick, 2026-10-03), and nobody read
+these as game. All of them now need `nt_jump_to_game` (defined in
+rebids.bid: the last bid is below 2NT); responder's "Game: 13+" over
+the notrump answer to the double is 3NT, as the 2026-10-02 fix. Against
+the trump-setting change:
+
+| set | boards changed | contract errors (even / odd) | errors | distance from par (even / odd) |
+|---|---:|---:|---:|---:|
+| vanilla | 38 | **+87** (+42 / +45) | +114 | **+46** (+16 / +30) |
+| corpus | 137 | **+445** (+231 / +214) | +703 | **+312** (+153 / +159) |
+| 21GF | 31 | **+85** (+43 / +42) | +104 | **+50** (+21 / +29) |
+
+The largest positions: 2S 2NT P (the negative double's 2NT answer, then
+3NT, not 4NT): corpus 49 boards +322, 2H 2NT P 33 boards +173. Doubling
+errors move a little against the actor (they no longer double our
+4NT), more for the other side. Flags unchanged but for one more "no
+rule" and one more "contradicts" per set.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -633,3 +685,6 @@ changes not kept, the 4NT → 3NT first calls gave +126 and +38.
   revaluation of a fit seen through a new suit; BBA's 3S / 4S from
   `probes/slam-1S-2D-3C-resp.toml`; vanilla, corpus and 21GF random
   measurements as given.
+- **Rick's rulings, 2026-10-03:** 1H-1S-1NT-3H makes the agreement;
+  4NT with no notrump bid by us is keycard, so a natural jump stops at
+  3NT. Measured on the vanilla SAYC and 21GF random sets and the corpus.

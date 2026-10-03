@@ -748,6 +748,14 @@ invitation ranges tried on the vanilla set, 15-18 with responder still
 accepting from 9 scored best (+359 over no change); measured with the
 widened raise there.
 
+## Notrump jumps stop at 3NT (2026-10-03)
+
+`nt_jump_to_game`, defined at the top of rebids.bid, keeps every natural
+`jump(N)` (here, in responder-rebids.bid, after-interference.bid and
+support-doubles.bid) at 3NT at most: past it a jump is 4NT, which with
+no notrump bid by us is keycard (Rick, 2026-10-03). Evidence and
+figures: responder-rebids.notes.md, "Notrump jumps stop at 3NT".
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -766,3 +774,5 @@ widened raise there.
 - **Book practice:** opener's rebids (Standard American: 1NT 12-14, the
   jump rebid and jump raise 16-18, reverses 17+, accepting a limit raise
   with 14 or more) are standard practice, not yet cited to a book.
+- **Rick, 2026-10-03:** 4NT with no notrump bid by us is keycard, so a
+  natural notrump jump stops at 3NT.

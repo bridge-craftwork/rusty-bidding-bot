@@ -82,6 +82,17 @@ AKQJ or seven to the AKQ; plus a doubleton or shorter without a
 stopper. +615 par, +969 side IMPs (420 boards). Without the unguarded
 condition: +601 / +942 on 603 boards, so it stays.
 
+## With Blackwood or RKCB, 4NT is keycard here (Rick, 2026-10-03)
+
+> A 4NT with no prior NT bids is normally keycard regardless, and if
+> there hasn't been suit agreement, it's for the last bid suit.
+
+The quantitative 4NT after 1x-1y-1z, 1x-1y-2z and 1x-2y-2z (no notrump
+bid) now needs `no_ask`: on cards with an ace or keycard ask, 4NT there
+is the ask in z (rkcb-1430.notes.md, "The keycard suit"); on cards with
+neither (bare SAYC) it stays quantitative. The 6NT beside it is
+unchanged. Measured with the rest of that change.
+
 ## Sources
 
 - **The thresholds:** the textbook combined counts for 6NT and a
@@ -98,3 +109,5 @@ condition: +601 / +942 on 603 boards, so it stays.
   rejected single-context version (-11,422 par).
 - **Where we differ:** responder's thresholds stay at the textbook 33,
   although lower ones score better on the slam-dealt scenarios.
+- **Rick's ruling, 2026-10-03:** 4NT with no notrump bid is keycard
+  for the last suit on cards that play an ask.
