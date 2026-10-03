@@ -1653,46 +1653,6 @@ fn has_maybe(e: &Expr) -> bool {
     }
 }
 
-/// The terms in `e` that read the board's conditions (vulnerability,
-/// scoring, seat), which the calls so far do not fix: `vul`,
-/// `unfavourable`, `they.vul`, ...
-pub fn board_terms(e: &Expr, out: &mut Vec<Expr>) {
-    match e {
-        Expr::And { all } => all.iter().for_each(|x| board_terms(x, out)),
-        Expr::Or { any } => any.iter().for_each(|x| board_terms(x, out)),
-        Expr::Not { expr } | Expr::Maybe { expr } | Expr::Neg { expr } => board_terms(expr, out),
-        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => {
-            board_terms(lhs, out);
-            board_terms(rhs, out);
-        }
-        Expr::InRange { expr, lo, hi } => {
-            board_terms(expr, out);
-            board_terms(lo, out);
-            board_terms(hi, out);
-        }
-        Expr::InSet { expr, .. } | Expr::Is { expr, .. } => board_terms(expr, out),
-        Expr::Path { path } => {
-            let board = path.iter().any(|s| {
-                matches!(
-                    s.name.as_str(),
-                    "vul" | "favourable" | "unfavourable" | "imps" | "matchpoints" | "seat"
-                )
-            });
-            if board && !out.contains(e) {
-                out.push(e.clone());
-            }
-            for s in path {
-                s.args.iter().flatten().for_each(|x| board_terms(x, out));
-            }
-        }
-        Expr::Asked { .. }
-        | Expr::Answered { .. }
-        | Expr::Shape { .. }
-        | Expr::Int { .. }
-        | Expr::Call { .. } => {}
-    }
-}
-
 /// Does `e` refer to the actor's own hand (so it must not be folded to a
 /// constant from knowledge)?
 fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {

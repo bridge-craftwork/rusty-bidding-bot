@@ -30,9 +30,6 @@ pub struct RuleEntry {
     pub source: RuleRef,
     /// Position in load order, the last tie-breaker.
     pub order: usize,
-    /// The terms of its `shows` that read the board's conditions
-    /// (vulnerability, scoring, seat), which the calls alone do not fix.
-    pub board_terms: Vec<Expr>,
     /// Its `shows` counts a condition in arithmetic (`+ doubler_four(x)`).
     pub counts_conditions: bool,
 }
@@ -191,10 +188,6 @@ impl System {
                 *e = expand(e);
             }
             let line = rule.line;
-            let mut board_terms = Vec::new();
-            if let Some(e) = &rule.shows {
-                crate::eval::board_terms(e, &mut board_terms);
-            }
             let counts_conditions = rule
                 .shows
                 .as_ref()
@@ -210,7 +203,6 @@ impl System {
                     line,
                 },
                 order: self.rules.len(),
-                board_terms,
                 counts_conditions,
             });
         }

@@ -343,18 +343,19 @@ impl Engine {
         let Some(shows) = &entry.rule.shows else {
             return 0.0;
         };
-        // The calls fix everything a `shows` can read except the board's
-        // conditions; a rule that reads those (`unfavourable`, `imps`) is
-        // keyed on their values too, or boards bid in parallel would share
-        // whichever came first.
-        let board: Vec<String> = {
-            let ctx = self.ctx(pos, actor, None, entry);
-            entry
-                .board_terms
-                .iter()
-                .map(|t| format!("{:?}", ctx.eval(t, &mut c.b.clone())))
-                .collect()
-        };
+        // The value is a pure function of the key, or boards bid in
+        // parallel would share whichever reached it first. Besides the
+        // calls, it depends on the board's conditions, seen from the
+        // actor's side: not only where this `shows` reads them (`vul`,
+        // `imps`), but through every earlier call whose meaning did (a
+        // pass that denies a weak two only when not vulnerable narrows the
+        // hands counted here). The dealer adds nothing: with the side
+        // fixed, the calls place every seat relative to the actor.
+        let board = (
+            pos.is_vulnerable(actor),
+            pos.is_vulnerable(actor.next()),
+            pos.is_imps(),
+        );
         let key = format!(
             "{}|{}|{}|{:?}|{:?}|{board:?}",
             side(actor),

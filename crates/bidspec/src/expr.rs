@@ -236,7 +236,8 @@ pub fn define_head(c: &mut Cursor) -> Result<(String, Vec<String>), PError> {
     let name = c.word("a name after `define`")?;
     let named = |n: &str| {
         n.chars().next().is_some_and(|ch| ch.is_ascii_lowercase())
-            && n.chars().all(|ch| ch.is_ascii_lowercase() || ch.is_ascii_digit() || ch == '_')
+            && n.chars()
+                .all(|ch| ch.is_ascii_lowercase() || ch.is_ascii_digit() || ch == '_')
     };
     if !named(&name) || name.len() < 2 {
         return c.err("a definition's name uses a-z, 0-9 and `_`, two characters or more");
@@ -247,7 +248,9 @@ pub fn define_head(c: &mut Cursor) -> Result<(String, Vec<String>), PError> {
         loop {
             let p = c.word("a suit variable")?;
             if !(p == "M" || (p.len() == 1 && p.chars().all(|ch| ch.is_ascii_lowercase()))) {
-                return c.err("a definition's parameters are suit variables: one lower-case letter, or `M`");
+                return c.err(
+                    "a definition's parameters are suit variables: one lower-case letter, or `M`",
+                );
             }
             if params.contains(&p) {
                 return c.err(format!("parameter `{p}` twice"));
