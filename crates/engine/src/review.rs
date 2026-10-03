@@ -75,7 +75,7 @@ impl Narrowed {
             hcp: a.hcp != b.hcp,
             len: std::array::from_fn(|i| a.len[i] != b.len[i]),
             balanced: a.balanced != b.balanced,
-            points: a.pts != b.pts,
+            points: a.pts != b.pts || a.dp != b.dp,
             tp: std::array::from_fn(|i| a.tp[i] != b.tp[i]),
             shown: b.shown.len().saturating_sub(a.shown.len()),
         }
@@ -299,9 +299,16 @@ pub fn knowledge_parts(k: &SeatKnowledge, n: &Narrowed) -> Vec<Part> {
         Tri::False => push("unbal".into(), n.balanced),
         Tri::Unknown => {}
     }
+    // Declarer points (HCP + length), which most rules show; then total
+    // points when a call showed them (a strength band) and they say more
+    // than the declarer points' floor.
+    let decl = k.declarer_points_shown();
+    if decl {
+        push(format!("decl {}", open(k.dp, 37)), n.points);
+    }
     for kind in [1, 0] {
-        if k.points_shown(kind) {
-            let p = k.whole_points(kind);
+        let p = k.whole_points(kind);
+        if k.points_shown(kind) && (!decl || p.lo > k.dp.lo) {
             push(
                 format!("{}pts {}", if kind == 0 { "nt " } else { "" }, open(p, 37)),
                 n.points,
@@ -325,13 +332,14 @@ pub fn knowledge_parts(k: &SeatKnowledge, n: &Narrowed) -> Vec<Part> {
 /// has shown and denied.
 pub fn knowledge_full(k: &SeatKnowledge) -> String {
     let mut s = format!(
-        "{} HCP  ♠{} ♥{} ♦{} ♣{}  balanced {:?}\npoints (suit) {}  (notrump) {}\nsupport points ♠{} ♥{} ♦{} ♣{}",
+        "{} HCP  ♠{} ♥{} ♦{} ♣{}  balanced {:?}\ndeclarer points {}  points (suit) {}  (notrump) {}\nsupport points ♠{} ♥{} ♦{} ♣{}",
         k.hcp,
         k.len[3],
         k.len[2],
         k.len[1],
         k.len[0],
         k.balanced,
+        k.dp,
         k.whole_points(1),
         k.whole_points(0),
         k.tp[3],

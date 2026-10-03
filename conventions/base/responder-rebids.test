@@ -108,7 +108,11 @@ N AK984.32.J85.K65      | 1D 1H 1S P 2C P     | 2D     | preference back to open
 N T98653.92.A83.A7      | 1C 1D 1S 2D P P     | 2S     | six spades: worth one more when they compete
 
 # ── Rick: 11-12 with three trumps bids a new suit, then jumps in opener's major
-N AQ94.K62.863.QJ6      | 1H P 1S P 1NT P  | 3H     | 11-12, three hearts: invitational jump raise
+# Opener's 1NT rebid with five hearts is 12-14 HCP and 13+ declarer points
+# (the fifth heart): 12 opposite 13 is the 25 of the fit count
+# (fit.bid, Rick 2026-10-01), so game; 11 still invites (2026-10-03).
+N AQ94.K62.863.QJ6      | 1H P 1S P 1NT P  | 4H     | 12 opposite opener's 13+ declarer points: game in the fit
+N AQ94.K62.863.Q76      | 1H P 1S P 1NT P  | 3H     | 11-12, three hearts: invitational jump raise
 N AQ94.K62.863.QJ6      | 1H P 1S P 2C P   | 3H     | 11-12, three hearts: invitational jump raise
 
 # ── The BBA treatment (general.style=bba): see responder-rebids.notes.md,

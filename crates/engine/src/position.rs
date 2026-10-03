@@ -291,6 +291,10 @@ impl Position {
     /// shape" branch drops out once the doubler cannot hold 17, leaving
     /// the shape. Repeated until nothing moves (a collapse can raise a
     /// minimum, which lowers the others' maxima).
+    ///
+    /// The same for each suit's 13 cards: a 1♥ opener facing a raise to 2♥
+    /// holds at most ten hearts, which bounds his length points, and so
+    /// what his total points say about his high cards.
     pub fn apply_deck_hcp(&mut self) {
         for _ in 0..4 {
             let mut moved = false;
@@ -304,6 +308,18 @@ impl Position {
                     let before = self.knowledge[s].hcp;
                     self.knowledge[s].add(crate::eval::hcp_at_most(bound));
                     moved |= self.knowledge[s].hcp != before;
+                }
+                for suit in 0..4 {
+                    let others: i32 = (0..4)
+                        .filter(|&t| t != s)
+                        .map(|t| self.knowledge[t].len[suit].lo)
+                        .sum();
+                    let bound = 13 - others;
+                    if bound < self.knowledge[s].len[suit].hi {
+                        let before = self.knowledge[s].len[suit];
+                        self.knowledge[s].narrow_by_deck(&crate::eval::length_at_most(suit, bound));
+                        moved |= self.knowledge[s].len[suit] != before;
+                    }
                 }
             }
             if !moved {

@@ -18,11 +18,13 @@ W J542.9643.AQJ.54      | P 1H 1N 3C          | X   | 23+ between us: they are t
 # Partner answered it: he sits.
 E K97.QT8.JT93.KJ6      | P 1H 1N 3C X P      | P   | partner doubled for penalty
 # Not with less: 20 known between us and four small trumps. With two of
-# the top three it is a double.
+# the top three it is a double. (Opener's 1D is 12+ declarer points, so
+# 11+ HCP with no suit beyond five: 9 and 10 of mine make 20 and 21,
+# 2026-10-03.)
 dealer  N
 vul     None
-S 8653.A4.K7.QJ852      | 1D 1S 2C 2S P P      | !X  | four small and 20 known: not a penalty double
-S KQT5.84.T7.AJ852      | 1D 1S 2C 2S P P      | X   | four good spades and 20 known
+S 8653.A4.Q7.QJ852      | 1D 1S 2C 2S P P      | !X  | four small and 20 known: not a penalty double
+S KQT5.84.T7.AJ852      | 1D 1S 2C 2S P P      | X   | four good spades and 21 known
 # Not their artificial bids: Stayman shows no clubs.
 dealer  N
 W AKQ.83.9762.KQJ9      | 1NT P 2C            | !X  | Stayman is not a contract

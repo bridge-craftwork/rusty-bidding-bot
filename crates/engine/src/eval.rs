@@ -1013,10 +1013,7 @@ impl<'a> Ctx<'a> {
                 his.sort_unstable_by(|a, b| b.cmp(a));
                 Val::Num(Range::new(los[1], his[1]))
             }
-            "length_points" => Val::Num(Range::new(
-                k.len.iter().map(|r| (r.lo - 4).max(0)).sum(),
-                k.len.iter().map(|r| (r.hi - 4).max(0)).sum(),
-            )),
+            "length_points" => Val::Num(k.length_points()),
             "last" => self
                 .pos
                 .last_call_of(seat)
@@ -1383,48 +1380,45 @@ impl<'a> Ctx<'a> {
     /// cannot be resolved to a number are dropped (treated as true), which
     /// loses information but never excludes a possible hand.
     pub fn resolve(&self, e: &Expr, b: &mut Bindings) -> Expr {
-        self.resolve_with(e, b, &mut false)
+        simplify(self.resolve_with(e, b, true))
     }
 
-    /// `resolve`, returning `None` if any term had to be dropped. Needed
-    /// wherever the result is negated: dropping a term there would claim more
-    /// than is known.
-    pub fn resolve_exact(&self, e: &Expr, b: &mut Bindings) -> Option<Expr> {
-        let mut lossy = false;
-        let r = self.resolve_with(e, b, &mut lossy);
-        (!lossy).then_some(r)
+    /// `e` resolved for a denial: the result is to be negated, so a term
+    /// that cannot be resolved becomes false where `resolve` makes it true
+    /// (and the reverse under a further negation). `not` of the result is
+    /// then implied by `not e`: weaker, never more than is known. "Not (A
+    /// or B)" with B unknown keeps "not A"; "not (A and B)" keeps nothing.
+    pub fn resolve_denied(&self, e: &Expr, b: &mut Bindings) -> Expr {
+        simplify(self.resolve_with(e, b, false))
     }
 
-    fn resolve_with(&self, e: &Expr, b: &mut Bindings, lossy: &mut bool) -> Expr {
-        let mut dropped = || {
-            *lossy = true;
-            konst(true)
-        };
+    /// `positive`: whether `e` stands where weakening it weakens the
+    /// whole (`resolve`), or under a negation, where strengthening it does.
+    /// A dropped term is replaced by whichever constant weakens the whole.
+    fn resolve_with(&self, e: &Expr, b: &mut Bindings, positive: bool) -> Expr {
+        let dropped = || konst(positive);
         match e {
             Expr::And { all } => Expr::And {
-                all: all.iter().map(|x| self.resolve_with(x, b, lossy)).collect(),
+                all: all
+                    .iter()
+                    .map(|x| self.resolve_with(x, b, positive))
+                    .collect(),
             },
             Expr::Or { any } => Expr::Or {
-                any: any.iter().map(|x| self.resolve_with(x, b, lossy)).collect(),
+                any: any
+                    .iter()
+                    .map(|x| self.resolve_with(x, b, positive))
+                    .collect(),
             },
-            Expr::Not { expr } => {
-                // A term dropped inside a negation would turn "not (unknown)"
-                // into "not true" = false. Drop the whole negation instead.
-                let mut inner_lossy = false;
-                let inner = self.resolve_with(expr, b, &mut inner_lossy);
-                if inner_lossy {
-                    *lossy = true;
-                    konst(true)
-                } else {
-                    Expr::Not {
-                        expr: Box::new(inner),
-                    }
-                }
-            }
+            // A term dropped inside the negation becomes the constant that
+            // makes the negation weaker.
+            Expr::Not { expr } => Expr::Not {
+                expr: Box::new(self.resolve_with(expr, b, !positive)),
+            },
             Expr::Shape { .. } => e.clone(),
             Expr::Cmp { cmp, lhs, rhs } => {
                 if let Ok(Some(e)) = self.strength_as_points(*cmp, lhs, rhs) {
-                    return self.resolve_with(&e, b, lossy);
+                    return self.resolve_with(&e, b, positive);
                 }
                 // A comparison that does not involve the actor's own hand is
                 // a fact about the auction: fold it to a constant if known.
@@ -1828,6 +1822,65 @@ pub fn hcp_at_most(n: i32) -> Expr {
         cmp: CmpOp::Le,
         lhs: Box::new(path_expr("hcp")),
         rhs: Box::new(Expr::Int { value: n as i64 }),
+    }
+}
+
+/// `S<=n`: at most `n` cards in suit `s` (C D H S).
+pub fn length_at_most(s: usize, n: i32) -> Expr {
+    Expr::Cmp {
+        cmp: CmpOp::Le,
+        lhs: Box::new(path_expr(SUITS[s])),
+        rhs: Box::new(Expr::Int { value: n as i64 }),
+    }
+}
+
+/// Fold the constants `resolve` leaves: a conjunction with a false part is
+/// false and its true parts go; a disjunction with a true branch is true
+/// and its false branches go; a negated constant flips.
+pub fn simplify(e: Expr) -> Expr {
+    let is = |e: &Expr, v: bool| match e {
+        Expr::And { all } => v && all.is_empty(),
+        Expr::Or { any } => !v && any.is_empty(),
+        _ => false,
+    };
+    match e {
+        Expr::And { all } => {
+            let all: Vec<Expr> = all.into_iter().map(simplify).collect();
+            if all.iter().any(|x| is(x, false)) {
+                return konst(false);
+            }
+            let mut all: Vec<Expr> = all.into_iter().filter(|x| !is(x, true)).collect();
+            if all.len() == 1 {
+                all.pop().unwrap()
+            } else {
+                Expr::And { all }
+            }
+        }
+        Expr::Or { any } => {
+            let any: Vec<Expr> = any.into_iter().map(simplify).collect();
+            if any.iter().any(|x| is(x, true)) {
+                return konst(true);
+            }
+            let mut any: Vec<Expr> = any.into_iter().filter(|x| !is(x, false)).collect();
+            if any.len() == 1 {
+                any.pop().unwrap()
+            } else {
+                Expr::Or { any }
+            }
+        }
+        Expr::Not { expr } => {
+            let inner = simplify(*expr);
+            if is(&inner, true) {
+                konst(false)
+            } else if is(&inner, false) {
+                konst(true)
+            } else {
+                Expr::Not {
+                    expr: Box::new(inner),
+                }
+            }
+        }
+        e => e,
     }
 }
 
@@ -2770,6 +2823,182 @@ mod term_tests {
             let mut msgs = Vec::new();
             check_expr(&e, &[], &mut msgs);
             assert!(msgs.is_empty(), "{x}: {msgs:?}");
+        }
+    }
+}
+
+/// Knowledge narrowing is sound: a hand that satisfies every constraint a
+/// seat has shown is never excluded by the ranges the constraints narrow
+/// to (`knowledge::Bounds`). Random hands against constraints in HCP,
+/// declarer points, total and suit points, support points, length points,
+/// sums of lengths, disjunctions and negations, alone and in pairs, with
+/// both valuations.
+#[cfg(test)]
+mod knowledge_soundness {
+    use super::*;
+    use bridge_types::{Hand, ScoringMethod, Vulnerability};
+
+    fn when_of(expr: &str) -> Expr {
+        let src = format!("module t \"t\"\nwhen {expr}\n  P  \"x\"\n");
+        let m =
+            bidspec::compile(&src, "t.bid", &bridge_card::Registry::parse("").unwrap()).unwrap();
+        m.contexts[0].when.clone().unwrap()
+    }
+
+    /// A deterministic deal of 13 cards (xorshift).
+    fn hand(seed: &mut u64) -> Facts {
+        let mut deck: Vec<usize> = (0..52).collect();
+        for i in (1..52).rev() {
+            *seed ^= *seed << 13;
+            *seed ^= *seed >> 7;
+            *seed ^= *seed << 17;
+            deck.swap(i, (*seed % (i as u64 + 1)) as usize);
+        }
+        let ranks = "AKQJT98765432".as_bytes();
+        let mut suits: [String; 4] = Default::default();
+        let mut cards: Vec<usize> = deck[..13].to_vec();
+        cards.sort_unstable();
+        for c in cards {
+            suits[c / 13].push(ranks[c % 13] as char);
+        }
+        Facts::new(&Hand::from_pbn(&suits.join(".")).unwrap())
+    }
+
+    fn contains(r: Range, v: i32) -> bool {
+        r.lo <= v && v <= r.hi
+    }
+
+    fn check(k: &SeatKnowledge, f: &Facts, v: Valuation, what: &str) {
+        assert!(
+            contains(k.hcp, f.hcp),
+            "{what}: hcp {} not in {}",
+            f.hcp,
+            k.hcp
+        );
+        for s in 0..4 {
+            assert!(
+                contains(k.len[s], f.len[s]),
+                "{what}: len {s} {:?} {k:?}",
+                f.len
+            );
+            let tp = f.total_points(Some(s));
+            assert!(
+                contains(k.tp[s], tp),
+                "{what}: tp {s} {tp} not in {}",
+                k.tp[s]
+            );
+        }
+        let q = [f.points_q(v), f.suit_points_q(v)];
+        for (i, (r, q)) in k.pts.iter().zip(q).enumerate() {
+            assert!(contains(*r, q), "{what}: pts {i} {q} not in {r}");
+        }
+        let dp = f.hcp + f.length_points();
+        assert!(
+            contains(k.dp, dp),
+            "{what}: dp {dp} not in {} ({:?})",
+            k.dp,
+            f.len
+        );
+        assert!(contains(k.length_points(), f.length_points()), "{what}: lp");
+        assert!(k.balanced != Tri::from_bool(!f.balanced), "{what}: balance");
+    }
+
+    const SHOWS: &[&str] = &[
+        "hcp+length_points>=12",
+        "hcp + length_points <= 11",
+        "hcp+length_points=9..11",
+        "length_points + hcp >= 15",
+        "H>=5, hcp+length_points>=12",
+        "H>=6, hcp+length_points>=19",
+        "H=6, S<=3, D<=3, C<=4, hcp+length_points>=12",
+        "points>=13",
+        "points<=9",
+        "points=10..12",
+        "suit_points>=16",
+        "suit_points=16..18",
+        "tp(H)>=19, H>=5",
+        "tp(S)=10..12, S>=4",
+        "tp(D)<=8",
+        "length_points>=2",
+        "length_points<=0",
+        "length_points=1",
+        "S+H>=9",
+        "S+H<=6",
+        "balanced, hcp=15..17",
+        "!(hcp+length_points>=12, ((S>=3, D>=3, C>=3) | hcp>=17))",
+        "!(hcp+length_points=9..11)",
+        "!(points>=13)",
+        "!(tp(S)>=10, S>=3)",
+        "(H>=5, hcp+length_points>=12) | hcp>=17",
+        "(S>=5, hcp+length_points=8..16) | (H>=5, hcp+length_points=8..16)",
+        "!(H>=5, hcp+length_points>=8)",
+    ];
+
+    fn holds(f: &Facts, v: Valuation, e: &Expr) -> bool {
+        let pos = Position::new(
+            Direction::North,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
+        let params = HashMap::new();
+        let ctx = Ctx {
+            pos: &pos,
+            actor: Direction::North,
+            hand: Some(f),
+            params: &params,
+            valuation: v,
+            private: None,
+        };
+        ctx.cond(e, &mut Bindings::new()) == Ok(Tri::True)
+    }
+
+    #[test]
+    fn narrowing_never_excludes_a_hand_that_fits() {
+        let bba = Valuation {
+            nt_length: 0,
+            ..Valuation::default()
+        };
+        let exprs: Vec<Expr> = SHOWS.iter().map(|s| when_of(s)).collect();
+        let mut seed = 0x9e37_79b9_7f4a_7c15u64;
+        let hands: Vec<Facts> = (0..3000).map(|_| hand(&mut seed)).collect();
+        for v in [Valuation::default(), bba] {
+            let fits: Vec<Vec<bool>> = exprs
+                .iter()
+                .map(|e| hands.iter().map(|f| holds(f, v, e)).collect())
+                .collect();
+            for (i, fit) in fits.iter().enumerate() {
+                assert!(fit.iter().any(|&b| b), "no hand fits {}", SHOWS[i]);
+            }
+            // Alone, then in pairs (the second narrowing through the first).
+            for (i, e) in exprs.iter().enumerate() {
+                let mut k = SeatKnowledge::with_valuation(v);
+                assert!(k.add(e.clone()), "{} contradicts nothing", SHOWS[i]);
+                for (f, _) in hands.iter().zip(&fits[i]).filter(|(_, &fit)| fit) {
+                    check(&k, f, v, SHOWS[i]);
+                }
+                for (j, e2) in exprs.iter().enumerate() {
+                    let both = |h: usize| fits[i][h] && fits[j][h];
+                    let mut k2 = k.clone();
+                    if !k2.add(e2.clone()) {
+                        // Rejected as a contradiction: no hand may hold both.
+                        assert!(
+                            !(0..hands.len()).any(both),
+                            "{} then {} rejected, but a hand holds both",
+                            SHOWS[i],
+                            SHOWS[j]
+                        );
+                        continue;
+                    }
+                    for h in (0..hands.len()).filter(|&h| both(h)) {
+                        check(
+                            &k2,
+                            &hands[h],
+                            v,
+                            &format!("{} then {}", SHOWS[i], SHOWS[j]),
+                        );
+                    }
+                }
+            }
         }
     }
 }
