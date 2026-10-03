@@ -519,6 +519,20 @@ majors without transfers"):
   with two (`choose_game`, one-nt.bid). Before, responder bid 3NT and
   lost the 5-3 fit. BBA bids 3M directly with these hands.
 
+
+## A raise of the answer agrees the major (2026-10-03)
+
+1NT-2♣-2♥-4♥ set no trump suit, though both hands had shown four hearts
+(fit.bid's `agreed_fit` held). The knowledge review showed it. Every
+raise of opener's major after the Stayman answer (invitation, game,
+slam; both treatments) now `sets trump`, so 4NT later asks for
+keycards in it and the review shows the agreement. Measured with the
+engine's knowledge change of the same day. With the two other rule
+changes of that day (nt-interference.bid's answer to 2NT, fit.bid over
+3NT) it moved the vanilla SAYC set by -56 IMPs in distance from par and
+-139 in errors against the engine change alone: small, and not measured
+apart.
+
 ## Sources
 
 - **The convention:** 2♣ Stayman over 1NT, non-forcing, with the usual
@@ -548,3 +562,5 @@ majors without transfers"):
   ("Accepted differences from BBA"); the default bids 3NT with 5-4 and a
   minor after 2♦, which par prefers, where BBA and the `bba` style bid
   3m.
+- **2026-10-03:** trump set by the raises; standard practice (a
+  raise of partner's shown major agrees it), not yet cited.

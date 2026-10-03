@@ -299,6 +299,19 @@ it carries the review as text; `rbb explain-auction` prints it as text
 for a terminal or a ticket, and `rbb call --knowledge` before its
 decision.
 
+A seat's knowledge line shows the HCP, the suit lengths that are
+narrower than nothing known, balance, `decl N` for declarer points (HCP
++ length points, what most rules show as `hcp+length_points`) when the
+calls said more than the HCP and lengths imply, `pts`/`nt pts` for total
+points when a call showed them and they say more than the declarer
+points' floor, and `♥sup N` for support points. Since 2026-10-03 these
+are tied to the HCP through the lengths (LANGUAGE.md §8, "Knowledge
+representation"): a 2♥ overcall of 12+ total points raises the HCP
+floor as far as the possible length allows, and the deck caps each
+seat's lengths by what the others have shown. `compare` prints how often
+partner's HCP floor is known (`knowledge:` line): the share of our
+decisions after partner bid where `partner.hcp.min` is above 0.
+
 ### Reference data
 
 In `Practice-Bidding-Scenarios`:

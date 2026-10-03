@@ -664,6 +664,19 @@ errors move a little against the actor (they no longer double our
 4NT), more for the other side. Flags unchanged but for one more "no
 rule" and one more "contradicts" per set.
 
+
+## 12 opposite a 1NT rebid with five: game in the fit (2026-10-03)
+
+1H-1S-1NT with AQ94.K62.863.QJ6 was a test of the invitational jump
+raise (3H). Opener's 1NT rebid with five hearts is 12-14 HCP and,
+counting the fifth heart, 13+ declarer points; the engine now knows
+that floor (it used to read partner's points as his HCP). fit.bid's
+count (Rick, 2026-10-01: the long hand counts declarer points, the
+short hand support points, game at 25) makes 12 + 13 = 25: game. The
+test now expects 4H with that hand and 3H with 11 (Q76 for QJ6), which
+keeps the invitation. Flat 4-3-3-3 hands are not marked down by the
+count; that is the open question if Rick prefers the invitation.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -688,3 +701,5 @@ rule" and one more "contradicts" per set.
 - **Rick's rulings, 2026-10-03:** 1H-1S-1NT-3H makes the agreement;
   4NT with no notrump bid by us is keycard, so a natural jump stops at
   3NT. Measured on the vanilla SAYC and 21GF random sets and the corpus.
+- **2026-10-03:** the 4H/3H pair in responder-rebids.test, from the
+  knowledge change; the count is Rick's ruling of 2026-10-01.

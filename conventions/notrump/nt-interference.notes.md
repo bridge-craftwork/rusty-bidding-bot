@@ -307,6 +307,18 @@ Still open: a weak six-card major (5-6 HCP) bids 2♥/2♠ where BBA jumps
 to game; a five-card major with 9 HCP and 10 points forces with 3♥ where
 BBA bids 3NT (5 boards, -9).
 
+
+## The answer to 2NT outranks one-nt.bid's (2026-10-03)
+
+After 1NT (2♣/2♦/...) 2NT, opener's "Accepts: a maximum" (16+) and
+"Declines: a minimum" (15-) here and one-nt.bid's general answer to
+`asked nt_invite` (by strength) are candidates for the same calls at
+the same priority, so descriptiveness chose between them. With the
+engine's narrower knowledge of opener (2026-10-03) the general Pass
+measured 0.445 against this 3NT's 0.435 and 16 HCP declined (the test
+at 1NT (2C) 2NT). These pairs are now priority 1: the specific answer
+to the invitation over their interference comes first.
+
 ## Sources
 
 - **The structure over interference:** standard practice, not yet cited
@@ -325,3 +337,5 @@ BBA bids 3NT (5 boards, -9).
 - **Where we differ from BBA:** Stayman over 2♣ with game values; game
   forcing calls over a natural 2♣ where BBA passes or bids 2♠; 4♥/4♠ with
   six from 9 points ("Accepted differences", the 2026-09-30 section).
+- **2026-10-03:** priority of the 2NT answers, nt-interference.test
+  (1NT 2C 2NT P, transfers off).
