@@ -36,6 +36,11 @@ after 1x (P) 1M (P) 1N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=13
 after 1M (P) 1y (P) 1N (P)
   3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets ask=invite(M)
+  # Opener's major is five: three cards make the fit, and a major fit plays
+  # better than notrump (Rick, ticket b400, 2026-10-02). Support points,
+  # as the support hand counts.
+  4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      priority 1
 
 # New suits after 1NT: below responder's suit, natural and not forcing
 # (5-4, weak); above it, a responder's reverse (game forcing).
@@ -137,6 +142,12 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
   2N  "Forced to bid: minimum, no fit"     shows points<=10
       when  we.forcing = round             # after a reverse
       priority -4
+# With game values and three of opener's five-card major: 4M, not 3NT
+# (Rick, ticket b400, 2026-10-02: 1H-1S-2C, AKQ5.Q832.T84.Q7 bid 3NT with
+# a nine-card heart fit; BBA plays 4H).
+after 1M (P) 1y (P) 2z (P) when z is not M, z is not y
+  4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      priority 1
 
 # ── Opener's jump rebid (6+, 16-18) or jump raise (4+, 16-18) ───────
 after 1x (P) 1y (P) 3x (P)
@@ -160,6 +171,9 @@ after 1x (P) 1y (P) 2N (P)
   3N  "Game: 7+"                           shows points>=7, y<=5 | y is C | y is D, hcp + partner.hcp.min <= 31   # with more, the catch-all below looks at slam
 after 1x (P) 1M (P) 2N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=7
+after 1M (P) 1y (P) 2N (P)
+  4M  "Game in opener's major: 3+ {M}"     shows M>=3, tp(M)>=7
+      priority 1                           # a major fit before 3NT (ticket b400)
 
 # ── After responder's 1NT and opener's rebid ─────────────────────────
 after 1x (P) 1N (P) 2z (P) when z is not x

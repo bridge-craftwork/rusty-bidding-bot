@@ -543,8 +543,10 @@ pub struct Context {
     pub first_difference: Option<FirstDifference>,
     /// "How the engine read BBA's auction", one row per call.
     pub bba_reading: Vec<ReadingRow>,
-    /// The knowledge view's review, when the ticket was filed from it.
-    pub knowledge: Option<KnowledgeReview>,
+    /// The knowledge view's reviews, when the ticket was filed from it:
+    /// the auction it showed first, then the other (Rick, ticket b400:
+    /// both auctions, so ours can be read beside BBA's).
+    pub knowledge: Vec<KnowledgeReview>,
     pub detail_error: Option<String>,
     pub reproduce: Reproduce,
     #[serde(skip)]
@@ -563,7 +565,7 @@ pub struct Capture<'a> {
     pub scenario: Option<ScenarioFigures>,
     pub board: Option<(&'a BoardResult, &'a Detail)>,
     /// Filed from the knowledge view: which auction it showed (`true`:
-    /// BBA's). Its review goes into the ticket.
+    /// BBA's). Both auctions' reviews go into the ticket, that one first.
     pub knowledge: Option<bool>,
 }
 
@@ -887,11 +889,14 @@ impl Context {
             None => (None, None, None, vec![], None),
         };
         let knowledge = match (c.board, c.knowledge) {
-            (Some((_, d)), Some(bba)) => Some(KnowledgeReview {
-                auction: if bba { "bba" } else { "ours" }.into(),
-                text: rbb_engine::review_text(&d.review[usize::from(bba)]),
-            }),
-            _ => None,
+            (Some((_, d)), Some(shown)) => [shown, !shown]
+                .into_iter()
+                .map(|bba| KnowledgeReview {
+                    auction: if bba { "bba" } else { "ours" }.into(),
+                    text: rbb_engine::review_text(&d.review[usize::from(bba)]),
+                })
+                .collect(),
+            _ => Vec::new(),
         };
         let reproduce = reproduce(&c.settings, board.as_ref(), first.as_ref());
         Context {
@@ -1227,7 +1232,7 @@ pub fn render_markdown(c: &Context) -> String {
         md += "\n";
     }
 
-    if let Some(k) = &c.knowledge {
+    for k in &c.knowledge {
         md += &format!(
             "## Knowledge view ({})\n\n```text\n{}```\n\n",
             if k.auction == "bba" {
@@ -1609,8 +1614,8 @@ const TRIMS: [Trim; 13] = [
         |v| drop_key(v, &["board"]),
     ),
     ("bba_reading", |v| drop_key(v, &["bba_reading"])),
-    ("knowledge.text (ticket.md has it)", |v| {
-        drop_key(v, &["knowledge", "text"])
+    ("knowledge[].text (ticket.md has it)", |v| {
+        drop_in_each(v, &["knowledge"], "text")
     }),
     ("first_difference", |v| drop_key(v, &["first_difference"])),
     ("summary", |v| drop_key(v, &["summary"])),
@@ -2106,8 +2111,15 @@ mod end_to_end {
         assert!(md.contains("scenario: Basic_Takeout_Double\nboard: 193\n"));
         assert!(md.contains("## How the engine read BBA's auction"));
         assert!(md.contains("## Knowledge view (our auction)\n\n```text\n 1. "));
-        assert_eq!(json["knowledge"]["auction"], "ours");
-        assert!(json["knowledge"]["text"].as_str().unwrap().contains(" 1. "));
+        assert!(md.contains(
+            "## Knowledge view (BBA's auction, as the engine reads it)\n\n```text\n 1. "
+        ));
+        assert_eq!(json["knowledge"][0]["auction"], "ours");
+        assert_eq!(json["knowledge"][1]["auction"], "bba");
+        assert!(json["knowledge"][0]["text"]
+            .as_str()
+            .unwrap()
+            .contains(" 1. "));
         assert_eq!(json["schema_version"], 1);
         assert_eq!(json["board"]["board"], "193");
         let steps = json["bba_reading"].as_array().unwrap();

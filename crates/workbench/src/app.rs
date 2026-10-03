@@ -2106,7 +2106,7 @@ mod tests {
         assert!(c.first_difference.is_some());
         assert_eq!(c.bba_reading.len(), b.reference.len());
         assert!(c.reproduce.notes.iter().any(|n| n.contains("no --set")));
-        assert!(c.knowledge.is_none());
+        assert!(c.knowledge.is_empty());
 
         // From the knowledge view, on the Cases tab: the board still comes,
         // with the view's review of BBA's auction. Headless, the view is
@@ -2131,8 +2131,11 @@ mod tests {
             .board
             .as_ref()
             .expect("the board, from the knowledge view");
-        let k = c.knowledge.as_ref().expect("the knowledge review");
+        // Both auctions' reviews, the one the view showed first.
+        assert_eq!(c.knowledge.len(), 2);
+        let k = &c.knowledge[0];
         assert_eq!(k.auction, "bba");
         assert!(k.text.contains(&format!("{:>2}. ", b.reference.len())));
+        assert_eq!(c.knowledge[1].auction, "ours");
     }
 }
