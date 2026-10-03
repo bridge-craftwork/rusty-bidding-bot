@@ -146,8 +146,12 @@ LANGUAGE.md §7, §8 and §12 are the detail; the promises are:
 takes the highest-priority rules for that call whose contexts hold; the
 caller's hand becomes the union of their `shows`. **Negative inference**
 is automatic: the call also denies every candidate that outranks it on
-priority and descriptiveness, except where the outranking rule has a term
-that cannot be judged for another hand. `denies` adds one by hand.
+priority and descriptiveness. A term that cannot be judged for another
+hand (`has(A,x)`, `stop(x)`) counts as false inside the denial, so the
+denial keeps what is sound: "not (A or B)" still denies A, "not (A and
+B)" denies nothing. `denies` adds one by hand. What a reading knows is
+**sound**: the ranges (`partner.hcp`, `partner.points`, suit lengths,
+support and declarer points) never exclude a hand the calls allow.
 
 ### State: `sets` and questions
 
@@ -209,6 +213,17 @@ of them needs a new language version (and a manifest that asks for it):
 - the load-time checks may be made stricter only for code that could never
   have worked (a condition that is always false, say); anything else
   stricter is a new version.
+
+How much the engine derives from the same calls may grow within a
+version: the ranges a reading leaves may get narrower (and only
+narrower), never excluding a hand the calls allow. A rule that compares
+partner's range with a threshold can then change its call, so such an
+engine change is measured on the rules, and their `.test` expectations
+move with it, as with any engine release. The meaning of every term and
+of negative inference stays the same. (2026-10-03: total points, support
+points and declarer points tied to the HCP through the known lengths,
+and denials kept in their sound part, came this way, without a new
+language version.)
 
 Additions that no existing file can notice may come without a new version:
 a new term, a new function, a new tool or option. A rule set that uses one

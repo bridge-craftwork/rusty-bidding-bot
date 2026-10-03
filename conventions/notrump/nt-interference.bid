@@ -165,7 +165,9 @@ after 1N (2y) 2z (P) when y is not C, z is not N, lho.y>=4, (maybe lho.H<=3) | (
   P   "Partner's suit, to play"
 after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   3N  "Accepts: a maximum"             shows hcp>=16
+      priority 1                       # ahead of one-nt.bid's answer to the invitation
   P   "Declines: a minimum"            shows hcp<=15
+      priority 1
 
 # ── Their natural 2♣, transfers off (2026-09-30) ─────────────────────
 # With `vs_2c` off there is no Stayman by double and no transfer, and a
@@ -211,7 +213,9 @@ after 1N (2C) 2z (P) when !vs_2c, lho.C>=5, z is not N
   P   "Partner's suit, to play"
 after 1N (2C) 2N (P) when !vs_2c, lho.C>=5
   3N  "Accepts: a maximum"             shows hcp>=16
+      priority 1                       # ahead of one-nt.bid's answer to the invitation
   P   "Declines: a minimum"            shows hcp<=15
+      priority 1
 after 1N (2C) 3z (P) when !vs_2c, lho.C>=5, z is not C
   4{z}  "Three-card support: game in the major"   shows z>=3
         when  z is H | z is S
@@ -272,7 +276,9 @@ after 1N (2C) P (P) X (P) 2z (P) when !vs_2c, lho.C>=5, z is not N
   P   "Partner's suit, to play"
 after 1N (2C) P (P) X (P) 2N (P) when !vs_2c, lho.C>=5
   3N  "Accepts: a maximum"             shows hcp>=16
+      priority 1                       # ahead of one-nt.bid's answer to the invitation
   P   "Declines: a minimum"            shows hcp<=15
+      priority 1
 
 # ── Their conventional overcalls (2026-09-28, vs-1nt.notes.md) ───────
 # The rules above read 2♦/2♥/2♠ as natural: they apply when the

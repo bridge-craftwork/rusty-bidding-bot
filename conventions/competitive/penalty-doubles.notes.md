@@ -454,6 +454,24 @@ way from the doubling errors on the corpus.
     failing games against 4,646). That is placement, not a double
     anyone could find; the errors yardstick books it to the defenders.
 
+
+## Higher floors, more doubles (2026-10-03)
+
+The engine now ties total points to the HCP (LANGUAGE.md §8): a 1♦
+opening of 12+ declarer points with no suit beyond five is 11+ HCP,
+not 10+. `we.hcp.min` is a point higher in many positions, so the
+thresholds of `pen_suit` (calibrated 2026-10-01 on the old floors)
+double a little more. The test of four small trumps with 20 known now
+had 21 known (and doubled); the hand is now 9 HCP so it keeps testing
+20. Across the three sets ours doubled 945 -> 999 (vanilla), 1,380 ->
+1,452 (21GF), 3,116 -> 3,174 (corpus), with doubles of making contracts
+287 -> 296, 425 -> 439, 926 -> 954. The doubling errors of the run
+moved -1,099 / -298 / -656, but almost all of that is "doubling other"
+(the side that did not make the first differing call failing to double
+our bolder contracts); the actor's own doubling errors improved
+(+412 / +445 / +281). No threshold was changed: whether to raise them
+a point is for a measured follow-up.
+
 ## Sources
 
 - **Standard practice, not yet cited:** double when they are too high
@@ -482,3 +500,5 @@ way from the doubling errors on the corpus.
   `probes/tools/par_blame.py`, `probes/tools/penalty_x.py`, and
   `probes/tools/errors_diff.py` for the re-judgment by errors
   (Rick's yardstick, 2026-10-01).
+- **2026-10-03:** the test hand and the counts above, from
+  `rbb compare` on the three sets and `probes/tools/errors_diff.py`.

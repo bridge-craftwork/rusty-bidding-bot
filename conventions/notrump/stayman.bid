@@ -96,24 +96,32 @@ when answered majors
       when  partner.last=2D, !jacoby, !smolen
       sets  forcing=game, ask=choose_game(H)
   6H  "Slam in the heart fit"                     shows H>=4, strength=slam   when partner.H>=4
+      sets  trump=H
   6S  "Slam in the spade fit"                     shows S>=4, strength=slam   when partner.S>=4
+      sets  trump=S
   4H  "Game in the heart fit"                     shows H>=4, strength>=game  when partner.H>=4, style is not bba
+      sets  trump=H
   3H  "Invitational raise in hearts"              shows H>=4, strength=invite when partner.H>=4, style is not bba
-      sets ask=invite(H)
+      sets ask=invite(H), trump=H
   4S  "Game in the spade fit"                     shows S>=4, strength>=game  when partner.S>=4, style is not bba
+      sets  trump=S
   3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4, style is not bba
-      sets ask=invite(S)
+      sets ask=invite(S), trump=S
   6H  "Slam in the heart fit, counting shortness"  shows H>=4, tp(H)>=33-partner.points.min
       when  partner.H>=4
+      sets  trump=H
   6S  "Slam in the spade fit, counting shortness"  shows S>=4, tp(S)>=33-partner.points.min
       when  partner.S>=4
+      sets  trump=S
   4H  "Game in the heart fit, counting shortness"  shows H>=4, tp(H)>=25-partner.points.min
       when  partner.H>=4, strength<=invite
       when  style is not bba
+      sets  trump=H
       priority 1                                  # support points raise an invitation to game
   4S  "Game in the spade fit, counting shortness"  shows S>=4, tp(S)>=25-partner.points.min
       when  partner.S>=4, strength<=invite
       when  style is not bba
+      sets  trump=S
       priority 1
   # Rick, 2026-09-24: balanced 16-17 with no fit, as over 1NT: 4NT with
   # 16, 6NT with 17 (32 combined opposite a minimum).
@@ -122,34 +130,38 @@ when answered majors
   4H  "Game in the heart fit"  shows H>=4, (hcp>=25-partner.hcp.min, !shape 4333) | hcp>=26-partner.hcp.min | (hcp>=24-partner.hcp.min, shortest<=0)
       when  partner.H>=4, matchpoints, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
+      sets  trump=H
   4H  "Game in the heart fit"  shows H>=4, (hcp>=24-partner.hcp.min, !shape 4333) | hcp>=25-partner.hcp.min | (hcp>=23-partner.hcp.min, shortest<=1) | (hcp>=22-partner.hcp.min, shortest<=0)
       when  partner.H>=4, imps, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba                          # at IMPs a point bolder
+      sets  trump=H
   3H  "Invitational raise in hearts"  shows H>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=24-partner.hcp.min, shortest>=1) | (hcp<=25-partner.hcp.min, shape 4333) | hcp<=23-partner.hcp.min
       when  partner.H>=4, matchpoints, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
-      sets  ask=fit_invite(H)
+      sets  ask=fit_invite(H), trump=H
   3H  "Invitational raise in hearts"  shows H>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=23-partner.hcp.min, shortest>=2) | (hcp<=24-partner.hcp.min, shape 4333) | (hcp<=22-partner.hcp.min, shortest=1) | hcp<=21-partner.hcp.min
       when  partner.H>=4, imps, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
-      sets  ask=fit_invite(H)
+      sets  ask=fit_invite(H), trump=H
   P   "Weak with the heart fit: play here"  shows H>=4, (hcp<=24-partner.hcp.max, shortest>=2) | (hcp<=25-partner.hcp.max, shape 4333) | (hcp<=23-partner.hcp.max, shortest=1) | hcp<=22-partner.hcp.max
       when  partner.H>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
   4S  "Game in the spade fit"  shows S>=4, (hcp>=25-partner.hcp.min, !shape 4333) | hcp>=26-partner.hcp.min | (hcp>=24-partner.hcp.min, shortest<=0)
       when  partner.S>=4, matchpoints, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
+      sets  trump=S
   4S  "Game in the spade fit"  shows S>=4, (hcp>=24-partner.hcp.min, !shape 4333) | hcp>=25-partner.hcp.min | (hcp>=23-partner.hcp.min, shortest<=1) | (hcp>=22-partner.hcp.min, shortest<=0)
       when  partner.S>=4, imps, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba                          # at IMPs a point bolder
+      sets  trump=S
   3S  "Invitational raise in spades"  shows S>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=24-partner.hcp.min, shortest>=1) | (hcp<=25-partner.hcp.min, shape 4333) | hcp<=23-partner.hcp.min
       when  partner.S>=4, matchpoints, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
-      sets  ask=fit_invite(S)
+      sets  ask=fit_invite(S), trump=S
   3S  "Invitational raise in spades"  shows S>=4, (hcp>=25-partner.hcp.max, !shape 4333) | hcp>=26-partner.hcp.max | (hcp>=24-partner.hcp.max, shortest<=1) | (hcp>=23-partner.hcp.max, shortest<=0), (hcp<=23-partner.hcp.min, shortest>=2) | (hcp<=24-partner.hcp.min, shape 4333) | (hcp<=22-partner.hcp.min, shortest=1) | hcp<=21-partner.hcp.min
       when  partner.S>=4, imps, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
-      sets  ask=fit_invite(S)
+      sets  ask=fit_invite(S), trump=S
   P   "Weak with the spade fit: play here"  shows S>=4, (hcp<=24-partner.hcp.max, shortest>=2) | (hcp<=25-partner.hcp.max, shape 4333) | (hcp<=23-partner.hcp.max, shortest=1) | hcp<=22-partner.hcp.max
       when  partner.S>=4, partner.hcp.min<=14 | partner.hcp.max>=18
       when  style is bba
@@ -179,40 +191,44 @@ when answered majors
   4H  "Game in the heart fit"  shows H>=4, bba_stay_game_points>=10
       when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
+      sets  trump=H
   3H  "Invitational raise in heart"  shows H>=4, bba_stay_raise_points>=8, bba_stay_game_points<=9
       when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-      sets  ask=fit_invite(H)
+      sets  ask=fit_invite(H), trump=H
   P   "Weak with the heart fit: play here"  shows H>=4, bba_stay_raise_points<=7
       when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
   4H  "Game in the heart fit"  shows H>=4, bba_stay_game_imp_points>=10
       when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
+      sets  trump=H
   3H  "Invitational raise in heart"  shows H>=4, bba_stay_raise_imp_points>=8, bba_stay_game_imp_points<=9
       when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-      sets  ask=fit_invite(H)
+      sets  ask=fit_invite(H), trump=H
   P   "Weak with the heart fit: play here"  shows H>=4, bba_stay_raise_imp_points<=7
       when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
   4S  "Game in the spade fit"  shows S>=4, bba_stay_sgame_points>=10
       when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
+      sets  trump=S
   3S  "Invitational raise in spade"  shows S>=4, bba_stay_sraise_points>=8, bba_stay_sgame_points<=9
       when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-      sets  ask=fit_invite(S)
+      sets  ask=fit_invite(S), trump=S
   P   "Weak with the spade fit: play here"  shows S>=4, bba_stay_sraise_points<=7
       when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
   4S  "Game in the spade fit"  shows S>=4, bba_stay_sgame_imp_points>=10
       when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
+      sets  trump=S
   3S  "Invitational raise in spade"  shows S>=4, bba_stay_sraise_imp_points>=8, bba_stay_sgame_imp_points<=9
       when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
-      sets  ask=fit_invite(S)
+      sets  ask=fit_invite(S), trump=S
   P   "Weak with the spade fit: play here"  shows S>=4, bba_stay_sraise_imp_points<=7
       when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba

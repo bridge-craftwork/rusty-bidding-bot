@@ -22,7 +22,9 @@ use rayon::prelude::*;
 use rbb_engine::Engine;
 use serde::Serialize;
 
-pub use board::{par_for, BoardResult, ParComparison, Problem, ProblemKind, ReadAs};
+pub use board::{
+    par_for, BoardResult, KnowledgeCount, ParComparison, Problem, ProblemKind, ReadAs,
+};
 pub use report::{
     contest, scoring_name, short, summarize, tally, Agreement, AuctionFilter, ClassTally, Contest,
     Divergence, DoubleTally, ParTally, ProblemPoint, ReadAsPoint, Stats, Summary,

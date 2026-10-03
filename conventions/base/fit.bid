@@ -88,10 +88,10 @@ define partner_named(x) = partner.last=1{x} | partner.last=2{x} | partner.last=3
 when !asked, we.trump is none, !game_reached | partner.last=3N, !they.bid | rho.last=P, me.has_bid, !(partner.last=2N, partner.hcp.min>=20), partner.last=1N | partner.last=2N | partner.last=3N | answered nmf | answered majors
   4S  "Game in the spade fit: my length and partner's make eight"
       shows S + partner.S.min >= 8, fit_game_values(S)
-      when  shown.S.min + partner.S.min <= 7, partner.S.min >= 2, !partner_named(S), !slam_route, !fit_slam_room(S), !other_major_open(H)
+      when  shown.S.min + partner.S.min <= 7 | partner.last=3N, partner.S.min >= 2, !partner_named(S), !slam_route, !fit_slam_room(S), !other_major_open(H)
       priority 1
   4H  "Game in the heart fit: my length and partner's make eight"
       shows H + partner.H.min >= 8, fit_game_values(H)
-      when  shown.H.min + partner.H.min <= 7, partner.H.min >= 2, !partner_named(H), !slam_route, !fit_slam_room(H), !other_major_open(S)
+      when  shown.H.min + partner.H.min <= 7 | partner.last=3N, partner.H.min >= 2, !partner_named(H), !slam_route, !fit_slam_room(H), !other_major_open(S)
       priority 1
 

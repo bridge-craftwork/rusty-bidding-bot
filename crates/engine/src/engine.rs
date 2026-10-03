@@ -291,7 +291,16 @@ impl Engine {
         if let Some(v) = self.consistent.lock().unwrap().get(&key) {
             return v.clone();
         }
-        let k = pos.knowledge(actor);
+        // The ranges the constraints alone give: the cache is keyed by the
+        // constraints, so what other seats' lengths add through the deck
+        // (`Position::apply_deck_hcp`) must not decide which hands pass.
+        let k = &pos.knowledge(actor).from_constraints();
+        // Constraints the ranges hold exactly need no second look.
+        let residual: Vec<&Expr> = k
+            .constraints
+            .iter()
+            .filter(|c| !crate::knowledge::held_by_ranges(c))
+            .collect();
         let params = HashMap::new();
         let ids: Vec<u32> = self
             .pool
@@ -300,9 +309,11 @@ impl Engine {
             .filter(|(_, f)| {
                 let v = self.valuation[side(actor)];
                 let q = [f.points_q(v), f.suit_points_q(v)];
+                let dp = f.hcp + f.length_points();
                 if !(k.hcp.lo <= f.hcp && f.hcp <= k.hcp.hi)
                     || (0..2).any(|i| !(k.pts[i].lo <= q[i] && q[i] <= k.pts[i].hi))
                     || (0..4).any(|s| !(k.len[s].lo <= f.len[s] && f.len[s] <= k.len[s].hi))
+                    || !(k.dp.lo <= dp && dp <= k.dp.hi)
                 {
                     return false;
                 }
@@ -314,7 +325,7 @@ impl Engine {
                     valuation: v,
                     private: None,
                 };
-                k.constraints
+                residual
                     .iter()
                     .all(|c| ctx.cond(c, &mut Bindings::new()) != Ok(Tri::False))
             })
@@ -394,7 +405,12 @@ impl Engine {
 
     /// An empty auction.
     pub fn start(&self, dealer: Direction, vul: Vulnerability, scoring: ScoringMethod) -> Position {
-        Position::new(dealer, vul, scoring)
+        let mut pos = Position::new(dealer, vul, scoring);
+        // Each seat's points are read the way its own side counts them.
+        for d in Direction::ALL {
+            pos.knowledge[d.to_index()] = SeatKnowledge::with_valuation(self.valuation[side(d)]);
+        }
+        pos
     }
 
     /// Interpret one more call: what it shows, and its effect on the state.
@@ -534,9 +550,12 @@ impl Engine {
                 }
             }
             if let Some(d) = &entry.rule.denies {
-                k.add(Expr::Not {
-                    expr: Box::new(ctx.resolve(d, &mut b)),
-                });
+                let denied = ctx.resolve_denied(d, &mut b);
+                if !is_const(&denied) {
+                    k.add(Expr::Not {
+                        expr: Box::new(denied),
+                    });
+                }
             }
             // Negative inference: the caller would have made any call that
             // outranks this one, had the hand qualified.
@@ -548,20 +567,23 @@ impl Engine {
                 if parts.is_empty() {
                     continue;
                 }
-                // Only when every term resolves: a dropped term would make
-                // the denial claim more than we know. Resolved part by part,
-                // which is what resolving their conjunction does, without
-                // copying the rule's trees first.
-                let resolved: Option<Vec<Expr>> = parts
-                    .iter()
-                    .map(|p| ctx.resolve_exact(p, &mut ob))
-                    .collect();
-                if let Some(resolved) = resolved.map(|all| Expr::And { all }) {
-                    if !is_const(&resolved) {
-                        k.add(Expr::Not {
-                            expr: Box::new(resolved),
-                        });
-                    }
+                // Resolved for a denial (`resolve_denied`): a term that
+                // cannot be resolved is taken as false, so the denial keeps
+                // only what is sound. A `has(A,x)` branch of a disjunction
+                // goes and the other branches are still denied; an unknown
+                // conjunct denies nothing. Resolved part by part, which is
+                // what resolving their conjunction does, without copying
+                // the rule's trees first.
+                let resolved = crate::eval::simplify(Expr::And {
+                    all: parts
+                        .iter()
+                        .map(|p| ctx.resolve_denied(p, &mut ob))
+                        .collect(),
+                });
+                if !is_const(&resolved) {
+                    k.add(Expr::Not {
+                        expr: Box::new(resolved),
+                    });
                 }
             }
         }

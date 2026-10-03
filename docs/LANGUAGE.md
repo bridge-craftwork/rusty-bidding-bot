@@ -462,6 +462,26 @@ context holds. It does not check the caller's hand, which it cannot see.
   quickly (`partner.hcp.min`). When later constraints settle a
   disjunction, it collapses into the ranges. Example: "not (15–17 and
   balanced)" plus a later "balanced" becomes "hcp not 15–17".
+
+  The summary keeps HCP, the four suit lengths, balance, total points
+  (`points`, `suit_points`), support points per trump suit (`tp(x)`) and
+  declarer points (`hcp + length_points`, written together). The point
+  counts are tied to the HCP both ways through what the lengths allow
+  (since 2026-10-03): length points lie between each suit's sure excess
+  over four and what the most lopsided hand the lengths and the deck
+  allow holds (a suit known 6–8, the others at most four, gives 2–4), and
+  shortness likewise, capped by the trumps. So "12+ total points" with
+  six hearts and nothing else beyond four is 10+ HCP; a known HCP floor
+  raises the points; "at most 16" in total points rules out a "17+ HCP"
+  branch of an earlier disjunction. Each seat's lengths are also capped
+  by the deck: 13 less what the other three have shown.
+
+  The narrowing is **sound**: a hand the calls allow is never excluded
+  (tested on random hands, `eval.rs`, `knowledge_soundness`). A denial
+  whose terms cannot all be judged for another hand (`has(A,x)`,
+  `stop(x)`) keeps only its sound part: an unjudgeable term counts as
+  false inside the negation, so "not (A or B)" with B unknown still
+  denies A, and "not (A and B)" denies nothing.
 - If no rule matches, a built-in natural interpretation applies. An
   unmatched call is reported; it usually means a convention is missing.
 

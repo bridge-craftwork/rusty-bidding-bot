@@ -259,6 +259,19 @@ keycard suit"), which may not be the knower's fit.
    no module uses or the engine reading a fallback as the union of
    meanings (JUDGMENT-LAYER.md §4, option 2, language 2).
 
+
+## A fit the calls made public over 3NT (2026-10-03)
+
+The engine now keeps more of what a call denies (LANGUAGE.md §8,
+"Knowledge representation"). On Basic-Bridge, partner's 1S-3NT then
+reads as exactly 3=4=3=3 (3NT is 13-15 balanced with two or three
+spades; it denies the 2/1 suits, the 2♥ response and the four-card
+raise), so opener's six spades make a fit both hands know. The rule
+required the fit to be private (`shown + partner <= 7`) and went
+silent: opener passed 3NT with six spades (fit.test). Over partner's
+3NT the rule now also places a public fit (`| partner.last=3N`): no
+trump suit is set there and nothing else bids it.
+
 ## Sources
 
 - **Rick's rulings**, 2026-10-02 (quoted above), and his counting rule
@@ -273,3 +286,5 @@ keycard suit"), which may not be the knower's fit.
   a fit: standard practice, not yet cited.
 - **Rick, 2026-10-03:** a major fit replaces a minor one (open question
   2); private fits and slam, for later.
+- **2026-10-03:** the 3NT case, from the knowledge change (engine
+  commit "points and HCP bound each other"); fit.test line 8.
