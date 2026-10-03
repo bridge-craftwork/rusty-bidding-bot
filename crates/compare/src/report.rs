@@ -96,6 +96,9 @@ pub struct Stats {
     /// Our own calls read by a higher rule than the one that chose them
     /// (`BoardResult::read_as`).
     pub read_as: usize,
+    /// Decisions of our own auctions made after partner had bid, and how
+    /// many of them knew partner's HCP floor above 0.
+    pub knowledge: crate::board::KnowledgeCount,
     /// Boards by the reference's scoring and generator.
     pub boards_by_scoring: BTreeMap<String, usize>,
     pub boards_by_generator: BTreeMap<String, usize>,
@@ -111,6 +114,8 @@ impl Stats {
         self.boards_with_no_rule +=
             b.problems.iter().any(|p| p.kind == ProblemKind::NoRule) as usize;
         self.read_as += b.read_as.len();
+        self.knowledge.after_partner_bid += b.knowledge.after_partner_bid;
+        self.knowledge.partner_hcp_floor += b.knowledge.partner_hcp_floor;
         let scoring = scoring_name(b);
         *self.boards_by_scoring.entry(scoring.clone()).or_default() += 1;
         *self

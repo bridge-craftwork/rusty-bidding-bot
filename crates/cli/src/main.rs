@@ -1042,6 +1042,13 @@ fn compare(
         .map(|(i, n)| format!("{}:{n}", i + 1))
         .collect();
     println!("first divergence at call #: {}", hist.join("  "));
+    let k = t.knowledge;
+    println!(
+        "knowledge: partner's HCP floor above 0 at {} of {} decisions after partner bid ({:.1}%)",
+        k.partner_hcp_floor,
+        k.after_partner_bid,
+        100.0 * k.partner_hcp_floor as f64 / k.after_partner_bid.max(1) as f64
+    );
 
     // Problems: wrong whatever the convention, and independent of BBA.
     println!(

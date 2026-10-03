@@ -168,6 +168,27 @@ pub struct BoardResult {
     pub runaway: bool,
     /// Problems in the engine's own auction (see `ProblemKind`).
     pub problems: Vec<Problem>,
+    /// How much our decisions knew about partner (see `KnowledgeCount`).
+    pub knowledge: KnowledgeCount,
+}
+
+/// At each decision of our own auction where partner has made a bid: how
+/// many there were, and in how many partner's HCP floor was above 0 (the
+/// knowledge the judgment rules key on).
+#[derive(Debug, Clone, Copy, Default, Serialize, PartialEq, Eq)]
+pub struct KnowledgeCount {
+    pub after_partner_bid: u32,
+    pub partner_hcp_floor: u32,
+}
+
+impl KnowledgeCount {
+    fn count(&mut self, pos: &rbb_engine::Position) {
+        let partner = pos.next_caller().partner();
+        if pos.has_bid(partner) {
+            self.after_partner_bid += 1;
+            self.partner_hcp_floor += (pos.knowledge(partner).hcp.lo > 0) as u32;
+        }
+    }
 }
 
 impl BoardResult {
@@ -216,11 +237,15 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
     let mut forced: Vec<bool> = Vec::new();
     let mut at_divergence = None;
     let mut read_as_list: Vec<ReadAs> = Vec::new();
+    let mut knowledge = KnowledgeCount::default();
     for (i, call) in reference.iter().enumerate() {
         let before = pos.clone();
         let seat = before.next_caller();
         let was_forced = is_forced(&before, seat);
         let (choice, step) = engine.step(&mut pos, hand(seat), call);
+        if at_divergence.is_none() && &choice.call == call {
+            knowledge.count(&before);
+        }
         if at_divergence.is_none() && &choice.call != call {
             at_divergence = Some((i, before));
         }
@@ -248,6 +273,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
                 break;
             }
             let seat = p.next_caller();
+            knowledge.count(&p);
             let choice = engine.choose(&p, hand(seat));
             let side = rbb_engine::side(seat);
             live.push(acted[side]);
@@ -313,6 +339,7 @@ pub fn compare(engine: &Engine, scenario: &str, board: &Board) -> Option<BoardRe
         par: None,
         runaway,
         problems,
+        knowledge,
     })
 }
 
