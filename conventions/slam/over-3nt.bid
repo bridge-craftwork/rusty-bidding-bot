@@ -65,6 +65,7 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
       priority 1
   4N  "Quantitative: 31-32 points between us"
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1
 after 1x (P) 1y (P) 1z (P)
@@ -73,6 +74,7 @@ after 1x (P) 1y (P) 1z (P)
       priority 1
   4N  "Quantitative: 31-32 points between us"
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1
 after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
@@ -81,5 +83,6 @@ after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
       priority 1
   4N  "Quantitative: 31-32 points between us"
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
+      when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1

@@ -120,6 +120,49 @@ define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H),
 # Public, so partner knows what a keycard ask agrees.
 define shown_fit(x) = agreed_fit(x) | partner.x.min >= 6
 
+# ── The keycard suit (Rick, 2026-10-03) ──────────────────────────────
+#
+# "A 4NT with no prior NT bids is normally keycard regardless, and if
+# there hasn't been suit agreement, it's for the last bid suit. So
+# 1H-1S-2H-4NT would be keycard for H." And: "Normally a major fit will
+# replace a minor fit." For the cards that play Blackwood or RKCB; with
+# neither (bare SAYC) 4NT stays natural or quantitative. Notes:
+# rkcb-1430.notes.md, "The keycard suit".
+#
+# The suit, in order:
+#   1. a trump suit set by a rule, unless it is a minor and a major has
+#      since been agreed (`major_over_minor`: 1S-2C-3C-4S-4NT asks in ♠);
+#   2. with none set, a suit agreed by what the two hands have shown
+#      (eight between us; a major before a minor);
+#   3. with no agreement and no notrump bid by us, the last suit our side
+#      bid: partner's last call, when it was a bid in a suit that showed
+#      two or more cards of it (not an artificial 2♦ waiting bid or a
+#      fourth-suit call).
+# With notrump bid by us and no agreement, 4NT is quantitative
+# (1NT-2D-2H-4NT): the notrump modules' rules.
+
+# Eight cards in x shown between us (fit.bid's `agreed_fit` without the
+# trump state).
+define shown_eight(x) = shown.x.min + partner.x.min >= 8
+
+# A minor set as trump, and a major agreed since: the major takes over.
+define major_over_minor(x) = x is S | x is H, trump is C | trump is D, shown_eight(x)
+define minor_given_way = major_over_minor(S) | major_over_minor(H)
+
+# Our side has bid notrump. The language keeps no history of calls, so:
+# one of our last calls was notrump, or either hand has shown a balanced
+# hand (a notrump opening, rebid or response is what shows one).
+define our_notrump = (last=1N | last=2N | last=3N | partner.last=1N | partner.last=2N | partner.last=3N | !(maybe !partner.balanced) | !(maybe !shown.balanced))
+
+# Partner's last call was a natural bid in x.
+define last_suit(x) = partner_named(x), partner.x.min >= 2
+
+define no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !shown_eight(C)
+
+# The keycard suit with no trump set (2 and 3 above), one suit at most.
+define kc_shown(x) = shown_eight(x), x is S | !shown_eight(S), x is S | x is H | !shown_eight(H), x is S | x is H | x is D | !shown_eight(D)
+define kc_open(x) = kc_shown(x) | (no_shown_eight, !our_notrump, last_suit(x))
+
 # Slam values with x as trump before it is agreed: the count on
 # partner's floor (as `slam_values`), or, when he has limited his hand to a
 # range of seven points or less (a preempt, a weak two), his top does and
@@ -189,9 +232,23 @@ define no_ask = !bw, !k1430, !k0314
 define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)
 define direct_slam_values = direct_count(trump)
 
-when we.trump is suit, !they.bid, !asked, no_ask
+when we.trump is suit, !minor_given_way, !they.bid, !asked, no_ask
   6{trump}  "Slam: our count on partner's floor plus my controls make 35"
       shows direct_slam_values
+      priority 1
+
+# A minor set as trump and a major agreed since: the slam is in the major
+# (Rick, 2026-10-03: "normally a major fit will replace a minor fit").
+when minor_given_way, !they.bid, !asked, no_ask
+  6S  "Slam in the spade fit, which replaces the minor: our count on partner's floor plus my controls make 35"
+      shows direct_count(S)
+      when  major_over_minor(S)
+      sets  trump=S
+      priority 1
+  6H  "Slam in the heart fit, which replaces the minor: our count on partner's floor plus my controls make 35"
+      shows direct_count(H)
+      when  major_over_minor(H), !major_over_minor(S)
+      sets  trump=H
       priority 1
 
 # ── A fit known but not agreed: the direct slam (2026-10-01) ──────────
