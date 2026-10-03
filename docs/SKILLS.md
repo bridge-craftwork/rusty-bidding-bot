@@ -260,6 +260,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 **Modules with no skill:**
 
+- `fit`
 - `nt-interference`
 - `penalty-doubles`
 - `their-1nt-overcall`

@@ -1,0 +1,49 @@
+# A major-suit fit: agreed, or seen by one hand (Rick, 2026-10-02;
+# fit.notes.md).
+card    Basic-Bridge
+dealer  N
+
+# A fit only I can see: game in it rather than notrump.
+# seat hand             | auction                              | expect | why
+N KQJ873.K.K7652.7      | 1S P 3N P                            | 4S     | six spades facing a balanced 3NT (two or more): the fit is eight
+S 742.K86.AQ2.K872      | 1S P 2C P 2N P                       | 4S     | three spades facing five, game values: not 3NT
+S T3.Q987643.Q5.T5      | 2C P 2D P 3N P                       | 4H     | seven hearts facing a balanced 25-27: game in the fit, not 3NT
+S 74.862.AQ2.KQ872      | 1S P 2C P 2N P                       | 3NT    | two spades facing five: no fit, 3NT
+# Rick's example: 1m-1H-1NT with six hearts.
+S K3.AQJ973.K52.84      | 1C P 1H P 1N P                       | 4H     | six hearts, 13+: game in the fit
+S K3.QJ9873.K52.84      | 1C P 1H P 1N P                       | 3H     | six hearts, 11-12: invitation in the fit
+S K3.QJ9873.952.84      | 1C P 1H P 1N P                       | 2H     | six hearts, weak: sign off in the fit
+# Four cards in the other major, which partner may hold: look for that
+# fit first.
+S KQ84.AJ9873.A2.4      | 1C P 1H P 1N P                       | 2S     | four spades opposite a 1NT that may hold four: the reverse first
+
+# After new minor forcing and Stayman (21GF).
+card    21GF-DEFAULT
+dealer  N
+S KQJ873.K5.Q52.84      | 1D P 1S P 1N P 2C P 2H P             | 4S     | partner's 2H denies three spades: two, and six make eight
+S K3.AQJ973.952.K4      | 1D P 1H P 1N P 2C P 2N P             | 4H     | six hearts facing two: 4H, not 3NT
+S KQ84.AJ9873.52.4      | 1N P 2C P 2D P                       | 4H     | Stayman found no spade fit; six hearts facing two
+
+# The support double: opener's three make the fit agreed when responder
+# has five, and responder places the contract.
+dealer  N
+S Q62.KJ853.952.84      | 1D P 1H 1S X P                       | 2H     | five hearts facing three, minimum: the eight-card fit
+S A62.KJ853.K52.84      | 1D P 1H 1S X P                       | 4H     | five hearts facing three, 12+: game
+S Q62.KJ85.Q952.84      | 1D P 1H 1S X P                       | 1N     | four hearts: no fit, 1NT with a spade stopper
+
+# Suit agreement: Texas agrees hearts (two facing six), so 4NT asks for
+# keycards in hearts.
+dealer  S
+S AK5.K73.Q942.K83      | 1N P 4D P 4H P 4N P                  | 5H     | keycards in hearts: A and the heart king, no queen
+S AK5.A73.A942.Q83      | 1N P 4D P 4H P 4N P                  | 5D     | keycards in hearts: three aces, 0 or 3
+# 1NT-2D-2H does not agree hearts (two facing five): 4NT is
+# quantitative with five, and opener places the contract.
+S AK5.KJ7.Q942.K83      | 1N P 2D P 2H P 4N P                  | 6H     | maximum and three hearts: slam in the fit
+S AK52.KJ.Q942.K83      | 1N P 2D P 2H P 4N P                  | 6NT    | maximum and two hearts: 6NT
+S AK52.QJ.Q942.K83      | 1N P 2D P 2H P 4N P                  | P      | minimum and two hearts: pass 4NT
+# Rick's 5H with three hearts and a minimum lost on the corpus (fit.notes.md):
+# opener passes 4NT with any minimum.
+S AK5.QJ7.Q942.K83      | 1N P 2D P 2H P 4N P                  | P      | minimum and three hearts: 4NT, not five of the fit
+# Responder's 4NT itself: quantitative with five hearts, keycard after Texas.
+N Q65.AK653.J3.KQ5      | 1N P 2D P 2H P                       | 4N     | five hearts, 16: quantitative
+N 8.AQ9732.K94.AKJ      | 1N P 4D P 4H P                       | 4N     | six hearts, slam values: keycard
