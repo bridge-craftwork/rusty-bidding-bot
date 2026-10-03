@@ -222,6 +222,110 @@ bids 2NT despite the singleton, as BBA does (Basic_Openers_Rebid 172).
 And after 2NT and opener's decline in three of the major responder
 passes (it had no rule; Basic_Openers_Rebid 225, BBA passes).
 
+## Opener's answer to the quantitative 4NT (2026-10-03)
+
+1NT-2♦-2♥-4NT (five hearts, 5-3-3-2, 16-17 total points). Rick:
+"sometimes we will prefer NT to M when we are 4333 with no ruffing
+values. Check the 5H response performance at 4333 vs other 3-card
+support patterns, and also vs 4333 with 4 being hearts vs 4-card support
+with other patterns." His 5♥ (a fit and a minimum, to play) had measured
+−21 contract errors on 33 corpus boards (`base/fit.notes.md`).
+
+Tested his way, by dealing hands to the auction rather than re-running
+the corpus (`probes/tools/dd_auction_test.py probes/dd/quant-4nt-hearts.toml`):
+North a 15-17 1NT without a five-card major, South five hearts in a
+5-3-3-2 with 16-17 total points (our 4NT band), East-West random; every
+deal solved double dummy, all contracts by North (he bid 1NT and 2♥
+first). IMPs per board against passing 4NT, ± standard error, none
+vulnerable (both vulnerable scales the same way, a little larger):
+
+| opener | HCP | deals | 5♥ | 6♥ | 6NT |
+|---|---|---|---|---|---|
+| 4-3-3-3, three hearts | 15 | 2,050 | −0.69 ±0.08 | −1.56 ±0.23 | −1.54 ±0.24 |
+| | 16 | 1,257 | −0.30 ±0.07 | +2.72 ±0.28 | **+3.25** ±0.29 |
+| | 17 | 693 | −0.08 ±0.06 | +5.25 ±0.33 | **+6.28** ±0.34 |
+| 4-3-3-3, four hearts | 15 | 2,058 | −0.44 ±0.09 | −3.50 ±0.21 | −3.69 ±0.22 |
+| | 16 | 1,211 | −0.23 ±0.07 | +0.34 ±0.30 | **+0.91** ±0.31 |
+| | 17 | 731 | −0.07 ±0.04 | +4.76 ±0.34 | **+5.76** ±0.35 |
+| three hearts, 4-4-3-2 | 15 | 1,500 | +0.01 ±0.09 | **+1.07** ±0.26 | +0.52 ±0.28 |
+| | 16 | 933 | −0.04 ±0.09 | +4.35 ±0.30 | +4.70 ±0.32 |
+| | 17 | 567 | −0.04 ±0.09 | +6.16 ±0.34 | **+7.36** ±0.34 |
+| three hearts, 5-3-3-2 | 15 | 1,526 | −0.07 ±0.09 | **+1.80** ±0.25 | +1.05 ±0.27 |
+| | 16 | 928 | −0.11 ±0.10 | +4.53 ±0.30 | +5.06 ±0.31 |
+| | 17 | 546 | −0.12 ±0.10 | +6.58 ±0.33 | **+8.21** ±0.31 |
+| four hearts, 4-4-3-2 | 15 | 1,473 | +0.61 ±0.09 | **+1.47** ±0.26 | −1.04 ±0.27 |
+| | 16 | 953 | +0.64 ±0.09 | **+5.19** ±0.28 | +3.96 ±0.32 |
+| | 17 | 574 | +0.21 ±0.08 | **+6.94** ±0.31 | +7.14 ±0.34 |
+| two hearts | 15 | 1,536 | −2.25 ±0.12 | −3.66 ±0.25 | −1.45 ±0.27 |
+| | 16 | 980 | −1.50 ±0.12 | −0.37 ±0.33 | **+2.27** ±0.34 |
+| | 17 | 484 | −1.10 ±0.14 | +2.00 ±0.47 | **+6.18** ±0.41 |
+
+Scored against 6♥ directly (`--baseline "6H N"`), 6NT − 6♥ is: 4-3-3-3
++0.0 to +0.2 at 16-17 (−0.3/−0.4 at 15, where both lose); three hearts
+and a doubleton −0.8 at 15, −0.1/−0.2 at 16 (a tie), +0.25/+0.5 at 17;
+four hearts and a doubleton −2.1, −1.3, −0.4 (±0.13-0.15).
+
+What it says:
+
+- **5♥ never wins.** It beats pass only with four hearts and a doubleton
+  (+0.6), and there 6♥ beats it by a further 0.9. Over a 4-3-3-3 it
+  loses to 4NT (−0.4 to −0.7 at 15): Rick's instinct about 4-3-3-3 is
+  right, and it extends to 4-3-3-3 with four hearts, which is the worst
+  slam hand of all (no side four-card suit either).
+- **The doubleton is a point.** With a fit and a doubleton a 15-count
+  plays slam in hearts (+1.1 to +1.8 against pass); a 4-3-3-3 15-count
+  passes. That is opener's support points (`tp(H)`: HCP + 1 for the
+  doubleton) reaching the 32 the rule already asks of `points`.
+- **The strain:** four trumps and a doubleton play hearts; three trumps
+  and a doubleton hearts below a maximum, notrump with 17; 4-3-3-3 and
+  two hearts notrump. At matchpoints 6NT outscores 6♥ on 54-88 % of the
+  boards in every class, so the major is an IMP choice; the 15-count's
+  slam on the doubleton stays in hearts (6♥ beats pass on 57-60 %, 6NT
+  only 42-52 %).
+- **Opposite responder's 16 or 17** (`--by N.h --by S.pts`): 15 + a
+  doubleton opposite 16 is close to even (+0.05 to +0.34), opposite 17
+  +2.6 to +4.1; 32 combined in `tp` is the right line. 4-3-3-3 with four
+  hearts and 16 opposite 16 loses even in 6NT (−1.0 ±0.4); not split
+  out, since opener cannot tell 16 from 17.
+
+The rule (`when asked quant_major(M)`): at IMPs 6M with four trumps and a
+doubleton, or three and a doubleton below opener's maximum; 6M with a fit,
+a doubleton and a minimum that the doubleton lifts to 32 (`tp(M)`), at
+either scoring; 6NT on any other acceptance; pass otherwise. No 5M.
+Spades: the same test (`probes/dd/quant-4nt-spades.toml`), below.
+
+**Spades** (1NT-2♥-2♠-4NT, 1,000 deals per class at 15, 300-650 at 16
+and 17): the same picture. 5♠ never best (+0.61 ±0.10 with four spades
+and a doubleton at 15, where 6♠ is +1.76); the 15-count with a fit and a
+doubleton +1.55 to +1.76 in 6♠ against pass; 4-3-3-3 passes at 15
+(−1.3 / −3.1 in slam) and plays 6NT or 6♠ alike above it (6NT − 6♠ +0.1
+/ −0.1 ±0.1-0.2); four spades and a doubleton prefer 6♠ at every
+strength (6NT − 6♠ −2.3, −1.8, −1.0); three and a doubleton 6♠ at 15-16,
+6NT at 17 (+0.3 / +0.6).
+
+**The sets** (base main 02fc735, 21GF-DEFAULT ranges):
+
+- Corpus (matchpoints throughout): 102 boards, contract errors **+31**
+  (+26 / +5), distance from par **+43** (+36 / +7); the defenders'
+  doubling −44 (our engine defending does not double the failing slams
+  now bid), errors in all −13. By first change: 6♥→6NT +11 (45 boards),
+  6♠→6NT 0 (44), pass→6♥ −40 (7), pass→6♠ +16 (6). The 13 slams on a
+  doubleton are too few to judge (−24); the dealt deals decide.
+- 21GF random set: 7 boards, all 6M→6NT with the same result: 0.
+- Vanilla: no transfers, no change (0 boards).
+
+**Re-running or asking the next question this way.** A spec in
+`probes/dd/` names the dealer3 prefilter, the Python filters per seat,
+the classes (first match wins, each with an optional dealer3 condition
+to fill it quickly), the candidate contracts with their declarer and the
+baseline; `probes/tools/dd_auction_test.py SPEC` deals until each class
+has its `quota`, solves with bridge-solver (both siblings' release
+builds), caches the tricks in `.rbb-cache/dd/<name>.jsonl` and prints
+the table at both vulnerabilities. `--report-only` re-tallies the cache,
+`--by EXPR` splits it (`N.h`, `S.pts`, `N.L[1]`...), `--baseline "6H N"`
+scores against another contract, `--json` writes the table. 3,000-4,000
+deals per class took about 40 minutes on a loaded machine.
+
 ## Sources
 
 - **The convention:** Jacoby transfers over 1NT. Standard practice, not
@@ -239,6 +343,11 @@ passes (it had no rule; Basic_Openers_Rebid 225, BBA passes).
   (2026-09-24); interference evidence in `nt-interference.notes.md`.
 - **Corpus measurements:** length points (2026-09-23), the super-accept
   floor and the module-removal screen (2026-09-25).
+- **Double-dummy deal tests:** opener's answer to the quantitative 4NT
+  (2026-10-03, Rick's question): `probes/dd/quant-4nt-hearts.toml` and
+  `quant-4nt-spades.toml`, run by `probes/tools/dd_auction_test.py`.
+  Rick's 5M (a fit and a minimum) is not adopted: it never beat the
+  better of pass and slam. His 4-3-3-3-plays-notrump instinct is.
 - **Where we differ:** a ten in the trump suit, the Jacoby/Texas choice,
   opener after the new suit, and responder after a plain super-accept
   ("Accepted differences from BBA"); responder's 2NT/3NT move a point
