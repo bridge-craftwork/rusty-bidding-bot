@@ -63,7 +63,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
 # bare suit goes to `control-bids.bid` first and comes back here only
 # once partner has shown a control.
 
-when (k1430 | k0314), we.trump is suit, !asked, we.forcing = none | we.forcing = round
+when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round
   4N  "Keycard ask in {trump}"
       when  slam_values_limited     # 33 facing partner's maximum
       when  !two_bare_suits  # and no two bare side suits
@@ -71,7 +71,7 @@ when (k1430 | k0314), we.trump is suit, !asked, we.forcing = none | we.forcing =
       artificial
       priority 1
 
-when (k1430 | k0314), we.trump is suit, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
+when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
   4N  "Keycard ask in {trump}"
       when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=keycards(trump)
@@ -90,6 +90,51 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for no
       priority 1
   4N  "Keycard ask, agreeing ♥"
       when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=keycards(H)
+      artificial
+      priority 1
+
+# The keycard suit when no rule has set the one we play in (Rick,
+# 2026-10-03; `kc_open`, slam-entry.bid): a suit agreed by what we have
+# shown, else, with no notrump bid by us, the last suit we bid
+# (1H-1S-2H-4NT asks in hearts). The ask sets it as trump. The majors
+# agreed publicly, and partner's own six-card major, are the rules above.
+# The ask needs the fit and the values, as above.
+when (k1430 | k0314), we.trump is none, !asked, !they.bid
+  4N  "Keycard ask in ♠: the last suit we bid"
+      when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=keycards(S)
+      artificial
+      priority -1
+  4N  "Keycard ask in ♥: the last suit we bid"
+      when  kc_open(H), !shown_fit(S), !shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=keycards(H)
+      artificial
+      priority -1
+  4N  "Keycard ask in ♦"
+      when  kc_open(D), !shown_fit(S), !shown_fit(H), we.fit(D).min >= 8, fit_slam_values(D), !two_bare_beside(D)
+      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)
+      sets  trump=D, ask=keycards(D)
+      artificial
+      priority -1
+  4N  "Keycard ask in ♣"
+      when  kc_open(C), !shown_fit(S), !shown_fit(H), we.fit(C).min >= 8, fit_slam_values(C), !two_bare_beside(C)
+      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)
+      sets  trump=C, ask=keycards(C)
+      artificial
+      priority -1
+
+# A minor set as trump, and a major agreed since (Rick, 2026-10-03:
+# "normally a major fit will replace a minor fit"; 1S-2C-3C-4S-4NT): the
+# ask is in the major, and makes it trump.
+when (k1430 | k0314), minor_given_way, !asked
+  4N  "Keycard ask in ♠: the major fit replaces the minor"
+      when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=keycards(S)
+      artificial
+      priority 1
+  4N  "Keycard ask in ♥: the major fit replaces the minor"
+      when  major_over_minor(H), !major_over_minor(S), fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=keycards(H)
       artificial
       priority 1

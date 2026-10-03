@@ -308,3 +308,9 @@ S AKJ54.A72.Q97.65      | 1S P 2S P                | 3S     | 15 with the fit: i
 S AQJ54.A72.Q97.65      | 1S P 2S P                | P      | 14: no game opposite 12
 card    Basic-Bridge
 S AKJ54.A72.Q97.65      | 1S P 2S P                | P      | 15 opposite a raise of 6-10: no game
+
+# A notrump jump stops at 3NT: past it, 4NT with no notrump bid by us is
+# keycard (Rick, 2026-10-03; slam-entry.bid, "The keycard suit").
+card    Basic-Bridge
+dealer  S
+S KQ4.AQ852.K93.Q4      | 1H 2S 3D P                           | !4NT   | 16 balanced, spades held: not a natural 4NT

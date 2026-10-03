@@ -59,7 +59,7 @@ module blackwood "Blackwood (standard)"
 # bare suit goes to `control-bids.bid` first and comes back here only
 # once partner has shown a control.
 
-when we.trump is suit, !asked, we.forcing = none | we.forcing = round
+when we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round
   4N  "Blackwood: how many aces?"
       when  slam_values_limited     # 33 facing partner's maximum
       when  !two_bare_suits  # and no two bare side suits
@@ -67,7 +67,7 @@ when we.trump is suit, !asked, we.forcing = none | we.forcing = round
       artificial
       priority 1
 
-when we.trump is suit, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
+when we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
   4N  "Blackwood: how many aces?"
       when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=aces
@@ -87,6 +87,49 @@ when we.trump is none, !asked, !they.bid   # uncontested for now: in competition
       priority 1
   4N  "Blackwood, agreeing ♥: how many aces?"
       when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=aces
+      artificial
+      priority 1
+
+# The keycard suit when no rule has set the one we play in (Rick,
+# 2026-10-03; `kc_open`, slam-entry.bid): a suit agreed by what we have
+# shown, else, with no notrump bid by us, the last suit we bid
+# (1H-1S-2H-4NT asks for aces with hearts agreed). The ask sets it as
+# trump. As in rkcb-1430.bid.
+when we.trump is none, !asked, !they.bid
+  4N  "Blackwood, agreeing ♠ (the last suit we bid): how many aces?"
+      when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=aces
+      artificial
+      priority -1
+  4N  "Blackwood, agreeing ♥ (the last suit we bid): how many aces?"
+      when  kc_open(H), !shown_fit(S), !shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
+      sets  trump=H, ask=aces
+      artificial
+      priority -1
+  4N  "Blackwood, agreeing ♦: how many aces?"
+      when  kc_open(D), !shown_fit(S), !shown_fit(H), we.fit(D).min >= 8, fit_slam_values(D), !two_bare_beside(D)
+      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)
+      sets  trump=D, ask=aces
+      artificial
+      priority -1
+  4N  "Blackwood, agreeing ♣: how many aces?"
+      when  kc_open(C), !shown_fit(S), !shown_fit(H), we.fit(C).min >= 8, fit_slam_values(C), !two_bare_beside(C)
+      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)
+      sets  trump=C, ask=aces
+      artificial
+      priority -1
+
+# A minor set as trump, and a major agreed since (Rick, 2026-10-03): the
+# major is trump.
+when minor_given_way, !asked
+  4N  "Blackwood, ♠ agreed (the major fit replaces the minor): how many aces?"
+      when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)
+      sets  trump=S, ask=aces
+      artificial
+      priority 1
+  4N  "Blackwood, ♥ agreed (the major fit replaces the minor): how many aces?"
+      when  major_over_minor(H), !major_over_minor(S), fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=aces
       artificial
       priority 1

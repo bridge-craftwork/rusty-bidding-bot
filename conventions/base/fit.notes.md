@@ -218,16 +218,35 @@ unchanged. On vanilla the private-fit boards of the survey fall from
   the 4NT contract makes where five of the major fails one trick in
   three. Not kept: par decides; opener passes 4NT with any minimum.
 
+## Private fits and slam: for later (Rick, 2026-10-03)
+
+> Private fits are often a problem area -- especially if the knower is
+> interested in slam. There needs to be a way to set up a GF before
+> agreeing on the trump suit, so 2/1, FSF, XYZ and others are often
+> employed. For invitational bids with a private fit, either it's
+> something like 1H-1S-1NT-3H, where the bid itself makes the
+> agreement, or a convention is used like 1H-1S-1NT-2C (XYZ)-2D-2H,
+> which would be invitational with H.
+
+Not built. Where we stand: the private-fit game rule above stays out of
+slam (`slam_route`, `fit_slam_room`), and the slam-interest hands go to
+the forcing calls below 3NT (new minor forcing, the fourth suit, a jump
+shift); 1H-1S-1NT-3H is the invitation and now sets trump
+(responder-rebids.notes.md, 2026-10-03); XYZ is not played. A private
+fit never changes what 4NT means: with no notrump bid by us and no
+agreement it asks in the last suit bid (rkcb-1430.notes.md, "The
+keycard suit"), which may not be the knower's fit.
+
 ## Open
 
 1. **Rick: the quantitative 4NT answer.** 5M with three or more hearts
    and a minimum is your ruling and lost on the corpus (above). Keep
    pass, or take 5M as the teaching answer at a small cost?
-2. **Minor-suit agreement.** Candidates, not changed: a minor raise that
-   set trump followed by a public major fit (12 boards per 100,000 on
-   21GF: 4NT asks in the minor); the inverted-minor and 1NT-3m auctions
-   already set trump in the minor. Should a later public major fit
-   replace a minor trump?
+2. **Minor-suit agreement.** Answered (Rick, 2026-10-03: "Normally a
+   major fit will replace a minor fit"): a major agreed publicly after
+   a minor was set is the keycard suit and becomes trump
+   (1S-2C-3C-4S-4NT asks in spades; rkcb-1430.notes.md, "The keycard
+   suit").
 3. **Positions this rule does not reach**, each a sequence question:
    1M-3NT with three cards in the major (27 vanilla, 38 21GF boards;
    the fix above lost on vanilla); 1x (1y) 1NT with three-card support
@@ -249,3 +268,5 @@ unchanged. On vanilla the private-fit boards of the survey fall from
 - **Book practice:** a known eight-card major fit is played in the major
   rather than notrump, and a six-card suit facing a balanced partner is
   a fit: standard practice, not yet cited.
+- **Rick, 2026-10-03:** a major fit replaces a minor one (open question
+  2); private fits and slam, for later.

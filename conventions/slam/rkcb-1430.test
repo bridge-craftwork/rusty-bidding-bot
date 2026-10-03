@@ -41,3 +41,20 @@ S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P                | 5D     | hearts
 N K5.843.K72.AQ852      | 1C P 2C P 4NT P                      | 5D     | clubs are trumps: 0314, one keycard is 5♦
 card    21GF-DEFAULT
 N K5.843.K72.AQ852      | 1C P 2C P 4NT P                      | 5C     | without the treatment: 1430, one keycard is 5♣
+
+# The keycard suit (Rick, 2026-10-03): a 4NT with no notrump bid by us
+# is keycard, for the agreed suit, else the last suit bid; a major fit
+# agreed later replaces a minor trump. The answers show which suit.
+card    21GF-DEFAULT
+dealer  N
+N K5.AK9873.Q52.K3      | 1H P 1S P 2H P 4NT P                 | 5H     | Rick's example: keycard for hearts, the ♥A and ♥K, no queen
+S AKQ5.K4.A93.KQ72      | 1H P 1S P 2H P                       | 4NT    | the asker: two hearts facing six, slam values
+S KQ4.A2.65.AJ8743      | 1S P 2C P 3C P 4S P 4NT P            | 5D     | spades replace clubs: ♠K, ♥A, ♣A are three (in clubs it would be two, 5H)
+N KQ.AKJ74.5.KQ932      | 1H P 1S P 2C P 4NT P                 | 5S     | no notrump, no agreement: keycard for clubs, the last suit (♥A, ♣K and the queen)
+S KQ64.A874.Q5.J32      | 1H P 1S P 4NT P                      | 5S     | 4NT over partner's 1S: keycard for spades, ♠K and ♥A with the queen (in hearts one keycard, 5C)
+N AK52.QJ.Q942.K83      | 1NT P 2D P 2H P 4NT P                | P      | notrump bid and hearts not agreed (two facing five): 4NT stays quantitative, minimum passes
+N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | 5S     | keycard for clubs: ♥A, ♣K and the queen (quantitative, this minimum would pass)
+S Q2.J8743.5.Q9832      | 2C P 2D P 4NT P                      | !5D    | 2♦ is a waiting bid, not a suit: 2C-2D-4NT stays natural
+# A card with no Blackwood or RKCB: 4NT stays natural or quantitative.
+card    21GF-DEFAULT slam.blackwood.rkcb_1430=false slam.blackwood.rkcb_0314=false slam.blackwood.standard=false
+N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | P      | quantitative: a minimum declines

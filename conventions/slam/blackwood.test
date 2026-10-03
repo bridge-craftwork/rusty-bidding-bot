@@ -32,3 +32,9 @@ S AKQJ5..T9643.AJ6      | 1S P 3S P                    | 4S     | shape but only
 # suits. `rbb probe` on the Basic-Bridge card, where BBA agrees.
 S AKQJT9.AK.Q54.32      | 1S P 3S P                    | 4S     | ♦Q54 and ♣32: two suits where the first two tricks can go
 S AKQJT9.A.KQ54.32      | 1S P 3S P                    | 4NT    | the same hand with the ♦K: one bare suit is allowed
+
+# The keycard suit (Rick, 2026-10-03): with no notrump bid by us, 4NT
+# asks for aces, the last suit bid agreed (it was quantitative here).
+card    Basic-Bridge
+dealer  N
+N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | 5D     | one ace: Blackwood with clubs agreed, not a quantitative 4NT

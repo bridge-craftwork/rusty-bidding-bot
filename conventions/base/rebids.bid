@@ -21,6 +21,14 @@ module rebids "Opener's rebid"
   param  support_through = doubles.support.through
   param  walsh = minor_openings.walsh.play default true
 
+# A notrump jump reaches 3NT at most: the last bid is below 2NT, so the
+# cheapest notrump bid is 2NT or lower. In a suit's terms: the cheapest
+# spade bid is 2S or lower, or the last bid was 2S. Above that a jump in
+# notrump is 4NT, which with no notrump bid by us is keycard (Rick,
+# 2026-10-03; slam-entry.bid, "The keycard suit"). Used by every natural
+# `jump(N)`.
+define nt_jump_to_game = cheapest_rank(S) <= 13 | partner.last=2S | rho.last=2S
+
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P)
   2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15   sets trump=y
@@ -620,6 +628,7 @@ after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
       when  stop(y)
       sets  ask=signoff
   jump(N) "18-19 balanced with a stopper in {y}"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19, z<=3
       when  stop(y)
   # Strong hands with nothing else to bid (2026-09-25: 19-counts repeated
@@ -638,6 +647,7 @@ after 1x (X) 1z (P) when z is not x
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
       sets  ask=signoff
   jump(N) "18-19 balanced"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19, z<=3
 
 # Opener with 18+ after 1x (X) 1z (1w): double, the strong hand, as BBA
@@ -734,6 +744,7 @@ after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y i
       sets  ask=signoff
       priority -5                          # below the pass: only when forced
   jump(N) "16-18 balanced with a stopper in {y}"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=16..18, z<=3
       when  stop(y)
   # Strong hands (2026-09-25): 3NT with their suit held, else a cue bid.
@@ -818,6 +829,7 @@ after 1x (*) 1N (*) when they.bid
       sets  ask=invite(x)
       priority -1
   jump(N) "18-19 balanced"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
   4{x} "Game: six or more {x}, 19+"
       shows x>=6, suit_points>=19
@@ -831,6 +843,7 @@ after 1x (*) 1N (*) when they.bid
       sets  ask=nt_invite
       priority -2
   jump(N) "18+: game opposite 6-10"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows hcp>=18
       when  !lho.last=X                    # over an overcall: partner holds their suit
       priority -2

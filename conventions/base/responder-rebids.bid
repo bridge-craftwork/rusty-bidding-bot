@@ -35,11 +35,15 @@ after 1x (P) 1y (P) 1N (P)
 after 1x (P) 1M (P) 1N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=13
 after 1M (P) 1y (P) 1N (P)
-  3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets ask=invite(M)
+  # The raise itself agrees opener's major (five facing three): trump is
+  # set (Rick, 2026-10-03: "1H-1S-1NT-3H, where the bid itself makes the
+  # agreement").
+  3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets trump=M, ask=invite(M)
   # Opener's major is five: three cards make the fit, and a major fit plays
   # better than notrump (Rick, ticket b400, 2026-10-02). Support points,
   # as the support hand counts.
   4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      sets  trump=M
       priority 1
 
 # New suits after 1NT: below responder's suit, natural and not forcing
@@ -150,6 +154,7 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
 # a nine-card heart fit; BBA plays 4H).
 after 1M (P) 1y (P) 2z (P) when z is not M, z is not y
   4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      sets  trump=M
       priority 1
 
 # ── Opener's jump rebid (6+, 16-18) or jump raise (4+, 16-18) ───────
@@ -544,6 +549,7 @@ after 1x (*) 1y (*) 1z (*) when they.bid, y is not x, z is not x, z is not y
   cheapest(y) "Weak: six or more {y}"       shows y>=6, points<=10   sets ask=signoff
   jump(y) "Invitational: six or more {y}, 11-12"  shows y>=6, points=11..12   sets ask=invite(y)
   jump(N) "Game: 13+"                       shows points>=13, z<=3
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
   4{z} "Game raise: four or more {z}, 13+"  shows z>=4, points>=13
       when  z is H | z is S
       sets  trump=z
@@ -558,6 +564,7 @@ after 1x (*) 1y (*) 2z (*) when they.bid, y is not x, z is not x, z is not y
   cheapest(N) "No fit, forced to bid"       shows points<=12
       priority -4
   jump(N) "Game: 13+"                       shows points>=13, z<=3
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
   P   "Weak, and partner may pass"          shows points<=10
       priority -5
   P   "Nothing to say"  priority -10
@@ -587,7 +594,7 @@ after 1x (*) X (*) 1N (*) | 1x (*) X (*) 2N (*) when they.bid
   cheapest(S) "Weak: six or more spades"    shows S>=6, points<=10   sets ask=signoff
   cheapest(H) "Weak: six or more hearts"    shows H>=6, S<=5, points<=10   sets ask=signoff
   cheapest(N) "Invitational: 11-12"         shows points=11..12   sets ask=nt_invite
-  jump(N) "Game: 13+"                       shows points>=13
+  3N      "Game: 13+"                       shows points>=13   # was jump(N): 4NT over the 2NT answer
   P   "Nothing more to say"  priority -10
 
 # ── Our double was left to them ──────────────────────────────────────
