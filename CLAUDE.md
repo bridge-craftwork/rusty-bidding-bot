@@ -197,10 +197,15 @@ local checkouts").
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
   rule links open (default `code -g {file}:{line}`). **Knowledge view** (the
   button over a board's detail, or `--board N` / `--board SCENARIO:N` to open
-  one at start): one row per call of our auction or BBA's, the call in its
-  seat's column, meaning, rule link, flags, what is known about each seat
-  (what the call changed highlighted, everything on hover), each hand's own
-  view and each side's state; column groups can be hidden.
+  one at start), in a native window of its own that can be wider than the
+  workbench: a header of the hands (compass layout), the auction shown and
+  the double-dummy table with par, then one row per call of our auction or
+  BBA's, the call in its seat's column, meaning, rule link, flags, what is
+  known about each seat (what the call changed highlighted, everything on
+  hover), each hand's own view and each side's state; column groups can be
+  hidden. Its **Report…** files a ticket on the board that also carries the
+  view's review of the auction shown (`knowledge` in `context.json`, a
+  "Knowledge view" section in `ticket.md`).
 
 ## Tickets
 
