@@ -256,3 +256,9 @@ E AKQ5.Q832.T84.Q7      | 1H P 1S P 2C P           | 4H     | nine hearts betwee
 E AKQ5.Q83.T842.Q7      | 1H P 1S P 1NT P          | 4H     | three hearts opposite five, 13: the major game
 E AJ54.Q83.T842.97      | 1H P 1S P 2NT P          | 4H     | three hearts and 7 opposite 18-19
 E AKQ5.83.KT84.Q72      | 1H P 1S P 2C P           | 3NT    | two hearts: no fit, 3NT
+
+# Opener's six-card rebid: a doubleton is a fit, 4M before 3NT (Rick, 2026-10-02).
+card    Basic-Bridge
+dealer  W
+E AKQ5.Q8.T842.Q72      | 1H P 1S P 2H P           | 4H     | two hearts opposite six: game in the major
+E AKQ5.8.QT842.Q72      | 1H P 1S P 2H P           | 3NT    | a singleton: no fit, 3NT
