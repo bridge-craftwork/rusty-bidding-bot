@@ -3,6 +3,7 @@
 
 mod app;
 mod detail;
+mod knowledge;
 mod ticket;
 
 use std::path::PathBuf;
@@ -46,6 +47,11 @@ struct Args {
     /// them (also: RBB_TICKET_DRY_RUN=1). The local copy is still written.
     #[arg(long)]
     ticket_dry_run: bool,
+    /// Select this board when the comparison has run (its number, e.g.
+    /// `595`; `SCENARIO:595` when several scenarios are loaded) and open
+    /// its knowledge view.
+    #[arg(long)]
+    board: Option<String>,
 }
 
 fn main() -> eframe::Result {
@@ -73,12 +79,9 @@ fn main() -> eframe::Result {
         "rbb workbench",
         native,
         Box::new(move |_cc| {
-            Ok(Box::new(app::App::new(
-                opts,
-                args.cards,
-                args.editor,
-                tickets,
-            )))
+            let mut app = app::App::new(opts, args.cards, args.editor, tickets);
+            app.show_board(args.board);
+            Ok(Box::new(app))
         }),
     )
 }
