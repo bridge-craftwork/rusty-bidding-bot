@@ -588,6 +588,19 @@ small hearts and "no heart fit"; it now holds two hearts
 The only loss: 25 vanilla boards (-56) where an invitational 3M hand now
 counts 13 support points with shortness and bids game.
 
+## A doubleton opposite opener's six-card rebid is a fit (Rick, 2026-10-02)
+
+Rick: "when opener rebids their suit to show 6+ - does responder prefer
+4M to 3N when holding a doubleton in support?" After 1M-1y-2M both the
+3NT game (two or fewer of opener's suit) and 4M (two or more) took a
+doubleton, and 3NT won on descriptiveness. The 3NT game now needs a
+singleton or void in opener's major, as the 2NT invitation already did
+(minors unchanged). The two-over-one rebid and 1M-1NT-2M already chose
+the major. Contract errors +174 / +107 / +112 and distance from par
++178 / +103 / +122 (vanilla / corpus / 21GF), both halves on every set.
+Next: a judgment, whatever the path, for a known major fit (Rick: the
+support double, 1m-1H-1NT with six hearts).
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and

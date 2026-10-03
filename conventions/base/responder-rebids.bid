@@ -75,7 +75,10 @@ after 1x (P) 1y (P) 2x (P)
   3x  "Raise (BBA): 3+ {x}, 7-9, to compete"  shows x>=3, points=7..9   sets ask=signoff
       when  style is bba, x is C | x is D  # BBA raises opener's six-card minor on 7
   2N  "Invitational: 11-12"                shows points=11..12, x<=1, y<=5  sets ask=nt_invite
-  3N  "Game: 13+"                          shows points>=13, x<=2 | x is C | x is D
+  # Opposite six, two is a fit: a doubleton in opener's major bids 4M,
+  # not 3NT (Rick, 2026-10-02), as the 2NT invitation above already
+  # needs a singleton.
+  3N  "Game: 13+"                          shows points>=13, x<=1 | x is C | x is D
 after 1M (P) 1y (P) 2M (P)
   4M  "Game: 2+ {M}, 13+"                  shows M>=2, points>=13
 
