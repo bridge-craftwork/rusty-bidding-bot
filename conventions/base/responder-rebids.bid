@@ -35,11 +35,15 @@ after 1x (P) 1y (P) 1N (P)
 after 1x (P) 1M (P) 1N (P)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=13
 after 1M (P) 1y (P) 1N (P)
-  3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets ask=invite(M)
+  # The raise itself agrees opener's major (five facing three): trump is
+  # set (Rick, 2026-10-03: "1H-1S-1NT-3H, where the bid itself makes the
+  # agreement").
+  3M  "Invitational: 3 {M}, 11-12 support points"  shows M=3, tp(M)=11..12   sets trump=M, ask=invite(M)
   # Opener's major is five: three cards make the fit, and a major fit plays
   # better than notrump (Rick, ticket b400, 2026-10-02). Support points,
   # as the support hand counts.
   4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      sets  trump=M
       priority 1
 
 # New suits after 1NT: below responder's suit, natural and not forcing
@@ -150,6 +154,7 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
 # a nine-card heart fit; BBA plays 4H).
 after 1M (P) 1y (P) 2z (P) when z is not M, z is not y
   4M  "Game in opener's major: 3+ {M}, 13+ support points"  shows M>=3, tp(M)>=13
+      sets  trump=M
       priority 1
 
 # ── Opener's jump rebid (6+, 16-18) or jump raise (4+, 16-18) ───────
