@@ -21,3 +21,10 @@ S AKQ765.A4.KQ3.A2          | 1H      | X      | 20 HCP: too strong to overcall,
 vul     Both
 S J87654.K3.Q42.83          | 1C      | P      | six ragged spades and 9 total points: nothing to bid
 S KQJ654.32.Q42.83          | 1C      | 2S     | vulnerable with KQJ: the jump is fine
+
+# Too strong for a two-level overcall in total points, short of the power
+# double in HCP: overcall, don't pass (ticket b400, 2026-10-02).
+card    Basic-Bridge
+dealer  W
+N A82.76.AKQT85.K3      | 1H                     | 2D     | 16 HCP and six good diamonds: 18 total points, overcall
+N AQ73.84.6.AKQJT4      | 1H                     | 2C     | 16 HCP and six solid clubs

@@ -63,20 +63,24 @@ after (1x)
 # Only where the suit cannot be shown at the one level: clubs over any
 # opening, diamonds over a major, hearts over 1S. A two-level bid in a
 # suit that could have been shown more cheaply is a jump, below.
+# Up to the one-level maximum in HCP as well (ticket b400, 2026-10-02):
+# a 16-count with a good six-card suit is 18 total points, over the
+# two-level maximum but short of the power double's 17 HCP, and it used
+# to pass. Now no direct-seat pass holds more than 16 HCP.
 after (1x)
   2C  "Overcall: five clubs, {two_min}-{two_max} total points"
       shows C>=5, C>S, C>H, C>D
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
       when  x is not C
       when  C>=6 | quality(C)>=good | top5(C)>=4
   2D  "Overcall: five diamonds, {two_min}-{two_max} total points"
       shows D>=5, D>S, D>H, D>=C
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
       when  x is not D, x is not C
       when  D>=6 | quality(D)>=good | top5(D)>=4
   2H  "Overcall: five hearts, {two_min}-{two_max} total points"
       shows H>=5, H>S, H>=D, H>=C
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max
+      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
       when  x is not H, x is not D, x is not C
       when  H>=6 | quality(H)>=good | top5(H)>=4
 
@@ -163,5 +167,9 @@ after (1x) when jump is weak
 # ── Nothing to say ───────────────────────────────────────────────────
 # An explicit pass, so that the seat is covered and partner can draw the
 # negative inference that we had no overcall.
+# A strong hand doubles first (takeout-double.bid), so the pass caps the
+# hand at the one-level overcall maximum. A trap pass is not assumed until
+# it shows (Rick, ticket b400, 2026-10-02): BBA's direct-seat passers
+# over a one-level opening, vanilla set, 99% at most 14-16 HCP.
 after (1x)
-  P   "No overcall"  priority -10
+  P   "No overcall"  shows hcp<=one_max  priority -10
