@@ -85,10 +85,23 @@ when answered transfer(M)
 # not.
 
 # Opener answers the quantitative 4NT with five in the major: slam with
-# 32 combined, in the major with three-card support.
+# 32 combined. Double dummy on dealt hands (probes/dd/quant-4nt-hearts.toml,
+# jacoby-transfers.notes.md, 2026-10-03): the doubleton is what makes the
+# major worth playing. A fit and a doubleton count the doubleton (`tp`),
+# so a minimum with one accepts in the major; 4-3-3-3 has no ruffing value
+# and plays notrump, or passes with a minimum. At IMPs the major with
+# four trumps, or three below a maximum; 6NT otherwise and at matchpoints.
+# 5M (to play, a minimum) never beat the better of pass and slam.
 when asked quant_major(M)
-  6M  "Accepts, in the fit"             shows M>=3, points>=32-partner.points.min
-  6N  "Accepts, no fit"                 shows M<=2, points>=32-partner.points.min
+  6M  "Accepts, in the fit: four trumps and a doubleton"
+      shows M>=4, shortest=2, points>=32-partner.points.min
+      when  imps
+  6M  "Accepts, in the fit: three trumps, a doubleton, not a maximum"
+      shows M=3, shortest=2, points>=32-partner.points.min, hcp<=shown.hcp.max-1
+      when  imps
+  6M  "Accepts on the ruff: a fit and a doubleton"
+      shows M>=3, shortest=2, points<=31-partner.points.min, tp(M)>=32-partner.points.min
+  6N  "Accepts the slam invitation"     shows points>=32-partner.points.min
   P   "Declines"                        shows points<=31-partner.points.min
 
 # Opener after responder's second suit (game forcing): rebid the major with

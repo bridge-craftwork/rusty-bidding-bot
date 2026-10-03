@@ -217,6 +217,10 @@ unchanged. On vanilla the private-fit boards of the survey fall from
   par, on 33 boards, both halves negative; 21GF not run. With a minimum
   the 4NT contract makes where five of the major fails one trick in
   three. Not kept: par decides; opener passes 4NT with any minimum.
+  Settled by dealt deals (2026-10-03, jacoby-transfers.notes.md,
+  "Opener's answer to the quantitative 4NT"): 5M never beats the better
+  of pass and slam; a minimum with a fit and a doubleton bids the slam
+  in the major, 4-3-3-3 passes or plays 6NT.
 
 ## Private fits and slam: for later (Rick, 2026-10-03)
 
@@ -239,9 +243,8 @@ keycard suit"), which may not be the knower's fit.
 
 ## Open
 
-1. **Rick: the quantitative 4NT answer.** 5M with three or more hearts
-   and a minimum is your ruling and lost on the corpus (above). Keep
-   pass, or take 5M as the teaching answer at a small cost?
+1. ~~Rick: the quantitative 4NT answer.~~ Answered by the double-dummy
+   deal test (2026-10-03, jacoby-transfers.notes.md): no 5M.
 2. **Minor-suit agreement.** Answered (Rick, 2026-10-03: "Normally a
    major fit will replace a minor fit"): a major agreed publicly after
    a minor was set is the keycard suit and becomes trump

@@ -44,11 +44,12 @@ S AK5.K73.Q942.K83      | 1N P 4D P 4H P 4N P                  | 5H     | keycar
 S AK5.A73.A942.Q83      | 1N P 4D P 4H P 4N P                  | 5D     | keycards in hearts: three aces, 0 or 3
 # 1NT-2D-2H does not agree hearts (two facing five): 4NT is
 # quantitative with five, and opener places the contract.
-S AK5.KJ7.Q942.K83      | 1N P 2D P 2H P 4N P                  | 6H     | maximum and three hearts: slam in the fit
+S AK52.QJ5.Q942.K8      | 1N P 2D P 2H P 4N P                  | 6H     | three hearts and a doubleton: slam in the fit
+S AK5.KJ7.Q942.K83      | 1N P 2D P 2H P 4N P                  | 6NT    | 4-3-3-3, three hearts: no ruff, 6NT
 S AK52.KJ.Q942.K83      | 1N P 2D P 2H P 4N P                  | 6NT    | maximum and two hearts: 6NT
 S AK52.QJ.Q942.K83      | 1N P 2D P 2H P 4N P                  | P      | minimum and two hearts: pass 4NT
-# Rick's 5H with three hearts and a minimum lost on the corpus (fit.notes.md):
-# opener passes 4NT with any minimum.
+# Rick's 5H with three hearts and a minimum lost on the corpus and double
+# dummy (jacoby-transfers.notes.md, 2026-10-03): 4-3-3-3 passes 4NT.
 S AK5.QJ7.Q942.K83      | 1N P 2D P 2H P 4N P                  | P      | minimum and three hearts: 4NT, not five of the fit
 # Responder's 4NT itself: quantitative with five hearts, keycard after Texas.
 N Q65.AK653.J3.KQ5      | 1N P 2D P 2H P                       | 4N     | five hearts, 16: quantitative

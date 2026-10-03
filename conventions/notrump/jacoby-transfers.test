@@ -27,9 +27,6 @@ N QJ973.82.K94.J83      | 1NT P 2H P 2S P      | 2NT    | 7 HCP + 1 length: invi
 N Q65.AK653.AT.AQ5      | 1NT P                | 2D     | 19 with five hearts: transfer first, not 6NT
 N Q65.AK653.AT.AQ5      | 1NT P 2D P 2H P      | 6NT    | then slam
 N Q65.AK653.J3.KQ5      | 1NT P 2D P 2H P      | 4NT    | 15 HCP + 1 length = 16: quantitative
-S AK5.KJ7.Q942.K83      | 1NT P 2D P 2H P 4NT P | 6H   | 16 and three hearts: slam in the fit
-S AK52.KJ.Q942.K83      | 1NT P 2D P 2H P 4NT P | 6NT  | 16 and two hearts: 6NT
-S AK52.QJ.Q942.K83      | 1NT P 2D P 2H P 4NT P | P    | 15: declines
 N 82.KJ973.K94.Q83      | 1NT P 2D P 2NT P     | 4H     | after a maximum super-accept, 9 is a game hand
 N AT984.KT.954.874      | 1NT P 2H P 2NT P     | 3S     | 7½ suit points: sign off; never pass the artificial 2NT
 N J82.Q8652.J4.A83      | 1NT P 2D P 2NT P     | 4H     | 8½ suit points opposite a maximum: game
@@ -80,3 +77,22 @@ dealer  S
 N 75.QJ952.3.KT974      | 1NT P 2D P 2H P | P | 6 HCP, 5-5: no natural invitation; BBA passes
 N KT432.Q32.2.QJ93      | 1NT P 2H P 2S P | 2NT | 8 HCP, five spades and a singleton: invites (BBA 2NT)
 N 965.T9654.K4.AT4      | 1NT P 2D P 2H P 2NT P 3H P | P | partner declined
+
+# Opener answers the quantitative 4NT with five hearts (double dummy,
+# probes/dd/quant-4nt-hearts.toml, notes 2026-10-03): the doubleton decides.
+card    21GF-DEFAULT
+dealer  S
+scoring IMP
+S AK5.KJ7.Q942.K83      | 1NT P 2D P 2H P 4NT P | 6NT  | 16, 4-3-3-3 with three hearts: no ruffing value, notrump
+S AK5.KJ52.Q94.K83      | 1NT P 2D P 2H P 4NT P | 6NT  | 16, 4-3-3-3 with four hearts: still notrump
+S AK52.QJ5.Q94.K83      | 1NT P 2D P 2H P 4NT P | P    | 15, 4-3-3-3: declines (5H loses to 4NT)
+S AK52.QJ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6H   | 15, three hearts and a doubleton: the ruff makes slam
+S AK52.QJ52.Q94.K8      | 1NT P 2D P 2H P 4NT P | 6H   | 15, four hearts and a doubleton: slam, not 5H
+S AK52.KJ52.Q94.K8      | 1NT P 2D P 2H P 4NT P | 6H   | 16, four hearts and a doubleton: slam in the fit
+S AK52.KJ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6H   | 16, three hearts and a doubleton: the fit
+S AK52.KQ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6NT  | 17, three hearts: a maximum plays notrump
+S AK52.KJ.Q942.K83      | 1NT P 2D P 2H P 4NT P | 6NT  | 16 and two hearts: 6NT
+S AK52.QJ.Q942.K83      | 1NT P 2D P 2H P 4NT P | P    | 15 and two hearts: declines
+scoring MP
+S AK52.KJ52.Q94.K8      | 1NT P 2D P 2H P 4NT P | 6NT  | matchpoints: 6NT whenever accepting on values
+S AK52.QJ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6H   | matchpoints: the 15 with a ruff still accepts in the fit
