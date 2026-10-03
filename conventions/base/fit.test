@@ -9,6 +9,7 @@ N KQJ873.K.K7652.7      | 1S P 3N P                            | 4S     | six sp
 S 742.K86.AQ2.K872      | 1S P 2C P 2N P                       | 4S     | three spades facing five, game values: not 3NT
 S T3.Q987643.Q5.T5      | 2C P 2D P 3N P                       | 4H     | seven hearts facing a balanced 25-27: game in the fit, not 3NT
 S 74.862.AQ2.KQ872      | 1S P 2C P 2N P                       | 3NT    | two spades facing five: no fit, 3NT
+S J765.93.A.AJT543      | 1D P 2C P 2S P 3C P 3N P             | 4S     | four spades facing the reverse's four: partner's 3NT answered my 3C
 # Rick's example: 1m-1H-1NT with six hearts.
 S K3.AQJ973.K52.84      | 1C P 1H P 1N P                       | 4H     | six hearts, 13+: game in the fit
 S K3.QJ9873.K52.84      | 1C P 1H P 1N P                       | 3H     | six hearts, 11-12: invitation in the fit

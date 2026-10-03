@@ -137,6 +137,26 @@ doubler. Against the uncontested rule:
 | corpus | 78 | **+275** (actor +166 / +138) | **+251** (+135 / +116) | +41 |
 | 21GF | 49 | **+140** (actor +63 / +84) | **+132** (+59 / +73) | +1 |
 
+**Over partner's notrump answer** (a third commit): the rule had kept
+out of every position where a question of mine had been answered, so
+partner's 3NT over my stopper ask or fourth suit (1D-2C-2S-3C-3NT with
+four spades facing the reverse) was passed. Now any notrump call of
+partner's counts; a suit answer still only to new minor forcing or
+Stayman. Against the rule before it:
+
+| set | boards changed | contract errors (even / odd) | distance from par (even / odd) | doubling |
+|---|---:|---:|---:|---:|
+| vanilla | 42 | **+141** (+33 / +108) | **+141** (+33 / +108) | −10 |
+| corpus | 37 | **+98** (+102 / −4) | **+99** (+99 / +0) | −11 |
+| 21GF | 26 | **+147** (+58 / +89) | **+130** (+49 / +81) | +13 |
+
+The corpus odd half is level (−4, par 0), the rest gain. It adds
+"contradicts earlier calls" boards: vanilla 185 → 199, corpus
+392 → 402, 21GF 320 → 331. They are hands that described themselves
+wrongly earlier (Stayman with six hearts, then 2NT) and now correct to
+the major; the flag is right about the description, and the contract is
+better.
+
 Positive means fewer errors (`probes/tools/errors_diff.py`). No new
 "no rule" or "passed a forcing" boards; contradictions 391 → 392 on the
 corpus. "Calls read as a higher rule" +90 on vanilla: the sequence
@@ -175,6 +195,10 @@ lines 36, 176), which now reads as this rule's 4M. The two say the same
   instead): vanilla −29, corpus +54, 21GF −2. Neither gains on all
   three sets; not kept. On vanilla the 1M-3NT loss is slams: 1S-2C-...-4S
   where 1S-3NT-6S had found them.
+- **A minor already agreed** (`we.trump is C | D` as well as none:
+  1S-2C-3C-3D-3NT with three spades): corpus −22 contract errors, −22
+  par on 8 boards. Not kept; minor agreement stays as it is (open
+  question 2).
 - **Rick's 5H answer to the quantitative 4NT** (1NT-2D-2H-4NT, opener
   minimum with three or more hearts): corpus −21 contract errors, −19
   par, on 33 boards, both halves negative; 21GF not run. With a minimum
