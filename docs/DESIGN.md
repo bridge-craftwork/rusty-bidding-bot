@@ -293,8 +293,9 @@ points for the hand with more trumps than partner has shown, support
 points for the other, support points for both with equal length). It is
 computed on demand, one board at a time, so `compare --json` stays the
 size it was. The workbench's **Knowledge view** (a button over the board
-detail; `--board N` opens it at start) shows it as a table, one row per
-call, for our auction or BBA's; `rbb explain-auction` prints it as text
+detail; `--board N` opens it at start) shows it in a window of its own as a
+table, one row per call, for our auction or BBA's, and a ticket filed from
+it carries the review as text; `rbb explain-auction` prints it as text
 for a terminal or a ticket, and `rbb call --knowledge` before its
 decision.
 

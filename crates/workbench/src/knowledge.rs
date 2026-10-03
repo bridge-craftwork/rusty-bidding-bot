@@ -15,14 +15,15 @@ use rbb_compare::{short, BoardResult};
 use rbb_engine::{knowledge_full, knowledge_parts, side_text, ReviewRow};
 
 use crate::app::BAD;
-use crate::detail::{hand_line, short_path, Detail};
+use crate::detail::{
+    auction_grid, compass, dd_grid, short_path, strain_and_declarer, Detail, ALERT, BBA,
+};
 
 /// What changed on a row.
 const CHANGED: Color32 = Color32::from_rgb(235, 150, 30);
 const FORCING: Color32 = Color32::from_rgb(220, 120, 40);
 const GAME_FORCE: Color32 = Color32::from_rgb(210, 60, 60);
 const INVITE: Color32 = Color32::from_rgb(70, 140, 220);
-const ALERT: Color32 = Color32::from_rgb(190, 160, 30);
 
 /// Columns in bridge order.
 const ORDER: [Direction; 4] = [
@@ -141,37 +142,125 @@ fn flags_cell(ui: &mut egui::Ui, r: &ReviewRow) {
     }
 }
 
-/// Draw the view for board `b`. Returns a rule location when its link is
-/// clicked.
-pub fn ui(
-    ui: &mut egui::Ui,
-    kv: &mut KnowledgeView,
-    b: &BoardResult,
-    d: &Detail,
-) -> Option<(String, usize)> {
-    let mut open = None;
-    ui.horizontal_wrapped(|ui| {
-        ui.strong(format!("{} — board {}", b.scenario, b.board));
-        ui.label(format!(
-            "dealer {}   vul {}   NS {}   EW {}",
-            b.dealer.to_char(),
-            b.vul.to_pbn(),
-            b.ns_card,
-            b.ew_card
-        ));
-    });
-    if let Some(deal) = &d.deal {
-        ui.horizontal_wrapped(|ui| {
-            for s in ORDER {
-                let h = deal.hand(s);
-                ui.label(
-                    RichText::new(format!("{} {}  ({})", s.to_char(), hand_line(h), h.hcp()))
-                        .monospace(),
+/// What the user asked for in the view.
+#[derive(Debug, Default)]
+pub struct Action {
+    /// A rule location whose link was clicked.
+    pub open: Option<(String, usize)>,
+    /// "Report…" was clicked.
+    pub report: bool,
+}
+
+/// The window's title for board `b`.
+pub fn title(b: &BoardResult) -> String {
+    format!("Knowledge — {} board {}", b.scenario, b.board)
+}
+
+/// The header: the hands in the compass layout (dealer and vulnerability in
+/// the corner), the auction shown, and the double-dummy table with par.
+fn header(ui: &mut egui::Ui, kv: &KnowledgeView, b: &BoardResult, d: &Detail) {
+    let rows = &d.review[usize::from(kv.bba)];
+    ui.horizontal_top(|ui| {
+        if let Some(deal) = &d.deal {
+            let corner = format!("dealer {}\nvul {}", b.dealer.to_char(), b.vul.to_pbn());
+            ui.vertical(|ui| compass(ui, deal, Some(&corner)));
+            ui.add_space(24.0);
+        }
+        ui.vertical(|ui| {
+            let (calls, name, color) = if kv.bba {
+                (&b.reference, "BBA", BBA)
+            } else {
+                (&b.ours, "ours", BAD)
+            };
+            ui.strong(format!("{name}: {}", contract(kv, b)));
+            // The engine's alerts and announcements, and BBA's own alerts
+            // on its auction.
+            let alerts: Vec<Option<String>> = (0..calls.len())
+                .map(|i| {
+                    let bba = kv.bba.then(|| b.reference_alerts.get(i).cloned().flatten());
+                    let f = rows.get(i).map(|r| &r.flags);
+                    bba.flatten()
+                        .or_else(|| f.and_then(|f| f.alert.clone()))
+                        .or_else(|| f.and_then(|f| f.announce.clone()))
+                })
+                .collect();
+            let problems: &[rbb_compare::Problem] = if kv.bba { &[] } else { &b.problems };
+            auction_grid(
+                ui,
+                "knowledge-auction",
+                b.dealer,
+                calls,
+                b.first_divergence,
+                color,
+                problems,
+                &alerts,
+            );
+        });
+        ui.add_space(24.0);
+        ui.vertical(|ui| match &b.dd {
+            Some(dd) => {
+                dd_grid(
+                    ui,
+                    dd,
+                    b.reference_contract
+                        .as_deref()
+                        .and_then(strain_and_declarer),
+                    b.our_contract.as_deref().and_then(strain_and_declarer),
+                    b.contracts_match(),
                 );
-                ui.add_space(12.0);
+                if let Some(p) = &b.par {
+                    ui.label(format!("par {:+} ({})", p.par_ns, p.par_contract));
+                    ui.label(
+                        RichText::new(format!(
+                            "BBA {:+}   ours {:+}  (NS)",
+                            p.reference_ns, p.ours_ns
+                        ))
+                        .weak(),
+                    );
+                }
+            }
+            None => {
+                ui.label(RichText::new("double dummy: not solved yet").weak());
             }
         });
+    });
+}
+
+/// The contract the shown auction reaches.
+fn contract<'a>(kv: &KnowledgeView, b: &'a BoardResult) -> &'a str {
+    let c = if kv.bba {
+        &b.reference_contract
+    } else {
+        &b.our_contract
+    };
+    c.as_deref().unwrap_or("passed out")
+}
+
+/// Draw the view for board `b`.
+pub fn ui(ui: &mut egui::Ui, kv: &mut KnowledgeView, b: &BoardResult, d: &Detail) -> Action {
+    let mut act = Action::default();
+    ui.horizontal_wrapped(|ui| {
+        if ui
+            .button("Report…")
+            .on_hover_text(
+                "File a ticket on this board: your note, everything the board detail \
+                 shows, and this view's review of the auction shown (as `rbb \
+                 explain-auction` prints it).",
+            )
+            .clicked()
+        {
+            act.report = true;
+        }
+        ui.separator();
+        ui.strong(format!("{} — board {}", b.scenario, b.board));
+        ui.label(format!("NS {}   EW {}", b.ns_card, b.ew_card));
+    });
+    if let Some(e) = &d.error {
+        ui.label(RichText::new(e).color(BAD));
     }
+    header(ui, kv, b, d);
+    ui.separator();
+    let open = &mut act.open;
     ui.horizontal_wrapped(|ui| {
         ui.label("auction:");
         ui.selectable_value(&mut kv.bba, false, "ours");
@@ -304,7 +393,7 @@ pub fn ui(
                                         .on_hover_text(&rule.module)
                                         .clicked()
                                     {
-                                        open = Some((rule.file.clone(), rule.line));
+                                        *open = Some((rule.file.clone(), rule.line));
                                     }
                                 }
                                 None => {
@@ -374,5 +463,5 @@ pub fn ui(
                     }
                 });
         });
-    open
+    act
 }

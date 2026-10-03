@@ -185,6 +185,9 @@ struct TicketDialog {
     /// The last save: what was written, or what went wrong.
     status: Option<Result<String, String>>,
     filing: Option<mpsc::Receiver<Filing>>,
+    /// Opened from the knowledge view: the dialog shows in its window and
+    /// the ticket carries its review of the auction shown.
+    from_knowledge: bool,
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -327,6 +330,7 @@ impl App {
                 sink: ticket::Sink::load(),
                 status: None,
                 filing: None,
+                from_knowledge: false,
             },
             ticket_opts,
             kview: Default::default(),
@@ -827,7 +831,9 @@ impl eframe::App for App {
             });
             });
         egui::CentralPanel::default().show(ui, |ui| self.lists(ui));
-        self.ticket_window(ui.ctx());
+        if !self.ticket.from_knowledge {
+            self.ticket_window(ui.ctx());
+        }
         self.knowledge_window(ui.ctx());
     }
 }
@@ -845,6 +851,7 @@ impl App {
                 .clicked()
             {
                 self.ticket.open = true;
+                self.ticket.from_knowledge = false;
             }
             ui.separator();
             let running = self.running.is_some();
@@ -1766,9 +1773,13 @@ impl App {
             (Some(l), Some((t, _))) => Some(ticket::Summary::new(t, l.took.as_secs_f64(), since)),
             _ => None,
         };
-        // The board shows in the detail panel on every tab but Cases.
+        // The board shows in the detail panel on every tab but Cases, and
+        // in the knowledge view.
+        let from_knowledge = self.ticket.from_knowledge && self.kview.open;
         let board = match (&self.loaded, self.board, &self.detail) {
-            (Some(l), Some(i), Some(d)) if self.tab != Tab::Cases => Some((&l.report.boards[i], d)),
+            (Some(l), Some(i), Some(d)) if self.tab != Tab::Cases || from_knowledge => {
+                Some((&l.report.boards[i], d))
+            }
             _ => None,
         };
         let scenario_name = board
@@ -1791,6 +1802,7 @@ impl App {
             summary,
             scenario,
             board,
+            knowledge: from_knowledge.then_some(self.kview.bba),
         })
     }
 
@@ -1867,31 +1879,55 @@ impl App {
         });
     }
 
-    /// The selected board's knowledge view, in a window of its own so it
-    /// can be as wide as the screen.
+    /// The selected board's knowledge view, in a native window of its own
+    /// (an immediate viewport) so it can be wider than the workbench's.
+    /// Closing the window closes the view. Where the backend has no
+    /// separate windows egui embeds it as a window inside this one.
     fn knowledge_window(&mut self, ctx: &egui::Context) {
         if !self.kview.open {
             return;
         }
-        let (Some(d), Some(i), Some(l)) = (&self.detail, self.board, &self.loaded) else {
-            return;
+        let title = match (&self.detail, self.board, &self.loaded) {
+            (Some(_), Some(i), Some(l)) => crate::knowledge::title(&l.report.boards[i]),
+            _ => return,
         };
-        let b = &l.report.boards[i];
-        let mut kv = self.kview.clone();
-        let mut open = true;
-        let mut link = None;
-        egui::Window::new(format!("Knowledge — {} board {}", b.scenario, b.board))
-            .id(egui::Id::new("knowledge-window"))
-            .open(&mut open)
-            .resizable(true)
-            .default_size([1400.0, 640.0])
-            .show(ctx, |ui| {
+        let builder = egui::ViewportBuilder::default()
+            .with_title(title)
+            .with_inner_size([1800.0, 700.0])
+            .with_resizable(true);
+        let id = egui::ViewportId::from_hash_of("knowledge-view");
+        let (act, close) = ctx.show_viewport_immediate(id, builder, |ui, class| {
+            let close = ui.ctx().input(|i| i.viewport().close_requested());
+            let mut act = crate::knowledge::Action::default();
+            let mut draw = |ui: &mut egui::Ui| {
                 ui.style_mut().interaction.selectable_labels = true;
-                link = crate::knowledge::ui(ui, &mut kv, b, d);
-            });
-        kv.open = open;
-        self.kview = kv;
-        if let Some((file, line)) = link {
+                if let (Some(d), Some(i), Some(l)) = (&self.detail, self.board, &self.loaded) {
+                    act = crate::knowledge::ui(ui, &mut self.kview, &l.report.boards[i], d);
+                }
+            };
+            if class == egui::ViewportClass::EmbeddedWindow {
+                draw(ui);
+            } else {
+                egui::CentralPanel::default().show(ui, draw);
+            }
+            if act.report {
+                self.ticket.open = true;
+                self.ticket.from_knowledge = true;
+            }
+            // The Report dialog opened here shows over this window.
+            if self.ticket.from_knowledge {
+                self.ticket_window(ui.ctx());
+            }
+            (act, close)
+        });
+        if close {
+            self.kview.open = false;
+            if self.ticket.from_knowledge {
+                self.ticket.open = false;
+                self.ticket.from_knowledge = false;
+            }
+        }
+        if let Some((file, line)) = act.open {
             self.open_in_editor(&file, line);
         }
     }
@@ -1940,6 +1976,18 @@ impl App {
                     }
                 });
                 match (&self.loaded, self.board) {
+                    (Some(l), Some(i)) if self.ticket.from_knowledge => {
+                        let b = &l.report.boards[i];
+                        let auction = if self.kview.bba { "BBA's" } else { "our" };
+                        ui.label(
+                            RichText::new(format!(
+                                "board: {} {}, with the knowledge view's review of {auction} \
+                                 auction",
+                                b.scenario, b.board
+                            ))
+                            .weak(),
+                        );
+                    }
                     (Some(l), Some(i)) if self.tab != Tab::Cases => {
                         let b = &l.report.boards[i];
                         ui.label(
@@ -1976,6 +2024,7 @@ impl App {
         }
         if cancel || !open {
             self.ticket.open = false;
+            self.ticket.from_knowledge = false;
             if self.ticket.filing.is_none() {
                 self.ticket.status = None;
             }
@@ -2057,5 +2106,33 @@ mod tests {
         assert!(c.first_difference.is_some());
         assert_eq!(c.bba_reading.len(), b.reference.len());
         assert!(c.reproduce.notes.iter().any(|n| n.contains("no --set")));
+        assert!(c.knowledge.is_none());
+
+        // From the knowledge view, on the Cases tab: the board still comes,
+        // with the view's review of BBA's auction. Headless, the view is
+        // embedded in the main window.
+        app.tab = Tab::Cases;
+        app.ticket.open = false;
+        app.kview.open = true;
+        app.kview.bba = true;
+        let mut out = ctx.run_ui(egui::RawInput::default(), |ui| {
+            app.knowledge_window(ui.ctx())
+        });
+        out.textures_delta.clear();
+        assert!(app.kview.open);
+        app.ticket.open = true;
+        app.ticket.from_knowledge = true;
+        let mut out = ctx.run_ui(egui::RawInput::default(), |ui| {
+            app.knowledge_window(ui.ctx())
+        });
+        out.textures_delta.clear();
+        let c = app.capture(here);
+        let b = c
+            .board
+            .as_ref()
+            .expect("the board, from the knowledge view");
+        let k = c.knowledge.as_ref().expect("the knowledge review");
+        assert_eq!(k.auction, "bba");
+        assert!(k.text.contains(&format!("{:>2}. ", b.reference.len())));
     }
 }
