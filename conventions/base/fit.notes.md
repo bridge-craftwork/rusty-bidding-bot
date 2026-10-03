@@ -126,6 +126,17 @@ four cards in the other major partner may hold (1D-1S-1NT-3H with 6-4:
 | corpus | 310 | **+395** (actor +258 / +156) | **+401** (+250 / +151) | −37 |
 | 21GF | 220 | **+255** (actor +126 / +145) | **+272** (+127 / +145) | −27 |
 
+**In competition** (2026-10-02, a second commit): the same rule once
+the opponents have passed since (`!they.bid | rho.last=P`, as the
+notrump ladder): 1S X P 2S P 3NT P 4H with six hearts facing the
+doubler. Against the uncontested rule:
+
+| set | boards changed | contract errors (even / odd) | distance from par (even / odd) | doubling |
+|---|---:|---:|---:|---:|
+| vanilla | 45 | **+113** (actor +83 / +31) | **+113** (+77 / +36) | −8 |
+| corpus | 78 | **+275** (actor +166 / +138) | **+251** (+135 / +116) | +41 |
+| 21GF | 49 | **+140** (actor +63 / +84) | **+132** (+59 / +73) | +1 |
+
 Positive means fewer errors (`probes/tools/errors_diff.py`). No new
 "no rule" or "passed a forcing" boards; contradictions 391 → 392 on the
 corpus. "Calls read as a higher rule" +90 on vanilla: the sequence
@@ -155,6 +166,15 @@ lines 36, 176), which now reads as this rule's 4M. The two say the same
   them to the forcing calls below 3NT; over 3NT only the notrump slam
   values (32 HCP, over-3nt.bid) go elsewhere, so a weak hand with seven
   hearts still corrects 2C-2D-3NT to 4H. Corpus +215 → +273 with it.
+- **Two sequence fixes the survey pointed to**, measured together with
+  the negative-double 3NT (kept, responder-rebids.notes.md): 1M-3NT
+  only with two cards in the major (`responses.bid`, so three bid a
+  game raise or a new suit), first calls 1S-3NT → 2C/3S: vanilla −20,
+  corpus +157, 21GF +57; and 1x (1y) 1NT not with three cards in
+  opener's major below 10 points (`after-interference.bid`, raise
+  instead): vanilla −29, corpus +54, 21GF −2. Neither gains on all
+  three sets; not kept. On vanilla the 1M-3NT loss is slams: 1S-2C-...-4S
+  where 1S-3NT-6S had found them.
 - **Rick's 5H answer to the quantitative 4NT** (1NT-2D-2H-4NT, opener
   minimum with three or more hearts): corpus −21 contract errors, −19
   par, on 33 boards, both halves negative; 21GF not run. With a minimum
@@ -171,12 +191,11 @@ lines 36, 176), which now reads as this rule's 4M. The two say the same
    21GF: 4NT asks in the minor); the inverted-minor and 1NT-3m auctions
    already set trump in the minor. Should a later public major fit
    replace a minor trump?
-3. **Positions this rule does not reach**, each a sequence fix (no rule
-   above can take them without claiming other calls): 1M-3NT with three
-   cards in the major (27 vanilla, 38 21GF boards; responses.bid 3NT
-   allows `M<=3`, and the 4M game raise at priority −3 ranks below it);
-   1x (1y) 1NT with three-card support (after-interference.bid);
-   the competitive positions (1S (2H) X 3D, pass with three spades).
+3. **Positions this rule does not reach**, each a sequence question:
+   1M-3NT with three cards in the major (27 vanilla, 38 21GF boards;
+   the fix above lost on vanilla); 1x (1y) 1NT with three-card support
+   (likewise); the competitive positions where partner's last call was
+   a suit (1S (2H) X (P) 3D, responder passing with three spades).
 4. **The invitation in a private fit** needs either a three-level call
    no module uses or the engine reading a fallback as the union of
    meanings (JUDGMENT-LAYER.md §4, option 2, language 2).

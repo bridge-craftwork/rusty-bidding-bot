@@ -24,6 +24,11 @@ S KQJ873.K5.Q52.84      | 1D P 1S P 1N P 2C P 2H P             | 4S     | partne
 S K3.AQJ973.952.K4      | 1D P 1H P 1N P 2C P 2N P             | 4H     | six hearts facing two: 4H, not 3NT
 S KQ84.AJ9873.52.4      | 1N P 2C P 2D P                       | 4H     | Stayman found no spade fit; six hearts facing two
 
+# In competition, once the opponents have passed (21GF random set,
+# board 5691).
+dealer  S
+E Q986.AQ7652.A8.7      | 1S X P 2S P 3N P                     | 4H     | six hearts facing the doubler's three or more: correct 3NT
+
 # The support double: opener's three make the fit agreed when responder
 # has five, and responder places the contract.
 dealer  N
