@@ -248,3 +248,11 @@ dealer  N
 S KQ5.A92.KJ84.Q73      | 1C P 1D P 2N P                       | 4NT    | 16 facing 18-19: quantitative (34-35 between us)
 S KQ5.A92.KJ84.AQ3      | 1C P 1D P 2N P                       | 6NT    | 18 facing 18-19: slam
 S K95.A92.QJ84.Q73      | 1C P 1D P 2N P                       | 3NT    | 12: game
+
+# Game in opener's major before 3NT (Rick, ticket b400, 2026-10-02).
+card    Basic-Bridge
+dealer  W
+E AKQ5.Q832.T84.Q7      | 1H P 1S P 2C P           | 4H     | nine hearts between us, minimum opener: game in the major, not 3NT
+E AKQ5.Q83.T842.Q7      | 1H P 1S P 1NT P          | 4H     | three hearts opposite five, 13: the major game
+E AJ54.Q83.T842.97      | 1H P 1S P 2NT P          | 4H     | three hearts and 7 opposite 18-19
+E AKQ5.83.KT84.Q72      | 1H P 1S P 2C P           | 3NT    | two hearts: no fit, 3NT

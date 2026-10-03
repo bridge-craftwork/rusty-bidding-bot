@@ -563,9 +563,34 @@ Vanilla +17 IMPs vs BBA (even +18 / odd -1), corpus +124 (+54 / +70),
 BBA bids 4S (63 of 500): our total points count tens and length a little
 differently.
 
+## Game in opener's major before 3NT (Rick, ticket b400, 2026-10-02)
+
+Rick: "responder should know we have a 9-card heart fit after the
+opening bid ... Once opener rebids 2C, slam isn't in the cards so
+responder should bid 4H. There should be a sense of major suit fit is
+better than NT." Vanilla board 400: 1H-1S-2C with AKQ5.Q832.T84.Q7 bid
+3NT (BBA's auction reached 4H). After opener's new suit, 1NT or 2NT
+rebid, responder had an invitation in opener's major but no game in it,
+so a game-going hand with three or more of opener's five-card major
+could only bid 3NT. Now `4M` "Game in opener's major", three or more
+trumps and 13 support points (7 opposite the 18-19 2NT), priority 1 so
+it comes before 3NT. Responder is the support hand and counts support
+points (Rick, 2026-10-01). Fourth suit forcing's test hand had three
+small hearts and "no heart fit"; it now holds two hearts
+(AQ82.98.K74.A753), so it still tests the fourth suit.
+
+| set | contract errors | distance from par | errors line |
+|---|---|---|---|
+| vanilla (357 boards) | +747 | +772 | +687 (+382 / +305) |
+| corpus (238) | +404 | +415 | +370 (+215 / +155) |
+| 21GF random (243) | +329 | +344 | +284 (+183 / +101) |
+
+The only loss: 25 vanilla boards (-56) where an invitational 3M hand now
+counts 13 support points with shortness and bids game.
+
 ## Sources
 
-- **Rick's rulings**, dated in the sections above (the ranges and
+- **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
   invitations 2026-09-22, the ladder catch-all 2026-09-27, the minor-fit
   stoppers 2026-09-25), and the tickets named there.
 - **BBA evidence:** corpus auctions only, as quoted in each section; no
