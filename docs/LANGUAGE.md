@@ -583,7 +583,10 @@ How `rbb-engine` implements the model, and its current limits:
   `we.keycards(t)` is only known from my own count.
 - **Descriptiveness** is measured on a fixed sample of 20,000 random hands.
   It is the share of hands that the call's `shows` rules out, among the
-  hands consistent with what the caller has already shown.
+  hands consistent with what the caller has already shown. It depends on
+  the calls and on the board's conditions (the vulnerability seen from the
+  caller's side, the scoring: earlier calls may mean different things
+  under them), and is computed once for each.
 - **Negative inference** is automatic. A call denies every candidate that
   outranks it on priority and descriptiveness. It is skipped when the
   denied rule has a term that cannot be resolved (for example `slam_try` or
