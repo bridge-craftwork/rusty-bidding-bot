@@ -268,3 +268,10 @@ E AKQ5.8.QT842.Q72      | 1H P 1S P 2H P           | 3NT    | a singleton: no fi
 card    Basic-Bridge
 dealer  N
 S KQ5.Q4.KJ84.A652      | 1H 2S X P 3C P                       | 3NT    | 15 balanced, spades stopped: game in notrump, not 4NT
+
+# Over opener's 2NT answer to the negative double, game is 3NT, not
+# jump(N)'s 4NT (Rick, 2026-10-03: 4NT with no notrump of ours would be
+# keycard, and here it was natural).
+card    Basic-Bridge
+dealer  N
+S AQ64.K83.Q5.K942      | 1C 1D X 2D 2NT P                     | 3NT    | 14 opposite 18-19: game in notrump

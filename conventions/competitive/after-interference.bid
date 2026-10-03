@@ -321,6 +321,7 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       shows balanced, hcp<=14
       when  stop(y)
   jump(N) "18-19 balanced with a stopper in {y}"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
       when  stop(y)
   cheapest(x) "Six cards in {x}, minimum"
@@ -442,6 +443,7 @@ after 1x (1y) X (2z) | 1x (2y) X (3z) when y is not x
       shows balanced, hcp<=15
       when  stop(y)
   jump(N) "18-19 balanced with a stopper in {y}"
+      when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
       when  stop(y)
   cheapest(x) "Six cards in {x} and the values to bid again"

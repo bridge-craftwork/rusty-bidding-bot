@@ -39,6 +39,7 @@ after 1x (*) 1M (1z) | 1x (*) 1M (2z) | 1x (*) 1M (3z) when M is not x, z is not
     # here. The strong hands without three of the major still need a
     # call: BBA bids 2NT or 3NT with 18 (probes/support-x-1C-X-1H-1S.toml).
     jump(N) "18-19 balanced with a stopper in {z}"
+        when  nt_jump_to_game                  # 3NT at most (rebids.bid)
         shows  balanced, hcp=18..19, M<=2, stop(z)
         when   lho.last=X
     3N  "20+ with a stopper in {z}"
