@@ -164,6 +164,19 @@ modules' own "Game: 6+ M" over partner's 1NT/2NT (responder-rebids.bid
 lines 36, 176), which now reads as this rule's 4M. The two say the same
 (six of M, game values).
 
+**All of it together** (this module's three commits and the
+negative-double 3NT in responder-rebids.bid), against main at ad9fb2f:
+
+| set | boards changed | contract errors (even / odd) | distance from par (even / odd) | doubling | read as a higher rule | contradictions |
+|---|---:|---:|---:|---:|---:|---:|
+| vanilla | 249 | **+484** (+253 / +231) | **+483** (+248 / +235) | −9 | 15,024 → 15,138 | 185 → 199 |
+| corpus | 462 | **+840** (+537 / +303) | **+809** (+515 / +294) | +47 | 21,140 → 21,520 | 391 → 402 |
+| 21GF | 316 | **+566** (+249 / +317) | **+555** (+245 / +310) | +1 | 15,675 → 15,764 | 320 → 331 |
+
+"No rule in a live auction" and "passed a forcing auction" are
+unchanged. On vanilla the private-fit boards of the survey fall from
+1,232 to 1,043 (errors 8,724 → 7,418, DD gain 4,103 → 3,548).
+
 ### Tried and dropped
 
 - **Broad context** (any position after my first call, not only over
