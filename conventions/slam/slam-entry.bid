@@ -149,15 +149,28 @@ define shown_eight(x) = shown.x.min + partner.x.min >= 8
 define major_over_minor(x) = x is S | x is H, trump is C | trump is D, shown_eight(x)
 define minor_given_way = major_over_minor(S) | major_over_minor(H)
 
-# Our side has bid notrump. The language keeps no history of calls, so:
-# one of our last calls was notrump, or either hand has shown a balanced
-# hand (a notrump opening, rebid or response is what shows one).
-define our_notrump = (last=1N | last=2N | last=3N | partner.last=1N | partner.last=2N | partner.last=3N | !(maybe !partner.balanced) | !(maybe !shown.balanced))
+# Our side has bid notrump: either of us made a natural notrump bid at
+# any point (`we.named(N)`, 2026-10-03; artificial calls such as a 2NT
+# feature ask do not count), or either hand has shown a balanced hand.
+define our_notrump = we.named(N) | !(maybe !partner.balanced) | !(maybe !shown.balanced)
 
 # Partner's last call was a natural bid in x.
 define last_suit(x) = partner_named(x), partner.x.min >= 2
 
 define no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !shown_eight(C)
+
+# 4NT after our side has bid notrump, with no suit agreed, is
+# quantitative (Rick, 2026-10-03). The notrump modules write it auction
+# by auction; this is the fallback below them, so that a 4NT after, say,
+# 1C-1S-1NT-2D (new minor) is read and answered rather than "no rule".
+# The answer is one-nt.bid's `when asked quant` (6NT from 32 between us).
+# Ranked below every pass, so it is for reading: our own 4NT stays with
+# the modules that judge it (a higher rank took over their 3NT and pass).
+when we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight
+  4N  "Quantitative: 31-32 between us, invites 6NT"
+      shows points + partner.points.min >= 31, points + partner.points.min <= 32
+      sets  ask=quant
+      priority -60
 
 # The keycard suit with no trump set (2 and 3 above), one suit at most.
 define kc_shown(x) = shown_eight(x), x is S | !shown_eight(S), x is S | x is H | !shown_eight(H), x is S | x is H | x is D | !shown_eight(D)

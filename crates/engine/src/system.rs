@@ -195,7 +195,10 @@ impl System {
             if let Some(e) = &rule.shows {
                 crate::eval::board_terms(e, &mut board_terms);
             }
-            let counts_conditions = rule.shows.as_ref().is_some_and(crate::eval::counts_conditions);
+            let counts_conditions = rule
+                .shows
+                .as_ref()
+                .is_some_and(crate::eval::counts_conditions);
             self.rules.push(RuleEntry {
                 rule,
                 patterns: patterns.clone(),

@@ -780,11 +780,15 @@ impl<'a> Ctx<'a> {
             ));
         }
         if n == "bare_suits" {
-            let trump = self.pos.side_state(self.actor).trump.and_then(suit_of_strain);
+            let trump = self
+                .pos
+                .side_state(self.actor)
+                .trump
+                .and_then(suit_of_strain);
             return Ok(Val::Num(match self.hand {
-                Some(f) => Range::point(
-                    (0..4).filter(|&s| Some(s) != trump && f.bare(s)).count() as i32,
-                ),
+                Some(f) => {
+                    Range::point((0..4).filter(|&s| Some(s) != trump && f.bare(s)).count() as i32)
+                }
                 None => Range::new(0, 4),
             }));
         }
@@ -937,7 +941,11 @@ impl<'a> Ctx<'a> {
                 self.suit_arg(args, 0, b)?.is_some_and(|s| f.stop(s)),
             )),
             "bare" => {
-                let trump = self.pos.side_state(self.actor).trump.and_then(suit_of_strain);
+                let trump = self
+                    .pos
+                    .side_state(self.actor)
+                    .trump
+                    .and_then(suit_of_strain);
                 Val::Bool(Tri::from_bool(
                     self.suit_arg(args, 0, b)?
                         .is_some_and(|s| Some(s) != trump && f.bare(s)),
@@ -973,7 +981,12 @@ impl<'a> Ctx<'a> {
         }
         // `partner.trump`: the length in our agreed suit.
         if n == "trump" {
-            return match self.pos.side_state(self.actor).trump.and_then(suit_of_strain) {
+            return match self
+                .pos
+                .side_state(self.actor)
+                .trump
+                .and_then(suit_of_strain)
+            {
                 Some(s) => Ok(Val::Num(k.len[s])),
                 None => Err("no trump suit agreed".into()),
             };
@@ -1046,6 +1059,10 @@ impl<'a> Ctx<'a> {
                     None => Val::Bool(Tri::False),
                 }
             }
+            // Public history: a natural bid in the strain, ever.
+            "named" => Val::Bool(Tri::from_bool(
+                self.pos.named(seat, self.strain_arg(seg, b)?),
+            )),
             "has" | "stop" | "semibalanced" | "bare" => Val::Bool(Tri::Unknown),
             // Support points are known when a raise showed them.
             "tp" => match self.suit_arg(seg.args.as_deref().unwrap_or(&[]), 0, b)? {
@@ -1100,10 +1117,32 @@ impl<'a> Ctx<'a> {
         self.knowledge_attr(self.pos.knowledge(d), d, seg, b)
     }
 
+    /// A strain argument: a suit, a suit variable, `N` or `trump`.
+    fn strain_arg(&self, seg: &Segment, b: &mut Bindings) -> R<Strain> {
+        let e = match seg.args.as_deref() {
+            Some([e]) => e,
+            _ => return Err(format!("`{}(x)` takes one strain", seg.name)),
+        };
+        if matches!(e, Expr::Path { path } if path.len() == 1 && path[0].name == "N") {
+            return Ok(Strain::NoTrump);
+        }
+        match self.eval(e, b)? {
+            Val::Suit(s) => Ok(strain_of_suit(s)),
+            Val::Strain(st) => Ok(st),
+            v => Err(format!("`{e}` is not a strain ({v:?})")),
+        }
+    }
+
     fn we_attr(&self, seg: &Segment, b: &mut Bindings) -> R<Val> {
         let side = self.pos.side_state(self.actor);
         Ok(match seg.name.as_str() {
             "trump" => side.trump.map_or(Val::Nothing, Val::Strain),
+            "named" => {
+                let st = self.strain_arg(seg, b)?;
+                Val::Bool(Tri::from_bool(
+                    self.pos.named(self.actor, st) || self.pos.named(self.partner(), st),
+                ))
+            }
             "forcing" => Val::Sym(
                 match side.forcing {
                     Forcing::None => "none",
@@ -1165,7 +1204,9 @@ impl<'a> Ctx<'a> {
         let last_bid = || {
             (0..self.pos.calls.len())
                 .rev()
-                .filter(|&i| crate::position::side(self.pos.caller(i)) != crate::position::side(self.actor))
+                .filter(|&i| {
+                    crate::position::side(self.pos.caller(i)) != crate::position::side(self.actor)
+                })
                 .find_map(|i| match self.pos.calls[i] {
                     Call::Bid { level, strain } => Some((level, strain)),
                     _ => None,
@@ -1185,7 +1226,9 @@ impl<'a> Ctx<'a> {
                 };
                 let suit = match self.eval(x, b)? {
                     Val::Suit(s) => s,
-                    Val::Strain(st) => suit_of_strain(st).ok_or("they.fit: notrump has no length")?,
+                    Val::Strain(st) => {
+                        suit_of_strain(st).ok_or("they.fit: notrump has no length")?
+                    }
                     v => return Err(format!("they.fit: `{x}` is not a suit ({v:?})")),
                 };
                 let len = Segment {
@@ -1543,7 +1586,10 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                 // condition is judged with no hand, comes out false, and
                 // the candidate vanishes silently.
                 "we" => path.get(1).is_some_and(|s| {
-                    matches!(s.name.as_str(), "hcp" | "keycards" | "points" | "tp" | "fit")
+                    matches!(
+                        s.name.as_str(),
+                        "hcp" | "keycards" | "points" | "tp" | "fit"
+                    )
                 }),
                 "partner" | "lho" | "rho" | "shown" | "they" => false,
                 _ if path.len() > 1 => false,
@@ -1917,6 +1963,11 @@ const SEAT_ATTRS: &[Term] = &[
         "(x[, call])",
         "that seat's last bid went past an available bid in x (above `call` when given)",
     ),
+    f(
+        "named",
+        "(x)",
+        "that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count",
+    ),
     f("has", "(rank, x)", "not tracked: unknown"),
     f("stop", "(x)", "not tracked: unknown"),
     t("semibalanced", "not tracked: unknown"),
@@ -1942,6 +1993,11 @@ const WE_ATTRS: &[Term] = &[
         "the agreed strain (`is suit`, `is notrump`, `is none`), usable as a suit",
     ),
     t("forcing", "`none`, `round` or `game`"),
+    f(
+        "named",
+        "(x)",
+        "either of us has made a natural bid in x (a suit or N) at any point; artificial calls do not count",
+    ),
     t("gf", "we are in a game force (`we.forcing = game`)"),
     t(
         "hcp",
@@ -2238,7 +2294,10 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
                     out.push(format!("`me.{}`", seg.name))
                 }
                 ("we", Some(seg))
-                    if matches!(seg.name.as_str(), "hcp" | "keycards" | "points" | "tp" | "fit") =>
+                    if matches!(
+                        seg.name.as_str(),
+                        "hcp" | "keycards" | "points" | "tp" | "fit"
+                    ) =>
                 {
                     out.push(format!("`we.{}`", seg.name))
                 }
@@ -2308,7 +2367,10 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
             out.extend(msgs.into_iter().map(|msg| diag(c.line, msg)));
         }
         for r in &c.rules {
-            for e in [&r.shows, &r.when, &r.denies, &r.prefer].into_iter().flatten() {
+            for e in [&r.shows, &r.when, &r.denies, &r.prefer]
+                .into_iter()
+                .flatten()
+            {
                 let e = expand(r.line, e, out);
                 let mut msgs = Vec::new();
                 check_expr(&e, params, &mut msgs);
@@ -2346,7 +2408,12 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
             let body = defines.expand(&d.body, &mut errors);
             let mut msgs = Vec::new();
             check_expr(&body, &params, &mut msgs);
-            out.extend(errors.into_iter().chain(msgs).map(|msg| diag(format!("`{n}`: {msg}"))));
+            out.extend(
+                errors
+                    .into_iter()
+                    .chain(msgs)
+                    .map(|msg| diag(format!("`{n}`: {msg}"))),
+            );
         }
         for c in &m.contexts {
             walk(m, c, &params, &defines, &mut out);
@@ -2573,7 +2640,9 @@ mod term_tests {
         }
         assert!(!m.iter().any(|x| x.contains("style")), "{m:?}");
         let twice = module("module e \"e\"\ndefine held(x) = x>=3\n");
-        assert!(msgs(&[d, twice]).iter().any(|x| x.contains("`held` is defined twice")));
+        assert!(msgs(&[d, twice])
+            .iter()
+            .any(|x| x.contains("`held` is defined twice")));
     }
 
     /// The judgment layer's Phase 0 terms (docs/JUDGMENT-LAYER.md).
@@ -2664,7 +2733,7 @@ mod term_tests {
         let arg = |n: &str| match n {
             "has" => "(A, S)",
             "bypassed" | "denied" | "cued" | "tp" | "keycards" | "stop" | "quality" | "top5"
-            | "under_game" | "cheapest_rank" | "bare" | "safe_level" | "fit" => "(S)",
+            | "under_game" | "cheapest_rank" | "bare" | "safe_level" | "fit" | "named" => "(S)",
             _ => "",
         };
         let mut exprs: Vec<String> = Vec::new();
