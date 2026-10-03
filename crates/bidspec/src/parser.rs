@@ -395,7 +395,11 @@ impl<'a> Parser<'a> {
         let level = match l.toks.get(1).map(|t| &t.tok) {
             Some(Tok::Word(w)) if w == "game" => w.clone(),
             _ => {
-                self.error(line, None, "expected `force game after <auction> [when <condition>]`");
+                self.error(
+                    line,
+                    None,
+                    "expected `force game after <auction> [when <condition>]`",
+                );
                 return None;
             }
         };

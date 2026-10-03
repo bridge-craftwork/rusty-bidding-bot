@@ -292,7 +292,10 @@ mod tests {
         ] {
             let full = format!("module demo \"Demo\"\n\n{src}\n");
             let err = crate::parse(&full, "demo.bid").unwrap_err();
-            assert!(err.iter().any(|d| d.message.contains(msg)), "{src}: {err:?}");
+            assert!(
+                err.iter().any(|d| d.message.contains(msg)),
+                "{src}: {err:?}"
+            );
         }
     }
 }
