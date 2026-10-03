@@ -122,6 +122,12 @@ fn pos_key(pos: &Position) -> String {
     k
 }
 
+/// What the hands consistent with `actor`'s calls are found from: the
+/// constraints it has shown (`Engine::consistent_hands`).
+fn consistent_key(pos: &Position, actor: Direction) -> String {
+    format!("{:?}|{:?}", actor, pos.knowledge(actor).constraints)
+}
+
 pub struct Engine {
     /// By side: 0 = North-South, 1 = East-West.
     systems: [System; 2],
@@ -273,8 +279,9 @@ impl Engine {
                 }
             }
         }
+        let shown = consistent_key(pos, actor);
         for c in &mut out {
-            c.descriptiveness = self.descriptiveness_of(pos, actor, c);
+            c.descriptiveness = self.descriptiveness_of(pos, actor, c, &shown);
         }
         out.sort_by(|a, b| {
             (b.priority, b.descriptiveness)
@@ -286,9 +293,9 @@ impl Engine {
     }
 
     /// Indices of sample hands consistent with what `actor` has shown.
-    fn consistent_hands(&self, pos: &Position, actor: Direction) -> Arc<Vec<u32>> {
-        let key = format!("{:?}|{:?}", actor, pos.knowledge(actor).constraints);
-        if let Some(v) = self.consistent.lock().unwrap().get(&key) {
+    /// `key` is `consistent_key(pos, actor)`.
+    fn consistent_hands(&self, pos: &Position, actor: Direction, key: &str) -> Arc<Vec<u32>> {
+        if let Some(v) = self.consistent.lock().unwrap().get(key) {
             return v.clone();
         }
         // The ranges the constraints alone give: the cache is keyed by the
@@ -332,42 +339,59 @@ impl Engine {
             .map(|(i, _)| i as u32)
             .collect();
         let ids = Arc::new(ids);
-        self.consistent.lock().unwrap().insert(key, ids.clone());
+        self.consistent
+            .lock()
+            .unwrap()
+            .insert(key.to_string(), ids.clone());
         ids
     }
 
     /// Share of the hands consistent with the actor's earlier calls that the
-    /// candidate's `shows` rules out.
-    fn descriptiveness_of(&self, pos: &Position, actor: Direction, c: &Cand) -> f64 {
+    /// candidate's `shows` rules out. `shown` is `consistent_key(pos, actor)`.
+    fn descriptiveness_of(&self, pos: &Position, actor: Direction, c: &Cand, shown: &str) -> f64 {
         let entry = &self.systems[side(actor)].rules[c.entry];
         let Some(shows) = &entry.rule.shows else {
             return 0.0;
         };
-        // The value is a pure function of the key, or boards bid in
-        // parallel would share whichever reached it first. Besides the
-        // calls, it depends on the board's conditions, seen from the
-        // actor's side: not only where this `shows` reads them (`vul`,
-        // `imps`), but through every earlier call whose meaning did (a
-        // pass that denies a weak two only when not vulnerable narrows the
-        // hands counted here). The dealer adds nothing: with the side
-        // fixed, the calls place every seat relative to the actor.
-        let board = (
-            pos.is_vulnerable(actor),
-            pos.is_vulnerable(actor.next()),
-            pos.is_imps(),
-        );
-        let key = format!(
-            "{}|{}|{}|{:?}|{:?}|{board:?}",
-            side(actor),
-            c.entry,
-            c.call,
-            sorted(&c.b),
-            pos.calls
-        );
+        // The value must be a pure function of the key, or boards bid in
+        // parallel share whichever reached it first. It is counted over
+        // the hands consistent with what the actor has shown (`shown`).
+        // A `shows` that reads only the hand (`hand_only`) depends on
+        // nothing else, so it is keyed on that alone, whatever the calls
+        // or the board. Any other may read the rest of the position: the
+        // calls, and the board's conditions seen from the actor's side,
+        // not only where it reads them itself (`vul`, `imps`) but through
+        // every earlier call whose meaning did (a pass that denies a weak
+        // two only when not vulnerable). The dealer adds nothing: with the
+        // side fixed, the calls place every seat relative to the actor.
+        let params = &self.systems[side(actor)].params[entry.module];
+        let key = if crate::eval::hand_only(shows, &c.b, params) {
+            format!(
+                "{}|{}|{}|{:?}|{shown}",
+                side(actor),
+                c.entry,
+                c.call,
+                sorted(&c.b)
+            )
+        } else {
+            let board = (
+                pos.is_vulnerable(actor),
+                pos.is_vulnerable(actor.next()),
+                pos.is_imps(),
+            );
+            format!(
+                "{}|{}|{}|{:?}|{:?}|{board:?}",
+                side(actor),
+                c.entry,
+                c.call,
+                sorted(&c.b),
+                pos.calls
+            )
+        };
         if let Some(v) = self.descriptiveness.lock().unwrap().get(&key) {
             return *v;
         }
-        let mut ids = self.consistent_hands(pos, actor);
+        let mut ids = self.consistent_hands(pos, actor, shown);
         if ids.is_empty() {
             ids = Arc::new((0..self.pool.len() as u32).collect());
         }

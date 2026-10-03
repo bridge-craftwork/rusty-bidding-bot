@@ -1653,6 +1653,55 @@ fn has_maybe(e: &Expr) -> bool {
     }
 }
 
+/// Does `e`, judged on a hand, read nothing but that hand, the bindings
+/// and the module's parameters: no other seat, no auction or side state,
+/// no board conditions? Its value on a hand is then the same at every
+/// position (`descriptiveness_of` shares it). Conservative: a name or form
+/// not known to be the hand's own counts as reading the position.
+pub fn hand_only(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
+    let rec = |x: &Expr| hand_only(x, b, params);
+    // A bare name that `Ctx::name` resolves without the position.
+    let pure_name = |n: &str| {
+        b.contains_key(n)
+            || params.contains_key(n)
+            || suit_index(n).is_some()
+            || n == "N"
+            || n == "NT"
+            || quality_level(n).is_some()
+            || rank_value(n).is_some()
+            || (named(SELF_ATTRS, n) && n != "bare_suits")
+    };
+    match e {
+        Expr::And { all } => all.iter().all(rec),
+        Expr::Or { any } => any.iter().all(rec),
+        Expr::Not { expr } | Expr::Neg { expr } => rec(expr),
+        Expr::Cmp { lhs, rhs, .. } | Expr::Arith { lhs, rhs, .. } => rec(lhs) && rec(rhs),
+        Expr::InRange { expr, lo, hi } => rec(expr) && rec(lo) && rec(hi),
+        Expr::InSet { expr, .. } => rec(expr),
+        Expr::Is { expr, what, .. } => {
+            rec(expr) && (matches!(what.as_str(), "suit" | "notrump" | "none") || pure_name(what))
+        }
+        Expr::Shape { .. } | Expr::Int { .. } => true,
+        Expr::Path { path } => {
+            let [seg] = path.as_slice() else {
+                return false;
+            };
+            match &seg.args {
+                None => pure_name(&seg.name),
+                Some(args) => {
+                    matches!(
+                        seg.name.as_str(),
+                        "tp" | "keycards" | "quality" | "top5" | "stop" | "has"
+                    ) && args.iter().all(rec)
+                }
+            }
+        }
+        Expr::Maybe { .. } | Expr::Asked { .. } | Expr::Answered { .. } | Expr::Call { .. } => {
+            false
+        }
+    }
+}
+
 /// Does `e` refer to the actor's own hand (so it must not be folded to a
 /// constant from knowledge)?
 fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
@@ -2491,6 +2540,43 @@ mod term_tests {
         assert!(hand_dependent(&when_of("S > partner.S.min"), &b));
         assert!(!hand_dependent(&when_of("partner.trump.min >= 3"), &b));
         assert!(!hand_dependent(&when_of("we.trump is suit"), &b));
+    }
+
+    /// Only a `shows` that reads nothing but the hand may share its
+    /// descriptiveness across positions: anything that reads another
+    /// seat, the auction, the side's state or the board must not.
+    #[test]
+    fn hand_only_reads_nothing_but_the_hand() {
+        let mut b = Bindings::new();
+        b.insert("x".into(), Val::Suit(1));
+        let params = HashMap::from([("min".to_string(), Val::Num(Range::point(10)))]);
+        for e in [
+            "H>=4, hcp+length_points=9..11",
+            "balanced, hcp>=12, stop(x), (H<=3 | x is H)",
+            "x>=5, quality(x)>=good, has(A, x)",
+            "tp(x)>=10, shape 5-4-x-x, longest<=5",
+            "hcp>=min",
+        ] {
+            assert!(hand_only(&when_of(e), &b, &params), "{e}");
+        }
+        for e in [
+            "hcp>=31-partner.hcp.min",
+            "vul, hcp>=10",
+            "favourable",
+            "imps",
+            "strength=invite",
+            "partner.opened",
+            "maybe H>=4",
+            "bare(x)",
+            "bare_suits>=2",
+            "safe_level(x)>=3",
+            "trump>=4",
+            "passed_hand",
+            "seat=3",
+            "asked",
+        ] {
+            assert!(!hand_only(&when_of(e), &b, &params), "{e}");
+        }
     }
 
     #[test]
