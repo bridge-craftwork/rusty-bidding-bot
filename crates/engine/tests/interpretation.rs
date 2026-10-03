@@ -230,3 +230,50 @@ fn a_game_force_survives_their_bid() {
     // not pass when opener bids over it.
     assert!(must_bid_after("1D X Pass 2D 3D"));
 }
+
+/// `Engine::review` reads the calls as `interpret` does, snapshots every
+/// seat and both sides after each call, and flags forcing calls and asks.
+#[test]
+fn review_snapshots_every_seat_and_flags_the_calls() {
+    let e = engine();
+    let auction = calls("1NT Pass 2C Pass 2H Pass 4H Pass Pass Pass");
+    let deal = bridge_types::Deal::from_pbn(
+        "N:J6.85.J9864.K872 AK73.AKJ9.52.Q93 QT952.764.AQT7.4 84.QT32.K3.AJT65",
+    )
+    .unwrap();
+    let hands = [
+        Direction::North,
+        Direction::East,
+        Direction::South,
+        Direction::West,
+    ]
+    .map(|d| Some(deal.hand(d).clone()));
+    let (dealer, vul, scoring) = (
+        Direction::East,
+        Vulnerability::None,
+        ScoringMethod::Matchpoints,
+    );
+    let rows = e.review(dealer, vul, scoring, &auction, &hands);
+    let read = e.interpret(dealer, vul, scoring, &auction);
+    assert_eq!(rows.len(), auction.len());
+    for (r, s) in rows.iter().zip(&read.steps) {
+        assert_eq!(r.step.call, s.call);
+        assert_eq!(r.step.rule, s.rule);
+        assert_eq!(r.seats[s.caller.to_index()], s.knowledge);
+    }
+    let last = rows.last().unwrap();
+    assert_eq!(last.seats, read.position.knowledge);
+    assert_eq!(last.sides, read.position.sides);
+    // East's 1NT narrows East; Stayman is forcing and asks.
+    let east = Direction::East.to_index();
+    assert!(rows[0].narrowed[east].hcp);
+    assert_eq!(rows[0].seats[east].hcp, Range::new(15, 17));
+    assert!(rows[2].flags.forcing, "{:?}", rows[2].flags);
+    assert!(rows[2].flags.ask.is_some());
+    // After 2H West sees the heart fit: four each, support points for both.
+    let own = rows[6].own[Direction::West.to_index()].as_ref().unwrap();
+    let fit = own.fit.as_ref().unwrap();
+    assert_eq!(fit.trump, Strain::Hearts);
+    assert_eq!(fit.role, rbb_engine::Role::Equal);
+    assert!(!rbb_engine::review_text(&rows).is_empty());
+}

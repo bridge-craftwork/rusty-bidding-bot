@@ -14,6 +14,7 @@ mod facts;
 mod knowledge;
 mod macros;
 mod position;
+mod review;
 mod sample;
 mod system;
 
@@ -26,6 +27,10 @@ pub use engine::{
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
 pub use position::{side, Ask, Forcing, Position, SideState};
+pub use review::{
+    knowledge_full, knowledge_parts, review_text, side_text, strain_symbol, FitView, Flags,
+    Narrowed, OwnView, Part, ReviewRow, Role,
+};
 
 /// The playing suit of a strain (`None` for notrump).
 pub fn suit_of(strain: bridge_types::Strain) -> Option<bridge_types::Suit> {
