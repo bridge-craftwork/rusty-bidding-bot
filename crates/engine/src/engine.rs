@@ -604,7 +604,9 @@ impl Engine {
                 }
             }
             b.insert("call".into(), Val::Call(call.clone()));
-            f.when.as_ref().is_none_or(|w| ctx.cond(w, &mut b) == Ok(Tri::True))
+            f.when
+                .as_ref()
+                .is_none_or(|w| ctx.cond(w, &mut b) == Ok(Tri::True))
         }) {
             let st = &mut pos.sides[side(caller)];
             if st.forcing != Forcing::Game {
@@ -616,6 +618,8 @@ impl Engine {
         step.warnings = warnings;
         pos.knowledge[caller.to_index()] = k;
         pos.apply_deck_hcp();
+        pos.artificial.resize(pos.calls.len(), false);
+        pos.artificial.push(step.artificial);
         pos.calls.push(call.clone());
         step
     }

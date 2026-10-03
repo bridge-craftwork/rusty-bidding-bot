@@ -467,6 +467,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.denied(x)` | in the control-bid dialogue that seat skipped x |
 | `partner.cued(x)` | in the control-bid dialogue that seat has shown a control in x |
 | `partner.bypassed(x[, call])` | that seat's last bid went past an available bid in x (above `call` when given) |
+| `partner.named(x)` | that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count |
 | `partner.has(rank, x)` | not tracked: unknown |
 | `partner.stop(x)` | not tracked: unknown |
 | `partner.semibalanced` | not tracked: unknown |
@@ -487,6 +488,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 |---|---|
 | `we.trump` | the agreed strain (`is suit`, `is notrump`, `is none`), usable as a suit |
 | `we.forcing` | `none`, `round` or `game` |
+| `we.named(x)` | either of us has made a natural bid in x (a suit or N) at any point; artificial calls do not count |
 | `we.gf` | we are in a game force (`we.forcing = game`) |
 | `we.hcp` | my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends) |
 | `we.points` | my points plus partner's range: `points + partner.points` |

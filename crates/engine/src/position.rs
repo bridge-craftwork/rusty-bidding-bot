@@ -74,6 +74,9 @@ pub struct Position {
     /// How the board is scored. Rules see it as `imps` / `matchpoints`.
     pub scoring: ScoringMethod,
     pub calls: Vec<Call>,
+    /// Beside `calls`: whether the rule that read each call marked it
+    /// `artificial` (missing entries count as natural).
+    pub artificial: Vec<bool>,
     /// By `Direction::to_index`.
     pub knowledge: [SeatKnowledge; 4],
     /// By `side`.
@@ -87,6 +90,7 @@ impl Position {
             vul,
             scoring,
             calls: Vec::new(),
+            artificial: Vec::new(),
             knowledge: Default::default(),
             sides: Default::default(),
         }
@@ -160,6 +164,16 @@ impl Position {
     }
 
     /// Has the side of `d` made a bid, double or redouble?
+    /// Has `d` made a natural bid in `strain`, at any point in the auction?
+    /// Calls a rule marked artificial (a transfer, a relay) do not count.
+    pub fn named(&self, d: Direction, strain: Strain) -> bool {
+        (0..self.calls.len()).any(|i| {
+            self.caller(i) == d
+                && matches!(self.calls[i], Call::Bid { strain: s, .. } if s == strain)
+                && !self.artificial.get(i).copied().unwrap_or(false)
+        })
+    }
+
     pub fn side_acted(&self, d: Direction) -> bool {
         (0..self.calls.len()).any(|i| side(self.caller(i)) == side(d) && !self.calls[i].is_pass())
     }
@@ -326,6 +340,31 @@ fn strain_rank(s: Strain) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn named_counts_natural_bids_only() {
+        let mut pos = Position::new(
+            Direction::North,
+            Vulnerability::None,
+            ScoringMethod::from_pbn("IMP").unwrap(),
+        );
+        // N 1NT, E P, S 2D (a transfer: artificial), W P, N 2H.
+        let bid = |level, strain| Call::Bid { level, strain };
+        for (c, art) in [
+            (bid(1, Strain::NoTrump), false),
+            (Call::Pass, false),
+            (bid(2, Strain::Diamonds), true),
+            (Call::Pass, false),
+            (bid(2, Strain::Hearts), false),
+        ] {
+            pos.calls.push(c);
+            pos.artificial.push(art);
+        }
+        assert!(pos.named(Direction::North, Strain::NoTrump));
+        assert!(pos.named(Direction::North, Strain::Hearts));
+        assert!(!pos.named(Direction::South, Strain::Diamonds));
+        assert!(!pos.named(Direction::South, Strain::NoTrump));
+    }
 
     fn pos(calls: &str) -> Position {
         let mut p = Position::new(

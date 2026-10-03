@@ -390,7 +390,9 @@ mod tests {
     }
 
     fn expanded(defs: &str, cond: &str) -> (String, Vec<String>) {
-        let d = module(&format!("module d \"d\"\n  param style = general.style\n{defs}\n"));
+        let d = module(&format!(
+            "module d \"d\"\n  param style = general.style\n{defs}\n"
+        ));
         let u = module(&format!("module u \"u\"\nwhen {cond}\n  P \"x\"\n"));
         let defines = Defines::new(&[d]);
         let mut errors = Vec::new();
@@ -400,14 +402,20 @@ mod tests {
 
     #[test]
     fn partnership_sums_are_written_out() {
-        let (e, err) = expanded("", "we.fit(S).min >= 8, we.points.max <= 24, we.fit(x) >= 9");
+        let (e, err) = expanded(
+            "",
+            "we.fit(S).min >= 8, we.points.max <= 24, we.fit(x) >= 9",
+        );
         assert!(err.is_empty(), "{err:?}");
         assert_eq!(
             e,
             "S+partner.S.min>=8, points+partner.points.max<=24, x+partner.x>=9"
         );
         let (e, _) = expanded("", "we.tp(trump).min >= 33, safe_level(x) >= 3");
-        assert_eq!(e, "tp(trump)+partner.tp(trump).min>=33, x+partner.x.min-6>=3");
+        assert_eq!(
+            e,
+            "tp(trump)+partner.tp(trump).min>=33, x+partner.x.min-6>=3"
+        );
     }
 
     #[test]
