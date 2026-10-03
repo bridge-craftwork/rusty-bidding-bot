@@ -59,10 +59,10 @@ before the call):
   and a major was later agreed publicly (1S-2C-3C-4S-4NT asks in clubs).
   A candidate for minor-suit agreement giving way to a later major one;
   not changed (open question 2).
-- **A bug, not changed here:** after a negative double and opener's
-  three-level answer, responder-rebids.bid's `jump(N)` "Game: 13+
-  balanced" is 4NT (1H (2S) X (P) 3H (P) 4NT, 4 boards in 100,000); 3NT
-  was meant.
+- **A bug, fixed:** after a negative double and opener's three-level
+  answer, responder-rebids.bid's `jump(N)` "Game: 13+ balanced" was 4NT
+  (1H (2S) X (P) 3H (P) 4NT); 3NT was meant (responder-rebids.notes.md,
+  2026-10-02).
 
 ## The survey (2026-10-02)
 

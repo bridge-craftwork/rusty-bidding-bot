@@ -429,7 +429,7 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
       shows balanced, hcp+length_points=11..12
       sets  ask=nt_invite
       priority -1                 # the fit first
-  jump(N) "Game: 13+ balanced"
+  3N  "Game: 13+ balanced"            # was jump(N): 4NT over a three-level answer
       shows balanced, hcp+length_points>=13
       priority -1
   P   "Nothing more to say"  priority -10
