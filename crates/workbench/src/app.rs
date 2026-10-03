@@ -270,6 +270,11 @@ pub struct App {
     show_passing: bool,
     ticket: TicketDialog,
     ticket_opts: TicketOptions,
+    /// The knowledge view of the selected board (a window).
+    kview: crate::knowledge::KnowledgeView,
+    /// A board to select, and zoom into, once the comparison has run
+    /// (`--board`).
+    pending_board: Option<String>,
 }
 
 impl App {
@@ -324,9 +329,17 @@ impl App {
                 filing: None,
             },
             ticket_opts,
+            kview: Default::default(),
+            pending_board: None,
         };
         app.pending = true;
         app
+    }
+
+    /// Select `board` (`595`, or `SCENARIO:595`) when the comparison has
+    /// run, and open its knowledge view.
+    pub fn show_board(&mut self, board: Option<String>) {
+        self.pending_board = board;
     }
 
     fn start(&mut self, ctx: &egui::Context) {
@@ -444,6 +457,25 @@ impl App {
                 });
                 self.detail = None;
                 self.refilter();
+                if let Some(want) = self.pending_board.take() {
+                    let (scenario, board) = match want.rsplit_once(':') {
+                        Some((s, b)) => (Some(s.to_string()), b.to_string()),
+                        None => (None, want.clone()),
+                    };
+                    let found = self.loaded.as_ref().and_then(|l| {
+                        l.report.boards.iter().position(|x| {
+                            x.board == board && scenario.as_ref().is_none_or(|s| &x.scenario == s)
+                        })
+                    });
+                    match found {
+                        Some(i) => {
+                            self.board = Some(i);
+                            self.tab = Tab::Boards;
+                            self.kview.open = true;
+                        }
+                        None => self.error = Some(format!("--board {want}: no such board")),
+                    }
+                }
                 if let Some(i) = self.board {
                     self.select_board(i);
                 }
@@ -771,6 +803,17 @@ impl eframe::App for App {
                         if self.solving.contains(&(b.scenario.clone(), b.board.clone())) {
                             ui.label(RichText::new("solving double dummy for par…").weak());
                         }
+                        if ui
+                            .button("🔍 Knowledge view")
+                            .on_hover_text(
+                                "Zoom into this board: one row per call, with what is known \
+                                 about every seat after it, each hand's own view of itself, \
+                                 and the flags (forcing, game force, invitational, alerted).",
+                            )
+                            .clicked()
+                        {
+                            self.kview.open = true;
+                        }
                         d.ui(ui, b)
                     }
                     _ => {
@@ -785,6 +828,7 @@ impl eframe::App for App {
             });
         egui::CentralPanel::default().show(ui, |ui| self.lists(ui));
         self.ticket_window(ui.ctx());
+        self.knowledge_window(ui.ctx());
     }
 }
 
@@ -1821,6 +1865,35 @@ impl App {
             )),
             Err(e) => Err(format!("Saved {dir}, but the issue failed: {e}")),
         });
+    }
+
+    /// The selected board's knowledge view, in a window of its own so it
+    /// can be as wide as the screen.
+    fn knowledge_window(&mut self, ctx: &egui::Context) {
+        if !self.kview.open {
+            return;
+        }
+        let (Some(d), Some(i), Some(l)) = (&self.detail, self.board, &self.loaded) else {
+            return;
+        };
+        let b = &l.report.boards[i];
+        let mut kv = self.kview.clone();
+        let mut open = true;
+        let mut link = None;
+        egui::Window::new(format!("Knowledge — {} board {}", b.scenario, b.board))
+            .id(egui::Id::new("knowledge-window"))
+            .open(&mut open)
+            .resizable(true)
+            .default_size([1400.0, 640.0])
+            .show(ctx, |ui| {
+                ui.style_mut().interaction.selectable_labels = true;
+                link = crate::knowledge::ui(ui, &mut kv, b, d);
+            });
+        kv.open = open;
+        self.kview = kv;
+        if let Some((file, line)) = link {
+            self.open_in_editor(&file, line);
+        }
     }
 
     fn ticket_window(&mut self, ctx: &egui::Context) {

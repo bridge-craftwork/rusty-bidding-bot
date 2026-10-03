@@ -270,6 +270,52 @@ enum Command {
         /// Print the full decision as JSON.
         #[arg(long)]
         json: bool,
+        /// Also review the auction so far, call by call: what is known
+        /// about every seat after each call, the flags, and this hand's own
+        /// view (as `explain-auction`; with --json, a `knowledge` array).
+        #[arg(long)]
+        knowledge: bool,
+    },
+    /// Review an auction call by call: what each call shows, what is known
+    /// about every seat after it (`*` marks what the call changed), the
+    /// flags (F1, GF, inv, ask, alert, art), each side's state, and, with
+    /// --deal, each hand's own view of itself (HCP, points, and with a fit
+    /// the count by role: declarer or support points).
+    #[command(name = "explain-auction")]
+    ExplainAuction {
+        /// The calls, e.g. "1NT Pass 2C Pass 2H".
+        #[arg(short, long)]
+        auction: String,
+        /// The deal in PBN, e.g. "N:AK52.KJ7.Q94.K83 ...", for the hands'
+        /// own view.
+        #[arg(long)]
+        deal: Option<String>,
+        /// Dealer: N, E, S or W.
+        #[arg(short, long, default_value = "N")]
+        dealer: char,
+        /// Vulnerability: None, NS, EW or All.
+        #[arg(short, long, default_value = "None")]
+        vul: String,
+        /// Scoring: MP or IMP.
+        #[arg(short, long, default_value = "MP")]
+        scoring: String,
+        /// Card for both sides: a .bbsa or card JSON file, or a stock card
+        /// name (21GF-DEFAULT).
+        #[arg(short, long)]
+        card: String,
+        /// A different card for East-West.
+        #[arg(long)]
+        ew_card: Option<String>,
+        /// A card change for both sides, `path=value` (repeatable), as in
+        /// `compare --set`.
+        #[arg(long = "set")]
+        card_changes: Vec<String>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Print the rows as JSON.
+        #[arg(long)]
+        json: bool,
     },
 }
 
@@ -765,6 +811,7 @@ fn run(cli: Cli) -> Result<()> {
             ew_card,
             rules,
             json,
+            knowledge,
         } => call(
             &hand,
             &auction,
@@ -773,6 +820,29 @@ fn run(cli: Cli) -> Result<()> {
             &scoring,
             &card,
             ew_card.as_deref(),
+            &rules,
+            json,
+            knowledge,
+        ),
+        Command::ExplainAuction {
+            auction,
+            deal,
+            dealer,
+            vul,
+            scoring,
+            card,
+            ew_card,
+            card_changes,
+            rules,
+            json,
+        } => explain_auction(
+            &auction,
+            deal.as_deref(),
+            dealer,
+            &vul,
+            &scoring,
+            [&card, ew_card.as_deref().unwrap_or(&card)],
+            &card_changes,
             &rules,
             json,
         ),
@@ -1203,6 +1273,7 @@ fn call(
     ew_card: Option<&Path>,
     rules: &Path,
     json: bool,
+    knowledge: bool,
 ) -> Result<()> {
     use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
     let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
@@ -1222,9 +1293,28 @@ fn call(
     };
     let engine = rbb_engine::Engine::new(&ns, &ew, &rules);
     let d = engine.bid(&hand, dealer, vul, scoring, &calls);
+    // The review, with this hand's own view at its seat.
+    let rows = knowledge.then(|| {
+        let mut hands: [Option<Hand>; 4] = Default::default();
+        hands[d.auction.position.next_caller().to_index()] = Some(hand.clone());
+        engine.review(dealer, vul, scoring, &calls, &hands)
+    });
     if json {
-        println!("{}", serde_json::to_string_pretty(&d)?);
+        match rows {
+            Some(rows) => println!(
+                "{}",
+                serde_json::to_string_pretty(&serde_json::json!({
+                    "decision": d,
+                    "knowledge": rows,
+                }))?
+            ),
+            None => println!("{}", serde_json::to_string_pretty(&d)?),
+        }
         return Ok(());
+    }
+    if let Some(rows) = &rows {
+        print!("{}", rbb_engine::review_text(rows));
+        println!();
     }
     println!("{}: {}", d.call, d.explanation);
     if let Some(r) = &d.rule {
@@ -1259,6 +1349,66 @@ fn call(
     }
     for w in &d.warnings {
         eprintln!("warning: {w}");
+    }
+    Ok(())
+}
+
+#[allow(clippy::too_many_arguments)]
+fn explain_auction(
+    auction: &str,
+    deal: Option<&str>,
+    dealer: char,
+    vul: &str,
+    scoring: &str,
+    cards: [&str; 2],
+    card_changes: &[String],
+    rules: &Path,
+    json: bool,
+) -> Result<()> {
+    use bridge_types::{Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
+    let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
+    let calls = auction
+        .split_whitespace()
+        .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
+        .collect::<std::result::Result<Vec<_>, _>>()?;
+    let dealer =
+        Direction::from_char(dealer.to_ascii_uppercase()).ok_or("dealer must be N, E, S or W")?;
+    let vul = Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?;
+    let mut a = bridge_types::Auction::new(dealer);
+    for (i, c) in calls.iter().enumerate() {
+        if a.is_complete() || !a.is_legal(c) {
+            return Err(format!("call {} ({c}) is not legal here", i + 1).into());
+        }
+        a.add_call(c.clone());
+    }
+    let mut hands: [Option<Hand>; 4] = Default::default();
+    if let Some(d) = deal {
+        let deal = Deal::from_pbn(d).ok_or("deal must be PBN, e.g. \"N:AK52.KJ7.Q94.K83 ...\"")?;
+        for seat in [
+            Direction::North,
+            Direction::East,
+            Direction::South,
+            Direction::West,
+        ] {
+            hands[seat.to_index()] = Some(deal.hand(seat).clone());
+        }
+    }
+    let rules = rules_from(Some(rules))?;
+    let mut cards = [
+        card_or_stock(&rules.vocab, cards[0])?,
+        card_or_stock(&rules.vocab, cards[1])?,
+    ];
+    for card in &mut cards {
+        for change in card_changes {
+            card.apply_change(change)?;
+        }
+    }
+    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules);
+    let rows = engine.review(dealer, vul, scoring, &calls, &hands);
+    if json {
+        println!("{}", serde_json::to_string_pretty(&rows)?);
+    } else {
+        print!("{}", rbb_engine::review_text(&rows));
     }
     Ok(())
 }

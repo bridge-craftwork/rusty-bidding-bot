@@ -85,7 +85,16 @@ local checkouts").
   differ from that source; "standard practice, not yet cited" when that
   is the truth (docs/CONTRACT.md, Part 2).
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
-  the engine's call with the candidate trace (`--json` for everything).
+  the engine's call with the candidate trace (`--json` for everything;
+  `--knowledge` reviews the auction so far first).
+- `./dev-build.sh run -q -p rbb-cli -- explain-auction -a "1NT Pass 2C Pass 2H" -d N -c <card> --deal "N:..."`:
+  the auction call by call: what is known about every seat after each
+  call (`*` marks what the call changed), the flags (F1, GF, inv, ask,
+  alert, art), each side's state, and with `--deal` each hand's own view
+  (HCP, points, and with a fit the count by role: `decl` declarer points,
+  `sup` support points, `sup=` equal length; `♥?` a fit only that hand
+  can see). `--set path=value` as in compare; `--json` for the rows
+  (`Engine::review`). Paste it into a ticket.
 - `./dev-build.sh run -q --release -p rbb-cli -- compare [SCENARIO...] [--limit N] [--par]`:
   compare with BBA's auctions in `../Practice-Bidding-Scenarios` (all 342
   scenarios in ~45 s in release). The top divergence points are the work
@@ -186,7 +195,12 @@ local checkouts").
   `python3 -m http.server -d web/dist`.
 - `./dev-build.sh run --release -p rbb-workbench [SCENARIO...] [--limit N]`: the GUI over
   the same comparison; re-runs when a `.bid` file is saved. `--editor` sets how
-  rule links open (default `code -g {file}:{line}`).
+  rule links open (default `code -g {file}:{line}`). **Knowledge view** (the
+  button over a board's detail, or `--board N` / `--board SCENARIO:N` to open
+  one at start): one row per call of our auction or BBA's, the call in its
+  seat's column, meaning, rule link, flags, what is known about each seat
+  (what the call changed highlighted, everything on hover), each hand's own
+  view and each side's state; column groups can be hidden.
 
 ## Tickets
 

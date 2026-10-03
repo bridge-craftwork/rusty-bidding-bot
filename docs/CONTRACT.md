@@ -184,7 +184,8 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 | `rbb bid skills [--rules DIR] [--doc F]` | the teaching-skill map: each skill, the card fields and the modules that name it, and the gaps (docs/SKILLS.md) |
 | `rbb bid reference [--rules DIR]` | every module and what each call means after each auction |
 | `rbb bid compile FILE [--rules DIR]` | a file's compiled JSON IR |
-| `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json]` | the engine's call with every candidate and why it lost |
+| `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json] [--knowledge]` | the engine's call with every candidate and why it lost |
+| `rbb explain-auction -a "1NT Pass 2C" -d N -c CARD [--deal PBN] [--set path=value] [--json]` | the auction reviewed call by call: what is known about every seat after each call, the flags, each side's state, each hand's own view |
 | `rbb compare [SCENARIO...] --rules DIR [--json F]` | compare with BBA's auctions in Practice-Bidding-Scenarios: agreement, distance from par, "no rule" in live auctions |
 | `rbb-workbench --rules DIR` | the same comparison as a GUI; re-runs when a `.bid`, `.test` or `card/*.toml` file is saved |
 | `rbb card coverage CARD... [--rules DIR]` | which card settings the rules read, ignore, or have no field for |

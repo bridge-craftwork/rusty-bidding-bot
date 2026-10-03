@@ -4,7 +4,7 @@
 use bridge_types::{Call, DdTable, Deal, Direction, Hand, Strain, Suit, STRAINS};
 use egui::{Color32, RichText};
 use rbb_compare::{short, BoardResult, Engines};
-use rbb_engine::{Decision, Interpretation, SeatKnowledge, SideState, Tri};
+use rbb_engine::{Decision, Interpretation, ReviewRow, SeatKnowledge, SideState, Tri};
 
 use crate::app::{BAD, GOOD};
 
@@ -26,6 +26,9 @@ pub struct Detail {
     pub(crate) reading: Option<Interpretation>,
     /// The engine's decision at the first difference.
     pub(crate) decision: Option<Decision>,
+    /// The knowledge view's rows (`Engine::review`): our auction, then
+    /// BBA's.
+    pub(crate) review: [Vec<ReviewRow>; 2],
     pub(crate) error: Option<String>,
 }
 
@@ -43,6 +46,7 @@ impl Detail {
                     deal,
                     reading: None,
                     decision: None,
+                    review: Default::default(),
                     error: Some(e),
                 }
             }
@@ -59,10 +63,22 @@ impl Detail {
             )),
             _ => None,
         };
+        let hands: [Option<Hand>; 4] = std::array::from_fn(|i| {
+            let seat = [
+                Direction::North,
+                Direction::East,
+                Direction::South,
+                Direction::West,
+            ][i];
+            deal.as_ref().map(|d| d.hand(seat).clone())
+        });
+        let review = [&b.ours, &b.reference]
+            .map(|calls| engine.review(b.dealer, b.vul, scoring, calls, &hands));
         Detail {
             deal,
             reading,
             decision,
+            review,
             error: None,
         }
     }
@@ -588,8 +604,24 @@ mod tests {
                 // The trace reproduces the engine's replayed call.
                 assert_eq!(dec.call, b.replay[i]);
             }
+            // The knowledge view's rows follow both auctions call for call,
+            // and every hand has its own view.
+            for (rows, calls) in d.review.iter().zip([&b.ours, &b.reference]) {
+                assert_eq!(rows.len(), calls.len());
+                for (r, c) in rows.iter().zip(calls.iter()) {
+                    assert_eq!(&r.step.call, c);
+                    assert!(r.own.iter().all(Option::is_some));
+                }
+            }
             let mut out = ctx.run_ui(egui::RawInput::default(), |ui| {
                 d.ui(ui, b);
+                for bba in [false, true] {
+                    let mut kv = crate::knowledge::KnowledgeView {
+                        bba,
+                        ..Default::default()
+                    };
+                    crate::knowledge::ui(ui, &mut kv, b, &d);
+                }
             });
             // No renderer here: drop the font-texture updates.
             out.textures_delta.clear();

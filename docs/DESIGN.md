@@ -280,6 +280,24 @@ For every call it makes, the engine returns a **trace** as well as the call:
 The workbench shows the trace at the point of divergence, and the CLI and
 unit tests print it. It is serde data, so any tool can read it.
 
+### Knowledge review
+
+`Engine::review` replays an auction and records, after every call, what
+is known about all four seats (`SeatKnowledge`, and which parts the call
+narrowed), both sides' state (`SideState`), the call's flags (forcing for
+a round, game forcing, an invitational ask, alerted or announced,
+artificial) and, where the hands are given, each hand's own view of
+itself: HCP, total points, and with a trump suit agreed or an eight-card
+fit it can see, the count by role that slam-entry.bid uses (declarer
+points for the hand with more trumps than partner has shown, support
+points for the other, support points for both with equal length). It is
+computed on demand, one board at a time, so `compare --json` stays the
+size it was. The workbench's **Knowledge view** (a button over the board
+detail; `--board N` opens it at start) shows it as a table, one row per
+call, for our auction or BBA's; `rbb explain-auction` prints it as text
+for a terminal or a ticket, and `rbb call --knowledge` before its
+decision.
+
 ### Reference data
 
 In `Practice-Bidding-Scenarios`:

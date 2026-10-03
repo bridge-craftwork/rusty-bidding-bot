@@ -191,6 +191,11 @@ impl Engine {
         &self.systems[side(seat)]
     }
 
+    /// How `seat`'s side counts points (its card's `general.style`).
+    pub fn valuation(&self, seat: Direction) -> Valuation {
+        self.valuation[side(seat)]
+    }
+
     fn ctx<'a>(
         &'a self,
         pos: &'a Position,
