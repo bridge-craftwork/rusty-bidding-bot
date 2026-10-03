@@ -219,3 +219,40 @@ defences, the shared answers and the pass are in cappelletti.bid,
 dont.bid, meckwell.bid, multi-landy.bid and vs-1nt.bid
 (vs-1nt.notes.md). The natural three-level preempts (4-10) are
 unchanged.
+## The direct-seat pass caps the hand (Rick, ticket b400, 2026-10-02)
+
+Rick: "After N passes 1H, everyone should reduce the top points for N.
+With a strong hand, N will normally double then show what they have ...
+run a scan on BBA auctions where there is 1M (pass) and see what the max
+HCP is for the passer ... if there is an outlier, we shouldn't keep that
+in our inference" (also for 1m); "for something where there could be a
+trap pass, we should assume it's not a trap pass hand unless and until
+they pass advancer's reopening double."
+
+BBA's direct-seat passer over a one-level opening, vanilla SAYC set:
+
+| opening | passers | 99% at most | 99.9% at most | max |
+|---|---|---|---|---|
+| 1♣ | 11,473 | 16 | 18 | 19 |
+| 1♦ | 13,759 | 15 | 18 | 19 |
+| 1♥ | 9,519 | 15 | 17 | 18 |
+| 1♠ | 11,380 | 14 | 17 | 18 |
+
+`P "No overcall"` now shows `hcp<=one_max` (16 on these cards): the
+power double takes every 17+ HCP hand, so the cap never contradicts our
+own pass. It needed one hole closed first: a 16-count with a good
+six-card suit (A82.76.AKQT85.K3 over 1♥) is 18 total points, over the
+two-level overcall's 17, and short of the power double's 17 HCP, so it
+passed. Two-level overcalls now also take any hand up to the one-level
+maximum in HCP. (Making the power double 18+ total points instead was
+tried: the doubler's later minimum calls deny it only in HCP, and the
+engine cannot collapse a total-points branch, so advancer lost the
+double's shape; takeout-double.notes.md, 2026-09-27, chose HCP for that
+reason.)
+
+After the change our direct-seat passes hold at most 16 HCP (315 at 15,
+218 at 16, vanilla), with no direct-seat no-rule. Calls that contradict
+earlier ones: vanilla 250 -> 185, corpus 412 -> 391, 21GF 377 -> 320.
+IMPs about neutral: contract errors +39 / +36 / +30, distance from par
++20 / +28 / +24, errors line +54 / +82 / -6 (vanilla / corpus / 21GF).
+
