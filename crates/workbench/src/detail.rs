@@ -9,7 +9,9 @@ use rbb_engine::{Decision, Interpretation, ReviewRow, SeatKnowledge, SideState, 
 use crate::app::{BAD, GOOD};
 
 /// The colour that marks BBA's call or contract; ours use `BAD`.
-const BBA: Color32 = Color32::from_rgb(90, 140, 220);
+pub(crate) const BBA: Color32 = Color32::from_rgb(90, 140, 220);
+/// The shade behind an alerted call.
+pub(crate) const ALERT: Color32 = Color32::from_rgb(190, 160, 30);
 /// The box around a call in our auction that has a problem attached.
 const PROBLEM: Color32 = Color32::from_rgb(240, 150, 30);
 
@@ -137,7 +139,7 @@ impl Detail {
 
         ui.horizontal_top(|ui| {
             if let Some(deal) = &self.deal {
-                ui.vertical(|ui| compass(ui, deal));
+                ui.vertical(|ui| compass(ui, deal, None));
             }
             ui.add_space(24.0);
             ui.vertical(|ui| {
@@ -150,6 +152,7 @@ impl Detail {
                     b.first_divergence,
                     BBA,
                     &[],
+                    &b.reference_alerts,
                 );
             });
             ui.add_space(24.0);
@@ -163,6 +166,7 @@ impl Detail {
                     b.first_divergence,
                     BAD,
                     &b.problems,
+                    &[],
                 );
             });
             if let Some(dd) = &b.dd {
@@ -382,7 +386,7 @@ pub(crate) fn strain_and_declarer(contract: &str) -> Option<(Strain, Direction)>
 /// N S E W, and partners share a row when they take the same tricks in
 /// every strain. The cell of BBA's contract is marked in BBA's colour and
 /// ours in red; green where both contracts are the same.
-fn dd_grid(
+pub(crate) fn dd_grid(
     ui: &mut egui::Ui,
     dd: &DdTable,
     reference: Option<(Strain, Direction)>,
@@ -467,11 +471,16 @@ fn dd_grid(
         });
 }
 
-fn compass(ui: &mut egui::Ui, deal: &Deal) {
+/// The four hands in the usual compass layout; `corner`, when given (dealer
+/// and vulnerability), goes in the top-left corner.
+pub(crate) fn compass(ui: &mut egui::Ui, deal: &Deal, corner: Option<&str>) {
     egui::Grid::new("compass")
         .spacing([18.0, 6.0])
         .show(ui, |ui| {
-            ui.label("");
+            match corner {
+                Some(c) => ui.label(RichText::new(c).weak()),
+                None => ui.label(""),
+            };
             hand_block(ui, Direction::North, deal.hand(Direction::North));
             ui.label("");
             ui.end_row();
@@ -486,7 +495,11 @@ fn compass(ui: &mut egui::Ui, deal: &Deal) {
         });
 }
 
-fn auction_grid(
+/// The auction in four columns, W N E S. The call at `mark` is filled
+/// with `color`; calls with a problem are boxed; a call with an alert
+/// (`alerts[i]`, its text) is shaded, the text on hover.
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn auction_grid(
     ui: &mut egui::Ui,
     id: &str,
     dealer: Direction,
@@ -494,6 +507,7 @@ fn auction_grid(
     mark: Option<usize>,
     color: Color32,
     problems: &[rbb_compare::Problem],
+    alerts: &[Option<String>],
 ) {
     egui::Grid::new(id).spacing([14.0, 2.0]).show(ui, |ui| {
         for s in SEATS {
@@ -506,10 +520,17 @@ fn auction_grid(
         }
         for (i, c) in calls.iter().enumerate() {
             let text = RichText::new(short(c)).monospace();
+            let alert = alerts.get(i).cloned().flatten();
             let resp = if Some(i) == mark {
                 ui.label(text.strong().color(Color32::WHITE).background_color(color))
+            } else if alert.is_some() {
+                ui.label(text.background_color(ALERT.gamma_multiply(0.35)))
             } else {
                 ui.label(text)
+            };
+            let resp = match alert.filter(|a| !a.is_empty()) {
+                Some(a) => resp.on_hover_text(format!("alert: {a}")),
+                None => resp,
             };
             // Problems index `BoardResult::ours`: box the call and name them.
             let here: Vec<String> = problems
