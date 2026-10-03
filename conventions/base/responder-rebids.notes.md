@@ -601,6 +601,17 @@ the major. Contract errors +174 / +107 / +112 and distance from par
 Next: a judgment, whatever the path, for a known major fit (Rick: the
 support double, 1m-1H-1NT with six hearts).
 
+## The balanced game after a negative double is 3NT (2026-10-02)
+
+After 1x (*) X (*) and opener's answer, "Game: 13+ balanced" was
+`jump(N)`: 3NT over a one- or two-level answer, but 4NT over a
+three-level one (1H (2S) X (P) 3C (P) 4NT), where it played as a natural
+4NT that nobody read as game. Found by the fit survey's 4NT
+classification (fit.notes.md). Now 3NT whatever the level. Vanilla:
+21 boards, contract errors +26 (+12 / +14), par +21 (+10 / +11),
+doubling +19; on the corpus and 21GF, measured together with two
+changes not kept, the 4NT → 3NT first calls gave +126 and +38.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -616,6 +627,8 @@ support double, 1m-1H-1NT with six hearts).
 - **Book practice:** the Standard American responder's rebids (weak,
   invitational, game ranges; fourth suit and new minor forcing) are
   standard practice, not yet cited to a book.
+- **2026-10-02:** the negative-double 3NT: a bug found by the fit survey
+  (`probes/tools/fit_survey.py`); vanilla, corpus and 21GF as given.
 - **2026-10-01:** Rick's note of the missing 3S after 1S-2D-3C and the
   revaluation of a fit seen through a new suit; BBA's 3S / 4S from
   `probes/slam-1S-2D-3C-resp.toml`; vanilla, corpus and 21GF random

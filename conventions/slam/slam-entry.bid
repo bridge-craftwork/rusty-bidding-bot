@@ -115,10 +115,10 @@ define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H),
 
 # ── A fit known but not agreed (Phase 1, 2026-09-30) ─────────────────
 
-# A suit both hands know we fit: eight cards shown between us, or
-# partner's own six-card suit. Public, so partner knows what a keycard
-# ask agrees.
-define shown_fit(x) = shown.x.min + partner.x.min >= 8 | partner.x.min >= 6
+# A suit both hands know we fit: suit agreement (`agreed_fit`,
+# fit.bid: eight cards shown between us), or partner's own six-card suit.
+# Public, so partner knows what a keycard ask agrees.
+define shown_fit(x) = agreed_fit(x) | partner.x.min >= 6
 
 # Slam values with x as trump before it is agreed: the count on
 # partner's floor (as `slam_values`), or, when he has limited his hand to a

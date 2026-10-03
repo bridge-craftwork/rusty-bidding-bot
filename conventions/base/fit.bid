@@ -1,0 +1,97 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# A major-suit fit, whatever the path (Rick, 2026-10-02): suit agreement,
+# which both hands know, and a fit that only one hand can see yet. The
+# conditions are named here for every module to read; the rules below are
+# the judgment for the second: the hand that sees the fit places the
+# contract in it. fit.notes.md has the ruling, the survey and the
+# measurements.
+
+module fit "A major-suit fit: agreed, or seen by one hand"
+  needs  base
+
+# ── The two concepts ──────────────────────────────────────────────────
+#
+# Suit agreement (public): what each hand has shown makes eight cards
+# (1NT-4D Texas: two facing six), or a rule has set the trump suit. Both
+# hands know it, so it makes x trump: 4NT asks for keycards in x, control
+# bids refer to x.
+define agreed_fit(x) = trump is x | shown.x.min + partner.x.min >= 8
+
+# A private fit: my own length and what partner has shown make eight,
+# what I have shown does not (1NT-2D-2H with six hearts; a doubleton
+# facing opener's six-card rebid). Partner does not know it yet, so it
+# changes nothing about what 4NT means; it tells me where to play.
+define private_fit(x) = x + partner.x.min >= 8, shown.x.min + partner.x.min <= 7
+
+# ── The count, by role (Rick, 2026-10-01) ─────────────────────────────
+#
+# The long-trump hand counts declarer points (HCP + length), the short
+# hand support points (HCP + shortness, capped by its trumps), each on
+# partner's floor (`longer`, slam-entry.bid). Game at 25.
+define fit_game_values(t)   = (longer(t), hcp + length_points + partner.points.min >= 25) | (!longer(t), tp(t) + partner.points.min >= 25)
+
+# A slam call the slam modules would make in the fit instead: the direct
+# slam on a card with no ask, the keycard ask agreeing it on one with
+# (slam-entry.bid, rkcb-1430.bid, blackwood.bid).
+define fit_slam_call(t) = (no_ask, direct_count(t)) | (!no_ask, shown_fit(t), fit_slam_values(t), !two_bare_beside(t))
+
+# In a game force, a fit in partner's own suit (three or more shown) with
+# slam interest is agreed slowly (slam-entry.bid, "Fast arrival"): the
+# jump to game would deny the interest.
+define fit_slow_agree(t) = we.forcing = game, partner.t.min >= 3, under_game(t), t + partner.t.min >= 8, slam_interest(t)
+define slam_route = fit_slow_agree(S) | fit_slow_agree(H) | fit_slam_call(S) | fit_slam_call(H)
+
+# Slam interest in the fit below 3NT leaves room for the forcing calls
+# that explore it (new minor forcing, a jump shift, a raise below game);
+# over partner's 3NT, slam values in notrump (32 HCP on his floor, the
+# quantitative 4NT and 6NT of over-3nt.bid) go there.
+define fit_slam_room(t) = (slam_interest(t), !partner.last=3N) | (partner.last=3N, hcp + partner.hcp.min >= 32)
+
+# Four cards in the other major, which partner may hold four of: look for
+# that fit first (1D-1S-1NT-3H with six spades and four hearts).
+define other_major_open(x) = x >= 4, partner.x.max >= 4
+
+# Partner's last bid was in x: raising it is the sequence modules' job
+# (a Stayman answer, opener's suit), and their raises say more.
+define partner_named(x) = partner.last=1{x} | partner.last=2{x} | partner.last=3{x} | partner.last=4{x}
+
+# ── Placing the contract in a fit only I can see ──────────────────────
+#
+# Rick (2026-10-02): the hand that knows the fit places the contract in
+# it, by strength, rather than in notrump. Game in the fit with 25
+# between us (`fit_game_values`), ahead of the notrump calls at the same
+# point (priority 1: the sequence rules are at 0). Bidding the suit this
+# way shows the fit, so partner knows it too.
+#
+# Where, measured (fit.notes.md): at my second call or later, with
+# nothing asked of me and no suit agreed, uncontested or with the
+# opponents silent since (RHO passed: 1S X P 2S P 3NT P), when partner's
+# last call was notrump (his 1NT, 2NT or 3NT rebid: balanced, so two or
+# more in the major; over his 3NT, four of the major is the correction;
+# his notrump answer to a question of mine too: a stopper ask, the
+# fourth suit), or when he has answered my new minor forcing or Stayman
+# in a suit. Elsewhere a
+# priority-1 4M would claim how partner reads the sequence modules' own
+# 4M (a jump raise's range: slam-entry.test), and an invitation at the
+# three level would claim their forcing three-level bids, so neither is
+# written. Not when partner's last bid was the suit (raising it is the
+# sequence modules' job), not over the strong 2NT (transfers may be on),
+# not when a slam call or slam exploration applies (`slam_route`,
+# `fit_slam_room`), and not with four cards in the other major that
+# partner may share (`other_major_open`).
+#
+# `private_fit(x)` is the rule's condition written out: the hand part in
+# `shows`, so that partner reads my length from it, the public part in
+# `when`. `partner.x.min >= 2` keeps the rule from claiming partner's
+# reading of a call it never made (1S-1NT-3H, a jump shift).
+when !asked, we.trump is none, !game_reached | partner.last=3N, !they.bid | rho.last=P, me.has_bid, !(partner.last=2N, partner.hcp.min>=20), partner.last=1N | partner.last=2N | partner.last=3N | answered nmf | answered majors
+  4S  "Game in the spade fit: my length and partner's make eight"
+      shows S + partner.S.min >= 8, fit_game_values(S)
+      when  shown.S.min + partner.S.min <= 7, partner.S.min >= 2, !partner_named(S), !slam_route, !fit_slam_room(S), !other_major_open(H)
+      priority 1
+  4H  "Game in the heart fit: my length and partner's make eight"
+      shows H + partner.H.min >= 8, fit_game_values(H)
+      when  shown.H.min + partner.H.min <= 7, partner.H.min >= 2, !partner_named(H), !slam_route, !fit_slam_room(H), !other_major_open(S)
+      priority 1
+

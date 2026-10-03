@@ -262,3 +262,9 @@ card    Basic-Bridge
 dealer  W
 E AKQ5.Q8.T842.Q72      | 1H P 1S P 2H P           | 4H     | two hearts opposite six: game in the major
 E AKQ5.8.QT842.Q72      | 1H P 1S P 2H P           | 3NT    | a singleton: no fit, 3NT
+
+# After a negative double and opener's three-level answer, the balanced
+# game is 3NT; `jump(N)` made it 4NT (2026-10-02, fit.notes.md).
+card    Basic-Bridge
+dealer  N
+S KQ5.Q4.KJ84.A652      | 1H 2S X P 3C P                       | 3NT    | 15 balanced, spades stopped: game in notrump, not 4NT
