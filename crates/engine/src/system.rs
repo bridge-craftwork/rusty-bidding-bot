@@ -68,7 +68,7 @@ fn to_val(v: &Value) -> Val {
     match v {
         Value::Bool(b) => Val::Bool(crate::knowledge::Tri::from_bool(*b)),
         Value::Int(i) => Val::Num(Range::point(*i as i32)),
-        Value::Text(s) => Val::Sym(s.clone()),
+        Value::Text(s) => Val::Sym(s.as_str().into()),
     }
 }
 

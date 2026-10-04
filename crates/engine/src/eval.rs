@@ -22,7 +22,10 @@ pub enum Val {
     Suit(usize),
     Strain(Strain),
     Call(Call),
-    Sym(String),
+    /// Shared, not owned: values are cloned out of the bindings and the
+    /// card parameters on every read, and a `String` would allocate each
+    /// time. Prints (`Debug`) exactly as a `String` does.
+    Sym(std::sync::Arc<str>),
     /// `kind(args)` as written in `sets ask=keycards(trump)`.
     Ask(String, Vec<Strain>),
     /// No value: no trump agreed, no call made yet.
@@ -392,7 +395,7 @@ impl<'a> Ctx<'a> {
                     // A named value: a card option (`style is relay`) or a
                     // symbol (`we.forcing is none`). Before the names below,
                     // which an option may share.
-                    (name, Val::Sym(s)) => s == name,
+                    (name, Val::Sym(s)) => &**s == name,
                     ("suit", Val::Strain(s)) => *s != Strain::NoTrump,
                     ("suit", Val::Suit(_)) => true,
                     ("notrump", Val::Strain(s)) => *s == Strain::NoTrump,
@@ -521,20 +524,24 @@ impl<'a> Ctx<'a> {
     /// Points compare by their whole part, so invite 8-9 means 8 to 9¾.
     /// A band can be empty (no invitation once partner's range is exact).
     fn strength_as_points(&self, cmp: CmpOp, lhs: &Expr, rhs: &Expr) -> R<Option<Expr>> {
-        let name = |e: &Expr| match e {
-            Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
-                Some(path[0].name.clone())
+        // Called for every comparison evaluated, so it borrows the names
+        // (no allocation) until it knows this is a strength comparison.
+        fn name(e: &Expr) -> Option<&str> {
+            match e {
+                Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
+                    Some(path[0].name.as_str())
+                }
+                _ => None,
             }
-            _ => None,
-        };
+        }
         let kind = |s: &str| match s {
             "strength" => Some(0),
             "suit_strength" => Some(1),
             _ => None,
         };
         let (band, cmp, kind) = match (name(lhs), name(rhs)) {
-            (Some(s), Some(band)) if kind(&s).is_some() => (band, cmp, kind(&s).unwrap()),
-            (Some(band), Some(s)) if kind(&s).is_some() => (band, flip(cmp), kind(&s).unwrap()),
+            (Some(s), Some(band)) if kind(s).is_some() => (band, cmp, kind(s).unwrap()),
+            (Some(band), Some(s)) if kind(s).is_some() => (band, flip(cmp), kind(s).unwrap()),
             _ => return Ok(None),
         };
         let i = BANDS
@@ -670,10 +677,10 @@ impl<'a> Ctx<'a> {
             (Val::Sym(s), Val::Call(_)) => bid_of_text(s).map(Val::Call),
             _ => None,
         };
-        let (l, r) = (
-            &as_bid(l, r).unwrap_or_else(|| l.clone()),
-            &as_bid(r, l).unwrap_or_else(|| r.clone()),
-        );
+        // Borrowed unless one side is a bid written as text (no clone of
+        // every value compared).
+        let (lb, rb) = (as_bid(l, r), as_bid(r, l));
+        let (l, r) = (lb.as_ref().unwrap_or(l), rb.as_ref().unwrap_or(r));
         match (l, r) {
             (Val::Strain(a), Val::Strain(b)) => eq_only(a == b),
             // Bids are ordered by rank (`rho.last <= 2H`); other calls
@@ -862,7 +869,7 @@ impl<'a> Ctx<'a> {
                 let we = self.num(&self.we_attr(&plain("hcp"), b)?)?;
                 Val::Bool(cmp3(we.lo >= 35, we.hi < 35))
             }
-            w if named(SYMBOLS, w) => Val::Sym(w.to_string()),
+            w if named(SYMBOLS, w) => Val::Sym(w.into()),
             _ => return Err(format!("unknown term `{n}`")),
         })
     }
