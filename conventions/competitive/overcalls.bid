@@ -67,20 +67,25 @@ after (1x)
 # a 16-count with a good six-card suit is 18 total points, over the
 # two-level maximum but short of the power double's 17 HCP, and it used
 # to pass. Now no direct-seat pass holds more than 16 HCP.
+# The minimum is in HCP, a point less with six cards (ticket b238,
+# 2026-10-04; probes/oc-2C-over-1D.toml): BBA overcalls 2C over 1D from
+# 12 HCP with five clubs, 11 with six or seven, never on less (a weak
+# hand with seven clubs preempts at 3C). 12 total points let 10 HCP and
+# six clubs overcall, and partner read the overcall as 3+ HCP.
 after (1x)
   2C  "Overcall: five clubs, {two_min}-{two_max} total points"
       shows C>=5, C>S, C>H, C>D
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
+      shows hcp>=two_min | (C>=6, hcp>=two_min-1), hcp+length_points<=two_max | hcp<=one_max
       when  x is not C
       when  C>=6 | quality(C)>=good | top5(C)>=4
   2D  "Overcall: five diamonds, {two_min}-{two_max} total points"
       shows D>=5, D>S, D>H, D>=C
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
+      shows hcp>=two_min | (D>=6, hcp>=two_min-1), hcp+length_points<=two_max | hcp<=one_max
       when  x is not D, x is not C
       when  D>=6 | quality(D)>=good | top5(D)>=4
   2H  "Overcall: five hearts, {two_min}-{two_max} total points"
       shows H>=5, H>S, H>=D, H>=C
-      shows hcp+length_points>=two_min, hcp+length_points<=two_max | hcp<=one_max
+      shows hcp>=two_min | (H>=6, hcp>=two_min-1), hcp+length_points<=two_max | hcp<=one_max
       when  x is not H, x is not D, x is not C
       when  H>=6 | quality(H)>=good | top5(H)>=4
 

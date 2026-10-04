@@ -28,3 +28,11 @@ card    Basic-Bridge
 dealer  W
 N A82.76.AKQT85.K3      | 1H                     | 2D     | 16 HCP and six good diamonds: 18 total points, overcall
 N AQ73.84.6.AKQJT4      | 1H                     | 2C     | 16 HCP and six solid clubs
+
+# Two-level overcalls: 12 HCP with five, 11 with six or more; BBA,
+# probes/oc-2C-over-1D.toml (ticket b238, 2026-10-04).
+card    Basic-Bridge
+dealer  S
+W J73.J3.K4.KQ6432      | 1D                     | P      | 10 HCP, six clubs: too weak for a two-level overcall
+W J73.Q3.K4.KQ6432      | 1D                     | 2C     | 11 HCP and six clubs
+W J73.Q3.K42.KQ643      | 1D                     | P      | 11 HCP and five clubs: one short
