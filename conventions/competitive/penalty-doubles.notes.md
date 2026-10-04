@@ -13,7 +13,8 @@ shown range:
 
 | my holding in their suit | we.hcp.min |
 |---|---|
-| four or more with two of the top three or three of the top five (Rick's standard, 2026-09-23) | 20 |
+| four or more with two of the top three or three of the top five (Rick's standard, 2026-09-23) | 17 (20 until 2026-10-03) |
+| four or more | 20 (2026-10-03) |
 | three or more | 21 |
 | anything | 22 |
 | their notrump (after they have both bid) | 21 |
@@ -453,6 +454,20 @@ way from the doubling errors on the corpus.
     more failing games and partscores uncontested than BBA (7,407
     failing games against 4,646). That is placement, not a double
     anyone could find; the errors yardstick books it to the defenders.
+11. **"Will stand" with the lower floors** (2026-10-03). Dropping the
+    condition that the contract will stand (passed round, a fit, or
+    game) now gains doubling errors on vanilla alone (+246, both halves)
+    and with the kept change (+920 together), but the contract errors
+    grow to -321 and par to -876: directly over a new suit that may be
+    forcing, the double takes away their runout and ours. Not measured
+    on 21GF and the corpus. Worth a ruling on whether a contract error of
+    that size is "clearly worse".
+12. **How far down the good four goes** (2026-10-03). Each point below
+    20 gains doubling errors on both halves down to 15 (+590); contract
+    errors and par worsen at each step. Kept at 17, where the trade is
+    best; 16 and 15 are there if the doubling yardstick alone decides.
+    Their game at 16 likewise gains doubling errors (+204) at -605 par
+    and 123 more doubles of contracts that made: not kept.
 
 
 ## Higher floors, more doubles (2026-10-03)
@@ -469,8 +484,88 @@ had 21 known (and doubled); the hand is now 9 HCP so it keeps testing
 moved -1,099 / -298 / -656, but almost all of that is "doubling other"
 (the side that did not make the first differing call failing to double
 our bolder contracts); the actor's own doubling errors improved
-(+412 / +445 / +281). No threshold was changed: whether to raise them
-a point is for a measured follow-up.
+(+412 / +445 / +281). The thresholds were then retuned on these floors
+(next section): none rose, the good-four floor fell to 17.
+
+## Retuned on the higher floors (2026-10-03)
+
+After PR #44 (partner's HCP floor known in 87% of positions, was about
+70%; a 1♦ opener reads 11+, was 10) and PR #45 (compare is
+deterministic: two runs of the same rules are identical, so small
+differences are real), every threshold was moved one point each way,
+two where the first step gained, one variant at a time, on the vanilla
+set against main 53f1d3a (`probes/tools/errors_diff.py`). Main:
+errors -43,131 (contract -32,577, doubling -10,554), distance from par
+-25,486. Judged on **doubling errors** (CLAUDE.md, "Judging a change"),
+contract errors and par beside them. Positive: fewer errors.
+
+| variant (vanilla) | boards | errors (even / odd) | doubling (even / odd) | contract | par (even / odd) | doubled / made |
+|---|---|---|---|---|---|---|
+| main | | | | | | 999 / 296 |
+| good four at 21 | 21 | +10 (+17 / -7) | +1 (+7 / -6) | +9 | +28 | 988 / 290 |
+| good four at 19 | 35 | +44 (+25 / +19) | +61 (+32 / +29) | -17 | -92 (-45 / -47) | 1,019 / 302 |
+| good four at 18 | 93 | +103 (+64 / +39) | +168 (+98 / +70) | -65 | -236 (-136 / -100) | 1,049 / 312 |
+| good four at 17 | 165 | +261 (+121 / +140) | +347 (+180 / +167) | -86 | -382 (-257 / -125) | 1,098 / 322 |
+| good four at 16 | 264 | +275 (+154 / +121) | +428 (+239 / +189) | -153 | -676 (-422 / -254) | 1,152 / 349 |
+| good four at 15 | 387 | +388 (+211 / +177) | +590 (+307 / +283) | -202 | -949 (-559 / -390) | 1,226 / 375 |
+| any four at 20 (four small) | 50 | +83 (+53 / +30) | +102 (+77 / +25) | -19 | -77 (-56 / -21) | 1,030 / 305 |
+| three at 20 | 230 | -143 (+35 / -178) | -138 (+29 / -167) | -5 | -396 | 1,115 / 374 |
+| three at 22 | 93 | -178 (-98 / -80) | -166 (-91 / -75) | -12 | +62 | 932 / 277 |
+| anything at 21 | 187 | -34 (-134 / +100) | -57 (-146 / +89) | +23 | -246 | 1,122 / 356 |
+| anything at 23 | 100 | -226 (-110 / -116) | -205 (-97 / -108) | -21 | -59 | 921 / 278 |
+| notrump at 20 | 11 | -8 (+4 / -12) | +20 (+15 / +5) | -28 | -40 | 1,004 / 297 |
+| notrump at 22 | 1 | -5 | -5 | 0 | -5 | 998 / 296 |
+| their game, my 16 | 303 | +144 (+101 / +43) | +204 (+134 / +70) | -60 | -605 (-292 / -313) | 1,160 / 419 |
+| their game, my 16, suits only | 238 | +114 (+125 / -11) | +131 (+131 / 0) | -17 | -381 | 1,132 / 396 |
+| their game, my 18 | 145 | -155 (-114 / -41) | -174 (-124 / -50) | +19 | +125 (+31 / +94) | 918 / 246 |
+| over our game: 11 in my hand | 29 | -3 (-9 / +6) | -1 (-7 / +6) | -2 | +5 | 1,010 / 306 |
+| over our game: 13 in my hand | 14 | -38 (-34 / -4) | -38 (-34 / -4) | 0 | +6 | 989 / 293 |
+| over our game: 19 known | 10 | -1 (-11 / +10) | -1 (-11 / +10) | 0 | +13 | 1,001 / 298 |
+| over our game: 21 known | 0 | 0 | 0 | 0 | 0 | 999 / 296 |
+| over our game: 14 or 21 | 32 | -83 (-61 / -22) | -89 (-62 / -27) | +6 | -11 | 976 / 290 |
+| partner's notrump allowed | 39 | -3 (+1 / -4) | +30 (+20 / +10) | -33 | -7 | 1,023 / 301 |
+| "will stand" dropped | 111 | +184 (+87 / +97) | +246 (+142 / +104) | -62 | -203 (-89 / -114) | 1,058 / 310 |
+| **good four at 17, any four at 20 (kept)** | 215 | **+344 (+174 / +170)** | **+449 (+257 / +192)** | -105 | -459 (-313 / -146) | 1,129 / 331 |
+| good four at 17 + "will stand" dropped | 353 | +421 (+157 / +264) | +728 (+382 / +346) | -307 | -769 (-475 / -294) | 1,181 / 341 |
+| kept + "will stand" dropped | 438 | +599 (+266 / +333) | +920 (+503 / +417) | -321 | -876 (-558 / -318) | 1,215 / 354 |
+
+What it says:
+- **Nothing should rise.** Every raise (three at 22, anything at 23,
+  their game at 18, over our game at 13 or 21) loses doubling errors on
+  both halves or changes nothing. The higher floors did not make the
+  doubles too loose.
+- **The good-four floor falls.** On the old floors good four at 19
+  split the halves (+9) and five-or-good-four at 16 lost; now each
+  step down gains doubling errors on both halves, to 15 and beyond.
+  Contract errors and par worsen with each step: the doubling gain per
+  point of contract loss is best at 17 (+347 / -86; 18 is +168 / -65,
+  16 +428 / -153), so it stops there.
+- **Four small at 20** gains (+102, both halves; it split on the old
+  floors), and adds to the good four at 17 almost unchanged.
+- **The rest holds**: three at 21, anything at 22, notrump at 21,
+  their game at 17 (16 gains doubling errors but par loses 605 and the
+  doubles of making contracts rise 296 -> 419; 18 loses), over our game
+  at 12 / 20 known.
+- **"Will stand" dropped** now gains alone (+246, both halves; it split
+  on the old floors), but with the lower good-four floor the contract
+  errors grow to -307 / -321: doubling a new suit that may be forcing
+  costs the doubled side's runout. Left out (For Rick 11).
+
+The kept change on the three sets (main 53f1d3a -> kept):
+
+| set | doubling errors vs BBA | change (even / odd) | contract (even / odd) | par | errors line (even / odd) | chances doubled | doubled, made | bailed out |
+|---|---|---|---|---|---|---|---|---|
+| vanilla SAYC random | -10,554 -> -10,105 | +449 (+257 / +192) | -105 (-83 / -22) | -25,486 -> -25,945 (-459) | -43,131 -> -42,787: +344 (+174 / +170) | 999 / 24,033 -> 1,129 / 24,028 | 296 -> 331 | 1,080 -> 1,080 |
+| 21GF random | -15,422 -> -14,717 | +705 (+355 / +350) | -166 (-107 / -59) | -39,441 -> -40,013 (-572) | -63,093 -> -62,554: +539 (+248 / +291) | 1,452 / 26,416 -> 1,611 / 26,408 | 439 -> 474 | 1,387 -> 1,387 |
+| full corpus | -13,498 -> -12,546 | +952 (+542 / +410) | -200 (-85 / -115) | -84,142 -> -84,765 (-623) | -107,211 -> -106,459: +752 (+457 / +295) | 3,174 / 35,417 -> 3,368 / 35,400 | 954 -> 1,001 | 1,789 -> 1,789 |
+
+The par loss is the known artefact: on the corpus, `penalty_x.py`
+(the penalty-doubles.bid doubles) gives -532 par but +939 side IMPs on
+the boards where the doubler's side ended above par, and -28 par / -49
+side / -80 below par on the rest. Side IMPs to the doubler: +464
+vanilla, +704 21GF, +864 corpus, both halves each. The contract loss
+is about two thirds the doubler's side ("actor": -70 / -117 / -207),
+where a double now takes the place of our own contract.
 
 ## Sources
 
@@ -502,3 +597,7 @@ a point is for a measured follow-up.
   (Rick's yardstick, 2026-10-01).
 - **2026-10-03:** the test hand and the counts above, from
   `rbb compare` on the three sets and `probes/tools/errors_diff.py`.
+- **2026-10-03, retune:** the variant tables and the three-set table,
+  from `rbb compare` on main 53f1d3a (after PRs #44 and #45) and
+  `probes/tools/errors_diff.py`, `probes/tools/penalty_x.py`; the
+  thresholds are calibrated here, not quoted.
