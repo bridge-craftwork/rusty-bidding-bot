@@ -28,8 +28,10 @@ define good_trumps(x) = x>=4, quality(x)>=good | top5(x)>=3
 define big_hand_vs_game = they.game_reached, hcp>=17
 
 # What I hold in their suit against what we have shown between us
-# (we.hcp.min: my HCP and the bottom of partner's range).
-define pen_suit(x) = (good_trumps(x), we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22 | big_hand_vs_game
+# (we.hcp.min: my HCP and the bottom of partner's range). Good four at
+# 17 and any four at 20 since partner's floor is known more often
+# (2026-10-03, after PRs #44/#45; notes, "Retuned on the higher floors").
+define pen_suit(x) = (good_trumps(x), we.hcp.min>=17) | (x>=4, we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22 | big_hand_vs_game
 
 # Responder's first call over their overcall: the double is negative.
 define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !me.last=XX
