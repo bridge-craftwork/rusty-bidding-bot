@@ -22,14 +22,66 @@ pub enum Val {
     Suit(usize),
     Strain(Strain),
     Call(Call),
-    Sym(String),
+    /// Shared, not owned: values are cloned out of the bindings and the
+    /// card parameters on every read, and a `String` would allocate each
+    /// time. Prints (`Debug`) exactly as a `String` does.
+    Sym(std::sync::Arc<str>),
     /// `kind(args)` as written in `sets ask=keycards(trump)`.
     Ask(String, Vec<Strain>),
     /// No value: no trump agreed, no call made yet.
     Nothing,
 }
 
-pub type Bindings = HashMap<String, Val>;
+/// A fast hasher for the short names the evaluator looks up (FxHash, as
+/// rustc uses): the bindings and parameters are read on every name
+/// evaluated, and SipHash was a tenth of a comparison run. Nothing
+/// iterates these maps in an order that matters (`engine::sorted` sorts).
+#[derive(Default, Clone, Copy)]
+pub struct FxHasher {
+    hash: u64,
+}
+
+impl FxHasher {
+    #[inline]
+    fn add(&mut self, word: u64) {
+        self.hash = (self.hash.rotate_left(5) ^ word).wrapping_mul(0x51_7c_c1_b7_27_22_0a_95);
+    }
+}
+
+impl std::hash::Hasher for FxHasher {
+    #[inline]
+    fn write(&mut self, bytes: &[u8]) {
+        let mut chunks = bytes.chunks_exact(8);
+        for c in &mut chunks {
+            self.add(u64::from_le_bytes(c.try_into().unwrap()));
+        }
+        let rest = chunks.remainder();
+        if !rest.is_empty() {
+            let mut w = [0u8; 8];
+            w[..rest.len()].copy_from_slice(rest);
+            self.add(u64::from_le_bytes(w));
+        }
+    }
+    #[inline]
+    fn write_u8(&mut self, i: u8) {
+        self.add(i as u64);
+    }
+    #[inline]
+    fn write_usize(&mut self, i: usize) {
+        self.add(i as u64);
+    }
+    #[inline]
+    fn finish(&self) -> u64 {
+        self.hash
+    }
+}
+
+pub type FastHash = std::hash::BuildHasherDefault<FxHasher>;
+
+pub type Bindings = HashMap<String, Val, FastHash>;
+
+/// A module's parameters by name (`System::params`).
+pub type Params = HashMap<String, Val, FastHash>;
 
 pub fn strain_of_suit(s: usize) -> Strain {
     [
@@ -304,17 +356,18 @@ pub struct Ctx<'a> {
     /// The actor's exact hand, when choosing a call.
     pub hand: Option<&'a Facts>,
     /// The rule's module parameters.
-    pub params: &'a HashMap<String, Val>,
+    pub params: &'a Params,
     /// How total points are counted.
     pub valuation: Valuation,
     /// Another seat's knowledge capped by my own HCP (`seat_attr`), shared
-    /// by the evaluations of one decision: building it clones the seat's
-    /// whole knowledge, once per attribute read without the cache.
+    /// by the evaluations of one position: building it narrows the seat's
+    /// ranges by every constraint again, once per attribute read without
+    /// the cache.
     pub private: Option<&'a PrivateCache>,
 }
 
 /// Capped knowledge by (seat, HCP bound), for one position (`Ctx::private`).
-pub type PrivateCache = RefCell<HashMap<(usize, i32), Rc<SeatKnowledge>>>;
+pub type PrivateCache = RefCell<HashMap<(usize, i32), Rc<SeatKnowledge>, FastHash>>;
 
 type R<T> = Result<T, String>;
 
@@ -392,7 +445,7 @@ impl<'a> Ctx<'a> {
                     // A named value: a card option (`style is relay`) or a
                     // symbol (`we.forcing is none`). Before the names below,
                     // which an option may share.
-                    (name, Val::Sym(s)) => s == name,
+                    (name, Val::Sym(s)) => &**s == name,
                     ("suit", Val::Strain(s)) => *s != Strain::NoTrump,
                     ("suit", Val::Suit(_)) => true,
                     ("notrump", Val::Strain(s)) => *s == Strain::NoTrump,
@@ -521,20 +574,24 @@ impl<'a> Ctx<'a> {
     /// Points compare by their whole part, so invite 8-9 means 8 to 9¾.
     /// A band can be empty (no invitation once partner's range is exact).
     fn strength_as_points(&self, cmp: CmpOp, lhs: &Expr, rhs: &Expr) -> R<Option<Expr>> {
-        let name = |e: &Expr| match e {
-            Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
-                Some(path[0].name.clone())
+        // Called for every comparison evaluated, so it borrows the names
+        // (no allocation) until it knows this is a strength comparison.
+        fn name(e: &Expr) -> Option<&str> {
+            match e {
+                Expr::Path { path } if path.len() == 1 && path[0].args.is_none() => {
+                    Some(path[0].name.as_str())
+                }
+                _ => None,
             }
-            _ => None,
-        };
+        }
         let kind = |s: &str| match s {
             "strength" => Some(0),
             "suit_strength" => Some(1),
             _ => None,
         };
         let (band, cmp, kind) = match (name(lhs), name(rhs)) {
-            (Some(s), Some(band)) if kind(&s).is_some() => (band, cmp, kind(&s).unwrap()),
-            (Some(band), Some(s)) if kind(&s).is_some() => (band, flip(cmp), kind(&s).unwrap()),
+            (Some(s), Some(band)) if kind(s).is_some() => (band, cmp, kind(s).unwrap()),
+            (Some(band), Some(s)) if kind(s).is_some() => (band, flip(cmp), kind(s).unwrap()),
             _ => return Ok(None),
         };
         let i = BANDS
@@ -658,6 +715,16 @@ impl<'a> Ctx<'a> {
     }
 
     fn compare(&self, op: CmpOp, l: &Val, r: &Val) -> R<Tri> {
+        // Numbers and suit lengths, by far the most common, go straight to
+        // the range comparison the last arm below makes of them.
+        let quick = |v: &Val| match v {
+            Val::Num(r) => Some(*r),
+            Val::Suit(s) => Some(self.self_len(*s)),
+            _ => None,
+        };
+        if let (Some(a), Some(b)) = (quick(l), quick(r)) {
+            return Ok(compare_ranges(op, a, b));
+        }
         let eq_only = |t: bool| -> R<Tri> {
             match op {
                 CmpOp::Eq => Ok(Tri::from_bool(t)),
@@ -670,10 +737,10 @@ impl<'a> Ctx<'a> {
             (Val::Sym(s), Val::Call(_)) => bid_of_text(s).map(Val::Call),
             _ => None,
         };
-        let (l, r) = (
-            &as_bid(l, r).unwrap_or_else(|| l.clone()),
-            &as_bid(r, l).unwrap_or_else(|| r.clone()),
-        );
+        // Borrowed unless one side is a bid written as text (no clone of
+        // every value compared).
+        let (lb, rb) = (as_bid(l, r), as_bid(r, l));
+        let (l, r) = (lb.as_ref().unwrap_or(l), rb.as_ref().unwrap_or(r));
         match (l, r) {
             (Val::Strain(a), Val::Strain(b)) => eq_only(a == b),
             // Bids are ordered by rank (`rho.last <= 2H`); other calls
@@ -694,14 +761,7 @@ impl<'a> Ctx<'a> {
             (Val::Sym(a), Val::Sym(b)) => eq_only(a == b),
             _ => {
                 let (a, b) = (self.num(l)?, self.num(r)?);
-                Ok(match op {
-                    CmpOp::Ge => cmp3(a.lo >= b.hi, a.hi < b.lo),
-                    CmpOp::Gt => cmp3(a.lo > b.hi, a.hi <= b.lo),
-                    CmpOp::Le => cmp3(a.hi <= b.lo, a.lo > b.hi),
-                    CmpOp::Lt => cmp3(a.hi < b.lo, a.lo >= b.hi),
-                    CmpOp::Eq => cmp3(a.as_point().is_some() && a == b, a.hi < b.lo || a.lo > b.hi),
-                    CmpOp::Ne => cmp3(a.hi < b.lo || a.lo > b.hi, a.as_point().is_some() && a == b),
-                })
+                Ok(compare_ranges(op, a, b))
             }
         }
     }
@@ -709,10 +769,14 @@ impl<'a> Ctx<'a> {
     fn path(&self, path: &[Segment], b: &mut Bindings) -> R<Val> {
         // The partnership sums, for a caller that did not expand them
         // (rules are expanded when they are flattened: `macros`).
-        if let Some(e) = crate::macros::sugar(path) {
-            return self.eval(&e?, b);
-        }
+        // `sugar` answers only `safe_level(x)` and `we.` paths; the test
+        // spares every other path the call (this runs for every name).
         let first = &path[0];
+        if first.name == "we" || (path.len() == 1 && first.name == "safe_level") {
+            if let Some(e) = crate::macros::sugar(path) {
+                return self.eval(&e?, b);
+            }
+        }
         let (mut val, rest) = match first.name.as_str() {
             "partner" | "lho" | "rho" | "shown" | "me" | "we" | "they" if path.len() > 1 => {
                 let seat = match first.name.as_str() {
@@ -862,7 +926,7 @@ impl<'a> Ctx<'a> {
                 let we = self.num(&self.we_attr(&plain("hcp"), b)?)?;
                 Val::Bool(cmp3(we.lo >= 35, we.hi < 35))
             }
-            w if named(SYMBOLS, w) => Val::Sym(w.to_string()),
+            w if named(SYMBOLS, w) => Val::Sym(w.into()),
             _ => return Err(format!("unknown term `{n}`")),
         })
     }
@@ -1091,11 +1155,7 @@ impl<'a> Ctx<'a> {
                 .sum();
             let bound = 40 - f.hcp - others;
             if bound < k.hcp.hi {
-                let capped = || {
-                    let mut private = k.clone();
-                    private.add(hcp_at_most(bound));
-                    Rc::new(private)
-                };
+                let capped = || Rc::new(k.narrowed_view(&hcp_at_most(bound)));
                 let private = match self.private {
                     Some(cache) => {
                         let key = (d.to_index(), bound);
@@ -1658,7 +1718,7 @@ fn has_maybe(e: &Expr) -> bool {
 /// no board conditions? Its value on a hand is then the same at every
 /// position (`descriptiveness_of` shares it). Conservative: a name or form
 /// not known to be the hand's own counts as reading the position.
-pub fn hand_only(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
+pub fn hand_only(e: &Expr, b: &Bindings, params: &Params) -> bool {
     let rec = |x: &Expr| hand_only(x, b, params);
     // A bare name that `Ctx::name` resolves without the position.
     let pure_name = |n: &str| {
@@ -1704,7 +1764,7 @@ pub fn hand_only(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
 
 /// Does `e` refer to the actor's own hand (so it must not be folded to a
 /// constant from knowledge)?
-fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
+fn mentions_self(e: &Expr, b: &Bindings, params: &Params) -> bool {
     match e {
         Expr::Path { path } => {
             let n = path[0].name.as_str();
@@ -1777,6 +1837,19 @@ fn bid_rank(c: &Call) -> Option<i32> {
             Some(*level as i32 * 5 + s)
         }
         _ => None,
+    }
+}
+
+/// `a op b` over ranges: true when every pair of values satisfies it,
+/// false when none does.
+fn compare_ranges(op: CmpOp, a: Range, b: Range) -> Tri {
+    match op {
+        CmpOp::Ge => cmp3(a.lo >= b.hi, a.hi < b.lo),
+        CmpOp::Gt => cmp3(a.lo > b.hi, a.hi <= b.lo),
+        CmpOp::Le => cmp3(a.hi <= b.lo, a.lo > b.hi),
+        CmpOp::Lt => cmp3(a.hi < b.lo, a.lo >= b.hi),
+        CmpOp::Eq => cmp3(a.as_point().is_some() && a == b, a.hi < b.lo || a.lo > b.hi),
+        CmpOp::Ne => cmp3(a.hi < b.lo || a.lo > b.hi, a.as_point().is_some() && a == b),
     }
 }
 
@@ -2535,7 +2608,7 @@ mod term_tests {
     fn bare_trump_in_a_comparison_is_my_own_length() {
         // Read for another seat, `trump > partner.trump.min` is about the
         // caller's hand: not public, so it cannot rule the call out.
-        let b = Bindings::new();
+        let b = Bindings::default();
         assert!(hand_dependent(&when_of("trump > partner.trump.min"), &b));
         assert!(hand_dependent(&when_of("S > partner.S.min"), &b));
         assert!(!hand_dependent(&when_of("partner.trump.min >= 3"), &b));
@@ -2547,9 +2620,9 @@ mod term_tests {
     /// seat, the auction, the side's state or the board must not.
     #[test]
     fn hand_only_reads_nothing_but_the_hand() {
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         b.insert("x".into(), Val::Suit(1));
-        let params = HashMap::from([("min".to_string(), Val::Num(Range::point(10)))]);
+        let params = Params::from_iter([("min".to_string(), Val::Num(Range::point(10)))]);
         for e in [
             "H>=4, hcp+length_points=9..11",
             "balanced, hcp>=12, stop(x), (H<=3 | x is H)",
@@ -2653,7 +2726,7 @@ mod term_tests {
         pos.knowledge[south].add(when_of("(S>=3, D>=3, C>=3) | hcp>=17"));
         pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
         let hand = Facts::new(&Hand::from_pbn("T3.J.AJ8763.KJ87").unwrap());
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::North,
@@ -2662,7 +2735,7 @@ mod term_tests {
             valuation: Valuation::default(),
             private: None,
         };
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         assert_eq!(ctx.cond(&when_of("partner.S>=3"), &mut b), Ok(Tri::True));
         assert_eq!(ctx.cond(&when_of("partner.hcp<=16"), &mut b), Ok(Tri::True));
         // Publicly South is still unknown.
@@ -2767,7 +2840,7 @@ mod term_tests {
         pos.knowledge[w].add(when_of("H>=6"));
         pos.knowledge[e].add(when_of("H>=2"));
         let hand = Facts::new(&Hand::from_pbn("AKJ74.K2.Q2.QT93").unwrap());
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = |actor, hand| Ctx {
             pos: &pos,
             actor,
@@ -2779,7 +2852,7 @@ mod term_tests {
         let north = ctx(Direction::North, Some(&hand));
         let holds = |c: &Ctx, e: &str| {
             let e = crate::macros::Defines::default().expand(&when_of(e), &mut Vec::new());
-            c.cond(&e, &mut Bindings::new())
+            c.cond(&e, &mut Bindings::default())
         };
         for e in [
             "unfavourable, !favourable",
@@ -2820,7 +2893,7 @@ mod term_tests {
             Vulnerability::None,
             ScoringMethod::Matchpoints,
         );
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::South,
@@ -2862,7 +2935,7 @@ mod term_tests {
         for x in exprs {
             let e = when_of(&format!("{x} = 1 | !{x} = 1"));
             let Expr::Or { any } = &e else { panic!("{x}") };
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if let Err(err) = ctx.eval(&any[0], &mut b) {
                 assert!(!err.contains("unknown"), "{x}: {err}");
             }
@@ -2986,7 +3059,7 @@ mod knowledge_soundness {
             Vulnerability::None,
             ScoringMethod::Matchpoints,
         );
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::North,
@@ -2995,7 +3068,7 @@ mod knowledge_soundness {
             valuation: v,
             private: None,
         };
-        ctx.cond(e, &mut Bindings::new()) == Ok(Tri::True)
+        ctx.cond(e, &mut Bindings::default()) == Ok(Tri::True)
     }
 
     #[test]

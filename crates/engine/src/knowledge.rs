@@ -288,23 +288,50 @@ impl SeatKnowledge {
     /// narrow the ranges by it. Returns false if it contradicts what was
     /// known, in which case the ranges are left unchanged.
     pub fn add(&mut self, e: Expr) -> bool {
-        let narrowed = narrow(self.bounds(), &e, true);
-        let ok = !narrowed.is_contradiction();
-        if ok {
-            self.shown.push(e.to_string());
-            self.constraints.push(e);
-            // Earlier disjunctions may settle now ("4 hearts or 4 spades",
-            // then "not 4 hearts"): narrow by everything once more.
-            let mut b = narrowed;
-            for c in &self.constraints {
-                let again = narrow(b, c, true);
-                if !again.is_contradiction() {
-                    b = again;
-                }
+        match self.added(&e) {
+            Some(b) => {
+                self.shown.push(e.to_string());
+                self.constraints.push(e);
+                self.set_bounds(b);
+                true
             }
-            self.set_bounds(b);
+            None => false,
         }
-        ok
+    }
+
+    /// The ranges `add(e)` leaves, or `None` if `e` contradicts them.
+    fn added(&self, e: &Expr) -> Option<Bounds> {
+        let narrowed = narrow(self.bounds(), e, true);
+        if narrowed.is_contradiction() {
+            return None;
+        }
+        // Earlier disjunctions may settle now ("4 hearts or 4 spades",
+        // then "not 4 hearts"): narrow by everything once more, `e` last
+        // (it is the last constraint once recorded).
+        let mut b = narrowed;
+        for c in self.constraints.iter().chain(std::iter::once(e)) {
+            let again = narrow(b, c, true);
+            if !again.is_contradiction() {
+                b = again;
+            }
+        }
+        Some(b)
+    }
+
+    /// A copy whose ranges are exactly what `add(e)` would leave on a
+    /// clone (unchanged if `e` contradicts them), without copying what
+    /// the seat has shown: its `shown` and `constraints` are empty. For a
+    /// short-lived view that reads only the ranges (another seat capped by
+    /// my own HCP while choosing, `eval::Ctx::seat_attr`), where cloning
+    /// every constraint was most of the cost.
+    pub fn narrowed_view(&self, e: &Expr) -> SeatKnowledge {
+        let mut k = SeatKnowledge {
+            shown: Vec::new(),
+            constraints: Vec::new(),
+            ..SeatKnowledge::unknown(self.valuation)
+        };
+        k.set_bounds(self.added(e).unwrap_or_else(|| self.bounds()));
+        k
     }
 
     /// Narrow by a fact the deck implies (another seat's shown length),

@@ -97,7 +97,10 @@ impl Position {
     }
 
     pub fn caller(&self, i: usize) -> Direction {
-        (0..i).fold(self.dealer, |d, _| d.next())
+        // `i` steps clockwise from the dealer (`Direction::next` goes N E S
+        // W, the index order): arithmetic, as scans over the calls ask for
+        // every call's seat.
+        Direction::ALL[(self.dealer.to_index() + i) % 4]
     }
 
     pub fn next_caller(&self) -> Direction {
@@ -330,7 +333,16 @@ impl Position {
 
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
-        match self.auction().last_bid() {
+        // The last bid and who made it, read off the calls: building an
+        // `Auction` for it cost a seventh of a comparison run (`we.` and
+        // `they.game_reached` are read for every sample hand).
+        let last = (0..self.calls.len())
+            .rev()
+            .find_map(|i| match self.calls[i] {
+                Call::Bid { level, strain } => Some((level, strain, self.caller(i))),
+                _ => None,
+            });
+        match last {
             Some((level, strain, by)) if side(by) == side(d) => match strain {
                 Strain::NoTrump => level < 3,
                 Strain::Hearts | Strain::Spades => level < 4,
@@ -356,6 +368,22 @@ fn strain_rank(s: Strain) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn caller_steps_clockwise_from_the_dealer() {
+        for dealer in Direction::ALL {
+            let pos = Position::new(
+                dealer,
+                Vulnerability::None,
+                ScoringMethod::from_pbn("IMP").unwrap(),
+            );
+            let mut d = dealer;
+            for i in 0..12 {
+                assert_eq!(pos.caller(i), d);
+                d = d.next();
+            }
+        }
+    }
 
     #[test]
     fn named_counts_natural_bids_only() {

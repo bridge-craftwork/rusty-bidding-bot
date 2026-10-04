@@ -8,7 +8,7 @@ use bridge_card::Card;
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
-use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, PrivateCache, Val};
+use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, FastHash, PrivateCache, Val};
 use crate::facts::{Facts, Valuation};
 use crate::knowledge::{SeatKnowledge, Tri};
 use crate::position::{side, Ask, Forcing, Position, SideState};
@@ -98,10 +98,19 @@ pub struct Decision {
     pub warnings: Vec<String>,
 }
 
-type IndexCache = HashMap<String, Arc<Vec<u32>>>;
+/// The sample hands consistent with what a seat has shown (indices into
+/// `Engine::pool`; the whole pool when none is), and `serial`, a number
+/// naming that set: equal sets have equal serials (`Engine::interned`),
+/// whatever constraints produced them.
+struct Consistent {
+    ids: Vec<u32>,
+    serial: usize,
+}
+
+type IndexCache = HashMap<String, Arc<Consistent>, FastHash>;
 
 /// The candidates at a position, with the warnings met finding them.
-type CandCache = HashMap<String, Arc<(Vec<Cand>, Vec<String>)>>;
+type CandCache = HashMap<String, Arc<(Vec<Cand>, Vec<String>)>, FastHash>;
 
 /// Entries kept before the candidate cache is emptied and refilled, so a
 /// run over the whole corpus stays within memory.
@@ -135,7 +144,9 @@ pub struct Engine {
     valuation: [Valuation; 2],
     pool: Vec<Facts>,
     consistent: Mutex<IndexCache>,
-    descriptiveness: Mutex<HashMap<String, f64>>,
+    /// Serial numbers of the distinct consistent sets (`Consistent`).
+    interned: Mutex<HashMap<Vec<u32>, usize, FastHash>>,
+    descriptiveness: Mutex<HashMap<String, f64, FastHash>>,
     cands: Mutex<CandCache>,
 }
 
@@ -162,9 +173,10 @@ impl Engine {
             systems: [System::new(ns, modules), System::new(ew, modules)],
             valuation: [Valuation::for_card(ns), Valuation::for_card(ew)],
             pool: sample::pool(),
-            consistent: Mutex::new(HashMap::new()),
-            descriptiveness: Mutex::new(HashMap::new()),
-            cands: Mutex::new(HashMap::new()),
+            consistent: Mutex::default(),
+            interned: Mutex::default(),
+            descriptiveness: Mutex::default(),
+            cands: Mutex::default(),
         }
     }
 
@@ -232,7 +244,7 @@ impl Engine {
         let mut out = Vec::new();
         for (i, entry) in sys.rules.iter().enumerate() {
             let ctx = self.ctx(pos, actor, None, entry);
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if !entry
                 .patterns
                 .iter()
@@ -280,8 +292,12 @@ impl Engine {
             }
         }
         let shown = consistent_key(pos, actor);
+        // Another seat's knowledge capped by the hand's HCP depends only on
+        // the position, the seat and the cap, so one cache serves every
+        // candidate here.
+        let private = PrivateCache::default();
         for c in &mut out {
-            c.descriptiveness = self.descriptiveness_of(pos, actor, c, &shown);
+            c.descriptiveness = self.descriptiveness_of(pos, actor, c, &shown, &private);
         }
         out.sort_by(|a, b| {
             (b.priority, b.descriptiveness)
@@ -292,9 +308,9 @@ impl Engine {
         out
     }
 
-    /// Indices of sample hands consistent with what `actor` has shown.
-    /// `key` is `consistent_key(pos, actor)`.
-    fn consistent_hands(&self, pos: &Position, actor: Direction, key: &str) -> Arc<Vec<u32>> {
+    /// The sample hands consistent with what `actor` has shown (all of
+    /// them when none is). `key` is `consistent_key(pos, actor)`.
+    fn consistent_hands(&self, pos: &Position, actor: Direction, key: &str) -> Arc<Consistent> {
         if let Some(v) = self.consistent.lock().unwrap().get(key) {
             return v.clone();
         }
@@ -308,7 +324,7 @@ impl Engine {
             .iter()
             .filter(|c| !crate::knowledge::held_by_ranges(c))
             .collect();
-        let params = HashMap::new();
+        let params = crate::eval::Params::default();
         let ids: Vec<u32> = self
             .pool
             .iter()
@@ -334,11 +350,21 @@ impl Engine {
                 };
                 residual
                     .iter()
-                    .all(|c| ctx.cond(c, &mut Bindings::new()) != Ok(Tri::False))
+                    .all(|c| ctx.cond(c, &mut Bindings::default()) != Ok(Tri::False))
             })
             .map(|(i, _)| i as u32)
             .collect();
-        let ids = Arc::new(ids);
+        let ids = if ids.is_empty() {
+            (0..self.pool.len() as u32).collect()
+        } else {
+            ids
+        };
+        let serial = {
+            let mut interned = self.interned.lock().unwrap();
+            let next = interned.len();
+            *interned.entry(ids.clone()).or_insert(next)
+        };
+        let ids = Arc::new(Consistent { ids, serial });
         self.consistent
             .lock()
             .unwrap()
@@ -347,8 +373,16 @@ impl Engine {
     }
 
     /// Share of the hands consistent with the actor's earlier calls that the
-    /// candidate's `shows` rules out. `shown` is `consistent_key(pos, actor)`.
-    fn descriptiveness_of(&self, pos: &Position, actor: Direction, c: &Cand, shown: &str) -> f64 {
+    /// candidate's `shows` rules out. `shown` is `consistent_key(pos, actor)`;
+    /// `private` caches capped knowledge for this position (`Ctx::private`).
+    fn descriptiveness_of(
+        &self,
+        pos: &Position,
+        actor: Direction,
+        c: &Cand,
+        shown: &str,
+        private: &PrivateCache,
+    ) -> f64 {
         let entry = &self.systems[side(actor)].rules[c.entry];
         let Some(shows) = &entry.rule.shows else {
             return 0.0;
@@ -364,15 +398,24 @@ impl Engine {
         // every earlier call whose meaning did (a pass that denies a weak
         // two only when not vulnerable). The dealer adds nothing: with the
         // side fixed, the calls place every seat relative to the actor.
+        //
+        // A hand-only value is a function of the consistent set itself, not
+        // of the constraints that produced it, so it is keyed on the set's
+        // serial: different auctions that leave the same hands share it.
         let params = &self.systems[side(actor)].params[entry.module];
+        let mut consistent = None;
         let key = if crate::eval::hand_only(shows, &c.b, params) {
-            format!(
-                "{}|{}|{}|{:?}|{shown}",
+            let set = self.consistent_hands(pos, actor, shown);
+            let key = format!(
+                "{}|{}|{}|{:?}|#{}",
                 side(actor),
                 c.entry,
                 c.call,
-                sorted(&c.b)
-            )
+                sorted(&c.b),
+                set.serial
+            );
+            consistent = Some(set);
+            key
         } else {
             let board = (
                 pos.is_vulnerable(actor),
@@ -391,10 +434,8 @@ impl Engine {
         if let Some(v) = self.descriptiveness.lock().unwrap().get(&key) {
             return *v;
         }
-        let mut ids = self.consistent_hands(pos, actor, shown);
-        if ids.is_empty() {
-            ids = Arc::new((0..self.pool.len() as u32).collect());
-        }
+        let set = consistent.unwrap_or_else(|| self.consistent_hands(pos, actor, shown));
+        let ids = &set.ids;
         // A condition counted in arithmetic (`+ doubler_four(x)`) would be
         // judged again for every hand: what the auction already settles is
         // settled once.
@@ -408,14 +449,13 @@ impl Engine {
             shows
         };
         let mut pass = 0usize;
-        let private = PrivateCache::default();
         // One copy of the bindings for the whole pool, restored only when
         // an evaluation bound something new (cloning per hand was a sixth
         // of the run).
         let mut b = c.b.clone();
         for &i in ids.iter() {
             let mut ctx = self.ctx(pos, actor, Some(&self.pool[i as usize]), entry);
-            ctx.private = Some(&private);
+            ctx.private = Some(private);
             if ctx.cond(shows, &mut b) == Ok(Tri::True) {
                 pass += 1;
             }
@@ -644,7 +684,7 @@ impl Engine {
                 valuation: self.valuation[side(caller)],
                 private: None,
             };
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if let Some(alts) = &f.after {
                 if !match_any(alts, &pos.calls, &ctx, &mut b) {
                     return false;
@@ -1461,7 +1501,7 @@ mod sets_tests {
         for s in &mut pos.sides {
             s.trump = Some(Strain::Spades);
         }
-        let params = HashMap::new();
+        let params = crate::eval::Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::South,
@@ -1474,7 +1514,7 @@ mod sets_tests {
             trump: Some(Strain::Spades),
             ..Default::default()
         };
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         b.insert("x".into(), Val::Suit(2));
         b.insert("M".into(), Val::Suit(3));
         let call = Call::Bid {
