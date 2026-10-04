@@ -232,7 +232,7 @@ impl Engine {
         let mut out = Vec::new();
         for (i, entry) in sys.rules.iter().enumerate() {
             let ctx = self.ctx(pos, actor, None, entry);
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if !entry
                 .patterns
                 .iter()
@@ -308,7 +308,7 @@ impl Engine {
             .iter()
             .filter(|c| !crate::knowledge::held_by_ranges(c))
             .collect();
-        let params = HashMap::new();
+        let params = crate::eval::Params::default();
         let ids: Vec<u32> = self
             .pool
             .iter()
@@ -334,7 +334,7 @@ impl Engine {
                 };
                 residual
                     .iter()
-                    .all(|c| ctx.cond(c, &mut Bindings::new()) != Ok(Tri::False))
+                    .all(|c| ctx.cond(c, &mut Bindings::default()) != Ok(Tri::False))
             })
             .map(|(i, _)| i as u32)
             .collect();
@@ -644,7 +644,7 @@ impl Engine {
                 valuation: self.valuation[side(caller)],
                 private: None,
             };
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if let Some(alts) = &f.after {
                 if !match_any(alts, &pos.calls, &ctx, &mut b) {
                     return false;
@@ -1461,7 +1461,7 @@ mod sets_tests {
         for s in &mut pos.sides {
             s.trump = Some(Strain::Spades);
         }
-        let params = HashMap::new();
+        let params = crate::eval::Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::South,
@@ -1474,7 +1474,7 @@ mod sets_tests {
             trump: Some(Strain::Spades),
             ..Default::default()
         };
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         b.insert("x".into(), Val::Suit(2));
         b.insert("M".into(), Val::Suit(3));
         let call = Call::Bid {

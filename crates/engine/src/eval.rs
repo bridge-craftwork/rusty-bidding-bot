@@ -32,7 +32,56 @@ pub enum Val {
     Nothing,
 }
 
-pub type Bindings = HashMap<String, Val>;
+/// A fast hasher for the short names the evaluator looks up (FxHash, as
+/// rustc uses): the bindings and parameters are read on every name
+/// evaluated, and SipHash was a tenth of a comparison run. Nothing
+/// iterates these maps in an order that matters (`engine::sorted` sorts).
+#[derive(Default, Clone, Copy)]
+pub struct FxHasher {
+    hash: u64,
+}
+
+impl FxHasher {
+    #[inline]
+    fn add(&mut self, word: u64) {
+        self.hash = (self.hash.rotate_left(5) ^ word).wrapping_mul(0x51_7c_c1_b7_27_22_0a_95);
+    }
+}
+
+impl std::hash::Hasher for FxHasher {
+    #[inline]
+    fn write(&mut self, bytes: &[u8]) {
+        let mut chunks = bytes.chunks_exact(8);
+        for c in &mut chunks {
+            self.add(u64::from_le_bytes(c.try_into().unwrap()));
+        }
+        let rest = chunks.remainder();
+        if !rest.is_empty() {
+            let mut w = [0u8; 8];
+            w[..rest.len()].copy_from_slice(rest);
+            self.add(u64::from_le_bytes(w));
+        }
+    }
+    #[inline]
+    fn write_u8(&mut self, i: u8) {
+        self.add(i as u64);
+    }
+    #[inline]
+    fn write_usize(&mut self, i: usize) {
+        self.add(i as u64);
+    }
+    #[inline]
+    fn finish(&self) -> u64 {
+        self.hash
+    }
+}
+
+pub type FastHash = std::hash::BuildHasherDefault<FxHasher>;
+
+pub type Bindings = HashMap<String, Val, FastHash>;
+
+/// A module's parameters by name (`System::params`).
+pub type Params = HashMap<String, Val, FastHash>;
 
 pub fn strain_of_suit(s: usize) -> Strain {
     [
@@ -307,7 +356,7 @@ pub struct Ctx<'a> {
     /// The actor's exact hand, when choosing a call.
     pub hand: Option<&'a Facts>,
     /// The rule's module parameters.
-    pub params: &'a HashMap<String, Val>,
+    pub params: &'a Params,
     /// How total points are counted.
     pub valuation: Valuation,
     /// Another seat's knowledge capped by my own HCP (`seat_attr`), shared
@@ -1665,7 +1714,7 @@ fn has_maybe(e: &Expr) -> bool {
 /// no board conditions? Its value on a hand is then the same at every
 /// position (`descriptiveness_of` shares it). Conservative: a name or form
 /// not known to be the hand's own counts as reading the position.
-pub fn hand_only(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
+pub fn hand_only(e: &Expr, b: &Bindings, params: &Params) -> bool {
     let rec = |x: &Expr| hand_only(x, b, params);
     // A bare name that `Ctx::name` resolves without the position.
     let pure_name = |n: &str| {
@@ -1711,7 +1760,7 @@ pub fn hand_only(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool 
 
 /// Does `e` refer to the actor's own hand (so it must not be folded to a
 /// constant from knowledge)?
-fn mentions_self(e: &Expr, b: &Bindings, params: &HashMap<String, Val>) -> bool {
+fn mentions_self(e: &Expr, b: &Bindings, params: &Params) -> bool {
     match e {
         Expr::Path { path } => {
             let n = path[0].name.as_str();
@@ -2542,7 +2591,7 @@ mod term_tests {
     fn bare_trump_in_a_comparison_is_my_own_length() {
         // Read for another seat, `trump > partner.trump.min` is about the
         // caller's hand: not public, so it cannot rule the call out.
-        let b = Bindings::new();
+        let b = Bindings::default();
         assert!(hand_dependent(&when_of("trump > partner.trump.min"), &b));
         assert!(hand_dependent(&when_of("S > partner.S.min"), &b));
         assert!(!hand_dependent(&when_of("partner.trump.min >= 3"), &b));
@@ -2554,9 +2603,9 @@ mod term_tests {
     /// seat, the auction, the side's state or the board must not.
     #[test]
     fn hand_only_reads_nothing_but_the_hand() {
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         b.insert("x".into(), Val::Suit(1));
-        let params = HashMap::from([("min".to_string(), Val::Num(Range::point(10)))]);
+        let params = Params::from_iter([("min".to_string(), Val::Num(Range::point(10)))]);
         for e in [
             "H>=4, hcp+length_points=9..11",
             "balanced, hcp>=12, stop(x), (H<=3 | x is H)",
@@ -2660,7 +2709,7 @@ mod term_tests {
         pos.knowledge[south].add(when_of("(S>=3, D>=3, C>=3) | hcp>=17"));
         pos.knowledge[Direction::East.to_index()].add(when_of("hcp>=14"));
         let hand = Facts::new(&Hand::from_pbn("T3.J.AJ8763.KJ87").unwrap());
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::North,
@@ -2669,7 +2718,7 @@ mod term_tests {
             valuation: Valuation::default(),
             private: None,
         };
-        let mut b = Bindings::new();
+        let mut b = Bindings::default();
         assert_eq!(ctx.cond(&when_of("partner.S>=3"), &mut b), Ok(Tri::True));
         assert_eq!(ctx.cond(&when_of("partner.hcp<=16"), &mut b), Ok(Tri::True));
         // Publicly South is still unknown.
@@ -2774,7 +2823,7 @@ mod term_tests {
         pos.knowledge[w].add(when_of("H>=6"));
         pos.knowledge[e].add(when_of("H>=2"));
         let hand = Facts::new(&Hand::from_pbn("AKJ74.K2.Q2.QT93").unwrap());
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = |actor, hand| Ctx {
             pos: &pos,
             actor,
@@ -2786,7 +2835,7 @@ mod term_tests {
         let north = ctx(Direction::North, Some(&hand));
         let holds = |c: &Ctx, e: &str| {
             let e = crate::macros::Defines::default().expand(&when_of(e), &mut Vec::new());
-            c.cond(&e, &mut Bindings::new())
+            c.cond(&e, &mut Bindings::default())
         };
         for e in [
             "unfavourable, !favourable",
@@ -2827,7 +2876,7 @@ mod term_tests {
             Vulnerability::None,
             ScoringMethod::Matchpoints,
         );
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::South,
@@ -2869,7 +2918,7 @@ mod term_tests {
         for x in exprs {
             let e = when_of(&format!("{x} = 1 | !{x} = 1"));
             let Expr::Or { any } = &e else { panic!("{x}") };
-            let mut b = Bindings::new();
+            let mut b = Bindings::default();
             if let Err(err) = ctx.eval(&any[0], &mut b) {
                 assert!(!err.contains("unknown"), "{x}: {err}");
             }
@@ -2993,7 +3042,7 @@ mod knowledge_soundness {
             Vulnerability::None,
             ScoringMethod::Matchpoints,
         );
-        let params = HashMap::new();
+        let params = Params::default();
         let ctx = Ctx {
             pos: &pos,
             actor: Direction::North,
@@ -3002,7 +3051,7 @@ mod knowledge_soundness {
             valuation: v,
             private: None,
         };
-        ctx.cond(e, &mut Bindings::new()) == Ok(Tri::True)
+        ctx.cond(e, &mut Bindings::default()) == Ok(Tri::True)
     }
 
     #[test]

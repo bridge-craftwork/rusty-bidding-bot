@@ -38,7 +38,7 @@ pub struct RuleEntry {
 #[derive(Debug, Clone, Default)]
 pub struct System {
     pub modules: Vec<String>,
-    pub params: Vec<HashMap<String, Val>>,
+    pub params: Vec<crate::eval::Params>,
     pub rules: Vec<RuleEntry>,
     /// The active modules' `force` declarations.
     pub forces: Vec<ForceEntry>,
@@ -122,7 +122,7 @@ impl System {
         // their own module's parameters under qualified names, active or
         // not (see `macros`).
         let defines = Defines::new(modules);
-        let mut defined: HashMap<String, Val> = HashMap::new();
+        let mut defined = crate::eval::Params::default();
         for m in modules.iter().filter(|m| !m.defines.is_empty()) {
             for p in &m.params {
                 defined.insert(qualified(&m.name, &p.name), param_value(p));
