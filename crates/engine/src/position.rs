@@ -330,7 +330,16 @@ impl Position {
 
     /// Our side's last bid is below game, so a game force still applies.
     pub fn below_game(&self, d: Direction) -> bool {
-        match self.auction().last_bid() {
+        // The last bid and who made it, read off the calls: building an
+        // `Auction` for it cost a seventh of a comparison run (`we.` and
+        // `they.game_reached` are read for every sample hand).
+        let last = (0..self.calls.len())
+            .rev()
+            .find_map(|i| match self.calls[i] {
+                Call::Bid { level, strain } => Some((level, strain, self.caller(i))),
+                _ => None,
+            });
+        match last {
             Some((level, strain, by)) if side(by) == side(d) => match strain {
                 Strain::NoTrump => level < 3,
                 Strain::Hearts | Strain::Spades => level < 4,
