@@ -256,3 +256,32 @@ earlier ones: vanilla 250 -> 185, corpus 412 -> 391, 21GF 377 -> 320.
 IMPs about neutral: contract errors +39 / +36 / +30, distance from par
 +20 / +28 / +24, errors line +54 / +82 / -6 (vanilla / corpus / 21GF).
 
+
+## Two-level overcalls: the minimum in HCP (ticket b238, 2026-10-04)
+
+Rick: "on the 2C overcall, how can West have 3 HCP possibly? With a weak
+hand and long clubs, they would make a 3C overcall. So this normally
+would be a 12-18 total points overcall - preempt when weaker, double
+first when stronger. Can we see how BBA judges to make this bid based
+on club length, club strength and points?"
+
+BBA over 1D, 1,500 made hands (`probes/oc-2C-over-1D.toml`, Basic-Bridge):
+five clubs overcall 2C from 12 HCP (59%; 13: 74%), six from 11 (80%;
+10: 21%; 9 or less never), seven from 11 (6-10 preempt 3C), eight from
+12 (7-10 bid 5C). No weak two-level overcall; suit quality matters only
+at the margin (six clubs, 9-12 HCP: 25% with no top honour, 80% with
+all three). So BBA reads the card's "2-level overcall: minimum 12" as
+HCP, a point less with six cards.
+
+2C/2D/2H now show `hcp>=two_min | (suit>=6, hcp>=two_min-1)` (was 12
+total points): J73.J3.K4.KQ6432 (10 HCP, six clubs) passes, and partner
+reads the overcall as 11-16 HCP (13+ with length) instead of 3+.
+
+Measured (vanilla / corpus / 21GF): contract errors +244 / +73 / +463
+(corpus halves -26 / +99), distance from par -114 / -396 / +120,
+doubling +79 / -258 / +75. The yardsticks disagree: staying out costs
+the pressure a light overcall puts on them. **Rick, 2026-10-04: merge;
+the overcall shows what partner can count on.** (PR #48, 7ed6129.)
+
+Sources: Rick's ticket b238 (2026-10-04); BBA probe
+`probes/oc-2C-over-1D.toml`; the measurements above.
