@@ -37,7 +37,7 @@ define pen_suit(x) = (good_trumps(x), we.hcp.min>=17) | (x>=4, we.hcp.min>=20) |
 define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !me.last=XX
 
 # Partner need not have shown values: with 22 known in my own hand (or
-# 20-21 with their trumps) the double stands alone. A condition that
+# 17-21 with their trumps) the double stands alone. A condition that
 # partner had shown 4+ was a par artefact: it lost on the errors
 # yardstick on all three sets (penalty-doubles.notes.md, 2026-10-01).
 
