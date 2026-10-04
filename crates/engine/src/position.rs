@@ -97,7 +97,10 @@ impl Position {
     }
 
     pub fn caller(&self, i: usize) -> Direction {
-        (0..i).fold(self.dealer, |d, _| d.next())
+        // `i` steps clockwise from the dealer (`Direction::next` goes N E S
+        // W, the index order): arithmetic, as scans over the calls ask for
+        // every call's seat.
+        Direction::ALL[(self.dealer.to_index() + i) % 4]
     }
 
     pub fn next_caller(&self) -> Direction {
@@ -365,6 +368,22 @@ fn strain_rank(s: Strain) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn caller_steps_clockwise_from_the_dealer() {
+        for dealer in Direction::ALL {
+            let pos = Position::new(
+                dealer,
+                Vulnerability::None,
+                ScoringMethod::from_pbn("IMP").unwrap(),
+            );
+            let mut d = dealer;
+            for i in 0..12 {
+                assert_eq!(pos.caller(i), d);
+                d = d.next();
+            }
+        }
+    }
 
     #[test]
     fn named_counts_natural_bids_only() {

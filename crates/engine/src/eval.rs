@@ -360,13 +360,14 @@ pub struct Ctx<'a> {
     /// How total points are counted.
     pub valuation: Valuation,
     /// Another seat's knowledge capped by my own HCP (`seat_attr`), shared
-    /// by the evaluations of one decision: building it clones the seat's
-    /// whole knowledge, once per attribute read without the cache.
+    /// by the evaluations of one position: building it narrows the seat's
+    /// ranges by every constraint again, once per attribute read without
+    /// the cache.
     pub private: Option<&'a PrivateCache>,
 }
 
 /// Capped knowledge by (seat, HCP bound), for one position (`Ctx::private`).
-pub type PrivateCache = RefCell<HashMap<(usize, i32), Rc<SeatKnowledge>>>;
+pub type PrivateCache = RefCell<HashMap<(usize, i32), Rc<SeatKnowledge>, FastHash>>;
 
 type R<T> = Result<T, String>;
 
@@ -714,6 +715,16 @@ impl<'a> Ctx<'a> {
     }
 
     fn compare(&self, op: CmpOp, l: &Val, r: &Val) -> R<Tri> {
+        // Numbers and suit lengths, by far the most common, go straight to
+        // the range comparison the last arm below makes of them.
+        let quick = |v: &Val| match v {
+            Val::Num(r) => Some(*r),
+            Val::Suit(s) => Some(self.self_len(*s)),
+            _ => None,
+        };
+        if let (Some(a), Some(b)) = (quick(l), quick(r)) {
+            return Ok(compare_ranges(op, a, b));
+        }
         let eq_only = |t: bool| -> R<Tri> {
             match op {
                 CmpOp::Eq => Ok(Tri::from_bool(t)),
@@ -750,14 +761,7 @@ impl<'a> Ctx<'a> {
             (Val::Sym(a), Val::Sym(b)) => eq_only(a == b),
             _ => {
                 let (a, b) = (self.num(l)?, self.num(r)?);
-                Ok(match op {
-                    CmpOp::Ge => cmp3(a.lo >= b.hi, a.hi < b.lo),
-                    CmpOp::Gt => cmp3(a.lo > b.hi, a.hi <= b.lo),
-                    CmpOp::Le => cmp3(a.hi <= b.lo, a.lo > b.hi),
-                    CmpOp::Lt => cmp3(a.hi < b.lo, a.lo >= b.hi),
-                    CmpOp::Eq => cmp3(a.as_point().is_some() && a == b, a.hi < b.lo || a.lo > b.hi),
-                    CmpOp::Ne => cmp3(a.hi < b.lo || a.lo > b.hi, a.as_point().is_some() && a == b),
-                })
+                Ok(compare_ranges(op, a, b))
             }
         }
     }
@@ -765,10 +769,14 @@ impl<'a> Ctx<'a> {
     fn path(&self, path: &[Segment], b: &mut Bindings) -> R<Val> {
         // The partnership sums, for a caller that did not expand them
         // (rules are expanded when they are flattened: `macros`).
-        if let Some(e) = crate::macros::sugar(path) {
-            return self.eval(&e?, b);
-        }
+        // `sugar` answers only `safe_level(x)` and `we.` paths; the test
+        // spares every other path the call (this runs for every name).
         let first = &path[0];
+        if first.name == "we" || (path.len() == 1 && first.name == "safe_level") {
+            if let Some(e) = crate::macros::sugar(path) {
+                return self.eval(&e?, b);
+            }
+        }
         let (mut val, rest) = match first.name.as_str() {
             "partner" | "lho" | "rho" | "shown" | "me" | "we" | "they" if path.len() > 1 => {
                 let seat = match first.name.as_str() {
@@ -1147,11 +1155,7 @@ impl<'a> Ctx<'a> {
                 .sum();
             let bound = 40 - f.hcp - others;
             if bound < k.hcp.hi {
-                let capped = || {
-                    let mut private = k.clone();
-                    private.add(hcp_at_most(bound));
-                    Rc::new(private)
-                };
+                let capped = || Rc::new(k.narrowed_view(&hcp_at_most(bound)));
                 let private = match self.private {
                     Some(cache) => {
                         let key = (d.to_index(), bound);
@@ -1833,6 +1837,19 @@ fn bid_rank(c: &Call) -> Option<i32> {
             Some(*level as i32 * 5 + s)
         }
         _ => None,
+    }
+}
+
+/// `a op b` over ranges: true when every pair of values satisfies it,
+/// false when none does.
+fn compare_ranges(op: CmpOp, a: Range, b: Range) -> Tri {
+    match op {
+        CmpOp::Ge => cmp3(a.lo >= b.hi, a.hi < b.lo),
+        CmpOp::Gt => cmp3(a.lo > b.hi, a.hi <= b.lo),
+        CmpOp::Le => cmp3(a.hi <= b.lo, a.lo > b.hi),
+        CmpOp::Lt => cmp3(a.hi < b.lo, a.lo >= b.hi),
+        CmpOp::Eq => cmp3(a.as_point().is_some() && a == b, a.hi < b.lo || a.lo > b.hi),
+        CmpOp::Ne => cmp3(a.hi < b.lo || a.lo > b.hi, a.as_point().is_some() && a == b),
     }
 }
 
