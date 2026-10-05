@@ -57,6 +57,8 @@ module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
   needs  overcalls
   skill  competitive_bidding/michaels_unusual
   skill  competitive_bidding/unusual_vs_unusual
+  skill  competitive_bidding/leaping_michaels
+  skill  competitive_bidding/non_leaping_michaels
   param  mich_play   = competitive.michaels.play default false
   param  mich_minors = direct_cuebids.nat_minors_michaels default false
   param  mich_quasi  = direct_cuebids.quasi_michaels default false
