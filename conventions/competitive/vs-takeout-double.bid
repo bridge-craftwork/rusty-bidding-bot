@@ -1,0 +1,98 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Responder's raises of partner's major once they have doubled it for
+# takeout: Jordan (Truscott) 2NT and BROMAD (2026-10-05). The rest of
+# responder's calls over the double (redouble, new suits, the simple
+# raise, 1NT) are in after-interference.bid.
+#
+# - Jordan 2NT (`competitive.jordan_2nt.play`; Bridge Bum, "Jordan
+#   2NT"): 1M (X) 2NT is a limit raise or better with four or more
+#   trumps, and the jump to 3M is preemptive (four trumps, up to 9).
+#   Opener signs off in 3M or bids the game, as over any limit raise.
+# - BROMAD (`competitive.bromad.play`; Bridge Bum, "BROMAD"): 2♣ a
+#   constructive raise with three trumps (7-9), 2♦ three trumps and a
+#   limit raise or better, 3♣ a constructive raise with four, 3♦ a
+#   four-card limit raise, 2M and 3M preemptive (three and four trumps,
+#   up to 6), 2NT a weak minor two-suiter. When the card plays Jordan
+#   too (BBA's cards with BROMAD all do), 2NT stays Jordan and covers
+#   the four-card limit raise, so BROMAD's 3♦ and 2NT are not played.
+#
+# Notes: vs-takeout-double.notes.md.
+
+module vs-takeout-double "Raises over their takeout double: Jordan 2NT and BROMAD"
+  needs  base
+  needs  after-interference
+  skill  competitive_bidding/jordan_2nt
+  skill  competitive_bidding/bromad
+  param  jordan = competitive.jordan_2nt.play default false
+  param  bromad = competitive.bromad.play default false
+  param  drury_comp = major_openings.drury.in_comp default false
+  param  drury   = major_openings.drury.play default false
+  param  rdrury  = major_openings.drury.reverse default false
+
+# ── Jordan 2NT ───────────────────────────────────────────────────────
+# Above the redouble (priority 1): with a four-card fit the raise comes
+# first, as BBA bids it (Jordan_2N: 375 of 500 boards). A passed hand
+# that plays Drury over the double bids Drury instead (drury.bid).
+after 1M (X) when jordan, !passed_hand | !drury_comp | !(drury | rdrury)
+  2N  "Jordan 2NT: limit raise or better, four or more {M}"
+      alert  artificial
+      shows M>=4, tp(M)>=10
+      sets  forcing=round, ask=limit_raise(M)
+      priority 2
+  3{M} "Preemptive raise: four or more {M}, up to 9"
+      shows M>=4, tp(M)<=9
+      when  !bromad
+      priority 1
+
+# ── BROMAD ───────────────────────────────────────────────────────────
+after 1M (X) when bromad, !passed_hand | !drury_comp | !(drury | rdrury)
+  2C  "BROMAD: constructive raise, three {M}, 7-9"
+      alert  artificial
+      shows M=3, tp(M)>=7, tp(M)<=9
+      priority 2
+  2D  "BROMAD: limit raise or better, three {M}"
+      alert  artificial
+      shows M=3, tp(M)>=10
+      sets  forcing=round, ask=limit_raise(M)
+      priority 2
+  3C  "BROMAD: constructive raise, four or more {M}, 7-9"
+      alert  artificial
+      shows M>=4, tp(M)>=7, tp(M)<=9
+      priority 2
+  2{M} "BROMAD: preemptive raise, three {M}, up to 6"
+      shows M=3, tp(M)<=6
+      priority 1
+  3{M} "BROMAD: preemptive raise, four or more {M}, up to 6"
+      shows M>=4, tp(M)<=6
+      priority 1
+after 1M (X) when bromad, !jordan
+  3D  "BROMAD: limit raise or better, four or more {M}"
+      alert  artificial
+      shows M>=4, tp(M)>=10
+      sets  forcing=round, ask=limit_raise(M)
+      priority 2
+  2N  "BROMAD: weak, five-five or better in the minors"
+      alert  artificial
+      shows C>=5, D>=5, hcp<=6, M<=2
+      priority 2
+
+# Opener after the constructive raises: the game with 17+ support points
+# opposite 2♣ (15+ opposite 3♣), an invitation with 15-16 opposite 2♣,
+# else the cheapest bid in the major.
+after 1M (X) 2C (P) | 1M (X) 2C (XX) when bromad
+  4{M} "Game opposite the constructive raise: 17+"     shows tp(M)>=17
+  3{M} "Invites game: 15-16"                           shows tp(M)>=15, tp(M)<=16
+  2{M} "Minimum: nothing more"                         priority -1
+after 1M (X) 3C (P) | 1M (X) 3C (XX) when bromad
+  4{M} "Game opposite the four-card constructive raise: 15+"   shows tp(M)>=15
+  3{M} "Minimum: nothing more"                                  priority -1
+after 1M (X) 2C (P) 3M (P) when bromad
+  4{M} "Accepts: the top of the constructive raise"    shows tp(M)>=9
+  P    "Declines"                                      priority -1
+
+# Responder after opener's sign-off over the limit raise: the game with
+# an opening hand.
+after 1M (X) 2N (P) 3M (P) | 1M (X) 2D (P) 2M (P) | 1M (X) 3D (P) 3M (P) when jordan | bromad
+  4{M} "Game: 13+ opposite opener's minimum"           shows tp(M)>=13
+  P    "Limit raise only: nothing more"                priority -1

@@ -1,0 +1,32 @@
+# Jordan 2NT (21GF-DEFAULT: on) and BROMAD (switched on below).
+card    21GF-DEFAULT
+dealer  N
+vul     None
+
+# seat hand                 | auction  | expect | why
+# ── Jordan 2NT ───────────────────────────────────────────────────────
+S KQ72.T74.QJ9.A86          | 1S X     | 2N     | 11 HCP, four spades: limit raise or better
+S KQ72.T74.Q93.865          | 1S X     | 3S     | 7 HCP, four spades: preemptive jump
+S Q72.T74.Q93.K865          | 1S X     | 2S     | 7 HCP, three spades: the simple raise
+S AQ72.T4.QJ9.KJ86          | 1H X     | XX     | 13 HCP, two hearts: redouble
+S K872.QT74.A92.86          | 1H X     | 2N     | 9 HCP and a doubleton, four hearts: 10 support points
+N AJ853.K2.KQ4.J32          | 1S X 2N P | 4S    | 14 HCP: accepts
+N AJ853.K2.Q74.J32          | 1S X 2N P | 3S    | 11 HCP: minimum
+S KQ72.T74.QJ9.A86          | 1S X 2N P 3S P | P  | limit raise only
+S KQ72.K74.AJ9.A86          | 1S X 2N P 3S P | 4S | 17 HCP: game
+
+# ── BROMAD (with Jordan, as BBA's cards play it) ─────────────────────
+card    21GF-DEFAULT competitive.bromad.play=true
+S Q72.T74.K93.Q865          | 1S X     | 2C     | 7 HCP, three spades: constructive
+S Q72.A74.K93.Q865          | 1S X     | 2D     | 11 HCP, three spades: limit raise or better
+S Q872.T74.K93.Q86          | 1S X     | 3C     | 7 HCP, four spades: constructive
+S 872.T74.K93.9865          | 1S X     | 2S     | 3 HCP, three spades: preemptive
+S Q872.T74.93.9865          | 1S X     | 3S     | 2 HCP, four spades: preemptive
+S KQ72.T74.QJ9.A86          | 1S X     | 2N     | four spades, 11 HCP: still Jordan
+N AJ853.K2.Q74.J32          | 1S X 2C P | 2S    | 11 HCP: no game opposite 7-9
+N AJ853.AK2.KQ4.J3          | 1S X 2C P | 4S    | 19 HCP: game
+
+# ── BROMAD without Jordan ────────────────────────────────────────────
+card    21GF-DEFAULT competitive.bromad.play=true competitive.jordan_2nt.play=false
+S KQ72.T74.QJ9.A86          | 1S X     | 3D     | four spades, 11 HCP: limit raise
+S 7.84.QT853.J9642          | 1S X     | 2N     | weak with both minors

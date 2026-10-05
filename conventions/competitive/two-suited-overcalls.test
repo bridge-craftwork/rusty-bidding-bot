@@ -41,3 +41,55 @@ W K82.QJ74.A83.952          | 1H 2H    | 2S     | 10 HCP, four hearts: cue bid, 
 W 752.Q84.K973.J62          | 1H 2H    | 3H     | 6 HCP, three hearts: competitive raise
 W 83.KJ74.A832.Q62          | 1H 2N    | 3C     | 10 HCP, four hearts: limit raise over 2NT
 E A5.AQJ74.K83.Q92          | 1H 2H 2S P | 4H   | 16 HCP: accepts the limit raise
+
+# ── The Unusual 1NT (21GF-DEFAULT: on) ───────────────────────────────
+# Dealer S: S has passed, so 1NT cannot be natural.
+dealer  S
+S 43.A8.QT874.A742          | P 1H P 1S  | 1N  | passed hand, the minors five-four, after they bid two suits
+S AJ85.3.KQT84.932          | P 1C P 1H  | 1N  | diamonds and spades, the unbid suits
+S 7.K3.KQT84.QJ932          | P P P 1H   | 1N  | passed hand over 1H: both minors
+N KJ5.Q8.932.KJ863          | P 1H P 1S 1N P | 2C | the longer of partner's minors
+N KJ5.Q8.Q9632.K86          | P 1H P 1S 1N P | 3D | 11 HCP, five diamonds: invites
+
+# ── The Unusual 4NT (21GF-DEFAULT: on) ───────────────────────────────
+dealer  E
+S -.7.AK985.KJT8432         | 1S         | 4N  | seven-five in the minors over 1S
+S 8.-.QJ7542.KJ9842         | 1H         | 4N  | six-six in the minors
+S 7.93.AQJ85.KQT84          | 1H         | 2N  | five-five: the Unusual 2NT, not 4NT
+S T.T.AKQ642.AKJ72          | 2H         | 4N  | over a weak two: strong five-five or better
+N QJ7.Q732.93.QJ63          | 1S 4N P    | 5C  | four clubs, two diamonds
+N QJ7.Q73.9432.QJ6          | 1S 4N P    | 5D  | four diamonds, three clubs: the longer
+
+# ── Michaels over their preempt (21GF-DEFAULT, Michaels on) ──────────
+S 6.AQJ94.KQ.AKQ63          | 2S         | 3S  | hearts and clubs over the weak two
+S AQJ85.AKJ87.Q4.3          | 2D         | 3D  | both majors
+S AQJ85.7.A5.KQT84          | 3H         | 4H  | spades and clubs, 16 total points
+N Q432.K.9874.J985          | 2S 3S P    | 4C  | no heart fit: pass or correct
+N 952.952.J5.AKQ75          | 2S 3S P    | 4H  | three hearts, 10 HCP: game
+N 873.J962.63.Q764          | 2H 3H P    | 3S  | three spades, weak: preference
+S 6.AQJ94.KQ.AKQ63          | 2S 3S P 4C P | P | clubs: partner's guess is right
+S 6.AQJ94.AKQ63.KQ          | 2S 3S P 4C P | 4D | diamonds: correct
+
+# ── Leaping Michaels (switched on) ───────────────────────────────────
+card    21GF-DEFAULT competitive.leaping_michaels.play=true
+S AKJT5.3.KQJ82.43          | 2H         | 4D  | Rosen's hand A: diamonds and spades
+S AKQ93.4.5.AQJ932          | 2H         | 4C  | clubs and spades
+S AQJ85.KQJ87.A5.3          | 2D         | 4D  | both majors over 2D
+S 6.AQJ94.KQ.AKQ63          | 2S         | 4C  | not the cue bid: hearts and clubs
+N Q72.J9542.K4.T73          | 2S 4C P    | 4H  | the known major with five
+N Q72.J92.K4.T7432          | 2H 4D P    | 4S  | three spades: game
+
+# ── Non-Leaping Michaels (switched on) ───────────────────────────────
+card    21GF-DEFAULT competitive.non_leaping_michaels.play=true
+S AQJ85.3.KQJ82.43          | 3H         | 4D  | diamonds and spades
+S KQT94.3.AJT96.K4          | 3C         | 4D  | diamonds and a major
+N K72.J954.K4.T743          | 3C 4D P    | 4H  | pass or correct: partner's major
+S KQT94.3.AJT96.K4          | 3C 4D P 4H P | 4S | spades: correct
+
+# ── Direct jump cue bids (switched on) ───────────────────────────────
+card    21GF-DEFAULT competitive.direct_jump_cuebid_major=gambling competitive.direct_jump_cuebid_minor=preempt
+S 7.A4.AKQ7643.Q53          | 1S         | 3S  | gambling: solid diamonds, asks for a spade stopper
+N KJ6.Q874.952.KT4          | 1S 3S P    | 3N  | spades held: to play
+N 986.Q874.J92.KT4          | 1S 3S P    | 4C  | no stopper: pass or correct
+S 7.A4.AKQ7643.Q53          | 1S 3S P 4C P | 4D | diamonds
+S 7.Q42.96.KQJT843         | 1C         | 3C  | 7 HCP, seven clubs: preempt in their minor
