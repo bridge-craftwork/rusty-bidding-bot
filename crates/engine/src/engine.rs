@@ -766,10 +766,11 @@ impl Engine {
                 .prefer
                 .as_ref()
                 .and_then(|p| ctx.eval(p, &mut b).ok())
-                .and_then(|v| match v {
-                    Val::Num(r) => Some(r.lo as f64),
-                    _ => None,
-                });
+                // As in arithmetic: a suit counts its length (`prefer x`
+                // picks the longer suit, docs/LANGUAGE.md section 7), a
+                // condition 1 or 0.
+                .and_then(|v| ctx.num(&v).ok())
+                .map(|r| r.lo as f64);
             if outcome.is_empty() {
                 eligible.push(Eligible {
                     idx,
