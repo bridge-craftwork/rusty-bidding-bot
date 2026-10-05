@@ -25,7 +25,7 @@ module weak-two-responses "Responses to a weak two"
 # card says it is natural. Without the guard, responder's 2NT over a
 # strong 2♣ was read as the weak-two ask and opener answered with a
 # feature (95 boards in the Basic_* scenarios, -478 IMPs).
-after 2x (P) when x is not N, x is not C | two_c is natural, style is standard
+after 2x (P) when weak_two_suit(x), x is not N, x is not C | two_c is natural, style is standard
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=15
       sets  forcing=round, ask=weak_two(x)
@@ -47,7 +47,7 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is standard
 # preemptive raise stops at 11. A new major is natural and forcing: over
 # 2D six cards from 13, five with exactly 14; over 2H five
 # spades from 13 with at most one heart (with two, 2NT).
-after 2x (P) when x is not N, x is not C | two_c is natural, style is not standard
+after 2x (P) when weak_two_suit(x), x is not N, x is not C | two_c is natural, style is not standard
   2N  "Asks: how good is the weak two?"   alert
       shows hcp>=13
       when  hcp>=20 | (x>=2, hcp>=15) | (x<=1, hcp>=18) | (x is H | x is S, x=2, hcp>=14, vul | !they.vul) | (x is H | x is S, x>=3, vul) | (x is H | x is S, x>=4, !they.vul)
@@ -89,7 +89,7 @@ after 2x (P) when x is not N, x is not C | two_c is natural, style is not standa
       priority -5
 
 # Opener after a new suit (default and bba). Raise with three, else rebid the suit.
-after 2x (P) 2y (P) when x is not C | two_c is natural, style is not standard
+after 2x (P) 2y (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard
   4y  "Three-card support: game (BBA, any strength)"   shows y>=3
       when  y is H | y is S
   3y  "Three-card support"                 shows y>=3
@@ -100,7 +100,7 @@ after 2x (P) 2y (P) when x is not C | two_c is natural, style is not standard
 # up to about 18 unless it has seven of its major (game from 13), bids
 # three of the major with six and 19+, and 3NT or four of opener's major
 # from 20.
-after 2x (P) 2y (P) 3x (P) when x is not C | two_c is natural, style is not standard, y is H | y is S
+after 2x (P) 2y (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard, y is H | y is S
   4y  "Seven-card suit: game facing a doubleton"   shows y>=7
   4y  "Six-card suit, four top honours: game"      shows y>=6, top5(y)>=4, hcp>=16
   3y  "Six-card suit, 19+: forcing, asks for a doubleton"   shows y>=6, hcp>=19
@@ -111,7 +111,7 @@ after 2x (P) 2y (P) 3x (P) when x is not C | two_c is natural, style is not stan
       when  x is D
   P   "No game facing a minimum weak two"          shows hcp<=19
 
-after 2x (P) 2y (P) 3x (P) 3y (P) when x is not C | two_c is natural, style is not standard, y is H | y is S
+after 2x (P) 2y (P) 3x (P) 3y (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard, y is H | y is S
   4y  "A doubleton: game in partner's suit"        shows y>=2
   3N  "A singleton or void: 3NT"                   shows y<=1
 
@@ -163,7 +163,7 @@ when asked weak_two(t), ask2nt is ogust
   3S  "Ogust: maximum, good suit"         shows hcp>=7, quality(t)>=2   artificial
   3N  "Ogust: the top three honours"      shows quality(t)=3
 
-after 2x (P) 2N (P) 3N (P) 4x (P) when x is C | x is D, style is bba
+after 2x (P) 2N (P) 3N (P) 4x (P) when weak_two_suit(x), x is C | x is D, style is bba
   5x  "A shortness: game in the minor"   shows shortest<=1
   P   "No shortness: play four"          shows shortest>=2
 
@@ -236,9 +236,9 @@ when answered weak_two(t)
 # sign-off, passed. BBA bid on over 2♦-2NT-3♣-3♦ in four Basic_Weak_2
 # boards (3NT twice, 4♦, 5♦); passing was closer to par in three of them
 # (notes, 2026-09-25).
-after 2x (P) 2N (P) 3y (P) 3x (P) when x is not C | two_c is natural, y is not x
+after 2x (P) 2N (P) 3y (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural, y is not x
   P   "Partner signed off in our suit"
 
 # Opener after the preemptive raise: pass.
-after 2x (P) 3x (P) when x is not C | two_c is natural
+after 2x (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural
   P   "Partner's raise is preemptive"

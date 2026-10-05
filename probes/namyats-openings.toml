@@ -1,0 +1,22 @@
+# Which hands BBA opens 4C/4D (Namyats) with 21GF-PolishTwoSuiters (Namyats on).
+card    = "21GF-PolishTwoSuiters"
+dealer  = "S"
+prefix  = ""
+vuls    = ["None", "All"]
+scoring = ["MP"]
+partner_auto = [6, 10]
+our     = []
+hands = [
+  "8H 10 | 4.KQJT9432.K3.Q2",
+  "8H 12 | 4.AKQJT432.K3.32",
+  "8H 14 | 4.AKQJT432.KJ3.2",
+  "8H 16 bb | K.KQJT9432.AJ.32",
+  "7H 12 | 42.AKQJT43.K32.2",
+  "7H 13 side A | 42.AKQJT43.A32.2",
+  "7S 12 | AKQJT43.42.K32.2",
+  "8S 13 | AKQJT432.4.KJ3.2",
+  "8S 11 | AKQJT432.4.Q32.2",
+  "7S 10 | KQJT943.4.K32.32",
+  "8H 9 weak | 4.KQJT9432.Q32.2",
+  "7H 15 | A2.AKQJT43.K32.2",
+]

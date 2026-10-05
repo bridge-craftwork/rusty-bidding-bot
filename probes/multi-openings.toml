@@ -1,0 +1,21 @@
+# What BBA opens with the Multi card (21GF-Multi: Multi on, weak natural 2M on).
+card    = "21GF-Multi"
+dealer  = "S"
+prefix  = ""
+vuls    = ["None", "All"]
+scoring = ["MP"]
+partner_auto = [8, 12]
+our     = []
+hands = [
+  "6 spades, 7 | KQJ976.32.54.J43",
+  "6 hearts, 8 | 32.KQJ976.K54.43",
+  "6 spades, 10 | AQJ976.32.K54.43",
+  "5 spades, 8 | KQJ97.32.Q54.743",
+  "5 hearts, 8 | 743.KQJ97.Q54.32",
+  "6 spades poor, 6 | J87654.K3.Q42.83",
+  "4441, 18 | AKJ4.KQ32.AJ54.4",
+  "4441, 21 | AKJ4.AKQ2.AJ54.4",
+  "20-21 bal | AK4.KQ3.AJ54.KQ4",
+  "5H 5m, 8 | 3.KQJ97.Q8543.43",
+  "5S 5m, 8 | KQJ97.3.43.Q8543",
+]

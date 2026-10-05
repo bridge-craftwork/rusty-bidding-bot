@@ -1,0 +1,29 @@
+# What BBA opens with Polish two-suiters on (21GF-PolishTwoSuiters, also Benjamin, Namyats).
+card    = "21GF-PolishTwoSuiters"
+dealer  = "S"
+prefix  = ""
+vuls    = ["None", "All"]
+scoring = ["MP"]
+partner_auto = [8, 12]
+our     = []
+hands = [
+  "6 spades, 7 | KQJ976.32.54.J43",
+  "6 hearts, 8 | 32.KQJ976.K54.43",
+  "5H 5C, 8 | 3.KQJ97.43.Q8543",
+  "5H 5D, 8 | 3.KQJ97.Q8543.43",
+  "5S 5C, 8 | KQJ97.3.43.Q8543",
+  "5S 5D, 8 | KQJ97.3.Q8543.43",
+  "5H 4C, 8 | 32.KQJ97.43.Q854",
+  "5S 4D, 8 | KQJ97.32.Q854.43",
+  "5S 5H, 8 | KQJ97.Q8543.43.3",
+  "5H 5C, 11 | 3.KQJ97.A3.Q8543",
+  "5H 5C, 5 | 3.QJ987.43.Q8543",
+  "6S 4H 8 | KQJ976.Q854.3.43",
+  "8 hearts strong | A.KQJT9432.KQ.AJ",
+  "7 spades strong | AKQT876.K5.A2.32",
+  "7 hearts good 13 | 4.AKQJ872.KJ3.32",
+  "8 spades 9 | KQJT9876.3.Q2.32",
+  "23 unbal | AKQJ76.AK3.AQ.32",
+  "20 6 spades | AKQJ76.AK3.Q2.32",
+  "6 diamonds 8 | 32.43.KQJ976.K54",
+]
