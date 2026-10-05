@@ -5,8 +5,10 @@ Pick-a-slam 5NT (2026-10-05), gated on `slam.pick_a_slam_5nt.play`.
 ## What the rules do
 
 - **The ask:** a jump to 5NT (partner's and RHO's last bids below 4NT),
-  no ask pending (a stopper ask aside), 33 total points on partner's
-  floor, and two eight-card fits known: a real choice of strains.
+  no ask pending (a stopper ask aside), 33 total points and 30 HCP on
+  partner's floor, and two eight-card fits known: a real choice of
+  strains. (Without the HCP floor a 10-count with an eight-card suit
+  asked opposite a strong raise: Michaels_and_Unusual 21.)
 - **The answer:** six of the suit with the most cards between us (spades
   first on a tie), or 6NT with no known eight-card fit. The asker
   passes.
