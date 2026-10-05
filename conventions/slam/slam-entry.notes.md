@@ -685,6 +685,15 @@ opponents out).
   opposite a raise asks again (blackwood.test) because 30 / 31 is low
   enough, not because its length is valued as tricks (the first item).
 
+## My own 18 only while my range is open (2026-10-05)
+
+`slam_values`' fallback "18 of my own" now holds only while my shown
+HCP range is wider than four points. An 18-19 2NT rebid (or a 15-17
+1NT) has already told partner; his game bid after it is a sign-off.
+Reported by another agent (1x-1M-2NT-3m NMF ...-4M asked with every
+18-19 opener). Tripwire (--limit 50, all scenarios): 33 boards stop in
+game instead, contract errors 246 -> 159.
+
 ## The card's quantitative 4NT (2026-10-05)
 
 The quantitative 4NT rules here read `slam.quantitative_4nt.play`
