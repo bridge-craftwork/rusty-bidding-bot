@@ -1,0 +1,19 @@
+# Roudi (21GF-SPECIALS2 plays it). Hands from the WB5_Roudi corpus.
+card    21GF-SPECIALS2
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N J9873.AK2.KT5.92      | 1C P 1S P 1NT P          | 2C     | 11 with five spades: Roudi (WB5_Roudi 5)
+S Q4.765.Q94.AKJ54      | 1C P 1S P 1NT P 2C P     | 2D     | 12, two spades: minimum, no fit
+N J9873.AK2.KT5.92      | 1C P 1S P 1NT P 2C P 2D P | 2NT   | no fit, 11: invite (BBA 2NT)
+S 875.A62.AQ6.A763      | 1C P 1S P 1NT P 2C P     | 2S     | 14 with three spades: maximum, fit (WB5_Roudi 10)
+N AKQJ9.Q9.743.982      | 1C P 1S P 1NT P 2C P 2S P | 4S    | five opposite three, maximum: game (BBA 4S)
+S A52.JT7.JT3.AK53      | 1C P 1H P 1NT P 2C P     | 2H     | 13 with three hearts: minimum, fit (WB5_Roudi 13)
+N J84.AK543.A9.962      | 1C P 1H P 1NT P 2C P 2H P | 4H    | 13 total points, fit: game (BBA invites with 3H, then reaches 4H)
+S KJ2.AKQ.98.J8653      | 1C P 1H P 1NT P 2C P     | 3C     | 14, three hearts, five clubs (WB5_Roudi 291)
+S 7.AT84.AQT76.KJT      | 1D P 1S P 1NT P 2C P     | 2NT    | 14, no fit: maximum (WB5_Roudi 11)
+N KT74.KJ6.Q32.K98      | 1C P 1S P 1NT P          | 2NT    | four spades only: natural 2NT
+
+# Without Roudi or NMF (21GF-GIB-Bergen plays Checkback instead).
+card    Basic-Bridge
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P          | 2NT    | no artificial 2C: natural 2NT

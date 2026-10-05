@@ -1,0 +1,47 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Roudi: after 1m-1M-1NT, responder's 2C is artificial, invitational or
+# better, and asks about support and strength. Opener (WB5_Roudi's
+# definition, which BBA's corpus follows): 2D minimum without three of
+# responder's major, 2H minimum with three, 2S maximum with three, 2NT
+# maximum without, three of opener's minor maximum with three and five
+# of the minor. Played instead of NMF. See roudi.notes.md.
+
+module roudi "Roudi"
+  card   other_conventions.roudi.play
+  needs  responder-rebids
+  skill  bidding_conventions/roudi
+
+after 1m (P) 1M (P) 1N (P)
+  2C  "Roudi: invitational or better, asks for support and strength"   alert
+      shows M>=5 | (H>=4, S>=4), points>=11
+      sets  forcing=round, ask=roudi
+      artificial
+      priority 1                       # ahead of a natural 2NT or 3NT
+
+# Minimum is 12-13 HCP, maximum 14 (the 1NT rebid's range).
+after 1m (P) 1M (P) 1N (P) 2C (P)
+  2D  "Minimum, at most two {M}"           alert   shows hcp<=13, M<=2   artificial
+  2H  "Minimum with three {M}"             alert   shows hcp<=13, M=3    artificial
+  2S  "Maximum with three {M}"             alert   shows hcp>=14, M=3    artificial
+  2N  "Maximum, at most two {M}"           alert   shows hcp>=14, M<=2
+  3m  "Maximum with three {M} and five {m}"  alert shows hcp>=14, M=3, m>=5
+
+# Responder. After a minimum: with a fit invite or bid game; without one
+# 2NT invites and 3NT is game. After a maximum: game.
+after 1m (P) 1M (P) 1N (P) 2C (P) 2D (P)
+  2N  "Invitational, no fit"               shows points=11..12, M<=5   sets ask=nt_invite
+  3M  "Invitational: six {M}"              shows M>=6, points=11..12   sets ask=invite(M)
+  3N  "Game"                               shows points>=13, M<=5
+  4M  "Game: six {M}"                      shows M>=6, points>=13
+after 1m (P) 1M (P) 1N (P) 2C (P) 2H (P)
+  3M  "Invitational, in the fit"           shows M>=5, points=11..12   sets trump=M, ask=invite(M)
+  4M  "Game in the fit"                    shows M>=5, points>=13      sets trump=M
+  2N  "Invitational, four {M}"             shows M=4, points=11..12    sets ask=nt_invite
+  3N  "Game, four {M}"                     shows M=4, points>=13
+after 1m (P) 1M (P) 1N (P) 2C (P) 2S (P) | 1m (P) 1M (P) 1N (P) 2C (P) 3m (P)
+  4M  "Game in the fit"                    shows M>=5                  sets trump=M
+  3N  "Game, four {M}"                     shows M=4
+after 1m (P) 1M (P) 1N (P) 2C (P) 2N (P)
+  4M  "Game: six {M}"                      shows M>=6
+  3N  "Game"                               shows M<=5
