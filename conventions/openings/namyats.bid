@@ -1,0 +1,61 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Namyats (Bridge Bum, "Namyats"): 4♣ shows a strong four-level preempt
+# in hearts, 4♦ the same in spades: a good seven- or eight-card major and
+# eight or nine playing tricks, too good for a plain 4♥/4♠ and not
+# strong enough for 2♣. The direct 4♥/4♠ stays the weaker preempt
+# (preempts.bid).
+#
+# Responder: the next step (4♦ over 4♣, 4♥ over 4♦) is a relay with slam
+# interest; the major is the sign-off. After the relay opener bids his
+# major without a side shortness, or shows a singleton or void.
+# See namyats.notes.md.
+
+module namyats "Namyats: 4♣/4♦ strong major preempts"
+  card   preempts.namyats.play
+  needs  preempts
+  skill  bidding_conventions/namyats
+
+# ── The opening ──────────────────────────────────────────────────────
+# Eight or nine tricks: at most five losers with a good suit, and not the
+# values of a 2♣ opening. Ahead of the one-level opening.
+when opening, seat<=3
+  4C  "Namyats: a strong preempt in hearts, 8-9 tricks"   alert
+      shows H>=7, H>=8 | top5(H)>=4, quality(H)>=good, losers<=5, hcp=10..15, S<=3
+      artificial
+      priority 1
+  4D  "Namyats: a strong preempt in spades, 8-9 tricks"   alert
+      shows S>=7, S>=8 | top5(S)>=4, quality(S)>=good, losers<=5, hcp=10..15, H<=3
+      artificial
+      priority 1
+
+# ── Responder ────────────────────────────────────────────────────────
+after 4C (P) | 4C (X)
+  4H  "Sign-off: no slam interest"
+      priority -1
+  4D  "Relay: slam interest in hearts"   alert
+      shows controls>=5 | hcp>=15, quick_tricks>=3
+      sets  trump=H, ask=namyats(H)
+      artificial
+after 4D (P) | 4D (X)
+  4S  "Sign-off: no slam interest"
+      priority -1
+  4H  "Relay: slam interest in spades"   alert
+      shows controls>=5 | hcp>=15, quick_tricks>=3
+      sets  trump=S, ask=namyats(S)
+      artificial
+
+# Opener after the sign-off: pass.
+after 4C (P) 4H (P) | 4D (P) 4S (P)
+  P   "Partner signed off"
+
+# ── Opener after the relay ───────────────────────────────────────────
+when asked namyats(t)
+  4{t}  "No side shortness: back to my suit"
+        priority -1
+  4S    "A singleton or void in spades"     shows S<=1
+        when  t is H
+  5C    "A singleton or void in clubs"      shows C<=1
+  5D    "A singleton or void in diamonds"   shows D<=1
+  5H    "A singleton or void in hearts"     shows H<=1
+        when  t is S
