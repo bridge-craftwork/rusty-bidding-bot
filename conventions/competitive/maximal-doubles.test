@@ -1,0 +1,22 @@
+# Maximal doubles (doubles.maximal): our major bid and raised, they bid
+# three of the suit just below it.
+card    21GF-SPECIALS doubles.maximal=true
+dealer  N
+vul     None
+
+# seat hand                 | auction            | expect | why
+N AQJ76.K5.A42.Q87          | 1S P 2S 3H         | X      | 17 support points: the game try is the double
+N AQJ762.K5.42.Q87          | 1S P 2S 3H         | 3S     | six spades, a minimum: competing only
+N AQJ76.K52.A4.Q87          | 1S P 2S 3D         | 3S     | 3D leaves room: 3S is the usual invitation
+N AKJ76.K5.AQ2.Q87          | 1S P 2S 3H         | 4S     | 19+: game
+S 8732.Q95.KJ2.J43          | 1S P 2S 3H X P     | 3S     | a minimum raise declines
+S 8732.Q95.KJ2.K43          | 1S P 2S 3H X P     | 4S     | a maximum accepts
+S 8732.Q95.KJ2.K43          | 1S P 2S 3H 3S P    | P      | 3S was only competitive
+N A5.KQJ76.K42.K87          | 1H P 2H 3D         | X      | under hearts the maximal suit is diamonds
+
+# After an overcall: (1H) 1S (P) 2S (3H).
+dealer  E
+S AQJ76.K5.A42.Q87          | 1H 1S P 2S 3H      | X      | the overcaller's game try
+card    21GF-SPECIALS
+dealer  N
+N AQJ762.K5.42.Q87          | 1S P 2S 3H         | P      | maximal doubles off: a minimum passes
