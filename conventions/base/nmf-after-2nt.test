@@ -1,0 +1,19 @@
+# New Minor Forcing after a 2NT rebid (21GF-DEFAULT plays it). Hands
+# from the BBA corpus.
+card    21GF-DEFAULT
+dealer  N
+
+# seat hand             | auction                  | expect | why
+S AJ7.96432.KT8.84      | 1C P 1H P 2N P           | 3D     | five hearts, 8: NMF (BBA)
+N K643.AJT.A53.AKT      | 1C P 1H P 2N P 3D P      | 3H     | three hearts
+S AJ7.96432.KT8.84      | 1C P 1H P 2N P 3D P 3H P | 4H     | five opposite three: game
+S A8543.865.AQ4.T6      | 1D P 1S P 2N P           | 3C     | five spades: NMF
+N K4.K4.AK42.AJT54      | 1C P 1H P 2N P 3D P      | 3NT    | two hearts, no four spades: 3NT
+S 853.AQJ82.86.K96      | 1C P 1H P 2N P 3D P 3NT P | P     | no fit: play 3NT
+N A9.KQT2.AQ95.A65      | 1D P 1S P 2N P 3C P      | 3H     | four hearts, two spades (BBA 3H)
+S AJT32.J9.A54.832      | 1H P 1S P 2N P           | 3C     | five spades over 1H: 3C asks (BBA's 3D also NMF)
+S KQT2.J8.Q97.K652      | 1D P 1S P 2N P           | 3NT    | four spades only: no ask
+
+# Off on a card without it (Basic-Bridge).
+card    Basic-Bridge
+S A8543.865.AQ4.T6      | 1D P 1S P 2N P           | 3NT    | no NMF after 2NT: game
