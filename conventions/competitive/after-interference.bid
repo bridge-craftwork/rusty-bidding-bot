@@ -30,6 +30,7 @@ module after-interference "Our side once the opponents come in"
   param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
   param  js = competitive.jump_shift_after_overcall default strong
   param  fsj = competitive.fit_showing_jumps.play default false
+  param  tfr = vs_to_double.new_suit_forcing_tfr default false
 
 # ── They overcalled at the one level ─────────────────────────────────
 after 1x (1y) when neg
@@ -321,6 +322,7 @@ after 1x (X)
       shows balanced, hcp+length_points>=6, hcp+length_points<=9
       when  (S<=3 | x is S), (H<=3 | x is H)
       when  x<=2 | x is C | x is D
+      when  !tfr | x is C | x is D          # a transfer to clubs (transfers-after-double.bid)
   P   "Nothing to say over the double"  priority -10
 
 # ── Opener answers a negative double ─────────────────────────────────

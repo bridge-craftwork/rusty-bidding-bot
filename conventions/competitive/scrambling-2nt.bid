@@ -1,0 +1,37 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Scrambling 2NT (`competitive.scrambling_2nt.play`; convention-card
+# competitive_bidding/scrambling_2nt; Robert S. Todd, Advancing in
+# Bridge 555; PBS btn/Scrambling_2NT.btn): when advancer must bid
+# after partner's takeout double of their raise, (1M) P (2M) X (P) 2NT
+# is not natural: it shows two places to play, both minors, and asks
+# the doubler to bid his lower four-card suit; advancer passes or
+# corrects. A free 2NT (RHO has bid) would be good/bad, not written.
+#
+# Here: four or more in each minor, no five-card suit and no four-card
+# unbid major (that is bid instead), 0-10 HCP (with more, game or a
+# jump). Notes: scrambling-2nt.notes.md.
+
+module scrambling-2nt "Scrambling 2NT"
+  needs  base
+  needs  takeout-double
+  skill  competitive_bidding/scrambling_2nt
+  card   competitive.scrambling_2nt.play
+
+after (1M) P (2M) X (P) | (1M) P (2M) P (P) X (P)
+  2N  "Scrambling: both minors, pick one"
+      alert  artificial
+      shows C>=4, D>=4, C<=5, D<=5, C+D>=8, hcp<=10, S<=3 | M is S, H<=3 | M is H
+      sets  ask=scramble
+      priority 1
+
+# The doubler: his lower four-card minor.
+when asked scramble
+  3C  "Four or more clubs"                         shows C>=4
+      priority 1
+  3D  "Diamonds: fewer than four clubs"            shows D>=4
+after (1M) P (2M) X (P) 2N (P) 3C (P) | (1M) P (2M) P (P) X (P) 2N (P) 3C (P)
+  P   "Clubs will do"                              shows C>=D
+      priority 1
+  3D  "Diamonds: longer"                           shows D>C
+      priority 1

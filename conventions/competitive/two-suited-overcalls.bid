@@ -73,6 +73,8 @@ module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
   param  nlm         = competitive.non_leaping_michaels.play default false
   param  djc_major   = competitive.direct_jump_cuebid_major
   param  djc_minor   = competitive.direct_jump_cuebid_minor
+  param  ghestem     = competitive.ghestem.play default false
+  param  sandwich    = competitive.sandwich_nt.play default false
 
 # ── Michaels over a minor: both majors ───────────────────────────────
 # Wide range (BBA, probes/michaels-1C.toml and -1D): not vulnerable from
@@ -81,7 +83,9 @@ module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
 # than 13 gained on both yardsticks (+93 IMPs par distance, +231 to the
 # overcalling side; notes). Up to 17 HCP: with more, the power double
 # (takeout-double.bid).
-after (1m) when mich_minors | mich_quasi | mich_play
+# Ghestem (ghestem.bid) replaces the one-level cue bids; its 2NT is this
+# file's Unusual 2NT.
+after (1m) when mich_minors | mich_quasi | mich_play, !ghestem
   2{m} "Michaels: five or more in each major"
       alert
       shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
@@ -104,7 +108,7 @@ after (1m) when mich_minors | mich_quasi | mich_play
       when  strength is weak_or_strong
 
 # ── Michaels over a major: the other major and a minor ───────────────
-after (1H) when mich_majors | mich_play
+after (1H) when mich_majors | mich_play, !ghestem
   2H  "Michaels: five or more spades and a five-card minor"
       alert
       shows S>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=17
@@ -126,7 +130,7 @@ after (1H) when mich_majors | mich_play
       shows S>=5, C>=5 | D>=5, hcp>=16
       when  strength is weak_or_strong
 
-after (1S) when mich_majors | mich_play
+after (1S) when mich_majors | mich_play, !ghestem
   2S  "Michaels: five or more hearts and a five-card minor"
       alert
       shows H>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=17
@@ -151,15 +155,15 @@ after (1S) when mich_majors | mich_play
 # ── The Unusual 2NT: the two lowest unbid suits ──────────────────────
 # BBA (probes/unusual-2n-*.toml): 9+ total points at every
 # vulnerability, and no upper limit (it bids 2NT on 19 HCP too).
-after (1H) | (1S) when u2n_play | u2n_jump
+after (1H) | (1S) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more in each minor"
       alert
       shows C>=5, D>=5, hcp+length_points>=9
-after (1C) when u2n_play | u2n_jump
+after (1C) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more diamonds and hearts"
       alert
       shows D>=5, H>=5, hcp+length_points>=9
-after (1D) when u2n_play | u2n_jump
+after (1D) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more clubs and hearts"
       alert
       shows C>=5, H>=5, hcp+length_points>=9
@@ -604,7 +608,7 @@ after (1x) P (1y) when u1n_play, passed_hand, y is not x
 # equal length the lower), a jump with four-card support and 11+ to
 # invite. Above the systems-on notrump responses (overcalls.bid), which
 # read a natural 1NT.
-after (1x) 1N (P) | (1x) 1N (X) | (1x) P (1y) 1N (P) | (1x) P (1y) 1N (X) when u1n_play
+after (1x) 1N (P) | (1x) 1N (X) | (1x) P (1y) 1N (P) | (1x) P (1y) 1N (X) when u1n_play | sandwich
   cheapest(C) "Preference: clubs"
       prefer C + 0
       when  partner.C>=4

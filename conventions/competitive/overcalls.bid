@@ -33,6 +33,7 @@ module overcalls "Suit and notrump overcalls"
   param  nt_max  = nt_overcalls.direct.range_max default 18
   param  nt_def  = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
+  param  raptor  = competitive.raptor_1nt.play default false
 
 # ── Simple overcalls at the one level ────────────────────────────────
 # `(1x)` binds x to the suit they opened; the rules below never bid it.
@@ -95,7 +96,7 @@ after (1x)
 after (1x)
   1N  "{nt_min}-{nt_max} balanced with a stopper in {x}"
       shows balanced, hcp>=nt_min, hcp<=nt_max, S<=4, H<=4
-      when  stop(x)
+      when  stop(x), !raptor             # Raptor 1NT shows two suits (raptor.bid)
 
 # Advancer when their partner raises over our 1NT overcall: nothing was
 # written (~160 corpus boards). BBA, 2026-09-25: a five-card suit at the

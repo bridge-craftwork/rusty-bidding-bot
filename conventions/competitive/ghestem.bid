@@ -1,0 +1,156 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Ghestem (`competitive.ghestem.play`; Wikipedia, "Ghestem"): over their
+# one-level opening on our right, three two-suited overcalls, each naming
+# one pair of the three unbid suits, five-five or longer:
+#
+# - 2NT: the two lowest unbid suits (the Unusual 2NT of
+#   two-suited-overcalls.bid, which this switch also turns on);
+# - 3♣: the two highest unbid suits (over 1♣ it is the jump cue bid);
+# - the cue bid: the highest and the lowest unbid suits.
+#
+#   over 1♣: 2NT ♦+♥, 3♣ ♥+♠, 2♣ ♦+♠
+#   over 1♦: 2NT ♣+♥, 3♣ ♥+♠, 2♦ ♣+♠
+#   over 1♥: 2NT ♣+♦, 3♣ ♦+♠, 2♥ ♣+♠
+#   over 1♠: 2NT ♣+♦, 3♣ ♦+♥, 2♠ ♣+♥
+#
+# It replaces Michaels over a one-level opening (two-suited-overcalls.bid
+# steps aside when the card plays Ghestem). Strength as our Michaels:
+# 9+ total points, 11+ vulnerable, up to 17 HCP (stronger hands double
+# first). The natural 3♣ jump overcall is lost (Wikipedia's first
+# disadvantage). Advancer: preference for the longer of partner's suits
+# at the cheapest level, the jump in a major to invite, game in a major
+# with a fit and an opening hand. After the cue bid of a major
+# the Michaels advances of two-suited-overcalls.bid apply (they read
+# partner's shown major). Notes: ghestem.notes.md.
+
+module ghestem "Ghestem two-suited overcalls"
+  needs  base
+  needs  two-suited-overcalls
+  skill  competitive_bidding/ghestem
+  card   competitive.ghestem.play
+
+after (1C)
+  2C  "Ghestem: five or more diamonds and spades"
+      alert
+      shows D>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  2C  "Ghestem: five or more diamonds and spades"
+      alert
+      shows D>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+  3C  "Ghestem: five or more hearts and spades"
+      alert
+      shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  3C  "Ghestem: five or more hearts and spades"
+      alert
+      shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+
+after (1D)
+  2D  "Ghestem: five or more clubs and spades"
+      alert
+      shows C>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  2D  "Ghestem: five or more clubs and spades"
+      alert
+      shows C>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+  3C  "Ghestem: five or more hearts and spades"
+      alert
+      shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  3C  "Ghestem: five or more hearts and spades"
+      alert
+      shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+
+after (1H)
+  2H  "Ghestem: five or more clubs and spades"
+      alert
+      shows C>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  2H  "Ghestem: five or more clubs and spades"
+      alert
+      shows C>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+  3C  "Ghestem: five or more diamonds and spades"
+      alert
+      shows D>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  3C  "Ghestem: five or more diamonds and spades"
+      alert
+      shows D>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+
+after (1S)
+  2S  "Ghestem: five or more clubs and hearts"
+      alert
+      shows C>=5, H>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  2S  "Ghestem: five or more clubs and hearts"
+      alert
+      shows C>=5, H>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+  3C  "Ghestem: five or more diamonds and hearts"
+      alert
+      shows D>=5, H>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+      priority 1
+  3C  "Ghestem: five or more diamonds and hearts"
+      alert
+      shows D>=5, H>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+      priority 1
+
+# ── Advancer ─────────────────────────────────────────────────────────
+# After the cue bid of a minor and after 3♣ (the cue bid of a major is
+# advanced as Michaels, above). Partner's two suits are known.
+after (1m) 2m (P) | (1m) 2m (X) | (1x) 3C (P) | (1x) 3C (X)
+  4S  "Game: three or more spades, 12+"
+      shows S>=3, S>=H, hcp+length_points>=12
+      when  partner.S>=5
+      priority 3
+  4H  "Game: three or more hearts, 12+"
+      shows H>=3, hcp+length_points>=12
+      when  partner.H>=5
+      priority 3
+  jump(S) "Invitational: four or more spades, 10-11"
+      shows S>=4, hcp+length_points>=10, hcp+length_points<=11
+      when  partner.S>=5, cheapest_rank(S) <= 13
+      priority 2
+  jump(H) "Invitational: four or more hearts, 10-11"
+      shows H>=4, hcp+length_points>=10, hcp+length_points<=11
+      when  partner.H>=5, cheapest_rank(H) <= 13
+      priority 2
+  cheapest(S) "Preference: spades"
+      prefer S + 0
+      when  partner.S>=5
+      priority 1
+  cheapest(H) "Preference: hearts"
+      prefer H + 0
+      when  partner.H>=5
+      priority 1
+  cheapest(D) "Preference: diamonds"
+      prefer D + 0
+      when  partner.D>=5
+      priority 1
+  cheapest(C) "Preference: clubs"
+      prefer C + 0
+      when  partner.C>=5
+      priority 1

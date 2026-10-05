@@ -31,6 +31,7 @@ module vs-takeout-double "Raises over their takeout double: Jordan 2NT and BROMA
   param  drury_comp = major_openings.drury.in_comp default false
   param  drury   = major_openings.drury.play default false
   param  rdrury  = major_openings.drury.reverse default false
+  param  tfr     = vs_to_double.new_suit_forcing_tfr default false
 
 # ── Jordan 2NT ───────────────────────────────────────────────────────
 # Above the redouble (priority 1): with a four-card fit the raise comes
@@ -48,7 +49,7 @@ after 1M (X) when jordan, !passed_hand | !drury_comp | !(drury | rdrury)
       priority 1
 
 # ── BROMAD ───────────────────────────────────────────────────────────
-after 1M (X) when bromad, !passed_hand | !drury_comp | !(drury | rdrury)
+after 1M (X) when bromad, !tfr, !passed_hand | !drury_comp | !(drury | rdrury)
   2C  "BROMAD: constructive raise, three {M}, 7-9"
       alert  artificial
       shows M=3, tp(M)>=7, tp(M)<=9
@@ -68,7 +69,7 @@ after 1M (X) when bromad, !passed_hand | !drury_comp | !(drury | rdrury)
   3{M} "BROMAD: preemptive raise, four or more {M}, up to 6"
       shows M>=4, tp(M)<=6
       priority 1
-after 1M (X) when bromad, !jordan
+after 1M (X) when bromad, !jordan, !tfr
   3D  "BROMAD: limit raise or better, four or more {M}"
       alert  artificial
       shows M>=4, tp(M)>=10

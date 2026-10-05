@@ -1,0 +1,59 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Snapdragon doubles (`competitive.snapdragon.play`; Bridge Bum,
+# "Snapdragon Double"; PBS btn/Snapdragon_Double.btn): they open, partner
+# overcalls, RHO bids a new suit; three suits have been bid, one by each
+# of three players, and advancer's double shows five or more of the
+# fourth suit with tolerance for partner's (two or three cards), 8+ HCP.
+# Forcing for one round (the scenario's definition).
+#
+# The overcaller then bids the fourth suit with three-card support (a
+# jump with 15+), rebids a six-card suit, bids notrump with RHO's suit
+# stopped, or else returns to his own suit. Notes: snapdragon.notes.md.
+
+module snapdragon "Snapdragon doubles"
+  needs  base
+  needs  advances
+  skill  competitive_bidding/snapdragon
+  card   competitive.snapdragon.play
+
+after (1x) 1y (1z) | (1x) 1y (2z) | (1x) 2y (2z) | (1x) 2y (3z) when y is not x, z is not x, z is not y
+  X   "Snapdragon: five or more clubs, tolerance for {y}, 8+"
+      alert
+      shows C>=5, y>=2, hcp>=8
+      when  x is not C, y is not C, z is not C
+      sets  forcing=round
+      priority 1
+  X   "Snapdragon: five or more diamonds, tolerance for {y}, 8+"
+      alert
+      shows D>=5, y>=2, hcp>=8
+      when  x is not D, y is not D, z is not D
+      sets  forcing=round
+      priority 1
+  X   "Snapdragon: five or more hearts, tolerance for {y}, 8+"
+      alert
+      shows H>=5, y>=2, hcp>=8
+      when  x is not H, y is not H, z is not H
+      sets  forcing=round
+      priority 1
+  X   "Snapdragon: five or more spades, tolerance for {y}, 8+"
+      alert
+      shows S>=5, y>=2, hcp>=8
+      when  x is not S, y is not S, z is not S
+      sets  forcing=round
+      priority 1
+
+# The overcaller.
+after (1x) 1y (1z) X (P) | (1x) 1y (2z) X (P) | (1x) 2y (2z) X (P) | (1x) 2y (3z) X (P) when y is not x, z is not x, z is not y
+  jump(C) "Fit for clubs and 15+"        shows C>=3, hcp+length_points>=15   when partner.C>=5   priority 3
+  jump(D) "Fit for diamonds and 15+"     shows D>=3, hcp+length_points>=15   when partner.D>=5   priority 3
+  jump(H) "Fit for hearts and 15+"       shows H>=3, hcp+length_points>=15   when partner.H>=5   priority 3
+  jump(S) "Fit for spades and 15+"       shows S>=3, hcp+length_points>=15   when partner.S>=5   priority 3
+  cheapest(C) "Three or more clubs"      shows C>=3                          when partner.C>=5   priority 2
+  cheapest(D) "Three or more diamonds"   shows D>=3                          when partner.D>=5   priority 2
+  cheapest(H) "Three or more hearts"     shows H>=3                          when partner.H>=5   priority 2
+  cheapest(S) "Three or more spades"     shows S>=3                          when partner.S>=5   priority 2
+  cheapest(y) "Six or more {y}"          shows y>=6                                              priority 1
+  cheapest(N) "{z} stopped, no fit"      shows stop(z), hcp+length_points<=14
+  cheapest(y) "Back to {y}: no fit"
+      priority -2

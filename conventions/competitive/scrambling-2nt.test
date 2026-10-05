@@ -1,0 +1,18 @@
+# Scrambling 2NT (switched on below; no stock card plays it), and the
+# takeout double of their raise it starts from (takeout-double.bid).
+card    21GF-DEFAULT competitive.scrambling_2nt.play=true
+dealer  W
+vul     None
+
+# seat hand                 | auction       | expect | why
+S AQ74.8.KJ74.A953          | 1H P 2H       | X      | short hearts, the unbid suits: takeout
+S A74.83.KQ74.A953          | 1H P 2H       | X      | 13 HCP, two hearts: takeout
+N 852.973.K954.QJ8          | 1H P 2H X P   | 3D     | no four-card major, longer diamonds
+N 852.73.K954.QJ84          | 1H P 2H X P   | 2N     | both minors: Scrambling
+N K852.973.K954.Q8          | 1H P 2H X P   | 2S     | four spades: bid them
+N K852.973.A954.A8          | 1H P 2H X P   | 4S     | 11 HCP and four spades: game
+S AQ74.8.KJ74.A953          | 1H P 2H X P 2N P | 3C  | the lower four-card minor
+N 852.73.K954.QJ84          | 1H P 2H X P 2N P 3C P | P | clubs will do
+
+card    21GF-DEFAULT
+N 852.73.K954.QJ84          | 1H P 2H X P   | 3C     | without Scrambling: the cheaper of two equal minors

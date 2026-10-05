@@ -19,9 +19,10 @@ module lebensohl "Lebensohl after they overcall our 1NT"
   card   notrump.lebensohl.over_interference
   needs  nt-interference
   skill  competitive_bidding/lebensohl
+  param  rub = notrump.rubensohl.over_interference default false
 
 # Responder. The context is the natural-overcall one of nt-interference.bid.
-after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3), !rub
   # Game values with four of an unbid major: Stayman, fast without a
   # stopper, slow (through 2NT) with one. Ahead of the negative double.
   3y  "Stayman, forcing to game: four of an unbid major, no stopper in {y}"  alert
@@ -108,12 +109,12 @@ after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
       sets  forcing=game
 
 # Opener: the relay is forced.
-after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3), !rub
   3C  "Completes the Lebensohl relay"  alert
       artificial
 
 # Responder after the relay.
-after 1N (2y) 2N (P) 3C (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+after 1N (2y) 2N (P) 3C (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3), !rub
   P   "To play: clubs"                           shows C>=6, points<=9
   3D  "To play: diamonds"                        shows D>=6, points<=9
       when  y is not D
@@ -154,22 +155,22 @@ when asked leb_invite(M)
 # Opener answers Stayman: a four-card unbid major, else 3NT with their
 # suit stopped (partner's slow cue-bid has one already), else four of
 # his longer minor. Responder then places the contract.
-after 1N (2y) 3y (P) | 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+after 1N (2y) 3y (P) | 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3), !rub
   3H  "Four hearts"                              shows H>=4
       when  y is D
   3S  "Four spades"                              shows S>=4, H<=3 | y is H
       when  y is D | y is H
   4H  "Four hearts"                              shows H>=4
       when  y is S
-after 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+after 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3), !rub
   3N  "No four-card major: game in notrump"
       priority -1
-after 1N (2y) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+after 1N (2y) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3), !rub
   3N  "No four-card major, a stopper in {y}"     shows stop(y)
   4C  "No four-card major, no stopper in {y}: clubs"     shows C>=D, !stop(y)
       priority -2
   4D  "No four-card major, no stopper in {y}: diamonds"  shows D>C, !stop(y)
       when  y is not D
       priority -2
-after 1N (2y) 3y (P) 4m (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+after 1N (2y) 3y (P) 4m (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3), !rub
   5m  "No stopper between us: game in {m}"

@@ -1,0 +1,114 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Raptor 1NT (`competitive.raptor_1nt.play`; convention-card
+# competitive_bidding/raptor; Wikipedia, "Raptor (bridge)"): the direct
+# 1NT overcall of a one-level suit opening shows a four-card major and a
+# longer minor instead of a strong balanced hand:
+#
+# - over 1♣: five or more diamonds and four of a major;
+# - over 1♦: five or more clubs and four of a major;
+# - over 1♥: four spades and five or more of a minor;
+# - over 1♠: four hearts and five or more of a minor.
+#
+# 8-15 HCP (10+ vulnerable); a stronger hand doubles. The natural 1NT
+# overcall is off (overcalls.bid); a strong balanced hand doubles or
+# passes. Advancer: the known suit at the cheapest level, 2♣
+# pass-or-correct over a major (partner's minor unknown), the cue bid
+# with 11+ asks for the unknown suit. Notes: raptor.notes.md.
+
+module raptor "Raptor 1NT: a four-card major and a longer minor"
+  needs  base
+  needs  overcalls
+  skill  competitive_bidding/raptor
+  card   competitive.raptor_1nt.play
+
+after (1x)
+  1N  "Raptor: five or more diamonds and four of a major"
+      alert
+      shows D>=5, H=4 | S=4, hcp>=8, hcp<=15
+      when  !vul | hcp>=10, x is C
+      priority 1
+  1N  "Raptor: five or more clubs and four of a major"
+      alert
+      shows C>=5, H=4 | S=4, hcp>=8, hcp<=15
+      when  !vul | hcp>=10, x is D
+      priority 1
+  1N  "Raptor: four spades and five or more of a minor"
+      alert
+      shows S=4, C>=5 | D>=5, hcp>=8, hcp<=15
+      when  !vul | hcp>=10, x is H
+      priority 1
+  1N  "Raptor: four hearts and five or more of a minor"
+      alert
+      shows H=4, C>=5 | D>=5, hcp>=8, hcp<=15
+      when  !vul | hcp>=10, x is S
+      priority 1
+
+# ── Advancer ─────────────────────────────────────────────────────────
+# Over a minor: partner's minor is known, the major is not.
+after (1m) 1N (P) | (1m) 1N (X)
+  cheapest(m) "Cue bid: 11+, asks for partner's major"
+      alert  artificial
+      shows hcp+length_points>=11
+      sets  forcing=round, ask=raptor_major
+      priority 3
+  2H  "To play: five or more hearts"
+      shows H>=5, H>=S, hcp+length_points<=10
+      priority 2
+  2S  "To play: five or more spades"
+      shows S>=5, S>H, hcp+length_points<=10
+      priority 2
+  2D  "To play: diamonds"
+      when  partner.D>=5
+      priority 1
+  2C  "To play: clubs"
+      when  partner.C>=5
+      priority 1
+  3D  "Invitational in diamonds: four or more, 9-10"
+      shows D>=4, hcp+length_points>=9
+      when  partner.D>=5
+      priority 2
+  3C  "Invitational in clubs: four or more, 9-10"
+      shows C>=4, hcp+length_points>=9
+      when  partner.C>=5
+      priority 2
+
+# Over a major: partner's major is known, the minor is not.
+after (1M) 1N (P) | (1M) 1N (X)
+  cheapest(M) "Cue bid: 11+, asks for partner's minor"
+      alert  artificial
+      shows hcp+length_points>=11
+      sets  forcing=round, ask=raptor_minor
+      priority 3
+  2S  "To play: three or more spades"
+      shows S>=3, hcp+length_points<=10
+      when  partner.S>=4
+      priority 3
+  2H  "To play: three or more hearts"
+      shows H>=3, hcp+length_points<=10
+      when  partner.H>=4
+      priority 3
+  3S  "Invitational: four or more spades, 9-10"
+      shows S>=4, hcp+length_points>=9
+      when  partner.S>=4
+      priority 3
+  2C  "Pass or correct: to play in partner's minor"
+      alert
+      shows C>=3, D>=3
+      priority 3                         # above the Unusual 1NT's preference
+  2D  "To play: six or more diamonds"
+      shows D>=6
+      when  partner.H>=4
+      priority 2
+
+# The overcaller answers.
+when asked raptor_major
+  cheapest(H) "Four hearts"                         shows H=4
+  cheapest(S) "Four spades"                         shows S=4
+      priority 1
+when asked raptor_minor
+  3C  "Clubs"                                       shows C>=5
+  3D  "Diamonds"                                    shows D>=5
+after (1M) 1N (P) 2C (P)
+  P   "Clubs: content"                              shows C>=5
+  2D  "Diamonds"                                    shows D>=5

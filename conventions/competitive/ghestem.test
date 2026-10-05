@@ -1,0 +1,21 @@
+# Ghestem (switched on below; no stock card plays it).
+card    21GF-DEFAULT competitive.ghestem.play=true
+dealer  W
+vul     None
+
+# seat hand                 | auction  | expect | why
+N AQ953.7.KJ862.85          | 1C       | 2C     | spades and diamonds: the cue bid (top and bottom)
+N AQ953.KJ862.7.85          | 1C       | 3C     | both majors: 3♣ (the two highest)
+N 7.AQ953.KJ862.85          | 1C       | 2N     | diamonds and hearts: 2NT (the two lowest)
+N AQ953.7.85.KJ862          | 1D       | 2D     | spades and clubs: the cue bid
+N AQ953.KJ862.7.85          | 1D       | 3C     | both majors: 3♣
+N AQ953.85.KJ862.7          | 1H       | 3C     | spades and diamonds: 3♣
+N AQ953.85.7.KJ862          | 1H       | 2H     | spades and clubs: the cue bid
+N 85.AQ953.KJ862.7          | 1S       | 3C     | hearts and diamonds: 3♣
+N 85.AQ953.7.KJ862          | 1S       | 2S     | hearts and clubs: the cue bid
+N 85.7.AQ953.KJ862          | 1S       | 2N     | both minors: 2NT
+# Advancer
+S K74.Q82.Q953.J74          | 1C 2C P  | 2D     | preference: the longer of partner's suits, diamonds
+S K742.Q82.Q93.J74          | 1C 2C P  | 2S     | preference: spades
+S K742.Q82.Q93.J74          | 1C 3C P  | 3S     | both majors: the longer, spades
+S K742.Q82.A93.K74          | 1C 3C P  | 4S     | 13 HCP and four spades: game

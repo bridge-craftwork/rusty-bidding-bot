@@ -1,0 +1,19 @@
+# Raptor 1NT (switched on below; no stock card plays it).
+card    21GF-DEFAULT competitive.raptor_1nt.play=true
+dealer  W
+vul     None
+
+# seat hand                 | auction  | expect | why
+N 85.KJ74.AQ953.85          | 1C       | 1N     | five diamonds and four hearts
+N KJ74.85.85.AQ953          | 1D       | 1N     | five clubs and four spades
+N KJ74.85.AQ953.85          | 1H       | 1N     | four spades and five diamonds
+N 85.KJ74.85.AQ953          | 1S       | 1N     | four hearts and five clubs
+N KQ4.AJ3.KJ74.Q93          | 1C       | X      | 16 balanced: no natural 1NT, double
+# Advancer
+S Q93.Q8652.K4.J74          | 1C 1N P  | 2H     | five hearts, weak: to play
+S Q932.Q86.K74.J74          | 1C 1N P  | 2D     | partner's diamonds
+S AQ93.Q86.K74.J74          | 1C 1N P  | 2C     | 12: the cue bid asks for the major
+N 85.KJ74.AQ953.85          | 1C 1N P 2C P | 2H | four hearts
+S Q9.863.K742.J742          | 1H 1N P  | 2C     | two spades: pass or correct
+S Q932.86.K74.J742          | 1H 1N P  | 2S     | four spades: to play
+N KJ74.85.AQ953.85          | 1H 1N P 2C P | 2D | diamonds: corrects

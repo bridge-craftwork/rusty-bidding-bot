@@ -1,0 +1,126 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Transfer responses after their takeout double of our major
+# (`vs_to_double.new_suit_forcing_tfr`; convention-card
+# bidding_conventions/transfers_after_double; Robert S. Todd, "1-Major
+# (X) Transfers", Advancing in Bridge 598; PBS btn/Transfers_after_1M_X.btn,
+# after the ACBL Bulletin, June 2025, p. 66). Over 1M (X), from 1NT up
+# to the suit below opener's major, each bid transfers to the next suit:
+#
+#   over 1♥: 1♠ natural (as before), 1NT clubs, 2♣ diamonds, 2♦ hearts
+#   over 1♠: 1NT clubs, 2♣ diamonds, 2♦ hearts, 2♥ spades
+#
+# - a transfer to a new suit: five or more cards (six when weak), fewer
+#   than three of opener's major, a weak two or better;
+# - the transfer to opener's major: a constructive raise, three trumps,
+#   8-10; the direct raise to 2M is 4-7 with three;
+# - the jump to three of the suit below the major (1♥-3♦, 1♠-3♥): four
+#   trumps, 8-10; 3M stays preemptive (vs-takeout-double.bid);
+# - 2NT: a fit (three or more) and 11+ (Jordan 2NT, extended to three
+#   trumps);
+# - the redouble: 10+ without three trumps.
+#
+# Opener completes the transfer (with the raise: 2M on a minimum, 3M
+# with 15-16, game with 17+); responder then passes when weak, raises
+# his suit to invite, or bids 3NT with game values. Notes:
+# transfers-after-double.notes.md. Only after a major: transfers over
+# 1m (X) (Todd 599) are not written.
+
+module transfers-after-double "Transfer responses after their takeout double"
+  needs  base
+  needs  after-interference
+  needs  vs-takeout-double
+  skill  bidding_conventions/transfers_after_double
+  card   vs_to_double.new_suit_forcing_tfr
+
+after 1M (X)
+  XX  "Redouble: 10+, fewer than three {M}"
+      alert  artificial
+      shows hcp+length_points>=10, M<=2
+      priority 2
+  2N  "A fit and 11+: three or more {M}"
+      alert  artificial
+      shows M>=3, tp(M)>=11
+      sets  forcing=round, ask=limit_raise(M)
+      priority 3
+  1N  "Transfer to clubs: five or more, a weak two or better"
+      alert  artificial
+      shows C>=5, C>=D, M<=2, hcp>=5, hcp>=8 | C>=6, S<=4 | M is S, H<=4
+      priority 2
+  2C  "Transfer to diamonds: five or more, a weak two or better"
+      alert  artificial
+      shows D>=5, D>C, M<=2, hcp>=5, hcp>=8 | D>=6, S<=4 | M is S, H<=4
+      priority 2
+  2D  "Transfer to hearts: a constructive raise, three hearts, 8-10"
+      alert  artificial
+      shows H=3, tp(H)>=8, tp(H)<=10
+      when  M is H
+      priority 2
+  2D  "Transfer to hearts: five or more, a weak two or better"
+      alert  artificial
+      shows H>=5, S<=2, hcp>=5, hcp>=8 | H>=6
+      when  M is S
+      priority 2
+  2H  "Transfer to spades: a constructive raise, three spades, 8-10"
+      alert  artificial
+      shows S=3, tp(S)>=8, tp(S)<=10
+      when  M is S
+      priority 2
+  2{M} "Raise: three {M}, 4-7"
+      shows M=3, tp(M)>=4, tp(M)<=7
+      priority 2
+  3D  "Four hearts, 8-10"
+      alert  artificial
+      shows H>=4, tp(H)>=8, tp(H)<=10
+      when  M is H
+      priority 3
+  3H  "Four spades, 8-10"
+      alert  artificial
+      shows S>=4, tp(S)>=8, tp(S)<=10
+      when  M is S
+      priority 3
+
+# Opener completes; over the constructive raise he values his hand.
+after 1H (X) 2D (P)
+  4H  "Game opposite the constructive raise: 17+"   shows tp(H)>=17
+      priority 1
+  3H  "Invites game: 15-16"                        shows tp(H)>=15, tp(H)<=16
+      priority 1
+  2H  "Minimum: completes the transfer"
+after 1S (X) 2H (P)
+  4S  "Game opposite the constructive raise: 17+"   shows tp(S)>=17
+      priority 1
+  3S  "Invites game: 15-16"                        shows tp(S)>=15, tp(S)<=16
+      priority 1
+  2S  "Minimum: completes the transfer"
+after 1M (X) 1N (P)
+  2C  "Completes the transfer"                      artificial
+after 1M (X) 2C (P)
+  2D  "Completes the transfer"                      artificial
+after 1S (X) 2D (P)
+  2H  "Completes the transfer"                      artificial
+after 1H (X) 3D (P)
+  4H  "Game opposite four trumps and 8-10: 15+"     shows tp(H)>=15
+  3H  "Minimum"                                    priority -1
+after 1S (X) 3H (P)
+  4S  "Game opposite four trumps and 8-10: 15+"     shows tp(S)>=15
+  3S  "Minimum"                                    priority -1
+
+# Responder after the completion of a transfer to a new suit: pass when
+# weak, three of his suit to invite, 3NT with game values.
+after 1M (X) 1N (P) 2C (P)
+  P   "Weak: to play"                               shows hcp<=9
+  3C  "Invites: 10-12, six or more clubs"           shows C>=6, hcp>=10, hcp<=12
+  3N  "Game values: 13+"                            shows hcp>=13
+  P   "Nothing more"                                priority -5
+after 1M (X) 2C (P) 2D (P)
+  P   "Weak: to play"                               shows hcp<=9
+  3D  "Invites: 10-12, six or more diamonds"        shows D>=6, hcp>=10, hcp<=12
+  3N  "Game values: 13+"                            shows hcp>=13
+  P   "Nothing more"                                priority -5
+after 1S (X) 2D (P) 2H (P)
+  P   "Weak: to play"                               shows hcp<=9
+  3H  "Invites: 10-12, six or more hearts"          shows H>=6, hcp>=10, hcp<=12
+  4H  "Game: six or more hearts, 13+"               shows H>=6, hcp>=13
+  3N  "Game values: 13+, five hearts"               shows hcp>=13
+  P   "Nothing more"                                priority -5

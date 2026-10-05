@@ -1,0 +1,53 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Sandwich 1NT (`competitive.sandwich_nt.play`; convention-card
+# competitive_bidding/sandwich_nt, Robert S. Todd, Advancing in Bridge
+# 194; Wikipedia, "Unusual notrump"): when they have bid two suits,
+# (1x) P (1y) 1NT shows the two unbid suits instead of a strong
+# balanced hand, which is unlikely between an opener and a responder.
+#
+# The passed hand's version is the Unusual 1NT of two-suited-overcalls.bid
+# (`competitive.unusual_1nt.play`); when that is on it keeps the passed
+# hand and this module covers the hand that has not passed. Five-four or
+# better (five-five preferred), 8-15 HCP: with more, double first. The
+# advances are the Unusual 1NT's (two-suited-overcalls.bid, which reads
+# this switch too). Notes: sandwich-nt.notes.md.
+
+module sandwich-nt "Sandwich 1NT: the two unbid suits"
+  needs  base
+  needs  two-suited-overcalls
+  skill  competitive_bidding/sandwich_nt
+  card   competitive.sandwich_nt.play
+  param  u1n = competitive.unusual_1nt.play default false
+
+after (1x) P (1y) when y is not x, !passed_hand | !u1n
+  1N  "Sandwich 1NT: the two unbid suits, hearts and spades"
+      alert
+      shows H>=4, S>=4, H>=5 | S>=5, hcp>=8, hcp<=15
+      when  x is C, y is D
+      priority 1
+  1N  "Sandwich 1NT: the two unbid suits, diamonds and spades"
+      alert
+      shows D>=4, S>=4, D>=5 | S>=5, hcp>=8, hcp<=15
+      when  x is C, y is H
+      priority 1
+  1N  "Sandwich 1NT: the two unbid suits, diamonds and hearts"
+      alert
+      shows D>=4, H>=4, D>=5 | H>=5, hcp>=8, hcp<=15
+      when  x is C, y is S
+      priority 1
+  1N  "Sandwich 1NT: the two unbid suits, clubs and spades"
+      alert
+      shows C>=4, S>=4, C>=5 | S>=5, hcp>=8, hcp<=15
+      when  x is D, y is H
+      priority 1
+  1N  "Sandwich 1NT: the two unbid suits, clubs and hearts"
+      alert
+      shows C>=4, H>=4, C>=5 | H>=5, hcp>=8, hcp<=15
+      when  x is D, y is S
+      priority 1
+  1N  "Sandwich 1NT: the two unbid suits, both minors"
+      alert
+      shows C>=4, D>=4, C>=5 | D>=5, hcp>=8, hcp<=15
+      when  x is H, y is S
+      priority 1

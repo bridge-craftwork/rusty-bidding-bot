@@ -1,0 +1,352 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Rubensohl (convention-card competitive_bidding/rubensohl; Wikipedia,
+# "Rubinsohl"; Larry Cohen, "Transfer Lebensohl"): a transfer version of
+# Lebensohl. Every bid from 2NT up is a transfer to the next strain.
+#
+# 1. After a natural two-level overcall of our 1NT (2♦, 2♥, 2♠;
+#    `notrump.rubensohl.over_interference`, which switches Lebensohl off):
+#
+#    - two of a suit: natural, to play; the double: as the card says
+#      (nt-interference.bid);
+#    - 2NT clubs, 3♣ diamonds, 3♦ hearts, 3♥ spades, 3♠ notrump;
+#    - the transfer to their suit is Stayman: game values, four cards in
+#      an unbid major;
+#    - the transfer to notrump (3♠, or 3♠ over 2♠: their suit) is game
+#      values with no stopper and no four-card major; 3NT is game with a
+#      stopper;
+#    - a transfer to a minor: six or more, weak (to play) or with game
+#      values (then 3NT); to a major: five or more, invitational or
+#      better (Wikipedia: "at least invitational").
+#
+#    Opener completes a transfer with a minimum; with a maximum (17) and
+#    three-card support for the major he bids game, with a maximum and
+#    no fit 3NT. He answers Stayman with the major, else 3NT with a
+#    stopper, else completes to their suit. Responder then places it.
+#
+# 2. After partner's takeout double of their weak two
+#    (`competitive.rubensohl_after_double.play`, which switches
+#    Lebensohl there off: vs-preempts.bid): the same transfers from 2NT
+#    up (Wikipedia: "the same transfer structure applies"), with the
+#    doubler in opener's place. A transfer shows four or more (five in
+#    a major below their suit when it jumps past two of it) and either a
+#    weak hand to play at three or 9+; the transfer to their suit is
+#    Stayman-like (game values, four of an unbid major), the transfer to
+#    notrump game values without a stopper.
+#
+# Notes: rubensohl.notes.md.
+
+module rubensohl "Rubensohl: transfers after interference over 1NT and after doubling a weak two"
+  needs  nt-interference
+  needs  vs-preempts
+  skill  competitive_bidding/rubensohl
+  param  over_nt  = notrump.rubensohl.over_interference default false
+  param  after_x  = competitive.rubensohl_after_double.play default false
+
+define rub_nt(y) = over_nt, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+define rub_nt_opener(y) = over_nt, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+
+# ════ 1. After they overcall our 1NT ═════════════════════════════════
+
+# ── Responder over 2♦ ───────────────────────────────────────────────
+after 1N (2D) when rub_nt(D)
+  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+      alert  artificial
+      shows C>=6, C>D, H<=3, S<=3
+      priority 3
+  3C  "Rubensohl: transfer to diamonds = Stayman, game values, a four-card major"
+      alert  artificial
+      shows hcp>=10, H=4 | S=4, H<=4, S<=4
+      priority 3
+  3D  "Rubensohl: transfer to hearts, five or more, invitational or better"
+      alert  artificial
+      shows H>=5, H>=S, hcp>=8
+      priority 3
+  3H  "Rubensohl: transfer to spades, five or more, invitational or better"
+      alert  artificial
+      shows S>=5, S>H, hcp>=8
+      priority 3
+  3S  "Rubensohl: transfer to notrump, game values, no stopper in {y}"
+      alert  artificial
+      shows hcp>=10, !stop(D), H<=3, S<=3
+      priority 3
+  3N  "Game with a stopper in diamonds"
+      shows hcp>=10, stop(D), H<=3, S<=3
+      priority 3
+
+# ── Responder over 2♥ ───────────────────────────────────────────────
+after 1N (2H) when rub_nt(H)
+  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+      alert  artificial
+      shows C>=6, C>=D, S<=3
+      priority 3
+  3C  "Rubensohl: transfer to diamonds (weak, or game values)"
+      alert  artificial
+      shows D>=6, D>C, S<=3
+      priority 3
+  3D  "Rubensohl: transfer to hearts = Stayman, game values, four spades"
+      alert  artificial
+      shows hcp>=10, S=4
+      priority 3
+  3H  "Rubensohl: transfer to spades, five or more, invitational or better"
+      alert  artificial
+      shows S>=5, hcp>=8
+      priority 3
+  3S  "Rubensohl: transfer to notrump, game values, no stopper in hearts"
+      alert  artificial
+      shows hcp>=10, !stop(H), S<=3
+      priority 3
+  3N  "Game with a stopper in hearts"
+      shows hcp>=10, stop(H), S<=3
+      priority 3
+
+# ── Responder over 2♠ ───────────────────────────────────────────────
+after 1N (2S) when rub_nt(S)
+  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+      alert  artificial
+      shows C>=6, C>=D, H<=3
+      priority 3
+  3C  "Rubensohl: transfer to diamonds (weak, or game values)"
+      alert  artificial
+      shows D>=6, D>C, H<=3
+      priority 3
+  3D  "Rubensohl: transfer to hearts, five or more, invitational or better"
+      alert  artificial
+      shows H>=5, hcp>=8
+      priority 3
+  3H  "Rubensohl: transfer to spades = Stayman, game values, four hearts"
+      alert  artificial
+      shows hcp>=10, H=4
+      priority 3
+  3S  "Rubensohl: game values, no stopper in spades"
+      alert  artificial
+      shows hcp>=10, !stop(S), H<=3
+      priority 3
+  3N  "Game with a stopper in spades"
+      shows hcp>=10, stop(S), H<=3
+      priority 3
+
+# ── Opener ──────────────────────────────────────────────────────────
+after 1N (2y) 2N (P) when rub_nt_opener(y)
+  3C  "Completes the transfer to clubs"           artificial
+      priority 3
+after 1N (2y) 3C (P) when rub_nt_opener(y), y is not D
+  3D  "Completes the transfer to diamonds"        artificial
+      priority 3
+after 1N (2y) 3D (P) when rub_nt_opener(y), y is not H
+  4H  "A maximum and three or more hearts: game"  shows H>=3, hcp>=17
+      priority 4
+  3N  "A maximum, two hearts"                     shows H<=2, hcp>=17
+      priority 4
+  3H  "Completes the transfer: a minimum"         artificial
+      priority 3
+after 1N (2y) 3H (P) when rub_nt_opener(y), y is not S
+  4S  "A maximum and three or more spades: game"  shows S>=3, hcp>=17
+      priority 4
+  3N  "A maximum, two spades"                     shows S<=2, hcp>=17
+      priority 4
+  3S  "Completes the transfer: a minimum"         artificial
+      priority 3
+# Stayman (the transfer to their suit): the major, else 3NT with a
+# stopper, else their suit (no stopper, no major).
+after 1N (2D) 3C (P) when rub_nt_opener(D)
+  3H  "Four hearts"                               shows H>=4
+      priority 4
+  3S  "Four spades"                               shows S>=4, H<=3
+      priority 4
+  3N  "No four-card major, diamonds stopped"      shows stop(D)
+      priority 3
+  3D  "No four-card major, no stopper"            artificial
+      priority 2
+after 1N (2H) 3D (P) when rub_nt_opener(H)
+  3S  "Four spades"                               shows S>=4
+      priority 4
+  3N  "No four spades, hearts stopped"            shows stop(H)
+      priority 3
+  3H  "No four spades, no stopper"                artificial
+      priority 2
+after 1N (2S) 3H (P) when rub_nt_opener(S)
+  4H  "Four hearts"                               shows H>=4
+      priority 4
+  3N  "No four hearts, spades stopped"            shows stop(S)
+      priority 3
+  3S  "No four hearts, no stopper"                artificial
+      priority 2
+# Game values without a stopper.
+after 1N (2y) 3S (P) when rub_nt_opener(y)
+  3N  "A stopper in {y}"                          shows stop(y)
+      priority 3
+  4C  "No stopper: clubs"                         shows C>=D
+      priority 2
+  4D  "No stopper: diamonds"                      shows D>C
+      priority 2
+
+# ── Responder after the completion ──────────────────────────────────
+after 1N (2y) 2N (P) 3C (P) when rub_nt(y)
+  P   "Weak: to play in clubs"                    shows hcp<=9
+      priority 3
+  3N  "Game values with clubs"                    shows hcp>=10
+      priority 3
+after 1N (2y) 3C (P) 3D (P) when rub_nt(y), y is not D
+  P   "Weak: to play in diamonds"                 shows hcp<=9
+      priority 3
+  3N  "Game values with diamonds"                 shows hcp>=10
+      priority 3
+after 1N (2y) 3D (P) 3H (P) when rub_nt(y), y is not H
+  P   "Invitational: no more"                     shows hcp<=9
+      priority 3
+  4H  "Game: six or more hearts"                  shows H>=6, hcp>=10
+      priority 3
+  3N  "Game: five hearts, choice of games"        shows H=5, hcp>=10
+      priority 3
+after 1N (2y) 3H (P) 3S (P) when rub_nt(y), y is not S
+  P   "Invitational: no more"                     shows hcp<=9
+      priority 3
+  4S  "Game: six or more spades"                  shows S>=6, hcp>=10
+      priority 3
+  3N  "Game: five spades, choice of games"        shows S=5, hcp>=10
+      priority 3
+after 1N (2y) 3D (P) 3H (P) 3N (P) when rub_nt_opener(y), y is not H
+  4H  "Three hearts: the major"                   shows H>=3
+      priority 3
+  P   "Two hearts: notrump"                       priority 2
+after 1N (2y) 3H (P) 3S (P) 3N (P) when rub_nt_opener(y), y is not S
+  4S  "Three spades: the major"                   shows S>=3
+      priority 3
+  P   "Two spades: notrump"                       priority 2
+# After the Stayman answer.
+after 1N (2D) 3C (P) 3H (P) | 1N (2D) 3C (P) 3S (P) | 1N (2H) 3D (P) 3S (P) | 1N (2S) 3H (P) 4H (P) when over_nt
+  4H  "The heart fit: game"                       shows H>=4
+      when  partner.H>=4
+      priority 3
+  4S  "The spade fit: game"                       shows S>=4
+      when  partner.S>=4
+      priority 3
+  3N  "No fit: notrump"
+      priority 2
+  P   "Game reached"
+      priority 1
+after 1N (2D) 3C (P) 3D (P) | 1N (2H) 3D (P) 3H (P) | 1N (2S) 3H (P) 3S (P) when over_nt
+  4C  "No stopper between us: clubs"              shows C>=4, C>=D
+      priority 2
+  4D  "No stopper between us: diamonds"           shows D>=4, D>C
+      priority 2
+  3N  "Notrump: nowhere better"
+      priority 1
+
+# ════ 2. After partner doubles their weak two ═══════════════════════
+# Advancer. Their suit x is 2♦, 2♥ or 2♠. Two of a suit is natural and
+# weak (vs-preempts.bid).
+after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
+  2N  "Rubensohl: transfer to clubs (weak, to play; or 9+)"
+      alert  artificial
+      shows C>=4, C>=D, hcp<=8 | (hcp>=9, C>=5), S<=3 | x is S, H<=3 | x is H
+      priority 3
+  3C  "Rubensohl: transfer to diamonds (weak, to play; or 9+)"
+      alert  artificial
+      shows D>=4, D>C, hcp<=8 | (hcp>=9, D>=5), S<=3 | x is S, H<=3 | x is H
+      when  x is not D
+      priority 3
+  3C  "Rubensohl: transfer to their diamonds = Stayman, game values, a four-card major"
+      alert  artificial
+      shows hcp>=13, H=4 | S=4, H<=4, S<=4
+      when  x is D
+      priority 3
+  3D  "Rubensohl: transfer to hearts, four or more"
+      alert  artificial
+      shows H>=4, H>=S | x is S, hcp<=12
+      when  x is S
+      priority 3
+  3D  "Rubensohl: transfer to hearts, five or more, 9-12"
+      alert  artificial
+      shows H>=5, H>=S, hcp>=9, hcp<=12
+      when  x is D
+      priority 3
+  3D  "Rubensohl: transfer to their hearts = Stayman, game values, four spades"
+      alert  artificial
+      shows hcp>=13, S=4
+      when  x is H
+      priority 3
+  3H  "Rubensohl: transfer to spades, five or more, 9-12"
+      alert  artificial
+      shows S>=5, hcp>=9, hcp<=12
+      when  x is D | x is H
+      priority 3
+  3H  "Rubensohl: transfer to their spades = Stayman, game values, four hearts"
+      alert  artificial
+      shows hcp>=13, H=4
+      when  x is S
+      priority 3
+  3S  "Rubensohl: game values, no stopper in {x}, no four-card major"
+      alert  artificial
+      shows hcp>=13, !stop(x), H<=3 | x is H, S<=3 | x is S
+      priority 3
+  3N  "Game with {x} stopped"
+      shows hcp>=13, stop(x), H<=3 | x is H, S<=3 | x is S
+      priority 3
+
+# The doubler completes the transfer (with 17+ and four-card support for
+# a major he bids game); answers the Stayman transfer with a major, else
+# 3NT with a stopper, else their suit; over 3♠, 3NT with a stopper.
+after (2x) X (P) 2N (P) | (2x) P (P) X (P) 2N (P) when after_x, x is not C
+  3C  "Completes the transfer"                    artificial
+      priority 3
+after (2x) X (P) 3C (P) | (2x) P (P) X (P) 3C (P) when after_x, x is not C, x is not D
+  3D  "Completes the transfer"                    artificial
+      priority 3
+after (2x) X (P) 3D (P) | (2x) P (P) X (P) 3D (P) when after_x, x is not C, x is not H
+  4H  "17+ and four hearts: game"                 shows H>=4, hcp>=17
+      priority 4
+  3H  "Completes the transfer"                    artificial
+      priority 3
+after (2x) X (P) 3H (P) | (2x) P (P) X (P) 3H (P) when after_x, x is not C, x is not S
+  4S  "17+ and four spades: game"                 shows S>=4, hcp>=17
+      priority 4
+  3S  "Completes the transfer"                    artificial
+      priority 3
+after (2x) X (P) 3C (P) | (2x) P (P) X (P) 3C (P) when after_x, x is D
+  3H  "Four hearts"                               shows H>=4
+      priority 4
+  3S  "Four spades"                               shows S>=4, H<=3
+      priority 4
+  3N  "No four-card major, diamonds stopped"      shows stop(D)
+      priority 3
+  3D  "No four-card major, no stopper"            artificial
+      priority 2
+after (2x) X (P) 3D (P) | (2x) P (P) X (P) 3D (P) when after_x, x is H
+  3S  "Four spades"                               shows S>=4
+      priority 4
+  3N  "No four spades, hearts stopped"            shows stop(H)
+      priority 3
+  3H  "No four spades, no stopper"                artificial
+      priority 2
+after (2x) X (P) 3H (P) | (2x) P (P) X (P) 3H (P) when after_x, x is S
+  4H  "Four hearts"                               shows H>=4
+      priority 4
+  3N  "No four hearts, spades stopped"            shows stop(S)
+      priority 3
+  3S  "No four hearts, no stopper"                artificial
+      priority 2
+after (2x) X (P) 3S (P) | (2x) P (P) X (P) 3S (P) when after_x, x is not C
+  3N  "A stopper in {x}"                          shows stop(x)
+      priority 3
+  4C  "No stopper: clubs"                         shows C>=D
+      priority 2
+  4D  "No stopper: diamonds"                      shows D>C
+      priority 2
+
+# Advancer after the completion: pass when weak, else game.
+after (2x) X (P) 2N (P) 3C (P) | (2x) P (P) X (P) 2N (P) 3C (P) | (2x) X (P) 3C (P) 3D (P) | (2x) P (P) X (P) 3C (P) 3D (P) when after_x, x is not C
+  P   "Weak: to play"                             shows hcp<=8
+      priority 3
+  3N  "9+ with {x} stopped"                       shows hcp>=9, stop(x)
+      priority 3
+  P   "Nothing better"                            priority 1
+after (2x) X (P) 3D (P) 3H (P) | (2x) P (P) X (P) 3D (P) 3H (P) when after_x, x is not C, x is not H
+  4H  "Game: 11+ with five, or 12+"               shows hcp>=11, H>=5 | hcp>=12
+      priority 3
+  P   "Weak or invitational: no more"             priority 1
+after (2x) X (P) 3H (P) 3S (P) | (2x) P (P) X (P) 3H (P) 3S (P) when after_x, x is not C, x is not S
+  4S  "Game: 11+ with five, or 12+"               shows hcp>=11, S>=5 | hcp>=12
+      priority 3
+  P   "Invitational: no more"                     priority 1

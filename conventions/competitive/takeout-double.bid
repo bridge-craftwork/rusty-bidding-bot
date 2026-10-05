@@ -322,3 +322,52 @@ after (1x) X (XX) P (P)
   P   "Leaves it in: four or more of their suit"             shows x>=4
       priority 2
 
+
+# ── The double of their raise (2026-10-05) ───────────────────────────
+# (1x) P (2x) X: they have found a fit, so the double is for takeout,
+# not penalty (penalty-doubles.bid read it as penalty, priority -6):
+# short in their suit, three or more in each unbid suit, 12+ total
+# points. Written with Scrambling 2NT (scrambling-2nt.bid), whose
+# scenario starts here (PBS btn/Scrambling_2NT.btn: 13+, 4-4-4-1 or
+# 5-4-4-0 short in their major).
+after (1x) P (2x)
+  X   "Takeout of their raise: short in {x}, the unbid suits, 12+ total points"
+      shows hcp+length_points>=12, x<=2
+      shows (S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)
+      shows hcp+length_points>=13 | x<=1
+
+# Advancer must bid (they have a fit; partner is short there): his
+# longest unbid suit, majors first; four of a major or 3NT with game
+# values opposite the double; a pass only with their suit stacked.
+after (1x) P (2x) X (P)
+  4S  "Game: four or more spades, 11+"
+      shows S>=4, S>=H | x is H, hcp+length_points>=11
+      when  x is not S
+      priority 1
+  4H  "Game: four or more hearts, 11+"
+      shows H>=4, H>S | x is S, hcp+length_points>=11
+      when  x is not H
+      priority 1
+  3N  "Game: 11+ with {x} stopped"
+      shows hcp>=11, stop(x), S<=3 | x is S, H<=3 | x is H
+      priority 1
+  P   "Penalty: five or more {x} with two top honours"
+      shows x>=5, quality(x)>=good
+      priority 1
+  cheapest(S) "Four or more spades"     shows S>=4, S>=H | x is H
+      when  x is not S
+  cheapest(H) "Four or more hearts"     shows H>=4, H>S | x is S
+      when  x is not H
+  cheapest(D) "Four or more diamonds"   shows D>=4, D>C, S<=3 | x is S, H<=3 | x is H
+      when  x is not D
+  cheapest(C) "Four or more clubs"      shows C>=4, C>=D, S<=3 | x is S, H<=3 | x is H
+      when  x is not C
+  # No four-card suit: the longest unbid suit, cheapest first.
+  cheapest(C) "Our best suit: clubs"    when x is not C, C>=D | x is D
+      priority -5
+  cheapest(D) "Our best suit: diamonds" when x is not D, D>C | x is C
+      priority -5
+  cheapest(H) "Our best suit: hearts"   when x is not H
+      priority -6
+  cheapest(S) "Our best suit: spades"   when x is not S
+      priority -7
