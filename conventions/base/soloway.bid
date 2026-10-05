@@ -1,0 +1,49 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Soloway jump shifts: the continuations. The jumps themselves are in
+# responses.bid (`soloway_js`). GIB's system notes: opener rebids his
+# suit with length, raises responder with three or more, bids a side suit
+# without support to show at least KQ there, or bids notrump at the
+# cheapest level with any other hand. Responder then rebids his suit
+# (types 1 and 2), bids notrump (type 3) or raises opener (type 4). The
+# auction is game forcing; keycard and control bids follow from the
+# agreed suit (slam/). See soloway.notes.md.
+
+module soloway "Soloway jump shifts"
+  needs  responses
+  skill  bidding_conventions/soloway
+  param  soloway = general.jump_shifts.soloway default false
+  param  weak2   = general.jump_shifts.weak_2 default false
+
+# ── Opener's rebid ────────────────────────────────────────────────────
+after 1x (P) 2y (P) when soloway, !weak2, y is not x, two_level_jump(y, x)
+  3y  "Support for {y}: three with an honour, or four"   shows y>=4 | (y=3, quality(y)>=fair)
+      sets  trump=y
+      priority 1                                # support first
+  3x  "Rebids {x}: five or more, no support"    shows x>=5, y<=3, quality(y)<=poor | y<=2
+  cheapest(z)  "No support, a side suit with two of the top three honours"
+      shows z>=4, quality(z)>=good, y<=3, quality(y)<=poor | y<=2
+      when  z is not x, z is not y
+      prefer 0 - cheapest_rank(z)
+  2N  "No support, nothing else to show"        shows y<=3, quality(y)<=poor | y<=2
+      priority -1
+
+# ── Responder's second call (no fit agreed yet) ───────────────────────
+after 1x (P) 2y (P) 2N (P) | 1x (P) 2y (P) 3x (P) when soloway, !weak2, y is not x, two_level_jump(y, x)
+  cheapest(x)  "Type 4: support for {x}"        shows x>=4
+      sets  trump=x
+      priority 1
+  cheapest(y)  "Type 1 or 2: a long, strong {y}"  shows y>=6, top5(y)>=4
+  3N  "Type 3: balanced, 18+"                   shows balanced
+      priority -1
+  cheapest(y)  "Rebids {y}"                     shows y>=6
+      priority -2
+after 1x (P) 2y (P) 2z (P) | 1x (P) 2y (P) 3z (P) when soloway, !weak2, y is not x, z is not x, z is not y, two_level_jump(y, x)
+  cheapest(x)  "Type 4: support for {x}"        shows x>=4
+      sets  trump=x
+      priority 1
+  cheapest(y)  "Type 1 or 2: a long, strong {y}"  shows y>=6, top5(y)>=4
+  3N  "Type 3: balanced, 18+"                   shows balanced
+      priority -1
+  cheapest(y)  "Rebids {y}"                     shows y>=6
+      priority -2

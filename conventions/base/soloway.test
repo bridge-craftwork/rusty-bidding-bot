@@ -1,0 +1,21 @@
+# Soloway jump shifts (21GF-SPECIALS2 plays them). Hands from the
+# Soloway_Jump_Shift corpus.
+card    21GF-SPECIALS2
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N AKQT952.Q3.QJ.K4      | 1D P                     | 2S     | type 1: strong six-card suit, 17, 5 controls
+N Q3.A.AKQT854.KT8      | 1C P                     | 2D     | type 1: 18, seven strong diamonds
+N KT8.AKJ32.AQ32.6      | 1D P                     | 2H     | type 4: four diamonds, 17 support points
+N AKQ8.J9876.A.K53      | 1C P                     | 1H     | 17 but a poor suit: no jump
+S KQ6.Q53.AT976.Q2      | 1D P 2H P                | 3H     | three hearts: support first (BBA 3H)
+S J.KJ5.AT974.AT98      | 1D P 2S P                | 3D     | no support, five diamonds (BBA 3D)
+S AQ42.42.AT83.A64      | 1D P 2H P                | 2S     | no support, a side suit with AQ (BBA 2S)
+S J4.652.KQ9.AQJ97      | 1C P 2H P                | 3C     | five clubs (BBA 3C)
+S 984.Q982.AKJ.Q74      | 1C P 2S P                | 2NT    | three small spades: no raise (BBA 2NT)
+N AKQT952.Q3.QJ.K4      | 1D P 2S P 3D P           | 3S     | type 1: rebids the suit
+N AKQT8.K.KJ82.A63      | 1D P 2S P 2N P           | 3D     | type 4: four diamonds
+
+# Without Soloway (21GF-DEFAULT) the jump is the plain strong one.
+card    21GF-DEFAULT
+N AKQ8.J9876.A.K53      | 1C P                     | 2H     | 17 with five hearts: strong jump shift
