@@ -25,6 +25,9 @@ module strong-openings "2♣ and 2NT openings"
   param  two_c      = two_level.two_clubs.meaning default strong
   param  two_d_resp = two_level.two_clubs.2d_response default waiting
   param  bust_2h    = two_level.two_clubs.parrish_bust default false
+  # Off (Precision: the forcing opening is 1C): no strong 2C; strong
+  # hands open at the one level (base.bid lifts its 21 HCP cap).
+  param  forcing_2c = general.forcing_opening_2c default true
   param  two_nt_min = notrump.two_nt.range_min default 20
   param  two_nt_max = notrump.two_nt.range_max default 21
   param  three_nt_min = notrump.three_nt.range_min default 26
@@ -43,21 +46,21 @@ when opening
   # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
       shows hcp>=22, !balanced | hcp<=25 | hcp>=28   # balanced 26-27 opens 3NT
-      when  two_c is strong | two_c is very_strong
+      when  two_c is strong | two_c is very_strong, forcing_2c
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1                       # ahead of a one-level opening
   2C  "Strong: nine tricks with a major"  alert
       shows hcp>=17, losers<=4, hcp+length_points>=23
       shows (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | (H>=5, S>=5)
-      when  two_c is strong | two_c is very_strong
+      when  two_c is strong | two_c is very_strong, forcing_2c
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
   2C  "Strong: ten tricks with a long suit"  alert
       shows hcp>=17, losers<=3, hcp+length_points>=23
       shows (C>=6, quality(C)>=good) | (D>=6, quality(D)>=good) | (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | shape 5-5-x-x
-      when  two_c is strong | two_c is very_strong
+      when  two_c is strong | two_c is very_strong, forcing_2c
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
