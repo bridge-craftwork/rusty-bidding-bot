@@ -12,6 +12,11 @@ S 9875.932.T9875.4      | 4NT P                    | 5C     | no ace
 N A.KQJT9865.KQ.KQ      | 4NT P 5NT P              | 6H     | two aces: one missing, six
 N A.KQJT9865.KQ.KQ      | 4NT P 5D P               | 5H     | the diamond ace: two missing, sign off
 N A.KQJT9865.KQ.KQ      | 4NT P 5C P               | 5H     | no ace: sign off
+N AKQJT4.T.6.AKQ53      |                          | 4NT    | spades, two aces missing
+N AKQJT4.T.6.AKQ53      | 4NT P 5H P               | 6S     | the heart ace: the diamond ace missing, six in spades
+N AKQJT4.T.6.AKQ53      | 4NT P 5C P               | 5S     | no ace: sign off in spades
+N AK.A.K.AKQJT8654      | 4NT P 5C P               | 6C     | clubs: only the diamond ace missing
+N AKQT54.5.KQ765.Q      |                          | !4NT   | K-Q-x-x-x on the side can lose its small cards
 
 card    21GF-DEFAULT slam.four_nt_opening.play=false
 N A.KQJT9865.KQ.KQ      |                          | !4NT   | off the card

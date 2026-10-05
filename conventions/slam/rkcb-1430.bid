@@ -128,27 +128,36 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid
 # The same 4NT in competition, for reading only (2026-10-05, DOPI and
 # ROPI): the asks above are off once they have bid, but partner's 4NT is
 # still keycard for the suit we play in, and the answer comes by DOPI or
-# ROPI (dopi-ropi.bid). Ranked below every pass, so we never choose it.
+# ROPI (dopi-ropi.bid). Never chosen: `read_only` is a condition on the
+# caller's hand that no hand meets, and that a reader cannot judge, so
+# it stays possible when the call is read (docs/LANGUAGE.md, section 8).
+# Low priority as well, so any other meaning of 4NT comes first.
+define read_only = bare(C), !bare(C)
+
 when (k1430 | k0314), we.trump is none, !asked, they.bid
   4N  "Keycard ask in ♠"
       when  kc_open(S) | shown_fit(S)
       sets  trump=S, ask=keycards(S)
       artificial
+      when  read_only
       priority -60
   4N  "Keycard ask in ♥"
       when  kc_open(H) | shown_fit(H), !shown_fit(S)
       sets  trump=H, ask=keycards(H)
       artificial
+      when  read_only
       priority -60
   4N  "Keycard ask in ♦"
       when  kc_open(D), !shown_fit(S), !shown_fit(H)
       sets  trump=D, ask=keycards(D)
       artificial
+      when  read_only
       priority -60
   4N  "Keycard ask in ♣"
       when  kc_open(C), !shown_fit(S), !shown_fit(H)
       sets  trump=C, ask=keycards(C)
       artificial
+      when  read_only
       priority -60
 
 # A trump suit agreed and partner's jump to game in competition
@@ -158,6 +167,7 @@ when (k1430 | k0314), we.trump is suit, they.bid, asked signoff
   4N  "Keycard ask in {trump}"
       sets  ask=keycards(trump)
       artificial
+      when  read_only
       priority -60
 
 # A minor set as trump, and a major agreed since (Rick, 2026-10-03:

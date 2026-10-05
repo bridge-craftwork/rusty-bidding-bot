@@ -4,7 +4,7 @@
 # aces (a long, solid suit and kings with queens or short) needs to know
 # which aces partner holds, not how many. Answers: 5♣ no ace, 5♦ 5♥ 5♠
 # the ace of that suit, 6♣ the club ace, 5NT two aces. The opener then
-# places the contract in his suit. Notes: four-nt-opening.notes.md.
+# places the contract in his long suit. Notes: four-nt-opening.notes.md.
 
 module four-nt-opening "4NT opening: asks for specific aces"
   card   slam.four_nt_opening.play
@@ -12,33 +12,22 @@ module four-nt-opening "4NT opening: asks for specific aces"
 
 # ── The opening ───────────────────────────────────────────────────────
 #
-# Every loser is an ace: each suit without the ace is a singleton, K-x
-# or headed by the K-Q (partner's ace there is a winner), the suits with
-# the ace lose nothing (`losers` equals the aces missing), and no void,
-# where partner's ace would be wasted. One to three aces missing, and a
-# suit of six or more to play in (the longest; spades first on a tie).
-define fna_ace_only(x) = has(A,x) | x = 1 | (has(K,x), x = 2) | (has(K,x), has(Q,x))
+# Every loser is an ace: each suit without the ace is a singleton, K-x,
+# K-Q-x, or the long suit headed by the K-Q-J (partner's ace there is a
+# winner; a longer side suit could lose its small cards too), the suits
+# with the ace lose nothing (`losers` equals the aces missing), and no
+# void, where partner's ace would be wasted. One to three aces missing,
+# and a suit of six or more to play in, the longest (spades first on a
+# tie). One rule, which sets no trump: partner's answer does not depend
+# on the suit, and the opener places the contract in his own.
+define fna_ace_only(x) = has(A,x) | x = 1 | (has(K,x), x = 2) | (has(K,x), has(Q,x), x = 3) | (has(K,x), has(Q,x), has(J,x), x >= 6)
 define fna_hand = C>=1, D>=1, H>=1, S>=1, fna_ace_only(C), fna_ace_only(D), fna_ace_only(H), fna_ace_only(S), keycards(N) >= 1, keycards(N) <= 3, losers + keycards(N) = 4
+define fna_suit(x) = x>=6, x>=S, x>=H, x>=D, x>=C
 
 when opening
-  4N  "Asks for specific aces: a long spade suit, every loser an ace"  alert
-      shows fna_hand, S>=6, S>=H, S>=D, S>=C
-      sets  trump=S, ask=specific_aces
-      artificial
-      priority 2
-  4N  "Asks for specific aces: a long heart suit, every loser an ace"  alert
-      shows fna_hand, H>=6, H>S, H>=D, H>=C
-      sets  trump=H, ask=specific_aces
-      artificial
-      priority 2
-  4N  "Asks for specific aces: a long diamond suit, every loser an ace"  alert
-      shows fna_hand, D>=6, D>S, D>H, D>=C
-      sets  trump=D, ask=specific_aces
-      artificial
-      priority 2
-  4N  "Asks for specific aces: a long club suit, every loser an ace"  alert
-      shows fna_hand, C>=6, C>S, C>H, C>D
-      sets  trump=C, ask=specific_aces
+  4N  "Asks for specific aces: a long suit, every loser an ace"  alert
+      shows fna_hand, S>=6 | H>=6 | D>=6 | C>=6
+      sets  ask=specific_aces
       artificial
       priority 2
 
@@ -59,16 +48,63 @@ when asked specific_aces
 define fna_left = losers - (we.keycards(N).min - keycards(N))
 
 when answered specific_aces
-  7{trump}  "Grand slam: partner's aces cover every loser"
-            when fna_left <= 0
-            priority 5
-  6{trump}  "Small slam: one ace missing"
-            when fna_left <= 1
-            priority 5
-  P         "Two aces missing: partner's answer is our suit"
-            when partner.last = 5{trump}
-            priority 5
-  5{trump}  "Two aces missing: sign off"
-            priority 5
-  6{trump}  "The answer has passed five of our suit"
-            priority 4
+  7S  "Grand slam in spades: partner's aces cover every loser"
+        when fna_suit(S), fna_left <= 0
+        priority 5
+  6S  "Small slam in spades: one ace missing"
+        when fna_suit(S), fna_left <= 1
+        priority 5
+  P   "Two aces missing: partner's answer is our suit"
+        when fna_suit(S), partner.last = 5S
+        priority 5
+  5S  "Two aces missing: sign off in spades"
+        when fna_suit(S)
+        priority 5
+  6S  "Six spades: the answer has passed five of our suit"
+        when fna_suit(S)
+        priority 4
+  7H  "Grand slam in hearts: partner's aces cover every loser"
+        when fna_suit(H), fna_left <= 0
+        priority 5
+  6H  "Small slam in hearts: one ace missing"
+        when fna_suit(H), fna_left <= 1
+        priority 5
+  P   "Two aces missing: partner's answer is our suit"
+        when fna_suit(H), partner.last = 5H
+        priority 5
+  5H  "Two aces missing: sign off in hearts"
+        when fna_suit(H)
+        priority 5
+  6H  "Six hearts: the answer has passed five of our suit"
+        when fna_suit(H)
+        priority 4
+  7D  "Grand slam in diamonds: partner's aces cover every loser"
+        when fna_suit(D), fna_left <= 0
+        priority 5
+  6D  "Small slam in diamonds: one ace missing"
+        when fna_suit(D), fna_left <= 1
+        priority 5
+  P   "Two aces missing: partner's answer is our suit"
+        when fna_suit(D), partner.last = 5D
+        priority 5
+  5D  "Two aces missing: sign off in diamonds"
+        when fna_suit(D)
+        priority 5
+  6D  "Six diamonds: the answer has passed five of our suit"
+        when fna_suit(D)
+        priority 4
+  7C  "Grand slam in clubs: partner's aces cover every loser"
+        when fna_suit(C), fna_left <= 0
+        priority 5
+  6C  "Small slam in clubs: one ace missing"
+        when fna_suit(C), fna_left <= 1
+        priority 5
+  P   "Two aces missing: partner's answer is our suit"
+        when fna_suit(C), partner.last = 5C
+        priority 5
+  5C  "Two aces missing: sign off in clubs"
+        when fna_suit(C)
+        priority 5
+  6C  "Six clubs: the answer has passed five of our suit"
+        when fna_suit(C)
+        priority 4
