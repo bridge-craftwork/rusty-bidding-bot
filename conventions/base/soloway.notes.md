@@ -23,8 +23,10 @@ Soloway_Jump_Shift and Soloway_Jump_Shift_Type-1..4 (21GF-SPECIALS2).
 
 ## Corpus (Soloway_Jump_Shift*, 2026-10-05)
 
-Calls agreeing 73.1% before (strong-jump-shift rules played the jump),
-78.3% after, NS 48.1% to 58.4%. Remaining divergences at the jump, all
+Same final contract as BBA on 38 of the first 250 boards (50 a
+scenario) before (strong jump shifts), 76 after. With the jumps but
+without the continuations calls agreed 73.1% (all 2,500 boards), with
+them 78.3% (NS 48.1% to 58.4%). Remaining divergences at the jump, all
 **BBA style**, not changed (GIB's definition is the spec):
 
 - BBA never jumps 1♣-2♦ with 17 HCP (all 2♦ jumps have 18+), where GIB's

@@ -27,7 +27,9 @@ Cases: `weak-jump-shifts.test`. Scenario: Weak_Jump_Shift (21GF-WJS-MSS).
 
 ## Corpus (Weak_Jump_Shift, 2026-10-05)
 
-Calls agreeing 79.8% before, 80.1% after (NS 76.5% to 77.0%). BBA's
+Same final contract as BBA on 6 of the first 50 boards before (strong
+jump shifts), 17 after; identical auctions 0 to 14. All 500: calls
+agreeing 80.1% (NS 77.0%). BBA's
 range is 3-5 HCP at two and up to 6 at three. Remaining divergences at
 the convention's calls are mostly EW's (BBA's GIB card competes over the
 jump, ours does not), and BBA passing where our opener rebids 3NT with a
