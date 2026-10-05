@@ -15,6 +15,8 @@ S AKJ742.AQ5.KQ94.      | 1S P 2N P 3C P 4S P                  | !5C    | 5♣ i
 # Over interference: DOPI and ROPI.
 N AJ32.J862.5.KQ84      | 1H P 4D P 5S 6D                      | P      | DOPI: pass, the second step ("0 or 3")
 N K932.J862.5.AQ84      | 1H P 4D P 5S X                       | XX     | ROPI: redouble, the first step ("1 or 4")
+N 9832.KQ62.5.AJ84      | 1H P 4D P 5S 6D                      | 6H     | two keycards over their bid: the slam
+S .AKQ74.KQ5.QJ932      | 1H P 4D P 5S 6D P P                  | X      | two and "0 or 3" read low: penalty
 
 # BBA's style: steps 0, 1, 2, 3, and a five-level bid need not be a jump.
 card    21GF-SPECIALS2 general.style=bba
