@@ -1,0 +1,99 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Weak jump shifts: opener's continuations and responder's answers. The
+# jumps themselves are in responses.bid (two level 2-5 HCP and six cards,
+# three level 2-6 and seven). Bridge Bum: opener may pass, rebid his own
+# suit (not forcing), raise (not forcing), bid a new suit (forcing, extra
+# strength) or bid 2NT, a forcing game try that implies at least two cards
+# in responder's suit. See weak-jump-shifts.notes.md.
+
+module weak-jump-shifts "Weak jump shifts"
+  needs  responses
+  skill  bidding_conventions/weak_jump_shifts
+  param  weak2 = general.jump_shifts.weak_2 default false
+  param  weak3 = general.jump_shifts.weak_3 default false
+
+# A response of 2x to 1y is a jump when x ranks above y (else a two over
+# one). responder-rebids.bid reads it to keep its 2/1 continuations away
+# from a weak jump shift.
+define two_level_jump(x, y) = y is C | (y is D, x is H | x is S) | (y is H, x is S)
+
+# ── Opener after a weak jump shift at the two level ────────────────────
+after 1x (P) 2y (P) when weak2, y is not x, partner.jumped
+  P   "Nothing to add: play two of {y}"          priority -5
+  4y  "Game: 18+ with two or more {y}"           shows y>=2, hcp>=18
+      when  y is H | y is S
+  3y  "Raise: 3+ {y}, 16-17, invitational"       shows y>=3, hcp=16..17
+  2N  "Forcing game try: asks for a feature"     alert
+      shows y>=3, hcp>=16, hcp<=17 | y is C | y is D
+      sets  forcing=round, ask=wjs_feature
+      artificial
+  3x  "Rebids {x}: seven or more, not forcing"   shows x>=7, y<=1, hcp<=17
+  4x  "Game in my own major: seven, or six good ones, 18+"
+      shows x>=7 | (x>=6, quality(x)>=good), y<=1, hcp>=18
+      when  x is H | x is S
+  cheapest(z)  "New suit: 4+ {z}, 17+, forcing"  shows z>=4, hcp>=17, y<=1
+      when  z is not x, z is not y
+      sets  forcing=round
+
+# Responder answers the 2NT game try: three of his suit with a minimum,
+# 3NT with a maximum and two of the top three honours, else a feature
+# (an ace or king) with a maximum.
+after 1x (P) 2y (P) 2N (P) when weak2, y is not x
+  3N  "Maximum (4-5) with two of the top three honours"   shows hcp>=4, quality(y)>=good
+  3z  "Maximum (4-5): a feature (ace or king) in {z}"
+      shows hcp>=4, has(A,z) | has(K,z)
+      when  z is not y
+      prefer 0 - z
+  3y  "Minimum (2-3), or a maximum without a feature"
+      priority -1
+
+after 1x (P) 2y (P) 2N (P) 3y (P) when weak2, y is not x
+  P   "Minimum opposite: play three"             priority -5
+  4y  "Game anyway"                              shows hcp>=17, y>=3
+      when  y is H | y is S
+after 1x (P) 2y (P) 2N (P) 3z (P) when weak2, y is not x, z is not y
+  4y  "Game in {y}"                              shows y>=2
+      when  y is H | y is S
+  3N  "Game in notrump"                          when  y is C | y is D
+after 1x (P) 2y (P) 2N (P) 3N (P) when weak2, y is not x
+  P   "Game reached"                             priority -5
+
+# Responder after opener rebids his suit (not forcing): pass.
+after 1x (P) 2y (P) 3x (P) when weak2, y is not x
+  P   "Opener's suit: play here"                 priority -5
+
+# Responder after opener's invitational raise: game with a maximum.
+after 1x (P) 2y (P) 3y (P) when weak2, y is not x
+  P   "Minimum: play three"                      priority -5
+  4y  "Maximum (4-5): game"                      shows hcp>=4
+      when  y is H | y is S
+# After opener's new suit (forcing): raise with four, else back to a
+# known suit as cheaply as possible.
+after 1x (P) 2y (P) 2z (P) | 1x (P) 2y (P) 3z (P) when weak2, y is not x, z is not x, z is not y
+  3z  "Raise: four {z}"                          shows z>=4
+  cheapest(y)  "Rebids {y}: no fit"              shows y>=6
+      priority -1
+  cheapest(x)  "Preference for {x}"              shows x>=2
+      priority -2
+
+# Opener after responder's answer to the new suit: game with a fit found
+# (4 of a major, or 3NT), else stop.
+after 1x (P) 2y (P) 2z (P) * (P) | 1x (P) 2y (P) 3z (P) * (P) when weak2, y is not x, z is not x, z is not y
+  P   "No game: stop here"                       priority -5
+  4z  "Game in the fit"                          shows z>=4, hcp>=19
+      when  partner.z>=4, z is H | z is S
+  3N  "Game in notrump: 19+"                     shows hcp>=19
+      priority -1
+
+# ── Opener after a weak jump shift at the three level ──────────────────
+after 1x (P) 3y (P) when weak3, y is not x, partner.jumped
+  P   "Nothing to add"                           priority -5
+  4y  "Game: 17+ with two or more {y}"           shows y>=2, hcp>=17
+      when  y is H | y is S
+  3N  "To play: 18+ with a fit for {y} and the other suits stopped"
+      shows y>=2, hcp>=18
+      when  y is C | y is D
+  4x  "Game in my own major: seven, or six good ones, 16+"
+      shows x>=7 | (x>=6, quality(x)>=good), hcp>=16, y<=1
+      when  x is H | x is S

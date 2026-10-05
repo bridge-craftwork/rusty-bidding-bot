@@ -20,6 +20,8 @@ module rebids "Opener's rebid"
   param  support_x = doubles.support.play default false
   param  support_through = doubles.support.through
   param  walsh = minor_openings.walsh.play default true
+  param  weak_js = general.jump_shifts.weak_2 default false
+  param  weak_js3 = general.jump_shifts.weak_3 default false
 
 # A notrump jump reaches 3NT at most: the last bid is below 2NT, so the
 # cheapest notrump bid is 2NT or lower. In a suit's terms: the cheapest
@@ -344,7 +346,7 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
   3N  "Game: no extras"                    shows points + partner.points.min <= 30
 
 # ── After a two-over-one response (forcing one round) ────────────────
-after 1M (P) 2x (P) when x is not M
+after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump shift: weak-jump-shifts.bid
   2M  "Rebids {M}: 5+, minimum"            shows M>=5, suit_points<=15
       priority -1                          # the default minimum rebid
   2M  "Rebids {M}: five or more, too weak to reverse"
@@ -403,7 +405,7 @@ after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
       priority -5
 
 # ── After an invitational jump shift (10-12, six cards) ──────────────
-after 1x (P) 3y (P) when y is not x, we.trump is none   # not a splinter (splinters.bid)
+after 1x (P) 3y (P) when y is not x, we.trump is none, !weak_js3   # not a splinter (splinters.bid); weak ones: weak-jump-shifts.bid
   P   "Minimum, no fit"                    shows hcp<=13
       priority -5
   # With a fit for a minor 3NT is still the game (Basic_Major 44 and 121,

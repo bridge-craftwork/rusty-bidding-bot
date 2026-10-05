@@ -1,0 +1,22 @@
+# Weak jump shifts (21GF-WJS-MSS plays them at the two and three levels).
+card    21GF-WJS-MSS
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N QJT642.Q962.8.64      | 1D P                     | 2S     | 5 HCP, six spades: weak jump shift (Weak_Jump_Shift 1)
+N .87652.KQ9653.T8      | 1C P                     | 2D     | 5 HCP, six diamonds
+N 8.3.854.QJT97632      | 1H P                     | 3C     | 3 HCP, eight clubs: weak at three
+N KJT942.Q3.T84.83      | 1C P                     | 1S     | 6 HCP: a one-level response
+N AK3.Q2.AKJ94.J32      | 1C P                     | 1D     | 18 with five diamonds: no strong jump shift on this card
+S K8.K.KQT32.AJ983      | 1D P 2S P                | P      | 16, misfit: pass (Weak_Jump_Shift 1)
+S AQ8.QJ.QJ42.AK96      | 1D P 2S P                | 4S     | 19 with two spades: game (Weak_Jump_Shift 19)
+S AK5.AQ976.J4.A54      | 1H P 2S P                | 4S     | 18 with two spades: game
+S AKQT86.JT864.QJ.      | 1S P 3C P                | P      | 13 opposite a weak three-level jump: pass
+S AQJT654.AJ2.KQ4.      | 1S P 3C P                | 4S     | seven good spades and 17: game in my suit (BBA 4S)
+N QJT874.T83.T85.8      | 1D P 2S P 2N P           | 3S     | 3 HCP: minimum
+N KQT874.T83.T85.8      | 1D P 2S P 2N P           | 3N     | 5 HCP with KQ: a good suit, maximum
+
+# A card without weak jump shifts keeps the strong ones.
+card    21GF-DEFAULT
+N AT752.Q3.AK.A932      | 1H P                     | 2S     | 17 with five spades: strong jump shift
+N QJT642.Q962.8.64      | 1D P                     | P      | 5 HCP: pass
