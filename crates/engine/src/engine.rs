@@ -758,7 +758,10 @@ impl Engine {
                     }
                 }
             }
-            if outcome.is_empty() && forced && c.call == Call::Pass {
+            // A pass a rule marks `artificial` carries a conventional
+            // meaning (DOPI's pass over their bid: "0 or 3 keycards"),
+            // so a force does not rule it out.
+            if outcome.is_empty() && forced && c.call == Call::Pass && !entry.rule.artificial {
                 outcome = "partner's call is forcing".into();
             }
             let prefer = entry

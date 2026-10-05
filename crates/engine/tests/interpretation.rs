@@ -227,6 +227,18 @@ fn a_round_force_ends_when_the_opponents_act() {
 }
 
 #[test]
+fn an_artificial_pass_is_allowed_in_a_force() {
+    // Jacoby 2NT forces to game, and they bid over our 4NT: a plain pass
+    // is ruled out, but DOPI's pass ("0 or 3 keycards", a rule marked
+    // `artificial`) is an answer, not a pass, and stands.
+    let auction = "1H Pass 2NT Pass 4H Pass 4NT 5C";
+    assert!(must_bid_after(auction));
+    let d = bid("QJ8.QJ953.KQ2.KJ", auction);
+    assert_call(&d, "Pass");
+    assert!(d.explanation.contains("DOPI"), "\n{}", explain(&d));
+}
+
+#[test]
 fn a_game_force_survives_their_bid() {
     // Advancer's cue bid of their suit forces to game: the doubler may
     // not pass when opener bids over it.
