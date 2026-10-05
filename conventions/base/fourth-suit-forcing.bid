@@ -30,7 +30,7 @@ define fsf_on = fsf_play | fsf_round | fsf_gf
 define fsf_game = fsf_gf | (fsf_play, !fsf_round)
 
 
-after 1x (P) 1y (P) 1z (P) | 1x (P) 1y (P) 2z (P) when y is not x, z is not x, z is not y
+after 1x (P) 1y (P) 1z (P) | 1x (P) 1y (P) 2z (P) when y is not x, z is not x, z is not y, !tw(x)
   cheapest(w)  "Fourth suit forcing: game values, no clear call"  alert
       shows points>=13
       when  fsf_on, fsf_game, w is not x, w is not y, w is not z, cheapest_rank(w) <= 13, !passed_hand

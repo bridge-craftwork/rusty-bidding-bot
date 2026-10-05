@@ -1,0 +1,17 @@
+# Ingberman 2NT: Basic-Bridge with Ingberman on.
+card    Basic-Bridge other_conventions.ingberman_2nt.play=true
+dealer  S
+
+# seat hand             | auction                   | expect | why
+N Q975.J5.8632.Q54      | 1D P 1S P 2H P            | 2NT    | 5 HCP: Ingberman, weak
+S A4.AK75.KQJ93.42      | 1D P 1S P 2H P 2N P       | 3C     | forced relay
+N Q975.J5.8632.Q54      | 1D P 1S P 2H P 2N P 3C P  | 3D     | sign off in opener's diamonds
+N Q975.J542.863.Q5      | 1D P 1S P 2H P 2N P 3C P  | 3H     | four hearts: weak raise
+N K975.Q5.J63.Q543      | 1C P 1S P 2D P 2N P 3C P  | P      | clubs: pass 3C
+N KJ975.5.K63.Q543      | 1D P 1S P 2H P            | 2S     | five spades, 10: forcing one round
+N K975.Q5.KJ63.Q54      | 1D P 1S P 2H P            | 3D     | four diamonds, 11: game forcing
+N KJ75.Q54.J6.KJ54      | 1D P 1S P 2H P            | 3NT    | 12, no fit
+S A4.AK75.KQJ93.42      | 1D P 1S P 2H P 2S P      | 2NT    | no spade fit
+S A4.AK75.KQJ93.42      | 1D P 1S P 2H P 2N P 3C P 3H P | P | partner's weak raise: 17, pass
+card    Basic-Bridge
+N Q975.J5.8632.Q54      | 1D P 1S P 2H P            | 2NT    | off: the natural 2NT (forced, minimum)

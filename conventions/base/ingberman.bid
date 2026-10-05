@@ -1,0 +1,92 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Ingberman 2NT (Lebensohl over opener's reverse; convention-card
+# bidding_conventions/ingberman; Robert S. Todd, Advancing in Bridge #417,
+# "Lebensohl over Reverses"): after 1x-1y-2z, a reverse (17+, forcing one
+# round), responder's 2NT is artificial and weak and asks opener for 3♣;
+# responder then passes with clubs or signs off in three of a suit. Every
+# other call above 2NT is natural and game forcing; responder's rebid of
+# his own suit at the two level is five or more and forcing one round.
+# Not played over interference. See ingberman.notes.md.
+
+module ingberman "Ingberman 2NT after opener's reverse"
+  card   other_conventions.ingberman_2nt.play
+  needs  responder-rebids
+  skill  bidding_conventions/ingberman
+
+# A reverse is the one two-level new suit that forces one round: a jump
+# shift forces to game, and a new suit below the first does not force.
+after 1x (P) 1y (P) 2z (P) when z is not x, z is not y, we.forcing = round, !tw(x)
+  2N  "Ingberman: weak, relay to 3♣"   alert
+      shows points<=8
+      sets  ask=ingberman
+      artificial
+      priority 2
+  2y  "Five or more {y}, forcing one round"
+      shows y>=5, points>=6
+      sets  forcing=round, ask=ing_suit
+      priority 3
+  3x  "Three or more {x}: game forcing"
+      shows x>=3, points>=9
+      sets  forcing=game
+      priority 2
+  3z  "Four or more {z}: game forcing"
+      shows z>=4, points>=9
+      sets  forcing=game, trump=z
+      priority 3
+  3y  "Six or more {y}: game forcing"
+      shows y>=6, points>=9
+      sets  forcing=game
+      priority 2
+  3N  "Game: no fit, 9+"
+      shows points>=9, z<=3
+      priority 1
+
+when asked ingberman
+  3C  "Forced: 3♣ as asked"   alert
+      artificial
+
+# Responder signs off: pass with clubs, else three of a suit.
+after 1x (P) 1y (P) 2z (P) 2N (P) 3C (P) when answered ingberman
+  3z  "Weak, four or more {z}: invitational"   shows z>=4   sets trump=z, ask=invite(z)
+      priority 3
+  3y  "Weak, six or more {y}: to play"         shows y>=6   sets ask=signoff
+      priority 2
+  P   "Weak: to play in clubs"                 shows C>=2
+      when  x is C
+      priority 1
+  3x  "Weak: to play in {x}"                   shows x>=2   sets ask=signoff
+      when  x is not C
+      priority 1
+  P   "Weak: to play in clubs"                 shows C>=5
+      when  x is not C
+      priority 2
+
+# Opener over the forcing 2y: support, a longer suit, or 2NT without.
+after 1x (P) 1y (P) 2z (P) 2y (P) when asked ing_suit
+  3y  "Three-card support for {y}"         shows y>=3
+      sets  trump=y
+      priority 2
+  3x  "Six or more {x}"                    shows x>=6, y<=2
+      priority 1
+  3z  "Five or more {z}"                   shows z>=5, y<=2
+      priority 1
+  3N  "19+, no fit"                        shows hcp>=19, y<=2
+  2N  "No fit, nothing more to show"       shows y<=2
+      priority -1
+after 1x (P) 1y (P) 2z (P) 2y (P) 2N (P) when answered ing_suit
+  P   "Weak: no game"                      shows points<=8
+      priority -5
+  3y  "Six or more {y}: to play"           shows y>=6, points<=8   sets ask=signoff
+  3N  "Game: 9+"                           shows points>=9
+after 1x (P) 1y (P) 2z (P) 2y (P) 3y (P) when answered ing_suit
+  P   "Weak: no game"                      shows points<=7
+      priority -5
+  4y  "Game"                               shows points>=8
+      when  y is H | y is S
+  3N  "Game"                               shows points>=8
+      when  y is C | y is D
+after 1x (P) 1y (P) 2z (P) 2y (P) 3x (P) | 1x (P) 1y (P) 2z (P) 2y (P) 3z (P) when answered ing_suit
+  P   "Weak: no game"                      shows points<=7
+      priority -5
+  3N  "Game"                               shows points>=8

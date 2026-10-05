@@ -7,11 +7,14 @@
 # instead of NMF. See two-way-nmf.notes.md.
 
 module two-way-nmf "Two-way New Minor Forcing (xyNT)"
-  card   other_conventions.two_way_nmf
   needs  responder-rebids
   skill  bidding_conventions/two_way_nmf
+  # On with its own switch, or with XYZ (xyz.bid), which plays the same
+  # structure after every one-level rebid, 1NT included.
+  param  twoway = other_conventions.two_way_nmf default false
+  param  xyz    = other_conventions.xyz default false
 
-after 1x (P) 1y (P) 1N (P)
+after 1x (P) 1y (P) 1N (P) when twoway | xyz, !tw(x)
   2C  "xyNT: relay to 2♦ (invitational, or weak with diamonds)"   alert
       shows points=11..12 | (D>=6, points<=10, y is not D, x is not D)
       sets  forcing=round, ask=xy_relay
@@ -37,19 +40,19 @@ when asked xy_clubs
   3C  "Forced relay"                       alert   artificial
 
 # ── After the 2♦ relay: weak with diamonds passes, every other call invites
-after 1x (P) 1M (P) 1N (P) 2C (P) 2D (P)
+after 1x (P) 1M (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(x)
   P   "To play in 2♦"                      shows D>=6, points<=10
   2M  "Invitational: five {M}"             shows M=5, points=11..12   sets ask=invite(M)
   3M  "Invitational: six {M}"              shows M>=6, points=11..12   sets ask=invite(M)
   2N  "Invitational, balanced"             shows points=11..12, M<=5   sets ask=nt_invite
       priority -1
-after 1C (P) 1D (P) 1N (P) 2C (P) 2D (P)
+after 1C (P) 1D (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(C)
   P   "Weak"                               shows points<=10
       priority -5
   3D  "Invitational: six diamonds"         shows D>=6, points=11..12   sets ask=invite(D)
   2N  "Invitational, balanced"             shows points=11..12   sets ask=nt_invite
       priority -1
-after 1x (P) 1y (P) 1N (P) 2N (P) 3C (P)
+after 1x (P) 1y (P) 1N (P) 2N (P) 3C (P) when twoway | xyz, !tw(x)
   P   "To play in 3♣"                      shows C>=6
 
 # ── After the 2♦ game force: opener shows three of responder's major,

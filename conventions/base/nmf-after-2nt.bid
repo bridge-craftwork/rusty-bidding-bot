@@ -13,7 +13,7 @@ module nmf-after-2nt "New Minor Forcing after a 2NT rebid"
   skill  bidding_conventions/new_minor_forcing
   param  wolff = other_conventions.wolff_signoff.play default false
 
-after 1C (P) 1M (P) 2N (P)
+after 1C (P) 1M (P) 2N (P) when !tw(C)
   3D  "New Minor Forcing: three {M}? four of the other major?"   alert
       shows M>=5 | (H>=4, S>=4), M<=5, points>=7
       sets  ask=nmf2n

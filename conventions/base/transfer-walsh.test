@@ -1,0 +1,27 @@
+# Transfer Walsh: Basic-Bridge with transfer responses to 1C.
+card    Basic-Bridge minor_openings.one_club.transfer_resp=true
+dealer  S
+
+# seat hand             | auction             | expect | why
+N 52.KJ54.Q85.J854      | 1C P                | 1D     | four hearts: transfer
+N KJ543.Q2.J85.854      | 1C P                | 1H     | five spades: transfer
+N KJ54.QJ43.85.854      | 1C P                | 1D     | four of each major: hearts first
+N K54.Q32.KJ85.854      | 1C P                | 1S     | four diamonds, no major
+N K54.Q32.J85.Q854      | 1C P                | 1NT    | balanced 8, no major or diamonds
+N K5.Q432.AKJ852.4      | 1C P                | 1S     | game forcing with longer diamonds
+# Opener.
+S A72.K83.Q4.KJ952      | 1C P 1D P           | 1H     | three hearts: accept
+S A72.K83.Q4.KJ952      | 1C P 1H P           | 1S     | three spades: accept
+S AQ72.83.K4.KJ952      | 1C P 1D P           | 1S     | four spades, two hearts
+S Q72.K3.KQ4.QJ952      | 1C P 1D P           | 1NT    | 12-14 balanced, not three hearts
+S A72.KQ83.A4.KJ95      | 1C P 1D P           | 2H     | four hearts, 17 support points
+S A2.83.KQ4.AKJ952      | 1C P 1S P           | 3C     | six clubs, 17
+S A72.83.KQ4.KJ952      | 1C P 1S P           | 1NT    | 13 balanced-ish over the no-major 1S
+# Responder's second call.
+N 52.KT654.985.J85      | 1C P 1D P 1H P      | P      | weak: the 5-3 fit is played at one
+N 52.KJ654.Q85.J85      | 1C P 1D P 1H P      | 2H     | 8 points, five hearts: two
+N 52.AKJ54.Q85.K85      | 1C P 1D P 1H P      | 4H     | game with five hearts opposite three
+N 52.KJ54.AQ5.K854      | 1C P 1D P 1NT P     | 3NT    | game, no heart fit
+N K654.KJ54.Q5.854      | 1C P 1D P 1S P      | 2S     | weak, four spades
+# Interference: the transfer is off over an overcall (natural responses).
+N 52.KJ54.Q85.J854      | 1C 1S               | X      | negative double, not a transfer

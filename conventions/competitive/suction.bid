@@ -1,0 +1,84 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Suction over their 1NT, direct and balancing (Bridge Bum, "Suction";
+# convention-card competitive_bidding/suction). Each two-level suit bid
+# shows the next suit up, or the two suits above that:
+#
+#   X    clubs and hearts
+#   2♣   diamonds, or hearts and spades
+#   2♦   hearts, or spades and clubs
+#   2♥   spades, or clubs and diamonds
+#   2♠   clubs, or diamonds and hearts
+#   2NT  diamonds and spades
+#
+# A one-suiter is a good five or six or more; a two-suiter 5-4 or longer,
+# 5-5 when it may end at the three level (2♥, 2♠, 2NT). Strength as the
+# other defences (cappelletti.bid): HCP plus a point a card beyond four,
+# 10 or more, at most 17. Advancer assumes the one-suiter and bids the
+# next suit; the overcaller passes with it or shows the two-suiter, which
+# advancer passes or corrects. See suction.notes.md.
+
+module suction "Suction over their 1NT"
+  needs  vs-1nt
+  skill  competitive_bidding/suction
+  skill  competitive_bidding/defense_vs_1nt
+  param  def = competitive.vs_1nt_strong.system default other
+
+define suction_one(x) = x>=6, second_longest<=4 | (x=5, quality(x)>=good, second_longest<=3)
+
+after (1N) | (1N) P (P) when def is suction
+  X   "Suction: clubs and hearts"                       alert
+      shows C>=4, H>=4, C+H>=9, hcp+length_points>=10, hcp<=17
+      sets  ask=suc_pick(C, H)
+  2C  "Suction: diamonds, or hearts and spades"         alert
+      shows suction_one(D) | (H>=4, S>=4, H+S>=9), hcp+length_points>=10, hcp<=17
+      sets  ask=suc_relay(D)
+      artificial
+  2D  "Suction: hearts, or spades and clubs"            alert
+      shows suction_one(H) | (S>=4, C>=4, S+C>=9), hcp+length_points>=10, hcp<=17
+      sets  ask=suc_relay(H)
+      artificial
+  2H  "Suction: spades, or clubs and diamonds"          alert
+      shows suction_one(S) | (C>=5, D>=5), hcp+length_points>=10, hcp<=17
+      sets  ask=suc_relay(S)
+      artificial
+  2S  "Suction: clubs, or diamonds and hearts"          alert
+      shows suction_one(C) | (D>=5, H>=5), hcp+length_points>=10, hcp<=17
+      sets  ask=suc_relay(C)
+      artificial
+  2N  "Suction: diamonds and spades"                    alert
+      shows D>=5, S>=5, hcp+length_points>=10, hcp<=17
+      sets  ask=suc_pick(D, S)
+
+# ── Advancer ─────────────────────────────────────────────────────────
+# Assume the one-suiter: bid it, the overcaller passes or shows the rest.
+when asked suc_relay(x), rho.last=P | rho.last=X
+  cheapest(x)  "Suction: bid your one-suiter (pass or correct)"   alert
+      sets  ask=suc_correct(x)
+
+# A two-suiter shown directly: preference, the longer (the higher when equal).
+when asked suc_pick(a, b), rho.last=P | rho.last=X
+  cheapest(a)  "Preference: {a}"                      shows a>b
+  cheapest(b)  "Preference: {b}"                      shows b>=a
+
+# ── The overcaller after the relay ───────────────────────────────────
+when asked suc_correct(x), rho.last=P
+  P   "My suit is {x}"                                shows x>=5
+      priority 1
+after (1N) 2C (P) 2D (P) | (1N) P (P) 2C (P) 2D (P) when asked suc_correct(D)
+  2H  "Hearts and spades"                             shows H>=4, S>=4
+      sets  ask=nt_majors
+after (1N) 2D (P) 2H (P) | (1N) P (P) 2D (P) 2H (P) when asked suc_correct(H)
+  2S  "Spades and clubs"                              shows S>=4, C>=4
+      sets  ask=suc_keep(S, C)
+after (1N) 2H (P) 2S (P) | (1N) P (P) 2H (P) 2S (P) when asked suc_correct(S)
+  2N  "Clubs and diamonds"                            shows C>=5, D>=5
+      sets  ask=nt_minors
+after (1N) 2S (P) 3C (P) | (1N) P (P) 2S (P) 3C (P) when asked suc_correct(C)
+  3D  "Diamonds and hearts"                           shows D>=5, H>=5
+      sets  ask=suc_keep(D, H)
+
+# Advancer: keep the first suit, or correct to the second.
+when asked suc_keep(a, b), rho.last=P | rho.last=X
+  P            "Keeps {a}"                            shows a>=b
+  cheapest(b)  "Prefers {b}"                          shows b>a

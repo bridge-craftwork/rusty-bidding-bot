@@ -314,3 +314,13 @@ S AKJ54.A72.Q97.65      | 1S P 2S P                | P      | 15 opposite a rais
 card    Basic-Bridge
 dealer  S
 S KQ4.AQ852.K93.Q4      | 1H 2S 3D P                           | !4NT   | 16 balanced, spades held: not a natural 4NT
+
+# Semi-forcing 1NT (2/1 with one_nt_response.semi_forcing): opener passes
+# only a balanced minimum; otherwise as over the forcing 1NT.
+card    21GF-DEFAULT major_openings.one_nt_response.forcing=false major_openings.one_nt_response.semi_forcing=true
+N 32.K54.QJ54.Q854      | 1S P                | 1NT    | 9 HCP, no fit: the semi-forcing 1NT
+S AKJ54.Q32.K54.32      | 1S P 1NT P          | P      | balanced minimum: pass
+S AKJ54.Q3.K543.32      | 1S P 1NT P          | 2D     | 5-4 minimum: natural 2D
+S AKJ54.Q32.KQ4.32      | 1S P 1NT P          | 2D     | 15 balanced: does not pass, three-card diamonds
+card    21GF-DEFAULT
+S AKJ54.Q32.K54.32      | 1S P 1NT P          | 2D     | forcing 1NT: no pass

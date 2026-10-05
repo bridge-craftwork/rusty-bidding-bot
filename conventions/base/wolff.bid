@@ -10,7 +10,7 @@ module wolff "Wolff sign-off after opener's 2NT rebid"
   needs  base
   skill  bidding_conventions/wolff_signoff
 
-after 1x (P) 1y (P) 2N (P)
+after 1x (P) 1y (P) 2N (P) when !tw(x)
   3C  "Wolff: relay to 3♦, to sign off"   alert
       shows points<=6, D>=6 | (y>=6, y is H) | (y>=6, y is S)
       when  y is not C

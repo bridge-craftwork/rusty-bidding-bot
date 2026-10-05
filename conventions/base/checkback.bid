@@ -13,13 +13,13 @@ module checkback "Checkback Stayman"
   needs  responder-rebids
   skill  bidding_conventions/checkback
 
-after 1x (P) 1M (P) 1N (P)
+after 1x (P) 1M (P) 1N (P) when !tw(x)
   2C  "Checkback: invitational or better, asks about the majors"   alert
       shows M>=5 | (H>=4, S>=4), points>=11
       sets  forcing=round, ask=checkback
       artificial
       priority 1                       # ahead of a natural 2NT or 3NT
-after 1C (P) 1D (P) 1N (P)
+after 1C (P) 1D (P) 1N (P) when !tw(C)
   2C  "Checkback: invitational or better, asks for a four-card major"   alert
       shows H>=4 | S>=4, points>=11
       sets  forcing=round, ask=checkback
@@ -29,7 +29,7 @@ after 1C (P) 1D (P) 1N (P)
 # Opener's answers. Over a minor opening: three of responder's major
 # first, then four hearts after a 1S response (1NT over 1H denies four
 # spades). After 1H-1S-1NT: three spades or 2D.
-after 1m (P) 1M (P) 1N (P) 2C (P)
+after 1m (P) 1M (P) 1N (P) 2C (P) when !tw(m)
   2M  "Three {M}"                          shows M=3
   2H  "Four hearts, not three spades"      shows H>=4, S<=2
       when  M is S
@@ -39,7 +39,7 @@ after 1H (P) 1S (P) 1N (P) 2C (P)
   2S  "Three spades"                       shows S=3
   2D  "Not three spades"                   artificial
       priority -1
-after 1C (P) 1D (P) 1N (P) 2C (P)
+after 1C (P) 1D (P) 1N (P) 2C (P) when !tw(C)
   2H  "Four hearts"                        shows H>=4
   2S  "Four spades, not four hearts"       shows S>=4, H<=3
   2D  "No four-card major"                 shows H<=3, S<=3   artificial

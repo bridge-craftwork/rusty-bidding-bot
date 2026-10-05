@@ -38,6 +38,13 @@ switch it on.
 - After 1♥-1♠-1NT, Bridge Winners reads 2♠ as 4-4 invitational; we keep
   our natural calls there.
 
+## Played with XYZ (2026-10-05)
+
+The module has no `card` line any more: its contexts hold when
+`other_conventions.two_way_nmf` or `other_conventions.xyz` is set, since
+XYZ (xyz.bid) is this structure extended to 1x-1y-1z. responder-rebids.bid
+and new-minor-forcing.bid step aside for either switch.
+
 ## Sources
 
 - **Bridge Winners, "Two-Way New Minor Forcing aka xyNT"**

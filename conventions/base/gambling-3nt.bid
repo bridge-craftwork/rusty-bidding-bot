@@ -1,0 +1,55 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Gambling 3NT (ACBL SAYC booklet; Bridge Bum, "Gambling 3NT";
+# convention-card bidding_conventions/gambling_3nt): a solid seven- or
+# eight-card minor (AKQ at least) and no outside ace or king. The
+# balanced 26-27 then opens 2♣ (strong-openings.bid reads the same field).
+#
+# The pass-or-correct calls are not marked artificial: a pass plays
+# them. Responder: pass to play (the other suits stopped), 4♣ and 5♣ pass or
+# correct to opener's minor, 4♥/4♠ to play, 6♣ pass or correct with slam
+# values. See gambling-3nt.notes.md.
+
+module gambling-3nt "Gambling 3NT: a solid minor"
+  card   notrump.three_nt.one_suit
+  needs  preempts
+  skill  bidding_conventions/gambling_3nt
+
+# ── The opening ──────────────────────────────────────────────────────
+# Ahead of a one-level or three-level opening of the minor.
+when opening, seat<=3
+  3N  "Gambling: a solid seven-card minor, no outside ace or king"   alert
+      shows C>=7, has(A,C), has(K,C), has(Q,C), D<=3, S<=4, H<=4
+      shows !has(A,S), !has(K,S), !has(A,H), !has(K,H), !has(A,D), !has(K,D)
+      priority 2
+  3N  "Gambling: a solid seven-card minor, no outside ace or king"   alert
+      shows D>=7, has(A,D), has(K,D), has(Q,D), C<=3, S<=4, H<=4
+      shows !has(A,S), !has(K,S), !has(A,H), !has(K,H), !has(A,C), !has(K,C)
+      priority 2
+
+# ── Responder ────────────────────────────────────────────────────────
+# Opener brings seven tricks: pass with the other three suits covered.
+after 3N (P)
+  P   "To play: the other suits stopped"
+      shows stop(S), stop(H), stop(C) | stop(D)
+      shows hcp>=10
+  4C  "Pass or correct: to play in your minor"   alert
+      priority -5
+  5C  "Pass or correct: game in your minor"   alert
+      shows S<=1 | H<=1, C>=3, D>=3
+      priority -4
+  6C  "Pass or correct: slam in your minor"   alert
+      shows hcp>=16, quick_tricks>=4
+  4H  "To play: a long heart suit"            shows H>=7 | (H>=6, hcp>=10)
+  4S  "To play: a long spade suit"            shows S>=7 | (S>=6, hcp>=10)
+
+after 3N (P) 4C (P) | 3N (P) 5C (P) | 3N (P) 6C (P)
+  P   "My minor is clubs"                     shows C>=7
+  cheapest(D)  "My minor is diamonds"         shows D>=7
+
+after 3N (P) 4H (P) | 3N (P) 4S (P)
+  P   "Partner's suit: to play"
+
+# Responder after the correction: the contract is placed.
+after 3N (P) 4C (P) 4D (P) | 3N (P) 5C (P) 5D (P) | 3N (P) 6C (P) 6D (P)
+  P   "To play in opener's diamonds"

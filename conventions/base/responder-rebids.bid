@@ -26,22 +26,23 @@ module responder-rebids "Responder's second call"
   # two-way-nmf.bid) switch off the natural calls they take.
   param  checkback = other_conventions.checkback.play default false
   param  roudi = other_conventions.roudi.play default false
-  param  twoway = other_conventions.two_way_nmf default false
+  param  twoway_sw = other_conventions.two_way_nmf default false
+  param  xyz = other_conventions.xyz default false   # xyz.bid: two-way NMF after 1NT too
 
 # ── Opener rebid 1NT (12-14) ─────────────────────────────────────────
-after 1x (P) 1y (P) 1N (P)
+after 1x (P) 1y (P) 1N (P) when !tw(x)
   P   "Weak: no game"                      shows points<=10
       priority -5
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
       when  y is H | y is S                # a weak minor passes 1NT
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
-      when  !twoway                        # two-way NMF: invitations start with 2C
+      when  !(twoway_sw | xyz)                        # two-way NMF: invitations start with 2C
   2N  "Invitational: 11-12"                shows points=11..12, y<=5   sets ask=nt_invite
-      when  !twoway
+      when  !(twoway_sw | xyz)
   3N  "Game: 13+"                          shows points>=13, y<=5 | y is C | y is D
   2x  "Weak: 5+ {x}"                       shows x>=5, points<=10   sets ask=signoff
-      when  x is H | x is S | (x is C, !checkback, !roudi, !twoway) | (x is D, !twoway)
-after 1x (P) 1M (P) 1N (P)
+      when  x is H | x is S | (x is C, !checkback, !roudi, !(twoway_sw | xyz)) | (x is D, !(twoway_sw | xyz))
+after 1x (P) 1M (P) 1N (P) when !tw(x)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=13
 after 1M (P) 1y (P) 1N (P)
   # The raise itself agrees opener's major (five facing three): trump is
@@ -57,29 +58,29 @@ after 1M (P) 1y (P) 1N (P)
 
 # New suits after 1NT: below responder's suit, natural and not forcing
 # (5-4, weak); above it, a responder's reverse (game forcing).
-after 1C (P) 1D (P) 1N (P)
+after 1C (P) 1D (P) 1N (P) when !tw(C)
   2H  "Responder's reverse: 4+ hearts, 5+ diamonds, game forcing"  shows H>=4, D>=5, points>=13  sets forcing=game
   2S  "Responder's reverse: 4+ spades, 5+ diamonds, game forcing"  shows S>=4, D>=5, points>=13  sets forcing=game
-after 1C (P) 1H (P) 1N (P)
-  2D  "4+ diamonds, 5+ hearts, not forcing"  shows D>=4, H>=5, points<=12   when !nmf, !twoway   sets ask=signoff
+after 1C (P) 1H (P) 1N (P) when !tw(C)
+  2D  "4+ diamonds, 5+ hearts, not forcing"  shows D>=4, H>=5, points<=12   when !nmf, !(twoway_sw | xyz)   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
-after 1C (P) 1S (P) 1N (P)
+after 1C (P) 1S (P) 1N (P) when !tw(C)
   3H  "Four hearts, five spades, game forcing"  shows H>=4, S>=5, points>=13   sets forcing=game
-  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !nmf, !twoway   sets ask=signoff
+  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !nmf, !(twoway_sw | xyz)   sets ask=signoff
   2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1D (P) 1H (P) 1N (P)
-  2C  "4+ clubs, 5+ hearts, not forcing"   shows C>=4, H>=5, points<=12   when !nmf, !checkback, !roudi, !twoway   sets ask=signoff
+  2C  "4+ clubs, 5+ hearts, not forcing"   shows C>=4, H>=5, points<=12   when !nmf, !checkback, !roudi, !(twoway_sw | xyz)   sets ask=signoff
   2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"    shows S>=4, H>=5, points>=13  sets forcing=game
 after 1D (P) 1S (P) 1N (P)
   3H  "Four hearts, five spades, game forcing"  shows H>=4, S>=5, points>=13   sets forcing=game
-  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !nmf, !checkback, !roudi, !twoway   sets ask=signoff
+  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !nmf, !checkback, !roudi, !(twoway_sw | xyz)   sets ask=signoff
   2H  "4+ hearts, 5+ spades, not forcing"   shows H>=4, S>=5, points<=12   sets ask=signoff
 after 1H (P) 1S (P) 1N (P)
-  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !checkback, !twoway   sets ask=signoff
-  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !twoway   sets ask=signoff
+  2C  "4+ clubs, 5+ spades, not forcing"   shows C>=4, S>=5, points<=12   when !checkback, !(twoway_sw | xyz)   sets ask=signoff
+  2D  "4+ diamonds, 5+ spades, not forcing"  shows D>=4, S>=5, points<=12   when !(twoway_sw | xyz)   sets ask=signoff
 
 # ── Opener rebid his suit (6+, minimum) ──────────────────────────────
-after 1x (P) 1y (P) 2x (P)
+after 1x (P) 1y (P) 2x (P) when !tw(x)
   P   "Weak: no game"                      shows points<=10
       priority -5
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
@@ -96,45 +97,49 @@ after 1M (P) 1y (P) 2M (P)
   4M  "Game: 2+ {M}, 13+"                  shows M>=2, points>=13
 
 # ── Opener raised responder's suit (4+, minimum) ─────────────────────
-after 1x (P) 1y (P) 2y (P)
+after 1x (P) 1y (P) 2y (P) when !tw(x)
   P   "Weak: no game"                      shows tp(y)<=10
       priority -5
   3y  "Invitational: 11-12"                shows tp(y)=11..12   sets ask=invite(y)
-after 1x (P) 1M (P) 2M (P)
+after 1x (P) 1M (P) 2M (P) when !tw(x)
   4M  "Game: 13+"                          shows tp(M)>=13
-after 1C (P) 1D (P) 2D (P)
+after 1C (P) 1D (P) 2D (P) when !tw(C)
   3N  "Game: 13+"                          shows points>=13
 
 # ── Opener bid a new suit at the one level (not forcing) ─────────────
 # The fourth suit at the one level stays natural whatever the card says
 # about fourth suit forcing: 1♠ here is a real suit (rebids.bid answers it).
-after 1C (P) 1D (P) 1H (P)
+after 1C (P) 1D (P) 1H (P) when !tw(C)
   1S  "4+ spades"                          shows S>=4, H<=3
       priority 1
-after 1x (P) 1y (P) 1z (P)
+after 1x (P) 1y (P) 1z (P) when !tw(x)
   1N  "6-10, no fit"                       shows points<=10, z<=3   sets ask=signoff
   2x  "Preference: 3+ {x}, weak"           shows x>=3, points<=10, z<=3   sets ask=signoff
+      when  !xyz                           # XYZ (xyz.bid): 2C and 2D are artificial
       priority -1
   2z  "Raise: 4+ {z}, weak"                shows z>=4, points<=10   sets ask=signoff
   3z  "Invitational raise: 4+ {z}, 11-12"  shows z>=4, points=11..12   sets ask=invite(z)
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
+      when  !xyz | y is H | y is S         # XYZ: weak diamonds go through 2C
   3y  "Invitational: 6+ {y}, 11-12"        shows y>=6, points=11..12   sets ask=invite(y)
+      when  !xyz                           # XYZ: invitations start with 2C
   2N  "Invitational: 11-12"                shows points=11..12, z<=3   sets ask=nt_invite
+      when  !xyz                           # XYZ: 2NT relays to 3C
   3N  "Game: 13+"                          shows points>=13, z<=3
-after 1x (P) 1y (P) 1M (P)
+after 1x (P) 1y (P) 1M (P) when !tw(x)
   4M  "Game raise: 4+ {M}, 13+"            shows M>=4, points>=13
 # Responder's 1♠ over 1♣-1♦-1♥ (above) is unlimited, and opener's
 # minimum answers (rebids.bid, "Responder bid a fourth suit at the one
 # level") set `ask=signoff`, which left a game-going responder only the
 # pass (2026-09-30: with a card that bids majors up the line this auction
 # is common). Game and invitations as after any minimum rebid.
-after 1x (P) 1y (P) 1z (P) 1M (P) 1N (P)
+after 1x (P) 1y (P) 1z (P) 1M (P) 1N (P) when !tw(x)
   2N  "Invitational: 11-12"                shows points=11..12   sets ask=nt_invite
   3N  "Game: 13+"                          shows points>=13
-after 1x (P) 1y (P) 1z (P) 1M (P) 2M (P)
+after 1x (P) 1y (P) 1z (P) 1M (P) 2M (P) when !tw(x)
   3M  "Invitational: 11-12"                shows tp(M)=11..12   sets ask=invite(M)
   4M  "Game: 13+"                          shows tp(M)>=13
-after 1x (P) 1y (P) 1z (P) 1M (P) 2x (P)
+after 1x (P) 1y (P) 1z (P) 1M (P) 2x (P) when !tw(x)
   3N  "Game: 13+"                          shows points>=13
 
 # The fourth suit at the two level: natural unless the card plays fourth
@@ -143,10 +148,10 @@ after 1x (P) 1y (P) 1z (P) 1M (P) 2x (P)
 # so the corpus keeps it natural). There is no artificial 2♣ yet.
 after 1D (P) 1H (P) 1S (P)
   2C  "5+ clubs, 8-10"                     shows C>=5, points=8..10, S<=3   sets ask=signoff
-      when  !fsf_on                    # fourth-suit-forcing.bid
+      when  !fsf_on, !xyz              # fourth-suit-forcing.bid; XYZ: 2C relays
 
 # ── Opener bid a new suit at the two level (a reverse is forcing) ────
-after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
+after 1x (P) 1y (P) 2z (P) when z is not x, z is not y, !tw(x)
   P   "Weak: passes {z}"                   shows points<=10, z>=4 | z>x
       priority -5
   2x  "Preference: weak"                   shows x>=2, points<=10, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
@@ -167,26 +172,26 @@ after 1M (P) 1y (P) 2z (P) when z is not M, z is not y
       priority 1
 
 # ── Opener's jump rebid (6+, 16-18) or jump raise (4+, 16-18) ───────
-after 1x (P) 1y (P) 3x (P)
+after 1x (P) 1y (P) 3x (P) when !tw(x)
   P   "Weak: no game"                      shows points<=8
       priority -5
   3N  "Game: 9+"                           shows points>=9, x<=1 | x is C | x is D
 after 1M (P) 1y (P) 3M (P)
   4M  "Game: 2+ {M}, 8+"                   shows M>=2, points>=8
-after 1x (P) 1y (P) 3y (P)
+after 1x (P) 1y (P) 3y (P) when !tw(x)
   P   "Weak: no game"                      shows points<=8
       priority -5
   3N  "Game: 8+"                           shows points>=8
       when  y is not H, y is not S         # with a major fit, 4M
-after 1x (P) 1M (P) 3M (P)
+after 1x (P) 1M (P) 3M (P) when !tw(x)
   4M  "Game: 9+"                           shows points>=9
 
 # ── Opener's 2NT (18-19) ─────────────────────────────────────────────
-after 1x (P) 1y (P) 2N (P)
+after 1x (P) 1y (P) 2N (P) when !tw(x)
   P   "Weak: no game"                      shows points<=6
       priority -5
   3N  "Game: 7+"                           shows points>=7, y<=5 | y is C | y is D, hcp + partner.hcp.min <= 31   # with more, the catch-all below looks at slam
-after 1x (P) 1M (P) 2N (P)
+after 1x (P) 1M (P) 2N (P) when !tw(x)
   4M  "Game: 6+ {M}"                       shows M>=6, points>=7
 after 1M (P) 1y (P) 2N (P)
   4M  "Game in opener's major: 3+ {M}"     shows M>=3, tp(M)>=7

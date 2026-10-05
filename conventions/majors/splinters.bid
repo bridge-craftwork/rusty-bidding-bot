@@ -20,6 +20,7 @@ module splinters "Splinters over 1♥ / 1♠"
   card   major_openings.splinters.play
   needs  responses
   skill  bidding_conventions/jacoby_2nt_splinters
+  skill  bidding_conventions/splinters
   param  by_resp = major_openings.splinters.by_responder default true
   param  by_open = major_openings.splinters.by_opener default true
   param  cue     = slam.cue_bids.play default false

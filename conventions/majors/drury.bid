@@ -18,6 +18,7 @@ module drury "Drury: a passed hand's 2♣ limit raise"
   needs  responses
   skill  bidding_conventions/drury
   skill  bidding_conventions/reverse_drury
+  skill  bidding_conventions/two_way_drury
   param  drury   = major_openings.drury.play default false
   param  reverse = major_openings.drury.reverse default false
   param  two_way = major_openings.drury.two_d default false

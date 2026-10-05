@@ -1,0 +1,20 @@
+# Gambling 3NT: 21GF-DEFAULT, which plays it (BBA's card).
+card    21GF-DEFAULT notrump.three_nt.one_suit=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S 4.Q32.AKQJ852.J2      |                     | 3NT    | solid seven diamonds, no outside ace or king
+S 42.J3.Q2.AKQT862      |                     | 3NT    | solid seven clubs
+S 4.K32.AKQJ852.J2      |                     | !3NT   | an outside king: not Gambling
+S AKQ.KQ3.AQ4.KQJ2      |                     | 2C     | balanced 26: 2C, 3NT is Gambling
+# Responder.
+N AJ5.KQ4.K863.854      | 3NT P               | P      | the other suits stopped
+N 8765.J843.J5.854      | 3NT P               | 4C     | weak: pass or correct
+N KQJT987.43.J5.84      | 3NT P               | 4S     | long spades: to play
+# Opener corrects.
+S 4.Q32.AKQJ852.J2      | 3NT P 4C P          | 4D     | my minor is diamonds
+S 42.J3.Q2.AKQT862      | 3NT P 4C P          | P      | my minor is clubs
+card    21GF-DEFAULT notrump.three_nt.one_suit=false
+S AKQ.KQ3.AQ4.KQJ2      |                     | 3NT    | Gambling off: 26-27 balanced
+S 4.Q32.AKQJ852.J2      |                     | !3NT   | Gambling off

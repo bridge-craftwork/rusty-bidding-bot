@@ -12,6 +12,9 @@ module responses "Responses to one-level suit openings"
   needs  base
   skill  partnership_bidding/basic_bidding
   skill  partnership_bidding/basic_major
+  skill  bidding_conventions/walsh
+  skill  bidding_conventions/forcing_1nt
+  skill  bidding_conventions/semi_forcing_1nt
   param  limit_raise = major_openings.jump_raise.inv default true
   param  bergen      = major_openings.bergen_raises.play default false
   param  rbergen     = major_openings.bergen_raises.reverse default false
@@ -28,6 +31,8 @@ module responses "Responses to one-level suit openings"
   param  drury_rev   = major_openings.drury.reverse default false
   param  gf21        = major_openings.two_over_one.game_force default false
   param  f1n         = major_openings.one_nt_response.forcing default false
+  param  twalsh      = minor_openings.one_club.transfer_resp default false
+  param  semi        = major_openings.one_nt_response.semi_forcing default false   # opener's pass: rebids.bid
 
 # The invitational 1M-3M, unless Bergen raises (majors/bergen.bid) take
 # the jump to 3M for a preemptive raise: a three-card limit raise then
@@ -35,7 +40,7 @@ module responses "Responses to one-level suit openings"
 define inv_jump_raise = limit_raise, !bergen, !rbergen
 
 # ── Over 1♣ / 1♦ ───────────────────────────────────────────────────────
-after 1C (P) when over_1c is up_the_line
+after 1C (P) when over_1c is up_the_line, !twalsh   # Transfer Walsh: transfer-walsh.bid
   1D  "4+ diamonds, 6+ HCP"         shows D>=4, hcp>=6, D>=H, D>H | D=4, D>=S, D>S | D=4
       sets forcing=round
   1H  "4+ hearts, 6+ HCP"           shows H>=4, hcp>=6, H>=D, H>D | H>=5, H>=S, H>S | H=4
@@ -44,7 +49,7 @@ after 1C (P) when over_1c is up_the_line
       sets forcing=round
 
 # Walsh: with a four-card major, bypass diamonds unless game forcing (12+ HCP).
-after 1C (P) when over_1c is walsh
+after 1C (P) when over_1c is walsh, !twalsh
   1D  "4+ diamonds, 6+ HCP: no four-card major, or game forcing (12+ HCP)"
       shows D>=4, hcp>=6, (H<=3, S<=3) | hcp>=12, D>=H, D>=S
       sets forcing=round
@@ -122,7 +127,7 @@ after 1D (P) when nt2 is game_forcing
   2C  "11-12, balanced, no 4-card major: 2NT next"   shows balanced, points=11..12, C>=3, H<=3, S<=3
       sets forcing=round
       priority -1
-after 1C (P) when nt2 is game_forcing
+after 1C (P) when nt2 is game_forcing, !twalsh
   1D  "11-12, balanced, no 4-card major: 2NT next"   shows balanced, points=11..12, D>=3, H<=3, S<=3
       sets forcing=round
       priority -1
@@ -140,7 +145,9 @@ after 1H (P)
       when  gf21, f1n
       sets forcing=round
   1N  "6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2, S<=3
-      when  gf21, !f1n
+      when  gf21, !f1n, !semi
+  1N  "Semi-forcing 1NT: 6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2, S<=3
+      when  gf21, !f1n, semi
   2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, hcp>=15  when strong_js, !weak_js, !soloway, !passed_hand
       sets forcing=game
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (H>=3, tp(H)>=11), suit_points>=10, C>=D, S<=3 | (C>S, hcp>=13 | C>=6)
@@ -176,7 +183,9 @@ after 1S (P)
       when  gf21, f1n
       sets forcing=round
   1N  "6-12 HCP, no spade fit"             shows hcp=6..12, S<=2
-      when  gf21, !f1n
+      when  gf21, !f1n, !semi
+  1N  "Semi-forcing 1NT: 6-12 HCP, no spade fit"   shows hcp=6..12, S<=2
+      when  gf21, !f1n, semi
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (S>=3, tp(S)>=11), suit_points>=10, C>=D, C>=H
       when  !gf21
       when  !passed_hand | (!drury, !drury_rev)   # Drury (drury.bid) takes a passed hand's 2♣
