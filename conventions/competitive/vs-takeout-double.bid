@@ -7,7 +7,9 @@
 #
 # - Jordan 2NT (`competitive.jordan_2nt.play`; Bridge Bum, "Jordan
 #   2NT"): 1M (X) 2NT is a limit raise or better with four or more
-#   trumps, and the jump to 3M is preemptive (four trumps, up to 9).
+#   trumps, and the jump to 3M is preemptive (four trumps; Bridge Bum
+#   says 5-9, we stop at 7 support points: BBA raises to 2M with four
+#   trumps and 6-9 HCP, and jumps only with less; notes).
 #   Opener signs off in 3M or bids the game, as over any limit raise.
 # - BROMAD (`competitive.bromad.play`; Bridge Bum, "BROMAD"): 2♣ a
 #   constructive raise with three trumps (7-9), 2♦ three trumps and a
@@ -40,8 +42,8 @@ after 1M (X) when jordan, !passed_hand | !drury_comp | !(drury | rdrury)
       shows M>=4, tp(M)>=10
       sets  forcing=round, ask=limit_raise(M)
       priority 2
-  3{M} "Preemptive raise: four or more {M}, up to 9"
-      shows M>=4, tp(M)<=9
+  3{M} "Preemptive raise: four or more {M}, up to 7"
+      shows M>=4, tp(M)<=7
       when  !bromad
       priority 1
 

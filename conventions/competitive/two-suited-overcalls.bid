@@ -563,6 +563,9 @@ after (1x) when u1n_play, passed_hand
       shows C>=4, D>=4, C>=5 | D>=5, hcp>=6
       when  x is H | x is S
       priority 1
+# BBA bids rarely: it overcalls 1S with five spades, five-five
+# included, and passes most other five-four and five-five hands
+# (GIB_Sandwich_NT_BPH). We bid the convention as defined (notes).
 after (1x) P (1y) when u1n_play, passed_hand, y is not x
   1N  "Unusual 1NT: the two unbid suits, hearts and spades"
       alert
@@ -646,7 +649,7 @@ after (1x) | (1x) P (2x) | (1x) P (3x) | (1x) P (4x) when u4n_play
       shows (C>=6, H>=6) | (C>=7, H>=5) | (C>=5, H>=7)
       when  x is D
       priority 1
-after (2x) | (3x) when u4n_play, x is not N, rho.hcp.max <= 12
+after (2x) | (3x) when u4n_play, x is not N, rho.hcp.max <= 12, rho.x>=5
   4N  "Unusual 4NT: five-five or better in both minors, strong"
       alert
       shows C>=5, D>=5, losers<=4
@@ -662,7 +665,7 @@ after (2x) | (3x) when u4n_play, x is not N, rho.hcp.max <= 12
       shows D>=5, H>=5, losers<=4
       when  x is C
       priority 1
-after (4M) when u4n_play, rho.hcp.max <= 12
+after (4M) when u4n_play, rho.hcp.max <= 12, rho.M>=5
   4N  "Unusual 4NT: five-five or better in both minors"
       alert
       shows C>=5, D>=5, losers<=5
@@ -693,7 +696,7 @@ after (1x) 4N (P) | (2x) 4N (P) | (3x) 4N (P) | (4x) 4N (P) | (1x) P (2x) 4N (P)
 # points direct over a weak two, 11 balancing, 14 over the raise, 16 at
 # the four level. With Leaping Michaels the direct cue of a weak two is
 # not Michaels (Rosen: it asks for a stopper; not written).
-after (2x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, !leaping
+after (2x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5, !leaping
   3{x} "Michaels over their weak two: five or more in each major"
       alert
       shows H>=5, S>=5, hcp+length_points>=13
@@ -709,7 +712,7 @@ after (2x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is n
       shows H>=5, C>=5 | D>=5, hcp+length_points>=13
       when  x is S
       priority 1
-after (2x) P (P) | (2x) P (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, lho.hcp.max <= 12
+after (2x) P (P) | (2x) P (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, lho.hcp.max <= 12, lho.x>=5
   cheapest(x) "Michaels: five or more in each major"
       alert
       shows H>=5, S>=5, hcp+length_points>=11
@@ -725,7 +728,7 @@ after (2x) P (P) | (2x) P (3x) when mich_play | mich_minors | mich_quasi | mich_
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11
       when  x is S
       priority 1
-after (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12
+after (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
   4{x} "Michaels over their preempt: five or more in each major"
       alert
       shows H>=5, S>=5, hcp+length_points>=16
@@ -746,7 +749,7 @@ after (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is n
 # Neil Rosen (English Bridge, August 2013) and Bridge Bum: over 2♦, 4♣
 # clubs and a major, 4♦ both majors; over 2♥ or 2♠, 4♣ / 4♦ that minor
 # and the other major. Five-five, a good hand: four or five losers.
-after (2x) when leaping, x is not N, rho.hcp.max <= 12
+after (2x) when leaping, x is not N, rho.hcp.max <= 12, rho.x>=5
   4C  "Leaping Michaels: five or more clubs and a five-card major"
       alert
       shows C>=5, H>=5 | S>=5, losers<=5
@@ -783,7 +786,7 @@ after (2x) when leaping, x is not N, rho.hcp.max <= 12
 # major, the cue of a minor both majors (the Michaels rules above). Not
 # forcing (Rosen: "not remotely close to being forcing"), so a little
 # lighter than the leap: five-five, five losers.
-after (3x) when nlm, x is not N, rho.hcp.max <= 12
+after (3x) when nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
   4D  "Non-Leaping Michaels: five or more diamonds and a five-card major"
       alert
       shows D>=5, H>=5 | S>=5, losers<=5
