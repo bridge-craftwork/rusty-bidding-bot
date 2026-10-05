@@ -1,0 +1,59 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Checkback Stayman: after opener's 1NT rebid, responder's 2C is
+# artificial, invitational or better, and asks about three-card support
+# for responder's major and four cards in an unbid major, whichever minor
+# was opened. Opener: 2D denies both, two of responder's major shows
+# three, two of the other major shows four. Played instead of NMF
+# (new-minor-forcing.bid switches off when this is on). See
+# checkback.notes.md.
+
+module checkback "Checkback Stayman"
+  card   other_conventions.checkback.play
+  needs  responder-rebids
+  skill  bidding_conventions/checkback
+
+after 1x (P) 1M (P) 1N (P)
+  2C  "Checkback: invitational or better, asks about the majors"   alert
+      shows M>=5 | (H>=4, S>=4), points>=11
+      sets  forcing=round, ask=checkback
+      artificial
+      priority 1                       # ahead of a natural 2NT or 3NT
+after 1C (P) 1D (P) 1N (P)
+  2C  "Checkback: invitational or better, asks for a four-card major"   alert
+      shows H>=4 | S>=4, points>=11
+      sets  forcing=round, ask=checkback
+      artificial
+      priority 1
+
+# Opener's answers. Over a minor opening: three of responder's major
+# first, then four hearts after a 1S response (1NT over 1H denies four
+# spades). After 1H-1S-1NT: three spades or 2D.
+after 1m (P) 1M (P) 1N (P) 2C (P)
+  2M  "Three {M}"                          shows M=3
+  2H  "Four hearts, not three spades"      shows H>=4, S<=2
+      when  M is S
+  2D  "No three {M}, no four-card major to show"   artificial
+      priority -1
+after 1H (P) 1S (P) 1N (P) 2C (P)
+  2S  "Three spades"                       shows S=3
+  2D  "Not three spades"                   artificial
+      priority -1
+after 1C (P) 1D (P) 1N (P) 2C (P)
+  2H  "Four hearts"                        shows H>=4
+  2S  "Four spades, not four hearts"       shows S>=4, H<=3
+  2D  "No four-card major"                 shows H<=3, S<=3   artificial
+      priority -1
+
+# Responder places the contract: with a fit (five opposite three, or
+# four-four), invite with 3M or bid game; without one 2NT invites and 3NT
+# is game.
+when answered checkback
+  4H  "Game in the heart fit"              shows points>=13, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets trump=H
+  3H  "Invitational, heart fit"            shows points=11..12, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets trump=H, ask=invite(H)
+  4S  "Game in the spade fit"              shows points>=13, S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3   sets trump=S
+  3S  "Invitational, spade fit"            shows points=11..12, S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3   sets trump=S, ask=invite(S)
+  3N  "Game, no fit"                       shows points>=13
+      priority -1
+  2N  "Invitational, no fit"               shows points=11..12   sets ask=nt_invite
+      priority -1
