@@ -58,3 +58,14 @@ S Q2.J8743.5.Q9832      | 2C P 2D P 4NT P                      | !5D    | 2♦ i
 # A card with no Blackwood or RKCB: 4NT stays natural or quantitative.
 card    21GF-DEFAULT slam.blackwood.rkcb_1430=false slam.blackwood.rkcb_0314=false slam.blackwood.standard=false
 N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | P      | quantitative: a minimum declines
+
+# The king ask by 5NT (`slam.king_ask.five_nt`): every keycard and the
+# queen ours; the answer counts the side kings, 6♣ none, 6♦ one, 6♥ two.
+card    21GF-DEFAULT
+dealer  S
+N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 5NT    | three keycards and partner's two with the queen: all five
+S KQ5.KQ4.Q82.A932      | 1NT P 4D P 4H P 4NT P 5S P 5NT P     | 6D     | one side king, the ♠K (the ♥K was a keycard)
+N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 7H    | two side kings between us and 33 HCP
+N A8.AJ9732.A94.QJ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6C P | 6H    | a side king missing: six
+card    21GF-DEFAULT slam.king_ask.five_nt=false
+N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 6H     | no king ask on the card: six

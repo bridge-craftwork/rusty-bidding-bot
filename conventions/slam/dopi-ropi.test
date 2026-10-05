@@ -1,0 +1,35 @@
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand             | auction                              | expect | why
+# DOPI over 1430: double the first step, pass the second, then the steps.
+S AK5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5C               | X      | one keycard: double is "1 or 4"
+S KJ5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5C               | P      | none: pass is "0 or 3"
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT 5C               | P      | three: pass is "0 or 3"
+S AK5.KQ4.Q982.Q93      | 1NT P 4D P 4H P 4NT 5C               | 5H     | two and the queen: the fourth step
+S AK5.K74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5S               | 5NT    | two, no queen: the third step over 5♠
+# ROPI: they double 4NT.
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT X                | P      | three: pass is "0 or 3"
+S AK5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT X                | XX     | one: redouble is "1 or 4"
+S AK5.K74.KQ82.Q93      | 1NT P 4D P 4H P 4NT X                | 5C     | two, no queen: the third step is 5♣
+
+# The asker: two keycards missing, defend.
+N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT 5C X P           | P      | "1 or 4" facing my two: three, defend 5♣ doubled
+N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT 5S P P           | X      | "0 or 3" facing my two: double, partner bids six with three
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT 5S P P X P       | 6H     | the higher count: bid the slam
+S KJ5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5S P P X P       | P      | none: defend
+N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT X XX P           | 5H     | ROPI "1 or 4" facing my two: two missing, sign off
+N 8.AQ9732.AK4.AKJ      | 1NT P 4D P 4H P 4NT 5C X P           | 6H     | three of mine and one: slam
+
+# Off the card: the uncontested answers, regardless of the interference.
+card    21GF-DEFAULT slam.dopi=false slam.ropi=false
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT 5C               | 5D     | no DOPI: "0 or 3" by the step over the ask
+
+# Standard Blackwood: double 0 or 4 aces, pass 1, then 2 and 3.
+card    Basic-Bridge slam.dopi=true slam.ropi=true
+N K532.J83.QJ43.Q3      | 1S P 3S P 4NT 5C                     | X      | no aces: "0 or 4"
+N A532.J83.QJ43.Q3      | 1S P 3S P 4NT 5C                     | P      | one ace
+N A532.A83.QJ43.Q3      | 1S P 3S P 4NT 5C                     | 5D     | two aces: the first step
+N A532.A83.QJ43.Q3      | 1S P 3S P 4NT X                      | 5C     | ROPI: two aces
+S AK932.KQ4.KQ5.K2      | 1S P 3S P 4NT 5C P P                 | X      | one and one: two missing, double
+S AK932.KQ4.KQ5.K2      | 1S P 3S P 4NT 5C 5D P                | 6S     | one and two: one missing, slam

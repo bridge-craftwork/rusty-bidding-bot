@@ -13,6 +13,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   param  m0314 = slam.blackwood.minor_0314 default false
   param  gstyle = general.style
   param  style = slam.cue_bids.style default first_or_second_round
+  param  kask5n = slam.king_ask.five_nt default false
 
 # ── The ask ───────────────────────────────────────────────────────────
 #
@@ -124,6 +125,41 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid
       artificial
       priority -1
 
+# The same 4NT in competition, for reading only (2026-10-05, DOPI and
+# ROPI): the asks above are off once they have bid, but partner's 4NT is
+# still keycard for the suit we play in, and the answer comes by DOPI or
+# ROPI (dopi-ropi.bid). Ranked below every pass, so we never choose it.
+when (k1430 | k0314), we.trump is none, !asked, they.bid
+  4N  "Keycard ask in ♠"
+      when  kc_open(S) | shown_fit(S)
+      sets  trump=S, ask=keycards(S)
+      artificial
+      priority -60
+  4N  "Keycard ask in ♥"
+      when  kc_open(H) | shown_fit(H), !shown_fit(S)
+      sets  trump=H, ask=keycards(H)
+      artificial
+      priority -60
+  4N  "Keycard ask in ♦"
+      when  kc_open(D), !shown_fit(S), !shown_fit(H)
+      sets  trump=D, ask=keycards(D)
+      artificial
+      priority -60
+  4N  "Keycard ask in ♣"
+      when  kc_open(C), !shown_fit(S), !shown_fit(H)
+      sets  trump=C, ask=keycards(C)
+      artificial
+      priority -60
+
+# A trump suit agreed and partner's jump to game in competition
+# (total-tricks.bid's `ask=signoff`, 1H-2NT-(3C)-4H): 4NT over the
+# sign-off is still keycard. For reading, as above.
+when (k1430 | k0314), we.trump is suit, they.bid, asked signoff
+  4N  "Keycard ask in {trump}"
+      sets  ask=keycards(trump)
+      artificial
+      priority -60
+
 # A minor set as trump, and a major agreed since (Rick, 2026-10-03:
 # "normally a major fit will replace a minor fit"; 1S-2C-3C-4S-4NT): the
 # ask is in the major, and makes it trump.
@@ -192,7 +228,13 @@ when (k1430 | k0314), asked keycards(t)
 # with partner's answer; the deck limit of 5 keycards resolves "1 or 4".
 when (k1430 | k0314), answered keycards(t)
   7{t}  "Grand slam"
-        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try
+  # The king ask (`slam.king_ask.five_nt`, 2026-10-05): every keycard
+  # and the queen are ours, and the grand turns on the side kings.
+  5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
+        when kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S
+        sets ask=kings(t)
+        artificial
   6{t}  "Small slam: at most one keycard missing"
         when we.keycards(t)>=4
   P     "Sign off: partner's answer is in our suit"
@@ -204,6 +246,33 @@ when (k1430 | k0314), answered keycards(t)
   5{t}  "Sign off: partner corrects to 6 with the higher count"
         when maybe we.keycards(t)>=4   # 0 or 3 / 1 or 4 still open
         sets ask=keycard_correct(t)
+
+# The king ask by 5NT: the number of kings outside the trump suit (its
+# king is a keycard), by steps from 6♣. As ACBL's SAYC booklet and BBA
+# (6♣ 0, 6♦ 1, 6♥ 2, 6♠ 3). Kings are controls less two for each ace.
+define side_kings(t) = controls - keycards(N) - keycards(N) - has(K,t)
+
+when kask5n, asked kings(t)
+  6C  "No side king"     shows side_kings(t) = 0   artificial
+  6D  "One side king"    shows side_kings(t) = 1   artificial
+  6H  "Two side kings"   shows side_kings(t) = 2   artificial
+  6S  "Three side kings" shows side_kings(t) = 3   artificial
+
+# The asker: the grand with every side king between us, or with two and
+# 33 HCP on partner's floor; else six, or 6NT when the answer has passed
+# six of a minor.
+define partner_side_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S)
+define our_side_kings(t) = side_kings(t) + partner_side_kings
+
+when kask5n, answered kings(t)
+  7{t}  "Grand slam: every side king is ours"
+        when our_side_kings(t) >= 3
+  7{t}  "Grand slam: two side kings and 33 HCP between us"
+        when our_side_kings(t) >= 2, hcp + partner.hcp.min >= 33
+  P     "Small slam: partner's answer is our suit"
+        when partner.last = 6{t}
+  6{t}  "Small slam: a side king missing"
+  6N    "Small slam: the answer has passed six of our suit"
 
 # When the answer was ambiguous the asker signs off in five, and the answerer
 # corrects to six holding the higher count (3 or 4 keycards).

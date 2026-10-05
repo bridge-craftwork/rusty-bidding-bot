@@ -9,6 +9,7 @@ module blackwood "Blackwood (standard)"
   skill  bidding_conventions/blackwood
   skill  partnership_bidding/blackwood
   param  style = slam.cue_bids.style default first_or_second_round
+  param  kask5n = slam.king_ask.five_nt default false
 
 # ── The ask ───────────────────────────────────────────────────────────
 #
@@ -168,6 +169,13 @@ when asked aces
 # The asker places the contract: slam with at most one ace missing,
 # otherwise five of the trump suit (or pass when that is the answer).
 when answered aces
+  # The king ask (`slam.king_ask.five_nt`, 2026-10-05): all four aces
+  # are ours and the grand turns on the kings.
+  5N        "King ask: all the aces are ours, how many kings?"
+            when kask5n, we.keycards(N)=4
+            sets ask=kings(N)
+            artificial
+            priority 1
   6{trump}  "Small slam: at most one ace missing"
             when we.keycards(N)>=3
   P         "Sign off: the answer is in our suit"
@@ -177,3 +185,29 @@ when answered aces
   6{trump}  "Small slam: \"0 or 4\" with no aces of my own is 4"
             when maybe we.keycards(N)>=3
             priority -1
+
+# The king ask by 5NT: the number of kings by steps from 6♣ (6NT four),
+# as ACBL's SAYC booklet. Kings are controls less two for each ace.
+define bw_kings = controls - keycards(N) - keycards(N)
+
+when kask5n, asked kings(N)
+  6C  "No king"       shows bw_kings = 0   artificial
+  6D  "One king"      shows bw_kings = 1   artificial
+  6H  "Two kings"     shows bw_kings = 2   artificial
+  6S  "Three kings"   shows bw_kings = 3   artificial
+  6N  "Four kings"    shows bw_kings = 4   artificial
+
+# The asker: the grand with every king between us, or with three and 33
+# HCP on partner's floor; else six, or 6NT when the answer has passed six
+# of our suit.
+define partner_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N)
+
+when kask5n, answered kings(N)
+  7{trump}  "Grand slam: every king is ours"
+            when bw_kings + partner_kings >= 4
+  7{trump}  "Grand slam: three kings and 33 HCP between us"
+            when bw_kings + partner_kings >= 3, hcp + partner.hcp.min >= 33
+  P         "Small slam: partner's answer is our suit"
+            when partner.last = 6{trump}
+  6{trump}  "Small slam: a king missing"
+  6N        "Small slam: the answer has passed six of our suit"
