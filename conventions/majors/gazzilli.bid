@@ -1,0 +1,267 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Gazzilli: after 1♥/1♠ and a 1NT response (or 1♥-1♠), opener's 2♣ is
+# artificial: either natural, 11-15 with four or more clubs, or any
+# strong hand (16+). Responder's 2♦ says 8+ and asks; anything else is
+# 5-7 and natural.
+#
+#   1M-1NT-2♣-2♦:  2M the natural minimum with clubs (NF); 2NT 16-17
+#                  balanced; 3♣/3♦ 16+ with the minor, 3M 16+ with six or
+#                  more, the other major 16+ with four (all game forcing)
+#
+# The classic form (Wikipedia, "Gazzilli"; BBA plays it: every 2♣ in the
+# PBS scenario Gazzilli holds clubs or 16+). Todd's modern form ("Modern
+# Gazzilli", Advancing in Bridge TWiB 488) moves the minimum six-card
+# one-suiter into 2♣ and the 5-4 with clubs into 2M; not played. Partial:
+# the artificial relays after 2♦ and opener's 5-5 jumps are not played;
+# see gazzilli.notes.md.
+
+module gazzilli "Gazzilli 2♣ after 1M-1NT and 1♥-1♠"
+  card   major_openings.gazzilli.play
+  needs  rebids
+  skill  bidding_conventions/gazzilli
+
+# A strong hand for the relay: 16+, but not 18-19 balanced (2NT at once)
+# or six of the major and 16-18 (the jump rebid, as BBA).
+define gazzilli_strong(M) = hcp>=16, !(balanced, hcp=18..19), !(M>=6, hcp<=18)
+
+# ── Opener ───────────────────────────────────────────────────────────
+after 1M (P) 1N (P)
+  2C  "Gazzilli: 11-15 with four or more clubs, or any 16+"  alert
+      shows gazzilli_strong(M) | (hcp<=15, C>=4)
+      sets  forcing=round, ask=gazzilli(M)
+      artificial
+      priority 2                       # ahead of the natural rebids (rebids.bid)
+  3x  "Five-five, 13-15: {M} and {x}"
+      shows M>=5, x>=5, hcp=13..15
+      when  x is not M, M is S | x is not S
+      priority 3                       # the jump in a new suit (PBS Gazzilli; Todd)
+after 1H (P) 1S (P)
+  3x  "Five-five, 13-15: hearts and {x}"
+      shows H>=5, x>=5, hcp=13..15, S<=3
+      when  x is C | x is D
+      priority 3
+  2C  "Gazzilli: 11-15 with four or more clubs, or any 16+"  alert
+      shows gazzilli_strong(H) | (hcp<=15, C>=4), S<=3
+      sets  forcing=round, ask=gazzilli(H)
+      artificial
+      priority 2                       # a spade fit raises (rebids.bid)
+
+# Responder after the 5-5 jump (13-15, not forcing).
+after 1M (P) 1N (P) 3x (P) when x is not M, M is S | x is not S
+  4M  "Game in {M}: two or more and 9+"
+      shows M>=2, points>=9
+      priority 3
+  3M  "Preference for {M}"
+      shows M>=2
+      priority 2
+  3N  "No fit for {M}, 10+"
+      shows points>=10
+      priority 2
+  P   "Weak: plays {x}"
+      priority 1
+after 1H (P) 1S (P) 3x (P) when x is C | x is D
+  4H  "Game in hearts: two or more and 9+"
+      shows H>=2, points>=9
+      priority 3
+  3H  "Preference for hearts"
+      shows H>=2
+      priority 2
+  3N  "No fit for hearts, 10+"
+      shows points>=10
+      priority 2
+  P   "Weak: plays {x}"
+      priority 1
+
+after 1M (P) 1N (P) 3x (P) 3M (P) | 1M (P) 1N (P) 3x (P) 3N (P) when x is not M
+  P   "The 5-5 jump was 13-15: no more"
+      priority 2
+after 1H (P) 1S (P) 3x (P) 3H (P) | 1H (P) 1S (P) 3x (P) 3N (P) when x is C | x is D
+  P   "The 5-5 jump was 13-15: no more"
+      priority 2
+
+# ── Responder after 2♣ ───────────────────────────────────────────────
+when asked gazzilli(M), rho.last=P, partner.last=2C
+  2D  "Gazzilli: 8+, asks"  alert
+      shows hcp>=8
+      sets  forcing=round
+      artificial
+      priority 3                       # ahead of responder's natural rebids
+  2M  "5-7, two or more {M}"
+      shows hcp<=7, M>=2
+      priority 3
+  2H  "5-7, five or more hearts, no spade fit"
+      shows hcp<=7, H>=5, S<=1
+      when  M is S
+      priority 2
+  2S  "5-7, five or more spades, no heart fit"
+      shows hcp<=7, S>=5, H<=1
+      when  M is H, me.last=1S
+      priority 2
+  3C  "5-7, six or more clubs"
+      shows hcp<=7, C>=6, M<=1
+      priority 2
+  3D  "5-7, six or more diamonds"
+      shows hcp<=7, D>=6, M<=1
+      priority 2
+  2N  "5-7, no fit for {M}"
+      shows hcp<=7, M<=1
+      priority 1
+
+# ── Opener after 2♦ (8+) ─────────────────────────────────────────────
+when answered gazzilli(M), rho.last=P, partner.last=2D
+  2M  "Gazzilli: the natural minimum, four or more clubs"
+      shows hcp<=15
+      priority 3                       # ahead of opener's natural rebids
+  2N  "Gazzilli: 16-17, balanced"
+      shows hcp=16..17, balanced
+      priority 3
+  3N  "Gazzilli: 20-21, balanced"
+      shows hcp>=20, balanced
+      priority 3
+  3M  "Gazzilli: 16+, six or more {M}"
+      shows hcp>=16, M>=6
+      sets  forcing=game
+      priority 3
+  3C  "Gazzilli: 16+, four or more clubs"
+      shows hcp>=16, C>=4, C>=D, M<=6
+      sets  forcing=game
+      priority 3
+  3D  "Gazzilli: 16+, four or more diamonds"
+      shows hcp>=16, D>=4, D>C, M<=6
+      sets  forcing=game
+      priority 3
+  3H  "Gazzilli: 16+, four or more hearts"
+      shows hcp>=16, H>=4
+      when  M is S
+      sets  forcing=game
+      priority 3
+  # Anything else strong: game in the major.
+  4M  "Gazzilli: 16+, game"
+      shows hcp>=16
+      priority 1
+
+after 1H (P) 1N (P) 2C (P) 2D (P)
+  2S  "Gazzilli: 16+, four or more spades"
+      shows hcp>=16, S>=4
+      sets  forcing=game
+      priority 3
+after 1H (P) 1S (P) 2C (P) 2D (P)
+  2S  "Gazzilli: 16+, three spades"
+      shows hcp>=16, S=3
+      sets  forcing=game
+      priority 3
+
+# ── Responder after opener's minimum (2M, not forcing) ───────────────
+after 1M (P) 1N (P) 2C (P) 2D (P) 2M (P)
+  4M  "Game opposite a minimum: 12+ with two or more {M}"
+      shows points>=12, M>=2
+      priority 3
+  3M  "Invites opposite a minimum: 10-11"
+      shows points=10..11, M>=2
+      priority 3
+  2N  "No fit for {M}, 8-10"
+      shows M<=1, points<=10
+      priority 3
+  3N  "No fit for {M}, 11+"
+      shows M<=1, points>=11
+      priority 3
+  P   "No game opposite a minimum"
+      priority 2
+after 1H (P) 1S (P) 2C (P) 2D (P) 2H (P)
+  2S  "Five or more spades, no heart fit: to play"
+      shows S>=5, H<=1, points<=10
+      priority 3
+  2N  "No fit for hearts, 8-10"
+      shows H<=1, S<=4, points<=10
+      priority 3
+  3N  "No fit for hearts, 11+"
+      shows H<=1, points>=11
+      priority 3
+  4H  "Game opposite a minimum: 12+ with two or more hearts"
+      shows points>=12, H>=2
+      priority 3
+  3H  "Invites opposite a minimum: 10-11"
+      shows points=10..11, H>=2
+      priority 3
+  P   "No game opposite a minimum"
+      priority 2
+
+# ── Responder after opener's strong rebids ───────────────────────────
+after 1M (P) 1N (P) 2C (P) 2D (P) 2N (P)
+  3N  "Game opposite 16-17: 9+"
+      shows points>=9
+      priority 3
+  P   "No game opposite 16-17"
+      priority 2
+after 1M (P) 1N (P) 2C (P) 2D (P) 3M (P)
+  4M  "Game in the six-card major"
+      priority 3
+after 1M (P) 1N (P) 2C (P) 2D (P) 3x (P) | 1M (P) 1N (P) 2C (P) 2D (P) 2x (P) when x is not M, we.forcing = game
+  4M  "Game in the major: three of them"
+      shows M>=3
+      priority 3
+  3N  "Game: no fit for {M}"
+      priority 2
+after 1H (P) 1S (P) 2C (P) 2D (P) 2N (P)
+  3N  "Game opposite 16-17: 9+"
+      shows points>=9
+      priority 3
+  P   "No game opposite 16-17"
+      priority 2
+after 1H (P) 1S (P) 2C (P) 2D (P) 3H (P)
+  4H  "Game in the six-card major"
+      priority 3
+after 1H (P) 1S (P) 2C (P) 2D (P) 2S (P)
+  4S  "Game in the 4-3 or better spade fit"
+      priority 3
+after 1H (P) 1S (P) 2C (P) 2D (P) 3x (P) when x is C | x is D
+  4H  "Game in hearts: three of them"
+      shows H>=3
+      priority 3
+  3N  "Game: no fit for hearts"
+      priority 2
+
+# Opener after responder's no-fit 2NT or 2♠: the minimum stops.
+after 1M (P) 1N (P) 2C (P) 2D (P) 2M (P) 2N (P) | 1H (P) 1S (P) 2C (P) 2D (P) 2H (P) 2N (P)
+  3C  "Five or more clubs: to play"
+      shows C>=5
+      priority 3
+  P   "Minimum: no game"
+      priority 2
+after 1H (P) 1S (P) 2C (P) 2D (P) 2H (P) 2S (P)
+  P   "Minimum: partner's spades"
+      priority 2
+
+# Opener after responder's 3NT: a six-card major plays there.
+after 1M (P) 1N (P) 2C (P) 2D (P) 3x (P) 3N (P) when x is not M
+  4M  "Six or more {M}: game in the major"
+      shows M>=6
+      priority 3
+after 1H (P) 1S (P) 2C (P) 2D (P) 3x (P) 3N (P) when x is C | x is D
+  4H  "Six or more hearts: game in the major"
+      shows H>=6
+      priority 3
+
+# ── Opener after a weak answer (5-7) ─────────────────────────────────
+when answered gazzilli(M), rho.last=P
+  P   "Gazzilli: no game opposite 5-7"
+      shows hcp<=18
+      when  !partner.last=2D
+      priority 2
+  3M  "Invites with six or more {M}: 19-20"
+      shows hcp=19..20, M>=6
+      when  !partner.last=2D
+      priority 3
+  4M  "Game: 21+ with six or more {M}"
+      shows hcp>=21, M>=6
+      when  !partner.last=2D
+      priority 3
+  3N  "Game: 19+, no six-card {M}"
+      shows hcp>=19, M<=5
+      when  !partner.last=2D
+      priority 3
+  3C  "Natural clubs, minimum: to play"
+      shows hcp<=15, C>=5
+      when  partner.last=2N
+      priority 3

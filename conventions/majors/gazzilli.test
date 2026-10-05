@@ -1,0 +1,25 @@
+# Gazzilli. 21GF-Gazzilli plays it (BBA's `Gazzilli`); hands made for
+# the rule. gazzilli.notes.md has the source and BBA's style.
+card    21GF-Gazzilli
+dealer  S
+
+# seat hand             | auction                      | expect | why
+# ── Opener's rebid ────────────────────────────────────────────────────
+S AQJ74.K5.83.KJ42      | 1S P 1N P                    | 2C     | 14 HCP and four clubs: the natural minimum goes through 2C
+S AQJ74.K5.AK3.432      | 1S P 1N P                    | 2C     | 17 HCP: strong, 2C
+S AQJ742.K5.K83.42      | 1S P 1N P                    | 2S     | a minimum six-card one-suiter rebids 2S
+S AQJ74.K5.AK3.Q42      | 1S P 1N P                    | 2N     | 18-19 balanced: 2NT at once
+S AQJ74.5.KQJ74.42      | 1S P 1N P                    | 3D     | 5-5, 13-15: the jump
+S 3.AKJ74.AQ5.KJ42      | 1H P 1S P                    | 2C     | 18 HCP, short spades: 2C after 1H-1S too
+S AK73.AKJ74.Q5.42      | 1H P 1S P                    | 4S     | four spades: the raise (rebids.bid), not 2C
+# ── Responder after 2C ────────────────────────────────────────────────
+N 85.KJ74.Q963.K72      | 1S P 1N P 2C P               | 2D     | 9 HCP: 2D, 8+
+N 85.J74.Q963.K732      | 1S P 1N P 2C P               | 2S     | 6 HCP and two spades: preference
+N 8.QJ74.Q963.T972      | 1S P 1N P 2C P               | 2N     | 5 HCP, a singleton spade: no fit
+# ── Opener after 2D ───────────────────────────────────────────────────
+S AQJ74.K5.83.KJ42      | 1S P 1N P 2C P 2D P          | 2S     | the natural minimum
+S AQJ74.K5.AK3.432      | 1S P 1N P 2C P 2D P          | 2N     | 17 HCP, balanced
+S AQJ74.K5.AKJ2.Q4      | 1S P 1N P 2C P 2D P          | 3D     | 19 HCP with diamonds: game forcing
+# ── Responder after the minimum ───────────────────────────────────────
+N 85.KJ74.Q963.K72      | 1S P 1N P 2C P 2D P 2S P     | P      | 9 HCP and two spades: no game opposite 11-15
+N 5.KJ74.Q963.KJ72      | 1S P 1N P 2C P 2D P 2S P     | 2N     | a singleton spade, 10 HCP: no fit
