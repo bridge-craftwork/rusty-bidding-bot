@@ -2038,7 +2038,8 @@ mod tests {
         assert_eq!(r["ok"], true, "{r}");
         let k = &r["position"]["knowledge"];
         assert_eq!(k["N"]["hcp"]["min"], 15, "{r}");
-        assert_eq!(k["N"]["balanced"], true);
+        // 21GF-DEFAULT's 1NT may be 5-4-2-2: balanced is not certain.
+        assert!(k["N"]["balanced"].is_null(), "{r}");
         assert_eq!(k["S"]["hcp"]["min"], 0);
         assert!(r["position"]["sides"]["ns"]["forcing"].is_string());
         assert!(r["position"]["sides"]["ew"]["summary"]

@@ -92,7 +92,9 @@ fn interpretation_tracks_what_each_call_showed() {
     );
     let south = &i.steps[0].knowledge;
     assert_eq!(south.hcp, Range::new(15, 17));
-    assert_eq!(south.balanced, rbb_engine::Tri::True);
+    // 21GF-DEFAULT allows 5-4-2-2 in 1NT ("1NT opening shape 5422"), so
+    // balanced is not certain.
+    assert_eq!(south.balanced, rbb_engine::Tri::Unknown);
     // 2NT shows 8-9 total points (a 7-count with a five-card suit
     // qualifies), so HCP are only capped at 9.
     let north = &i.steps[2].knowledge;
