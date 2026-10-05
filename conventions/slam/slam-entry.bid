@@ -16,6 +16,7 @@ module slam-entry "Slam entry: the conditions the slam modules share"
   param  bw    = slam.blackwood.standard default false
   param  k1430 = slam.blackwood.rkcb_1430 default false
   param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  q4n   = slam.quantitative_4nt.play default true
 
 # ── The count: declarer points and support points (2026-10-01) ───────
 #
@@ -168,6 +169,7 @@ define no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !show
 # the modules that judge it (a higher rank took over their 3NT and pass).
 when we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight
   4N  "Quantitative: 31-32 between us, invites 6NT"
+      when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.min <= 32
       sets  ask=quant
       priority -60

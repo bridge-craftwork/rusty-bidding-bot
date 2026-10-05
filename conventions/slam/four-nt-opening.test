@@ -1,0 +1,17 @@
+card    21GF-DEFAULT
+dealer  N
+
+# seat hand             | auction                  | expect | why
+N A.KQJT9865.KQ.KQ      |                          | 4NT    | every loser an ace: which aces partner holds decides
+N A.AKQJT986.KQ.Q3      |                          | 2C     | ♣Q3 loses two tricks: not every loser is an ace
+N .KQJT9865.AK.KQ3      |                          | !4NT   | a void: partner's ace there would be wasted
+S 9875.A32.T9875.4      | 4NT P                    | 5H     | the heart ace
+S 9875.932.T9875.A      | 4NT P                    | 6C     | the club ace, at the six level
+S 9875.932.AT987.A      | 4NT P                    | 5NT    | two aces
+S 9875.932.T9875.4      | 4NT P                    | 5C     | no ace
+N A.KQJT9865.KQ.KQ      | 4NT P 5NT P              | 6H     | two aces: one missing, six
+N A.KQJT9865.KQ.KQ      | 4NT P 5D P               | 5H     | the diamond ace: two missing, sign off
+N A.KQJT9865.KQ.KQ      | 4NT P 5C P               | 5H     | no ace: sign off
+
+card    21GF-DEFAULT slam.four_nt_opening.play=false
+N A.KQJT9865.KQ.KQ      |                          | !4NT   | off the card

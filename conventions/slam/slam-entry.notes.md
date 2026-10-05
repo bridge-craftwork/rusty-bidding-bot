@@ -685,6 +685,16 @@ opponents out).
   opposite a raise asks again (blackwood.test) because 30 / 31 is low
   enough, not because its length is valued as tricks (the first item).
 
+## The card's quantitative 4NT (2026-10-05)
+
+The quantitative 4NT rules here read `slam.quantitative_4nt.play`
+(default on; every PBS card has it on): with it off, 4NT is not bid
+quantitatively and the hand passes or bids on as the other rules say.
+Only the slam/ modules are gated so far; the quantitative 4NTs in
+notrump/ (one-nt, stayman, jacoby-transfers, two-nt-responses) and
+base/ (rebids, responder-rebids, strong-openings) still ignore the
+field (they belong to other work in flight).
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point

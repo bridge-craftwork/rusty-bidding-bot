@@ -1,0 +1,26 @@
+card    21GF-SPECIALS2
+dealer  S
+
+# seat hand             | auction                              | expect | why
+# The ask: a jump to five in the void suit, trumps agreed.
+S .AKQ74.KQ5.AJ932      | 1H P 4D P                            | 5S     | a spade void and three keycards over the splinter
+N AJ32.J862.5.KQ84      | 1H P 4D P 5S P                       | 6C     | no keycard outside spades (the ♠A does not count): "0 or 3"
+N K932.J862.5.AQ84      | 1H P 4D P 5S P                       | 5N     | the ♣A: "1 or 4"
+N 9832.KQ62.5.AJ84      | 1H P 4D P 5S P                       | 6H     | ♥K and ♣A with the queen: the fourth step
+S .AKQ74.KQ5.AJ932      | 1H P 4D P 5S P 6C P                  | 6H     | three and none: one missing, six
+S .AKQ74.KQ5.AJ932      | 1H P 4D P 5S P 5N P                  | 7H     | three and one: all four, and the queen
+# Not a jump: 5♣ over partner's 4♠ is not Exclusion by default.
+S AKJ742.AQ5.KQ94.      | 1S P 2N P 3C P 4S P                  | !5C    | 5♣ is not a jump: no Exclusion (BBA's style asks)
+
+# Over interference: DOPI and ROPI.
+N AJ32.J862.5.KQ84      | 1H P 4D P 5S 6D                      | P      | DOPI: pass, the second step ("0 or 3")
+N K932.J862.5.AQ84      | 1H P 4D P 5S X                       | XX     | ROPI: redouble, the first step ("1 or 4")
+
+# BBA's style: steps 0, 1, 2, 3, and a five-level bid need not be a jump.
+card    21GF-SPECIALS2 general.style=bba
+S AKJ742.AQ5.KQ94.      | 1S P 2N P 3C P 4S P                  | 5C     | a club void: Exclusion over game
+N Q853.KJ6.A752.K3      | 1S P 2N P 3C P 4S P 5C P             | 5H     | ♦A: one keycard outside clubs, the second step
+
+# Off the card.
+card    21GF-SPECIALS2 slam.exclusion_blackwood.play=false
+S .AKQ74.KQ5.AJ932      | 1H P 4D P                            | 4NT    | no Exclusion: the keycard ask

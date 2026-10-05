@@ -1,0 +1,158 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Exclusion Blackwood: with a suit agreed, a jump to the five level in a
+# new suit shows a void there and asks for keycards outside it (the ace
+# of the void suit does not count, so there are four). The answers are
+# steps above the ask, 1430 style: first step 1 or 4, second 0 or 3,
+# third 2 without the trump queen, fourth 2 with it. With
+# `general.style=bba` the steps count 0, 1, 2, 3 and the ask need not be
+# a jump (BBA's own treatment). Notes: exclusion.notes.md.
+
+module exclusion "Exclusion Blackwood: a jump to five in a void asks for keycards outside it"
+  card   slam.exclusion_blackwood.play
+  needs  base
+  skill  bidding_conventions/exclusion_blackwood
+  param  gstyle = general.style
+  param  dopi   = slam.dopi default false
+  param  ropi   = slam.ropi default false
+
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# A void in v (not the trump suit), the slam values of the keycard ask
+# (`slam_values`, `slam_values_limited`: slam-entry.bid), and keycards
+# enough that every answer leaves room: three of my own, or two when the
+# answer "none" is still at or below five of our suit. Above the 4NT ask
+# (priority 1); control bids, when the card plays them, come first.
+
+# A jump: the cheapest bid in v is at the four level or lower. In BBA's
+# style any five-level bid in v asks.
+define ex_jump(v) = (v is C, cheapest_rank(C) <= 20) | (v is D, cheapest_rank(D) <= 21) | (v is H, cheapest_rank(H) <= 22) | (v is S, cheapest_rank(S) <= 23)
+define ex_level(v) = ex_jump(v) | gstyle is bba
+
+# The answer "no keycard" is at or below five of the trump suit: 1430's
+# second step, BBA's first.
+define ex_zero_room(v) = (gstyle is not bba, (v is C, trump is H | trump is S) | (v is D, trump is S)) | (gstyle is bba, (v is C, trump is not C) | (v is D, trump is H | trump is S) | (v is H, trump is S))
+define ex_room(v) = keycards(trump) >= 3 | (keycards(trump) >= 2, ex_zero_room(v))
+
+define ex_values = slam_values | slam_values_limited
+
+when we.trump is suit, !minor_given_way, !asked
+  5C  "Exclusion: a club void, how many keycards outside clubs?"  alert
+      shows C=0, ex_values
+      when  trump is not C, ex_level(C), ex_room(C)
+      sets  ask=exclusion(C)
+      artificial
+      priority 12
+  5D  "Exclusion: a diamond void, how many keycards outside diamonds?"  alert
+      shows D=0, ex_values
+      when  trump is not D, ex_level(D), ex_room(D)
+      sets  ask=exclusion(D)
+      artificial
+      priority 12
+  5H  "Exclusion: a heart void, how many keycards outside hearts?"  alert
+      shows H=0, ex_values
+      when  trump is not H, ex_level(H), ex_room(H)
+      sets  ask=exclusion(H)
+      artificial
+      priority 12
+  5S  "Exclusion: a spade void, how many keycards outside spades?"  alert
+      shows S=0, ex_values
+      when  trump is not S, ex_level(S), ex_room(S)
+      sets  ask=exclusion(S)
+      artificial
+      priority 12
+
+# ── The answers ───────────────────────────────────────────────────────
+#
+# Keycards outside the void suit: the trump king and the other three aces.
+define ex_keys(v) = keycards(trump) - has(A,v)
+
+when asked exclusion(v), rho.last = P, gstyle is not bba
+  5D  "1 or 4 keycards outside clubs"      shows ex_keys(v) in 1|4   artificial   when v is C
+  5H  "0 or 3 keycards outside clubs"      shows ex_keys(v) in 0|3   artificial   when v is C
+  5S  "2 keycards outside clubs, no {trump} queen"   shows ex_keys(v) = 2, !has(Q,trump)   artificial   when v is C
+  5N  "2 keycards outside clubs and the {trump} queen"   shows ex_keys(v) = 2, has(Q,trump)   artificial   when v is C
+  5H  "1 or 4 keycards outside diamonds"   shows ex_keys(v) in 1|4   artificial   when v is D
+  5S  "0 or 3 keycards outside diamonds"   shows ex_keys(v) in 0|3   artificial   when v is D
+  5N  "2 keycards outside diamonds, no {trump} queen"   shows ex_keys(v) = 2, !has(Q,trump)   artificial   when v is D
+  6C  "2 keycards outside diamonds and the {trump} queen"   shows ex_keys(v) = 2, has(Q,trump)   artificial   when v is D
+  5S  "1 or 4 keycards outside hearts"     shows ex_keys(v) in 1|4   artificial   when v is H
+  5N  "0 or 3 keycards outside hearts"     shows ex_keys(v) in 0|3   artificial   when v is H
+  6C  "2 keycards outside hearts, no {trump} queen"   shows ex_keys(v) = 2, !has(Q,trump)   artificial   when v is H
+  6D  "2 keycards outside hearts and the {trump} queen"   shows ex_keys(v) = 2, has(Q,trump)   artificial   when v is H
+  5N  "1 or 4 keycards outside spades"     shows ex_keys(v) in 1|4   artificial   when v is S
+  6C  "0 or 3 keycards outside spades"     shows ex_keys(v) in 0|3   artificial   when v is S
+  6D  "2 keycards outside spades, no {trump} queen"   shows ex_keys(v) = 2, !has(Q,trump)   artificial   when v is S
+  6H  "2 keycards outside spades and the {trump} queen"   shows ex_keys(v) = 2, has(Q,trump)   artificial   when v is S
+
+when asked exclusion(v), rho.last = P, gstyle is bba
+  5D  "0 keycards outside clubs"      shows ex_keys(v) = 0   artificial   when v is C
+  5H  "1 keycard outside clubs"       shows ex_keys(v) = 1   artificial   when v is C
+  5S  "2 keycards outside clubs"      shows ex_keys(v) = 2   artificial   when v is C
+  5N  "3 keycards outside clubs"      shows ex_keys(v) >= 3  artificial   when v is C
+  5H  "0 keycards outside diamonds"   shows ex_keys(v) = 0   artificial   when v is D
+  5S  "1 keycard outside diamonds"    shows ex_keys(v) = 1   artificial   when v is D
+  5N  "2 keycards outside diamonds"   shows ex_keys(v) = 2   artificial   when v is D
+  6C  "3 keycards outside diamonds"   shows ex_keys(v) >= 3  artificial   when v is D
+  5S  "0 keycards outside hearts"     shows ex_keys(v) = 0   artificial   when v is H
+  5N  "1 keycard outside hearts"      shows ex_keys(v) = 1   artificial   when v is H
+  6C  "2 keycards outside hearts"     shows ex_keys(v) = 2   artificial   when v is H
+  6D  "3 keycards outside hearts"     shows ex_keys(v) >= 3  artificial   when v is H
+  5N  "0 keycards outside spades"     shows ex_keys(v) = 0   artificial   when v is S
+  6C  "1 keycard outside spades"      shows ex_keys(v) = 1   artificial   when v is S
+  6D  "2 keycards outside spades"     shows ex_keys(v) = 2   artificial   when v is S
+  6H  "3 keycards outside spades"     shows ex_keys(v) >= 3  artificial   when v is S
+
+# Over interference, DOPI and ROPI as for the keycard ask (dopi-ropi.bid):
+# double or redouble the first step, pass the second; with two keycards
+# or more, partner's and mine make a slam, so bid it.
+when asked exclusion(v), dopi, rho.last <= 6S
+  X   "DOPI: first step"   shows ex_keys(v) in 1|4   artificial   when gstyle is not bba   priority 5
+  P   "DOPI: second step"  shows ex_keys(v) in 0|3   artificial   when gstyle is not bba   priority 5
+  X   "DOPI: no keycard"   shows ex_keys(v) = 0      artificial   when gstyle is bba       priority 5
+  P   "DOPI: one keycard"  shows ex_keys(v) = 1      artificial   when gstyle is bba       priority 5
+when asked exclusion(v), ropi, rho.last = X
+  XX  "ROPI: first step"   shows ex_keys(v) in 1|4   artificial   when gstyle is not bba   priority 5
+  P   "ROPI: second step"  shows ex_keys(v) in 0|3   artificial   when gstyle is not bba   priority 5
+  XX  "ROPI: no keycard"   shows ex_keys(v) = 0      artificial   when gstyle is bba       priority 5
+  P   "ROPI: one keycard"  shows ex_keys(v) = 1      artificial   when gstyle is bba       priority 5
+when asked exclusion(v), !rho.last = P
+  6{trump}  "Slam: two keycards outside the void, with partner's"
+      shows ex_keys(v) = 2
+      priority 4
+
+# ── The asker places the contract ─────────────────────────────────────
+#
+# The step partner answered with, by the ask's suit.
+define ex_s1(v) = (v is C, partner.last = 5D) | (v is D, partner.last = 5H) | (v is H, partner.last = 5S) | (v is S, partner.last = 5N)
+define ex_s2(v) = (v is C, partner.last = 5H) | (v is D, partner.last = 5S) | (v is H, partner.last = 5N) | (v is S, partner.last = 6C)
+define ex_s3(v) = (v is C, partner.last = 5S) | (v is D, partner.last = 5N) | (v is H, partner.last = 6C) | (v is S, partner.last = 6D)
+define ex_s4(v) = (v is C, partner.last = 5N) | (v is D, partner.last = 6C) | (v is H, partner.last = 6D) | (v is S, partner.last = 6H)
+
+# Partner's keycards outside the void, the low count where the step
+# leaves two open (1430 "1 or 4" facing none of mine, "0 or 3" facing
+# one: read low, as the keycard sign-off is). Over DOPI and ROPI the
+# double (redouble) is the first step and the pass the second.
+define ex_d1 = partner.last = X | partner.last = XX
+define ex_d2 = partner.last = P
+define ex_partner(v) = (gstyle is not bba, ex_s1(v) | ex_d1) + (gstyle is not bba, ex_s3(v) | ex_s4(v)) + (gstyle is not bba, ex_s3(v) | ex_s4(v)) + (gstyle is bba, ex_s2(v) | ex_d2) + (gstyle is bba, ex_s3(v)) + (gstyle is bba, ex_s3(v)) + (gstyle is bba, ex_s4(v)) + (gstyle is bba, ex_s4(v)) + (gstyle is bba, ex_s4(v))
+define ex_total(v) = keycards(trump) + ex_partner(v)
+
+# The trump queen: mine, or 1430's fourth step.
+define ex_queen(v) = has(Q,trump) | (gstyle is not bba, ex_s4(v))
+
+when answered exclusion(v)
+  7{trump}  "Grand slam: all four keycards outside the void and the {trump} queen"
+            when  ex_total(v) >= 4, ex_queen(v)
+  6{trump}  "Small slam: at most one keycard missing"
+            when  ex_total(v) >= 3
+  P         "Defend doubled: two keycards missing"
+            when  ex_d1, partner.last = X, ex_total(v) <= 2
+  X         "Penalty: two keycards missing"
+            when  ex_d2, rho.last = P, lho.last >= 5C, lho.last <= 6S, ex_total(v) <= 2
+  P         "Sign off: partner's answer is in our suit"
+            when  partner.last = 5{trump}, ex_total(v) <= 2
+  5{trump}  "Sign off: two keycards missing"
+            when  ex_total(v) <= 2
+  6{trump}  "Small slam: the answer has passed five of our suit"
+            priority -1

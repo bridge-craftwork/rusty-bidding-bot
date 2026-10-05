@@ -1,0 +1,74 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The 4NT opening: asks for specific aces. A hand whose only losers are
+# aces (a long, solid suit and kings with queens or short) needs to know
+# which aces partner holds, not how many. Answers: 5♣ no ace, 5♦ 5♥ 5♠
+# the ace of that suit, 6♣ the club ace, 5NT two aces. The opener then
+# places the contract in his suit. Notes: four-nt-opening.notes.md.
+
+module four-nt-opening "4NT opening: asks for specific aces"
+  card   slam.four_nt_opening.play
+  needs  base
+
+# ── The opening ───────────────────────────────────────────────────────
+#
+# Every loser is an ace: each suit without the ace is a singleton, K-x
+# or headed by the K-Q (partner's ace there is a winner), the suits with
+# the ace lose nothing (`losers` equals the aces missing), and no void,
+# where partner's ace would be wasted. One to three aces missing, and a
+# suit of six or more to play in (the longest; spades first on a tie).
+define fna_ace_only(x) = has(A,x) | x = 1 | (has(K,x), x = 2) | (has(K,x), has(Q,x))
+define fna_hand = C>=1, D>=1, H>=1, S>=1, fna_ace_only(C), fna_ace_only(D), fna_ace_only(H), fna_ace_only(S), keycards(N) >= 1, keycards(N) <= 3, losers + keycards(N) = 4
+
+when opening
+  4N  "Asks for specific aces: a long spade suit, every loser an ace"  alert
+      shows fna_hand, S>=6, S>=H, S>=D, S>=C
+      sets  trump=S, ask=specific_aces
+      artificial
+      priority 2
+  4N  "Asks for specific aces: a long heart suit, every loser an ace"  alert
+      shows fna_hand, H>=6, H>S, H>=D, H>=C
+      sets  trump=H, ask=specific_aces
+      artificial
+      priority 2
+  4N  "Asks for specific aces: a long diamond suit, every loser an ace"  alert
+      shows fna_hand, D>=6, D>S, D>H, D>=C
+      sets  trump=D, ask=specific_aces
+      artificial
+      priority 2
+  4N  "Asks for specific aces: a long club suit, every loser an ace"  alert
+      shows fna_hand, C>=6, C>S, C>H, C>D
+      sets  trump=C, ask=specific_aces
+      artificial
+      priority 2
+
+# ── The answers ───────────────────────────────────────────────────────
+when asked specific_aces
+  5C  "No ace"                    shows keycards(N)=0                 artificial   priority 5
+  5D  "The diamond ace"           shows keycards(N)=1, has(A,D)       artificial   priority 5
+  5H  "The heart ace"             shows keycards(N)=1, has(A,H)       artificial   priority 5
+  5S  "The spade ace"             shows keycards(N)=1, has(A,S)       artificial   priority 5
+  6C  "The club ace"              shows keycards(N)=1, has(A,C)       artificial   priority 5
+  5N  "Two aces (three: rare)"    shows keycards(N) in 2|3            artificial   priority 5
+
+# ── The opener places the contract ────────────────────────────────────
+#
+# Every ace partner holds is one I lack, so each covers a loser: seven
+# with none left, six with one, else five of the suit (pass when that
+# was the answer).
+define fna_left = losers - (we.keycards(N).min - keycards(N))
+
+when answered specific_aces
+  7{trump}  "Grand slam: partner's aces cover every loser"
+            when fna_left <= 0
+            priority 5
+  6{trump}  "Small slam: one ace missing"
+            when fna_left <= 1
+            priority 5
+  P         "Two aces missing: partner's answer is our suit"
+            when partner.last = 5{trump}
+            priority 5
+  5{trump}  "Two aces missing: sign off"
+            priority 5
+  6{trump}  "The answer has passed five of our suit"
+            priority 4

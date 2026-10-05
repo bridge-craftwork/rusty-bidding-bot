@@ -1,0 +1,42 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Pick-a-slam 5NT: a jump to 5NT, not after a keycard ask, says "we
+# belong in slam, choose where" (1♠-2♣-3♣-3♠-5NT: 6♣, 6♠ or 6NT).
+# Partner bids six of the suit he likes best, or 6NT with no preference.
+# Notes: pick-a-slam.notes.md.
+
+module pick-a-slam "Pick-a-slam 5NT: choose among the slams"
+  card   slam.pick_a_slam_5nt.play
+  needs  base
+  skill  bidding_conventions/pick_a_slam_5nt
+
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# A jump (4NT was available), no ask pending (a stopper ask aside), slam values on partner's
+# floor (33 total points), and two eight-card fits known, so there is a
+# real choice. Without the two fits the keycard ask or a direct slam
+# says more.
+define pas_fit(x) = we.fit(x).min >= 8
+define pas_two_fits = (pas_fit(S), pas_fit(H)) | (pas_fit(S), pas_fit(D)) | (pas_fit(S), pas_fit(C)) | (pas_fit(H), pas_fit(D)) | (pas_fit(H), pas_fit(C)) | (pas_fit(D), pas_fit(C))
+
+when !asked | asked stoppers, partner.last <= 4S, rho.last = P | rho.last <= 4S
+  5N  "Pick a slam: two fits and the values, choose the strain"  alert
+      shows points + partner.points.min >= 33, pas_two_fits
+      sets  ask=pick_slam
+      artificial
+      priority 1
+
+# ── The answer ────────────────────────────────────────────────────────
+#
+# Six of the suit where we hold the most cards between us (the
+# higher suit on a tie), or 6NT with no eight-card fit of mine to show.
+when asked pick_slam
+  6S  "Pick a slam: spades"     when we.fit(S).min >= 8   prefer we.fit(S).min   priority 5
+  6H  "Pick a slam: hearts"     when we.fit(H).min >= 8   prefer we.fit(H).min   priority 5
+  6D  "Pick a slam: diamonds"   when we.fit(D).min >= 8   prefer we.fit(D).min   priority 5
+  6C  "Pick a slam: clubs"      when we.fit(C).min >= 8   prefer we.fit(C).min   priority 5
+  6N  "Pick a slam: notrump"    priority 4
+
+# The asker accepts partner's choice.
+when answered pick_slam
+  P   "Partner has picked the slam"   priority 5
