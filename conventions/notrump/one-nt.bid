@@ -15,6 +15,7 @@ module notrump-base "1NT opening and natural responses"
   param  style   = general.style
   param  five_major = notrump.one_nt.five_card_major default sometimes
   param  jacoby  = notrump.transfers.jacoby default true
+  param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -46,10 +47,12 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
   2N  "Invitational: {invite} total points"
       shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
       when  minors is not four_way, minors is not four_way_reversed, style is not bba   # 2NT is a transfer
+      when  minors is not none | !nt_2n_clubs
       sets  ask=nt_invite
   2N  "Invitational: {invite} total points, a long minor"
       shows strength=invite, H<=4, S<=4, (C>=6 | D>=6)
       when  minors is relay | minors is none         # no minor route for invitations
+      when  minors is not none | !nt_2n_clubs
       sets  ask=nt_invite
   # A slam try in the minor: six cards, or five in an unbalanced hand
   # (2026-09-27: 15-18 counts with a five-card minor bid 3NT opposite

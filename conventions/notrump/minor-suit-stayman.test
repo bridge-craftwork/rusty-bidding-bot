@@ -1,0 +1,19 @@
+# Minor Suit Stayman over 1NT (minor-suit-stayman.bid).
+# 21GF-MSTandMSS: 2♠ Minor Suit Stayman, 2NT transfer to clubs, 3♣
+# transfer to diamonds.
+card    21GF-MSTandMSS
+dealer  S
+
+# seat hand                 | auction            | expect | why
+N T6.86.KJ653.AKQ5          | 1NT P              | 2S     | five-four in the minors, game values
+N 8.AQT.QJT2.KJ842          | 1NT P              | 2S     | five-four in the minors, a singleton
+N 543.83.Q5.KJT842          | 1NT P              | 2NT    | six clubs, weak: transfer
+N 543.83.KJT842.Q5          | 1NT P              | 3C     | six diamonds, weak: transfer
+N K54.K83.Q54.KJ84          | 1NT P              | 3NT    | balanced game, no five-card suit
+S AKQ98.T3.AQT.T93          | 1NT P 2S P         | 2NT    | no four-card minor
+S AK87.Q87.K432.K8          | 1NT P 2S P         | 3D     | four diamonds, not four clubs
+S KQ4.QJ4.KQ.QJ964          | 1NT P 2S P         | 3C     | four or more clubs
+S KQ4.QJ4.KQ.QJ964          | 1NT P 2NT P        | 3C     | completes the transfer
+N 543.83.Q5.KJT842          | 1NT P 2NT P 3C P   | P      | weak: play 3♣
+N T6.86.KJ653.AKQ5          | 1NT P 2S P 2NT P   | 3NT    | no fit: game in notrump
+N T6.86.KJ653.AKQ5          | 1NT P 2S P 3D P    | 3NT    | a fit, no slam: 3NT
