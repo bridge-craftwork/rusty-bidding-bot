@@ -38,6 +38,7 @@ module strong-openings "2♣ and 2NT openings"
   param  gambling   = notrump.three_nt.one_suit default false
   param  k1430      = slam.blackwood.rkcb_1430 default false
   param  k0314      = slam.blackwood.rkcb_0314 default false
+  param  benjamin   = two_level.benjamin.play default false
 
 when opening
   2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
@@ -49,21 +50,21 @@ when opening
   # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
       shows hcp>=22, !balanced | hcp<=25 | hcp>=28 | gambling   # balanced 26-27 opens 3NT, unless 3NT is Gambling
-      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c
+      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1                       # ahead of a one-level opening
   2C  "Strong: nine tricks with a major"  alert
       shows hcp>=17, losers<=4, hcp+length_points>=23
       shows (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | (H>=5, S>=5)
-      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c
+      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
   2C  "Strong: ten tricks with a long suit"  alert
       shows hcp>=17, losers<=3, hcp+length_points>=23
       shows (C>=6, quality(C)>=good) | (D>=6, quality(D)>=good) | (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | shape 5-5-x-x
-      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c
+      when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
