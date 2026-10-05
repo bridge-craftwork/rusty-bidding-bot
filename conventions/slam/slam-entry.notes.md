@@ -699,10 +699,12 @@ game instead, contract errors 246 -> 159.
 The quantitative 4NT rules here read `slam.quantitative_4nt.play`
 (default on; every PBS card has it on): with it off, 4NT is not bid
 quantitatively and the hand passes or bids on as the other rules say.
-Only the slam/ modules are gated so far; the quantitative 4NTs in
+Since the slam-tools batch (2026-10-05) the quantitative 4NTs in
 notrump/ (one-nt, stayman, jacoby-transfers, two-nt-responses) and
-base/ (rebids, responder-rebids, strong-openings) still ignore the
-field (they belong to other work in flight).
+base/ (rebids, responder-rebids, strong-openings) are gated too, each
+with one condition, `when quant_4nt` (the define here, reading this
+module's `q4n`). No stock card turns it off, so nothing changes on the
+corpus; slam-entry.test checks 1NT and 2NT with it off (3NT instead).
 
 ## Sources
 

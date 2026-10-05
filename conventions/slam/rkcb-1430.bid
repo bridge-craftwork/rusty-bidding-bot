@@ -202,6 +202,13 @@ when (k1430 | k0314), we.trump is suit, asked control(t), !kb_asks(trump)
       sets  ask=keycards(trump)
       artificial
       priority 11
+  # Partner's control bid has passed 4NT (a first-round control past
+  # game, as over a non-serious 3NT, serious-3nt.bid): with every suit
+  # covered and the values, bid the slam rather than go on cueing and
+  # stop in five (2026-10-05, Serious boards 17 and 47).
+  6{trump}  "Slam: every suit covered, the keycard ask is gone"
+      when  all_covered, slam_values, partner.last >= 5C
+      priority 11
 
 when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_asks(trump)
   4N  "Keycard ask in {trump}"

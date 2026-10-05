@@ -49,8 +49,16 @@ game.
 
 ## Open questions
 
-- **DEPO** (`slam.depo`: double even, pass odd, when their suit
-  outranks ours) is not built; DOPI applies whatever their suit.
+- **DEPO** (`slam.depo`, 2026-10-05): double an even number of
+  keycards (aces), pass an odd number, over their suit bid. The spec
+  says "played instead of DOPI", so with `slam.depo` on it replaces DOPI
+  at every level (some pairs play DOPI low and DEPO high; the card has
+  no field for that split). ROPI is unchanged. The asker's DOPI rules
+  apply as they are: over an even double facing two of mine the count
+  stays open (2 or 4) and we sign off, and partner's correction to six
+  needs three keycards, so the slam with two and two is missed.
+  **Question for Rick:** worth a DEPO-specific correction? Decision
+  taken: no, rare.
 - Interference at the six level is not answered by DOPI (the rules stop
   at 5♠); a double there is whatever the competitive rules say.
 - The asker's continuation over an open "1 or 4" double (asker with no
@@ -65,5 +73,9 @@ game.
   Bridge Conventions You Should Know*, ch. 15; Todd, Advancing in Bridge
   #536). Where we differ from Unit 390: its 1430 table lists a "3rd
   cheapest = three keycards", which repeats the pass; we use four steps.
+- **DEPO:** convention-card
+  `spec/conventions/bidding_conventions/depo.toml` (Kantar, *25 More
+  Bridge Conventions You Should Know*, ch. 15): double even, pass odd,
+  instead of DOPI.
 - **BBA:** DOPI_ROPI corpus notes ("A=1/5 or 4/5" for a double over 1430)
   agree with the step order.

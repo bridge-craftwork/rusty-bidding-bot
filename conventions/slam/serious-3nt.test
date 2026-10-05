@@ -21,3 +21,7 @@ S K52.Q74.A2.KJ874      | 1S P 2C P 2S P 3S P 3NT X            | 4S     | nothin
 # Off the card: 3NT is not artificial.
 card    21GF-DEFAULT
 N AJ874.K5.K83.K92      | 1S P 2C P 2S P 3S P                  | !3NT   | no non-serious 3NT
+
+# A control past 4NT (rkcb-1430.bid): every suit covered, bid the slam.
+card    21GF-DEFAULT slam.non_serious_3nt.play=true
+S AJT.AKQ4.AKJ4.97      | 1S P 2D P 2S P 3S P 3NT P 4D P 5C P  | 6S     | ♣ covered by partner's 5♣: slam, not more cueing at five (Serious 17)
