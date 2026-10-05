@@ -1,0 +1,30 @@
+# Wilkosz 2♦ (the default card with Wilkosz on).
+card    21GF-DEFAULT two_level.wilkosz.play=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S 3.KQJ97.43.Q8543      |                     | 2D     | hearts and clubs, 8 (BBA)
+S 3.KQJ97.Q8543.43      |                     | 2D     | hearts and diamonds, 8
+S KQJ97.3.43.Q8543      |                     | 2D     | spades and clubs, 8
+S KQJ97.Q8543.43.3      |                     | 2D     | both majors, 8
+S 3.43.KQJ97.Q8543      |                     | P      | both minors: not Wilkosz (BBA)
+S 32.KQJ976.K54.43      |                     | 2H     | six hearts: the weak 2H stays
+S 32.43.KQJ976.K54      |                     | P      | six diamonds: no weak 2D
+# Responder (probes/b2-Wilkosz-resp.toml).
+N Q32.T82.K764.J65      | 2D P                | 2H     | weak: pass or correct
+N KT64.32.Q876.J65      | 2D P                | 2S     | spades longer: pass or correct
+N 3.T2.Q65.KJT8765      | 2D P                | 3C     | seven clubs: to play
+N KJ6.K82.Q762.Q96      | 2D P                | 3D     | invitational, both majors
+N AQ6.K82.KJ62.A96      | 2D P                | 2N     | 17: ask
+# Opener.
+S 3.KQJ97.43.Q8543      | 2D P 2H P           | P      | hearts: pass
+S KQJ97.3.43.Q8543      | 2D P 2H P           | 2S     | spades and a minor
+S 3.KQJ97.43.Q8543      | 2D P 2S P           | 3C     | hearts and clubs
+S KQJ97.Q8543.43.3      | 2D P 2N P           | 3H     | both majors
+S 3.KQJ97.Q8543.43      | 2D P 2N P           | 3D     | diamonds and hearts
+S KQJ97.3.43.Q8543      | 2D P 2N P           | 3C     | clubs and a major
+S KQJ97.3.43.Q8543      | 2D P 2N P 3C P 3D P | 3S     | spades and clubs
+S KQJ97.Q8543.43.3      | 2D P 3D P           | 3S     | minimum, spades
+# Responder places it.
+N AQ6.K82.KJ62.A96      | 2D P 2N P 3H P      | 4S     | both majors: game in spades

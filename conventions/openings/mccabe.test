@@ -1,0 +1,21 @@
+# The McCabe adjunct (the default card with McCabe on).
+card    21GF-DEFAULT two_level.mccabe.play=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+N 943.82.AKJ65.762      | 2S X                | 3D     | three spades, AK of diamonds: lead diamonds
+N 943.82.65432.AK2      | 2S X                | 3C     | three spades, AK of clubs
+N 943.KQJ2.6543.72      | 2S X                | 3H     | three spades, KQJ of hearts
+N 92.943.AKJ65.762      | 2H X                | 3D     | three hearts, AK of diamonds
+N 3.AKQJ872.96.K32      | 2S X                | XX     | seven hearts, no fit: redouble
+N AK4.KQ3.A762.K32      | 2S X                | 2N     | 19 with a fit: the ask
+N 943.Q2.K9653.762      | 2S X                | 3S     | three spades, nothing to lead: the plain raise
+# Opener.
+S KQJ976.32.54.J43      | 2S X 3D P           | 3S     | back to spades
+S KQJ976.32.54.J43      | 2S X XX P           | 2N     | the next step
+N 3.AKQJ872.96.K32      | 2S X XX P 2N P      | 3H     | my suit
+N 93.2.964.AKQJ872      | 2H X XX P 2S P      | 3C     | my suit
+N AKQJ872.3.96.K32      | 2H X XX P 2S P      | P      | spades: to play
+card    21GF-DEFAULT
+N 943.82.AKJ65.762      | 2S X                | 3S     | McCabe off: the plain raise

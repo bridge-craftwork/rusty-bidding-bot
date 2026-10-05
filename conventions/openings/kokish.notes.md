@@ -25,6 +25,12 @@
 - After the relay's 2NT BBA plays Stayman (3♣) and transfers; we have no
   system over it and responder bids 3NT. Open: systems on over 2♣–2♦–2NT
   and the Kokish 2NT belong to the notrump modules.
+  Checked 2026-10-05 (batch 2): not a gate's worth. Only Puppet
+  (two-nt-responses.bid) is written over 2♣–2♦–2NT; Stayman and the
+  transfers after a 2NT opening are `after 2N (P)` contexts in
+  notrump/two-nt-responses.bid and two-nt-minors.bid (19 blocks). Adding
+  the Kokish 2NT means extending those contexts, together with
+  2♣–2♦–2NT: left to the notrump work.
 - Divergences at 2♣–P (positive responses) and in the opponents'
   overcalls are not Kokish's.
 

@@ -26,16 +26,21 @@ module preempts "Weak two-bids and preempts"
   param  multi    = two_level.two_diamonds.multi default false
   param  benjamin = two_level.benjamin.play default false
   param  polish   = two_level.polish_two_suiters.play default false
+  param  mini_roman = two_level.two_diamonds.mini_roman default false
+  param  french   = two_level.french_2d.play default false
+  param  wilkosz  = two_level.wilkosz.play default false
+  param  prec_2d  = two_level.precision_2d.play default false
 
 # The natural weak twos give way when a convention takes the call
-# (conventions/openings/): Flannery, Multi and Benjamin take 2♦; Multi
+# (conventions/openings/): Flannery, Multi, Benjamin, Mini-Roman, French,
+# Wilkosz and Precision 2♦ take 2♦; Multi
 # shows the weak twos in a major through 2♦ (BBA opens every such hand
 # 2♦, probes/multi-openings.toml), and Polish two-suiters take 2♥ and 2♠.
-define weak_2d_open = !flannery, !multi, !benjamin
+define weak_2d_open = !flannery, !multi, !benjamin, !mini_roman, !french, !wilkosz, !prec_2d
 define weak_2h_open = !multi, !polish
 define weak_2s_open = !multi, !polish
 # For the responses (weak-two-responses.bid): a 2x opening that is a natural weak two.
-define weak_two_suit(x) = x is not D | (!flannery, !multi, !benjamin), x is not H | (!multi, !polish), x is not S | (!multi, !polish)
+define weak_two_suit(x) = x is not D | (!flannery, !multi, !benjamin, !mini_roman, !french, !wilkosz, !prec_2d), x is not H | (!multi, !polish), x is not S | (!multi, !polish)
 
 # ── Weak two-bids, first and second seat ─────────────────────────────
 when opening, seat<=2

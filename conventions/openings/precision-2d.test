@@ -1,0 +1,28 @@
+# Precision 2♦ (the default card with Precision 2D on).
+card    21GF-DEFAULT two_level.precision_2d.play=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S AQ54.KJ32.4.KJ54      |                     | 2D     | 4-4-1-4, 14
+S AQ54.KJ32.-.KJ543     |                     | 2D     | 4-4-0-5, 14
+S AQ54.KJ3.4.J9543      |                     | 2D     | 4-3-1-5, weak clubs
+S AQ54.KJ3.4.AK543      |                     | 1C     | 4-3-1-5, good clubs: not 2D
+S AKJ4.KQ32.AJ54.4      |                     | 1D     | 4-4-4-1 18: not short diamonds
+S AQ54.KJ32.KJ54.4      |                     | 1D     | short clubs: not 2D
+S 32.43.KQJ976.K54      |                     | P      | six diamonds: no weak 2D
+# Responder.
+N 863.854.Q97532.6      | 2D P                | P      | six diamonds, weak
+N 8632.Q854.973.65      | 2D P                | 2H     | four hearts, weak
+N Q863.854.973.J65      | 2D P                | 2S     | four spades
+N 63.85.973.QJ6542      | 2D P                | 3C     | six clubs, short majors
+N KQ63.A54.Q73.J65      | 2D P                | 2N     | 12: ask
+# Opener answers.
+S AQ54.KJ32.4.KJ54      | 2D P 2N P           | 3S     | 4-4-1-4, 14
+S AQ54.KJ32.4.QJ54      | 2D P 2N P           | 3H     | 4-4-1-4, 12
+S AQ54.KJ32.K.QJ54      | 2D P 2N P           | 3N     | 4-4-1-4, 15, the diamond king
+S AQ54.KJ32.-.KJ543     | 2D P 2N P           | 4D     | 4-4-0-5, 14
+S AQ54.KJ3.4.J9543      | 2D P 2N P           | 3D     | 4-3-1-5
+# Responder places it.
+N KQ63.A54.Q73.J65      | 2D P 2N P 3S P      | 4S     | four spades: game
+N K63.A54.KQ73.J65      | 2D P 2N P 3H P      | 3N     | diamonds held

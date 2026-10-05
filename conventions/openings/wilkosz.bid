@@ -1,0 +1,123 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Wilkosz 2♦ (Polish; BBO forum "Wilkosz responses", Matula's scheme;
+# BBA's `Wilkosz`, probes/b2-Wilkosz-*.toml): a weak two-suiter, five or
+# more cards in each of two suits, at least one of them a major (both
+# minors are excluded), 5-10 HCP. The weak 2♦ is off (preempts.bid).
+#
+# Responder (BBA where it differs from Matula):
+#
+#   2♥   pass or correct: opener passes with hearts, else bids 2♠
+#   2♠   pass or correct: opener passes with spades, else bids his minor
+#   2NT  14+, asks: 3♣ clubs and a major, 3♦ diamonds and hearts,
+#        3♥ both majors, 3♠ spades and diamonds
+#   3♣   six or more clubs: to play
+#   3♦   invitational, three or more in both majors: opener bids 3M
+#        with a minimum, 4M with a maximum
+#   4♦   game: bid your major
+#
+# See wilkosz.notes.md.
+
+module wilkosz "Wilkosz 2♦"
+  card   two_level.wilkosz.play
+  needs  preempts
+  skill  bidding_conventions/wilkosz
+
+define wilkosz_shape = (H>=5, S>=5) | (H>=5, C>=5) | (H>=5, D>=5) | (S>=5, C>=5) | (S>=5, D>=5)
+
+# ── The opening ──────────────────────────────────────────────────────
+when opening, seat<=3
+  2D  "Wilkosz: 5-5 or more in two suits, at least one a major, 5-10"   alert
+      shows hcp=5..10, wilkosz_shape
+      artificial
+      priority 1
+
+# ── Responder ────────────────────────────────────────────────────────
+after 2D (P) | 2D (X)
+  2N  "Asks for the suits: 14+"   alert
+      shows hcp>=14
+      sets  forcing=game, ask=wilkosz
+      artificial
+  4D  "Game: bid your major"   alert
+      shows H>=3, S>=3, hcp=12..13
+      artificial
+  3D  "Invitational: three or more in both majors"   alert
+      shows H>=3, S>=3, hcp=10..11
+      artificial
+  3C  "Six or more clubs: to play"
+      shows C>=6, hcp<=13
+      priority 1
+  2S  "Pass or correct: spades if you have them"   alert
+      shows S>=3, S>H, hcp<=13
+  2H  "Pass or correct: hearts if you have them"   alert
+      shows hcp<=13
+      artificial
+      priority -1
+
+# ── Opener: pass or correct ──────────────────────────────────────────
+after 2D (P) 2H (P) | 2D (X) 2H (P)
+  P   "Five or more hearts"              shows H>=5
+  2S  "Spades and a minor"               shows S>=5, H<=4
+after 2D (P) 2S (P) | 2D (X) 2S (P)
+  P   "Five or more spades"              shows S>=5
+  3C  "Hearts and clubs"                 shows H>=5, C>=5, S<=4
+  3D  "Hearts and diamonds"              shows H>=5, D>=5, S<=4
+after 2D (P) 3C (P) | 2D (X) 3C (P)
+  P   "Partner's suit: to play"
+after 2D (P) 3D (P) | 2D (X) 3D (P)
+  4S  "Maximum, spades"     shows S>=5, hcp>=9, S>=H
+  4H  "Maximum, hearts"     shows H>=5, hcp>=9
+  3S  "Minimum, spades"     shows S>=5, S>=H
+  3H  "Minimum, hearts"     shows H>=5
+after 2D (P) 4D (P) | 2D (X) 4D (P)
+  4S  "Spades"              shows S>=5, S>=H
+  4H  "Hearts"              shows H>=5
+
+# Responder after the correction to spades: pass with two, or bid 3♣
+# pass-or-correct with fewer.
+after 2D (P) 2H (P) 2S (P) | 2D (X) 2H (P) 2S (P)
+  P   "Two or more spades: to play"     shows S>=2
+  3C  "Short in spades: pass or correct to your minor"
+      shows S<=1
+after 2D (P) 2H (P) 2S (P) 3C (P) | 2D (X) 2H (P) 2S (P) 3C (P)
+  P   "Spades and clubs"                 shows C>=5
+  3D  "Spades and diamonds"              shows D>=5
+after 2D (P) 2S (P) 3C (P) | 2D (P) 2S (P) 3D (P) | 2D (P) 2H (P) 2S (P) 3C (P) 3D (P) | 2D (P) 3D (P) 3H (P) | 2D (P) 3D (P) 3S (P)
+  P   "Partner's suit: to play"
+
+# They come in over the pass-or-correct response: opener passes.
+after 2D (P) 2H (*) | 2D (P) 2S (*)
+  P   "They came in: nothing more to say"
+      priority -5
+
+# ── Opener answers 2NT ───────────────────────────────────────────────
+when asked wilkosz
+  3H  "Both majors"                  shows H>=5, S>=5
+      priority 1
+  3C  "Clubs and a major"            shows C>=5
+  3D  "Diamonds and hearts"          shows D>=5, H>=5
+  3S  "Spades and diamonds"          shows S>=5, D>=5
+
+# Responder: after 3♣ a major is still unknown; 3♦ asks for it.
+after 2D (P) 2N (P) 3C (P)
+  3D  "Which major?"   artificial
+      priority 1
+after 2D (P) 2N (P) 3C (P) 3D (P)
+  3H  "Hearts and clubs"            shows H>=5
+  3S  "Spades and clubs"            shows S>=5
+
+# Responder places the contract: game in a fit, else 3NT.
+after 2D (P) 2N (P) 3H (P) | 2D (P) 2N (P) 3D (P) | 2D (P) 2N (P) 3S (P) | 2D (P) 2N (P) 3C (P) 3D (P) 3H (P) | 2D (P) 2N (P) 3C (P) 3D (P) 3S (P)
+  4S  "Game in spades"      shows S>=3
+      when  partner.S>=5
+      priority 2
+  4H  "Game in hearts"      shows H>=3
+      when  partner.H>=5
+      priority 1
+  3N  "Game in notrump"
+  5D  "Game in diamonds"    shows D>=3
+      when  partner.D>=5
+      priority -1
+  5C  "Game in clubs"       shows C>=3
+      when  partner.C>=5
+      priority -1

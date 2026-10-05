@@ -1,0 +1,24 @@
+# Responder after a French 2D: the hands with aces (21GF-DEFAULT with French 2D on).
+card    = "21GF-DEFAULT"
+set     = ["French 2D=1", "Weak natural 2D=0"]
+dealer  = "N"
+prefix  = "2D Pass"
+vuls    = ["None"]
+scoring = ["MP"]
+partner_auto = [24, 27]
+our     = []
+hands = [
+  "SA 4 | A632.854.9732.65",
+  "HA 4 | 632.A854.9732.65",
+  "DA 4 | 632.854.A732.965",
+  "CA 4 | 632.854.9732.A65",
+  "SA 8 | A632.Q54.K732.65",
+  "CA 8 | 632.Q54.K732.A65",
+  "SA HA | A632.A54.9732.65",
+  "DA CA | 632.854.A732.A65",
+  "3 aces | A632.A54.A732.65",
+  "SA 5 spades | AJ632.54.9732.65",
+  "HA 5 hearts | 63.AJ654.9732.65",
+  "7 no ace 5H | 63.KQ654.Q732.65",
+  "4 no ace 6D | 63.854.KJ8652.95",
+]

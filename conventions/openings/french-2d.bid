@@ -1,0 +1,79 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# French 2♦ (the French standard system, SEF: "2♦ forcing de manche";
+# BBA's `French 2D`, probes/b2-French-*.toml): 2♦ is the artificial
+# game-forcing opening, 24+ HCP of any shape, and 2♣ keeps the strong
+# hands below it (strong-openings.bid caps it at 23 when this is on).
+# There is no weak 2♦ (preempts.bid, `weak_2d_open`).
+#
+# Responder answers in aces (BBA):
+#
+#   2♥   no ace, 0-7, no five-card major
+#   2♠   one ace, the ♥A or the ♠A
+#   2NT  no ace, 8+
+#   3♣   one ace, the ♣A          3♦   one ace, the ♦A
+#   3♥/3♠  no ace, 0-7, a five-card suit
+#   3NT  two aces or more
+#
+# Opener then bids naturally. See french-2d.notes.md.
+
+module french-2d "French 2♦ (game forcing)"
+  card   two_level.french_2d.play
+  needs  strong-openings
+  skill  bidding_conventions/french_2d
+
+# ── The opening ──────────────────────────────────────────────────────
+# Above every 2♣ opening and the 3NT opening (BBA opens 2♦ with a
+# balanced 26 too).
+when opening
+  2D  "French 2♦: game forcing, 24+ HCP"   alert
+      shows hcp>=24
+      sets  forcing=game, ask=french_2d
+      artificial
+      priority 2
+
+# ── Responder: aces ──────────────────────────────────────────────────
+when asked french_2d
+  3N  "Two aces or more"                 shows keycards(N)>=2
+      artificial
+      priority 2
+  2S  "One ace: the ♥A or the ♠A"        shows keycards(N)=1, has(A,H) | has(A,S)
+      artificial
+      priority 1
+  3C  "One ace: the ♣A"                  shows keycards(N)=1, has(A,C)
+      artificial
+      priority 1
+  3D  "One ace: the ♦A"                  shows keycards(N)=1, has(A,D)
+      artificial
+      priority 1
+  3H  "No ace, 0-7: five or more hearts"   shows keycards(N)=0, hcp<=7, H>=5, H>=S
+  3S  "No ace, 0-7: five or more spades"   shows keycards(N)=0, hcp<=7, S>=5, S>H
+  2N  "No ace, 8+"                       shows keycards(N)=0, hcp>=8
+      artificial
+  2H  "No ace, 0-7"                      shows keycards(N)=0, hcp<=7
+      artificial
+      priority -1
+
+# ── Opener: natural ──────────────────────────────────────────────────
+# The auction is forced to game; opener shows his suit or his balanced
+# hand, and the slam modules take over once a suit is agreed.
+after 2D (P) 3H (P)
+  4H  "Three or more hearts: agrees hearts"   shows H>=3
+      sets  trump=H
+      priority 2
+after 2D (P) 3S (P)
+  4S  "Three or more spades: agrees spades"   shows S>=3
+      sets  trump=S
+      priority 2
+# Two aces opposite 24+: a balanced 25 bids the slam (32+ between us).
+after 2D (P) 3N (P)
+  6N  "Balanced: slam opposite two aces"    shows balanced, hcp>=25
+      priority 1
+  P   "Balanced 24: game"                    shows balanced
+after 2D (P) 2H (P) | 2D (P) 2S (P) | 2D (P) 2N (P) | 2D (P) 3C (P) | 2D (P) 3D (P) | 2D (P) 3H (P) | 2D (P) 3S (P) | 2D (P) 3N (P)
+  cheapest(S) "Five or more spades"       shows S>=5
+  cheapest(H) "Five or more hearts"       shows H>=5
+  cheapest(D) "Five or more diamonds"     shows D>=5
+  cheapest(C) "Five or more clubs"        shows C>=5
+  cheapest(N) "Balanced"                  shows balanced
+      priority -1

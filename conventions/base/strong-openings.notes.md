@@ -25,6 +25,9 @@ cards with two of the top three honours, or six with three of the top
 five. 2NT is the balanced positive. After opener describes, the cheapest
 minor is the **second negative**: a bust, less than a jack and a queen.
 
+French 2♦ (`two_level.french_2d.play`, openings/french-2d.bid) caps
+every 2♣ opening at 23 and takes the 3NT opening's 26-27 as well.
+
 Card fields: `two_level.two_clubs.2d_response` (waiting/negative/steps),
 `parrish_bust` for the treatment where 2♥ shows the bust and 2♦ is game
 forcing, `notrump.two_nt.range_min/max`, `notrump.three_nt.range_min/max`.
@@ -72,9 +75,17 @@ twice). BBA opens that 1♠ and so do we.
 
 ## Gaps and open questions
 
-- **The 2♥ bust treatment** (`parrish_bust`) is read but only half
-  written: 2♥ shows the bust, but 2♦ is not yet game forcing on that
-  card, and there is no rule for opener after it.
+- **The 2♥ bust treatment** (`parrish_bust`, written 2026-10-05): 2♥
+  shows 0-2 HCP and lifts the game force (`sets forcing=none`); 2♦ then
+  waits with 3+ and the second negatives are off. Opener rebids
+  naturally: 2♠ forcing one round (responder 3♠ with three, else 2NT),
+  2NT 22-23 and three-level suits passable, 3♥ for hearts, 3NT 24-25.
+  The positive-response blocks skip 2♥ on that card. Kokish's relay
+  (2♣–2♦–2♥) is unaffected: it follows the waiting 2♦. Bust_Over_Strong_2C
+  with the field set: 5 boards, the divergence is our 2♥ where BBA (not
+  playing it) waits. Sources: Larry Cohen, "Two Club Opening"
+  (larryco.com: 2♥ as the immediate double negative); opener's rebids
+  are standard practice, not yet cited.
 - `two_clubs.2d_response = steps` is not modelled.
 - Opener's second call after the second negative.
 - Slam bidding after a positive: covered for opener's raise (responder

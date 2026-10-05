@@ -1,0 +1,23 @@
+# French 2D on 21GF-DEFAULT: which strong hands open 2D, which 2C (convention batch 2).
+card    = "21GF-DEFAULT"
+set     = ["French 2D=1", "Weak natural 2D=0"]
+dealer  = "S"
+prefix  = ""
+vuls    = ["None"]
+scoring = ["MP"]
+partner_auto = [0, 6]
+our     = []
+hands = [
+  "24 bal | AK4.AQ3.AKJ4.Q54",
+  "25 bal | AK4.AQ3.AKJ4.K54",
+  "27 bal | AK4.AQ3.AKJ4.KQ4",
+  "21 6S 3 losers | AKQJ76.AK3.A2.32",
+  "22 6S 3 losers | AKQJ76.AK3.AQ.32",
+  "24 6S | AKQJ76.AK3.AQ.Q2",
+  "25 6S | AKQJ76.AKQ.AK.32",
+  "22 5-5 | AKQJ7.AKQ32.A2.2",
+  "20 8H | A.KQJT9432.KQ.AJ",
+  "23 4441 | AKJ4.AKQ2.AJ54.4",
+  "26 4441 | AKJ4.AKQ2.AKQ4.4",
+  "21 7C | A2.AK.K2.AKQJ876",
+]

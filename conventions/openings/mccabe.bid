@@ -1,0 +1,64 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The McCabe adjunct (Robert S. Todd, "McCabe Responses to Preempts",
+# Advancing in Bridge; PBS `McCabe_After_Weak_2`): after our weak two is
+# doubled for takeout, responder's new suit below three of opener's suit
+# is a raise that names the lead, and the redouble shows a long suit of
+# responder's own:
+#
+#   3♣/3♦/3♥  a raise to three of opener's suit with a good holding in
+#             the suit bid (two of the top three): opener bids 3 of his suit
+#   XX        a long suit of my own, no fit: opener bids the next step,
+#             responder passes it or bids his suit
+#   2NT       the ask, as without the double (weak-two-responses.bid)
+#
+# The direct raises and pass are unchanged. See mccabe.notes.md.
+
+module mccabe "McCabe adjunct"
+  card   two_level.mccabe.play
+  needs  weak-two-responses
+  skill  bidding_conventions/mccabe
+
+# ── Responder over the double ────────────────────────────────────────
+after 2x (X) when weak_two_suit(x), x is D | x is H | x is S
+  3y  "McCabe: a raise, lead {y}"   alert
+      shows x>=3, quality(y)>=good, hcp<=14
+      when  y is not x, y is C | (y is D, x is not D) | (y is H, x is S)
+      artificial
+      priority 1
+  2N  "Asks: how good is the weak two?"   alert
+      shows hcp>=15, x>=2
+      sets  forcing=round, ask=weak_two(x)
+      artificial
+  XX  "McCabe: a long suit of my own, no fit (bid the next step)"   alert
+      shows x<=1, longest>=6, hcp<=14
+      artificial
+      priority 1
+
+# ── Opener after the lead-directing raise: back to his suit ──────────
+after 2x (X) 3y (P) when weak_two_suit(x), x is D | x is H | x is S, y is not x
+  3x  "Back to my suit (the lead noted)"
+      priority 1
+
+# ── The redouble: opener bids the next step, responder places it ────
+after 2D (X) XX (P)
+  2H  "Next step, as asked"   artificial   priority 1
+after 2H (X) XX (P)
+  2S  "Next step, as asked"   artificial   priority 1
+after 2S (X) XX (P)
+  2N  "Next step, as asked"   artificial   priority 1
+after 2D (X) XX (P) 2H (P) | 2H (X) XX (P) 2S (P) | 2S (X) XX (P) 2N (P)
+  P   "My suit: to play"           shows H>=6
+      when  partner.last=2H
+      priority 1
+  P   "My suit: to play"           shows S>=6
+      when  partner.last=2S
+      priority 1
+  2S  "My suit: to play"           shows S>=6
+  3C  "My suit: to play"           shows C>=6
+  3D  "My suit: to play"           shows D>=6
+  3H  "My suit: to play"           shows H>=6
+# They bid over the redouble: opener has nothing more to say.
+after 2D (X) XX (*) | 2H (X) XX (*) | 2S (X) XX (*)
+  P   "They came in: partner will bid his suit"
+      priority -5

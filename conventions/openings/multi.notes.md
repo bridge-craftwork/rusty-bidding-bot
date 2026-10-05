@@ -32,7 +32,7 @@
 ## Open questions
 
 - Strong options for the Multi (4-4-4-1, 20-21 for Lars Multi): need a
-  card field (convention-card) to choose; Lars_Multi_2D has no BBA
+  card field (convention-card) to choose (still none, 2026-10-05); Lars_Multi_2D has no BBA
   corpus (bba-works: false).
 - Should 2♥/2♠ stay natural weak twos when the card also says `Weak
   natural 2M` (then Multi would hold only the strong options)? We follow

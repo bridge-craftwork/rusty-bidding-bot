@@ -39,18 +39,21 @@ module strong-openings "2♣ and 2NT openings"
   param  k1430      = slam.blackwood.rkcb_1430 default false
   param  k0314      = slam.blackwood.rkcb_0314 default false
   param  benjamin   = two_level.benjamin.play default false
+  # French 2♦ (openings/french-2d.bid) takes every 24+ hand: 2♣ stops at 23.
+  param  french     = two_level.french_2d.play default false
 
 when opening
   2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
       shows hcp=two_nt_min..two_nt_max, balanced
   3N  "{three_nt_min}-{three_nt_max} HCP, balanced"
       shows hcp=three_nt_min..three_nt_max, balanced
-      when  !gambling
+      when  !gambling, !french
   # Three ways in, written apart because one condition for all of them
   # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
       shows hcp>=22, !balanced | hcp<=25 | hcp>=28 | gambling   # balanced 26-27 opens 3NT, unless 3NT is Gambling
       when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
+      shows !french | hcp<=23
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1                       # ahead of a one-level opening
@@ -58,6 +61,7 @@ when opening
       shows hcp>=17, losers<=4, hcp+length_points>=23
       shows (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | (H>=5, S>=5)
       when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
+      shows !french | hcp<=23
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
@@ -65,6 +69,7 @@ when opening
       shows hcp>=17, losers<=3, hcp+length_points>=23
       shows (C>=6, quality(C)>=good) | (D>=6, quality(D)>=good) | (H>=6, quality(H)>=good) | (S>=6, quality(S)>=good) | shape 5-5-x-x
       when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
+      shows !french | hcp<=23
       sets  forcing=game, ask=strong_2c
       artificial
       priority 1
@@ -91,6 +96,7 @@ after 2C (P)
   2N  "Positive: balanced, 8+"         shows balanced, hcp>=8
   2H  "Bust: fewer than 3 HCP"         shows hcp<=2
       when  bust_2h
+      sets  forcing=none                # opener may stop below game
       artificial
       priority 1
 
@@ -126,7 +132,7 @@ after 2C (P) 2N (P) 3H (P) | 2C (P) 3C (P) 3H (P) | 2C (P) 3D (P) 3H (P)
 # of its own (BBA raises on all of them: probes/slam-2C-2H-opener.toml).
 # A lighter 2C, opened on playing tricks, has a long suit and shows it.
 # So responder counts the raise as 22, not the 2C floor of 17.
-after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
+after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5, y is not H | !bust_2h
   cheapest(y) "Raise: three or more {y}, 22+"  shows y>=3, hcp>=22   sets trump=y
       priority 1
   cheapest(S) "Five or more spades"           shows S>=5   when y is not S
@@ -144,7 +150,7 @@ after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5
 # BBA, probes/strong2c-2S-2N-resp.toml and strong2c-2H-2N-resp.toml:
 # a six-card suit rebids, a four-card side suit is shown, 5-3-3-2 bids a
 # quantitative 4NT with 8-9 and 6NT with 10+.
-after 2C (P) 2y (P) 2N (P) when y is H | y is S
+after 2C (P) 2y (P) 2N (P) when y is H | y is S, y is not H | !bust_2h
   3y  "Six or more {y}: the fit is known"      shows y>=6   sets trump=y
       priority 2                             # the fit first, before a side suit
   3S  "Four or more spades"                    shows S>=4
@@ -167,7 +173,7 @@ after 2C (P) 2y (P) 2N (P) when y is H | y is S
 # for keycards at once: 30+ between us and a fit (BBA asks on almost
 # every hand after 2C P 2S P 2NT P 3S P, probes/strong2c-2S-2N-3S-opener.toml).
 # Without 1430 or 0314 on the card, game in the fit.
-after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y
+after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y, y is not H | !bust_2h
   4N  "Keycard ask in {z}: four-card support"  shows z>=4
       when  k1430 | k0314
       sets  trump=z, ask=keycards(z)
@@ -192,9 +198,49 @@ after 2C (P) 2N (P)
 # ── Responder's second call: the second negative ─────────────────────
 # Having waited, responder shows a bust by bidding the cheapest minor;
 # anything else is a positive and the auction is already game forcing.
+# With the 2♥ bust (`parrish_bust`) the bust was shown at once: 2♦ has
+# 3+ HCP and there is no second negative.
 after 2C (P) 2D (P) 2H (P)
-  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
+  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
 after 2C (P) 2D (P) 2S (P)
-  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
+  3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
 after 2C (P) 2D (P) 3C (P)
-  3D  "Second negative: fewer than 3 HCP"  shows hcp<=2  artificial  priority 1
+  3D  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
+
+# ── The 2♥ bust (`two_level.two_clubs.parrish_bust`) ─────────────────
+# 2♣–2♥ shows fewer than 3 HCP (2♦ is then waiting with 3+, game
+# forcing). Opener describes naturally; a suit at the two level is
+# forcing one round, 2NT (22-23) and a three-level suit may be passed.
+# Hearts are bid at the three level (2♥ was artificial).
+after 2C (P) 2H (P) when bust_2h
+  2N  "22-23 HCP, balanced"            shows hcp=22..23, balanced
+  3N  "24-25 HCP, balanced"            shows balanced, hcp>=24, hcp<=25 | (gambling, hcp<=27)
+  4N  "28+ HCP, balanced"              shows hcp>=28, balanced
+  2S  "5+ spades: forcing one round"   shows S>=5
+      sets  forcing=round
+  3H  "5+ hearts"                      shows H>=5
+  3C  "5+ clubs"                       shows C>=5
+  3D  "5+ diamonds"                    shows D>=5
+after 2C (P) 2H (P) 2S (P) when bust_2h
+  3S  "Three or more spades"           shows S>=3
+      sets  trump=S
+      priority 1
+  2N  "No spade support"
+after 2C (P) 2H (P) 3H (P) when bust_2h
+  4H  "Three or more hearts: game opposite a 2♣ suit"   shows H>=3
+      sets  trump=H
+      priority 1
+  P   "No support"
+after 2C (P) 2H (P) 3C (P) | 2C (P) 2H (P) 3D (P) | 2C (P) 2H (P) 2N (P) when bust_2h
+  P   "A bust: nothing to add"
+      priority 1
+# Opener after the bust's 2NT (no spade support): game with it in hand.
+after 2C (P) 2H (P) 2S (P) 2N (P) when bust_2h
+  4S  "Game in hand: six or more spades"   shows S>=6, losers<=3
+      priority 1
+  3S  "Six or more spades: to play"        shows S>=6
+  3H  "Five or more hearts too"            shows H>=5
+  3D  "Four or more diamonds too"          shows D>=4
+  3C  "Four or more clubs too"             shows C>=4
+  P   "Nothing more to say"
+      priority -1

@@ -1,0 +1,30 @@
+# Mini-Roman 2♦ (the default card with Mini-Roman on).
+card    21GF-DEFAULT two_level.two_diamonds.mini_roman=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S AQ54.KJ32.4.KJ54      |                     | 2D     | 4-4-1-4, 14: Mini-Roman
+S AQ54.KJ32.KJ54.4      |                     | 2D     | 4-4-4-1 short clubs, 14
+S 4.AQ54.KJ32.KJ54      |                     | 2D     | 1-4-4-4, 14
+S AQ54.KJ32.-.KJ543     |                     | 2D     | 4-4-0-5, 14
+S AQ543.KJ32.KJ54.-     |                     | 1S     | five spades: 1S
+S AKJ4.KQ32.AJ54.4      |                     | 1D     | 4-4-4-1 18: too strong
+S Q542.KJ32.4.KJ54      |                     | P      | 4-4-1-4, 10 HCP: below the range, pass
+S 32.43.KQJ976.K54      |                     | P      | six diamonds: no weak 2D
+# Responder.
+N 8632.854.97532.6      | 2D P                | P      | five diamonds, weak: pass
+N 8632.Q854.973.65      | 2D P                | 2H     | four hearts, weak: to play
+N Q863.854.973.J65      | 2D P                | 2S     | four spades, weak
+N 63.854.9.QJ65432      | 2D P                | 3C     | six clubs, weak
+N KQ63.A54.Q73.J65      | 2D P                | 2N     | 12: ask
+# Opener corrects from the short suit.
+S AQ54.4.KJ32.KJ54      | 2D P 2H P           | 2S     | short hearts: spades
+S AQ54.KJ32.4.KJ54      | 2D P 2H P           | P      | four hearts: pass
+S 4.AQ54.KJ32.KJ54      | 2D P 2S P           | 3C     | short spades: clubs
+S AQ54.KJ32.KJ54.4      | 2D P 3C P           | 3D     | short clubs: diamonds
+# The ask.
+S AQ54.KJ32.4.KJ54      | 2D P 2N P           | 3D     | short diamonds
+S AQ54.KJ32.KJ54.4      | 2D P 2N P           | 3C     | short clubs
+N KQ63.A54.Q73.J65      | 2D P 2N P 3D P      | 4S     | four spades: game
+N K63.A54.KQ73.J65      | 2D P 2N P 3D P      | 3N     | diamonds held: 3NT
