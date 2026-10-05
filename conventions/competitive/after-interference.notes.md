@@ -153,9 +153,8 @@ know partner really holds it.
 - **Responder's second call in a contested auction**: `1x (1y) X (P) 2x`
   is 54 boards on the subset, and it is the next turn after the rules
   added here.
-- **Jump shifts** (`competitive.jump_shift_after_overcall` is strong on
-  this card) and Lebensohl over an overcall of 1m (BBA plays it on the
-  21GF card).
+- **Jump shifts**: done 2026-10-05 (below). Lebensohl over an overcall
+  of 1m (BBA plays it on the 21GF card) is still open.
 - **Trap passes**: BBA passes with length and strength behind the
   overcaller where we double or cue. Trap_Pass loses 3.0 points of call
   agreement, and its contracts gain 2.6.
@@ -401,7 +400,40 @@ the five-club hand expects a pass. One consequence in `rebids.test`:
 after `1D (2S) 3D (P)` the raise now shows five, so opener with five
 holds ten trumps and the Law bids 4♦ (it passed before; still not 5♦).
 
+## Jump shifts over their overcall, from the card (2026-10-05)
+
+`competitive.jump_shift_after_overcall` (`1X-(1Y)-2Z weak/strong` in
+`.bbsa`): weak on every 21GF and Precision card, strong on Basic-Bridge.
+
+- **weak**: `1x (1y)` and a jump to 2H/2S is preemptive, six or more
+  cards, 2-7 HCP, not with three-card support for partner's major;
+  opener passes it unless another rule (a strong balanced hand) bids.
+  Only at the two level: BBA alerts "1X-(1Y)-2Z weak" at 2H/2S only
+  (all 63 corpus alerts), and passes the weak six-card hands a three-level
+  jump would show; our first version also jumped at three and diverged
+  on about 20 boards, so it was cut back.
+- **strong**: the existing 13+ game-forcing jumps (where a new suit is
+  not forcing).
+- A passed hand's jump is a fit-showing jump when the card plays those
+  (`fit-showing-jumps.bid`).
+
+Tripwire (all scenarios, --limit 50): the weak jump shift now fires in
+Negative_Free_Bid, Dealing_with_Overcalls_Strong, Game_Overcalls and
+single boards elsewhere, all on cards that set it. BBA bids 1S rather
+than 2S with 8 HCP and six spades, and over 1D (1S) bids a forcing 2H
+with six hearts and 7-9 HCP: hence the 2-7 range.
+
+**For Rick:** with `weak` and a new suit not forcing (the Precision
+cards), a 13+ responder with a long suit now has no jump; he bids the
+non-forcing new suit or doubles. Fine, or should the jump stay strong
+there?
+
 ## Sources
+
+- **Jump shifts in competition** (2026-10-05): the ACBL convention card's
+  "Jump shift in competition: weak / strong"; BBA's alerts
+  ("1X-(1Y)-2Z weak") for the range and the two-level limit. Weak jump
+  shifts by responder: standard practice, not yet cited to a book.
 
 - **The conventions:** negative doubles, the redouble, the cue-bid raise
   (limit raise or better) and free bids. Standard practice, not yet

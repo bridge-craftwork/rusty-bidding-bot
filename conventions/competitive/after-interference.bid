@@ -179,33 +179,24 @@ after 1x (1y) 2y (3y) 4x (P) when x is C | x is D, y is not x
 # `competitive.jump_shift_after_overcall` = weak (the 21GF cards): a
 # jump in a new suit is preemptive, a six-card suit and little else
 # (ACBL convention card, "Jump shift in competition: weak"; BBA alerts
-# it "1X-(1Y)-2Z weak": 1-10 HCP, median 6, always six cards). With
+# it "1X-(1Y)-2Z weak", 1-10 HCP, median 6, six cards, and only at the
+# two level: a three-level jump it never makes, it passes). With
 # support for partner's major a raise comes first. A passed hand's jump
 # is fit-showing when the card plays those (fit-showing-jumps.bid).
 # With `strong`, the 13+ jumps above (when a new suit is not forcing).
 after 1x (1y) when y is not x, js is weak, !passed_hand | !fsj
-  jump(S) "Weak jump shift: six or more spades, 2-8 HCP"
-      shows S>=6, hcp=2..8
-      when  x is not S, y is not S
+  jump(S) "Weak jump shift: six or more spades, 2-7 HCP"
+      shows S>=6, hcp=2..7
+      when  x is not S, y is not S, cheapest_rank(S) <= 8
       when  x<=2 | x is C | x is D
       priority 2
-  jump(H) "Weak jump shift: six or more hearts, 2-8 HCP"
-      shows H>=6, hcp=2..8
-      when  x is not H, y is not H
-      when  x<=2 | x is C | x is D
-      priority 2
-  jump(D) "Weak jump shift: six or more diamonds, 2-8 HCP"
-      shows D>=6, hcp=2..8, S<=3, H<=3
-      when  x is not D, y is not D
-      when  x<=2 | x is C | x is D
-      priority 2
-  jump(C) "Weak jump shift: six or more clubs, 2-8 HCP"
-      shows C>=6, hcp=2..8, S<=3, H<=3
-      when  x is not C, y is not C
+  jump(H) "Weak jump shift: six or more hearts, 2-7 HCP"
+      shows H>=6, hcp=2..7
+      when  x is not H, y is not H, cheapest_rank(H) <= 8
       when  x<=2 | x is C | x is D
       priority 2
 # Opener passes the weak jump unless something else fits better.
-after 1x (1y) 2z (P) | 1x (1y) 3z (P) when partner.jumped, js is weak, z is not x, z is not y
+after 1x (1y) 2z (P) when partner.jumped, js is weak, z is not x, z is not y
   P   "Partner's jump was weak"             priority -5
 
 # ── They overcalled at the two level or jumped ───────────────────────
