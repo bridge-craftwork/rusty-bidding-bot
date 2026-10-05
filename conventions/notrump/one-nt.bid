@@ -17,6 +17,8 @@ module notrump-base "1NT opening and natural responses"
   param  jacoby  = notrump.transfers.jacoby default true
   param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
   param  puppet_1nt = notrump.stayman.puppet_1nt default false
+  param  allow_5422 = notrump.one_nt.allow_5422 default false
+  param  allow_4441 = notrump.one_nt.allow_4441 default false
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -30,6 +32,17 @@ when opening
   1N  "{nt_min}-{nt_max} HCP, balanced (1 HCP light with extras)"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min-1, points>=nt_min, balanced, five_major is not never | (H<=4, S<=4)
       when one_less
+  # The card's shape options (one-nt.notes.md, "5-4-2-2 and 4-4-4-1").
+  # 5-4-2-2 with a five-card minor and four hearts or four of the other
+  # minor, both doubletons headed by the ace or king (BBA: never with
+  # four spades, always with both doubletons stopped). 4-4-4-1 only with
+  # a singleton ace or king.
+  1N  "{nt_min}-{nt_max} HCP, 5-4-2-2 with a five-card minor"  announce "{nt_min} to {nt_max}"
+      shows hcp=nt_min..nt_max, shape 5-4-2-2, C=5 | D=5, S=2, H>=2, D>=2, C>=2, has(A,S) | has(K,S), H>=3 | has(A,H) | has(K,H), D>=3 | has(A,D) | has(K,D), C>=3 | has(A,C) | has(K,C)
+      when allow_5422
+  1N  "{nt_min}-{nt_max} HCP, 4-4-4-1 with a singleton honour"  announce "{nt_min} to {nt_max}"
+      shows hcp=nt_min..nt_max, shape 4-4-4-1, S>=2 | has(A,S) | has(K,S), H>=2 | has(A,H) | has(K,H), D>=2 | has(A,D) | has(K,D), C>=2 | has(A,C) | has(K,C)
+      when allow_4441
 
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.

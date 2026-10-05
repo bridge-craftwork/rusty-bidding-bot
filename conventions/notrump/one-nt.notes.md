@@ -581,6 +581,31 @@ boards and −1,995 IMPs before, 1,396 and +675 after. `1NT P 3H P` and
 `1NT P 3S P` no longer appear among the no-rule positions. The corpus
 and 21GF play transfers, so nothing there moves.
 
+## 5-4-2-2 and 4-4-4-1 (2026-10-05)
+
+The card's shape options now open 1NT (`notrump.one_nt.allow_5422`, on
+for every 21GF card; `allow_4441`, on for none in the corpus):
+
+- **5-4-2-2**: a five-card minor with four hearts or four of the other
+  minor, both doubletons headed by the ace or king; never four spades
+  (and no five-card major). This is what the 2026-09-24 probe found
+  for the minor/heart hands (probes/open-15-5422-major-mirror.toml:
+  65 of 65 with both doubletons stopped, a third with one, none
+  without; never with four spades). Five-four in the minors is held
+  to the same rule: BBA's choices there (Any_5422_*, GIB_1N5422) open
+  1NT with small doubletons and the minor with stopped ones about
+  equally often; requiring the stoppers matched BBA slightly better
+  (250 vs 245 of 300 opening calls) than opening every one.
+- **4-4-4-1**: only with a singleton ace or king (standard practice,
+  not yet cited; no corpus card plays it).
+
+The rule says `S=2, H>=2, D>=2, C>=2` explicitly: partner's reading of
+`shape 5-4-2-2` alone left the suit minimums at 0 and broke the
+fit counts after Stayman (fit.test).
+
+`compare Any_5422_with_15-17 --limit 100`, the opening call: 84 → 89
+of 100. The unmapped `.bbsa` key `1NT opening NT style` is left alone.
+
 ## Sources
 
 - **The system:** a 15-17 1NT opening and natural responses (2NT
@@ -614,3 +639,7 @@ and 21GF play transfers, so nothing there moves.
 - **Where we differ:** BBA's finer valuation, flat 8-counts, tens with a
   five-card minor, and 16-17 opposite 15-17 ("Accepted differences from
   BBA").
+- 5-4-2-2 / 4-4-4-1 openings: the 2026-09-24 probe above
+  (probes/open-15-5422-major-mirror.toml) and BBA's auctions in the
+  Any_5422_* and GIB_1N5422 scenarios; 4-4-4-1 standard practice,
+  not yet cited.
