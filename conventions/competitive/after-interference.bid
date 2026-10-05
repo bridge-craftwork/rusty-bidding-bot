@@ -28,6 +28,8 @@ module after-interference "Our side once the opponents come in"
   param  neg = doubles.negative.play default true
   param  cue_raise = competitive.cue_bid_raise.play default true
   param  new_suit_forcing = competitive.new_suit_after_overcall_forcing default true
+  param  js = competitive.jump_shift_after_overcall default strong
+  param  fsj = competitive.fit_showing_jumps.play default false
 
 # ── They overcalled at the one level ─────────────────────────────────
 after 1x (1y) when neg
@@ -102,17 +104,17 @@ after 1x (1y)
       when  y is S, x is not H, !new_suit_forcing
   jump(C) "13+ total points, five or more clubs: forcing to game"
       shows C>=5, hcp>=13
-      when  x is not C, y is not C, !new_suit_forcing
+      when  x is not C, y is not C, !new_suit_forcing, js is strong
       when  H<=4 | y is not S | x is H     # 5-5 with hearts: the higher suit
       sets  forcing=game
   jump(D) "13+ total points, five or more diamonds: forcing to game"
       shows D>=5, hcp>=13
-      when  x is not D, y is not D, !new_suit_forcing
+      when  x is not D, y is not D, !new_suit_forcing, js is strong
       when  H<=4 | y is not S | x is H     # 5-5 with hearts: the higher suit
       sets  forcing=game
   3H  "13+ total points, five or more hearts: forcing to game"
       shows H>=5, hcp>=13
-      when  y is S, x is not H, !new_suit_forcing
+      when  y is S, x is not H, !new_suit_forcing, js is strong
       sets  forcing=game
   # Limit raise or better, and the notrump responses (2026-09-26: over a
   # one-level overcall these existed only over two-level ones, so 11-16
@@ -172,6 +174,39 @@ after 1x (1y) 2y (3y) 4x (P) when x is C | x is D, y is not x
   5{x} "Game in the minor: 13+ opposite the fifth trump"  shows hcp+length_points>=13
   P    "The limit raise: no game"
        priority -5
+
+# ── Weak jump shifts over their one-level overcall ───────────────────
+# `competitive.jump_shift_after_overcall` = weak (the 21GF cards): a
+# jump in a new suit is preemptive, a six-card suit and little else
+# (ACBL convention card, "Jump shift in competition: weak"; BBA alerts
+# it "1X-(1Y)-2Z weak": 1-10 HCP, median 6, always six cards). With
+# support for partner's major a raise comes first. A passed hand's jump
+# is fit-showing when the card plays those (fit-showing-jumps.bid).
+# With `strong`, the 13+ jumps above (when a new suit is not forcing).
+after 1x (1y) when y is not x, js is weak, !passed_hand | !fsj
+  jump(S) "Weak jump shift: six or more spades, 2-8 HCP"
+      shows S>=6, hcp=2..8
+      when  x is not S, y is not S
+      when  x<=2 | x is C | x is D
+      priority 2
+  jump(H) "Weak jump shift: six or more hearts, 2-8 HCP"
+      shows H>=6, hcp=2..8
+      when  x is not H, y is not H
+      when  x<=2 | x is C | x is D
+      priority 2
+  jump(D) "Weak jump shift: six or more diamonds, 2-8 HCP"
+      shows D>=6, hcp=2..8, S<=3, H<=3
+      when  x is not D, y is not D
+      when  x<=2 | x is C | x is D
+      priority 2
+  jump(C) "Weak jump shift: six or more clubs, 2-8 HCP"
+      shows C>=6, hcp=2..8, S<=3, H<=3
+      when  x is not C, y is not C
+      when  x<=2 | x is C | x is D
+      priority 2
+# Opener passes the weak jump unless something else fits better.
+after 1x (1y) 2z (P) | 1x (1y) 3z (P) when partner.jumped, js is weak, z is not x, z is not y
+  P   "Partner's jump was weak"             priority -5
 
 # ── They overcalled at the two level or jumped ───────────────────────
 # Rick: over a two-level overcall a new suit is 10+ total points with five

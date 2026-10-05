@@ -138,3 +138,14 @@ S QJ.K7.8653.85432          | 1C 2S   | 3C     | five clubs and 7 total points: 
 S 982.KJ3.Q732.K42          | 1D 2C   | P      | three diamonds: no raise, even at the two level
 S 98.KJ3.Q7432.K42          | 1D 2C   | 2D     | five diamonds: raise
 S 9.83.8732.QJ7632          | 1C 1H   | 3C     | six clubs and 4 HCP: preempt
+
+# Jump shifts over their one-level overcall: weak on the 21GF cards
+# (competitive.jump_shift_after_overcall = weak).
+card    21GF-DEFAULT
+S 82.KQT874.93.854          | 1C 1S   | 3H     | weak jump shift: six hearts, 5 HCP
+S 82.K4.QJT874.854          | 1C 1S   | 3D     | weak jump shift in diamonds
+S 82.KQT874.93.854          | 1C 1D   | 2H     | a jump at the two level
+S 92.KQT874.93.854          | 1S 1N   | P      | not over their notrump
+N AK3.A5.K962.A932          | 1C 1S 3H P | P   | opener passes the weak jump
+card    21GF-DEFAULT competitive.jump_shift_after_overcall=strong
+S 82.KQT874.93.854          | 1C 1S   | X      | strong jump shifts: the weak hand doubles

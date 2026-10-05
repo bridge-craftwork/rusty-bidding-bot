@@ -1,0 +1,31 @@
+# Fit-showing jumps (competitive.fit_showing_jumps.play; on in 21GF-GIB).
+card    21GF-GIB
+dealer  S
+vul     None
+
+# seat hand                 | auction         | expect | why
+# A passed hand's jump shift over partner's minor.
+S 87.Q4.KQJ84.K932          | P P 1C P        | 2D     | four clubs, five diamonds with honours, 11 HCP
+S 5.984.Q632.AQJ84          | P P 1D P        | 3C     | four diamonds, five clubs, 9 HCP
+S 5.984.Q632.AQJ84          | P P 1D 1S       | 3C     | still a fit jump over their overcall
+S 5.984.Q632.98764          | P P 1D P        | P      | no honour in clubs: not a fit jump, too weak for anything else
+# Opener judges the double fit; the jumper passes the sign-off.
+N AQ76.KJ5.A42.Q87          | P P 1C P 2D P   | 3N     | 16 balanced with the diamond ace
+N AQ76.KJ5.5.KQ987          | P P 1C P 2D P   | 3C     | singleton diamond: no game
+S 92.Q2.AQJ86.9752          | P P 1D P 3C P 3D P | P   | partner has signed off
+
+# Responder over their takeout double.
+dealer  N
+S KJ84.5.432.AQJ76          | 1S X            | 3C     | four spades, five good clubs, 10 HCP
+N AQ876.KJ5.Q42.87          | 1S X 3D P       | 4S     | the queen of diamonds fits
+N AQ876.KJ5.Q42.87          | 1S X 3C P       | 3S     | small doubleton in clubs: sign off
+
+# Advancer after partner's overcall.
+dealer  W
+S KJ84.5.432.AQJ76          | 1D 1S P         | 3C     | four spades for partner, five good clubs
+N AQJ76.K5.A42.Q87          | 1D 1S P 3C P    | 4S     | the club queen fits
+
+# Off the card: no fit jump.
+card    21GF-DEFAULT
+dealer  S
+S 87.Q4.KQJ84.K932          | P P 1C P        | 2C     | fit jumps off: the inverted raise

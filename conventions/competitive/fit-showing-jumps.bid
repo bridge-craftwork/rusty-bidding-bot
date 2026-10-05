@@ -1,0 +1,156 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Fit-showing jumps (`competitive.fit_showing_jumps.play`): a jump in a
+# new suit by a hand that has a fit for partner shows four or more of
+# partner's suit, a five-card side suit with a top honour, and about a
+# limit raise (Todd, "Fit-Showing Jumps"; Robinson in "25 More Bridge
+# Conventions You Should Know", ch. 14). Partner then judges the double
+# fit: honours in the side suit work, shortness there does not.
+#
+# Where they apply here (fit-showing-jumps.notes.md):
+#
+# - a passed hand's jump shift over partner's opening, with or without
+#   an overcall on the right (the scenario Fit_Showing_Jumps);
+# - responder's jump shift over their takeout double (Fit_Jumps_after_
+#   1M_Double; BBA plays them there on the 21GF-GIB card);
+# - advancer's jump shift after partner's overcall.
+#
+# An unpassed responder's jump shift over their *overcall* is not one:
+# the card has its own field for it (`competitive.jump_shift_after_
+# overcall`, after-interference.bid).
+
+module fit-showing-jumps "Fit-showing jumps"
+  card   competitive.fit_showing_jumps.play
+  needs  base
+  needs  overcalls
+  skill  competitive_bidding/fit_showing_jumps
+
+# ── A passed hand's jump shift ───────────────────────────────────────
+# 10-12 support points (a passed hand), four of partner's suit, five of
+# the side suit with an ace, king or queen.
+after 1x (P) | 1x (X) | 1x (1N) when passed_hand
+  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10-12"  alert
+      shows x>=4, S>=5, quality(S)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not S
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10-12"  alert
+      shows x>=4, H>=5, quality(H)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not H
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10-12"  alert
+      shows x>=4, D>=5, quality(D)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not D
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10-12"  alert
+      shows x>=4, C>=5, quality(C)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not C
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+after 1x (1y) | 1x (2y) when passed_hand, y is not x
+  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10-12"  alert
+      shows x>=4, S>=5, quality(S)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not S, y is not S
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10-12"  alert
+      shows x>=4, H>=5, quality(H)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not H, y is not H
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10-12"  alert
+      shows x>=4, D>=5, quality(D)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not D, y is not D
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10-12"  alert
+      shows x>=4, C>=5, quality(C)>=fair, hcp+length_points=10..12, hcp<=11
+      when  x is not C, y is not C
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+
+# ── Responder over their takeout double ──────────────────────────────
+# A limit raise or better with the side suit: it replaces the redouble
+# or the Jordan 2NT for this shape.
+after 1x (X) when !passed_hand
+  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10+"  alert
+      shows x>=4, S>=5, quality(S)>=fair, hcp+length_points>=10
+      when  x is not S
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10+"  alert
+      shows x>=4, H>=5, quality(H)>=fair, hcp+length_points>=10
+      when  x is not H
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10+"  alert
+      shows x>=4, D>=5, quality(D)>=fair, hcp+length_points>=10
+      when  x is not D
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10+"  alert
+      shows x>=4, C>=5, quality(C)>=fair, hcp+length_points>=10
+      when  x is not C
+      sets  trump=x, forcing=round, ask=fit_jump(x)
+      priority 2
+
+# ── Advancer after partner's one-level overcall ──────────────────────
+# Partner's overcall is five cards, so four-card support is nine trumps.
+# Forcing one round; a passed advancer is limited to 12.
+after (1x) 1y (P) | (1x) 1y (X) | (1x) P (P) 1y (P)
+  jump(S) "Fit-showing jump: 4+ {y}, five or more spades with an honour, 10+"  alert
+      shows y>=4, S>=5, quality(S)>=fair, hcp+length_points>=10
+      when  x is not S, y is not S
+      when  !passed_hand | hcp<=11
+      sets  trump=y, forcing=round, ask=fit_jump(y)
+      priority 2
+  jump(H) "Fit-showing jump: 4+ {y}, five or more hearts with an honour, 10+"  alert
+      shows y>=4, H>=5, quality(H)>=fair, hcp+length_points>=10
+      when  x is not H, y is not H
+      when  !passed_hand | hcp<=11
+      sets  trump=y, forcing=round, ask=fit_jump(y)
+      priority 2
+  jump(D) "Fit-showing jump: 4+ {y}, five or more diamonds with an honour, 10+"  alert
+      shows y>=4, D>=5, quality(D)>=fair, hcp+length_points>=10
+      when  x is not D, y is not D
+      when  !passed_hand | hcp<=11
+      sets  trump=y, forcing=round, ask=fit_jump(y)
+      priority 2
+  jump(C) "Fit-showing jump: 4+ {y}, five or more clubs with an honour, 10+"  alert
+      shows y>=4, C>=5, quality(C)>=fair, hcp+length_points>=10
+      when  x is not C, y is not C
+      when  !passed_hand | hcp<=11
+      sets  trump=y, forcing=round, ask=fit_jump(y)
+      priority 2
+
+# ── Partner judges the double fit ────────────────────────────────────
+# Opener (or the overcaller) counts the side suit: an honour there, or
+# length, makes the hands fit; a singleton or void there is wasted
+# opposite partner's length. Game with a fitting maximum, else the
+# cheapest bid in the trump suit, which partner passes.
+after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z (P) | 1x (1y) 3z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | (1y) 1x (P) 2z (P) | (1y) 1x (P) 3z (P) | (1y) 1x (X) 2z (P) | (1y) 1x (X) 3z (P) | (1y) P (P) 1x (P) 2z (P) | (1y) P (P) 1x (P) 3z (P) when asked fit_jump(t), z is not t
+  4{t} "Game: the side suit {z} fits"
+      shows hcp>=14 | (hcp>=12, z>=3 | quality(z)>=fair), z>=2
+      when  t is H | t is S
+      priority 2
+  3N  "Game in notrump: 14+, {z} fits, balanced"
+      shows hcp>=14, z>=2, balanced
+      when  t is C | t is D
+      priority 2
+  5{t} "Game in {t}: 16+, the side suit {z} fits"
+      shows hcp>=16, z>=3 | quality(z)>=fair, !balanced
+      when  t is C | t is D
+      priority 2
+  cheapest(t) "No game: sign off in {t}"
+      priority 1
+
+# ── The jumper after partner's sign-off ──────────────────────────────
+# The jump described the hand; partner has judged. Pass, unless an
+# unlimited jump (over their double, or advancer's) holds 13+ for game
+# in a major.
+after 1x (P) 2z (P) 3x (P) | 1x (P) 3z (P) 3x (P) | 1x (P) 3z (P) 4x (P) | 1x (X) 2z (P) 3x (P) | 1x (X) 3z (P) 3x (P) | 1x (X) 3z (P) 4x (P) | 1x (1y) 2z (P) 3x (P) | 1x (1y) 3z (P) 3x (P) | 1x (1y) 3z (P) 4x (P) | 1x (2y) 3z (P) 3x (P) | 1x (2y) 3z (P) 4x (P) | (1y) 1x (P) 2z (P) 3x (P) | (1y) 1x (P) 3z (P) 3x (P) | (1y) 1x (P) 3z (P) 4x (P) when answered fit_jump(x), z is not x
+  4{x} "13+: game after all"                 shows hcp+length_points>=13
+      when  x is H | x is S, !passed_hand
+  P   "Partner has signed off"               priority -5
