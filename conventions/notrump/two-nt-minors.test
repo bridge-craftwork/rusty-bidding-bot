@@ -1,0 +1,26 @@
+# The minors over 2NT (two-nt-minors.bid).
+# 21GF-DEFAULT: "Minor Suit Transfers after 2NT" on.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand                 | auction            | expect | why
+N 54.83.976.QJ8642          | 2NT P              | 3S     | weak, six clubs: relay to play
+N 54.83.QJ8642.976          | 2NT P              | 3S     | weak, six diamonds
+N 54.K8.Q54.QJ8642          | 2NT P              | 3NT    | balanced game: 3NT
+S AK5.KQ3.AJ54.K93          | 2NT P 3S P         | 4C     | the relay is forced
+N 54.83.976.QJ8642          | 2NT P 3S P 4C P    | P      | clubs: play here
+N 54.83.QJ8642.976          | 2NT P 3S P 4C P    | 4D     | diamonds: to play
+
+# 21GF-MSS: "Minor Suit Stayman after 2NT" on, the transfers off.
+card    21GF-MSS
+dealer  S
+
+N 8.K4.KT642.QT952          | 2NT P              | 3NT    | five-five in the minors, game values only: 3NT
+N 8.K4.AKT64.QT952          | 2NT P              | 3S     | five-five in the minors, slam interest
+N 54.A3.KJ75.AQ864          | 2NT P              | 3S     | five-four in the minors, slam interest
+S AK5.KQ3.AJ54.K93          | 2NT P 3S P         | 4D     | four diamonds, not four clubs
+S AK5.KQ3.AJ5.K973          | 2NT P 3S P         | 4C     | four clubs
+S AK54.KQ3.AJ5.K93          | 2NT P 3S P         | 3NT    | no four-card minor
+N 54.A3.KJ75.QJ864          | 2NT P 3S P 4D P    | 6D     | 11 and a nine-card fit: slam
+N 8.K4.AKT64.QT952          | 2NT P 3S P 4C P    | 6C     | slam in the fit
+N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 6NT    | no fit, 32 between us: 6NT
