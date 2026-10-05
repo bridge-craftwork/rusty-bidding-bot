@@ -1,0 +1,44 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Splinters over 1NT (nt-splinter.notes.md): 1NT–3♦ with
+# `notrump.three_d_response = splinter`, 1NT–3♥/3♠ with
+# `notrump.three_major_splinter`. The bid suit is a singleton or void,
+# with four or more in each other suit (4-4-4-1, 5-4-4-0 and alike,
+# no five-card major) and game values; not with a singleton A, K or Q
+# (BBA bids Stayman with those). Opener bids game in a four-card
+# major he shares, else 3NT.
+
+module nt-splinter "Splinters over 1NT"
+  needs  notrump-base
+  param  three_d  = notrump.three_d_response default natural
+  param  major_splinter = notrump.three_major_splinter default false
+
+after 1N (P)
+  3D  "Splinter: a singleton or void in diamonds, four or more in each other suit, game values"  alert
+      shows D<=1, !has(A,D), !has(K,D), !has(Q,D), H=4, S=4, C>=4, strength>=game
+      when  three_d is splinter
+      sets  forcing=game, ask=nt_splinter
+      artificial
+      priority 2                           # ahead of Stayman
+  3H  "Splinter: a singleton or void in hearts, four or more in each other suit, game values"  alert
+      shows H<=1, !has(A,H), !has(K,H), !has(Q,H), S=4, D>=4, C>=4, strength>=game
+      when  major_splinter
+      sets  forcing=game, ask=nt_splinter
+      artificial
+      priority 2
+  3S  "Splinter: a singleton or void in spades, four or more in each other suit, game values"  alert
+      shows S<=1, !has(A,S), !has(K,S), !has(Q,S), H=4, D>=4, C>=4, strength>=game
+      when  major_splinter
+      sets  forcing=game, ask=nt_splinter
+      artificial
+      priority 2
+
+when asked nt_splinter
+  4S  "Four spades: game in the fit"        shows S>=4
+      when  partner.last=3D | partner.last=3H
+      sets  trump=S
+  4H  "Four hearts: game in the fit"        shows H>=4, S<=3 | partner.last=3S
+      when  partner.last=3D | partner.last=3S
+      sets  trump=H
+  3N  "No major fit: 3NT"
+      priority -1

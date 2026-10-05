@@ -1,0 +1,14 @@
+# Splinters over 1NT (nt-splinter.bid). 21GF-GIB has "1N-3D splinter"
+# and "1N-3M splinter" on.
+card    21GF-GIB
+dealer  S
+
+# seat hand                 | auction            | expect | why
+N QT65.8.KQT8.A943          | 1NT P              | 3H     | 4-1-4-4, game values: heart splinter
+N Q642.AK96.6.AT85          | 1NT P              | 3D     | 4-4-1-4: diamond splinter
+N .K964.A875.KQT52          | 1NT P              | 3S     | 0-4-4-5: spade splinter: spade splinter
+N Q642.A963.65.AT8          | 1NT P              | 2C     | no shortness: Stayman
+S K3.A842.AK94.K74          | 1NT P 3D P         | 4H     | four hearts
+S AKT.K3.AJ983.Q43          | 1NT P 3D P         | 3NT    | no four-card major
+S QT98.AQ87.AK6.65          | 1NT P 3H P         | 4S     | four spades
+S AK43.A65.A93.542          | 1NT P 3S P         | 3NT    | three hearts: 3NT
