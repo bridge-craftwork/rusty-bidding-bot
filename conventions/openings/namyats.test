@@ -4,20 +4,20 @@ dealer  S
 vul     None
 
 # seat hand             | auction             | expect | why
-S 4.KQJT9432.K3.Q2      |                     | 4C     | eight good hearts, 11 HCP: Namyats
-S AKQJT43.42.K32.2      |                     | 4D     | seven spades with four top honours, 13 HCP
-S 4.KQJT9432.Q32.2      |                     | 4H     | 8 HCP: the plain preempt
-S A2.AKQJT43.K32.2      |                     | 1H     | 17 HCP: one level
+S 42.AKQT943.QJ3.2      |                     | 4C     | seven hearts headed by AKQ, 12 HCP, no side ace or king
+S AKQJT43.42.QJ2.2      |                     | 4D     | seven spades headed by AKQ, 13 HCP
+S 42.AKQT943.K3.32      |                     | 1H     | a side king: one level (BBA)
+S 4.KQJT9432.Q32.2      |                     | 4H     | 8 HCP, eight hearts: the plain preempt
 card    21GF-DEFAULT
-S 4.KQJT9432.K3.Q2      |                     | 1H     | Namyats off
+S 42.AKQT943.QJ3.2      |                     | 1H     | Namyats off
 card    21GF-DEFAULT preempts.namyats.play=true
 # Responder.
-N A832.A5.QJ54.876      | 4C P                | 4H     | no slam interest: sign off
-N A83.A5.AKJ54.K76      | 4C P                | 4D/4N  | 18 HCP, five controls: the relay, or keycards at once
-N A83.A5.AKJ54.K76      | 4D P                | 4H/4N  | the relay over 4D
+N A832.J5.QJ54.876      | 4C P                | 4H     | no slam interest: sign off
+N A83.65.AKJ54.K76      | 4C P                | 4D/4N  | 15 HCP, six controls: the relay, or keycards at once
+N A83.A5.AK654.K76      | 4D P                | 4H/4N  | the relay over 4D
 # Opener.
-S 4.KQJT9432.K3.Q2      | 4C P 4H P           | P      | partner signed off
-S 4.KQJT9432.K3.Q2      | 4C P 4D P           | 4S     | the singleton spade
-S 43.KQJT9432.K3.Q      | 4C P 4D P           | 5C     | the singleton club
-S AKQJT43.42.K32.2      | 4D P 4H P           | 5C     | the singleton club
-S AKQJT43.42.K3.32      | 4D P 4H P           | !P     | the relay is forcing
+S 42.AKQT943.QJ3.2      | 4C P 4H P           | P      | partner signed off
+S 4.AKQT943.QJ3.32      | 4C P 4D P           | 4S     | the singleton spade
+S 42.AKQT943.QJ32.      | 4C P 4D P           | 5C     | the club void
+S AKQJT43.42.QJ2.2      | 4D P 4H P           | 5C     | the singleton club
+S AKQJT43.42.QJ.32      | 4D P 4H P           | !P     | the relay is forcing

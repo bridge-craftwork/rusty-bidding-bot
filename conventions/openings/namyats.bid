@@ -17,15 +17,21 @@ module namyats "Namyats: 4♣/4♦ strong major preempts"
   skill  bidding_conventions/namyats
 
 # ── The opening ──────────────────────────────────────────────────────
-# Eight or nine tricks: at most five losers with a good suit, and not the
-# values of a 2♣ opening. Ahead of the one-level opening.
+# Exactly seven cards headed by the ace-king-queen, 9-13 HCP, no side
+# ace or king: the hand BBA opens 4♣/4♦ (nine times in the whole corpus,
+# all of them this hand, 21GF-GIB; with eight such cards and 9-10 it
+# opens 4M, with a side ace or king 1M). Bridge Bum's "8-9 tricks" alone took 1M openings
+# (the first version, 10-15 HCP with five losers, changed ~70 boards
+# where BBA opened 1M; namyats.notes.md). Ahead of the one-level opening.
 when opening, seat<=3
   4C  "Namyats: a strong preempt in hearts, 8-9 tricks"   alert
-      shows H>=7, H>=8 | top5(H)>=4, quality(H)>=good, losers<=5, hcp=10..15, S<=3
+      shows H=7, has(A,H), has(K,H), has(Q,H), hcp=9..13, S<=3
+      shows !has(A,S), !has(K,S), !has(A,D), !has(K,D), !has(A,C), !has(K,C)
       artificial
       priority 1
   4D  "Namyats: a strong preempt in spades, 8-9 tricks"   alert
-      shows S>=7, S>=8 | top5(S)>=4, quality(S)>=good, losers<=5, hcp=10..15, H<=3
+      shows S=7, has(A,S), has(K,S), has(Q,S), hcp=9..13, H<=3
+      shows !has(A,H), !has(K,H), !has(A,D), !has(K,D), !has(A,C), !has(K,C)
       artificial
       priority 1
 
