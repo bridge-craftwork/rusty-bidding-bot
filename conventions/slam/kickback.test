@@ -1,0 +1,35 @@
+card    21GF-DEFAULT slam.kickback.play=true
+dealer  N
+
+# seat hand             | auction                              | expect | why
+# The ask: the step above four of the trump suit.
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | 4D     | clubs agreed in a game force, slam values: 4♦ asks
+# The answers, 1430 steps above 4♦.
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4D P                  | 4H     | one keycard (♥A): the first step
+N K4.KQJ86.65.Q952      | 1H P 2C P 3C P 4D P                  | 4S     | none: the second step
+N K4.AQJ86.A5.Q952      | 1H P 2C P 3C P 4D P                  | 5C     | two and the ♣Q: the fourth step, five of our suit
+N K4.AQJ86.A5.J952      | 1H P 2C P 3C P 4D P                  | 4NT    | two, no queen: the third step
+# The asker.
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P 4D P 4H P             | 6C     | three of mine and one: one missing, slam
+S Q5.K4.KQ2.AKJ843      | 1H P 2C P 3C P 4D P 4H P             | 5C     | two of mine and one: sign off in five
+S Q5.K4.KQ2.KQJ843      | 1H P 2C P 3C P 4D P 5C P             | P      | one and two: the answer is the sign-off
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4D P 4H P 5C P        | P      | one keycard: accept the sign-off
+
+# Hearts: 4♠ asks, 4NT is the first step.
+S A5.AKQ74.KQ5.K93      | 1S P 2H P 3H P                       | 4S     | hearts agreed: 4♠ is the ask
+N KQ872.J842.A5.A4      | 1S P 2H P 3H P 4S P                  | 5D     | ♦A ♣A, no ♥Q: the third step
+
+# Diamonds: 4♥ asks.
+S A5.K4.AKJ843.KQ2      | 1H P 2D P 3D P                       | 4H     | diamonds agreed: 4♥ asks
+N K4.AQJ86.Q52.952      | 1H P 2D P 3D P 4H P                  | 4S     | one keycard: the first step is 4♠
+N K4.KQJ86.Q52.K52      | 1H P 2D P 3D P 4H P                  | 4NT    | none: the second step is 4NT
+S A5.K4.AKJ843.KQ2      | 1H P 2D P 3D P 4H P 4NT P            | 5D     | three of mine and "0 or 3": no slam opposite none
+N KQ872.AJ42.654.4      | 1S P 2H P 3H P 4S P                  | 4NT    | hearts: one keycard (♥A) is the first step, 4NT
+
+# 0314.
+card    21GF-DEFAULT slam.kickback.rkcb_0314=true
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4D P                  | 4S     | one keycard: the second step in 0314
+
+# Off the card: 4NT is the ask.
+card    21GF-DEFAULT
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | !4D    | no Kickback

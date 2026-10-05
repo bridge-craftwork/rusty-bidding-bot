@@ -46,6 +46,7 @@ after 2N (P)
   3N  "To play: {game} total points"       shows strength>=game, H<=4, S<=4
       when  style is not bba
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, strength=slam_invite
       when  style is not bba
       sets  ask=quant
@@ -77,6 +78,7 @@ after 2N (P)
   3N  "To play: game values"               shows hcp>=25-partner.hcp.min, H<=4, S<=4
       when  style is bba
   4N  "Quantitative: invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, hcp>=32-partner.hcp.max, points<=31-partner.hcp.min, H<=4, S<=4   # with five, transfer first
       when  style is bba
       sets  ask=quant
@@ -194,6 +196,7 @@ when answered puppet, partner.last=3D
       artificial
   6N  "No four-card major: slam"              shows H<=3, S<=3, points>=32-partner.hcp.min
   4N  "No four-card major: quantitative, invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows H<=3, S<=3, balanced, strength=slam_invite, points<=31-partner.hcp.min
       sets  ask=quant
   3N  "No four-card major: game"              shows H<=3, S<=3, strength>=game
@@ -227,6 +230,7 @@ when answered puppet, partner.last=3H
       priority -1                             # slam first when there
   6N  "No fit: slam"                          shows H<=2, points>=32-partner.hcp.min
   4N  "No fit: quantitative, invites 6NT"     shows H<=2, balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   3N  "No fit: game"                          shows H<=2
       priority -1
@@ -238,6 +242,7 @@ when answered puppet, partner.last=3S
       priority -1
   6N  "No fit: slam"                          shows S<=2, points>=32-partner.hcp.min
   4N  "No fit: quantitative, invites 6NT"     shows S<=2, balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   3N  "No fit: game"                          shows S<=2
       priority -1
@@ -245,6 +250,7 @@ when answered puppet, partner.last=3S
 when answered puppet, partner.last=3N
   6N  "No fit: slam"                          shows points>=32-partner.hcp.min
   4N  "No fit: quantitative, invites 6NT"     shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   P   "No fit: 3NT"
       priority -20                            # behind slam/over-3nt.bid (minor-suit slam tries)
@@ -252,6 +258,7 @@ when answered puppet, partner.last=3N
 when answered puppet_fit(x), partner.last=3N
   6N  "No fit: slam"                          shows points>=32-partner.hcp.min
   4N  "No fit: quantitative, invites 6NT"     shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   P   "No fit: 3NT"
       priority -20

@@ -836,6 +836,7 @@ when partner.last=1N | partner.last=2N, me.has_bid | style is not bba, partner.b
       shows hcp + partner.hcp.min >= 34, we.fit(S).min <= 7, we.fit(H).min <= 7
       priority -8
   4N  "Quantitative: 32-33 between us"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows hcp + partner.hcp.min >= 32, hcp + partner.hcp.max <= 35, we.fit(S).min <= 7, we.fit(H).min <= 7
       sets  ask=quant
       priority -8

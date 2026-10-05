@@ -1,0 +1,90 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Minorwood: with a minor agreed, four of that minor asks for keycards
+# instead of 4NT, so every answer stays below five of the minor: over
+# 4♣ the steps are 4♦ 4♥ 4♠ 4NT, over 4♦ they are 4♥ 4♠ 4NT 5♣ (1430,
+# or 0314 as the card's keycard treatment says). Kickback, when the card
+# plays it, is the ask instead (kickback.bid). Notes: minorwood.notes.md.
+
+module minorwood "Minorwood: four of the agreed minor asks for keycards"
+  needs  base
+  skill  bidding_conventions/minorwood
+  param  mwplay = slam.minorwood.play default false
+
+# Four of the minor is still available (`cheapest_rank`: 4♣ 20, 4♦ 21).
+define mw_room(t) = (t is C, cheapest_rank(C) <= 20) | (t is D, cheapest_rank(D) <= 21)
+define mw_asks(t) = mwplay, !kickback_on, mw_room(t)
+
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# A game force with the minor agreed, or (uncontested) a forcing or
+# limited auction where four of the minor cannot be weak: "if there is
+# any question, 4m is Minorwood" (the source). The values are the 4NT
+# ask's (rkcb-1430.bid). Priority 11, as Kickback's: the call must read
+# as the ask whatever else could claim it.
+
+when mwplay, !kickback_on, we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control
+  4C  "Minorwood: keycard ask in ♣"  alert
+      when  trump is C, mw_room(C)
+      when  slam_values
+      sets  ask=minorwood(trump)
+      artificial
+      priority 11
+  4D  "Minorwood: keycard ask in ♦"  alert
+      when  trump is D, mw_room(D)
+      when  slam_values
+      sets  ask=minorwood(trump)
+      artificial
+      priority 11
+
+when mwplay, !kickback_on, we.trump is suit, !minor_given_way, !asked, !they.bid, we.forcing = none | we.forcing = round
+  4C  "Minorwood: keycard ask in ♣"  alert
+      when  trump is C, mw_room(C)
+      when  slam_values_limited, !two_bare_suits
+      sets  ask=minorwood(trump)
+      artificial
+      priority 11
+  4D  "Minorwood: keycard ask in ♦"  alert
+      when  trump is D, mw_room(D)
+      when  slam_values_limited, !two_bare_suits
+      sets  ask=minorwood(trump)
+      artificial
+      priority 11
+
+# ── The answers ───────────────────────────────────────────────────────
+#
+# The first two steps as the card's keycard ask has them in a minor
+# (`kc_first_14`, dopi-ropi.bid: 1430 unless a 0314 treatment applies).
+
+when mwplay, asked minorwood(t), rho.last = P
+  4D  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, kc_first_14(t)
+  4D  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, !kc_first_14(t)
+  4H  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, kc_first_14(t)
+  4H  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, !kc_first_14(t)
+  4S  "Minorwood: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is C
+  4N  "Minorwood: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is C
+
+  4H  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, kc_first_14(t)
+  4H  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, !kc_first_14(t)
+  4S  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, kc_first_14(t)
+  4S  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, !kc_first_14(t)
+  4N  "Minorwood: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is D
+  5C  "Minorwood: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is D
+
+# ── The asker places the contract ─────────────────────────────────────
+
+when mwplay, answered minorwood(t)
+  7{t}  "Grand slam: every keycard and the {t} queen"
+        when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+  6{t}  "Small slam: at most one keycard missing"
+        when  we.keycards(t)>=4
+  5{t}  "Sign off: two keycards missing"
+        when  we.keycards(t).max<=3
+        sets  ask=mw_correct(t)
+  5{t}  "Sign off: partner corrects to six with the higher count"
+        when  maybe we.keycards(t)>=4
+        sets  ask=mw_correct(t)
+
+when mwplay, asked mw_correct(t)
+  6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
+  P     "Accepts the sign-off"

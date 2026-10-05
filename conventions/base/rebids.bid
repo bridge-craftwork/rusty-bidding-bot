@@ -340,6 +340,7 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
       shows points + partner.points.min >= 33
       priority 1
   4N  "Quantitative: 31-32 points between us"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows points + partner.points.min >= 31
       sets  ask=quant
       priority 1

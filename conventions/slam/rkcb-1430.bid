@@ -64,7 +64,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
 # bare suit goes to `control-bids.bid` first and comes back here only
 # once partner has shown a control.
 
-when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round
+when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round, !kb_asks(trump), !mw_asks(trump)   # Kickback, Minorwood: their own ask
   4N  "Keycard ask in {trump}"
       when  slam_values_limited     # 33 facing partner's maximum
       when  !two_bare_suits  # and no two bare side suits
@@ -72,7 +72,7 @@ when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = n
       artificial
       priority 1
 
-when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control   # after a control dialogue its own rules decide
+when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control, !kb_asks(trump), !mw_asks(trump)   # after a control dialogue its own rules decide
   4N  "Keycard ask in {trump}"
       when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=keycards(trump)
@@ -196,14 +196,14 @@ when (k1430 | k0314), minor_given_way, !asked
 # is covered -- a control of mine, one partner has cued, or one I denied
 # that partner has promised by bidding on. A control bid below game still
 # comes first (priority 12), the ask before one past game (10).
-when (k1430 | k0314), we.trump is suit, asked control(t)
+when (k1430 | k0314), we.trump is suit, asked control(t), !kb_asks(trump)
   4N  "Keycard ask in {trump}"
       when  all_covered
       sets  ask=keycards(trump)
       artificial
       priority 11
 
-when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{trump}
+when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_asks(trump)
   4N  "Keycard ask in {trump}"
       when  all_covered_by_us
       sets  ask=keycards(trump)

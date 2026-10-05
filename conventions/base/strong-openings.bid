@@ -156,6 +156,7 @@ after 2C (P) 2y (P) 2N (P) when y is H | y is S
   3C  "Four or more clubs"                     shows C>=4
   3D  "Four or more diamonds"                  shows D>=4
   4N  "Quantitative: 30-32 between us, invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, hcp + partner.hcp.min >= 30, hcp + partner.hcp.min <= 32
       sets  ask=quant
   6N  "Slam: 33 or more between us"            shows balanced, hcp + partner.hcp.min >= 33
@@ -184,6 +185,7 @@ after 2C (P) 2N (P)
   3N  "Balanced 22, no suit to show"         shows balanced, hcp>=22   # 23+ bids 4NT or 6NT
       priority -1
   4N  "Quantitative: 23-24 balanced, invites 6NT"  shows balanced, hcp=23..24
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   6N  "Slam: the values are there"            shows hcp>=25, balanced
 

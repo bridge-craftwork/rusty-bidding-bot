@@ -50,6 +50,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
   6N  "To play: slam values"
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, strength=slam_invite, points<=31-partner.hcp.min, H<=4, S<=4   # with five, transfer first
       when  style is not bba
       sets  ask=quant
@@ -92,6 +93,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
   # ten passes. At IMPs game comes a point earlier (9 opposite 15-17).
   # The slam invitation needs 16 HCP: 15 and tens bids 3NT.
   4N  "Quantitative: invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, strength=slam_invite, hcp>=33-partner.hcp.max, points<=31-partner.hcp.min, H<=4, S<=4
       when  style is bba
       sets  ask=quant
@@ -199,6 +201,7 @@ when answered choose_game(M), partner.last=3N
   6M  "Slam: six or more {M}, slam values"   shows M>=6, strength>=slam
   6N  "Slam values, no fit"                  shows M<=5, strength>=slam
   4N  "Quantitative, no fit"                 shows M<=5, balanced, strength=slam_invite
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       sets  ask=quant
   4M  "Six or more {M}: game in the fit"     shows M>=6, strength<=slam_invite
   P   "No fit: play 3NT"                     shows M<=5, strength<=slam_invite
@@ -269,6 +272,7 @@ after 1N (2C) when vs_2c
   6N  "To play: {slam} total points"
       shows balanced, strength=slam, H<=4, S<=4
   4N  "Quantitative: {slam_invite} total points, invites 6NT"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows balanced, strength=slam_invite
       sets  ask=quant
   3N  "To play: {game} total points"

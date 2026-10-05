@@ -1,0 +1,144 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Kickback: with a suit agreed, the keycard ask is the bid one step above
+# four of the trump suit instead of 4NT: 4♦ with clubs, 4♥ with
+# diamonds, 4♠ with hearts. With spades it is 4NT, which rkcb-1430.bid
+# already is. The answers are the four 1430 steps above the ask (0314 by
+# `slam.kickback.rkcb_0314`), so the fourth step is five of the trump
+# suit and every answer leaves the sign-off in five. Notes:
+# kickback.notes.md.
+
+module kickback "Kickback: the step above four of the trump suit asks for keycards"
+  needs  base
+  skill  bidding_conventions/kickback
+  param  kbplay = slam.kickback.play default false
+  param  kb1430 = slam.kickback.rkcb_1430 default false
+  param  kb0314 = slam.kickback.rkcb_0314 default false
+
+# The card plays Kickback when any of its three fields is on.
+define kickback_on = kbplay | kb1430 | kb0314
+
+# The ask is four of the next suit, while the auction is below it
+# (`cheapest_rank`: 4♦ 21, 4♥ 22, 4♠ 23). Once
+# the auction has passed it, 4NT is the ask again (rkcb-1430.bid).
+define kb_room(t) = (t is C, cheapest_rank(D) <= 21) | (t is D, cheapest_rank(H) <= 22) | (t is H, cheapest_rank(S) <= 23)
+define kb_asks(t) = kickback_on, kb_room(t)
+
+# Hearts as trumps: 4♠ is the ask, not a control bid (control-bids.bid).
+define kb_spade_ask = kb_asks(H), trump is H
+
+# The first step: "1 or 4" (1430), else "0 or 3".
+define kb_first_14 = !kb0314
+
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# The values are rkcb-1430.bid's: 33 facing a limited partner's maximum
+# with no two bare side suits, or 33 on a game-forcing partner's floor.
+# Priority 11: the call must read as the ask whatever else could claim
+# it (the engine reads a call by its highest-ranked rule), so it ranks
+# above the descriptive calls, but below a control bid (12), which comes
+# first when a side suit is uncontrolled.
+
+when kickback_on, we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round
+  4D  "Kickback: keycard ask in ♣"  alert
+      when  trump is C, kb_room(C)
+      when  slam_values_limited, !two_bare_suits
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+  4H  "Kickback: keycard ask in ♦"  alert
+      when  trump is D, kb_room(D)
+      when  slam_values_limited, !two_bare_suits
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+  4S  "Kickback: keycard ask in ♥"  alert
+      when  trump is H, kb_room(H)
+      when  slam_values_limited, !two_bare_suits
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+
+when kickback_on, we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control
+  4D  "Kickback: keycard ask in ♣"  alert
+      when  trump is C, kb_room(C)
+      when  slam_values
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+  4H  "Kickback: keycard ask in ♦"  alert
+      when  trump is D, kb_room(D)
+      when  slam_values
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+  4S  "Kickback: keycard ask in ♥"  alert
+      when  trump is H, kb_room(H)
+      when  slam_values
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+
+# After a control-bid exchange in hearts (control-bids.bid), as the 4NT
+# ask there: once every side suit is covered.
+when kickback_on, we.trump is suit, asked control(t), trump is H
+  4S  "Kickback: keycard ask in ♥"  alert
+      when  kb_room(H), all_covered
+      sets  ask=kickback(trump)
+      artificial
+      priority 11
+
+when kickback_on, we.trump is suit, answered control(t), partner.last = 4H, trump is H
+  4S  "Kickback: keycard ask in ♥"  alert
+      when  kb_room(H), all_covered_by_us
+      sets  ask=kickback(trump)
+      artificial
+      priority 15
+
+# ── The answers: four steps above the ask ─────────────────────────────
+
+when kickback_on, asked kickback(t), rho.last = P
+  4H  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, kb_first_14
+  4H  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, !kb_first_14
+  4S  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, kb_first_14
+  4S  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, !kb_first_14
+  4N  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is C
+  5C  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is C
+
+  4S  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, kb_first_14
+  4S  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, !kb_first_14
+  4N  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, kb_first_14
+  4N  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, !kb_first_14
+  5C  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is D
+  5D  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is D
+
+  4N  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is H, kb_first_14
+  4N  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is H, !kb_first_14
+  5C  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is H, kb_first_14
+  5C  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is H, !kb_first_14
+  5D  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is H
+  5H  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is H
+
+# ── The asker places the contract ─────────────────────────────────────
+#
+# As after 4NT (rkcb-1430.bid): `we.keycards(t)` combines my count with
+# the answer, within the deck's five. The fourth step is five of our
+# suit: pass it with two keycards missing.
+
+when kickback_on, answered kickback(t)
+  7{t}  "Grand slam: every keycard and the {t} queen"
+        when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+  6{t}  "Small slam: at most one keycard missing"
+        when  we.keycards(t)>=4
+  P     "Sign off: partner's answer is five of our suit"
+        when  partner.last=5{t}, we.keycards(t).max<=3
+  5{t}  "Sign off: two keycards missing"
+        when  we.keycards(t).max<=3
+        sets  ask=kb_correct(t)
+  5{t}  "Sign off: partner corrects to six with the higher count"
+        when  maybe we.keycards(t)>=4
+        sets  ask=kb_correct(t)
+
+when kickback_on, asked kb_correct(t)
+  6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
+  P     "Accepts the sign-off"

@@ -169,6 +169,12 @@ define no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !show
 # by auction; this is the fallback below them, so that a 4NT after, say,
 # 1C-1S-1NT-2D (new minor) is read and answered rather than "no rule".
 # The answer is one-nt.bid's `when asked quant` (6NT from 32 between us).
+#
+# `quant_4nt` is the card's switch (`slam.quantitative_4nt.play`, on by
+# default and on every stock card), for the quantitative 4NTs the
+# notrump and base modules write (2026-10-05).
+define quant_4nt = q4n
+
 # Ranked below every pass, so it is for reading: our own 4NT stays with
 # the modules that judge it (a higher rank took over their 3NT and pass).
 when we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight

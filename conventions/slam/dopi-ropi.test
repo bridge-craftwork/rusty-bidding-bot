@@ -33,3 +33,12 @@ N A532.A83.QJ43.Q3      | 1S P 3S P 4NT 5C                     | 5D     | two ac
 N A532.A83.QJ43.Q3      | 1S P 3S P 4NT X                      | 5C     | ROPI: two aces
 S AK932.KQ4.KQ5.K2      | 1S P 3S P 4NT 5C P P                 | X      | one and one: two missing, double
 S AK932.KQ4.KQ5.K2      | 1S P 3S P 4NT 5C 5D P                | 6S     | one and two: one missing, slam
+
+# DEPO (slam.depo): double even, pass odd, instead of DOPI.
+card    21GF-DEFAULT slam.depo=true
+dealer  S
+S KJ5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5C               | X      | none: even
+S AK5.KQ4.Q982.Q93      | 1NT P 4D P 4H P 4NT 5C               | X      | two: even (no DOPI step)
+S AK5.Q74.KQ82.Q93      | 1NT P 4D P 4H P 4NT 5C               | P      | one: odd
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT 5C               | P      | three: odd
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT X                | P      | ROPI still answers their double: pass is "0 or 3"

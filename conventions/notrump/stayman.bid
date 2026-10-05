@@ -169,6 +169,7 @@ when answered majors
       when  style is not bba
       priority -1
   4N  "Quantitative, no fit found"               shows balanced, strength=slam_invite, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       when  style is not bba
       sets  ask=quant
       priority -1
@@ -236,6 +237,7 @@ when answered majors
       when  style is bba                          # as over 1NT: 17 bids the slam
       priority -1
   4N  "Quantitative, no fit found"      shows balanced, strength=slam_invite, hcp>=33-partner.hcp.max, points<=31-partner.hcp.min
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       when  style is bba
       sets  ask=quant
       priority -1
@@ -561,6 +563,7 @@ after 1N (P) 2C (P) 2S (P) 3D (P) 4D (P) when style is bba
 after 1N (P) 2C (P) 2D (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2H (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2S (P) 3C (P) 3D (P) | 1N (P) 2C (P) 2S (P) 3C (P) 3H (P) | 1N (P) 2C (P) 2S (P) 3D (P) 3H (P) when style is bba
   3N  "To play"                shows hcp>=9, hcp<=14
   4N  "Quantitative"           shows hcp>=15   sets ask=quant
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
 after 1N (P) 2C (P) 2D (P) 3D (P) 4C (P) when style is bba
   4H  "Four hearts"  shows H>=4
   4S  "Four spades"  shows S>=4
