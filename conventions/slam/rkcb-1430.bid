@@ -256,6 +256,12 @@ when (k1430 | k0314), answered keycards(t)
   5{t}  "Sign off: partner corrects to 6 with the higher count"
         when maybe we.keycards(t)>=4   # 0 or 3 / 1 or 4 still open
         sets ask=keycard_correct(t)
+  # With clubs as trumps every answer but 5♣ passes the sign-off
+  # (2026-10-05: we passed partner's artificial 5♦ on ~30 boards). Six
+  # then: the answer is never a place to play, and an open count ("0 or
+  # 3") is far more often the higher one opposite slam values.
+  6{t}  "No sign-off below six: the answer has passed five of our suit"
+        priority -1
 
 # The king ask by 5NT: the number of kings outside the trump suit (its
 # king is a keycard), by steps from 6♣. As ACBL's SAYC booklet and BBA

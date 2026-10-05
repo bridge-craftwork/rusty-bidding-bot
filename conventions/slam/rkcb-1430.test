@@ -69,3 +69,8 @@ N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 7H    | two si
 N A8.AJ9732.A94.QJ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6C P | 6H    | a side king missing: six
 card    21GF-DEFAULT slam.king_ask.five_nt=false
 N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 6H     | no king ask on the card: six
+
+# Clubs as trumps: an answer past 5♣ leaves no sign-off, so six (2026-10-05).
+card    21GF-DEFAULT
+dealer  S
+S KJ3.KQ964.K.KT94      | 1H P 2C P 3C P 3NT P 4NT P 5D P      | 6C     | "0 or 3" facing my one, past 5♣: six, never a pass of the answer

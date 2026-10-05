@@ -70,7 +70,11 @@ define slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), c
 # with support points in both hands), or 18 of my own. Partner's floor
 # understates him, so one point under the textbook 33 (calibrated
 # 2026-09-30 on random deals and the corpus: slam-entry.notes.md).
-define slam_values = slam_count(trump) | tp(trump) >= 18
+# The 18 of my own only while my range is still open (more than four
+# HCP wide): an 18-19 2NT rebid has told partner, and his game bid
+# after it is his sign-off, not an invitation (2026-10-05: 1x-1M-2NT-
+# 3m(NMF)-...-4M asked with every 18-19 opener).
+define slam_values = slam_count(trump) | (tp(trump) >= 18, !(shown.hcp.max - shown.hcp.min <= 4))
 
 # Facing a limited hand (a raise with a top): the count on partner's
 # maximum (`slam_count_max`: 33 with support points in both hands), and
