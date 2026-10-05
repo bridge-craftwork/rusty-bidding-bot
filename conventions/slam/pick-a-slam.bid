@@ -19,7 +19,7 @@ module pick-a-slam "Pick-a-slam 5NT: choose among the slams"
 define pas_fit(x) = we.fit(x).min >= 8
 define pas_two_fits = (pas_fit(S), pas_fit(H)) | (pas_fit(S), pas_fit(D)) | (pas_fit(S), pas_fit(C)) | (pas_fit(H), pas_fit(D)) | (pas_fit(H), pas_fit(C)) | (pas_fit(D), pas_fit(C))
 
-when !asked | asked stoppers, partner.last <= 4S, rho.last = P | rho.last <= 4S
+when !asked | asked stoppers, partner_bid, partner.last <= 4S, rho.last = P | (rho_bid, rho.last <= 4S)
   5N  "Pick a slam: two fits and the values, choose the strain"  alert
       shows points + partner.points.min >= 33, hcp + partner.hcp.min >= 30, pas_two_fits
       sets  ask=pick_slam

@@ -106,7 +106,7 @@ when asked exclusion(v), rho.last = P, gstyle is bba
 # Over interference, DOPI and ROPI as for the keycard ask (dopi-ropi.bid):
 # double or redouble the first step, pass the second; with two keycards
 # or more, partner's and mine make a slam, so bid it.
-when asked exclusion(v), dopi, rho.last <= 6S
+when asked exclusion(v), dopi, rho_bid, rho.last <= 6S
   X   "DOPI: first step"   shows ex_keys(v) in 1|4   artificial   when gstyle is not bba   priority 5
   P   "DOPI: second step"  shows ex_keys(v) in 0|3   artificial   when gstyle is not bba   priority 5
   X   "DOPI: no keycard"   shows ex_keys(v) = 0      artificial   when gstyle is bba       priority 5
@@ -149,7 +149,7 @@ when answered exclusion(v)
   P         "Defend doubled: two keycards missing"
             when  ex_d1, partner.last = X, ex_total(v) <= 2
   X         "Penalty: two keycards missing"
-            when  ex_d2, rho.last = P, lho.last >= 5C, lho.last <= 6S, ex_total(v) <= 2
+            when  ex_d2, rho.last = P, lho_bid, lho.last >= 5C, lho.last <= 6S, ex_total(v) <= 2
   P         "Sign off: partner's answer is in our suit"
             when  partner.last = 5{trump}, ex_total(v) <= 2
   5{trump}  "Sign off: two keycards missing"

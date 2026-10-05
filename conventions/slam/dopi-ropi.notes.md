@@ -19,7 +19,7 @@ only).
   ("0 or 3" facing my two) is read low and the double sets
   `keycard_correct`, so partner bids six with the higher count (as the
   5-level sign-off does). Over ROPI's redouble the asker always bids.
-- **Reading 4NT in competition** (`rkcb-1430.bid`, priority -60): the
+- **Reading 4NT in competition** (`rkcb-1430.bid`, `read_only`): the
   asks there are off once they have bid ("in competition it cost"), so
   BBA's contested 4NT read as nothing and we never answered it. A
   read-only copy now makes it keycard for the suit we play in, and for

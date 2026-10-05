@@ -29,7 +29,12 @@ module dopi-ropi "DOPI and ROPI: answering an ace or keycard ask over interferen
 define kc_first_14(t) = (gstyle is not bba, !m0314 | t is H | t is S) | (gstyle is bba, !k0314)
 
 # They bid a suit over the ask, below six (DOPI); they doubled it (ROPI).
-define dopi_bid  = rho.last <= 5S
+# A bid, not a pass, double or redouble: checked first, as only bids can
+# be ordered (`<=` on a pass is an error).
+define rho_bid = !(rho.last = P), !(rho.last = X), !(rho.last = XX)
+define lho_bid = !(lho.last = P), !(lho.last = X), !(lho.last = XX)
+define partner_bid = !(partner.last = P), !(partner.last = X), !(partner.last = XX)
+define dopi_bid  = rho_bid, rho.last <= 5S
 define ropi_dbl  = rho.last = X
 
 # ── Keycards ──────────────────────────────────────────────────────────
@@ -131,20 +136,20 @@ define kc_two_missing(t) = we.keycards(t).max <= 3
 
 when (dopi | ropi), answered keycards(t), rho.last = P
   P   "Defend doubled: two keycards missing"
-      when  partner.last = X, kc_two_missing(t), lho.last <= 5S
+      when  partner.last = X, kc_two_missing(t), lho_bid, lho.last <= 5S
       priority 5
   # Over partner's pass a count still open ("0 or 3" facing my two) is
   # read low, as the sign-off in rkcb-1430.bid is: partner bids six over
   # the double with the higher count.
   X   "Penalty: two keycards missing (partner bids six with the higher count)"
-      when  partner.last = P, we.keycards(t).min <= 3, lho.last <= 5S
+      when  partner.last = P, we.keycards(t).min <= 3, lho_bid, lho.last <= 5S
       sets  ask=keycard_correct(t)
       priority 5
 
 when (dopi | ropi), answered aces, rho.last = P
   P   "Defend doubled: two aces missing"
-      when  partner.last = X, we.keycards(N).max <= 2, lho.last <= 5S
+      when  partner.last = X, we.keycards(N).max <= 2, lho_bid, lho.last <= 5S
       priority 5
   X   "Penalty: two aces missing"
-      when  partner.last = P, we.keycards(N).max <= 2, lho.last <= 5S
+      when  partner.last = P, we.keycards(N).max <= 2, lho_bid, lho.last <= 5S
       priority 5
