@@ -1,0 +1,18 @@
+# Defence to their Multi 2♦ (21GF-Multi plays it; the test card is both
+# sides' card, so East's 2♦ is a Multi).
+card    21GF-Multi
+dealer  E
+vul     None
+
+# seat hand             | auction             | expect | why
+S AK4.KQ3.QJ54.Q32      | 2D                  | 2N     | 16 balanced: 2NT
+S AK4.KQ3.J954.Q32      | 2D                  | X      | 15 balanced: double
+S A4.KQJ63.954.Q32      | 2D                  | 2H     | five good hearts, 10 HCP: overcall
+S A4.K3.954.KQJ632      | 2D                  | 3C     | six clubs: natural
+S A4.K3.KQJ632.Q32      | 2D                  | 3D     | six diamonds: natural, not a cue bid
+S 954.K32.Q54.J832      | 2D                  | P      | nothing
+# Fourth seat.
+N AK42.3.KJ54.Q832      | 2D P 2H             | X      | takeout of hearts
+N A4.K3.954.KQJ632      | 2D P 2H             | 3C     | natural
+card    21GF-DEFAULT
+S A4.K3.KQJ632.Q32      | 2D                  | !3D    | their natural weak 2D: 3D is not natural

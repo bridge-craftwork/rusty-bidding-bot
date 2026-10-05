@@ -1,0 +1,72 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Defence to their Multi 2♦ (Bridge Bum, "Defense to Multi 2D", option
+# 2). Their 2♦ is read with their card: when it is a Multi, the opener
+# may hold six hearts or six spades (`maybe lho/rho.H>=6, maybe ...S>=6`;
+# `maybe ...D<=3`; a natural weak 2♦ shows six diamonds and Flannery
+# five hearts, so neither matches). In the direct seat:
+#
+#   X     13-15 balanced, or 16+ any shape
+#   2♥/2♠ natural, five or more, not forcing
+#   2NT   16-18 balanced
+#   3♣/3♦ natural, six or more
+#   3♥/3♠ natural, six or more, better than a two-level overcall
+#
+# After (2♦) P (2♥/2♠), pass or correct: a double is takeout of the suit
+# bid, other calls natural, 2NT 15-18. Everything else passes. These
+# outrank the defence to a natural 2♦ (competitive/vs-preempts.bid).
+# See vs-multi.notes.md.
+
+module vs-multi "Defence to a Multi 2♦"
+  needs  base
+  skill  bidding_conventions/multi_2d
+
+# ── Direct seat ──────────────────────────────────────────────────────
+after (2D) when maybe rho.H>=6, maybe rho.S>=6, maybe rho.D<=3
+  X   "13-15 balanced, or 16+ any shape"
+      shows (balanced, hcp=13..15) | hcp>=16
+      priority 2
+  2H  "Natural: five or more hearts, not forcing"   shows H>=5, hcp=10..15
+      priority 2
+  2S  "Natural: five or more spades, not forcing"   shows S>=5, hcp=10..15
+      priority 2
+  2N  "16-18 balanced"                              shows balanced, hcp=16..18
+      priority 3
+  3C  "Natural: six or more clubs"                  shows C>=6, hcp=10..15
+      priority 2
+  3D  "Natural: six or more diamonds"               shows D>=6, hcp=10..15
+      priority 2
+  3H  "Natural: six or more hearts, a good overcall"   shows H>=6, hcp=13..16
+      priority 3
+  3S  "Natural: six or more spades, a good overcall"   shows S>=6, hcp=13..16
+      priority 3
+  P   "Nothing to say over their Multi"
+      priority 1
+
+# ── Fourth seat, after their pass-or-correct response ────────────────
+after (2D) P (2H) when maybe lho.H>=6, maybe lho.S>=6, maybe lho.D<=3
+  X   "Takeout of hearts: 13+"                       shows H<=2, S>=3, hcp>=13
+      priority 2
+  2S  "Natural: five or more spades"                 shows S>=5, hcp=10..15
+      priority 2
+  2N  "15-18 balanced"                               shows balanced, hcp=15..18
+      priority 3
+  3C  "Natural: six or more clubs"                   shows C>=6, hcp=10..15
+      priority 2
+  3D  "Natural: six or more diamonds"                shows D>=6, hcp=10..15
+      priority 2
+  P   "Nothing to say over their Multi"
+      priority 1
+after (2D) P (2S) when maybe lho.H>=6, maybe lho.S>=6, maybe lho.D<=3
+  X   "Takeout of spades: 13+"                       shows S<=2, H>=3, hcp>=13
+      priority 2
+  2N  "15-18 balanced"                               shows balanced, hcp=15..18
+      priority 3
+  3C  "Natural: six or more clubs"                   shows C>=6, hcp=10..15
+      priority 2
+  3D  "Natural: six or more diamonds"                shows D>=6, hcp=10..15
+      priority 2
+  3H  "Natural: five or more hearts"                 shows H>=5, hcp=11..15
+      priority 2
+  P   "Nothing to say over their Multi"
+      priority 1
