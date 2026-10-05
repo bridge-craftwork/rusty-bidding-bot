@@ -1,0 +1,25 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Puppet Stayman over 1NT (`notrump.stayman.puppet_1nt`; puppet-1nt.notes.md):
+# 1NT–3♣ asks for a four- or five-card major, forcing to game. Responder
+# bids it with game values, no five-card major and a three- or
+# four-card major. Opener's answers and everything after them are the
+# Puppet rules over 2NT (two-nt-responses.bid, `when asked puppet`):
+# 3♥/3♠ five cards, 3♦ a four-card major, 3NT neither; after 3♦
+# responder names the major he does not hold, 4♦ both, 4♣ both with
+# slam interest. 2♣ Stayman stays for invitational hands.
+
+module puppet-1nt "Puppet Stayman over 1NT"
+  card   notrump.stayman.puppet_1nt
+  needs  two-nt-responses
+  skill  bidding_conventions/puppet_stayman
+
+after 1N (P)
+  3C  "Puppet Stayman: asks for a four- or five-card major"  alert
+      shows strength>=game, H<=4, S<=4, H>=3 | S>=3
+      sets  forcing=game, ask=puppet
+      artificial
+      priority 2                           # ahead of 2♣ Stayman with game values
+
+after 1N (P) 3C (P) 3D (P) 3N (P)
+  P   "No fit: 3NT"

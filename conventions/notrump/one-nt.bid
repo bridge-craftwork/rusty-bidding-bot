@@ -16,6 +16,7 @@ module notrump-base "1NT opening and natural responses"
   param  five_major = notrump.one_nt.five_card_major default sometimes
   param  jacoby  = notrump.transfers.jacoby default true
   param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
+  param  puppet_1nt = notrump.stayman.puppet_1nt default false
 
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
@@ -60,7 +61,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
   # HCP between the hands, an eight-card fit 71% at 30).
   3C  "Slam try: six or more clubs, or five and unbalanced"
       shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
-      when  !three_c_transfer, minors is not bba
+      when  !three_c_transfer, minors is not bba, !puppet_1nt
   3D  "Slam try: six or more diamonds, or five and unbalanced"
       shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
       when  three_d is natural
@@ -197,7 +198,7 @@ when answered choose_game(M), partner.last=4{M}
 # Opener answers the natural 3m slam try (six of the minor, slam-invite
 # values): slam with a fit and a maximum, else 3NT (it had no rule;
 # Basic_What_To_Open 320).
-after 1N (P) 3C (P) when !three_c_transfer, minors is not bba
+after 1N (P) 3C (P) when !three_c_transfer, minors is not bba, !puppet_1nt
   6C  "Accepts: a club fit and a maximum"   shows C>=3, hcp>=17
   4C  "A club fit, not a maximum: responder decides"   shows C>=3, hcp<=16
       sets  trump=C, forcing=game

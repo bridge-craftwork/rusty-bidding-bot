@@ -1,0 +1,16 @@
+# Puppet Stayman over 1NT (puppet-1nt.bid). 21GF-Puppet: "1N-3C Puppet
+# Stayman" on.
+card    21GF-Puppet
+dealer  S
+
+# seat hand                 | auction            | expect | why
+N KJ5.A82.Q543.K64          | 1NT P              | 3C     | game values, three of each major
+N KQ54.832.AQ5.K64          | 1NT P              | 3C     | game values, four spades
+N 54.83.AQ54.KQJ64          | 1NT P              | 3NT    | no three-card major
+N KQ54.832.Q5.J642          | 1NT P              | 2C     | invitational: Stayman
+S AQ5.KQ832.QJ9.A6          | 1NT P 3C P         | 3H     | five hearts
+S AQ52.KQ8.QJ9.A64          | 1NT P 3C P         | 3D     | a four-card major
+S AQ5.KQ8.QJ93.A64          | 1NT P 3C P         | 3NT    | no major
+N KQ54.832.AQ5.K64          | 1NT P 3C P 3D P    | 3H     | four spades: names hearts
+S AQ52.KQ8.QJ9.A64          | 1NT P 3C P 3D P 3H P | 4S   | four spades: game in the fit
+N KJ5.A82.Q543.K64          | 1NT P 3C P 3H P    | 4H     | three hearts: game in the five-three fit
