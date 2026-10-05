@@ -16,8 +16,12 @@ style are explained in the comments of `base.bid` and in
   openings holds only while 2♣ is the strong opening
   (strong-openings.bid). Off (the Precision cards, whose forcing opening
   is 1♣), there is no strong 2♣, and a strong hand opens at the one level
-  with no cap. There is no Precision 1♣ module yet, so this is the honest
-  reading of "off", not Precision.
+  with no cap. A card whose forcing opening is 1♣
+  (`general.forcing_opening_1c`, the Precision cards) keeps the strong
+  2♣ and the cap as a stand-in until a forcing 1♣ is built: switched off
+  there, the tripwire showed 22-counts opening 1♦ and being passed out.
+  So today "off" bites only on a card with no forcing opening at all
+  (no PBS card).
 
 ## Open questions
 

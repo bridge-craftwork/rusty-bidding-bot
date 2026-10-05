@@ -12,6 +12,11 @@ New Minor Forcing after opener's 2NT rebid (18-19), card field
   3NT. Responder: four of the major with a fit (5-3, 4-4), else 3NT.
 - Independent of `new_minor_forcing.play`: 21GF-SPECIALS2 plays NMF after
   2NT without NMF after 1NT, and BBA's corpus on it shows the 3♣ ask.
+- Responder's 4M does not set `trump`: with trump set, slam-entry.bid's
+  `slam_values` ("18 of my own") sent every 18-19 opener into keycard
+  after 4M (tripwire, 2026-10-05: about 15 boards reached slam from what
+  was 3NT). Left as a known fit, the keycard path for a fit not agreed
+  judges with `fit_slam_values` instead. A question for the slam layer.
 - With Wolff on (`wolff_signoff.play`), 3♣ after 1♦-1M-2NT stays Wolff's,
   and there is no ask there.
 

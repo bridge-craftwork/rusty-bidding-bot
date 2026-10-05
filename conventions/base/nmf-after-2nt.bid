@@ -44,8 +44,8 @@ when asked nmf2n
 # Responder places the contract: game in a fit (five opposite three, or
 # four-four), else 3NT. Slam tries go through the agreed suit (slam/).
 when answered nmf2n
-  4H  "Game in the heart fit"              shows H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets trump=H
-  4S  "Game in the spade fit"              shows S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3   sets trump=S
+  4H  "Game in the heart fit"              shows H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3
+  4S  "Game in the spade fit"              shows S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3
   3N  "Game in notrump"                    priority -1
   P   "Opener's 3NT: play there"           when partner.last=3N
       priority -2

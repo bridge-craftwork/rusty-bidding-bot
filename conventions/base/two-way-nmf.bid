@@ -63,5 +63,7 @@ when asked xy_gf
 when answered xy_gf
   4H  "Game in the heart fit"              shows H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets trump=H
   4S  "Game in the spade fit"              shows S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3   sets trump=S
+  4H  "Game: six hearts"                   shows H>=6
+  4S  "Game: six spades"                   shows S>=6
   3N  "Game, no major fit"
       priority -1
