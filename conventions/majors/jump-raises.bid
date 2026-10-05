@@ -1,0 +1,52 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The jump raise 1M-3M when it is not the limit raise (responses.bid):
+#
+#   weak  (`major_openings.jump_raise.weak`)   preemptive: four trumps, about 3-6
+#   mixed (`major_openings.jump_raise.mixed`)  four trumps, 7-10 support points:
+#                                              more than a raise to 2M, less than a limit raise
+#
+# The invitational jump raise (`jump_raise.inv`) wins when a card sets it
+# too (BBA's cards set "Mixed raise" beside "1M-3M inviting", and BBA then
+# plays 1M-3M inviting: probes/mixed-resp-1H-GIB.toml). Bergen raises
+# (bergen.bid) take the jump to 3M when they are on. Uncontested only.
+# (Bridge Bum, "Weak Jump Raise" and "Mixed Raise"; the PBS scenario
+# Gavin_Mixed_Raise: "Mixed 4-card Raise (8-10 TP) 3M".) See
+# jump-raises.notes.md.
+
+module jump-raises "Weak and mixed jump raises of a major"
+  needs  responses
+  param  weak    = major_openings.jump_raise.weak default false
+  param  mixed   = major_openings.jump_raise.mixed default false
+  param  inv     = major_openings.jump_raise.inv default true
+  param  bergen  = major_openings.bergen_raises.play default false
+  param  reverse = major_openings.bergen_raises.reverse default false
+
+after 1M (P) when !bergen, !reverse, !inv
+  3M  "Weak jump raise: four {M}, about 3-6"
+      shows M>=4, tp(M)<=7, hcp<=6, hcp>=2
+      when  weak
+      when  M=4 | hcp<=3               # five trumps and a weak hand: 4M (responses.bid)
+      sets  trump=M, ask=preemptive_raise(M)
+      priority 1
+  3M  "Mixed raise: four {M}, 7-10 support points"
+      shows M>=4, tp(M)=7..10, hcp>=5
+      when  mixed, !weak
+      sets  trump=M, ask=mixed_raise(M)
+      priority 1                       # the four-card raise, ahead of 2M or a new suit
+
+# Opposite a mixed raise (7-10, nine trumps): game from 16.
+when asked mixed_raise(M), rho.last=P, partner.last=3{M}
+  4M  "Game opposite a mixed raise: 16+"
+      shows tp(M)>=16
+      priority 3                       # ahead of opener's natural rebids
+  P   "No game opposite a mixed raise"
+      priority 2
+
+# Opener after a preemptive 3M, the weak jump raise or Bergen's (bergen.bid).
+when asked preemptive_raise(M), rho.last=P, partner.last=3{M}
+  4M  "Game opposite a preemptive raise: 19+"
+      shows tp(M)>=19
+      priority 3
+  P   "No game opposite a preemptive raise"
+      priority 2

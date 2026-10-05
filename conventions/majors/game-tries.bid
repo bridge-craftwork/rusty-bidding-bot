@@ -1,0 +1,163 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Game tries after a single raise of a major, 1M-2M, uncontested. Without
+# a convention opener invites with 3M (rebids.bid). With
+#
+#   help-suit tries (`other_conventions.help_suit_game_tries.play`):
+#       a new suit below 3M is a long-suit try: 3+ cards that need help
+#   two-way tries (`other_conventions.two_way_game_tries.play`):
+#       the next step (1♥-2♥-2♠, 1♠-2♠-2NT) shows unspecified shortness;
+#       responder's next step asks where it is; opener names the short
+#       suit, or bids 3M when it is one of the two step suits. Any other
+#       call below 3M is a long-suit try, three or more cards with some
+#       honours (over 1♥, 2NT is the spade try, with four);
+#       3M is a general try, no singleton or void.
+#
+# (BBO, "GIB system notes", Two-way Game Try; Bridge Bum, "Help Suit Game
+# Try"; the PBS scenarios Two-Way_Game_Try and Help_Suit_Game_Try.)
+# See game-tries.notes.md.
+
+module game-tries "Help-suit and two-way game tries after 1M-2M"
+  needs  rebids
+  skill  bidding_conventions/help_suit_game_try
+  skill  bidding_conventions/two_way_game_tries
+  param  two_way = other_conventions.two_way_game_tries.play default false
+  param  help    = other_conventions.help_suit_game_tries.play default false
+
+# The invitational range of rebids.bid's 3M (17-18 support points), with
+# 14 HCP at least: BBA passes 15 HCP and a singleton opposite a raise
+# (Two-Way_Game_Try), and a singleton honour counts twice in tp.
+define try_values(M) = tp(M)=17..18, hcp>=14
+# Shortness worth showing: a void, or a singleton other than the K, Q, J.
+define small_short(x) = x=0 | (x=1, !has(K,x), !has(Q,x), !has(J,x))
+define short_side(M) = (M is not C, small_short(C)) | (M is not D, small_short(D)) | (M is not H, small_short(H)) | (M is not S, small_short(S))
+# A suit that needs help: three or more cards with two or three losers.
+define needs_help(x) = x>=3, !(has(A,x), has(K,x)), !(has(A,x), has(Q,x)), !(has(K,x), has(Q,x))
+# A two-way long-suit try (GIB): three or more cards with some honours.
+define long_try(x) = x>=3, has(A,x) | has(K,x) | has(Q,x)
+# Partner's help in my try suit: at most one loser there, or four cards.
+define helps(x) = x>=4, has(A,x) | has(K,x) | has(Q,x) | x<=1 | (x=2, has(A,x) | has(K,x)) | (has(A,x), has(K,x)) | (has(A,x), has(Q,x)) | (has(K,x), has(Q,x))
+# Partner's honours wasted opposite my shortness.
+define wasted(x) = has(K,x) | has(Q,x) | has(J,x)
+
+# ── Opener's tries ───────────────────────────────────────────────────
+# Priorities above the control bids (slam/control-bids.bid, 12): over a
+# single raise a new suit is a game try, and partner must read it so.
+# A control bid there needs 23+ (33 opposite a raise to 10), which the
+# tries' 17-18 never reach.
+after 1H (P) 2H (P) when two_way
+  2S  "Short-suit game try: a singleton or void somewhere, 17-18"  alert
+      shows try_values(H), short_side(H), H>=5
+      sets  ask=short_try(H), forcing=round
+      artificial
+      priority 14                      # shortness first, ahead of a long-suit try
+  # Four spades with the ace or KQ: BBA tries 2NT ahead of the
+  # short-suit try (Two-Way_Game_Try: every 2NT holds four such spades,
+  # singleton or not; QJ86 and KT32 make the short-suit try).
+  2N  "Long-suit game try in spades: four good spades, 17-18"  alert
+      shows try_values(H), S>=4, has(A,S) | (has(K,S), has(Q,S))
+      sets  ask=help_try(S), forcing=round
+      artificial
+      priority 15                      # ahead of the short-suit try
+after 1S (P) 2S (P) when two_way
+  2N  "Short-suit game try: a singleton or void somewhere, 17-18"  alert
+      shows try_values(S), short_side(S), S>=5
+      sets  ask=short_try(S), forcing=round
+      artificial
+      priority 14
+after 1H (P) 2H (P) when help, !two_way
+  2S  "Help-suit game try: help wanted in spades, 17-18"
+      shows try_values(H), needs_help(S)
+      sets  ask=help_try(S), forcing=round
+      priority 13
+after 1M (P) 2M (P) when two_way
+  3x  "Long-suit game try: 3+ {x} with honours, 17-18"
+      shows try_values(M), long_try(x)
+      when  x is not M, M is S | x is not S
+      sets  ask=help_try(x), forcing=round
+      prefer x
+      priority 13
+after 1M (P) 2M (P) when help, !two_way
+  3x  "Help-suit game try: help wanted in {x}, 17-18"
+      shows try_values(M), needs_help(x)
+      when  x is not M, M is S | x is not S
+      sets  ask=help_try(x), forcing=round
+      prefer x
+      priority 13
+
+# ── Responder after a short-suit try ─────────────────────────────────
+# Accept with the top of the raise, sign off with the bottom, and with
+# the middle ask where the shortness is: honours there are wasted.
+when asked short_try(M), rho.last=P
+  4M  "Accepts the short-suit try: the top of the raise"
+      shows tp(M)>=10
+      priority 3                       # ahead of responder's natural rebids
+  3M  "Declines the short-suit try: the bottom of the raise"
+      shows tp(M)<=6
+      priority 3
+  2N  "Where is the shortness?"  alert
+      shows tp(M)=7..9
+      when  M is H
+      sets  ask=where_short(M)
+      artificial
+      priority 3
+  3C  "Where is the shortness?"  alert
+      shows tp(M)=7..9
+      when  M is S
+      sets  ask=where_short(M)
+      artificial
+      priority 3
+
+# Opener names the short suit; 3M when it is one of the step suits.
+when asked where_short(M), rho.last=P
+  3x  "Shortness in {x}"  alert
+      shows x<=1
+      when  x is not M, M is S | x is not S, M is H | x is not C
+      artificial
+      priority 3
+  3M  "Shortness in a step suit (spades over 1♥, clubs over 1♠)"  alert
+      shows S<=1 | M is S
+      shows C<=1 | M is H
+      artificial
+      priority 2
+
+# Responder: game without wasted honours opposite the shortness.
+when answered where_short(M), rho.last=P
+  4M  "No wasted honours opposite the shortness: game"
+      when  !partner.last=3{M}
+      shows !wasted(C) | !partner.last=3C, !wasted(D) | !partner.last=3D, !wasted(H) | !partner.last=3H
+      priority 3
+  4M  "No wasted honours in either step suit: game"
+      when  partner.last=3{M}
+      shows !wasted(S) | M is S, !wasted(C) | M is H
+      priority 3
+  P   "Wasted honours opposite the shortness: no game"
+      when  partner.last=3{M}
+      priority 2
+  3M  "Wasted honours opposite the shortness: no game"
+      when  !partner.last=3{M}
+      priority 2
+
+# ── Responder after a long-suit (help-suit) try ──────────────────────
+when asked help_try(x), rho.last=P
+  4{trump} "Accepts the help-suit try: help in {x}, or the top of the raise"
+      shows helps(x) | tp(trump)>=10 | (tp(trump)>=8, has(A,x) | has(K,x) | x=2)
+      priority 3
+  3{trump} "Declines the help-suit try"
+      priority 2
+
+# Opener after a sign-off: the try was all opener had. Priority above
+# the control bids (12), which would otherwise read a limited hand's
+# slam values into it.
+when answered help_try(x), rho.last=P, partner.last=3{trump}
+  P   "Partner declined the try"
+      priority 13
+when answered short_try(M), rho.last=P, partner.last=3{M}
+  P   "Partner declined the try"
+      priority 13
+after 1H (P) 2H (P) 2S (P) 2N (P) 3x (P) 3H (P) when two_way, x is not H
+  P   "Partner declined after hearing the shortness"
+      priority 13
+after 1S (P) 2S (P) 2N (P) 3C (P) 3x (P) 3S (P) when two_way, x is not S
+  P   "Partner declined after hearing the shortness"
+      priority 13

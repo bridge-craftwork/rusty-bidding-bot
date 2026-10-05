@@ -1,0 +1,31 @@
+# Bergen raises. 21GF-GIB-Bergen plays them (BBA's `Bergen`); hands
+# made for the rule. bergen.notes.md has the sources and BBA's style.
+card    21GF-GIB-Bergen
+dealer  S
+
+# seat hand             | auction              | expect | why
+# ── Responder ─────────────────────────────────────────────────────────
+N K852.Q3.A974.T52      | 1S P                 | 3C     | four spades, 9 HCP and a doubleton: constructive
+N K852.Q3.A974.Q52      | 1S P                 | 3D     | four spades, 11 HCP and a doubleton: limit raise
+N 9852.Q3.J974.T52      | 1S P                 | 3S     | four spades, 3 HCP: preemptive
+N 852.Q63.A974.K52      | 1S P                 | 2S     | three spades: the simple raise, not Bergen
+N T542.K852.A9.Q74      | 1H P                 | 3C     | four hearts, 9 HCP: constructive (ahead of 1S)
+N K852.AQ3.A974.K2      | 1S P                 | 2N     | game values: Jacoby 2NT, not Bergen
+N 98652.K3.Q974.T5      | 1S P                 | 4S     | five spades and 5 HCP: the jump to game stays (responses.bid)
+# ── Opener ────────────────────────────────────────────────────────────
+S AQJ74.K5.983.Q42      | 1S P 3C P            | 3S     | 13 support points opposite 7-10: sign off
+S AQJ74.K5.K83.AQ2      | 1S P 3C P            | 4S     | 19 HCP: game
+S AQJ74.K5.K83.J42      | 1S P 3C P            | 3D     | 15-16: the game try
+S AQJ74.K5.983.J42      | 1S P 3D P            | 3S     | 12 support points opposite a limit raise: sign off
+S AQJ74.K5.K83.Q42      | 1S P 3D P            | 4S     | 14 support points opposite a limit raise: game
+S AQJ74.K5.K83.Q42      | 1S P 3S P            | P      | 16 support points: no game opposite a preemptive raise
+N K852.Q3.A974.T52      | 1S P 3C P 3D P       | 4S     | 9 HCP and a doubleton: the top of the constructive raise
+N K852.Q3.A974.T52      | 1S P 3C P 3S P       | P      | opener signed off
+# ── In competition Bergen is off ──────────────────────────────────────
+N K852.Q3.A974.T52      | 1S 2D                | 2S     | over an overcall the raise is natural
+
+# ── Reverse Bergen: 3C limit, 3D constructive ─────────────────────────
+card    21GF-GIB-Bergen major_openings.bergen_raises.play=false major_openings.bergen_raises.reverse=true
+N K852.Q3.A974.T52      | 1S P                 | 3D     | constructive is 3D in Reverse Bergen
+N K852.Q3.A974.Q52      | 1S P                 | 3C     | the limit raise is 3C
+S AQJ74.K5.K83.J42      | 1S P 3D P            | 3H     | the game try is the next step
