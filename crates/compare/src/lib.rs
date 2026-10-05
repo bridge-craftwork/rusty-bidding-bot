@@ -130,6 +130,16 @@ impl Report {
 }
 
 /// Run the comparison. `progress` is called with (boards done, total).
+/// Size rayon's global pool to `rbb_engine::cpu_budget` unless
+/// `RAYON_NUM_THREADS` says otherwise. Call it first thing in `main`.
+pub fn init_threads() {
+    if std::env::var_os("RAYON_NUM_THREADS").is_none() {
+        let _ = rayon::ThreadPoolBuilder::new()
+            .num_threads(rbb_engine::cpu_budget())
+            .build_global();
+    }
+}
+
 pub fn run(opts: &Options, progress: &(dyn Fn(usize, usize) + Sync)) -> Result<Report, String> {
     let engines = Engines::for_options(opts)?;
     run_with(opts, &engines, progress)

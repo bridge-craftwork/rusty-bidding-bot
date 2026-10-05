@@ -327,11 +327,10 @@ fn load_card_file(
 pub fn run(files: &[PathBuf], rules: &Path, cards_dir: &Path) -> Result<Vec<Outcome>, Vec<String>> {
     let rules = crate::load_rules(rules)
         .map_err(|d| d.iter().map(|d| d.to_string()).collect::<Vec<_>>())?;
-    // The files are independent: run them on all cores, each thread with
-    // its own engines, and put the results back in file order.
-    let threads = std::thread::available_parallelism()
-        .map_or(1, |n| n.get())
-        .clamp(1, files.len().max(1));
+    // The files are independent: run them on the cores we may use
+    // (`cpu_budget`), each thread with its own engines, and put the
+    // results back in file order.
+    let threads = crate::cpu_budget().clamp(1, files.len().max(1));
     let mut per_file: Vec<(Vec<Outcome>, Vec<String>)> = Vec::new();
     std::thread::scope(|scope| {
         let handles: Vec<_> = (0..threads)

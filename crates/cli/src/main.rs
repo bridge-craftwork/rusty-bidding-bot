@@ -461,6 +461,7 @@ fn version() -> &'static str {
 }
 
 fn main() -> ExitCode {
+    rbb_compare::init_threads();
     match run(Cli::parse()) {
         Ok(()) => ExitCode::SUCCESS,
         Err(e) => {

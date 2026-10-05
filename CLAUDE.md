@@ -13,6 +13,35 @@ the proposed top-down judgment layer (placement, competition, slam entry): docs/
   convention-card repo), `crates/bidspec`, and `conventions/` must never
   depend on `rbb-engine` or `rbb-cli`.
 
+## Pace (Rick, 2026-10-05)
+
+The goal is "practice my card": many conventions, moderately good basic
+bidding. Conventions now come first; the core improves later. Cheap
+breakage beats slow progress: no users yet, and git bisect finds a
+regression.
+
+- **Conventions take the fast lane.** The cited definition is the spec
+  (par judges only the judgment inside one). Rules plus `.test` cases
+  for the auctions it defines and a little interference; then
+  `compare <matching scenario> --limit 50` and read the divergences
+  at the convention's calls only (bug / BBA style / don't care, no IMP
+  verdict); then `bid test` and a `--limit 50` compare of all scenarios
+  as a tripwire: did calls outside the convention change? Notes:
+  sources, deviations, open questions. Several conventions per PR;
+  batch convention-card field changes into one PR and tag.
+- **Judgment changes** (competition, slams, valuation) keep the
+  yardsticks in "Judging a change", but the big runs (full corpus,
+  random deals, vanilla) run as a periodic batch, not on every change.
+- **Do not stall on Rick.** Decide what you can probably get right,
+  record the decision and why in the notes, and collect questions for
+  his next check-in; he would rather redo a wrong turn than wait.
+- **CPU:** every `dev-build.sh` run goes through `cpu-gate.sh`: one
+  heavy job at a time across all checkouts, on every core but two
+  (`RBB_CPUS`), niced. Run Python probes and bba-cli batches through
+  `./cpu-gate.sh <command>` too. A waiting job prints who holds the
+  gate. A new worktree seeds `target/` from the main checkout's
+  (copy-on-write), so it builds in seconds, not minutes.
+
 ## Related repos (sibling checkouts, `../<repo>`)
 
 - `bridge-types`: Hand, Call, Auction (git dependency).
@@ -163,7 +192,8 @@ local checkouts").
   `probes/grid_tally.py <name> [--by hcp] [--diff]` tallies the run;
   `probes/grid_diff.py <name> --key "L[0]" --key h` groups the
   disagreements.
-- **Judging a change:** distance from par suits uncontested auctions
+- **Judging a change** (judgment work; conventions take the fast lane
+  in "Pace" above): distance from par suits uncontested auctions
   but counts a successful competitive call or a penalty double of an
   overbid as a loss. For competitive and doubling changes judge by the
   **errors** line (each side charged with its own errors, an overbid taken
