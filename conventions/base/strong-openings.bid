@@ -48,7 +48,7 @@ when opening
   # Three ways in, written apart because one condition for all of them
   # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
-      shows hcp>=22, !balanced | hcp<=25 | hcp>=28   # balanced 26-27 opens 3NT
+      shows hcp>=22, !balanced | hcp<=25 | hcp>=28 | gambling   # balanced 26-27 opens 3NT, unless 3NT is Gambling
       when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c
       sets  forcing=game, ask=strong_2c
       artificial
@@ -96,7 +96,10 @@ after 2C (P)
 # ── Opener describes after the waiting bid ───────────────────────────
 after 2C (P) 2D (P)
   2N  "22-23 HCP, balanced"            shows hcp=22..23, balanced
-  3N  "24-25 HCP, balanced"            shows hcp=24..25, balanced
+  # With a Gambling 3NT the balanced 26-27 opens 2C too, and rebids 3NT
+  # (before 2026-10-05 it had no opening at all and passed: Kokish_Relay,
+  # 10 of 50 boards). BBA rebids 3NT with 26-27 there.
+  3N  "24-25 HCP, balanced (to 27 with a Gambling 3NT)"   shows balanced, hcp>=24, hcp<=25 | (gambling, hcp<=27)
   4N  "28+ HCP, balanced"              shows hcp>=28, balanced
   2H  "5+ hearts"                      shows H>=5
   2S  "5+ spades"                      shows S>=5

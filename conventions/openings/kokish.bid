@@ -1,0 +1,67 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The Kokish relay (Bridge Bum, "Kokish Relay"): after 2♣–2♦, opener's
+# 2♥ shows either hearts (five or more, unbalanced) or the balanced hand
+# that would have rebid 3NT (24-25 on our ladder, strong-openings.bid).
+# Responder must bid 2♠, and opener says which:
+#
+#   2NT  24-25 balanced (game forcing, below 3NT)
+#   3♣/3♦/3♠  five or more hearts and four or more of that suit
+#   3♥   six or more hearts, one-suited
+#
+# A balanced hand with five hearts rebids 2NT (22-23) or goes through the
+# relay (24-25). See kokish.notes.md.
+
+module kokish "Kokish relay after 2♣–2♦"
+  card   two_level.two_clubs.kokish
+  needs  strong-openings
+  skill  bidding_conventions/kokish
+
+# ── Opener's 2♥: the relay ───────────────────────────────────────────
+# Priority 1: it replaces the natural 2♥ and the 3NT rebid of
+# strong-openings.bid for the hands it takes.
+after 2C (P) 2D (P)
+  2H  "Kokish: hearts, or 24-25 balanced"   alert
+      shows (H>=5, !balanced) | (balanced, hcp=24..25)
+      sets  ask=kokish
+      artificial
+      priority 1
+
+# ── Responder completes the relay ────────────────────────────────────
+when asked kokish
+  2S  "Completes the relay (forced)"   alert
+      artificial
+      priority 2
+
+# ── Opener says which ────────────────────────────────────────────────
+when answered kokish
+  2N  "24-25 balanced"                        shows balanced, hcp=24..25
+      priority 1
+  3H  "Six or more hearts, one-suited"        shows H>=6, S<=3, D<=3, C<=3
+      priority 1
+  3C  "Five or more hearts, four or more clubs"     shows H>=5, C>=4
+      priority 1
+  3D  "Five or more hearts, four or more diamonds"  shows H>=5, D>=4
+      priority 1
+  3S  "Five or more hearts, four or more spades"    shows H>=5, S>=4
+      priority 1
+
+# ── Responder after the two-suiter: support hearts, raise the second
+# suit, or 3NT. Game forcing (the 2♣ opening), so a cheap raise leaves
+# room for the slam modules.
+after 2C (P) 2D (P) 2H (P) 2S (P) 3x (P) when x is not H
+  3H  "Three or more hearts: agrees hearts"   shows H>=3
+      sets  trump=H
+      priority 1
+  4x  "Four or more {x}: agrees {x}"          shows x>=4, H<=2
+      when  x is S
+      sets  trump=x
+      priority 1
+  4x  "Four or more {x}: agrees {x}"          shows x>=4, H<=2
+      when  x is C | x is D
+      sets  trump=x
+  3N  "No fit: notrump"                        shows H<=2
+after 2C (P) 2D (P) 2H (P) 2S (P) 3H (P)
+  4H  "Two or more hearts: game in hearts"     shows H>=2
+      sets  trump=H
+  3N  "A singleton or void in hearts"          shows H<=1
