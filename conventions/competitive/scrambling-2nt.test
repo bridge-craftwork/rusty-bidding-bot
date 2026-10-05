@@ -6,7 +6,7 @@ vul     None
 
 # seat hand                 | auction       | expect | why
 S AQ74.8.KJ74.A953          | 1H P 2H       | X      | short hearts, the unbid suits: takeout
-S A74.83.KQ74.A953          | 1H P 2H       | X      | 13 HCP, two hearts: takeout
+S A74.83.KQ74.A953          | 1H P 2H       | P      | 13 HCP, two hearts: no takeout double (singleton needed)
 N 852.973.K954.QJ8          | 1H P 2H X P   | 3D     | no four-card major, longer diamonds
 N 852.73.K954.QJ84          | 1H P 2H X P   | 2N     | both minors: Scrambling
 N K852.973.K954.Q8          | 1H P 2H X P   | 2S     | four spades: bid them

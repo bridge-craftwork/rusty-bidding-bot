@@ -326,15 +326,16 @@ after (1x) X (XX) P (P)
 # ── The double of their raise (2026-10-05) ───────────────────────────
 # (1x) P (2x) X: they have found a fit, so the double is for takeout,
 # not penalty (penalty-doubles.bid read it as penalty, priority -6):
-# short in their suit, three or more in each unbid suit, 12+ total
-# points. Written with Scrambling 2NT (scrambling-2nt.bid), whose
+# a singleton or void in their suit, three or more in each unbid suit,
+# 13+ HCP (BBA mostly passes there: a first try at 12+ total points
+# with a doubleton doubled on 95 of the tripwire's boards, BBA agreed
+# on 14; scrambling-2nt.notes.md). Written with Scrambling 2NT (scrambling-2nt.bid), whose
 # scenario starts here (PBS btn/Scrambling_2NT.btn: 13+, 4-4-4-1 or
 # 5-4-4-0 short in their major).
 after (1x) P (2x)
-  X   "Takeout of their raise: short in {x}, the unbid suits, 12+ total points"
-      shows hcp+length_points>=12, x<=2
+  X   "Takeout of their raise: short in {x}, the unbid suits, 13+ HCP"
+      shows hcp>=13, x<=1
       shows (S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)
-      shows hcp+length_points>=13 | x<=1
 
 # Advancer must bid (they have a fit; partner is short there): his
 # longest unbid suit, majors first; four of a major or 3NT with game
