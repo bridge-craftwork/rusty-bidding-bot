@@ -1,0 +1,175 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Lebensohl after a natural two-level overcall of our 1NT (2♦, 2♥, 2♠),
+# "slow shows" (Larry Cohen, "Lebensohl"; lebensohl.notes.md):
+#
+# - two of a suit: natural, to play (nt-interference.bid);
+# - 2NT: a relay to 3♣. Then pass or a suit below theirs is to play, a
+#   suit above theirs invites, their suit is Stayman with a stopper and
+#   3NT is game with a stopper;
+# - a new suit at the three level directly: natural, forcing to game;
+# - their suit directly: Stayman without a stopper;
+# - 3NT directly: game without a stopper.
+#
+# The double stays what the card says it is (nt-interference.bid), and
+# so do the calls over their 2♣, their double and their conventional
+# two-suited overcalls: Lebensohl reads only a natural overcall.
+
+module lebensohl "Lebensohl after they overcall our 1NT"
+  card   notrump.lebensohl.over_interference
+  needs  nt-interference
+  skill  competitive_bidding/lebensohl
+
+# Responder. The context is the natural-overcall one of nt-interference.bid.
+after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+  # Game values with four of an unbid major: Stayman, fast without a
+  # stopper, slow (through 2NT) with one. Ahead of the negative double.
+  3y  "Stayman, forcing to game: four of an unbid major, no stopper in {y}"  alert
+      shows hcp>=10, !stop(y), H=4 | S=4, H<=4, S<=4
+      when  y is D
+      sets  forcing=game
+      artificial
+      priority 2
+  3y  "Stayman, forcing to game: four spades, no stopper in {y}"  alert
+      shows hcp>=10, !stop(y), S=4
+      when  y is H
+      sets  forcing=game
+      artificial
+      priority 2
+  3y  "Stayman, forcing to game: four hearts, no stopper in {y}"  alert
+      shows hcp>=10, !stop(y), H=4
+      when  y is S
+      sets  forcing=game
+      artificial
+      priority 2
+  2N  "Lebensohl: relays to 3♣, then Stayman with a stopper in {y}"  alert
+      shows hcp>=10, stop(y), H=4 | S=4, H<=4, S<=4
+      when  y is D
+      sets  ask=leb_relay
+      artificial
+      priority 2
+  2N  "Lebensohl: relays to 3♣, then Stayman with a stopper in {y}"  alert
+      shows hcp>=10, stop(y), S=4
+      when  y is H
+      sets  ask=leb_relay
+      artificial
+      priority 2
+  2N  "Lebensohl: relays to 3♣, then Stayman with a stopper in {y}"  alert
+      shows hcp>=10, stop(y), H=4, S<=4
+      when  y is S
+      sets  ask=leb_relay
+      artificial
+      priority 2
+  # Game in notrump: fast denies a stopper, slow shows one.
+  3N  "Game: 10+ HCP, no stopper in {y}"        shows hcp>=10, !stop(y)
+  2N  "Lebensohl: relays to 3♣, then 3NT with a stopper in {y}"  alert
+      shows hcp>=10, stop(y)
+      sets  ask=leb_relay
+      artificial
+  # Weak with a long suit that cannot be bid at the two level: through
+  # 2NT, to sign off at three.
+  2N  "Lebensohl: relays to 3♣, to play three of a long minor"  alert
+      shows hcp>=4, points<=9, C>=6 | D>=6, H<=4, S<=4
+      when  y is not D
+      sets  ask=leb_relay
+      artificial
+  2N  "Lebensohl: relays to 3♣, to play three clubs"  alert
+      shows hcp>=4, points<=9, C>=6, H<=4, S<=4
+      when  y is D
+      sets  ask=leb_relay
+      artificial
+  2N  "Lebensohl: relays to 3♣, to play three hearts"  alert
+      shows hcp>=4, points<=9, H>=5, H>=S
+      when  y is S
+      sets  ask=leb_relay
+      artificial
+      priority -1                        # the negative double first (5 hearts, weak)
+  # Invitational with a five-card major above their suit: through 2NT,
+  # then three of the major.
+  2N  "Lebensohl: relays to 3♣, then invites in spades"  alert
+      shows S>=5, S>=H, hcp=8..9
+      when  y is D | y is H
+      sets  ask=leb_relay
+      artificial
+      priority 1                         # ahead of the natural two of the suit
+  2N  "Lebensohl: relays to 3♣, then invites in hearts"  alert
+      shows H>=5, H>S, hcp=8..9
+      when  y is D
+      sets  ask=leb_relay
+      artificial
+      priority 1
+  # A jump to three of a major is natural and forcing to game (the
+  # non-jump new suits are in nt-interference.bid).
+  3S  "Natural, forcing to game: five or more spades"   shows S>=5, S>=H, points>=10
+      when  y is D | y is H
+      sets  forcing=game
+  3H  "Natural, forcing to game: five or more hearts"   shows H>=5, H>S, points>=10
+      when  y is D
+      sets  forcing=game
+
+# Opener: the relay is forced.
+after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  3C  "Completes the Lebensohl relay"  alert
+      artificial
+
+# Responder after the relay.
+after 1N (2y) 2N (P) 3C (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+  P   "To play: clubs"                           shows C>=6, points<=9
+  3D  "To play: diamonds"                        shows D>=6, points<=9
+      when  y is not D
+  3H  "To play: hearts"                          shows H>=5, points<=9
+      when  y is S
+  3H  "Invitational: five or more hearts"        shows H>=5, hcp=8..9
+      when  y is D
+      sets  ask=leb_invite(H)
+  3S  "Invitational: five or more spades"        shows S>=5, hcp=8..9
+      when  y is D | y is H
+      sets  ask=leb_invite(S)
+  3y  "Stayman with a stopper in {y}: four of an unbid major, forcing to game"  alert
+      shows hcp>=10, stop(y), H=4 | S=4, H<=4, S<=4
+      when  y is D
+      sets  forcing=game
+      artificial
+      priority 1                                 # ahead of 3NT with the major
+  3y  "Stayman with a stopper in {y}: four spades, forcing to game"  alert
+      shows hcp>=10, stop(y), S=4
+      when  y is H
+      sets  forcing=game
+      artificial
+      priority 1
+  3y  "Stayman with a stopper in {y}: four hearts, forcing to game"  alert
+      shows hcp>=10, stop(y), H=4
+      when  y is S
+      sets  forcing=game
+      artificial
+      priority 1
+  3N  "Game with a stopper in {y}"               shows hcp>=10, stop(y)
+
+# Opener after the invitation: game with a maximum.
+when asked leb_invite(M)
+  4M  "Accepts: a maximum and three or more {M}"   shows M>=3, hcp>=16
+  3N  "Accepts: a maximum, two {M}"                shows M<=2, hcp>=16
+  P   "Declines: a minimum"                        shows hcp<=15
+
+# Opener answers Stayman: a four-card unbid major, else 3NT with their
+# suit stopped (partner's slow cue-bid has one already), else four of
+# his longer minor. Responder then places the contract.
+after 1N (2y) 3y (P) | 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  3H  "Four hearts"                              shows H>=4
+      when  y is D
+  3S  "Four spades"                              shows S>=4, H<=3 | y is H
+      when  y is D | y is H
+  4H  "Four hearts"                              shows H>=4
+      when  y is S
+after 1N (2y) 2N (P) 3C (P) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  3N  "No four-card major: game in notrump"
+      priority -1
+after 1N (2y) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+  3N  "No four-card major, a stopper in {y}"     shows stop(y)
+  4C  "No four-card major, no stopper in {y}: clubs"     shows C>=D, !stop(y)
+      priority -2
+  4D  "No four-card major, no stopper in {y}: diamonds"  shows D>C, !stop(y)
+      when  y is not D
+      priority -2
+after 1N (2y) 3y (P) 4m (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
+  5m  "No stopper between us: game in {m}"

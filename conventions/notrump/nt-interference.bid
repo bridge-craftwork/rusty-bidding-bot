@@ -14,6 +14,7 @@ module nt-interference "Our 1NT when RHO acts"
   needs  notrump-base
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c     = notrump.transfers.vs_2c default false
+  param  leb       = notrump.lebensohl.over_interference default false
 
 # ── They doubled, transfers on ───────────────────────────────────────
 # 2♣ is Stayman and 2♦/2♥ are the transfers (see the other modules).
@@ -115,8 +116,10 @@ after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
       when  y is not S
       priority 1
   2N  "Invitational: 8-9 HCP, a stopper in {y}"   shows hcp=8..9, stop(y)
+      when  !leb
       sets  ask=nt_invite
   3N  "Game: 10+ HCP"                           shows hcp>=10
+      when  !leb
   P   "Nothing to say over their overcall"
       priority -10
 
@@ -163,7 +166,7 @@ after 1N (2y) 3z (P) when y is not C, z is not y, z is not N, lho.y>=4, (maybe l
         priority -1
 after 1N (2y) 2z (P) when y is not C, z is not N, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   P   "Partner's suit, to play"
-after 1N (2y) 2N (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
+after 1N (2y) 2N (P) when !leb, y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
   3N  "Accepts: a maximum"             shows hcp>=16
       priority 1                       # ahead of one-nt.bid's answer to the invitation
   P   "Declines: a minimum"            shows hcp<=15
