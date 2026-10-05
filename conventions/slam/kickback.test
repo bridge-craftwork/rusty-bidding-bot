@@ -26,6 +26,9 @@ N K4.KQJ86.Q52.K52      | 1H P 2D P 3D P 4H P                  | 4NT    | none: 
 S A5.K4.AKJ843.KQ2      | 1H P 2D P 3D P 4H P 4NT P            | 5D     | three of mine and "0 or 3": no slam opposite none
 N KQ872.AJ42.654.4      | 1S P 2H P 3H P 4S P                  | 4NT    | hearts: one keycard (♥A) is the first step, 4NT
 
+# Interference: no DOPI/ROPI for Kickback yet (notes): game in the suit.
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4D X                  | 5C     | their double: the answer is lost, game
+
 # 0314.
 card    21GF-DEFAULT slam.kickback.rkcb_0314=true
 N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4D P                  | 4S     | one keycard: the second step in 0314
