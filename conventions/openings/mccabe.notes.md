@@ -27,6 +27,17 @@
 - With a fit and a long side suit, the lead-directing raise wins over a
   redouble (it shows the fit).
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only mccabe`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call.
+McCabe_After_Weak_2 and McCabe_after_WJO: 168 boards changed; actor
+contract -20, doubling +181; other side contract +161, doubling -167;
+double-dummy +155; halves +76/+85 (z +2.4): gains.
+
 ## Sources
 
 - Robert S. Todd, "McCabe Responses to Preempts", Advancing in Bridge,

@@ -29,6 +29,17 @@ scenario, and no stock card switches it on.
   (19+); some play that opener may then bid on. Decision: always 3♣;
   responder's invitational 3z lets a strong opener bid game.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only ingberman`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. There is a
+scenario after all: Reverse_By_Opener and Reverse_After_Two_Over_One:
+301 boards changed; actor contract +116, double-dummy +138, halves
++30/+86 (z +1.5): leans gain.
+
 ## Sources
 
 - **Robert S. Todd, "Lebensohl over Reverses", Advancing in Bridge #417**

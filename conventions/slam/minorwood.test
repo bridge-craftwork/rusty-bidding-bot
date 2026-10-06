@@ -32,3 +32,7 @@ S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | 4D     | Kickba
 # Off the card.
 card    21GF-DEFAULT
 S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | !4C    | no Minorwood
+
+# The king ask after the answer (self A/B, 2026-10-05).
+card    21GF-DEFAULT slam.minorwood.play=true
+S A.K7.KQT73.AKQ87         | 1D P 2D P 3D P 4D P 4N P | 5N | every keycard and the queen: the 5NT king ask

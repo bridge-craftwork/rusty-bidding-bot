@@ -238,6 +238,14 @@ Full corpus: +1,392 par, +1,698 side IMPs (1,049 boards). One test
 changed: 2C 2D 2H with three hearts and 8 HCP now bids 4♥, not the
 fallback 3NT.
 
+## The strong balanced double when they raise (2026-10-05)
+
+`(1x) X (P) 1y (2x)`: the doubler with 18-19 balanced and their suit
+stopped bids 2NT, as without their raise (BBA bids it: We_Overcall_1N
+board 343). Found by the Raptor self A/B (raptor.notes.md), where the
+strong balanced hands double instead of overcalling 1NT; before, the
+doubler passed.
+
 ## Sources
 
 - **Rick's rulings:** the double (12 total points and three cards in

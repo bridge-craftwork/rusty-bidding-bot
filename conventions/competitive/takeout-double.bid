@@ -194,6 +194,10 @@ after (1x) X (P) 1y (2x) | (1x) X (P) 2y (2x)
       when  x is not C, y is not C
   cheapest(D) "16+ and five diamonds"               shows D>=5, D>C, hcp>=16, y<=3
       when  x is not D, y is not D
+  # The strong balanced double, as without their bid (2026-10-05, the
+  # Raptor self A/B: 1♣ X P 1♥ 2♣ passed with 18 HCP; BBA bids 2NT).
+  2N  "18-19 balanced with a stopper in {x}"       shows balanced, hcp=17..19
+      when  stop(x)
   P   "Nothing more"                                priority -5
 
 # The doubler when their responder bid over the double, partner passed

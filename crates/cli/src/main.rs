@@ -63,6 +63,13 @@ enum Command {
         /// `--set general.style=bba` to run BBA's treatments for an A/B test.
         #[arg(long = "set")]
         card_changes: Vec<String>,
+        /// A card change for North-South only (repeatable), e.g. for a
+        /// convention self A/B where one pair plays it and the other not.
+        #[arg(long = "ns-set")]
+        ns_changes: Vec<String>,
+        /// A card change for East-West only (repeatable).
+        #[arg(long = "ew-set")]
+        ew_changes: Vec<String>,
         /// Only boards where, in BBA's auction, one side bid alone
         /// (`ns`, `ew`) or both sides bid (`competitive`).
         #[arg(long, value_parser = ["all", "ns", "ew", "competitive"], default_value = "all")]
@@ -487,11 +494,15 @@ fn run(cli: Cli) -> Result<()> {
             top,
             by_imps,
             min_coverage,
-            card_changes,
+            mut card_changes,
+            ns_changes,
+            ew_changes,
             auctions,
             worst,
             json,
         } => {
+            card_changes.extend(ns_changes.iter().map(|c| format!("ns:{c}")));
+            card_changes.extend(ew_changes.iter().map(|c| format!("ew:{c}")));
             let filter = match auctions.as_str() {
                 "ns" => rbb_compare::AuctionFilter::UncontestedNs,
                 "ew" => rbb_compare::AuctionFilter::UncontestedEw,

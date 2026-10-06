@@ -34,6 +34,18 @@ the convention itself (our X game try where BBA bids 3M).
 - Not applied when the responder, rather than the opener, is the one
   to act over their 3x (1M P 2M P P 3x), nor to minor-suit raises.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+maximal-doubles`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Maximal_Double and Maximal_After_Overcall: 85 boards
+changed; actor contract +10, doubling +39; other side contract +42,
+doubling -54; double-dummy +63 to the actor; halves +4/+45 (z +1.3):
+leans gain.
+
 ## Sources
 
 - Bridge Bum, "Maximal Double" (https://www.bridgebum.com/maximal_double.php):

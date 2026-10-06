@@ -40,6 +40,18 @@ without). Mostly 1m-2m(inverted)-4m, which our base bid as a natural
 non-forcing raise and partner passed; as Minorwood it reached slams that
 make.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only minorwood`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call.
+Minor_Game_Or_Slam: 96 boards changed; actor contract +492 (with the 5NT
+king ask added, +478 before), double-dummy +641, halves +236/+256 (z
++8.5): gains. Mostly the 1m-2m-4m auctions our base passed out in four
+(Corpus, above).
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Slam Bidding: Minorwood",

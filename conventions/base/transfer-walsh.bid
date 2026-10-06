@@ -19,6 +19,7 @@ module transfer-walsh "Transfer Walsh responses to 1♣"
   card   minor_openings.one_club.transfer_resp
   needs  responder-rebids
   skill  bidding_conventions/transfer_walsh
+  param  q4n = slam.quantitative_4nt.play default true
 
 # ── Responder ────────────────────────────────────────────────────────
 # A game force with longer diamonds and a major starts with 1♠ (as Walsh
@@ -115,11 +116,45 @@ after 1C (P) 1D (P) 2H (P) | 1C (P) 1H (P) 2S (P)
   4{trump}  "Game"                            shows points>=8
 
 # Opener denied three of the major, or answered 1♠: natural.
+# Slam and the second suit (2026-10-05, the self A/B against Walsh: every
+# game force went 1NT-3NT, 19-21 HCP and a 4-4 fit in the other major
+# included, -93 IMPs on 75 boards): a quantitative 4NT or 6NT, and the
+# responder's reverses that natural Walsh has (responder-rebids.bid).
 after 1C (P) 1x (P) 1N (P)
   P   "Weak: no game"                         shows points<=10
       priority -5
   2N  "Invitational: 11-12"                   shows points=11..12   sets ask=nt_invite
   3N  "Game: 13+"                             shows points>=13
+  4N  "Quantitative: 31-32 between us, invites 6NT"
+      shows balanced, points + partner.points.min >= 31, points + partner.points.min <= 32
+      when  q4n
+      sets  ask=quant
+  6N  "Slam: 33+ between us"                  shows balanced, points + partner.points.min >= 33
+after 1C (P) 1S (P) 1N (P) | 1C (P) 1S (P) 2C (P)
+  2H  "Game force: four hearts, longer diamonds"   shows H>=4, D>=5, D>S, points>=13   sets forcing=game
+      priority 1
+  2S  "Game force: four spades, longer diamonds"   shows S>=4, D>=5, H<=3, points>=13   sets forcing=game
+      priority 1
+after 1C (P) 1D (P) 1N (P)
+  2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"   shows S>=4, H>=5, points>=13   sets forcing=game
+      priority 1
+after 1C (P) 1H (P) 1N (P)
+  3H  "Four hearts, five spades, game forcing"   shows H>=4, S>=5, points>=13   sets forcing=game
+      priority 1
+
+# Opener over responder's major after 1♣-1♠-1NT: the 1NT rebid did not
+# deny a four-card major (responder had denied one), so raise with four.
+after 1C (P) 1S (P) 1N (P) 2M (P) | 1C (P) 1S (P) 2C (P) 2M (P)
+  3{M} "Four {M}: the fit"                    shows M>=4   sets trump=M
+      priority 2
+  2S   "Four spades, not four hearts"        shows S>=4, H<=3
+      when  M is H
+      priority 1
+  3N   "No fit in {M}"
+after 1C (P) 1S (P) 1N (P) 2H (P) 2S (P) | 1C (P) 1S (P) 2C (P) 2H (P) 2S (P)
+  4S   "Four spades as well: game"           shows S>=4
+      priority 1
+  3N   "Game in notrump"
 after 1C (P) 1D (P) 1N (P)
   2H  "Weak: six or more hearts"             shows H>=6, points<=10   sets ask=signoff
   3H  "Invitational: six or more hearts"     shows H>=6, points=11..12   sets ask=invite(H)
@@ -139,12 +174,26 @@ after 1C (P) 1D (P) 1S (P)
   1N  "6-10, no spade fit"                    shows points<=10, S<=3   sets ask=signoff
   2N  "Invitational: 11-12, no spade fit"     shows points=11..12, S<=3   sets ask=nt_invite
   3N  "Game: 13+, no spade fit"               shows points>=13, S<=3
+  4N  "Quantitative: 31-32 between us, no spade fit"
+      shows balanced, S<=3, points + partner.points.min >= 31, points + partner.points.min <= 32
+      when  q4n
+      sets  ask=quant
+  6N  "Slam: 33+ between us, no spade fit"    shows balanced, S<=3, points + partner.points.min >= 33
 
 after 1C (P) 1x (P) 2C (P)
   P   "Weak: no game"                         shows points<=10
       priority -5
   2N  "Invitational: 11-12"                   shows points=11..12   sets ask=nt_invite
   3N  "Game: 13+"                             shows points>=13
+
+# Opener's jump to 3♣ (six clubs, 16-18): game from 9 (2026-10-05, the
+# self A/B: responder had no rule and passed it with 13-14).
+after 1C (P) 1x (P) 3C (P)
+  P   "Weak: no game"                         shows points<=8
+      priority -5
+  3N  "Game: 9+"                              shows points>=9
+  5C  "Game in clubs: 9+, three clubs, a suit unstopped"   shows C>=3, points>=9, !balanced
+      priority -1
 
 after 1C (P) 1S (P) 2D (P)
   P   "Weak: no game"                         shows tp(D)<=10

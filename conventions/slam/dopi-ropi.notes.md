@@ -64,6 +64,19 @@ game.
 - The asker's continuation over an open "1 or 4" double (asker with no
   keycard) passes; a correction structure there is not written.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+depo-vs-dopi`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. DEPO against DOPI (`slam.depo` on, `slam.dopi` on in
+both runs), DOPI_ROPI: 0 boards changed. Our 4NT came up on 394 boards
+and the opponents never bid over it: our defenders do not interfere over
+keycard, so the scenario's interference exists only in BBA's auctions.
+No self verdict possible; the `.test` cases are the check.
+
 ## Sources
 
 - **The convention:** ACBL Unit 390, "DOPI and ROPI"

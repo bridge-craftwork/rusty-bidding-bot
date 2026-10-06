@@ -29,6 +29,22 @@ Snapdragon_Double, 50 boards, 71.7% call agreement. At the double: BBA
 (card off) passes or raises partner with three where we double; BBA
 style, not a bug. No forced-pass or contradiction problems.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only snapdragon`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call.
+Snapdragon_Double: 336 boards changed. First -435 to the actor (z -4.9):
+opener's redouble of the Snapdragon double was left to play (1♥XX making
+with overtricks, about 30 boards), the overcaller had no rule over XX.
+Fixed (the overcaller's context takes the redouble): actor contract
+-203, doubling +148; other side contract +230, doubling -257;
+double-dummy -23; halves -29/-26 (z -1.0): neutral. What is left is the
+overcaller forced to answer: 1NT without a fit on 8-11 opposite a weak
+advancer goes down where the natural auction passed.
+
 ## Sources
 
 - Bridge Bum, "Snapdragon Double" (https://www.bridgebum.com/snapdragon_double.php).

@@ -42,6 +42,16 @@ at the 2NT itself one board (BBA 3♣, card off). No bug found.
 - Over a minor raise, 2NT stays undefined.
 - Good/bad 2NT (the free-bid version) is not written.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+scrambling-2nt`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Scrambling_2NT: 11 boards changed, no IMPs either way:
+neutral (the 2NT rarely arises in our auctions).
+
 ## Sources
 
 - Robert S. Todd, "Competitive Auctions: Scrambling 2NT", Advancing in

@@ -238,13 +238,13 @@ after 1N (2D) 3C (P) 3D (P) | 1N (2H) 3D (P) 3H (P) | 1N (2S) 3H (P) 3S (P) when
 # Advancer. Their suit x is 2♦, 2♥ or 2♠. Two of a suit is natural and
 # weak (vs-preempts.bid).
 after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
-  2N  "Rubensohl: transfer to clubs (weak, to play; or 9+)"
+  2N  "Rubensohl: transfer to clubs (to play or invite; game values with five)"
       alert  artificial
-      shows C>=4, C>=D, hcp<=8 | (hcp>=9, C>=5), S<=3 | x is S, H<=3 | x is H
+      shows C>=4, C>=D, hcp<=12 | C>=5, S<=3 | x is S, H<=3 | x is H
       priority 3
-  3C  "Rubensohl: transfer to diamonds (weak, to play; or 9+)"
+  3C  "Rubensohl: transfer to diamonds (to play or invite; game values with five)"
       alert  artificial
-      shows D>=4, D>C, hcp<=8 | (hcp>=9, D>=5), S<=3 | x is S, H<=3 | x is H
+      shows D>=4, D>C, hcp<=12 | D>=5, S<=3 | x is S, H<=3 | x is H
       when  x is not D
       priority 3
   3C  "Rubensohl: transfer to their diamonds = Stayman, game values, a four-card major"
@@ -288,19 +288,30 @@ after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
 # The doubler completes the transfer (with 17+ and four-card support for
 # a major he bids game); answers the Stayman transfer with a major, else
 # 3NT with a stopper, else their suit; over 3♠, 3NT with a stopper.
+# With 19+ and their suit stopped the doubler bids 3NT instead, as over
+# Lebensohl's relay (vs-preempts.bid); the self A/B (2026-10-05) lost
+# the games that relay found, partner's transfer passed with 20-22.
 after (2x) X (P) 2N (P) | (2x) P (P) X (P) 2N (P) when after_x, x is not C
+  3N  "19+ with {x} stopped: game"               shows hcp>=19, stop(x)
+      priority 4
   3C  "Completes the transfer"                    artificial
       priority 3
 after (2x) X (P) 3C (P) | (2x) P (P) X (P) 3C (P) when after_x, x is not C, x is not D
+  3N  "19+ with {x} stopped: game"               shows hcp>=19, stop(x)
+      priority 4
   3D  "Completes the transfer"                    artificial
       priority 3
 after (2x) X (P) 3D (P) | (2x) P (P) X (P) 3D (P) when after_x, x is not C, x is not H
   4H  "17+ and four hearts: game"                 shows H>=4, hcp>=17
+      priority 5
+  3N  "19+ with {x} stopped, two hearts or fewer: game"   shows hcp>=19, stop(x), H<=2
       priority 4
   3H  "Completes the transfer"                    artificial
       priority 3
 after (2x) X (P) 3H (P) | (2x) P (P) X (P) 3H (P) when after_x, x is not C, x is not S
   4S  "17+ and four spades: game"                 shows S>=4, hcp>=17
+      priority 5
+  3N  "19+ with {x} stopped, two spades or fewer: game"   shows hcp>=19, stop(x), S<=2
       priority 4
   3S  "Completes the transfer"                    artificial
       priority 3

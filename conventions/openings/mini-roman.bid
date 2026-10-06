@@ -101,6 +101,50 @@ after 2D (P) 2N (P) 3x (P)
   3N  "Game in notrump"
       priority -2
 
+# ── They overcall the 2♦ (2026-10-05) ───────────────────────────────
+# The self A/B against the weak 2♦ found responder passing every
+# overcall, 13 HCP and a fit included (2♦ (2♥) P P P on 32 boards). With
+# game values: 3NT with their suit stopped, four of a major with five
+# (four when they bid the other major: opener is then likely short in
+# theirs and holds four of ours), else a double, values for defence
+# or for opener to describe. Weaker hands pass. Standard practice for a
+# three-suited opening, not yet cited.
+after 2D (2y) | 2D (3y) when y is not D
+  4S  "Game: 11+ and spades"           shows S>=5 | (S>=4, y is H), hcp>=11
+      when  y is not S
+      priority 2
+  4H  "Game: 11+ and hearts"           shows H>=5 | (H>=4, y is S), hcp>=11
+      when  y is not H
+      priority 2
+  3N  "Game: 11+, {y} stopped"         shows hcp>=11, stop(y)
+      priority 1
+  X   "11+: values, defence or a game for opener to choose"   shows hcp>=11
+  P   "Not enough to act"
+      priority -3
+
+# Opener after the double: defend with three or more of their suit;
+# short there, bid the cheapest four-card suit, a major first.
+after 2D (2y) X (P) | 2D (3y) X (P)
+  P   "Defend: three or more {y}"      shows y>=3
+      priority 1
+  cheapest(S) "Short in {y}: four spades"    shows S>=4, y<=1   when y is not S   priority 3
+  cheapest(H) "Short in {y}: four hearts"    shows H>=4, y<=1   when y is not H   priority 2
+  cheapest(C) "Short in {y}: four clubs"     shows C>=4, y<=1   when y is not C   priority 1
+  cheapest(D) "Short in {y}: four diamonds"  shows D>=4, y<=1   when y is not D
+
+# Responder places the game: four of opener's major with four, 3NT with
+# their suit stopped, else five of opener's minor.
+after 2D (2y) X (P) 2z (P) | 2D (2y) X (P) 3z (P) | 2D (3y) X (P) 3z (P) | 2D (3y) X (P) 4z (P)
+  4{z} "Game in {z}"                    shows z>=4
+      when  z is H | z is S
+      priority 2
+  3N  "Game in notrump: {y} stopped"   shows stop(y)
+      priority 1
+  5{z} "Game in {z}"                    shows z>=3
+      when  z is C | z is D
+  P   "Partner's suit: to play"
+      priority -2
+
 # They come in over the weak response: opener passes (responder may act).
 after 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)
   P   "They came in: nothing more to say"

@@ -104,7 +104,7 @@ after (2x) P (P) when x is not N, lho.hcp.max <= 12
       when  x is not S, cheapest_rank(S) <= 13
   jump(H) "Six or more hearts, 15-16"
       shows H>=6, H>S, hcp=15..16
-      when  x is not H, cheapest_rank(H) <= 13
+      when  x is not H, cheapest_rank(H) <= 13, !rub | cheapest_rank(x) > 18
   cheapest(N) "16-18 balanced, {x} stopped"
       shows balanced, hcp=16..18, S<=4, H<=4
       when  stop(x)
@@ -246,10 +246,10 @@ after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) | (3x) P (P) X (P) when x is no
       when  x is not H
   jump(S) "Invitational: five or more spades, 8-10"
       shows S>=5, S>=H, hcp+length_points=8..10
-      when  x is not S, cheapest_rank(S) <= 13     # a jump to three, not to game
+      when  x is not S, cheapest_rank(S) <= 13, !rub | cheapest_rank(x) > 18     # a jump to three, not to game; Rubensohl transfers there
   jump(H) "Invitational: five or more hearts, 8-10"
       shows H>=5, H>S, hcp+length_points=8..10
-      when  x is not H, cheapest_rank(H) <= 13
+      when  x is not H, cheapest_rank(H) <= 13, !rub | cheapest_rank(x) > 18
   cheapest(N) "11-12 with {x} stopped"
       shows hcp+length_points=11..12, S<=3 | x is S, H<=3 | x is H
       when  stop(x), cheapest_rank(x) < 14, !(leb | rub) | cheapest_rank(x) > 18

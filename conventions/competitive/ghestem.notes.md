@@ -35,6 +35,20 @@ Michaels_Cuebid and Michaels_and_Unusual, 100 boards: every top
 divergence is Ghestem itself (3♣ for the majors over a minor where BBA
 cue-bids, and so on). No bug found.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+ghestem-vs-michaels`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Against Michaels (the cards' default), Michaels_Cuebid
+and Michaels_and_Unusual: 516 boards changed; actor contract -81,
+doubling +17, double-dummy -50, halves -49/-15 (z -0.7): neutral. The
+losses are the majors over 1♣ (3♣ for Ghestem against Michaels' 2♣, -118
+on 107 boards), the gains the red suits over 1♠ (+65 on 111): the
+convention's own trade, no bug.
+
 ## Sources
 
 - Wikipedia, "Ghestem" (https://en.wikipedia.org/wiki/Ghestem): the

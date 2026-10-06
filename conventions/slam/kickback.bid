@@ -14,6 +14,7 @@ module kickback "Kickback: the step above four of the trump suit asks for keycar
   param  kbplay = slam.kickback.play default false
   param  kb1430 = slam.kickback.rkcb_1430 default false
   param  kb0314 = slam.kickback.rkcb_0314 default false
+  param  kask5n = slam.king_ask.five_nt default false
 
 # The card plays Kickback when any of its three fields is on.
 define kickback_on = kbplay | kb1430 | kb0314
@@ -128,6 +129,12 @@ when kickback_on, asked kickback(t), rho.last = P
 when kickback_on, answered kickback(t)
   7{t}  "Grand slam: every keycard and the {t} queen"
         when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+  # The king ask, as after 4NT (rkcb-1430.bid answers it); the self A/B
+  # (2026-10-05) lost the grands that 4NT-5NT found.
+  5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
+        when  kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t)
+        sets  ask=kings(t)
+        artificial
   6{t}  "Small slam: at most one keycard missing"
         when  we.keycards(t)>=4
   P     "Sign off: partner's answer is five of our suit"

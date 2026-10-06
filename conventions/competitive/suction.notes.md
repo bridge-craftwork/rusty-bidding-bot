@@ -31,6 +31,21 @@ Suction's own calls).
   (the problems seen in the scenario).
 - `vs_1nt_weak.system` is still not read (vs-1nt.bid).
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only suction`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. Against the
+card's default defence, Suction: 401 boards changed. First -90 to the
+actor (z -1.2), two bugs: the overcaller did not correct the relay once
+they had doubled it (1NT 2♦ X 2♥ X left in with spades and clubs,
+-1400), and advancer passed their redouble of the Suction double. Both
+continue now over X and XX. After: 400 changed; actor contract -32,
+doubling +84; other side doubling -238; double-dummy +238; halves +60/-8
+(z +0.8): neutral.
+
 ## Sources
 
 - **Bridge Bum, "Suction"** (https://www.bridgebum.com/suction.php): the

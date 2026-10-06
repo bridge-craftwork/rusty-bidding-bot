@@ -56,6 +56,28 @@ Weak_NT_14-15 (Precision cards); in the last, 1NT 2♥ 2NT (natural
 invitation) became a pass, since Rubensohl has no natural 2NT.
 Question for Rick: invite in notrump by double, or keep it as is.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+rubensohl-vs-lebensohl-nt, rubensohl-vs-lebensohl-x`. IMPs by the errors
+yardstick, positive when the convention makes fewer; "actor" is the side
+that made the first differing call. Against Lebensohl (both on in the
+base, Rubensohl added). Over their overcall of 1NT, Lebensohl and
+Lebensohl2: 258 boards changed; actor contract -44, doubling -12,
+double-dummy -82, halves -6/-50 (z -0.9): neutral. After our double of a
+weak two (Lebensohl_vs_Opps_W2_*): first -251 to the actor (z -1.6),
+three bugs: (1) advancer with 9-12 and only a four-card minor had no
+call and passed the double for penalty (2♥ X P P, -670); the minor
+transfers now take 4+ up to 12; (2) vs-preempts.bid's natural 3M
+invitational jump stayed on, and the doubler read 3♠ as Rubensohl's "no
+stopper" (4♣ in a 5-3 spade fit); it is now off under Rubensohl over a
+two-level preempt; (3) the doubler had no 3NT with 19+ over the
+transfer, as Lebensohl's relay has. After: 741 boards changed; actor
+contract +181, doubling -43; other side contract +120, doubling -153;
+double-dummy +63; halves +31/+107 (z +1.0): leans gain.
+
 ## Sources
 
 - Wikipedia, "Rubinsohl" (https://en.wikipedia.org/wiki/Rubinsohl):

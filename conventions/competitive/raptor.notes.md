@@ -35,6 +35,24 @@ We_Overcall_1N, 50 boards: the strong balanced hands that BBA overcalls
 1NT with now double (17+) or pass (15-16): the cost of the convention,
 recorded under the open question above.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only raptor`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. We_Overcall_1N:
+483 boards changed; actor contract +3, doubling -438; other side
+contract -405, doubling +200; double-dummy -229; halves -143/-292 (z
+-4.5): loses, but not on Raptor's own call: the Raptor 1NT was bid on 0
+of the 500 boards. The deals are dealt for the strong natural 1NT
+overcall, which Raptor gives up (15-16 passes, 17+ doubles): the cost of
+the convention, measured where it can only cost. A fair test needs deals
+with the four-card major and longer minor (random deals; a question for
+Rick). One bug found on the way, in the double that now carries the
+strong balanced hands: 1♣ X P 1♥ (2♣) and the doubler with 18 balanced
+passed (takeout-double.bid: 2NT added, as BBA bids).
+
 ## Sources
 
 - Wikipedia, "Raptor (bridge)": the suits shown over each opening.

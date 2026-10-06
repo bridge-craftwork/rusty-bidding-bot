@@ -1,0 +1,171 @@
+# Self A/B of the conventions BBA does not play, or that no PBS card
+# switches on (Rick, 2026-10-05): the same deals with the convention off
+# (base) and on (variant), judged by the errors yardstick.
+#
+#   probes/tools/self_ab.py --batch probes/self-ab.toml [--only a,b] [--side ns]
+#
+# `--side ns` plays the variant for North-South alone (compare --ns-set):
+# the opponents keep the base card. Results: each module's notes,
+# "Self A/B".
+
+[[ab]]
+name      = "maximal-doubles"
+scenarios = ["Maximal_Double", "Maximal_After_Overcall"]
+base      = ["doubles.maximal=false"]
+variant   = ["doubles.maximal=true"]
+
+[[ab]]
+name      = "kickback"
+scenarios = ["Minor_Game_Or_Slam", "Slam_After_Major_Fit"]
+base      = ["slam.kickback.play=false"]
+variant   = ["slam.kickback.play=true"]
+
+[[ab]]
+name      = "minorwood"
+scenarios = ["Minor_Game_Or_Slam"]
+base      = ["slam.minorwood.play=false"]
+variant   = ["slam.minorwood.play=true"]
+
+[[ab]]
+name      = "depo-vs-dopi"
+scenarios = ["DOPI_ROPI"]
+base      = ["slam.dopi=true", "slam.depo=false"]
+variant   = ["slam.dopi=true", "slam.depo=true"]
+
+[[ab]]
+name      = "non-serious-3nt"
+scenarios = ["Serious"]
+base      = ["slam.non_serious_3nt.play=false"]
+variant   = ["slam.non_serious_3nt.play=true"]
+
+[[ab]]
+name      = "spiral-2nt"
+scenarios = ["Spiral_Raises_Weinstein", "Spiral_Raises_Wolpert"]
+base      = ["slam.spiral_cuebids.play=false"]
+variant   = ["slam.spiral_cuebids.play=true"]
+
+[[ab]]
+name      = "western-cue"
+scenarios = ["Western_Cue_Bid"]
+base      = ["slam.western_cuebid.play=false"]
+variant   = ["slam.western_cuebid.play=true"]
+
+[[ab]]
+name      = "sandwich-nt"
+scenarios = ["GIB_Sandwich_NT_BPH"]
+base      = ["competitive.sandwich_nt.play=false"]
+variant   = ["competitive.sandwich_nt.play=true"]
+
+[[ab]]
+name      = "unusual-1nt"
+scenarios = ["GIB_Sandwich_NT_BPH"]
+base      = ["competitive.unusual_1nt.play=false"]
+variant   = ["competitive.unusual_1nt.play=true"]
+
+[[ab]]
+name      = "raptor"
+scenarios = ["We_Overcall_1N"]
+base      = ["competitive.raptor_1nt.play=false"]
+variant   = ["competitive.raptor_1nt.play=true"]
+
+[[ab]]
+name      = "ghestem-vs-michaels"
+scenarios = ["Michaels_Cuebid", "Michaels_and_Unusual"]
+base      = ["competitive.ghestem.play=false"]
+variant   = ["competitive.ghestem.play=true"]
+
+[[ab]]
+name      = "scrambling-2nt"
+scenarios = ["Scrambling_2NT"]
+base      = ["competitive.scrambling_2nt.play=false"]
+variant   = ["competitive.scrambling_2nt.play=true"]
+
+[[ab]]
+name      = "snapdragon"
+scenarios = ["Snapdragon_Double"]
+base      = ["competitive.snapdragon.play=false"]
+variant   = ["competitive.snapdragon.play=true"]
+
+[[ab]]
+name      = "lead-directing-doubles"
+scenarios = ["Lead_Directing_Double"]
+base      = ["competitive.lead_directing_double.play=false"]
+variant   = ["competitive.lead_directing_double.play=true"]
+
+[[ab]]
+name      = "transfers-after-1M-X"
+scenarios = ["Transfers_after_1M_X", "Xfer_after_1M_X"]
+base      = ["vs_to_double.new_suit_forcing_tfr=false"]
+variant   = ["vs_to_double.new_suit_forcing_tfr=true"]
+
+[[ab]]
+name      = "rubensohl-vs-lebensohl-nt"
+scenarios = ["Lebensohl", "Lebensohl2"]
+base      = ["notrump.lebensohl.over_interference=true", "notrump.rubensohl.over_interference=false"]
+variant   = ["notrump.lebensohl.over_interference=true", "notrump.rubensohl.over_interference=true"]
+
+[[ab]]
+name      = "rubensohl-vs-lebensohl-x"
+scenarios = ["Lebensohl_vs_Opps_W2_Bal", "Lebensohl_vs_Opps_W2_Dir", "Lebensohl_vs_Opps_W2_Bal_or_Dir"]
+base      = ["competitive.lebensohl_weak_twos.play=true", "competitive.rubensohl_after_double.play=false"]
+variant   = ["competitive.lebensohl_weak_twos.play=true", "competitive.rubensohl_after_double.play=true"]
+
+[[ab]]
+name      = "mini-roman-vs-weak-2d"
+scenarios = ["Mini-Maxi_Roman_2D"]
+base      = ["two_level.two_diamonds.mini_roman=false"]
+variant   = ["two_level.two_diamonds.mini_roman=true"]
+
+[[ab]]
+name      = "mccabe"
+scenarios = ["McCabe_After_Weak_2", "McCabe_after_WJO"]
+base      = ["two_level.mccabe.play=false"]
+variant   = ["two_level.mccabe.play=true"]
+
+[[ab]]
+name      = "transfer-walsh"
+scenarios = ["Transfer_Walsh", "1C_WalshStyle"]
+base      = ["minor_openings.one_club.transfer_resp=false"]
+variant   = ["minor_openings.one_club.transfer_resp=true"]
+
+[[ab]]
+name      = "xyz-vs-nmf"
+scenarios = ["XYZ"]
+base      = ["other_conventions.new_minor_forcing.play=true", "other_conventions.xyz=false"]
+variant   = ["other_conventions.new_minor_forcing.play=true", "other_conventions.xyz=true"]
+
+[[ab]]
+name      = "semi-forcing-1nt"
+scenarios = ["Gavin_Semi-Forcing_NT_with_Fit", "Forcing_NT"]
+base      = ["major_openings.one_nt_response.forcing=true", "major_openings.one_nt_response.semi_forcing=false"]
+variant   = ["major_openings.one_nt_response.forcing=false", "major_openings.one_nt_response.semi_forcing=true"]   # a choice: with both on the forcing 1NT wins
+
+[[ab]]
+name      = "suction"
+scenarios = ["Suction"]
+base      = []
+variant   = ["competitive.vs_1nt_strong.system=suction"]
+
+[[ab]]
+name      = "dont"
+scenarios = ["DONT"]
+base      = []
+variant   = ["competitive.vs_1nt_strong.system=dont"]
+
+[[ab]]
+name      = "meckwell"
+scenarios = ["Meckwell"]
+base      = []
+variant   = ["competitive.vs_1nt_strong.system=meckwell"]
+
+[[ab]]
+name      = "2h-bust"
+scenarios = ["Bust_Over_Strong_2C", "Game_Forcing_2C", "Opps_Bid_Over_GF_2C"]
+base      = ["two_level.two_clubs.parrish_bust=false"]
+variant   = ["two_level.two_clubs.parrish_bust=true"]
+
+[[ab]]
+name      = "ingberman"
+scenarios = ["Reverse_By_Opener", "Reverse_After_Two_Over_One"]
+base      = ["other_conventions.ingberman_2nt.play=false"]
+variant   = ["other_conventions.ingberman_2nt.play=true"]

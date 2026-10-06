@@ -38,6 +38,19 @@ At the convention's calls: BBA (card off) raises 2M with four trumps
 where we bid 3♦ (four trumps, 8-10), and bids 2♠ where we transfer with
 2♥: the convention itself. No bug found.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+transfers-after-1M-X`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Transfers_after_1M_X and Xfer_after_1M_X: 324 boards
+changed; actor contract -211, doubling +153; other side contract +112,
+doubling -194; double-dummy -15; halves -47/-11 (z -0.8): neutral. The
+2NT fit raise taking hands that redoubled before (-34 on 27) is the main
+contract cost; opener's answer to it is vs-takeout-double.bid's.
+
 ## Sources
 
 - PBS `btn/Transfers_after_1M_X.btn` (citing the ACBL Bulletin, June

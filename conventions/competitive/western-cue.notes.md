@@ -38,6 +38,17 @@ Western_Cue_Bid `--limit 50 --set slam.western_cuebid.play=true`: the
 cue came up on 2 boards (a spade and a diamond stopper ask). BBA does
 not play it, so agreement there is not a measure.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+western-cue`. IMPs by the errors yardstick, positive when the convention
+makes fewer; "actor" is the side that made the first differing call.
+Western_Cue_Bid: 17 boards changed (4 without par); actor contract -32,
+doubling +31, double-dummy +2, halves -11/+10: neutral (too few boards
+to say more).
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Thinking and Responding:

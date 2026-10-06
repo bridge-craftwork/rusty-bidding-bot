@@ -33,6 +33,18 @@ card plays it and the `.bbsa` format has no key for it.
   three-card answers come up only on cards that raise with three.
 - No repeated ask: the source describes one round.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only spiral-2nt`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call.
+Spiral_Raises_Weinstein and Spiral_Raises_Wolpert (PBS has them after
+all: Weinstein's 2NT ask after 1x-1M-2M): 84 boards changed; actor
+contract +21, other side doubling +48, double-dummy +11, halves -29/+50
+(z +0.6): neutral.
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Fits and More: 2NT Trump Suit

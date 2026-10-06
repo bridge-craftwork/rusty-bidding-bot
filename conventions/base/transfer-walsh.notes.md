@@ -44,6 +44,28 @@ four spades after an acceptance had no rule. One remains in competition
 - Slam auctions and the modules under slam/ and majors/ that read
   `after 1x (P) 1M (P)` literally (splinters by opener) are not gated.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+transfer-walsh`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Against natural Walsh, Transfer_Walsh and 1C_WalshStyle:
+711 boards changed. First -338 to the actor (z -3.2), three gaps: (1)
+after 1♣-1x-1NT responder had only pass/2NT/3NT, so the game force with
+longer diamonds and a major (1♠ first) never showed the major, and 19-21
+balanced stopped in 3NT (-93 on 75 boards); now the responder's reverses
+as in natural Walsh, opener raising with four, and a quantitative 4NT /
+6NT (also after 1♣-1♦-1♠); (2) responder had no rule over opener's 3♣
+(six clubs, 16-18) and passed it with 13-14; (3) opener's splinters
+(splinters.bid) read 1♣-1♦/1♥ as natural and agreed the wrong major;
+they now stand aside under Transfer Walsh. After: 703 changed; actor
+contract -137, doubling 0; double-dummy -184; halves -172/+35 (z -1.4):
+neutral. Left: no opener's splinter under Transfer Walsh (natural Walsh
+found two slams by 1♣-1♥-4♦), and the game raise 4M with 19+ that
+responder cannot judge for slam.
+
 ## Sources
 
 - **Wikipedia, "Transfer Walsh"** (https://en.wikipedia.org/wiki/Transfer_Walsh):

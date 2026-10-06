@@ -27,23 +27,30 @@ module dont "DONT over their 1NT"
   param  def       = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
 
+# The ceiling: 15 HCP, or 19 with a shapely hand (5-5 or longer, or a
+# seven-card suit). 2026-10-05, the self A/B against the card's default
+# defence: 16-19 with 6-5 passed "to wait" and partner passed it out,
+# about -100 IMPs on DONT's own deals. A balanced or 5-4 strong hand
+# still passes.
+define dont_strength = hcp<=15 | (hcp<=19, longest+second_longest>=10 | longest>=7)
+
 after (1N) | (1N) P (P) when def is dont | (dont_play, def is other)
   X   "DONT: one long suit (clubs, diamonds or hearts)"   alert
-      shows (C>=6 | D>=6 | H>=6), second_longest<=3, hcp+length_points>=10, hcp<=15
+      shows (C>=6 | D>=6 | H>=6), second_longest<=3, hcp+length_points>=10, dont_strength
       sets  ask=dont_one
   2C  "DONT: clubs and a higher suit"            alert
       shows (C>=5, (D>=4 | H>=4 | S>=4)) | (C>=4, (D>=5 | H>=5 | S>=5))
-      shows hcp+length_points>=10, hcp<=15
+      shows hcp+length_points>=10, dont_strength
       sets  ask=nt_pc(C)
   2D  "DONT: diamonds and a major"               alert
       shows (D>=5, (H>=4 | S>=4)) | (D>=4, (H>=5 | S>=5))
-      shows hcp+length_points>=10, hcp<=15
+      shows hcp+length_points>=10, dont_strength
       sets  ask=nt_pc(D)
   2H  "DONT: hearts and spades"                  alert
-      shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, hcp<=15
+      shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, dont_strength
       sets  ask=nt_majors
   2S  "DONT: six or more spades"
-      shows S>=6, second_longest<=4, hcp+length_points>=10, hcp<=15
+      shows S>=6, second_longest<=4, hcp+length_points>=10, dont_strength
       sets  ask=nt_one(S)
 
 # Advancer over the double: 2♣ asks for the suit (partner passes with

@@ -63,14 +63,12 @@ def whole(boards):
     return c, d
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('base')
-    ap.add_argument('variant')
-    ap.add_argument('--top', type=int, default=6)
-    a = ap.parse_args()
-    base = json.load(open(a.base))['boards']
-    var = json.load(open(a.variant))['boards']
+def diff(base, var):
+    """The board-by-board comparison of two runs' boards: (cells, n,
+    skipped, by, cnt, changed). cells[name] = [even, odd] IMPs; n =
+    [even, odd] boards changed; by/cnt: IMPs and boards per first
+    differing call; changed: (scenario, board, errors gain, actor side)
+    per changed board."""
     key = lambda x: (x['scenario'], x['board'])
     B = {key(x): x for x in base}
 
@@ -80,6 +78,7 @@ def main():
     skipped = 0
     by = collections.Counter()
     cnt = collections.Counter()
+    changed = []
     for v in var:
         b = B.get(key(v))
         if not b:
@@ -122,6 +121,20 @@ def main():
         k = f"{' '.join(pre[-3:])} : {ob[i] if i < len(ob) else '-'} -> {ov[i] if i < len(ov) else '-'}"
         by[k] += tot
         cnt[k] += 1
+        ga = sum(eb[kd][actor] - ev[kd][actor] for kd in ('contract', 'doubling'))
+        changed.append((v['scenario'], v['board'], ga, 'NS' if actor == 0 else 'EW', k))
+    return cells, n, skipped, by, cnt, changed
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('base')
+    ap.add_argument('variant')
+    ap.add_argument('--top', type=int, default=6)
+    a = ap.parse_args()
+    base = json.load(open(a.base))['boards']
+    var = json.load(open(a.variant))['boards']
+    cells, n, skipped, by, cnt, _ = diff(base, var)
 
     N = n[0] + n[1]
     print(f'boards changed {N} (even {n[0]}, odd {n[1]}; skipped {skipped})')

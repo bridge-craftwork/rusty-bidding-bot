@@ -53,6 +53,21 @@ Slam_After_Major_Fit (`--limit 50`): the ask came up 3 times in the
 minors and 8 times in hearts, answered and placed as written; no final
 contract changed (same par scores as without Kickback).
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only kickback`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call.
+Minor_Game_Or_Slam and Slam_After_Major_Fit: 154 boards changed; first
+-11 to the actor (contract), the grands that 4NT-5NT found and Kickback
+could not: its asker had no king ask. With the 5NT king ask added
+(rkcb-1430.bid answers it): actor contract +8, double-dummy +26, halves
+-8/+16 (z +0.2): neutral. What is left is the price of the step ask
+itself: with diamonds agreed 4♥ is the ask, so a heart fit found later
+cannot be bid there (Slam_After_Major_Fit 445).
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Kickback Keycard Ask",

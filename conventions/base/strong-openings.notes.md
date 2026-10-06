@@ -180,6 +180,17 @@ random +40, both halves positive; responder's slams after 2C-2H-3H are
 slam-entry's (slam-entry.notes.md, "Declarer points and support
 points").
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only 2h-bust`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. 2♥ bust
+(`parrish_bust`), Bust_Over_Strong_2C (5 boards), Game_Forcing_2C and
+Opps_Bid_Over_GF_2C: 174 boards changed; actor contract +180, other side
+doubling +193, double-dummy +171, halves +94/+86 (z +2.6): gains.
+
 ## Sources
 
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣

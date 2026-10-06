@@ -10,6 +10,7 @@ module minorwood "Minorwood: four of the agreed minor asks for keycards"
   needs  base
   skill  bidding_conventions/minorwood
   param  mwplay = slam.minorwood.play default false
+  param  kask5n = slam.king_ask.five_nt default false
 
 # Four of the minor is still available (`cheapest_rank`: 4♣ 20, 4♦ 21).
 define mw_room(t) = (t is C, cheapest_rank(C) <= 20) | (t is D, cheapest_rank(D) <= 21)
@@ -76,6 +77,11 @@ when mwplay, asked minorwood(t), rho.last = P
 when mwplay, answered minorwood(t)
   7{t}  "Grand slam: every keycard and the {t} queen"
         when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+  # The king ask, as after 4NT (rkcb-1430.bid answers it; 2026-10-05).
+  5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
+        when  kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t)
+        sets  ask=kings(t)
+        artificial
   6{t}  "Small slam: at most one keycard missing"
         when  we.keycards(t)>=4
   5{t}  "Sign off: two keycards missing"

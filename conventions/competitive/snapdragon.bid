@@ -43,8 +43,10 @@ after (1x) 1y (1z) | (1x) 1y (2z) | (1x) 2y (2z) | (1x) 2y (3z) when y is not x,
       sets  forcing=round
       priority 1
 
-# The overcaller.
-after (1x) 1y (1z) X (P) | (1x) 1y (2z) X (P) | (1x) 2y (2z) X (P) | (1x) 2y (3z) X (P) when y is not x, z is not x, z is not y
+# The overcaller. Over opener's redouble too (2026-10-05, self A/B:
+# without it the overcaller passed and the redouble was left to play,
+# 1♥XX made with overtricks on 30-odd boards).
+after (1x) 1y (1z) X (P) | (1x) 1y (2z) X (P) | (1x) 2y (2z) X (P) | (1x) 2y (3z) X (P) | (1x) 1y (1z) X (XX) | (1x) 1y (2z) X (XX) | (1x) 2y (2z) X (XX) | (1x) 2y (3z) X (XX) when y is not x, z is not x, z is not y
   jump(C) "Fit for clubs and 15+"        shows C>=3, hcp+length_points>=15   when partner.C>=5   priority 3
   jump(D) "Fit for diamonds and 15+"     shows D>=3, hcp+length_points>=15   when partner.D>=5   priority 3
   jump(H) "Fit for hearts and 15+"       shows H>=3, hcp+length_points>=15   when partner.H>=5   priority 3

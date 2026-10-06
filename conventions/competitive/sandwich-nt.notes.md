@@ -31,6 +31,19 @@ context now also reads this switch.
 GIB_Sandwich_NT_BPH is a passed-hand scenario, so it shows the Unusual
 1NT as before (BBA overcalls 1♠ or passes); nothing new.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+sandwich-nt`. IMPs by the errors yardstick, positive when the convention
+makes fewer; "actor" is the side that made the first differing call.
+GIB_Sandwich_NT_BPH: Sandwich on, 0 boards changed (a passed-hand
+scenario: the Unusual 1NT covers it). The Unusual 1NT itself, off
+against on (`competitive.unusual_1nt.play`; BBA does not bid it there):
+339 boards changed; actor contract +55, doubling +311, other side
+doubling -152, double-dummy +377, halves +171/+195 (z +7.6): gains.
+
 ## Sources
 
 - Robert S. Todd, "Competitive Bidding: Sandwich NT", Advancing in

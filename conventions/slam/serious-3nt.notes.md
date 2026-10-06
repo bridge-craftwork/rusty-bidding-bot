@@ -53,6 +53,16 @@ the slam. That fix also changed 7 boards elsewhere in the tripwire (the
 same stall without the 3NT): six slams that make, one 6♠ one down
 (SCS16_Major_Open_2-Suit_Resp 10).
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+non-serious-3nt`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Serious: 52 boards changed; actor contract +4,
+double-dummy +14, halves +51/-47 (z +0.1): neutral.
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Slam Bidding: Non-Serious 3NT",

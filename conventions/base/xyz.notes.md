@@ -39,6 +39,16 @@ no problems in our auctions at the convention's calls, 50 boards,
   relay, matching two-way NMF and the convention-card summary
   ("extending two-way checkback").
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only xyz-vs-nmf`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. Against New
+Minor Forcing (on in both runs), XYZ: 248 boards changed; actor contract
+-28, double-dummy -15, halves +15/-43 (z -0.7): neutral.
+
 ## Sources
 
 - **Robert S. Todd, "XYZ", Advancing in Bridge #587**

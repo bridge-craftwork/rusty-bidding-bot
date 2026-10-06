@@ -30,6 +30,20 @@ cost is on their side: after 1NT P 2♣ X our opener passes where BBA
 bids 2♥ (4 boards, -22 IMPs); opener's answers to Stayman over a double
 belong to the Stayman module (notrump/), not changed here.
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only
+lead-directing-doubles`. IMPs by the errors yardstick, positive when the
+convention makes fewer; "actor" is the side that made the first
+differing call. Lead_Directing_Double: 196 boards changed; actor
+contract -22, doubling +19; other side contract -214 (their
+Stayman/transfer auctions after our double, the opener's pass noted
+above); double-dummy +261 to the actor; halves -2/-1: neutral by the
+actor's own errors, a gain by the double-dummy and by the other side's
+errors.
+
 ## Sources
 
 - Bridge Bum, "Lead Directing Double" (https://www.bridgebum.com/lead_directing_double.php).

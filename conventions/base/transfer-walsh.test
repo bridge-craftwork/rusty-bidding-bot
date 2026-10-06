@@ -25,3 +25,14 @@ N 52.KJ54.AQ5.K854      | 1C P 1D P 1NT P     | 3NT    | game, no heart fit
 N K654.KJ54.Q5.854      | 1C P 1D P 1S P      | 2S     | weak, four spades
 # Interference: the transfer is off over an overcall (natural responses).
 N 52.KJ54.Q85.J854      | 1C 1S               | X      | negative double, not a transfer
+
+# After 1C-1x-1NT: the second suit and slam (self A/B, 2026-10-05).
+N KJT5.KT8.AKQ92.Q       | 1C P 1S P 1N P      | 2S     | game force, four spades and longer diamonds
+S AQ86.Q6.84.A9765       | 1C P 1S P 1N P 2S P | 3S     | four spades: the fit
+N A.AJ95.KJT93.AK2        | 1C P 1S P 1N P      | 2H     | game force, four hearts and longer diamonds
+N KQ4.AJ3.KQ32.KJ4       | 1C P 1S P 1N P      | 4N     | 19 balanced: quantitative
+N KQ4.AJ3.KQ32.AKJ       | 1C P 1S P 1N P      | 6N     | 22 balanced: slam
+N AT32.KT.KJT98.K9       | 1C P 1S P 3C P      | 3N     | 13 opposite 16-18 and six clubs: game
+N K64.AJ94.KQ743.7       | 1C P 1S P 2C P      | 2H     | game force, four hearts and longer diamonds over 2C too
+S QJ.A752.6.AKQJ95       | 1C P 1H P           | 2H     | 1H showed spades: no heart splinter; the reverse
+N J2.KQ85.AQJT.AQT        | 1C P 1D P 1S P      | 4N     | 19 balanced, no spade fit: quantitative

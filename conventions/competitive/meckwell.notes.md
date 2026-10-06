@@ -33,6 +33,17 @@ range; the sources say a passed hand and the balancing seat play it
 anyway ("a passed hand uses the defensive scheme vs. a strong 1NT
 instead, since a penalty double isn't needed anymore").
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only meckwell`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. Against the
+card's default defence, Meckwell: 367 boards changed; actor contract
+-79, doubling +76; other side contract +97, doubling +47; double-dummy
+-145; halves +21/-24 (z -0.1): neutral.
+
 ## Sources
 
 - Wikipedia, "Meckwell convention", https://en.wikipedia.org/wiki/Meckwell_convention

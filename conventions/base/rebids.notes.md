@@ -769,6 +769,16 @@ the forcing 1NT there). Question for Rick: 15-17 balanced with a five-card
 major (no 1NT opening on such a card?) bids its three-card minor, as over
 the forcing 1NT; decision taken.
 
+## Self A/B: semi-forcing 1NT
+
+Semi-forcing 1NT, self A/B (2026-10-05; `probes/tools/self_ab.py --batch
+probes/self-ab.toml --only semi-forcing-1nt`): the forcing 1NT and the
+semi-forcing one are a choice on the card, so the variant turns
+`forcing` off (with both on the forcing 1NT wins, and nothing changed).
+Gavin_Semi-Forcing_NT_with_Fit and Forcing_NT: 29 boards changed; actor
+contract +9, other side doubling +22, double-dummy -12, halves -14/+23
+(z +0.3): neutral.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
