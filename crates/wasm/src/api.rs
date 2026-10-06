@@ -2038,7 +2038,8 @@ mod tests {
         assert_eq!(r["ok"], true, "{r}");
         let k = &r["position"]["knowledge"];
         assert_eq!(k["N"]["hcp"]["min"], 15, "{r}");
-        assert_eq!(k["N"]["balanced"], true);
+        // 21GF-DEFAULT's 1NT may be 5-4-2-2: balanced is not certain.
+        assert!(k["N"]["balanced"].is_null(), "{r}");
         assert_eq!(k["S"]["hcp"]["min"], 0);
         assert!(r["position"]["sides"]["ns"]["forcing"].is_string());
         assert!(r["position"]["sides"]["ew"]["summary"]
@@ -2180,7 +2181,8 @@ mod tests {
             .iter()
             .any(|x| x["severity"] == "info"));
 
-        // The fallback's pass appended: West bids, North (human) is next.
+        // The fallback's pass appended: West answers the Unusual 4NT
+        // (5D), North (human) is next.
         let r = parse(&auction(&format!(
             r#"{{{TABLE}, "auction": "1C 4NT Pass"}}"#
         )));
@@ -2204,7 +2206,7 @@ mod tests {
         // Every call reads as `interpret` reads it.
         let i = parse(&interpret(
             r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "vul": "None", "scoring": "IMP",
-                "auction": "1C 4NT Pass Pass"}"#,
+                "auction": "1C 4NT Pass 5D"}"#,
         ));
         for (a, b) in steps.iter().zip(i["steps"].as_array().unwrap()) {
             for k in ["call", "explanation", "alert", "rule", "knowledge"] {

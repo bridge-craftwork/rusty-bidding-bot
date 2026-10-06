@@ -20,6 +20,22 @@ mod system;
 
 use std::path::Path;
 
+/// How many threads a parallel job of ours may use: `RBB_CPUS` when set,
+/// otherwise every core but two, so the machine stays usable for other
+/// work while a comparison or test run is going (Rick, 2026-10-05).
+pub fn cpu_budget() -> usize {
+    std::env::var("RBB_CPUS")
+        .ok()
+        .and_then(|v| v.parse::<usize>().ok())
+        .filter(|&n| n > 0)
+        .unwrap_or_else(|| {
+            std::thread::available_parallelism()
+                .map_or(1, |n| n.get())
+                .saturating_sub(2)
+        })
+        .max(1)
+}
+
 pub use engine::{
     check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation,
     OnNoRule, Step, StopReason, Table, TableAuction, TableStop, SET_KEYS,

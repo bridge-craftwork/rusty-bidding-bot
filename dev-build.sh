@@ -50,6 +50,34 @@ set -euo pipefail
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 cd "$SCRIPT_DIR"
 
+# CPU budget (Rick, 2026-10-05): every run takes the machine-wide gate in
+# cpu-gate.sh, one heavy job at a time on every core but two. The workbench
+# stays open for hours, so it only gets the thread budget, not the gate.
+if [[ " $* " == *" rbb-workbench "* ]]; then
+    export RBB_CPU_GATE_HELD=${RBB_CPU_GATE_HELD:-workbench}
+fi
+if [[ -z ${RBB_CPU_GATE_HELD:-} && ${RBB_CPU_GATE:-on} != off ]]; then
+    exec "$SCRIPT_DIR/cpu-gate.sh" "$SCRIPT_DIR/dev-build.sh" "$@"
+fi
+if [[ -z ${RBB_CPUS:-} ]]; then
+    ncpu=$(sysctl -n hw.ncpu 2>/dev/null || nproc 2>/dev/null || echo 4)
+    export RBB_CPUS=$((ncpu > 3 ? ncpu - 2 : 1))
+fi
+export CARGO_BUILD_JOBS=${CARGO_BUILD_JOBS:-$RBB_CPUS}
+export RUST_TEST_THREADS=${RUST_TEST_THREADS:-$RBB_CPUS}
+
+# A new agent worktree has no target/ and would compile everything from
+# scratch. Start it from a copy-on-write clone of the main checkout's
+# (APFS: instant, no space until files change); cargo rebuilds what differs.
+if [[ ! -d target ]]; then
+    common=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null || true)
+    main_dir=${common%/.git}
+    if [[ -n $common && $main_dir != "$SCRIPT_DIR" && -d $main_dir/target ]]; then
+        echo "dev-build: seeding target/ from $main_dir/target (copy-on-write)" >&2
+        cp -cR "$main_dir/target" target 2>/dev/null || rm -rf target
+    fi
+fi
+
 # Both spellings cargo accepts, newest first.
 CONFIG_NAMES=(config.toml config)
 

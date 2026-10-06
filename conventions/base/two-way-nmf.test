@@ -1,0 +1,18 @@
+# Two-way New Minor Forcing (xyNT): 21GF-DEFAULT with NMF swapped for it.
+card    21GF-DEFAULT other_conventions.new_minor_forcing.play=false other_conventions.two_way_nmf=true
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P          | 2C     | 11, five spades: invitational, relay
+S Q76.K42.AQ5.K987      | 1C P 1S P 1NT P 2C P     | 2D     | forced relay
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P 2C P 2D P | 2S    | invitational with five spades
+N KQJ54.A32.A4.J76      | 1C P 1S P 1NT P          | 2D     | 15, five spades: game force
+S Q76.K42.AQ5.K987      | 1C P 1S P 1NT P 2D P     | 2S     | three spades
+S K7.K42.AJ53.Q987      | 1C P 1S P 1NT P 2D P     | 2NT    | no fit to show
+N KQJ54.A32.A4.J76      | 1C P 1S P 1NT P 2D P 2S P | 4S    | five opposite three: game
+N KQJ54.A32.A4.J76      | 1C P 1S P 1NT P 2D P 2NT P | 3NT  | no fit: 3NT
+N K8543.2.QJ9763.4      | 1C P 1S P 1NT P          | 2C     | weak with six diamonds: relay, then pass
+N K8543.2.QJ9763.4      | 1C P 1S P 1NT P 2C P 2D P | P     | to play in 2D
+N KJ54.A32.K54.J76      | 1D P 1S P 1NT P          | 2C     | 11, four spades, balanced: relay to invite
+N KJ54.A32.K54.J76      | 1D P 1S P 1NT P 2C P 2D P | 2NT   | balanced invitation
+N KQ5.A32.K54.QJ76      | 1D P 1S P 1NT P          | 3NT    | 15 balanced: natural 3NT

@@ -55,6 +55,7 @@ struct Args {
 }
 
 fn main() -> eframe::Result {
+    rbb_compare::init_threads();
     let args = Args::parse();
     let tickets = app::TicketOptions {
         repo: args.ticket_repo,

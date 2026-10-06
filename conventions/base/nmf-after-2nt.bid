@@ -1,0 +1,51 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# New Minor Forcing after opener's 2NT rebid (18-19): after 1m-1M-2NT,
+# three of the other minor asks for three cards in responder's major or
+# four in the other major; after 1H-1S-2NT, 3C asks for three spades. The
+# auction is already game forcing (game-force.bid). BBA plays it on its
+# own switch, with or without NMF after 1NT (21GF-SPECIALS2 has only this
+# one). With Wolff on, 3C after 1D-1M-2NT stays Wolff's.
+
+module nmf-after-2nt "New Minor Forcing after a 2NT rebid"
+  card   other_conventions.new_minor_forcing.after_2nt_rebid
+  needs  responder-rebids
+  skill  bidding_conventions/new_minor_forcing
+  param  wolff = other_conventions.wolff_signoff.play default false
+
+after 1C (P) 1M (P) 2N (P) when !tw(C)
+  3D  "New Minor Forcing: three {M}? four of the other major?"   alert
+      shows M>=5 | (H>=4, S>=4), M<=5, points>=7
+      sets  ask=nmf2n
+      artificial
+      priority 1
+after 1D (P) 1M (P) 2N (P) when !wolff
+  3C  "New Minor Forcing: three {M}? four of the other major?"   alert
+      shows M>=5 | (H>=4, S>=4), M<=5, points>=7
+      sets  ask=nmf2n
+      artificial
+      priority 1
+after 1H (P) 1S (P) 2N (P)
+  3C  "New Minor Forcing: three spades?"   alert
+      shows S=5, points>=7
+      sets  ask=nmf2n
+      artificial
+      priority 1
+
+# Opener: three of responder's major first, then four of the other major,
+# else 3NT.
+when asked nmf2n
+  3H  "Three hearts"                       shows H=3        when partner.H>=4
+  3S  "Three spades"                       shows S=3        when partner.S>=4
+  3S  "Four spades, not three hearts"      shows S>=4, H<=2  when partner.H>=4
+  3H  "Four hearts, not three spades"      shows H>=4, S<=2  when partner.S>=4
+  3N  "No fit"                             priority -1
+
+# Responder places the contract: game in a fit (five opposite three, or
+# four-four), else 3NT. Slam tries go through the agreed suit (slam/).
+when answered nmf2n
+  4H  "Game in the heart fit"              shows H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3
+  4S  "Game in the spade fit"              shows S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3
+  3N  "Game in notrump"                    priority -1
+  P   "Opener's 3NT: play there"           when partner.last=3N
+      priority -2

@@ -1,0 +1,46 @@
+# Lebensohl after a natural overcall of our 1NT (lebensohl.bid).
+# 21GF-DEFAULT plays it ("Lebensohl after 1NT"); its opponents' 2♥/2♠
+# are Cappelletti, a five-card major and a minor: natural for us.
+card    21GF-DEFAULT
+dealer  S
+
+# seat hand                 | auction            | expect | why
+N KJ5.A82.Q543.K64          | 1NT 2H             | 2NT    | 13, a heart stopper: slow 3NT
+N K54.832.AQ54.KJ4          | 1NT 2H             | 3NT    | 13, no heart stopper: fast 3NT
+N KQ54.832.AQ5.K64          | 1NT 2H             | 3H     | four spades, no stopper: Stayman now
+N KQ54.A82.Q54.K64          | 1NT 2H             | 2NT    | four spades and a stopper: slow Stayman
+N 54.83.Q5.KJT8642          | 1NT 2H             | 2NT    | weak with seven clubs: relay
+N AJ984.83.K54.954          | 1NT 2H             | 2NT    | five spades, 8: relay, then invite
+N J8742.83.K54.954          | 1NT 2H             | 2S     | five spades, 4: to play
+N AQJ84.83.K54.K54          | 1NT 2H             | 3S     | five spades, game values: forcing
+N 83.AQ984.K5.K954          | 1NT 2S             | 3H     | five hearts, game values: forcing
+N 54.QJ9843.Q54.94          | 1NT 2S             | 2NT    | six hearts, weak: relay to sign off
+N 83.KQ54.K5.A9542          | 1NT 2S             | 3S     | four hearts, no spade stopper: Stayman
+
+# Opener.
+S AQ5.K832.QJ9.A64          | 1NT 2H 2NT P       | 3C     | the relay is forced
+S KQ32.K83.AJ9.A64          | 1NT 2H 3H P        | 3S     | four spades for Stayman
+S AQ5.KJ3.QJ92.A64          | 1NT 2H 3H P        | 3NT    | no spades, a heart stopper
+S AQ5.832.KQJ9.AK4          | 1NT 2H 3H P        | 4D     | no spades, no heart stopper
+S AQ5.KJ3.QJ92.A64          | 1NT 2H 2NT P 3C P 3H P | 3NT | slow Stayman, no four spades
+
+# Responder after the relay.
+N 54.83.Q5.KJT8642          | 1NT 2H 2NT P 3C P  | P      | clubs: play here
+N 54.83.KJT8642.Q5          | 1NT 2H 2NT P 3C P  | 3D     | diamonds, below their hearts: to play
+N AJ984.83.K54.954          | 1NT 2H 2NT P 3C P  | 3S     | spades, above their hearts: invites
+N 54.QJ9843.Q54.94          | 1NT 2S 2NT P 3C P  | 3H     | hearts, below their spades: to play
+N KJ5.A82.Q543.K64          | 1NT 2H 2NT P 3C P  | 3NT    | game with a stopper
+N KQ54.A82.Q54.K64          | 1NT 2H 2NT P 3C P  | 3H     | Stayman with a stopper
+
+# A natural 2♦ (their card plays natural overcalls).
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=other
+dealer  S
+
+N 83.KQ54.95.AK542          | 1NT 2D             | 3D     | four hearts, no diamond stopper: Stayman
+N AJ984.83.K54.954          | 1NT 2D             | 2NT    | five spades, 8: relay, then invite
+N AQJ84.83.K54.K54          | 1NT 2D             | 3S     | five spades, game values: forcing
+N AJ984.83.K54.954          | 1NT 2D 2NT P 3C P  | 3S     | spades, above their diamonds: invites
+S AQ5.KJ32.Q92.A64          | 1NT 2D 3D P        | 3H     | four hearts for Stayman
+S AQ5.K32.KJ92.A64          | 1NT 2D 3D P        | 3NT    | no major, diamonds stopped
+S AQ5.KJ3.QJ92.A64          | 1NT 2D 2NT P 3C P 3S P | 4S  | invitation in spades, maximum and three
+S AQ5.KJ3.QJ92.Q64          | 1NT 2D 2NT P 3C P 3S P | P   | a minimum: declines

@@ -15,8 +15,10 @@ module game-force "When the auction forces to game"
 
 # Responder's third bid at the three level, below game: "a 3rd bid by
 # responder at the 3 level or higher is usually considered a GF" (Rick).
-# 3NT and higher are game themselves.
-force game when partner.opened, !they.bid, me.bids = 2, call >= 3C, call <= 3S
+# 3NT and higher are game themselves. Three of a suit already agreed is
+# a sign-off, not a force: 1♠-2♠-2NT-3♣-3♦-3♠ declines a game try
+# (majors/game-tries.bid).
+force game when partner.opened, !they.bid, me.bids = 2, call >= 3C, call <= 3S, !(we.trump is suit, call = 3{trump})
 
 # After opener's 2NT rebid (18-19), anything but pass forces to game,
 # except Wolff's 3C, which is there to stop in a part score.

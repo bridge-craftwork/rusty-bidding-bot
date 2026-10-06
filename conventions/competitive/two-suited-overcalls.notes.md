@@ -193,6 +193,71 @@ BBA bids game from 12, and our 4m preempt after 2NT); the opening side
   (a jump, notrump): pass unless a simple competitive preference fits.
 - A two-suiter that is 6-5: no special treatment.
 
+## Two-suiters over preempts and at the four level (2026-10-05)
+
+Fast lane (CLAUDE.md "Pace"): written from the sources below, then
+`compare` of Jordan_2N, Leaping_Michaels, Non_Leaping_Michaels_After_2-Bid
+and _3-Bid, Unusual_2N (`--limit 50`) read at the conventions' own calls.
+Call agreement there 71.7% -> 78.8%.
+
+- **Unusual 1NT** (`competitive.unusual_1nt.play`, on in every PBS
+  21GF card): a passed hand's 1NT over their opening shows the two lowest
+  unbid suits; in the sandwich seat (`(1x) P (1y) 1NT`) the two unbid
+  suits. Five-four or better, 6+ HCP. Advancer: the longer suit (lower
+  with equal length) at the cheapest level, a jump with four and 11+.
+  **BBA hardly plays it**: in GIB_Sandwich_NT_BPH it overcalls 1S with
+  five spades (five-five included), bids 2NT with six-five, and passes
+  most five-four and five-five hands of 9-10 HCP; its only 1NTs in the
+  corpus are five-four minors with 10 HCP. We bid the convention as
+  defined (-14 agreeing calls in that scenario). Gating it off with five
+  spades only made us pass: a passed hand has no 1-level overcall rule.
+- **Unusual 4NT** (`competitive.unusual_4nt.play`, on in every 21GF
+  card): the jump to 4NT over their one-level opening or their raise
+  shows the two lowest unbid suits, six-six or seven-five (six-five goes
+  through the Unusual 2NT, which has no upper limit: BBA bids 2NT there,
+  and our first try at six-five took 20 of its 2NTs); over a weak two or
+  three-level preempt five-five with four losers; over four of a major
+  the minors, five-five, five losers. Advancer: the longer suit at the
+  five level.
+- **Michaels over their preempt** (BBA's reading of its Michaels switch,
+  no separate card field): the cue of a weak two (13+ total points), in
+  the balancing seat or over their raise (11+), and of a three-level
+  preempt (16+): both majors over a minor, the other major and a minor
+  over a major. BBA's thresholds are not probed; 15 at the four level
+  overcalled BBA's 3S on 5-5 hands, so 16. Advancer: game in a known
+  major with three and 8+ HCP (or four), else the cheapest preference
+  with three, 3NT with their suit held, else pass or correct (4♣ for the
+  unknown minor, 4♥ for the unknown major). **BBA style**: over 2♥/2♠ 3M
+  it asks with 3NT ("to the partner's longer"); we bid 4♣ pass or correct
+  and keep 3NT natural.
+- **Leaping Michaels** (`competitive.leaping_michaels.play`; 21GF-WJS-MSS
+  and Precision only, not the cards of the Leaping_Michaels scenario,
+  where BBA plays the cue instead): Rosen's table. 5-5, at most five
+  losers. With it the direct cue of a weak two is not Michaels (Rosen: a
+  stopper ask, not written). After (2♦) 4♣ advancer bids 4♥ pass or
+  correct, not Bridge Bum's 4♦ ask.
+- **Non-Leaping Michaels** (`competitive.non_leaping_michaels.play`; no
+  PBS card plays it): Rosen's table over a three-level preempt, five
+  losers; the cue of a minor is both majors (shared with the Michaels
+  rule).
+- **Direct jump cue bids** (`competitive.direct_jump_cuebid_major`,
+  `_minor`; no PBS card turns them on, BBA plays none): as the PBS
+  scenarios Jump_Cuebid_Strong and _Weak define them. Gambling: a solid
+  seven-card suit, no stopper in theirs, asks for 3NT; strong: the same
+  with six controls; majors: five-five, up to 10 HCP; preempt: seven of
+  their minor, up to 10 HCP, two top honours. Advancer: 3NT with a
+  stopper, else 4♣ pass or correct. Not written: over a major the
+  `minor` option (meaning unknown), and the strong variety's 4♣/4♦
+  control answers.
+- All of these over a preempt require the opener's suit to be shown
+  (`rho.x>=5`), so a Multi 2♦ is not cue-bid as diamonds.
+
+Questions for Rick (decisions taken):
+- Unusual 1NT against BBA's near-silence: we play it as defined.
+- What does `direct_jump_cuebid_major = minor` mean? Not written.
+- Michaels-over-preempt strength (13 / 11 / 14 / 16 total points) is
+  ours, not probed; worth a grid if the Leaping scenarios matter.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
@@ -232,3 +297,22 @@ BBA bids game from 12, and our 4m preempt after 2NT); the opening side
   the seed card (`competitive.michaels.strength = weak_or_strong`).
 - **Corpus measurements**: the thresholds and the treatments above
   (2026-09-28).
+- **Neil Rosen**, "Leaping and Non-Leaping Michaels", English Bridge,
+  August 2013
+  (<https://www.bridgewebs.com/alton/EBU%20-%20Stage%202%20Conventions%20-%20Leaping%20and%20Non-Leaping%20Michaels.pdf>):
+  both tables, "four or five losers at most", the cue of a weak two as a
+  stopper ask, non-leaping bids not forcing. We differ: pass or correct
+  4♥ instead of Bridge Bum's 4♦ ask after (2♦) 4♣.
+- **Bridge Bum**, "Leaping Michaels"
+  (<https://www.bridgebum.com/leaping_michaels.php>): the same over weak
+  twos.
+- **Wikipedia**, "Unusual notrump"
+  (<https://en.wikipedia.org/wiki/Unusual_notrump>): the passed hand's
+  Unusual 1NT, the Unusual 4NT. Lengths and strength (five-four and 6+
+  HCP for 1NT; six-six / seven-five for 4NT) are ours: standard
+  practice, not yet cited.
+- **Practice-Bidding-Scenarios** `btn/Jump_Cuebid_Strong.btn`,
+  `Jump_Cuebid_Weak.btn`: the direct jump cue bids.
+- **BBA corpus** (2026-10-05): "Michaels Cuebid" notes over weak twos
+  and three-level preempts in Leaping_Michaels and the Non-Leaping
+  scenarios; "Unusual 1NT" and "Unusual 4NT" notes across the corpus.

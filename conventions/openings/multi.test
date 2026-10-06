@@ -1,0 +1,33 @@
+# Multi 2♦ (21GF-Multi: `Multi = 1`, weak natural 2♦ off).
+card    21GF-Multi
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S KQJ976.32.54.J43      |                     | 2D     | six spades, 7 HCP: Multi
+S 32.KQJ976.K54.43      |                     | 2D     | six hearts, 9 HCP: Multi
+S KQJ97.32.Q54.743      |                     | P      | five spades: pass
+S 32.54.KQJ976.J43      |                     | P      | six diamonds: no weak 2D
+S AKJ4.KQ32.AJ54.4      |                     | 1D     | 4-4-4-1 18: natural
+card    21GF-DEFAULT
+S KQJ976.32.54.J43      |                     | 2S     | Multi off: the weak 2S
+card    21GF-Multi
+# Responder.
+N 85.J4.KQ976.K852      | 2D P                | 2H     | no game: pass or correct
+N 5.Q84.KQ976.K852      | 2D P                | 2S     | three hearts, a singleton spade: 2S
+N AK4.A2.AQ54.K852      | 2D P                | 2N     | 20 HCP: ask
+N AK4.A82.AQ54.K85      | 2D P                | 4D     | game opposite either major
+N Q854.J842.97.852      | 2D P                | 3H/4H  | both majors, weak: preempt
+N 85.J4.KQ976.K852      | 2D X                | 2H     | over the double too
+# Opener.
+S KQJ976.32.54.J43      | 2D P 2H P           | 2S     | spades: correct
+S 32.KQJ976.K54.43      | 2D P 2H P           | P      | hearts: pass
+S KQJ976.32.54.J43      | 2D P 2S P           | P      | spades: pass
+S 32.KQJ976.K54.43      | 2D P 2S P           | 3H     | hearts: correct
+S 32.KQJ976.K54.43      | 2D P 4D P           | 4H     | bid my major
+S 32.KQJ976.K54.43      | 2D P 2N P           | 3C     | maximum hearts
+S KQJ976.32.54.J43      | 2D P 2N P           | 3S     | minimum spades
+S AQJ976.32.K54.43      | 2D P 2N P           | 3D     | maximum spades
+# The asker.
+N AK4.A2.AQ54.K852      | 2D P 2N P 3C P      | 4H     | game opposite a maximum
+N AK.A42.KQ54.J852      | 2D P 2N P 3S P      | P      | 17 HCP and two spades opposite a minimum

@@ -7,3 +7,18 @@ S AKJ52.K73.94.Q83      |         | 1S     | 13 HCP, five spades
 S K52.A73.Q94.KJ83      |         | 1C     | 13 HCP, four clubs
 S K52.A73.QJ94.K83      |         | 1D     | 13 HCP, four diamonds
 S Q52.J73.Q94.K832      |         | P      | 8 HCP
+
+# 1m may hold a five-card major (minor_openings.may_hold_5_card_major):
+# on, the longer minor opens; off (21GF-WJS-MSS), the major.
+S AKJ54.2.AQ8763.4      |         | 1D     | 5-6 with 14 HCP: the longer minor
+S KQJ54.2.4.AK8763      |         | 1C     | six clubs, five spades: clubs
+card    21GF-WJS-MSS
+S AKJ54.2.AQ8763.4      |         | 1S     | off: a five-card major opens
+S KQJ54.2.4.AK8763      |         | 1S     | off: spades, not clubs
+
+# No forcing 2C opening (general.forcing_opening_2c off): a 22-count
+# opens at the one level.
+card    21GF-DEFAULT general.forcing_opening_2c=false
+S AKQJ5.AK3.KQ4.Q3      |         | 1S     | 24 HCP: no 2C, so 1S
+card    21GF-DEFAULT
+S AKQJ5.AK3.KQ4.Q3      |         | 2C     | 24 HCP: 2C

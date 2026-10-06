@@ -1,0 +1,21 @@
+# Responder after a Wilkosz 2D (5-5, a major, 4-10), 21GF-DEFAULT with Wilkosz on.
+card    = "21GF-DEFAULT"
+set     = ["Wilkosz=1", "Weak natural 2D=0"]
+dealer  = "N"
+prefix  = "2D Pass"
+vuls    = ["None"]
+scoring = ["MP"]
+partner = ["3.KQJ97.Q8543.43", "KQJ97.Q8543.43.3", "KQJ97.3.43.Q8543", "J.AJT97.32.AT874", "AJ987.2.QJ543.32", "9.AJ954.QT952.32", "T9876.AJ954.2.32", "QJ987.AJ953.4.T4", "A.QJ953.T.AT9432", "QJ985.4.AT953.T4", "A9742.Q4.K.T8752", "95432.A9653.9.Q3", "J9852.KT983.4.Q7"]
+our     = []
+hands = [
+  "weak 3-3 majors | Q32.T82.K764.J65",
+  "weak 2H 4S | KT64.32.Q876.J65",
+  "weak 4H 2S | 32.KT64.Q876.J65",
+  "weak long D | 3.T2.KJT8765.Q65",
+  "weak long C | 3.T2.Q65.KJT8765",
+  "inv both majors | KJ6.K82.Q762.Q96",
+  "game both majors | AQ6.K82.KJ62.A96",
+  "16 bal | AQ64.82.AKJ6.Q96",
+  "weak 4-4 majors | QT64.J642.Q8.965",
+  "13 long spades | AKJT64.2.K76.965",
+]

@@ -180,7 +180,7 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
       prefer 0 - cheapest_rank(H)
       priority 10
   cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
-      when  trump is not S, !partner.cued(S), !me.cued(S), !under_game(S), (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
+      when  trump is not S, !partner.cued(S), !me.cued(S), !under_game(S), !kb_spade_ask, (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
       when  first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial
@@ -224,7 +224,7 @@ when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H
       prefer 0 - cheapest_rank(H)
       priority 10
   cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
-      when  trump is not S, !partner.cued(S), !me.cued(S), (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
+      when  trump is not S, !partner.cued(S), !me.cued(S), !kb_spade_ask, (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
       when  slam_values, first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial

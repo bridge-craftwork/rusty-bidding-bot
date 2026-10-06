@@ -44,6 +44,11 @@ pub struct SideState {
     /// agreed, so one auction holds one dialogue.
     pub denied: [u8; 4],
     pub cued: [u8; 4],
+    /// Where our notrump system came on: the index in the auction of
+    /// the natural notrump made where a `systems on` declaration held.
+    /// Patterns reach it with `systems 1N` / `systems 2N`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub systems: Option<usize>,
 }
 
 impl SideState {

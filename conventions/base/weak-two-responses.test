@@ -100,7 +100,7 @@ card    Basic-Bridge
 dealer  S
 vul     EW
 N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P                      | 4NT    | 26 opposite a maximum: agree hearts and ask (plain Blackwood on this card)
-N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P 4NT P 5C P           | 6H     | no aces opposite, all four here: small slam
+N AKJT86.AJ.AK8.AQ      | 2H P 2NT P 3S P 4NT P 5C P           | 6H/5NT | no aces opposite, all four here: small slam (5NT asks for kings first when the card plays the king ask)
 
 # Game opposite a maximum answer (ticket basic-weak-2-b278, 2026-09-28):
 # responder's HCP plus partner's floor, 21 or more.

@@ -9,14 +9,20 @@ module new-minor-forcing "New Minor Forcing"
   card   other_conventions.new_minor_forcing.play
   needs  responder-rebids
   skill  bidding_conventions/new_minor_forcing
+  param  checkback = other_conventions.checkback.play default false
+  param  roudi = other_conventions.roudi.play default false
+  param  twoway = other_conventions.two_way_nmf default false
+  param  xyz = other_conventions.xyz default false
 
-after 1C (P) 1M (P) 1N (P)
+# Checkback, Roudi and two-way NMF each replace NMF when the card has
+# both (no PBS card does).
+after 1C (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz, !tw(C)
   2D  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
       shows M>=4, points>=11
       sets  forcing=round, ask=nmf
       artificial
       priority 1                       # ahead of a natural 2NT or 3NT
-after 1D (P) 1M (P) 1N (P)
+after 1D (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz
   2C  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
       shows M>=4, points>=11
       sets  forcing=round, ask=nmf

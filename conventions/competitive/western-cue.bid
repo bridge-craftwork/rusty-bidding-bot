@@ -1,0 +1,99 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Western cue bid: once both of us have bid and they have bid a suit, a
+# cue bid of their suit (three of it, or two when that is cheaper) asks partner to bid 3NT with a stopper
+# there; without one partner makes a natural descriptive bid. It is for
+# a side with game values, no major fit and no stopper in their suit.
+# Card field `slam.western_cuebid.play` (the card files it under slam).
+# A module of its own, outside slam/: it is a competitive tool. Notes:
+# western-cue.notes.md.
+
+module western-cue "Western cue bid: three of their suit asks for a stopper for 3NT"
+  needs  base
+  skill  bidding_conventions/western_cuebid
+  param  western = slam.western_cuebid.play default false
+
+# Game values between us, no major fit and no stopper of mine in their
+# suit. The cue is the cheapest bid in their suit, at the two or three
+# level (`cheapest_rank`: 3♣ 15, 3♦ 16, 3♥ 17, 3♠ 18). Both of us have
+# bid, so it is never the first-round cue raise (after-interference.bid).
+define wc_values = points + partner.points.min >= 25
+define wc_no_major_fit = we.fit(S).min <= 7, we.fit(H).min <= 7
+
+# ── The ask ───────────────────────────────────────────────────────────
+
+when western, they.bid, !asked, !answered western, me.bids >= 1, partner.bids >= 1, we.trump is none | we.trump is C | we.trump is D
+  cheapest(C)  "Western cue: a club stopper for 3NT?"  alert
+      when  they.strain is C, cheapest_rank(C) <= 15
+      when  !stop(C), wc_values, wc_no_major_fit
+      sets  ask=western(C), forcing=game
+      artificial
+      priority 2
+  cheapest(D)  "Western cue: a diamond stopper for 3NT?"  alert
+      when  they.strain is D, cheapest_rank(D) <= 16
+      when  !stop(D), wc_values, wc_no_major_fit
+      sets  ask=western(D), forcing=game
+      artificial
+      priority 2
+  cheapest(H)  "Western cue: a heart stopper for 3NT?"  alert
+      when  they.strain is H, cheapest_rank(H) <= 17
+      when  !stop(H), wc_values, wc_no_major_fit
+      sets  ask=western(H), forcing=game
+      artificial
+      priority 2
+  cheapest(S)  "Western cue: a spade stopper for 3NT?"  alert
+      when  they.strain is S, cheapest_rank(S) <= 18
+      when  !stop(S), wc_values, wc_no_major_fit
+      sets  ask=western(S), forcing=game
+      artificial
+      priority 2
+
+# ── The answer ────────────────────────────────────────────────────────
+#
+# 3NT with a stopper. Without one, the natural descriptive bid: a suit of
+# five or more of my own, or support for partner's suit (seven cards
+# between us on his shown length), the longer fit first. With none of those,
+# 3NT anyway (a stopper is likelier than not to be missing from the
+# asker's partner only).
+
+when western, asked western(y)
+  3N  "A stopper in {y}: 3NT"
+      shows stop(y)
+      priority 2
+  cheapest(C)  "No stopper in {y}: clubs"
+      when  y is not C, C>=5 | we.fit(C).min>=7
+      prefer C + partner.C.min
+  cheapest(D)  "No stopper in {y}: diamonds"
+      when  y is not D, D>=5 | we.fit(D).min>=7
+      prefer D + partner.D.min
+  cheapest(H)  "No stopper in {y}: hearts"
+      when  y is not H, H>=5 | we.fit(H).min>=7
+      prefer H + partner.H.min
+  cheapest(S)  "No stopper in {y}: spades"
+      when  y is not S, S>=5 | we.fit(S).min>=7
+      prefer S + partner.S.min
+  3N  "No stopper and nothing to show: 3NT anyway"
+      priority -5
+
+# ── The asker places the contract ─────────────────────────────────────
+#
+# 3NT stands. Over a suit: game in a major fit, else five of our best
+# minor fit; 3NT once more if partner's suit is a minor and no fit.
+
+when western, answered western(y)
+  P   "Partner has the stopper: 3NT"
+      when  partner.last = 3N
+      priority 2
+  4H  "Game in the heart fit"
+      when  we.fit(H).min >= 8
+  4S  "Game in the spade fit"
+      when  we.fit(S).min >= 8
+  5C  "Game in clubs: their suit is not stopped"
+      when  we.fit(C).min >= 8
+      prefer we.fit(C).min
+  5D  "Game in diamonds: their suit is not stopped"
+      when  we.fit(D).min >= 8
+      prefer we.fit(D).min
+  P   "Partner's game"
+      when  partner.last = 4H | partner.last = 4S | partner.last = 5C | partner.last = 5D
+      priority 1

@@ -756,6 +756,29 @@ support-doubles.bid) at 3NT at most: past it a jump is 4NT, which with
 no notrump bid by us is keycard (Rick, 2026-10-03). Evidence and
 figures: responder-rebids.notes.md, "Notrump jumps stop at 3NT".
 
+## Semi-forcing 1NT (2026-10-05)
+
+`major_openings.one_nt_response.semi_forcing` (2/1 cards, instead of
+the forcing 1NT; responses.bid bids it 6-12 as the forcing one, without
+`forcing=round`). Opener passes only a balanced minimum (12-14,
+including 5-3-3-2); every other hand rebids as over the forcing 1NT
+(`semi_1nt(x)` gates the natural passes and opens the forcing-1NT
+rebids). Cases at the end of rebids.test. The Gavin_Semi-Forcing_NT
+scenario with the switch set shows no problems at these calls (BBA plays
+the forcing 1NT there). Question for Rick: 15-17 balanced with a five-card
+major (no 1NT opening on such a card?) bids its three-card minor, as over
+the forcing 1NT; decision taken.
+
+## Self A/B: semi-forcing 1NT
+
+Semi-forcing 1NT, self A/B (2026-10-05; `probes/tools/self_ab.py --batch
+probes/self-ab.toml --only semi-forcing-1nt`): the forcing 1NT and the
+semi-forcing one are a choice on the card, so the variant turns
+`forcing` off (with both on the forcing 1NT wins, and nothing changed).
+Gavin_Semi-Forcing_NT_with_Fit and Forcing_NT: 29 boards changed; actor
+contract +9, other side doubling +22, double-dummy -12, halves -14/+23
+(z +0.3): neutral.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -776,3 +799,8 @@ figures: responder-rebids.notes.md, "Notrump jumps stop at 3NT".
   with 14 or more) are standard practice, not yet cited to a book.
 - **Rick, 2026-10-03:** 4NT with no notrump bid by us is keycard, so a
   natural notrump jump stops at 3NT.
+- **Semi-forcing 1NT:** Robert S. Todd, "2 over 1 Game Forcing:
+  Responder's Rebids after 1NT Semi-Forcing Response", Advancing in
+  Bridge #375 (https://www.advinbridge.com/this-week-in-bridge/375),
+  cited by convention-card `semi_forcing_1nt.toml`: opener passes a
+  balanced minimum, otherwise as over the forcing 1NT.

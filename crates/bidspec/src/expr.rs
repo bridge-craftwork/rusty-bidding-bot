@@ -29,6 +29,11 @@ impl<'a> Cursor<'a> {
         self.toks.get(self.pos + n).map(|t| &t.tok)
     }
 
+    /// How many tokens are left.
+    pub fn remaining(&self) -> usize {
+        self.toks.len().saturating_sub(self.pos)
+    }
+
     pub fn at_end(&self) -> bool {
         self.pos >= self.toks.len()
     }
@@ -264,6 +269,67 @@ pub fn define_head(c: &mut Cursor) -> Result<(String, Vec<String>), PError> {
     }
     c.expect(&Tok::Eq, "`=` after the name")?;
     Ok((name, params))
+}
+
+/// Words that cannot name an auction pattern: the keywords that may
+/// follow one, and the relative calls.
+const NOT_AUCTION_NAMES: &[&str] = &[
+    "when", "after", "auction", "systems", "cheapest", "jump", "raise", "new_suit",
+];
+
+/// `systems 2N` at the start of an `after` alternative: the level of our
+/// notrump where the system came on, if next.
+pub fn systems_anchor(c: &mut Cursor) -> Result<Option<u8>, PError> {
+    if !matches!(c.peek(), Some(Tok::Word(w)) if w == "systems") {
+        return Ok(None);
+    }
+    c.bump();
+    match c.peek() {
+        Some(Tok::Call(level, s)) if s == "N" && (1..=7).contains(level) => {
+            let level = *level;
+            c.bump();
+            Ok(Some(level))
+        }
+        _ => c.err("expected a notrump bid after `systems` (`systems 1N`, `systems 2N`)"),
+    }
+}
+
+/// A name for an auction pattern (`define auction nt2`): a-z, 0-9 and
+/// `_`, starting with a letter, two characters or more. Calls (`P`, `X`,
+/// `2N`) never look like one.
+pub fn is_auction_name(n: &str) -> bool {
+    n.len() >= 2
+        && n.chars().next().is_some_and(|ch| ch.is_ascii_lowercase())
+        && n.chars()
+            .all(|ch| ch.is_ascii_lowercase() || ch.is_ascii_digit() || ch == '_')
+        && !NOT_AUCTION_NAMES.contains(&n)
+}
+
+/// The head of an auction definition after `define auction`: the name
+/// and `=`.
+pub fn auction_head(c: &mut Cursor) -> Result<String, PError> {
+    let name = c.word("a name after `define auction`")?;
+    if !is_auction_name(&name) {
+        return c.err(
+            "an auction pattern's name uses a-z, 0-9 and `_`, starts with a letter and has \
+             two characters or more",
+        );
+    }
+    c.expect(&Tok::Eq, "`=` after the name")?;
+    Ok(name)
+}
+
+/// A named auction pattern at the start of an `after` alternative
+/// (`nt2` in `after nt2 3C (P)`), if next.
+pub fn pattern_name(c: &mut Cursor) -> Option<String> {
+    match c.peek() {
+        Some(Tok::Word(w)) if is_auction_name(w) => {
+            let w = w.clone();
+            c.bump();
+            Some(w)
+        }
+        _ => None,
+    }
 }
 
 pub fn expr(c: &mut Cursor) -> Result<Expr, PError> {

@@ -1,0 +1,67 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Namyats (Bridge Bum, "Namyats"): 4♣ shows a strong four-level preempt
+# in hearts, 4♦ the same in spades: a good seven- or eight-card major and
+# eight or nine playing tricks, too good for a plain 4♥/4♠ and not
+# strong enough for 2♣. The direct 4♥/4♠ stays the weaker preempt
+# (preempts.bid).
+#
+# Responder: the next step (4♦ over 4♣, 4♥ over 4♦) is a relay with slam
+# interest; the major is the sign-off. After the relay opener bids his
+# major without a side shortness, or shows a singleton or void.
+# See namyats.notes.md.
+
+module namyats "Namyats: 4♣/4♦ strong major preempts"
+  card   preempts.namyats.play
+  needs  preempts
+  skill  bidding_conventions/namyats
+
+# ── The opening ──────────────────────────────────────────────────────
+# Exactly seven cards headed by the ace-king-queen, 9-13 HCP, no side
+# ace or king: the hand BBA opens 4♣/4♦ (nine times in the whole corpus,
+# all of them this hand, 21GF-GIB; with eight such cards and 9-10 it
+# opens 4M, with a side ace or king 1M). Bridge Bum's "8-9 tricks" alone took 1M openings
+# (the first version, 10-15 HCP with five losers, changed ~70 boards
+# where BBA opened 1M; namyats.notes.md). Ahead of the one-level opening.
+when opening, seat<=3
+  4C  "Namyats: a strong preempt in hearts, 8-9 tricks"   alert
+      shows H=7, has(A,H), has(K,H), has(Q,H), hcp=9..13, S<=3
+      shows !has(A,S), !has(K,S), !has(A,D), !has(K,D), !has(A,C), !has(K,C)
+      artificial
+      priority 1
+  4D  "Namyats: a strong preempt in spades, 8-9 tricks"   alert
+      shows S=7, has(A,S), has(K,S), has(Q,S), hcp=9..13, H<=3
+      shows !has(A,H), !has(K,H), !has(A,D), !has(K,D), !has(A,C), !has(K,C)
+      artificial
+      priority 1
+
+# ── Responder ────────────────────────────────────────────────────────
+after 4C (P) | 4C (X)
+  4H  "Sign-off: no slam interest"
+      priority -1
+  4D  "Relay: slam interest in hearts"   alert
+      shows controls>=5 | hcp>=15, quick_tricks>=3
+      sets  trump=H, ask=namyats(H)
+      artificial
+after 4D (P) | 4D (X)
+  4S  "Sign-off: no slam interest"
+      priority -1
+  4H  "Relay: slam interest in spades"   alert
+      shows controls>=5 | hcp>=15, quick_tricks>=3
+      sets  trump=S, ask=namyats(S)
+      artificial
+
+# Opener after the sign-off: pass.
+after 4C (P) 4H (P) | 4D (P) 4S (P)
+  P   "Partner signed off"
+
+# ── Opener after the relay ───────────────────────────────────────────
+when asked namyats(t)
+  4{t}  "No side shortness: back to my suit"
+        priority -1
+  4S    "A singleton or void in spades"     shows S<=1
+        when  t is H
+  5C    "A singleton or void in clubs"      shows C<=1
+  5D    "A singleton or void in diamonds"   shows D<=1
+  5H    "A singleton or void in hearts"     shows H<=1
+        when  t is S

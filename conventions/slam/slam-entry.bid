@@ -16,6 +16,7 @@ module slam-entry "Slam entry: the conditions the slam modules share"
   param  bw    = slam.blackwood.standard default false
   param  k1430 = slam.blackwood.rkcb_1430 default false
   param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  q4n   = slam.quantitative_4nt.play default true
 
 # ── The count: declarer points and support points (2026-10-01) ───────
 #
@@ -69,7 +70,11 @@ define slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), c
 # with support points in both hands), or 18 of my own. Partner's floor
 # understates him, so one point under the textbook 33 (calibrated
 # 2026-09-30 on random deals and the corpus: slam-entry.notes.md).
-define slam_values = slam_count(trump) | tp(trump) >= 18
+# The 18 of my own only while my range is still open (more than four
+# HCP wide): an 18-19 2NT rebid has told partner, and his game bid
+# after it is his sign-off, not an invitation (2026-10-05: 1x-1M-2NT-
+# 3m(NMF)-...-4M asked with every 18-19 opener).
+define slam_values = slam_count(trump) | (tp(trump) >= 18, !(shown.hcp.max - shown.hcp.min <= 4))
 
 # Facing a limited hand (a raise with a top): the count on partner's
 # maximum (`slam_count_max`: 33 with support points in both hands), and
@@ -164,10 +169,17 @@ define no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !show
 # by auction; this is the fallback below them, so that a 4NT after, say,
 # 1C-1S-1NT-2D (new minor) is read and answered rather than "no rule".
 # The answer is one-nt.bid's `when asked quant` (6NT from 32 between us).
+#
+# `quant_4nt` is the card's switch (`slam.quantitative_4nt.play`, on by
+# default and on every stock card), for the quantitative 4NTs the
+# notrump and base modules write (2026-10-05).
+define quant_4nt = q4n
+
 # Ranked below every pass, so it is for reading: our own 4NT stays with
 # the modules that judge it (a higher rank took over their 3NT and pass).
 when we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight
   4N  "Quantitative: 31-32 between us, invites 6NT"
+      when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.min <= 32
       sets  ask=quant
       priority -60
@@ -197,10 +209,12 @@ define two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(
 # jump shift or a reverse, where neither hand could count 33 on the
 # other's floor.
 
+# Not straight over partner's notrump where systems are on (2♣–2♠–2NT,
+# 2026-10-05): there the cheapest bid is the system's (a transfer).
 # Slam interest: the count on partner's floor, 31 (29 for the long hand).
 define slam_interest(x) = slam_count_interest(x)
 
-when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid
+when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid, !we.systems_on
   cheapest(S)  "Agrees ♠: slam interest"
       shows we.fit(S).min >= 8, slam_interest(S)
       when  partner.S.min >= 3, under_game(S)   # public: a raise of partner's suit, never read into a natural bid

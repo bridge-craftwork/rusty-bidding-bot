@@ -34,3 +34,21 @@ S AQ5.KJ4.KQJ3.K73      | 4S           | X   | 19: values, for penalty
 S 952.K83.Q95.Q862      | 4S           | P   | nothing
 N AK752.8.KQ43.J32      | 4H X P       | 4S  | five spades: take the double out
 N 952.K83.Q95.Q862      | 4H X P       | P   | leave it in
+
+# Lebensohl after our double of their weak two (21GF cards:
+# competitive.lebensohl_weak_twos.play).
+card    21GF-DEFAULT
+N 843.92.Q7632.J42      | 2H X P           | 2N  | weak with diamonds: the relay
+N 843.92.KQ763.A42      | 2H X P           | 3D  | 9-12: the direct three-level suit is constructive
+N KQ43.92.A763.AK2      | 2H X P           | 3H  | fast cue: game values, four spades, no heart stopper
+N 943.92.AQ63.AK42      | 2H X P           | 3N  | fast 3NT: no stopper, no four-card major
+N K43.Q92.A763.KQ2      | 2H X P           | 2N  | game values with hearts stopped: slow
+S A762.3.KQJ4.AK32      | 2H X P 2N P      | 3C  | the doubler bids 3C as asked
+N 843.92.Q7632.J42      | 2H X P 2N P 3C P | 3D  | weak: correct to diamonds
+N 843.92.Q76.QJ842      | 2H X P 2N P 3C P | P   | weak with clubs: pass
+N K43.Q92.A763.KQ2      | 2H X P 2N P 3C P | 3N  | slow 3NT: hearts stopped
+N AQ43.K92.A763.K4      | 2H X P 2N P 3C P | 3H  | slow cue: four spades and a heart stopper
+S A762.3.KQJ4.AK32      | 2H X P 3H P      | 3S  | the doubler shows four spades
+S 843.92.KQ763.A42      | 2S P P X P       | 3D  | the balancing double too
+card    21GF-DEFAULT competitive.lebensohl_weak_twos.play=false
+N K43.Q92.A763.KQ2      | 2H X P           | 3N  | without Lebensohl: natural 3NT with the stopper

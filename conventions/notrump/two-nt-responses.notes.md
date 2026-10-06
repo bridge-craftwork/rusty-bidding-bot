@@ -49,6 +49,41 @@ One ranking fix came with it: in `stayman.bid`, "game, no fit found"
 known 4-4 major fit is played in the major. Opposite a 20-21 opening the
 game band is wide enough that 3NT was outranking 4♥ on descriptiveness.
 
+## One system for every 2NT (Rick, 2026-10-05)
+
+Every context here starts `after nt2` (`define auction nt2 = systems
+2N (P)`), so the same rules answer every natural 2NT where systems are
+on (one-nt.notes.md, "Systems on"): the 2NT opening (20-21), 2♣–2♦–2NT
+(22-23), Kokish's 2NT (24-25), 2♣–2♠/2♥–2NT, 2♣ (2♠) P (P) 2NT, a
+natural 2NT overcall or balancing 2NT. Before, only Puppet and Gerber
+named 2♣–2♦–2NT, and after Kokish's 2NT nothing answered (3NT whatever
+responder held).
+
+**Opener's range from the auction.** Every count in this module and in
+the generic continuations it relies on (stayman.bid's `when answered
+majors`, jacoby-transfers.bid's `when answered transfer(M)`, gerber.bid,
+two-nt-minors.bid's Minor Suit Stayman) was already a strength band or
+measured against partner's range (`hcp>=25-partner.hcp.min`). The
+explain-auction knowledge gives the range: 2♣–2♦–2NT `N: 22-23 hcp, bal`,
+Kokish's 2NT `N: 24-25 hcp, bal`. So 3 HCP passes 2NT but bids 3NT over
+2♣–2♦–2NT; 8 bids 3NT over 2NT and 4NT over Kokish's 2NT; 11 bids 3NT
+over 2NT and 6NT over 2♣–2♦–2NT (two-nt-responses.test). After 2♣ the
+side is in a game force, so the passes are not available there; the
+weakest hands bid 3NT or, after a transfer, choose the game.
+
+The only absolute counts were two-nt-minors.bid's weak minor relay (0-3
+HCP, now `hcp<=24-partner.hcp.max`; see its notes).
+
+**A difference from the old catch-all.** Over 2♣–2♦–2NT responder used
+to fall through to responder-rebids.bid's notrump catch-all, calibrated
+on random deals (2026-09-30): a quantitative 4NT with 32-33 HCP on
+opener's floor and 6NT with 34. The 2NT system's bands put slam at 33
+total points on opener's floor (as over a 2NT opening), so 11 opposite
+22-23 now bids 6NT (responder-rebids.test moved). Kept the system's
+bands, one system as Rick asked. For Rick: should the 2NT system's 4NT
+and 6NT move to the catch-all's 32-33 / 34 HCP everywhere (it would
+change the 2NT opening too)?
+
 ## Gaps and open questions
 
 - **Minor-suit transfers over 2NT** (`notrump.two_nt.minor_transfers`,
@@ -278,3 +313,5 @@ Stayman fixed that.
   script and could not be read here.
 - Bridge Guys' page (bridgeguys.com/Conventions/puppet_stayman.html) was
   unreachable on 2026-09-28.
+- Rick, 2026-10-05: one 2NT system for every natural 2NT, opener's
+  range from the auction ("systems on", one-nt.notes.md).

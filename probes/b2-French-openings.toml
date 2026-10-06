@@ -1,0 +1,32 @@
+# What BBA opens with French 2D set on 21GF-DEFAULT (convention batch 2).
+card    = "21GF-DEFAULT"
+set     = ["French 2D=1", "Weak natural 2D=0"]
+dealer  = "S"
+prefix  = ""
+vuls    = ["None", "All"]
+scoring = ["MP"]
+partner_auto = [8, 12]
+our     = []
+hands = [
+  "6 spades, 7 | KQJ976.32.54.J43",
+  "6 hearts, 8 | 32.KQJ976.K54.43",
+  "6 diamonds, 8 | 32.43.KQJ976.K54",
+  "5H 5C, 8 | 3.KQJ97.43.Q8543",
+  "5H 5D, 8 | 3.KQJ97.Q8543.43",
+  "5S 5C, 8 | KQJ97.3.43.Q8543",
+  "5S 5H, 8 | KQJ97.Q8543.43.3",
+  "5D 5C, 8 | 3.43.KQJ97.Q8543",
+  "4414, 13 | AQ54.KJ32.4.KJ54",
+  "4405, 13 | AQ54.KJ32.-.KJ543",
+  "4441 short C, 13 | AQ54.KJ32.KJ54.4",
+  "4144, 13 | AQ54.4.KJ32.KJ54",
+  "1444, 13 | 4.AQ54.KJ32.KJ54",
+  "5440 short C, 13 | AQ543.KJ32.KJ54.-",
+  "4441, 18 | AKJ4.KQ32.AJ54.4",
+  "4441, 21 | AKJ4.AKQ2.AJ54.4",
+  "22 bal | AK4.KQ3.AJ54.KQ4",
+  "25 bal | AK4.AQ3.AKJ4.KQ4",
+  "23 unbal | AKQJ76.AK3.AQ.32",
+  "20 6 spades | AKQJ76.AK3.Q2.32",
+  "8 hearts strong | A.KQJT9432.KQ.AJ",
+]

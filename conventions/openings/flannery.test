@@ -1,0 +1,36 @@
+# Flannery 2♦ (21GF-Flannery turns it on: `Flannery = 1`, weak 2♦ off).
+card    21GF-Flannery
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+# The opening.
+S KQ74.AJ852.K3.94      |                     | 2D     | 13 HCP, four spades and five hearts
+S AQ74.KJ852.A3.94      |                     | 2D     | 15 HCP: still Flannery
+S AQ74.KJ852.AK3.4      |                     | 1H     | 19 HCP: too strong
+S KQ7.AJ852.K53.94      |                     | 1H     | three spades: 1H
+S 32.54.KQJ976.J43      |                     | P      | no weak 2D with Flannery on
+# Responder.
+N 932.Q4.Q9653.K72      | 2D P                | 2H     | weak, two hearts: play 2H
+N J932.4.Q9653.K72      | 2D P                | 2S     | four spades: 2S
+N 3.4.QJT9653.K762      | 2D P                | P      | seven diamonds, weak: pass
+N A932.Q4.J965.K72      | 2D P                | 3S     | four spades, 10 HCP and a doubleton: invite
+N A932.Q4.K965.AK2      | 2D P                | 4D     | four spades, game values: transfer
+N A3.Q94.K965.AK72      | 2D P                | 4C     | three hearts, game: transfer
+N K3.K94.J965.Q872      | 2D P                | 3H     | three hearts, 9 HCP and a doubleton: invite
+N A3.94.KQ65.AK872      | 2D P                | 2N/3N  | game values, no major fit
+N 932.Q4.Q9653.K72      | 2D X                | 2H     | over a double: the same calls
+# Opener.
+S KQ74.AJ852.K3.94      | 2D P 2H P           | P      | partner placed the contract
+S KQ74.AJ852.K3.94      | 2D P 3H P           | P      | 13 HCP: decline
+S AQ74.KJ852.A3.94      | 2D P 3H P           | 4H     | 15 HCP: accept
+S KQ74.AJ852.K3.94      | 2D P 4C P           | 4H     | complete the transfer
+S KQ74.AJ852.K3.94      | 2D P 4D P           | 4S     | complete the transfer
+S KQ74.AJ852.K32.4      | 2D P 2N P           | 3D     | 4-5-3-1
+S KQ74.AJ852.4.K32      | 2D P 2N P           | 3C     | 4-5-1-3
+S KQ74.AJ852.K3.94      | 2D P 2N P           | 3H     | 4-5-2-2 minimum
+S AQ74.KJ852.A3.94      | 2D P 2N P           | 3S     | 4-5-2-2 maximum
+S KQ74.AJ852.KQ32.      | 2D P 2N P           | 4D     | 4-5-4-0
+# The asker.
+N A3.94.KQ65.AK872      | 2D P 2N P 3C P      | 3N     | short clubs: I hold them
+N A3.94.KQ65.AK872      | 2D P 2N P 3H P      | 3N     | 4-5-2-2: the minors are covered

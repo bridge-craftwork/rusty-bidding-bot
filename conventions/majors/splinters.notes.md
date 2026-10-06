@@ -101,6 +101,12 @@ Splinters_By_Opener −1,107 → −859.
 - Splinters after a 2/1 or a jump (1♠–2♣–2♦–4♥), and Rick's card's
   `slam.control_bids` text is not read.
 - Splinters in competition: the patterns need the opponents to pass.
+- **Transfer Walsh** (2026-10-05): opener's splinters stand aside after
+  1♣-1♦/1♥ when the card plays transfer responses
+  (`minor_openings.one_club.transfer_resp`): they read the transfer as
+  the natural suit and agreed the wrong major (Transfer Walsh self A/B,
+  transfer-walsh.notes.md). Opener's splinters in the transfer's major
+  are not written.
 
 ## Sources
 

@@ -1,0 +1,16 @@
+# Snapdragon doubles (switched on below; the scenario's card,
+# 21GF-SPECIALS, has them off).
+card    21GF-DEFAULT competitive.snapdragon.play=true
+dealer  N
+vul     None
+
+# seat hand                 | auction    | expect | why
+W 852.KQJ74.Q9.K53          | 1C 1D 1S   | X      | five hearts, two diamonds, 11: Snapdragon
+W K52.KQJ74.98.953          | 1C 1H 1S   | 2H     | partner's hearts: raise
+W 85.92.KQJ74.A953          | 1C 1H 1S   | X      | five diamonds, tolerance for hearts
+W 85.92.KQJ74.A953          | 1S 2H 3C   | X      | at the three level too
+# The overcaller
+E 9.Q53.AKJ95.Q864          | 1C 1D 1S X P | 2H   | three hearts: bid them
+E 9.A3.AKJ95.Q8642          | 1C 1D 1S X P | 2D   | no fit, no stopper: back to diamonds
+E 9.AQ53.AKJ95.K64          | 1C 1D 1S X P | 3H   | a fit and 17: jump
+E 9.Q53.AKJ95.Q864          | 1C 1D 1S X XX | 2H  | over the redouble too: three hearts

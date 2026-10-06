@@ -38,3 +38,15 @@ S AKQJT9.A.KQ54.32      | 1S P 3S P                    | 4NT    | the same hand 
 card    Basic-Bridge
 dealer  N
 N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | 5D     | one ace: Blackwood with clubs agreed, not a quantitative 4NT
+
+# The king ask by 5NT (`slam.king_ask.five_nt`): all four aces ours; the
+# answer counts the kings, 6♣ none up to 6NT four.
+card    Basic-Bridge
+dealer  S
+S AKQJ2.KQ4.AQ5.AQ      | 1S P 3S P 4NT P 5D P                 | 5NT    | three aces and partner's one: all four
+N J854.A83.QJ43.Q3      | 1S P 3S P 4NT P 5D P 5NT P           | 6C     | no king
+N J854.A83.KJ43.Q3      | 1S P 3S P 4NT P 5D P 5NT P           | 6D     | one king
+S AKQ32.KQ4.AK5.AQ      | 1S P 3S P 4NT P 5D P 5NT P 6D P      | 7S     | three kings of mine and one: every king
+S AKQ32.QJ4.AQ5.A2      | 1S P 3S P 4NT P 5D P 5NT P 6C P      | 6S     | one king between us: six
+card    Basic-Bridge slam.king_ask.five_nt=false
+S AKQJ2.KQ4.AQ5.AQ      | 1S P 3S P 4NT P 5D P                 | 6S     | no king ask on the card

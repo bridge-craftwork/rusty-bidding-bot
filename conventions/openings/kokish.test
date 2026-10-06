@@ -1,0 +1,22 @@
+# The Kokish relay (21GF-SPECIALS turns it on: `Kokish Relay = 1`).
+card    21GF-SPECIALS
+dealer  S
+vul     None
+
+# seat hand             | auction                     | expect | why
+S A4.AKQJ52.AK3.K2      | 2C P 2D P                   | 2H     | six hearts: the relay
+S AKQ4.AQJ52.A3.K2      | 2C P 2D P                   | 2H     | hearts and spades: the relay
+S AK4.KQ3.AQJ4.KQ2      | 2C P 2D P                   | 2H     | 25 balanced: the relay
+S AK4.KQ3.AQJ4.K32      | 2C P 2D P                   | 2N     | 22 balanced: 2NT
+S AKQJ52.A4.AK3.K2      | 2C P 2D P                   | 2S     | spades: natural
+card    21GF-DEFAULT
+S AK4.KQ3.AQJ4.KQ2      | 2C P 2D P                   | 3N     | Kokish off: 24-25 rebids 3NT
+card    21GF-SPECIALS
+N 8642.J72.9643.82      | 2C P 2D P 2H P              | 2S     | complete the relay
+S A4.AKQJ52.AK3.K2      | 2C P 2D P 2H P 2S P         | 3H     | six hearts, one-suited
+S AKQ4.AQJ52.A3.K2      | 2C P 2D P 2H P 2S P         | 3S     | five hearts, four spades
+S A4.AKQJ5.AKJ3.K2      | 2C P 2D P 2H P 2S P         | 3D     | five hearts, four diamonds
+S AK4.KQ3.AQJ4.KQ2      | 2C P 2D P 2H P 2S P         | 2N     | 24-25 balanced
+N 862.J72.9643.832      | 2C P 2D P 2H P 2S P 3D P    | 3H     | three hearts: agree
+N 8642.72.9643.Q82      | 2C P 2D P 2H P 2S P 3S P    | 4S     | four spades: agree
+N 862.J7.9643.Q832      | 2C P 2D P 2H P 2S P 3H P    | 4H     | two hearts opposite six

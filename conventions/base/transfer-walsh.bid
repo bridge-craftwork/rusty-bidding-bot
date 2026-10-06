@@ -1,0 +1,241 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Transfer Walsh (Wikipedia, "Transfer Walsh"; convention-card
+# bidding_conventions/transfer_walsh): over partner's 1♣,
+#
+#   1♦   four or more hearts (with four of each major too)
+#   1♥   four or more spades (longer than hearts, or 5-5)
+#   1♠   no four-card major: four or more diamonds, or a game force
+#        with longer diamonds
+#   1NT  natural, 6-10 balanced (responses.bid)
+#
+# Opener accepts with three of responder's major (or four and a
+# minimum), raises to two with four and 16-18, to game with 19+, and
+# otherwise rebids naturally, the rebid denying three of the major. The
+# natural rules that read the response as a suit stand aside under this
+# card (`tw(x)` in rebids.bid). See transfer-walsh.notes.md.
+
+module transfer-walsh "Transfer Walsh responses to 1♣"
+  card   minor_openings.one_club.transfer_resp
+  needs  responder-rebids
+  skill  bidding_conventions/transfer_walsh
+  param  q4n = slam.quantitative_4nt.play default true
+
+# ── Responder ────────────────────────────────────────────────────────
+# A game force with longer diamonds and a major starts with 1♠ (as Walsh
+# bids 1♦ first with game values).
+after 1C (P)
+  1D  "Transfer: 4+ hearts, 6+ HCP"        alert
+      shows H>=4, hcp>=6, H>=S, H>S | H=4, hcp<=11 | H>=D
+      sets  forcing=round, ask=tw_accept(H)
+      artificial
+  1H  "Transfer: 4+ spades, 6+ HCP"        alert
+      shows S>=4, hcp>=6, S>H | S>=5, S>=H, hcp<=11 | S>=D
+      sets  forcing=round, ask=tw_accept(S)
+      artificial
+  1S  "No four-card major: 4+ diamonds, or game forcing with longer diamonds"   alert
+      shows D>=4, hcp>=6, (H<=3, S<=3) | (hcp>=12, D>H, D>S)
+      sets  forcing=round, ask=tw_nomajor
+      artificial
+
+# ── Opener after a transfer to a major ───────────────────────────────
+when asked tw_accept(M)
+  1{M}  "Accepts: three {M}, or four and a minimum"
+        shows M>=3, M=3 | tp(M)<=15
+        priority 3
+  2{M}  "Raise: four {M}, 16-18"            shows M>=4, tp(M)=16..18   sets trump=M
+        priority 3
+  4{M}  "Game raise: four {M}, 19+"          shows M>=4, tp(M)>=19   sets trump=M
+        priority 3
+  # Without three of the major: natural, each denying the fit.
+  1S    "4+ spades, not three hearts"        shows S>=4, H<=2, suit_points<=18
+        when  M is H
+        priority 2
+  2H    "Reverse: 4+ hearts, longer clubs, 17+, not three spades"   shows H>=4, C>H, S<=2, suit_points>=17
+        when  M is S
+        sets  forcing=round
+        priority 2
+  1N    "12-14 HCP, balanced, not three {M}"   shows balanced | shape 5-4-2-2, hcp=12..14, M<=2
+        priority 1
+  2N    "18-19 HCP, balanced, not three {M}"   shows balanced, hcp=18..19, M<=2
+        priority 1
+  2C    "6+ clubs, minimum, not three {M}"     shows C>=6, suit_points<=15, M<=2
+  3C    "6+ clubs, 16-18, not three {M}"       shows C>=6, suit_points=16..18, M<=2
+  2D    "Reverse: 4+ diamonds, longer clubs, 17+, not three {M}"   shows D>=4, C>D, suit_points>=17, M<=2
+        sets  forcing=round
+  3N    "18-21 with six or more clubs, not three {M}"   shows C>=6, hcp=18..21, M<=2
+        priority 1
+  1N    "Minimum, no better rebid"            shows hcp<=14, M<=2
+        priority -3
+  2C    "Clubs, too strong for 1NT, no better rebid"   shows C>=5, M<=2
+        priority -4
+
+# ── Opener after 1♠ (no major) ───────────────────────────────────────
+when asked tw_nomajor
+  1N  "12-14 HCP, balanced"                  shows balanced | shape 5-4-2-2, hcp=12..14
+      priority 1
+  2N  "18-19 HCP, balanced"                  shows balanced, hcp=18..19
+      priority 1
+  2D  "Raise: 4+ diamonds, minimum"          shows D>=4, tp(D)<=15   sets trump=D
+  3D  "Jump raise: 4+ diamonds, 16+"         shows D>=4, tp(D)>=16   sets trump=D
+  2C  "6+ clubs, minimum"                    shows C>=6, suit_points<=15
+  3C  "6+ clubs, 16-18"                      shows C>=6, suit_points=16..18
+  3N  "18-21 with six or more clubs"         shows C>=6, hcp=18..21
+  1N  "Minimum, no better rebid"             shows hcp<=14
+      priority -3
+  2C  "Clubs, no better rebid"               shows C>=5
+      priority -4
+
+# ── Responder's second call ──────────────────────────────────────────
+# Opener accepted: three (or four, minimum) in responder's major.
+after 1C (P) 1D (P) 1H (P) | 1C (P) 1H (P) 1S (P)
+  P   "Weak: to play"                        shows points<=10
+      priority -5
+  3N  "Game: 13+, four of the major"          shows points>=13
+      priority -1
+  2N  "Invitational: 11-12"                   shows points=11..12
+      sets  ask=nt_invite
+      priority -1
+after 1C (P) 1D (P) 1H (P)
+  2H  "Five or more hearts, 8-10: competitive"   shows H>=5, points=8..10   sets trump=H, ask=signoff
+  3H  "Invitational: five or more hearts, 11-12"  shows H>=5, tp(H)=11..12   sets trump=H, ask=invite(H)
+  4H  "Game: five or more hearts, 13+"         shows H>=5, tp(H)>=13   sets trump=H
+  1S  "Four spades as well, 6+"                 shows S>=4, H=4
+      sets  forcing=round
+      priority 1
+after 1C (P) 1H (P) 1S (P)
+  2S  "Five or more spades, 8-10: competitive"   shows S>=5, points=8..10   sets trump=S, ask=signoff
+  3S  "Invitational: five or more spades, 11-12"  shows S>=5, tp(S)=11..12   sets trump=S, ask=invite(S)
+  4S  "Game: five or more spades, 13+"         shows S>=5, tp(S)>=13   sets trump=S
+  2H  "Four or more hearts as well, 8-10"      shows H>=4, S>=5, points=8..10   sets ask=signoff
+
+# Opener raised to two (four, 16-18): game from 8.
+after 1C (P) 1D (P) 2H (P) | 1C (P) 1H (P) 2S (P)
+  P   "Weak: no game"                         shows points<=7
+      priority -5
+  4{trump}  "Game"                            shows points>=8
+
+# Opener denied three of the major, or answered 1♠: natural.
+# Slam and the second suit (2026-10-05, the self A/B against Walsh: every
+# game force went 1NT-3NT, 19-21 HCP and a 4-4 fit in the other major
+# included, -93 IMPs on 75 boards): a quantitative 4NT or 6NT, and the
+# responder's reverses that natural Walsh has (responder-rebids.bid).
+after 1C (P) 1x (P) 1N (P)
+  P   "Weak: no game"                         shows points<=10
+      priority -5
+  2N  "Invitational: 11-12"                   shows points=11..12   sets ask=nt_invite
+  3N  "Game: 13+"                             shows points>=13
+  4N  "Quantitative: 31-32 between us, invites 6NT"
+      shows balanced, points + partner.points.min >= 31, points + partner.points.min <= 32
+      when  q4n
+      sets  ask=quant
+  6N  "Slam: 33+ between us"                  shows balanced, points + partner.points.min >= 33
+after 1C (P) 1S (P) 1N (P) | 1C (P) 1S (P) 2C (P)
+  2H  "Game force: four hearts, longer diamonds"   shows H>=4, D>=5, D>S, points>=13   sets forcing=game
+      priority 1
+  2S  "Game force: four spades, longer diamonds"   shows S>=4, D>=5, H<=3, points>=13   sets forcing=game
+      priority 1
+after 1C (P) 1D (P) 1N (P)
+  2S  "Responder's reverse: 4+ spades, 5+ hearts, game forcing"   shows S>=4, H>=5, points>=13   sets forcing=game
+      priority 1
+after 1C (P) 1H (P) 1N (P)
+  3H  "Four hearts, five spades, game forcing"   shows H>=4, S>=5, points>=13   sets forcing=game
+      priority 1
+
+# Opener over responder's major after 1♣-1♠-1NT: the 1NT rebid did not
+# deny a four-card major (responder had denied one), so raise with four.
+after 1C (P) 1S (P) 1N (P) 2M (P) | 1C (P) 1S (P) 2C (P) 2M (P)
+  3{M} "Four {M}: the fit"                    shows M>=4   sets trump=M
+      priority 2
+  2S   "Four spades, not four hearts"        shows S>=4, H<=3
+      when  M is H
+      priority 1
+  3N   "No fit in {M}"
+after 1C (P) 1S (P) 1N (P) 2H (P) 2S (P) | 1C (P) 1S (P) 2C (P) 2H (P) 2S (P)
+  4S   "Four spades as well: game"           shows S>=4
+      priority 1
+  3N   "Game in notrump"
+after 1C (P) 1D (P) 1N (P)
+  2H  "Weak: six or more hearts"             shows H>=6, points<=10   sets ask=signoff
+  3H  "Invitational: six or more hearts"     shows H>=6, points=11..12   sets ask=invite(H)
+  4H  "Game: six or more hearts"             shows H>=6, points>=13
+after 1C (P) 1H (P) 1N (P)
+  2S  "Weak: six or more spades"             shows S>=6, points<=10   sets ask=signoff
+  3S  "Invitational: six or more spades"     shows S>=6, points=11..12   sets ask=invite(S)
+  4S  "Game: six or more spades"             shows S>=6, points>=13
+
+after 1C (P) 1D (P) 1S (P)
+  P   "Weak: four spades too"                 shows S>=4, points<=10
+      priority -4
+  2S  "Raise: four spades, weak"              shows S>=4, points<=10   sets trump=S, ask=signoff
+  3S  "Invitational raise: four spades"       shows S>=4, tp(S)=11..12   sets trump=S, ask=invite(S)
+  4S  "Game: four spades"                     shows S>=4, tp(S)>=13   sets trump=S
+  2H  "Weak: six or more hearts"              shows H>=6, points<=10   sets ask=signoff
+  1N  "6-10, no spade fit"                    shows points<=10, S<=3   sets ask=signoff
+  2N  "Invitational: 11-12, no spade fit"     shows points=11..12, S<=3   sets ask=nt_invite
+  3N  "Game: 13+, no spade fit"               shows points>=13, S<=3
+  4N  "Quantitative: 31-32 between us, no spade fit"
+      shows balanced, S<=3, points + partner.points.min >= 31, points + partner.points.min <= 32
+      when  q4n
+      sets  ask=quant
+  6N  "Slam: 33+ between us, no spade fit"    shows balanced, S<=3, points + partner.points.min >= 33
+
+after 1C (P) 1x (P) 2C (P)
+  P   "Weak: no game"                         shows points<=10
+      priority -5
+  2N  "Invitational: 11-12"                   shows points=11..12   sets ask=nt_invite
+  3N  "Game: 13+"                             shows points>=13
+
+# Opener's jump to 3♣ (six clubs, 16-18): game from 9 (2026-10-05, the
+# self A/B: responder had no rule and passed it with 13-14).
+after 1C (P) 1x (P) 3C (P)
+  P   "Weak: no game"                         shows points<=8
+      priority -5
+  3N  "Game: 9+"                              shows points>=9
+  5C  "Game in clubs: 9+, three clubs, a suit unstopped"   shows C>=3, points>=9, !balanced
+      priority -1
+
+after 1C (P) 1S (P) 2D (P)
+  P   "Weak: no game"                         shows tp(D)<=10
+      priority -5
+  3D  "Invitational: 11-12"                   shows tp(D)=11..12   sets ask=invite(D)
+  3N  "Game: 13+"                             shows points>=13
+
+# Responder showed four spades as well after the heart transfer was
+# accepted (1♣-1♦-1♥-1♠): opener raises with four, else describes.
+after 1C (P) 1D (P) 1H (P) 1S (P)
+  2S  "Four spades, minimum"                  shows S>=4, tp(S)<=15   sets trump=S
+  3S  "Four spades, 16-18"                    shows S>=4, tp(S)=16..18   sets trump=S
+  4S  "Four spades, 19+"                      shows S>=4, tp(S)>=19   sets trump=S
+  2H  "Four hearts, minimum"                  shows H>=4, S<=3, suit_points<=15   sets trump=H
+  2C  "Six or more clubs, minimum"            shows C>=6, S<=3, H<=3, suit_points<=15
+  2N  "18-19, balanced"                       shows balanced, hcp=18..19, S<=3
+  1N  "Minimum, no four spades"               shows hcp<=14, S<=3
+      priority -1
+  3N  "15+, no four spades"                   shows hcp>=15, S<=3
+      priority -2
+
+# Opener reversed (17+, forcing one round) over the transfer.
+after 1C (P) 1x (P) 2z (P) when we.forcing = round
+  2N  "Forced: minimum, no fit"               shows points<=7
+      priority -1
+  3N  "Game: 8+"                              shows points>=8
+      priority -2
+  3C  "Three or more clubs, 8+: game forcing"  shows C>=3, points>=8   sets forcing=game
+      priority -3
+  3z  "Four {z}, 8+: game forcing"            shows z>=4, points>=8   sets forcing=game, trump=z
+after 1C (P) 1D (P) 2z (P) when we.forcing = round
+  2H  "Five or more hearts"                   shows H>=5   sets forcing=round
+      when  z is D
+after 1C (P) 1H (P) 2z (P) when we.forcing = round
+  2S  "Five or more spades"                   shows S>=5   sets forcing=round
+# Opener after responder's five-card major over the reverse.
+after 1C (P) 1D (P) 2z (P) 2H (P) | 1C (P) 1H (P) 2z (P) 2S (P)
+  2N  "No fit, minimum reverse"               shows hcp<=18
+      priority -1
+  3N  "No fit, 19+"                           shows hcp>=19
+      priority -2
+after 1C (P) 1D (P) 2z (P) 2H (P)
+  3H  "Two hearts: the 5-2 fit"               shows H=2
+after 1C (P) 1H (P) 2z (P) 2S (P)
+  3S  "Two spades: the 5-2 fit"               shows S=2

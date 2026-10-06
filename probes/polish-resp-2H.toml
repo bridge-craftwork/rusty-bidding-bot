@@ -1,0 +1,19 @@
+# Responder after a Polish 2H (5H and another five), 21GF-PolishTwoSuiters.
+card    = "21GF-PolishTwoSuiters"
+dealer  = "N"
+prefix  = "2H Pass"
+vuls    = ["None"]
+scoring = ["MP"]
+partner = ["3.KQJ97.43.Q8543", "KQJ97.Q8543.43.3", "3.KQJ97.Q8543.43", "J.AJT97.32.AT874", "2.AQ974.AT953.T2", "AJ987.QJ543.2.32", "9.AJ954.QT952.32", "Q.QJT75.Q8543.T3"]
+our     = []
+hands = [
+  "3H weak | Q32.T82.K764.J65",
+  "short H, 4S | KT64.3.Q8762.J65",
+  "short H, long minors | T64.3.Q8762.K965",
+  "2H 3S | QT6.82.J8762.K96",
+  "2H 3S 12 | AQ6.82.KJ762.Q96",
+  "3H 13 | AQ6.K82.KJ762.96",
+  "4H 15 | A6.K982.AJ76.K96",
+  "16 bal no fit | AQ64.82.AKJ6.Q96",
+  "4S 6 | QT9864.2.J876.95",
+]

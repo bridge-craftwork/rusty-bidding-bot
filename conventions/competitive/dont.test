@@ -4,6 +4,8 @@ dealer  E
 
 # seat hand                 | auction              | expect | why
 S T82.J.AK9643.QJ8          | 1NT                  | X      | six diamonds: one long suit
+S AKJ543.KQJ64..K2          | 1NT                  | 2H     | 17 but 6-5 in the majors: bid, do not wait (self A/B, 2026-10-05)
+S AKJ5.KQJ6.Q4.K32          | 1NT                  | P      | 19 balanced: still passes (no penalty double in DONT)
 S AQ652.QJ82.3.AJ2          | 1NT                  | 2H     | hearts and spades
 S Q5.AQT76.QJT3.QT          | 1NT                  | 2D     | diamonds and a higher suit (hearts)
 S K3.2.QJ85.AT9643          | 1NT                  | 2C     | clubs and a higher suit (diamonds)

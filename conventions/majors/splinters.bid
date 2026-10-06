@@ -20,12 +20,16 @@ module splinters "Splinters over 1♥ / 1♠"
   card   major_openings.splinters.play
   needs  responses
   skill  bidding_conventions/jacoby_2nt_splinters
+  skill  bidding_conventions/splinters
   param  by_resp = major_openings.splinters.by_responder default true
   param  by_open = major_openings.splinters.by_opener default true
   param  cue     = slam.cue_bids.play default false
   param  style   = slam.cue_bids.style default first_or_second_round
   param  k1430   = slam.blackwood.rkcb_1430 default false
   param  k0314   = slam.blackwood.rkcb_0314 default false
+  # Under Transfer Walsh 1C-1D/1H are transfers: opener's splinters
+  # read them as natural and agreed the wrong major (self A/B, 2026-10-05).
+  param  twalsh  = minor_openings.one_club.transfer_resp default false
 
 # ── Responder ────────────────────────────────────────────────────────
 # 12-15 HCP with a small singleton, 11 with a void (BBA, both probes);
@@ -68,14 +72,14 @@ after 1M (P) when by_resp
 # singleton or void and 17-21 HCP (16 with a void): BBA's own range,
 # probes/splinter-by-opener-1D-1S.toml. Without a singleton or void the
 # same hands raise to game (rebids.bid).
-after 1m (P) 1H (P) when by_open
+after 1m (P) 1H (P) when by_open, !(twalsh, m is C)
   3S  "Splinter: 4 hearts, 17-21, at most one spade"  alert
       shows H>=4, S<=1, !has(A,S), !has(K,S), !has(Q,S), !has(J,S), tp(H)>=19
       shows hcp=17..21 | (hcp=16, S=0)
       sets  trump=H, forcing=game
       artificial
       priority 2                       # ahead of the raise to game
-after 1x (P) 1M (P) when by_open
+after 1x (P) 1M (P) when by_open, !(twalsh, x is C)
   4y  "Splinter: 4 {M}, 17-21, at most one {y}"  alert
       shows M>=4, y<=1, !has(A,y), !has(K,y), !has(Q,y), !has(J,y), tp(M)>=19
       shows hcp=17..21 | (hcp=16, y=0)
@@ -180,7 +184,7 @@ after 1M (P) 4x (P) when x is not M, M is S | x is not S
 # ── Responder, over opener's splinter ────────────────────────────────
 # The same count, with 11 or more: opener has shown 17-21 HCP and
 # shortness, where the splinter by responder showed 12-15.
-after 1m (P) 1H (P) 3S (P) when by_open
+after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
   4H  "Game: no slam interest"
       shows !((!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17))
       priority 13                      # ahead of the control bids (12) and any natural reading
@@ -222,7 +226,7 @@ after 1m (P) 1H (P) 3S (P) when by_open
       sets  ask=keycards(trump)
       artificial
       priority 12
-after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is not S
+after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is not S, !(twalsh, x is C)
   4M  "Game: no slam interest"
       shows !((!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17))
       priority 13                      # ahead of the control bids (12) and any natural reading

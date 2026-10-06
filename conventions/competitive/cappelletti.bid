@@ -23,6 +23,7 @@
 module cappelletti "Cappelletti and Modified Cappelletti over their 1NT"
   needs  vs-1nt
   skill  competitive_bidding/cappelletti
+  skill  competitive_bidding/modified_cappelletti
   skill  competitive_bidding/defense_vs_1nt
   param  def = competitive.vs_1nt_strong.system default other
 

@@ -1,0 +1,25 @@
+# Benjamin twos (the default card with Benjamin on).
+card    21GF-DEFAULT two_level.benjamin.play=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S AK4.KQ3.AQJ4.K32      |                     | 2C     | 22 balanced: Benjamin 2C
+S AKQJ76.AKQ.Q2.32      |                     | 2C     | 21 HCP, a solid six-card suit
+S AK4.KQ3.AQJ4.KQ2      |                     | 2D     | 25 balanced: game forcing
+S AKQJ76.AK3.AQ.K2      |                     | 2D     | 26 unbalanced: game forcing
+S AK4.KQ3.AJ54.K32      |                     | 2N     | 20 balanced: 2NT as before
+S 32.54.KQJ976.J43      |                     | P      | no weak 2D
+card    21GF-DEFAULT
+S AKQJ76.AK3.AQ.32      |                     | 2C     | Benjamin off: the strong 2C
+card    21GF-DEFAULT two_level.benjamin.play=true
+# Responder to 2D.
+N 8642.J72.9643.82      | 2D P                | 2N     | nothing: the negative
+N 86.KQ972.9643.82      | 2D P                | 2H     | five hearts, 5 HCP
+N K86.QJ7.9643.K82      | 2D P                | 3N     | balanced, 9 HCP
+# Opener after the negative.
+S AKQJ76.AK3.AQ.32      | 2D P 2N P           | 3S     | spades
+S AK4.KQ3.AQJ4.KQ2      | 2D P 2N P           | 3N     | balanced
+# Responder to 2C: the waiting 2D, then a raise.
+N 8642.J72.9643.82      | 2C P                | 2D     | waiting
+N 864.J72.K964.Q82      | 2C P 2D P 2S P      | 3S     | three spades and some values

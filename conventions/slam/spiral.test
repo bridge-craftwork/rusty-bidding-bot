@@ -1,0 +1,24 @@
+card    21GF-DEFAULT slam.spiral_cuebids.play=true
+dealer  N
+
+# seat hand             | auction                              | expect | why
+# The ask: the invitational raise asks instead.
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P                       | 2NT    | 11 support points: Spiral
+S KJ84.K5.Q72.J932      | 1C P 1S P 2S P                       | 2NT    | the same in spades
+S K5.KJ84.Q72.QJ92      | 1D P 1H P 2H P                       | 4H     | game values: no need to ask
+# Opener's answer.
+N K5.Q984.AJ72.K92      | 1D P 1H P 2H P 2NT P                 | 3H     | four trumps, 13: minimum
+N K5.Q984.AJ7.KQ92      | 1D P 1H P 2H P 2NT P                 | 3S     | four trumps, 15: maximum
+N K53.Q984.AJ7.KQ9      | 1D P 1H P 2H P 2NT P                 | 3NT    | 4-3-3-3, maximum
+N K5.Q98.AJ72.KJ92      | 1D P 1H P 2H P 2NT P                 | 3D     | three trumps (a system that raises with three), maximum
+# Responder.
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P 2NT P 3S P            | 4H     | maximum: game
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P 2NT P 3H P            | P      | minimum: 3♥ is the sign-off
+S KJ84.K5.Q72.J932      | 1C P 1S P 2S P 2NT P 3H P            | 3S     | minimum, spades: sign off
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P 2NT P 3N P            | P      | 4-4 facing 4-3-3-3, balanced: 3NT
+S K5.KJ842.Q72.J93      | 1D P 1H P 2H P 2NT P 3N P            | 4H     | five trumps: the major
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P 2NT P 3D P            | 3NT    | 4-3 fit, balanced: 3NT
+
+# Off the card: 2NT is not Spiral.
+card    21GF-DEFAULT
+S K5.KJ84.Q72.J932      | 1D P 1H P 2H P                       | !2NT   | no Spiral

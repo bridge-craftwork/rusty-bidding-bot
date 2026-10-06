@@ -14,7 +14,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.4.0 (rule language 1)`), and so does the last line of
+(`rbb 0.5.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
@@ -24,7 +24,7 @@ its root, `conventions.toml`:
 name = "rusty-bidding-bot"
 description = "The base system and conventions, switched on by the convention card"
 language = 1          # required: the rule language version
-engine = "0.4.0"      # optional: the engine it was developed against (information only)
+engine = "0.5.0"      # optional: the engine it was developed against (information only)
 ```
 
 - A manifest that asks for a language this engine does not read refuses
@@ -250,7 +250,13 @@ totals and last bid, `favourable` / `unfavourable`, `captain`,
 while choosing; how an unchosen call's `we.tp` resolves could differ, and
 on the corpus nothing changed (170,633 boards, 2026-09-30). Engine
 0.4.0 adds the `force game` declaration (LANGUAGE.md §3) and the `bids`
-term. This repository's manifest names `engine = "0.4.0"`.
+term. Engine 0.5.0 adds named auction patterns (`define auction`,
+LANGUAGE.md §3 and §4), the `systems on` declaration and the `systems 1N`
+/ `systems 2N` start of a pattern, and the terms `me.opened`,
+`me.named(x)` and `we.systems_on`. No existing file can notice them
+(each was a parse error or an unknown term before), so they came without
+a new language version. This repository's manifest names `engine =
+"0.5.0"`.
 
 What the
 engine *knows* may also get sharper within a version (the deck limits,
@@ -475,14 +481,14 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.second_longest` | length of the second-longest suit, as far as shown |
 | `partner.length_points` | cards beyond four, as far as shown |
 | `partner.last` | that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`) |
-| `partner.opened` | that seat made the opening bid |
+| `partner.opened` | that seat made the opening bid (`me.opened`: I did) |
 | `partner.bids` | how many bids that seat has made |
 | `partner.has_bid` | that seat has made a bid, not only passes or doubles |
 | `partner.jumped` | that seat's last bid was at least a level above the cheapest in its strain |
 | `partner.denied(x)` | in the control-bid dialogue that seat skipped x |
 | `partner.cued(x)` | in the control-bid dialogue that seat has shown a control in x |
 | `partner.bypassed(x[, call])` | that seat's last bid went past an available bid in x (above `call` when given) |
-| `partner.named(x)` | that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count |
+| `partner.named(x)` | that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count (`me.named(x)`: I have) |
 | `partner.has(rank, x)` | not tracked: unknown |
 | `partner.stop(x)` | not tracked: unknown |
 | `partner.semibalanced` | not tracked: unknown |
@@ -505,6 +511,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `we.forcing` | `none`, `round` or `game` |
 | `we.named(x)` | either of us has made a natural bid in x (a suit or N) at any point; artificial calls do not count |
 | `we.gf` | we are in a game force (`we.forcing = game`) |
+| `we.systems_on` | partner's last call is the notrump where our notrump system came on (`systems on`): I am answering it |
 | `we.hcp` | my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends) |
 | `we.points` | my points plus partner's range: `points + partner.points` |
 | `we.fit(x)` | my length in x plus partner's range: `x + partner.x`; `.min` is the known fit |

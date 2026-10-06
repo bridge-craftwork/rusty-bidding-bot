@@ -1,0 +1,127 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Bergen raises: over partner's 1♥/1♠ (RHO passing), responder's jumps
+# show four-card raises by strength, so opener knows the fit and the
+# values at once:
+#
+#   Bergen         (`major_openings.bergen_raises.play`)     3♣ constructive 7-10, 3♦ limit 11-12
+#   Reverse Bergen (`major_openings.bergen_raises.reverse`)  3♣ limit 11-12, 3♦ constructive 7-10
+#   either                                                    3M preemptive, about 3-6
+#
+# Support points (shortness counted). Game-forcing raises stay with Jacoby
+# 2NT and splinters. (Bridge Bum, "Bergen Raises"; Bergen & Cohen; the
+# PBS scenario Bergen_Raises.) With both switches, Reverse. See
+# bergen.notes.md.
+
+module bergen "Bergen raises: four-card raises at the three level"
+  needs  responses
+  skill  bidding_conventions/bergen_raises
+  skill  bidding_conventions/reverse_bergen_raises
+  param  bergen  = major_openings.bergen_raises.play default false
+  param  reverse = major_openings.bergen_raises.reverse default false
+  param  drury   = major_openings.drury.play default false
+  param  drury_r = major_openings.drury.reverse default false
+
+# ── Responder ────────────────────────────────────────────────────────
+after 1M (P) when bergen | reverse
+  3C  "Bergen: constructive raise, four {M}, 7-10 support points"  alert
+      shows M>=4, tp(M)=7..10, hcp>=5
+      when  !reverse
+      when  M=4 | hcp>=8               # five trumps and 5-7 HCP: the jump to game
+      sets  trump=M
+      artificial
+      priority 1                       # the four-card raise, ahead of 2M or a new suit
+  3D  "Bergen: limit raise, four {M}, 11-12 support points"  alert
+      shows M>=4, tp(M)=11..12, hcp<=12
+      when  !reverse
+      when  !passed_hand | (!drury, !drury_r)   # a passed hand's limit raise is Drury's 2♣
+      sets  trump=M
+      artificial
+      priority 1
+  3D  "Reverse Bergen: constructive raise, four {M}, 7-10 support points"  alert
+      shows M>=4, tp(M)=7..10, hcp>=5
+      when  reverse
+      when  M=4 | hcp>=8
+      sets  trump=M
+      artificial
+      priority 1
+  3C  "Reverse Bergen: limit raise, four {M}, 11-12 support points"  alert
+      shows M>=4, tp(M)=11..12, hcp<=12
+      when  reverse
+      when  !passed_hand | (!drury, !drury_r)
+      sets  trump=M
+      artificial
+      priority 1
+  # Five trumps and a weak hand keep the jump to game (responses.bid).
+  3M  "Bergen: preemptive raise, four {M}, about 3-6"
+      shows M>=4, tp(M)<=7, hcp<=6, hcp>=2
+      when  M=4 | hcp<=3
+      sets  trump=M, ask=preemptive_raise(M)
+      priority 1
+
+# ── Opener ───────────────────────────────────────────────────────────
+# Written against the auction, not as a question (`ask=`): a pending
+# question would shut out the slam rules, which have the big hands.
+define bergen_constructive(M) = (bergen, !reverse, partner.last=3C) | (reverse, partner.last=3D)
+define bergen_limit(M)        = (bergen, !reverse, partner.last=3D) | (reverse, partner.last=3C)
+
+# Opposite 7-10 with a nine-card fit: game from 17, invite with 15-16
+# (the cheapest step is a game try in Bergen; with Reverse Bergen and
+# hearts there is no step below 3♥, so opener decides).
+after 1M (P) 3x (P) when x is C | x is D, bergen | reverse, bergen_constructive(M)
+  4M  "Game opposite a constructive raise: 17-20"
+      shows tp(M)=17..20
+      when  M is S | x is C
+      priority 3                       # ahead of opener's natural rebids
+  4M  "Game opposite a constructive raise: 16-20"
+      shows tp(M)=16..20
+      when  M is H, x is D
+      priority 3
+  4M  "Game opposite a constructive raise"
+      shows tp(M)>=16
+      priority -1                      # with more, the slam rules first
+  3D  "Game try opposite a constructive raise: 15-16"  alert
+      shows tp(M)=15..16
+      when  x is C
+      artificial
+      priority 3
+  3H  "Game try opposite a constructive raise: 15-16"  alert
+      shows tp(M)=15..16
+      when  x is D, M is S
+      artificial
+      priority 3
+  3M  "Sign off opposite a constructive raise"
+      priority 2
+
+# Opposite 11-12: game from 14.
+after 1M (P) 3x (P) when x is C | x is D, bergen | reverse, bergen_limit(M)
+  4M  "Game opposite a limit raise: 14-18"
+      shows tp(M)=14..18
+      priority 3
+  4M  "Game opposite a limit raise"
+      shows tp(M)>=14
+      priority -1                      # with more, the slam rules first
+  3M  "Sign off opposite a limit raise: a minimum"
+      shows tp(M)<=13
+      priority 3
+
+# Responder after the game try.
+after 1M (P) 3C (P) 3D (P) when bergen, !reverse
+  4M  "Accepts the game try: the top of the constructive raise"
+      shows tp(M)>=9
+      priority 3
+  3M  "Declines the game try"
+      priority 2
+after 1S (P) 3D (P) 3H (P) when reverse
+  4S  "Accepts the game try: the top of the constructive raise"
+      shows tp(S)>=9
+      priority 3
+  3S  "Declines the game try"
+      priority 2
+
+# Responder after opener's sign-off.
+after 1M (P) 3x (P) 3M (P) when x is C | x is D, bergen | reverse
+  P   "Opener signed off"
+      priority 2
+
+# Opener after the preemptive 3M: jump-raises.bid (`asked preemptive_raise`).

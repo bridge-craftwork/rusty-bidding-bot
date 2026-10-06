@@ -111,12 +111,58 @@ distance / side, against the natural rules on the same cards):
 | + a strong doubler breaks the relay (3NT with 19+) | -264 / -669 |
 | + weak 2NT only without a four-card major at two; stopper route from 11 | -736 / -1,013 |
 
-Reverted: the natural structure is used on every card, including those
+(Superseded 2026-10-05: see "Lebensohl after the double: played from
+the card" below.) Reverted: the natural structure is used on every card, including those
 that list Lebensohl. **For Rick:** the card says we play Lebensohl
 there, and par says the natural replies (a weak three-level suit
 0-10, 3NT with a stopper, the cue bid) do better in our engine. Keep
 natural, or play the card's convention and accept the cost while the
 Lebensohl continuations mature?
+
+## Lebensohl after the double: played from the card (2026-10-05)
+
+Rick's pace ruling (2026-10-05, CLAUDE.md "Pace"): the card decides and
+the cited definition is the spec, so the cards that list Lebensohl (all
+21GF cards) now play it; Basic-Bridge and Precision keep the natural
+replies. **The trade:** the 2026-09-27 table above says the natural
+replies did better on par in our engine; we accept that cost for
+playing the partnership's card, and the big par runs come back to it
+in the periodic batch.
+
+Over 2D/2H/2S doubled (direct or balancing), advancer:
+
+| call | meaning |
+|---|---|
+| 2-level suit | natural, 0-10 (the natural rule, unchanged) |
+| 2NT | relay to 3C: 0-8 with a suit to play at three (no four-card major biddable at two), or 13+ with their suit stopped and no five-card unbid major |
+| 3-level suit directly | constructive, 9-12 HCP, four or more |
+| cue directly | 13+, exactly four of an unbid major, no stopper ("fast denies") |
+| 3NT directly | 13+, no four-card major, no stopper |
+| 4M | five or more of an unbid major and 11+ |
+| pass | penalty (as before), or five or more of theirs and 0-8 |
+
+After 2NT the doubler bids 3C (3NT with 19+ and their suit stopped);
+advancer passes with clubs, corrects to a lower suit (weak), or shows
+game values with a stopper: the slow cue (four of an unbid major) or
+3NT. The doubler answers either cue with an unbid four-card major,
+else 3NT.
+
+Fast-lane compare (`Lebensohl_vs_Opps_W2_*`, 150 boards): call agreement
+83.5% (natural) -> 89.2% (NS 65.0% -> 77.7%). Remaining divergences at
+the convention's calls, classified:
+
+- BBA style: BBA's doubler breaks the relay with an artificial 3 of
+  their suit on strong hands (we bid 3C, or 3NT with 19+ and a stop);
+  BBA bids a direct 3NT *with* a stopper on several balanced 13-15s,
+  against its own scenario text and the slow-shows rule we follow; a
+  flat 10+ with four of theirs we pass for penalty where BBA relays.
+- BBA's constructive range starts at 9 HCP: its 8-counts relay (our
+  ranges were moved to match: weak 0-8, constructive 9-12, game 13+).
+- Don't care: single boards of judgment (BBA 2S with four spades and 12
+  where we bid 4S).
+
+**For Rick:** the doubler's strong relay break (BBA's artificial cue)
+is not written; tell us if you want it.
 
 ## Next
 
@@ -137,7 +183,15 @@ suits).
   and `vs-w2-2S-X-leb.toml`.
 - **Corpus measurements:** `probes/tools/par_blame.py` for the motive,
   and each step judged by par distance and by side IMPs.
-- **Where we differ from the card:** the 21GF cards list Lebensohl after
-  doubling a weak two; BBA's version was probed and written, lost on both
-  yardsticks, and was reverted, so every card plays the natural replies
-  (for Rick). No published Lebensohl description is cited yet.
+- **Lebensohl after the double** (2026-10-05): Bridge Bum, "Lebensohl
+  over weak two bids" (https://www.bridgebum.com/lebensohl_over_weak_two.php):
+  2NT relay for weak hands and slow-shows game hands, direct three-level
+  suits constructive, the cue four of the unbid major, fast denies;
+  Larry Cohen, "Lebensohl" (https://www.larryco.com/bridge-articles/lebensohl)
+  for fast denies / slow shows. Practice-Bidding-Scenarios
+  `btn/Lebensohl_vs_Opps_W2_*.btn`. Deviations: ranges in HCP from
+  BBA's corpus (weak 0-8, constructive 9-12, game 13+) rather than the
+  source's 0-7 / 8-11; a five-card unbid major with game values bids
+  game rather than going through the cue; the cue promises exactly four.
+  Played on the cards that list it, against the earlier par result
+  (the section above); Rick's pace ruling, 2026-10-05.

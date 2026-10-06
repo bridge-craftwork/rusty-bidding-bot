@@ -1,0 +1,93 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Polish two-suiters (Wikipedia, "Polish Club": "Polish two-suiters,
+# 6-11 HCP. Opening 2♥ = any 5-5 with hearts (spades possible). Opening
+# 2♠ = 5 spades and 5 of a minor"). The natural weak 2♥/2♠ are off
+# (preempts.bid). Responder:
+#
+#   over 2♥  pass to play; 2♠ pass or correct (opener passes with
+#            spades, else bids his minor); 2NT asks (3♥ = spades,
+#            3♣/3♦ = that minor); 3♥ preemptive; 4♥ to play
+#   over 2♠  pass to play; 3♣ pass or correct to the minor; 2NT asks
+#            (3♣/3♦); 3♠ preemptive; 4♠ to play
+#
+# Ranges and responder's choices follow BBA (probes/polish-openings.toml,
+# polish-resp-2H.toml, polish-resp-2S.toml). See
+# polish-two-suiters.notes.md.
+
+module polish-two-suiters "Polish two-suiters: 2♥ and 2♠"
+  card   two_level.polish_two_suiters.play
+  needs  preempts
+  skill  bidding_conventions/polish_two_suiters
+
+# ── The openings ─────────────────────────────────────────────────────
+when opening, seat<=3
+  2H  "Polish: five hearts and another five-card suit, 5-11"   alert
+      shows H>=5, S>=5 | D>=5 | C>=5, hcp=5..11
+      priority 1
+  2S  "Polish: five spades and a five-card minor, 5-11"   alert
+      shows S>=5, H<=4, D>=5 | C>=5, hcp=5..11
+      priority 1
+
+# ── Responder to 2♥ ──────────────────────────────────────────────────
+after 2H (P) | 2H (X)
+  P   "Hearts: to play"                        shows H>=3, hcp<=14
+  2S  "Pass or correct: no heart fit"   alert  shows H<=2, hcp<=14
+      artificial
+  3H  "Preemptive raise: four or more hearts"  shows H>=4, hcp<=9
+  4H  "Game in hearts"                         shows H>=3, hcp>=15
+      priority 1
+  2N  "Asks for the second suit: game interest"   alert
+      shows hcp>=15
+      sets  forcing=round, ask=polish(H)
+      artificial
+
+# ── Responder to 2♠ ──────────────────────────────────────────────────
+after 2S (P) | 2S (X)
+  P   "Spades: to play"                        shows S>=2, hcp<=14
+  3C  "Pass or correct: no spade fit"   alert  shows S<=1, hcp<=14
+      artificial
+  3S  "Preemptive raise: four or more spades"  shows S>=4, hcp<=9
+  4S  "Game in spades"                         shows S>=3, hcp>=15
+      priority 1
+  2N  "Asks for the minor: game interest"   alert
+      shows hcp>=15
+      sets  forcing=round, ask=polish(S)
+      artificial
+
+# ── Opener: pass or correct ──────────────────────────────────────────
+after 2H (P) 2S (P) | 2H (X) 2S (P)
+  P   "My second suit is spades"     shows S>=5
+  3C  "My second suit is clubs"      shows C>=5
+  3D  "My second suit is diamonds"   shows D>=5
+after 2S (P) 3C (P) | 2S (X) 3C (P)
+  P   "My minor is clubs"            shows C>=5
+  3D  "My minor is diamonds"         shows D>=5
+after 2H (P) 3H (P) | 2S (P) 3S (P) | 2H (P) 4H (P) | 2S (P) 4S (P)
+  P   "Partner placed the contract"
+
+# Responder after the correction to a minor: pass.
+after 2H (P) 2S (P) 3x (P) | 2S (P) 3C (P) 3D (P)
+  P   "Partner's suit: to play"
+
+# ── Opener answers 2NT ───────────────────────────────────────────────
+when asked polish(t)
+  3C  "My second suit is clubs"      shows C>=5
+  3D  "My second suit is diamonds"   shows D>=5
+  3H  "My second suit is spades"     shows S>=5
+      when  t is H
+      artificial
+
+# ── The asker places the contract ────────────────────────────────────
+when answered polish(t)
+  4{t}  "Game in the major"                     shows t>=3
+        priority 1
+  4S    "Game in spades: opener's second suit"  shows S>=3
+        when  t is H, partner.last=3H
+        priority 2
+  3N    "Game in notrump"                        shows hcp>=16
+  5C    "Game in clubs"                          shows C>=3
+        when  partner.last=3C
+  5D    "Game in diamonds"                       shows D>=3
+        when  partner.last=3D
+        priority -1

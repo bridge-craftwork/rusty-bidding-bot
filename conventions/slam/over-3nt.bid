@@ -14,12 +14,14 @@
 module over-3nt "Slam after partner's 3NT"
   needs  base
   skill  partnership_bidding/slam_bidding
+  param  q4n   = slam.quantitative_4nt.play default true
 
 when partner.last=3N, !they.bid, we.trump is none
   6N  "Slam: 34 or more between us (partner at his minimum)"
       shows hcp + partner.hcp.min >= 34
       priority -10
   4N  "Quantitative: 32-33 between us"
+      when  q4n                            # the card plays a quantitative 4NT
       shows hcp + partner.hcp.min >= 32, hcp + partner.hcp.max <= 35
       sets  ask=quant
       priority -10
@@ -64,6 +66,7 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
   4N  "Quantitative: 31-32 points between us"
+      when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
@@ -73,6 +76,7 @@ after 1x (P) 1y (P) 1z (P)
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
   4N  "Quantitative: 31-32 points between us"
+      when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
@@ -82,6 +86,7 @@ after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
   4N  "Quantitative: 31-32 points between us"
+      when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant

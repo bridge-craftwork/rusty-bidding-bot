@@ -1,0 +1,68 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# The minors over a 2NT opening (two-nt-minors.notes.md):
+#
+# - `notrump.two_nt.minor_transfers`: 3♠ relays to 4♣ with a long minor
+#   (BBA's "Minor Suit Transfers after 2NT": one relay for either minor).
+#   Too weak for game opposite opener's range (0-3 HCP opposite 20-21)
+#   responder passes or bids 4♦ to play, five of the minor for game. Slam
+#   hands keep the natural 4♣/4♦ tries (or Gerber). Not in a game force
+#   (2♣–2♦–2NT, Kokish's 2NT): there the weak hands bid 3NT.
+# - `notrump.two_nt.minor_stayman`: 3♠ is Minor Suit Stayman, five-four
+#   or better in the minors and slam interest (game hands bid 3NT). Opener bids 4♣ with four
+#   clubs, 4♦ with four diamonds and not four clubs, 3NT with neither.
+#
+# The 4♣/4♦ natural slam tries of two-nt-responses.bid stay.
+
+module two-nt-minors "Minor-suit transfers and Minor Suit Stayman over 2NT"
+  needs  two-nt-responses
+  skill  bidding_conventions/minor_suit_transfers
+  skill  bidding_conventions/minor_suit_stayman
+  param  mst = notrump.two_nt.minor_transfers default false
+  param  mss = notrump.two_nt.minor_stayman default false
+
+# ── Minor-suit transfer: 3♠ relays to 4♣ ────────────────────────────
+after nt2 when mst, !mss
+  3S  "Relay to 4♣: six or more of a minor, weak"  alert
+      shows C>=6 | D>=6, H<=3, S<=3, hcp<=24-partner.hcp.max
+      when  !(we.forcing = game)
+      sets  forcing=round, ask=minor_relay
+      artificial
+      priority 1                           # ahead of 3NT with shortness
+after nt2 3S (P) when mst, !mss
+  4C  "Completes the relay"  alert
+      artificial
+after nt2 3S (P) 4C (P) when mst, !mss
+  P   "To play: clubs"                     shows C>=6, hcp<=24-partner.hcp.max
+  4D  "To play: diamonds"                  shows D>=6, D>C, hcp<=24-partner.hcp.max
+  5C  "Game: clubs"                        shows C>=6, C>=D, hcp>=25-partner.hcp.max
+      priority -1
+  5D  "Game: diamonds"                     shows D>=6, D>C, hcp>=25-partner.hcp.max
+      priority -1
+after nt2 3S (P) 4C (P) 4D (P) when mst, !mss
+  P   "Partner's diamonds, to play"
+
+# ── Minor Suit Stayman: 3♠ asks for a four-card minor ────────────────
+after nt2 when mss
+  3S  "Minor Suit Stayman: five-four or better in the minors, slam interest"  alert
+      shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=slam_invite
+      sets  forcing=game
+      artificial
+      priority 1
+after nt2 3S (P) when mss
+  4C  "Four or more clubs"                 shows C>=4
+  4D  "Four or more diamonds, not four clubs"  shows D>=4, C<=3
+  3N  "No four-card minor"                 alert  shows C<=3, D<=3
+      artificial
+after nt2 3S (P) 4m (P) when mss
+  6m  "Slam in the minor fit"              shows tp(m)>=33-partner.hcp.min
+  5m  "Game in the minor fit"
+      priority -1
+after nt2 3S (P) 3N (P) when mss
+  6N  "No fit: slam values"                shows points>=32-partner.hcp.min
+  6C  "Slam in my long clubs"              shows C>=6, points>=32-partner.hcp.min
+  6D  "Slam in my long diamonds"           shows D>=6, points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"    shows strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  P   "No fit: 3NT"
+      priority -5

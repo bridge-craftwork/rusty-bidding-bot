@@ -1,0 +1,38 @@
+# Rubensohl (switched on below over 21GF-DEFAULT, whose Lebensohl it
+# replaces; the Precision cards play it).
+# Natural overcalls of 1NT (21GF-DEFAULT plays Cappelletti).
+card    21GF-DEFAULT notrump.rubensohl.over_interference=true competitive.rubensohl_after_double.play=true competitive.vs_1nt_strong.system=other
+dealer  N
+vul     None
+
+# seat hand                 | auction  | expect | why
+# ── After they overcall our 1NT ──
+S 72.84.Q93.KJ9854          | 1N 2D    | 2N     | six clubs, weak: transfer to clubs
+S 72.84.KJ9854.Q93          | 1N 2H    | 3C     | six diamonds, weak: transfer to diamonds
+S K872.A4.Q93.J954          | 1N 2D    | 3C     | 10, four spades: Stayman by transfer to their suit
+S KQ872.A4.93.J954          | 1N 2D    | 3H     | five spades, 10: transfer to spades
+S 72.KQ872.93.QJ54          | 1N 2S    | 3D     | five hearts, 8: transfer to hearts
+S 972.A4.KQ3.J9854          | 1N 2S    | 3S     | 10, no spade stopper: transfer to notrump
+S A72.K4.Q93.J9854          | 1N 2S    | 3N     | 10, spades stopped: 3NT
+S 72.KQ872.93.Q954          | 1N 2D    | 2H     | five hearts, weak: natural at the two level
+# Opener
+N AQ4.KJ3.KT5.Q972          | 1N 2D 2N P   | 3C | completes
+N AQ4.KJ3.KT5.Q972          | 1N 2D 3D P   | 3H | a minimum: completes
+N AQ4.KJ3.AT5.KJ72          | 1N 2D 3D P   | 4H | 18 HCP and three hearts: game
+N AQ54.KJ3.KT5.Q97          | 1N 2D 3C P   | 3S | four spades
+N AQ4.KJ3.KT5.Q972          | 1N 2D 3C P   | 3N | no major, diamonds stopped
+N AQ4.KJ3.KT5.Q972          | 1N 2S 3S P   | 3N | a spade stopper
+# Responder
+S 72.84.Q93.KJ9854          | 1N 2D 2N P 3C P | P | weak: to play
+S KQ872.A4.93.J954          | 1N 2D 3H P 3S P | 3N | five spades, game values: choice
+# ── After partner doubles their weak two ──
+dealer  W
+S 732.84.Q93.KJ985          | 2H X P   | 2N     | weak with clubs: transfer
+S K872.A4.KQ3.J954          | 2H X P   | 3D     | 13, four spades: Stayman by transfer to their suit
+S 72.QJ84.Q93.K985          | 2S X P   | 3D     | four hearts: transfer
+N A4.AJ3.KQ54.Q972          | 2S X P 3D P  | 3H | completes
+N A4.AJ3.KQ54.Q972          | 2S X P 2N P  | 3C | completes
+S 732.84.Q93.KJ985          | 2H X P 2N P 3C P | P | weak: to play
+S 962.J76.K86.AJT5          | 2H X P   | 2N     | 9 HCP and four clubs: transfer, not a penalty pass (self A/B, 2026-10-05)
+S J9873.983.AQJ.T8          | 2H X P   | 2S     | 7 and five spades: 2S; the natural 3S jump is off (3S is Rubensohl)
+N AKQ3.K96.KJT3.KT          | 2H X P 2N P | 3N  | 22 with hearts stopped: game, not the completion (as over Lebensohl's relay)

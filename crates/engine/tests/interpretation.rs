@@ -92,7 +92,9 @@ fn interpretation_tracks_what_each_call_showed() {
     );
     let south = &i.steps[0].knowledge;
     assert_eq!(south.hcp, Range::new(15, 17));
-    assert_eq!(south.balanced, rbb_engine::Tri::True);
+    // 21GF-DEFAULT allows 5-4-2-2 in 1NT ("1NT opening shape 5422"), so
+    // balanced is not certain.
+    assert_eq!(south.balanced, rbb_engine::Tri::Unknown);
     // 2NT shows 8-9 total points (a 7-count with a five-card suit
     // qualifies), so HCP are only capped at 9.
     let north = &i.steps[2].knowledge;
@@ -222,6 +224,18 @@ fn a_round_force_ends_when_the_opponents_act() {
     assert!(must_bid_after("1D 1H 2H Pass"));
     assert!(!must_bid_after("1D 1H 2H 3H"));
     assert!(!must_bid_after("1D 1H 2H X"));
+}
+
+#[test]
+fn an_artificial_pass_is_allowed_in_a_force() {
+    // Jacoby 2NT forces to game, and they bid over our 4NT: a plain pass
+    // is ruled out, but DOPI's pass ("0 or 3 keycards", a rule marked
+    // `artificial`) is an answer, not a pass, and stands.
+    let auction = "1H Pass 2NT Pass 4H Pass 4NT 5C";
+    assert!(must_bid_after(auction));
+    let d = bid("QJ8.QJ953.KQ2.KJ", auction);
+    assert_call(&d, "Pass");
+    assert!(d.explanation.contains("DOPI"), "\n{}", explain(&d));
 }
 
 #[test]

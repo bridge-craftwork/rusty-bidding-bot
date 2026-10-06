@@ -1,0 +1,26 @@
+# Reverse Flannery (21GF-SPECIALS turns on both 2♥ and 2♠).
+card    21GF-SPECIALS
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+# Responder.
+N KJ874.Q963.84.72      | 1C P                | 2H     | five spades, four hearts, 6 HCP
+N KJ874.Q9632.84.7      | 1D P                | 2H     | 5-5 in the majors, 6 HCP
+N KJ874.KQ63.84.72      | 1C P                | 2S     | five spades, four hearts, 9 HCP
+N KJ874.AQ63.K4.72      | 1C P                | 1S     | 13 HCP: too strong
+N KJ874.963.84.Q72      | 1C P                | 1S     | three hearts: 1S
+card    21GF-DEFAULT
+N KJ874.Q963.84.72      | 1C P                | 1S     | Reverse Flannery off
+card    21GF-SPECIALS
+# Opener after 2♥.
+S A3.K74.KQ5.QJ932      | 1C P 2H P           | P      | three hearts, two spades: hearts
+S A93.K7.KQ5.QJ932      | 1C P 2H P           | 2S     | three spades: play 2S
+S A3.K4.KQ5.AKJ932      | 1C P 2H P           | 2N     | 19 HCP: ask
+S AQ3.AK4.K5.QJ932      | 1C P 2H P           | 4S     | 19 HCP with a spade fit: game
+# Responder answers 2NT.
+N KJ874.Q963.84.72      | 1C P 2H P 2N P      | 3C     | 5-4, 6 HCP
+N KJ874.Q963.J4.72      | 1C P 2H P 2N P      | 3D     | 5-4, 8 HCP
+# Opener after 2♠.
+S A3.Q74.KQ5.QJ932      | 1C P 2S P           | P      | 14 HCP, two spades: pass
+S A93.AK4.KQ5.QJ93      | 1C P 2S P           | 4S     | 19 HCP: game

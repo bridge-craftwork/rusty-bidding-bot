@@ -1,0 +1,10 @@
+# SOS redouble (switched on below; no stock card plays it).
+card    21GF-DEFAULT other_conventions.sos_redouble.play=true
+dealer  N
+vul     None
+
+# seat hand                 | auction    | expect | why
+N AQ74.K863.K4.Q95          | 1C X P P   | XX     | three clubs: SOS
+N AQ7.K86.K4.Q9532          | 1C X P P   | P      | five clubs: plays it
+S 9632.J8542.73.84          | 1C X P P XX P | 1H  | longest other suit: hearts, at the one level
+S 9632.J854.743.84          | 1C X P P XX P | 1H  | four-four: the cheaper, hearts

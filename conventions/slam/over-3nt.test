@@ -15,3 +15,10 @@ dealer  S
 vul     NS
 S AKQJ63.32.6.T542      | 1S P 2D P 2S P 3NT P                 | 4S     | six to the AKQJ, hearts a weak doubleton
 S AKQJ63.K3.A6.T54      | 1S P 2D P 2S P 3NT P                 | P      | both doubletons guarded: 3NT
+
+# The quantitative 4NT is the card's (`slam.quantitative_4nt.play`).
+card    Basic-Bridge
+dealer  S
+N AQ4.KJ5.J953.K75      | 1D P 2C P 3N P                       | 4NT    | 14 facing 18-21: 32-35, invite
+card    Basic-Bridge slam.quantitative_4nt.play=false
+N AQ4.KJ5.J953.K75      | 1D P 2C P 3N P                       | P      | no quantitative 4NT on the card: pass

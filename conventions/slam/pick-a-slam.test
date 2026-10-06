@@ -1,0 +1,10 @@
+card    21GF-SPECIALS2
+dealer  N
+
+# seat hand             | auction                  | expect | why
+S KQ5.A4.AKQ932.A4      | 1S P 2D P 3D P           | 5NT    | spades and diamonds both fit, slam values: partner chooses
+N AJ9874.K5.J854.K      | 1S P 2D P 3D P 5NT P     | 6D     | diamonds: the fit partner has shown, nine or more cards
+N KJ987.K5.AJ5.Q64      | 1S P 2D P 3D P 5NT P     | !5NT   | a choice, never a pass
+S KQ5.A4.AKQ932.A4      | 1S P 2D P 3D P 5NT P 6D P | P     | partner has picked
+card    21GF-SPECIALS2 slam.pick_a_slam_5nt.play=false
+S KQ5.A4.AKQ932.A4      | 1S P 2D P 3D P           | !5NT   | off the card

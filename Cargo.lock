@@ -469,7 +469,7 @@ checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
 name = "bidspec"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bridge-card",
  "serde",
@@ -2885,14 +2885,14 @@ dependencies = [
 
 [[package]]
 name = "rbb-assets"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bridge-card",
 ]
 
 [[package]]
 name = "rbb-cli"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bidspec",
  "bridge-card",
@@ -2908,7 +2908,7 @@ dependencies = [
 
 [[package]]
 name = "rbb-compare"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bidspec",
  "bridge-card",
@@ -2924,7 +2924,7 @@ dependencies = [
 
 [[package]]
 name = "rbb-engine"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bidspec",
  "bridge-card",
@@ -2935,7 +2935,7 @@ dependencies = [
 
 [[package]]
 name = "rbb-wasm"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bidspec",
  "bridge-card",
@@ -2951,7 +2951,7 @@ dependencies = [
 
 [[package]]
 name = "rbb-workbench"
-version = "0.4.0"
+version = "0.5.0"
 dependencies = [
  "bridge-types",
  "chrono",

@@ -25,6 +25,9 @@ cards with two of the top three honours, or six with three of the top
 five. 2NT is the balanced positive. After opener describes, the cheapest
 minor is the **second negative**: a bust, less than a jack and a queen.
 
+French 2♦ (`two_level.french_2d.play`, openings/french-2d.bid) caps
+every 2♣ opening at 23 and takes the 3NT opening's 26-27 as well.
+
 Card fields: `two_level.two_clubs.2d_response` (waiting/negative/steps),
 `parrish_bust` for the treatment where 2♥ shows the bust and 2♦ is game
 forcing, `notrump.two_nt.range_min/max`, `notrump.three_nt.range_min/max`.
@@ -72,9 +75,17 @@ twice). BBA opens that 1♠ and so do we.
 
 ## Gaps and open questions
 
-- **The 2♥ bust treatment** (`parrish_bust`) is read but only half
-  written: 2♥ shows the bust, but 2♦ is not yet game forcing on that
-  card, and there is no rule for opener after it.
+- **The 2♥ bust treatment** (`parrish_bust`, written 2026-10-05): 2♥
+  shows 0-2 HCP and lifts the game force (`sets forcing=none`); 2♦ then
+  waits with 3+ and the second negatives are off. Opener rebids
+  naturally: 2♠ forcing one round (responder 3♠ with three, else 2NT),
+  2NT 22-23 and three-level suits passable, 3♥ for hearts, 3NT 24-25.
+  The positive-response blocks skip 2♥ on that card. Kokish's relay
+  (2♣–2♦–2♥) is unaffected: it follows the waiting 2♦. Bust_Over_Strong_2C
+  with the field set: 5 boards, the divergence is our 2♥ where BBA (not
+  playing it) waits. Sources: Larry Cohen, "Two Club Opening"
+  (larryco.com: 2♥ as the immediate double negative); opener's rebids
+  are standard practice, not yet cited.
 - `two_clubs.2d_response = steps` is not modelled.
 - Opener's second call after the second negative.
 - Slam bidding after a positive: covered for opener's raise (responder
@@ -169,6 +180,35 @@ random +40, both halves positive; responder's slams after 2C-2H-3H are
 slam-entry's (slam-entry.notes.md, "Declarer points and support
 points").
 
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only 2h-bust`.
+IMPs by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. 2♥ bust
+(`parrish_bust`), Bust_Over_Strong_2C (5 boards), Game_Forcing_2C and
+Opps_Bid_Over_GF_2C: 174 boards changed; actor contract +180, other side
+doubling +193, double-dummy +171, halves +94/+86 (z +2.6): gains.
+
+## Systems on over opener's notrump (Rick, 2026-10-05)
+
+Rick: 2♣–2♠–2NT and 2♣–2♥(positive)–2NT are systems on, like
+2♣–2♦–2NT and 2♣ (2♠) P (P) 2NT (one-nt.notes.md, "Systems on"). So by
+default responder answers opener's 2NT after a positive with the 2NT
+system (Stayman, transfers: the six-card suit transfers and opener
+declares). The natural rebids probed from BBA (2026-09-28, "After a
+positive and opener's 2NT") are now BBA's treatment, `general.style =
+bba` (strong-openings.test keeps their cases there). Measured on the
+tripwire only: Grand_Slam_Invite 23 now stops in 4♥ after the transfer
+where the natural 3♥ and keycard reached 7♥; slam continuations after a
+transfer over a 22+ 2NT are the jacoby-transfers.bid ones.
+
+**After their overcall and partner's pass** (2♣ (2x) P (P)) opener had
+no rule at all. Added the balanced rebids only: 2NT with 22-23 and a
+stopper (systems on over it), 3NT with 24-25 and a stopper. The suit
+rebids and doubles there are still missing.
+
 ## Sources
 
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
@@ -199,3 +239,6 @@ points").
   BBA: see "Accepted differences from BBA".
 - **Rick's guidance (2026-10-01):** the raise of a positive is the 22+
   hand; `probes/slam-2C-2H-opener.toml` (BBA bare SAYC) for BBA's raise.
+- Rick, 2026-10-05: systems on over 2♣–positive–2NT and over 2♣ (2x) P
+  (P) 2NT; the balanced rebids after interference are standard practice,
+  not yet cited.

@@ -1,0 +1,20 @@
+# Checkback Stayman (21GF-GIB-Bergen plays it, without NMF).
+card    21GF-GIB-Bergen
+dealer  S
+
+# seat hand             | auction                  | expect | why
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P          | 2C     | 11 with five spades: checkback
+S Q76.K42.AQ5.K987      | 1C P 1S P 1NT P 2C P     | 2S     | three spades
+S K7.K42.AJ53.Q987      | 1C P 1S P 1NT P 2C P     | 2D     | two spades, three hearts: 2D
+S K7.KJ42.AJ5.Q987      | 1C P 1S P 1NT P 2C P     | 2H     | four hearts, two spades
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P 2C P 2S P | 3S    | fit, 11: invite
+N KQJ54.A32.A4.J76      | 1C P 1S P 1NT P 2C P 2S P | 4S    | fit, 15: game
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P 2C P 2D P | 2NT   | no fit, 11: invite
+N KQJ54.A32.54.J76      | 1D P 1S P 1NT P          | 2C     | checkback over 1D too
+N 54.KJ54.AQ765.J7      | 1C P 1D P 1NT P          | 2C     | four hearts, 11: checkback
+N 9854.AQ.KQ7.J765      | 1C P 1S P 1NT P          | 2NT    | four spades only: natural 2NT
+N K8754.32.54.J762      | 1D P 1S P 1NT P          | P      | weak: pass
+
+# NMF cards keep NMF: 2C is natural there.
+card    21GF-DEFAULT
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P          | 2D     | NMF, not checkback

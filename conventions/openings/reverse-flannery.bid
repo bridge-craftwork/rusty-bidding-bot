@@ -1,0 +1,111 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Reverse Flannery (Dural Bridge, "Flannery and Reverse Flannery";
+# Practice-Bidding-Scenarios `Reverse_Flannery`): responder's jumps to
+# 2♥ and 2♠ over partner's 1♣/1♦ show five spades and four or five
+# hearts, below a game try:
+#
+#   1m–2♥   5♠ and 4-5♥, 5-8 HCP     (card `two_level.reverse_flannery.two_h`)
+#   1m–2♠   5♠ and 4♥, 9-10 HCP      (card `two_level.reverse_flannery.two_s`)
+#
+# Over 2♥ opener passes or bids 2♠ to play, or asks with 2NT: 3♣ 5-4 and
+# 5-6, 3♦ 5-4 and 7-8, 3♥ 5-5 and 5-6, 3♠ 5-5 and 7-8. Both outrank a
+# jump shift of either kind. See reverse-flannery.notes.md.
+
+module reverse-flannery "Reverse Flannery"
+  needs  responses
+  skill  bidding_conventions/reverse_flannery
+  param  rf_2h = two_level.reverse_flannery.two_h default false
+  param  rf_2s = two_level.reverse_flannery.two_s default false
+
+# ── Responder ────────────────────────────────────────────────────────
+after 1m (P)
+  2H  "Reverse Flannery: five spades, four or five hearts, 5-8 HCP"   alert
+      shows S=5, H=4..5, hcp=5..8
+      when  rf_2h
+      priority 2
+  2S  "Reverse Flannery: five spades, four hearts, 9-10 HCP"   alert
+      shows S=5, H=4, hcp=9..10
+      when  rf_2s
+      priority 2
+
+# ── Opener after 2♥ (5-8) ────────────────────────────────────────────
+after 1m (P) 2H (P) when rf_2h
+  P   "To play in hearts: hearts longer than spades"
+      shows H>S, S<=2, hcp<=15
+  2S  "To play in spades"
+      shows hcp<=15
+      priority -1
+  3m  "Six or more of my minor: to play"
+      shows m>=6, S<=1, H<=2, hcp<=15
+  2N  "Asks: which shape and which half of the range?"   alert
+      shows hcp>=16
+      sets  forcing=round, ask=reverse_flannery
+      artificial
+      priority 1
+  4S  "Game in spades"   shows S>=3, hcp>=18
+      priority 1
+  4H  "Game in hearts"   shows H>=4, H>S, hcp>=18
+      priority 1
+
+when asked reverse_flannery
+  3C  "5-4 in the majors, 5-6 HCP"   shows H=4, hcp<=6   artificial   priority 2
+  3D  "5-4 in the majors, 7-8 HCP"   shows H=4, hcp>=7   artificial   priority 2
+  3H  "5-5 in the majors, 5-6 HCP"   shows H=5, hcp<=6   priority 2
+  3S  "5-5 in the majors, 7-8 HCP"   shows H=5, hcp>=7   priority 2
+
+# Opener places the contract: game with 23 between us counting partner
+# at the floor of his answer, else the cheapest call in the better major.
+when answered reverse_flannery
+  4S  "Game in spades"   shows S>=3, S>=H | partner.H.max<=4, hcp + partner.hcp.min >= 23
+      priority 1
+  4H  "Game in hearts"   shows H>=4, H>S, hcp + partner.hcp.min >= 23
+      priority 1
+  3N  "Game in notrump: no major fit"   shows S<=2, H<=3, hcp + partner.hcp.min >= 23
+  P   "Partner's 3♠: play there"
+      when  partner.last=3S
+  3S  "Sign off in spades"
+      when  !partner.last=3S
+      priority -1
+  4H  "Sign off: hearts are the fit"   shows H>=4, H>S
+      when  partner.last=3S
+      priority -1
+
+# ── Opener after 2♠ (9-10) ───────────────────────────────────────────
+after 1m (P) 2S (P) when rf_2s
+  P   "A minimum with two spades: play 2♠"
+      shows S=2, hcp<=14
+  3S  "Three or more spades, a minimum: invites game"
+      shows S>=3, tp(S)<=14
+  2N  "Short spades, a minimum: no fit"
+      shows S<=1, hcp<=14
+      priority -1
+  3H  "Four hearts, short spades: to play"
+      shows H>=4, S<=1, hcp<=14
+  3m  "Six or more of my minor, short spades: to play"
+      shows m>=6, S<=1, hcp<=14
+  4S  "Game in spades"   shows S>=3, tp(S)>=15
+      priority 1
+  4H  "Game in hearts"   shows H>=4, S<=2, hcp>=15
+      priority 1
+  3N  "Game in notrump: no fit"   shows S<=2, H<=3, hcp>=15
+
+# Responder after opener's invitation: game with the top of the range.
+after 1m (P) 2S (P) 3S (P) when rf_2s
+  4S  "Accepts: 10 HCP"   shows hcp>=10
+      priority 1
+  P   "Declines: 9 HCP"
+      priority 1
+
+# Responder after opener's sign-offs: pass.
+after 1m (P) 2S (P) 3x (P) when rf_2s, x is not S
+  P   "Partner signed off"
+      priority 1
+after 1m (P) 2S (P) 2N (P) when rf_2s
+  P   "Partner's minimum without a fit: 2NT is high enough"   shows hcp<=9
+      priority 1
+  3N  "10 HCP: game"
+      priority 1
+after 1m (P) 2H (P) 3m (P) | 1m (P) 2H (P) 2S (P) when rf_2h
+  P   "Partner signed off"
+      priority 1

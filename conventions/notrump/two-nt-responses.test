@@ -86,3 +86,32 @@ N KJ2.Q5.AJ432.K72      | 2NT P 3C P 3N P         | 6N  | 14 HCP and a five-card
 N K32.Q54.J432.K72      | 2C P 2D P 2NT P         | 3C  | three cards in each major: Puppet
 N 732.Q54.J432.972      | 2C P 2D P 2NT P         | 3C  | 3 HCP opposite 22-23 is game values (BBA: 3C from 3)
 S AQ5.KJ87.AK3.KQ7      | 2C P 2D P 2NT P 3C P    | 3D  | four hearts, no five
+
+# ── Systems on (Rick, 2026-10-05): the same system after every natural
+# balanced 2NT, opener's range from the auction. 2NT 20-21, 2♣–2♦–2NT
+# 22-23, Kokish's 2NT 24-25. After 2♣ the side is forced to game.
+card    21GF-SPECIALS slam.gerber.play=false
+dealer  S
+N KJ54.Q762.93.874      | 2C P 2D P 2NT P              | 3C  | Stayman opposite 22-23
+N 82.QJ9732.K94.J8      | 2C P 2D P 2NT P              | 3D  | transfer opposite 22-23
+N KJ54.Q762.93.874      | 2C P 2D P 2H P 2S P 2NT P    | 3C  | Stayman opposite Kokish's 24-25
+N 82.QJ9732.K94.J8      | 2C P 2D P 2H P 2S P 2NT P    | 3D  | transfer opposite 24-25
+S AK4.KQ3.AQJ4.KQ2      | 2C P 2D P 2H P 2S P 2NT P 3C P | 3D | no four-card major
+S AK4.KQ3.AQJ4.KQ2      | 2C P 2D P 2H P 2S P 2NT P 3D P | 3H | completes the transfer
+N 8432.QJ973.94.82      | 2C P 2D P 2H P 2S P 2NT P 3D P 3H P | 3NT | 1 HCP, five hearts: game is forced, choose it
+# The thresholds move with opener's range.
+N 732.K74.9632.874      | 2NT P                        | P   | 3 HCP opposite 20-21: no game
+N 732.K74.9632.874      | 2C P 2D P 2NT P              | 3NT | 3 opposite 22-23: game
+N K8.K74.Q963.T874      | 2NT P                        | 3NT | 8 opposite 20-21: game only
+N K8.K74.Q963.T874      | 2C P 2D P 2H P 2S P 2NT P    | 4NT | 8 opposite 24-25: 32-33, quantitative
+N K83.QJ4.K872.Q95      | 2NT P                        | 3NT | 11 opposite 20-21: game only
+N K83.QJ4.K872.Q95      | 2C P 2D P 2NT P              | 6NT | 11 opposite 22-23: slam
+# Puppet after Kokish's 2NT.
+card    21GF-MSTandMSS two_level.two_clubs.kokish=true
+N K32.Q54.J432.972      | 2C P 2D P 2H P 2S P 2NT P    | 3C  | 6 HCP, three of each major: Puppet opposite 24-25
+# Over their interference after 2♣ (2♣ (2♠) P (P) 2NT).
+card    21GF-DEFAULT
+S AQ5.KQ7.AKJ4.K76      | 2C 2S P P                    | 2NT | 22 balanced, a spade stopper
+N 82.QJ9732.K94.J8      | 2C 2S P P 2NT P              | 3D  | systems on: transfer
+# Not systems on: a notrump rebid after a natural suit (1♣–1♥–1NT).
+N 82.QJ9732.K94.J8      | 1C P 1H P 1NT P              | 2H  | natural rebid, not a transfer

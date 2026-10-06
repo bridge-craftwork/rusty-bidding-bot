@@ -92,3 +92,13 @@ card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_maj
 S AQJ65.K42.8.AQ82      | 1NT P 3S P 4S P  | 6S     | 16 and a singleton in the fit: slam
 S AT643.AT3.KT52.K      | 1NT P 3S P 4S P  | 6S     | 14 and six controls: slam-entry's direct slam (count 30 + 6), par's choice on the vanilla set (2026-10-01)
 S QT643.QJ3.KT52.K      | 1NT P 3S P 4S P  | P      | 11, two controls: game
+
+# The 1NT shape options (one-nt.bid). 21GF-DEFAULT: "1NT opening shape
+# 5422" on, 4441 off.
+card    21GF-DEFAULT
+dealer  S
+
+S A4.KQ93.K5.QJ862          |          | 1NT    | 5-4-2-2, five clubs, four hearts, both doubletons stopped
+S A4.K5.KQ93.QJ862          |          | 1NT    | five clubs, four diamonds
+S 84.KQ93.A5.AQJ62          |          | 1C     | a small doubleton: open the minor
+S KQ93.A4.K5.QJ862          |          | 1C     | four spades: open the minor

@@ -27,6 +27,9 @@ module vs-preempts "Defence against preempts"
   needs  base
   skill  competitive_bidding/defense_vs_preempts
   skill  competitive_bidding/takeout_doubles
+  skill  competitive_bidding/lebensohl
+  param  leb = competitive.lebensohl_weak_twos.play default false
+  param  rub = competitive.rubensohl_after_double.play default false
 
 # ── Direct seat over their weak two ──────────────────────────────────
 after (2x) when x is not N, rho.hcp.max <= 12
@@ -101,7 +104,7 @@ after (2x) P (P) when x is not N, lho.hcp.max <= 12
       when  x is not S, cheapest_rank(S) <= 13
   jump(H) "Six or more hearts, 15-16"
       shows H>=6, H>S, hcp=15..16
-      when  x is not H, cheapest_rank(H) <= 13
+      when  x is not H, cheapest_rank(H) <= 13, !rub | cheapest_rank(x) > 18
   cheapest(N) "16-18 balanced, {x} stopped"
       shows balanced, hcp=16..18, S<=4, H<=4
       when  stop(x)
@@ -226,14 +229,15 @@ after (4x) X (P) | (4x) P (P) X (P) when x is H | x is S
 after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) | (3x) P (P) X (P) when x is not C
   P   "Penalty: five of their suit with two top honours"
       shows x>=5, quality(x)>=good | top5(x)>=3
-      priority 1
+      priority 2
   P   "Penalty: four of their suit, a flat hand and 10+"
       shows x=4, hcp>=10, stop(x), S<=4, H<=4, D<=4, C<=4
-      priority 1
+      priority 2
   cheapest(x) "Cue bid: 13+, forcing to game"
       alert  artificial
       shows  hcp+length_points>=13
       sets   forcing=game
+      when   !(leb | rub) | cheapest_rank(x) > 18
   4S  "Game: four or more spades, 11+"
       shows S>=4, S>=H, hcp+length_points=11..12
       when  x is not S
@@ -242,37 +246,37 @@ after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) | (3x) P (P) X (P) when x is no
       when  x is not H
   jump(S) "Invitational: five or more spades, 8-10"
       shows S>=5, S>=H, hcp+length_points=8..10
-      when  x is not S, cheapest_rank(S) <= 13     # a jump to three, not to game
+      when  x is not S, cheapest_rank(S) <= 13, !rub | cheapest_rank(x) > 18     # a jump to three, not to game; Rubensohl transfers there
   jump(H) "Invitational: five or more hearts, 8-10"
       shows H>=5, H>S, hcp+length_points=8..10
-      when  x is not H, cheapest_rank(H) <= 13
+      when  x is not H, cheapest_rank(H) <= 13, !rub | cheapest_rank(x) > 18
   cheapest(N) "11-12 with {x} stopped"
       shows hcp+length_points=11..12, S<=3 | x is S, H<=3 | x is H
-      when  stop(x), cheapest_rank(x) < 14
+      when  stop(x), cheapest_rank(x) < 14, !(leb | rub) | cheapest_rank(x) > 18
       sets  ask=nt_invite
   3N  "Game with {x} stopped, no four-card major"
       shows hcp+length_points>=13 | (hcp+length_points>=11, cheapest_rank(x) >= 14), S<=3 | x is S, H<=3 | x is H
-      when  stop(x)
+      when  stop(x), !(leb | rub) | cheapest_rank(x) > 18
   cheapest(S) "Four or more spades, 0-10"
       shows S>=4, S>=H, hcp+length_points<=10
-      when  x is not S
+      when  x is not S, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(S) <= 13
   cheapest(H) "Four or more hearts, 0-10"
       shows H>=4, H>S, hcp+length_points<=10
-      when  x is not H
+      when  x is not H, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(H) <= 13
   cheapest(D) "Four or more diamonds, 0-10, no four-card major"
       shows D>=4, D>=C, hcp+length_points<=10, S<=3 | x is S, H<=3 | x is H
-      when  x is not D
+      when  x is not D, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(D) <= 13
   cheapest(C) "Four or more clubs, 0-10, no four-card major"
       shows C>=4, C>D | x is D, hcp+length_points<=10, S<=3 | x is S, H<=3 | x is H
-      when  x is not C
+      when  x is not C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(C) <= 13
   # Nothing fits: the longest suit that is not theirs, cheapest first.
-  cheapest(S) "Our best suit: spades"   when x is not S, S>=H, S>=D, S>=C
+  cheapest(S) "Our best suit: spades"   when x is not S, S>=H, S>=D, S>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(S) <= 13
       priority -5
-  cheapest(H) "Our best suit: hearts"   when x is not H, H>=D, H>=C
+  cheapest(H) "Our best suit: hearts"   when x is not H, H>=D, H>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(H) <= 13
       priority -5
-  cheapest(D) "Our best suit: diamonds" when x is not D, D>=C
+  cheapest(D) "Our best suit: diamonds" when x is not D, D>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(D) <= 13
       priority -6
-  cheapest(C) "Our best suit: clubs"    when x is not C
+  cheapest(C) "Our best suit: clubs"    when x is not C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(C) <= 13
       priority -7
 
 # ── The doubler's rebid ──────────────────────────────────────────────
@@ -290,10 +294,120 @@ after (2x) X (P) 2y (P) | (2x) X (P) 3y (P) | (3x) X (P) 3y (P) | (3x) X (P) 4y 
       when  x is not S, y is not S
   cheapest(H) "17+ and five or more hearts"          shows H>=5, S<=4, hcp>=17
       when  x is not H, y is not H
-after (2x) X (P) 2N (P) when x is not C
+after (2x) X (P) 2N (P) when x is not C, !leb, !rub
   3N  "Accepts the invitation: 14+"                  shows hcp>=14
   P   "Declines"                                     shows hcp<=13
       priority -5
+
+# ── Lebensohl after our double of their weak two ─────────────────────
+# `competitive.lebensohl_weak_twos.play` (the 21GF cards). Bridge Bum,
+# "Lebensohl over weak two bids"; Larry Cohen, "Lebensohl". Advancer:
+#
+# - a new suit at the two level: natural, weak (the rules above);
+# - 2NT: a relay to 3C, with a weak hand that must bid at the three
+#   level (pass or correct), or game values with their suit stopped
+#   ("slow shows": then the cue bid or 3NT);
+# - a new suit at the three level directly: constructive, 8-11;
+# - the cue bid directly: game values, four of an unbid major, no stopper;
+# - 3NT directly: game values, no stopper, no four-card major;
+# - jumps to three of a major (invitational) and to game: as before.
+#
+# The natural replies above step aside at the three level when this is
+# on (their `!leb` clauses); over a three-level preempt nothing changes.
+# Tried 2026-09-27 and reverted on par; built again from the card
+# 2026-10-05 (vs-preempts.notes.md).
+after (2x) X (P) | (2x) P (P) X (P) when x is not C, leb, !rub
+  2N  "Lebensohl: relay to 3C (weak, to play at three; or game values with {x} stopped)"
+      alert  artificial
+      shows  (hcp<=8, C>=4 | (D>=4, x is H | x is S) | (H>=4, x is S), S<=3 | x is S | cheapest_rank(S) >= 15, H<=3 | x is H | cheapest_rank(H) >= 15) | (hcp>=13, stop(x), S<=4 | x is S, H<=4 | x is H)
+      sets   ask=leb_relay
+      priority 1
+  cheapest(x) "Cue bid: game values, four of an unbid major, no stopper in {x}"
+      alert  artificial
+      shows  hcp>=13, (S=4, x is not S) | (H=4, x is not H), S<=4 | x is S, H<=4 | x is H
+      when   !stop(x)
+      sets   forcing=game, ask=leb_cue
+      priority 1
+  3N  "Game values, no four-card major, no stopper in {x}"
+      shows hcp>=13, S<=3 | x is S, H<=3 | x is H
+      when  !stop(x)
+      priority 1
+  cheapest(S) "Constructive: four or more spades, 9-12"
+      shows S>=4, S>=H, hcp=9..12
+      when  x is not S, cheapest_rank(S) >= 15
+      priority 1
+  cheapest(H) "Constructive: four or more hearts, 9-12"
+      shows H>=4, H>S, hcp=9..12
+      when  x is not H, cheapest_rank(H) >= 15
+      priority 1
+  cheapest(D) "Constructive: four or more diamonds, 9-12"
+      shows D>=4, D>=C, hcp=9..12, S<=3 | x is S, H<=3 | x is H
+      when  x is not D, cheapest_rank(D) >= 15
+      priority 1
+  cheapest(C) "Constructive: four or more clubs, 9-12"
+      shows C>=4, C>D | x is D, hcp=9..12, S<=3 | x is S, H<=3 | x is H
+      when  x is not C, cheapest_rank(C) >= 15
+      priority 1
+  # A five-card unbid major and game values: bid the game (BBA too).
+  4S  "Game: five or more spades"
+      shows S>=5, S>=H, hcp+length_points>=11
+      when  x is not S
+      priority 1
+  4H  "Game: five or more hearts"
+      shows H>=5, H>S, hcp+length_points>=11
+      when  x is not H
+      priority 1
+  # Five of their suit and a weak hand: nowhere to go, pass (BBA).
+  P   "Five or more {x}: nothing to say"
+      shows x>=5, hcp<=8
+      priority 1
+  # Nothing else fits: the relay, then the best of what is left.
+  2N  "Lebensohl: relay to 3C"
+      alert  artificial
+      sets   ask=leb_relay
+      priority -8
+
+# The doubler: 3C as asked; with 19+ and their suit stopped, 3NT.
+after (2x) X (P) 2N (P) | (2x) P (P) X (P) 2N (P) when x is not C, leb, !rub
+  3N  "19+ with {x} stopped: no clubs partscore"    shows hcp>=19, stop(x)
+      priority 2
+  3C  "Lebensohl: as asked"
+      alert  artificial
+      priority 1
+
+# Advancer after the relay.
+after (2x) X (P) 2N (P) 3C (P) | (2x) P (P) X (P) 2N (P) 3C (P) when x is not C, leb, !rub
+  P   "Weak, clubs"                                  shows C>=4, hcp<=8
+      priority 1
+  cheapest(D) "Weak, diamonds: to play"              shows D>=4, D>C, hcp<=8
+      when  x is not D
+      priority 1
+  cheapest(H) "Weak, hearts: to play"                shows H>=4, H>D, H>C, hcp<=8
+      when  x is S
+      priority 1
+  cheapest(x) "Slow cue: game values, four of an unbid major, {x} stopped"
+      alert  artificial
+      shows  hcp>=13, stop(x), (S=4, x is not S) | (H=4, x is not H)
+      sets   forcing=game, ask=leb_cue
+      priority 1
+  3N  "Slow 3NT: game values with {x} stopped, no four-card major"
+      shows hcp>=13, stop(x)
+      priority 1
+  P   "Weak: clubs will do"                          priority -10
+
+# The doubler answers either cue bid: an unbid four-card major, else
+# 3NT, else his longer minor.
+after (2x) X (P) 3x (P) | (2x) P (P) X (P) 3x (P) | (2x) X (P) 2N (P) 3C (P) 3x (P) | (2x) P (P) X (P) 2N (P) 3C (P) 3x (P) when x is not C, leb, !rub
+  cheapest(H) "Four hearts"                          shows H>=4
+      when  x is not H
+      priority 2
+  cheapest(S) "Four spades"                          shows S>=4
+      when  x is not S
+      priority 2
+  3N  "No four-card major"                           priority 1
+  cheapest(D) "No major, no stopper: diamonds"       shows D>=4, D>=C
+      when  x is not D
+      priority -1
 
 # ── Advancer after our overcall of their weak two ────────────────────
 after (2x) 2y (P) | (2x) 3y (P) | (3x) 3y (P) | (3x) 4y (P) | (2x) P (P) 2y (P) | (2x) P (P) 3y (P) when y is not x, x is not C

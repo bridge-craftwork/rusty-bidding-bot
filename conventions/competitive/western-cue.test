@@ -1,0 +1,20 @@
+card    21GF-DEFAULT slam.western_cuebid.play=true
+dealer  S
+
+# seat hand             | auction                              | expect | why
+# Opener: game values, no stopper in their suit, no major fit.
+S 72.AK4.AKJ64.Q93      | 1D 1S 2C P                           | 2S     | 18, no spade stopper: the cue asks for one
+S K72.AKJ84.A6.932      | 1H 2C 2D P                           | 3C     | three of their suit: a club stopper?
+S Q72.AK4.AKJ64.Q9      | 1D 1S 2C P                           | !2S    | a spade stopper of my own: no need to ask
+S 72.AK4.AKJ64.Q93      | 1D 1S 2C 2S                          | 3S     | they raised: three of their suit asks
+# Responder answers.
+N KJ5.Q4.K5.AJ8762      | 1D 1S 2C P 2S P                      | 3NT    | a stopper: 3NT
+N J65.Q4.K5.AKJ876      | 1D 1S 2C P 2S P                      | 3C     | no stopper: the long suit
+N 65.Q42.KT52.AKJ8      | 1D 1S 2C P 2S P                      | 3D     | no stopper: four-card support for partner's diamonds
+# The asker.
+S 72.AK4.AKJ64.Q93      | 1D 1S 2C P 2S P 3NT P                | P      | partner has the stopper
+S 72.AK4.AKJ64.Q93      | 1D 1S 2C P 2S P 3C P                 | 5C     | no stopper: game in the minor fit
+
+# Off the card: no Western cue.
+card    21GF-DEFAULT
+S 72.AK4.AKJ64.Q93      | 1D 1S 2C P                           | !2S    | the cue is not a stopper ask here

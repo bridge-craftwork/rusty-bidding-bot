@@ -1,0 +1,25 @@
+# Weak and mixed jump raises 1M-3M. No PBS card plays them alone (the
+# BBA cards that set "Mixed raise" also set "1M-3M inviting"), so the
+# card is changed here. Hands made for the rule.
+card    21GF-DEFAULT major_openings.jump_raise.inv=false major_openings.jump_raise.weak=true
+dealer  S
+
+# seat hand             | auction              | expect | why
+# ── Weak jump raise ───────────────────────────────────────────────────
+N 9852.Q3.J974.T52      | 1S P                 | 3S     | four spades, 3 HCP: preemptive
+N K852.Q3.A974.T52      | 1S P                 | 2S     | 9 HCP: the simple raise
+S AQJ74.K5.K83.Q42      | 1S P 3S P            | P      | no game opposite a preemptive raise
+S AKJ74.A5.K83.A42      | 1S P 3S P            | 4S     | 21 support points: game opposite 3-6
+N 9852.Q3.J974.T52      | 1S 2D                | P      | over an overcall the weak jump raise is off (it is natural)
+
+# ── Mixed raise ───────────────────────────────────────────────────────
+card    21GF-DEFAULT major_openings.jump_raise.inv=false major_openings.jump_raise.mixed=true
+N K852.Q3.A974.T52      | 1S P                 | 3S     | four spades, 9 HCP and a doubleton: mixed raise
+N 852.Q63.A974.K52      | 1S P                 | 2S     | three spades: the simple raise
+N T542.K852.A9.Q74      | 1H P                 | 3H     | four hearts, 9 HCP: mixed raise ahead of 1S
+S AQJ74.K5.983.Q42      | 1S P 3S P            | P      | 13 support points: no game opposite 7-10
+S AQJ74.K5.K83.Q42      | 1S P 3S P            | 4S     | 16 support points: game opposite 7-10
+
+# ── With the invitational raise too (BBA's 21GF-GIB), 3M stays the limit raise
+card    21GF-GIB
+N K852.Q3.Q974.T52      | 1S P                 | 2S     | the mixed raise is off: 7 HCP raises to 2S

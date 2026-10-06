@@ -1,0 +1,24 @@
+# XYZ: 21GF-DEFAULT with NMF swapped for XYZ.
+card    21GF-DEFAULT other_conventions.new_minor_forcing.play=false other_conventions.xyz=true
+dealer  S
+
+# seat hand             | auction                   | expect | why
+# 1x-1y-1z: the relay, the game force, the clubs relay.
+N KQ54.A9832.54.J7      | 1C P 1H P 1S P            | 2C     | 11, four spades too: invite through the relay
+S A76.K4.Q5.AQ9874      | 1C P 1H P 1S P 2C P       | 2D     | forced relay
+N KQ5.A9832.54.J76      | 1C P 1H P 1S P 2C P 2D P  | 2H     | invitational, five hearts
+N K5.A9832.54.KJ76      | 1C P 1D P 1S P 2C P 2D P  | 2NT    | invitational, balanced
+N KQ5.AK832.54.J76      | 1C P 1H P 1S P            | 2D     | 15: game force
+S A762.K42.5.AQ987      | 1C P 1H P 1S P 2D P       | 2H     | three hearts
+S A762.K4.QJ53.AQ9      | 1D P 1H P 1S P 2D P       | 2NT    | no fit to show
+N 54.K832.QJ98763.-     | 1D P 1H P 1S P            | 2C     | weak with diamonds: relay, then pass
+N 54.K832.QJ98763.-     | 1D P 1H P 1S P 2C P 2D P  | P      | to play in 2D
+N 5.K832.4.QJ98763      | 1D P 1H P 1S P            | 2NT    | weak with clubs: relay to 3C
+N 5.K832.4.QJ98763      | 1D P 1H P 1S P 2N P 3C P  | P      | to play in 3C
+N Q4.K832.J54.9763      | 1D P 1H P 1S P            | 1NT    | weak, balanced: natural 1NT
+N 5.KJ832.Q54.9763      | 1C P 1H P 1S P            | 1NT    | weak, no fit: natural, as without XYZ
+# 1x-1y-1NT: two-way NMF.
+N KQJ54.A32.54.J76      | 1C P 1S P 1NT P           | 2C     | XYZ after 1NT: the relay
+# The fourth suit after a two-level rebid stays natural (or FSF).
+card    21GF-DEFAULT other_conventions.new_minor_forcing.play=false
+N KQ54.A9832.54.J7      | 1C P 1H P 1S P            | 3S     | without XYZ: the natural invitational raise

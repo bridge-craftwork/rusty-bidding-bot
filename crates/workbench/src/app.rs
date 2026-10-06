@@ -44,7 +44,7 @@ fn case_file_hash(file: &Path) -> u64 {
 }
 
 /// Run the `.test` files whose text or module changed since the last run,
-/// or that failed then, spread over the cores; keep the rest from `cache`.
+/// or that failed then, spread over the cores we may use; keep the rest from `cache`.
 /// Rick, 2026-09-27: running all ~1,000 cases before every comparison
 /// took 16 s on one thread. A change in one module can still break
 /// another module's cases, which this misses until that file is touched
@@ -64,21 +64,8 @@ fn run_cases(rules: &Path, cards: &Path, cache: &CaseCache) -> CaseResults {
             .map(|(f, _)| f.clone())
             .collect()
     };
-    let threads = std::thread::available_parallelism().map_or(4, |n| n.get());
-    let chunks: Vec<&[PathBuf]> = stale.chunks(stale.len().div_ceil(threads).max(1)).collect();
-    let results: Vec<CaseResults> = std::thread::scope(|scope| {
-        let handles: Vec<_> = chunks
-            .iter()
-            .map(|chunk| scope.spawn(move || rbb_engine::cases::run(chunk, rules, cards)))
-            .collect();
-        handles
-            .into_iter()
-            .map(|h| {
-                h.join()
-                    .unwrap_or_else(|_| Err(vec!["a case run panicked".into()]))
-            })
-            .collect()
-    });
+    // `cases::run` spreads the files over the cores itself (`cpu_budget`).
+    let results: Vec<CaseResults> = vec![rbb_engine::cases::run(&stale, rules, cards)];
     let mut errors = Vec::new();
     let mut fresh: HashMap<PathBuf, Vec<rbb_engine::cases::Outcome>> =
         stale.iter().map(|f| (f.clone(), Vec::new())).collect();

@@ -1,0 +1,48 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# XYZ (Robert S. Todd, Advancing in Bridge #587; convention-card
+# bidding_conventions/xyz): after three one-level bids, 1x-1y-1z,
+# responder's 2♣ relays to 2♦ (every invitational hand starts here, and a
+# weak hand with diamonds passes 2♦), 2♦ is an artificial game force, and
+# 2NT relays to 3♣ (weak with clubs). Other calls are natural and weak or
+# as before (responder-rebids.bid). After 1x-1y-1NT the same structure is
+# two-way New Minor Forcing, which two-way-nmf.bid plays when this card
+# field is on. The relay and game-force answers are two-way-nmf.bid's
+# (`xy_relay`, `xy_clubs`, `xy_gf`). See xyz.notes.md.
+
+module xyz "XYZ: 2♣ relay and 2♦ game force after three one-level bids"
+  card   other_conventions.xyz
+  needs  two-way-nmf
+  skill  bidding_conventions/xyz
+
+after 1x (P) 1y (P) 1z (P) when !tw(x)
+  2C  "XYZ: relay to 2♦ (invitational, or weak with diamonds)"   alert
+      shows points=11..12 | (points<=10, D>=6 | (x is D, D>=4, z<=2))
+      sets  forcing=round, ask=xy_relay
+      artificial
+      priority 2
+  2D  "XYZ: artificial game force"   alert
+      shows points>=13
+      sets  forcing=game, ask=xy_gf
+      artificial
+      priority 2
+  2N  "XYZ: relay to 3♣ (weak with clubs)"   alert
+      shows points<=10, C>=6 | (x is C, C>=5, z<=2)
+      sets  forcing=round, ask=xy_clubs
+      artificial
+      priority 2
+
+# ── After the 2♦ relay: weak with diamonds passes, every other call invites
+after 1x (P) 1y (P) 1z (P) 2C (P) 2D (P) when !tw(x)
+  P   "To play in 2♦"                      shows points<=10
+  2y  "Invitational: five {y}"             shows y=5, points=11..12   sets ask=invite(y)
+      when  y is H | y is S
+  3y  "Invitational: six {y}"              shows y>=6, points=11..12   sets ask=invite(y)
+  3z  "Invitational raise: four {z}"       shows z>=4, tp(z)=11..12   sets ask=invite(z)
+  2N  "Invitational, balanced"             shows points=11..12, z<=3   sets ask=nt_invite
+      priority -1
+  3x  "Invitational: four {x}"             shows x>=4, points=11..12, z<=3   sets ask=invite(x)
+      when  x is C | x is D
+      priority -2
+after 1x (P) 1y (P) 1z (P) 2N (P) 3C (P) when !tw(x)
+  P   "To play in 3♣"                      shows C>=4

@@ -163,6 +163,61 @@ force game after 1x (P) 1y (P) 2N (P) when !call = P, !(wolff, call = 3C)
 
 Engine 0.4.0.
 
+**Named auction patterns.** `define auction <name> = <patterns>` at the
+left margin names a set of `after` alternatives that any module may
+start an alternative with. More alternatives may follow on indented
+lines, and each line may end with its own `when`, which holds for the
+alternatives on that line (as on an `after` line):
+
+```
+define auction nt1_undoubled = systems 1N (P)
+define auction nt1 = nt1_undoubled
+  systems 1N (X)   when lho.opened | rho.opened
+
+after nt1 when !they.bid | systems_on          # the 1NT system's entry
+  2C  "Stayman" ...
+after nt1 2C (P)                                # each alternative, then 2C (P)
+  2D  "No four-card major" ...
+```
+
+A name stands only at the start of an alternative, and the calls after
+it continue every one of its alternatives (`nt2 3C (P) 3D (P)`): the
+engine writes the alternatives out, in the definition's order, when the
+rules load, so bindings work as for any `after A | B` (the first
+alternative that matches supplies them, and its `when` sees them). A
+name uses a-z, 0-9 and `_`, starts with a letter and has two characters
+or more. A definition may use another (`nt1` above); the names are
+shared across the rule set whether or not their module is active, each
+defined once, never in terms of itself; a line's `when` is public (no
+terms of the hand) and reads its own module's card parameters, as a
+`define` does. `rbb bid check` reports an unknown name, a cycle and a
+second definition. The reference prints `define auction` lines and the
+rules' `after` as written. Engine 0.5.0.
+
+**Systems on.** `systems on when <condition>` at the left margin says
+where our notrump system comes on: a natural notrump bid (the rule that
+explains it is not `artificial` and does not `alert` it; an `announce` is
+fine) made where the condition holds marks that
+call as our side's system point. The condition is judged once the
+call's meaning is known (`shown.balanced` is what it has shown), with
+`call` the call being made and the auction as it stood before it; it is
+public. An `after` alternative reaches the system with `systems 1N` /
+`systems 2N` first: our notrump at that level where the system came on,
+whatever the auction before it. So the system is written once against
+one notion, not a list of auctions (one-nt.bid):
+
+```
+systems on when call = 1N | call = 2N, maybe shown.balanced, shown.second_longest.min <= 4
+  !me.named(C), !me.named(D), !me.named(H), !me.named(S), !me.named(N)
+  ...
+define auction nt2 = systems 2N (P)
+after nt2 3D (P)                    # opener completes the transfer, after
+  3H  "Completes transfer"          # 2NT, 2♣–2♦–2NT, Kokish's 2NT, ...
+```
+
+`we.systems_on` is true while answering partner's notrump at the system
+point (so another module can stand aside there). Engine 0.5.0.
+
 ## 4. Contexts
 
 A **context** says when a group of rules applies. Rules are indented under
@@ -193,6 +248,12 @@ after (1x) X (P)               # they opened, partner doubled, RHO passed
 
   Rules under such a context must not rely on a variable that only one
   alternative binds, unless a `when` rules the others out.
+- **Named patterns** (`define auction`, section 3) stand for a set of
+  alternatives at the start of one: `after nt2`, `after nt2 3C (P)`.
+  `systems 2N` at the start of an alternative is our 2NT where our
+  notrump system came on (`systems on`, section 3), any auction before
+  it; the 1NT and 2NT systems are written `after nt1 ...` /
+  `after nt2 ...` that way, and reach every auction where systems are on.
 - Leading passes are skipped unless written. Use the state `seat` or
   `passed_hand` when position matters.
 - `(*)` means any opponent call. Suit variables: `M` = a major, `m` = a minor,
@@ -222,7 +283,8 @@ A context can combine both: `after 1N (P) when !passed_hand`.
     prefer   <expression>     # score used when ranking (section 7)
     priority <n>
     replaces <module>[.<rule-id>]
-    artificial                # not a place to play: passing it out is a mistake
+    artificial                # not a place to play: passing it out is a mistake; on a pass, a
+                              # pass with a conventional meaning (DOPI), allowed in a force
     as       <rule-id>
 ```
 
@@ -532,7 +594,10 @@ These are enforced by `bidspec`, with file:line:column errors:
 - An `after` pattern must alternate our calls with (their calls), and must
   end with an opponent's call: the one just before my turn. Several
   alternatives may be written on one `after` line, separated by `|`; each is
-  checked on its own and any match is enough.
+  checked on its own and any match is enough. An alternative may start
+  with a named pattern (`nt2`, which ends with their call, so ours comes
+  next) or with `systems 1N` / `systems 2N` (ours, so theirs comes next);
+  neither may stand anywhere else.
 - `shows`, `when` and `denies` may be repeated, on the rule line or on
   continuation lines; the repeats are combined with AND. `prefer`,
   `priority`, `replaces`, `as` and `alert`/`announce` may appear once.

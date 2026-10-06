@@ -1,0 +1,63 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Spiral 2NT: after opener raises responder's major to two (1X-1M-2M),
+# responder's 2NT asks for the length of the raise and its strength, so
+# responder can judge game, or 3NT opposite three trumps:
+#
+#   3♣  three trumps, minimum      3♥  four trumps, minimum
+#   3♦  three trumps, maximum      3♠  four trumps, maximum
+#   3NT 4-3-3-3 with four trumps, maximum
+#
+# Card field `slam.spiral_cuebids.play`. Opener raises with four in our
+# base system, so the three-card answers come from a system that raises
+# with three. Notes: spiral.notes.md.
+
+module spiral "Spiral 2NT: how many trumps, minimum or maximum, after 1X-1M-2M"
+  needs  base
+  skill  bidding_conventions/spiral
+  param  spiral = slam.spiral_cuebids.play default false
+
+# A maximum for the single raise (12-15 HCP opener): 14 or more.
+define sp_max = hcp >= 14
+
+# ── The ask ───────────────────────────────────────────────────────────
+#
+# The invitational hand that would raise to three (responder-rebids.bid:
+# 11-12 support points) asks instead: game opposite a maximum. Priority
+# 1 over the natural raise.
+
+after 1x (P) 1M (P) 2M (P) when spiral, x is not M
+  2N  "Spiral: how many {M}, minimum or maximum?"  alert
+      shows M>=4, tp(M)=11..12
+      sets  ask=spiral(M)
+      artificial
+      priority 1
+
+# ── Opener's answer ───────────────────────────────────────────────────
+
+when spiral, asked spiral(M), rho.last = P
+  3C  "Spiral: three {M}, minimum"            shows M=3, !sp_max   artificial
+  3D  "Spiral: three {M}, maximum"            shows M=3, sp_max    artificial
+  3H  "Spiral: four {M}, minimum"             shows M>=4, !sp_max  artificial
+  3S  "Spiral: four {M}, maximum"             shows M>=4, sp_max   artificial
+  3N  "Spiral: 4-3-3-3 with four {M}, maximum"  shows M=4, shape 4333, sp_max   artificial
+
+# ── Responder places the contract ─────────────────────────────────────
+#
+# Game opposite a maximum: 3NT with four of the major facing three and a
+# balanced hand, else four of the major; a pass of 3NT when balanced.
+# Opposite a minimum, three of the major.
+
+when spiral, answered spiral(M)
+  4M  "Game opposite a maximum"
+      when  partner.last = 3D | partner.last = 3S | partner.last = 3N
+  3N  "Game in notrump: a 4-3 fit, balanced"
+      when  partner.last = 3D, M=4, balanced
+      priority 1
+  P   "Pass 3NT: balanced"
+      when  partner.last = 3N, M=4, balanced   # with five, the 9-card fit
+      priority 1
+  3M  "Sign off opposite a minimum"
+      when  partner.last = 3C | (partner.last = 3H, M is S)
+  P   "Sign off opposite a minimum: partner's 3♥ is our suit"
+      when  partner.last = 3H, M is H

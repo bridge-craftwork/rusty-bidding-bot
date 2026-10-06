@@ -73,6 +73,12 @@ suit our side bid, agreed by the ask (1H-1S-2C-4NT on the Basic-Bridge
 card: aces, clubs agreed; it was quantitative); a major agreed after a
 minor was set replaces it. The rules mirror rkcb-1430.bid's.
 
+## The 5NT king ask (2026-10-05)
+
+With `slam.king_ask.five_nt`, 5NT after the answer promises all four
+aces and asks for kings by number: 6♣ none up to 6NT four. Seven with
+every king between us, or three and 33 HCP on partner's floor.
+
 ## Sources
 
 - **The convention:** standard (plain) Blackwood with the usual ace
@@ -89,3 +95,6 @@ minor was set replaces it. The rules mirror rkcb-1430.bid's.
 - **Where we differ:** no queen ask after 4NT-5♣, where BBA asks for the
   trump queen with the next step (Gaps).
 - **Rick's rulings, 2026-10-03:** the keycard suit, as rkcb-1430.notes.md.
+- **The king ask, 2026-10-05:** ACBL SAYC booklet (5NT asks for kings,
+  promising all the aces; answers by number). Grand thresholds ours,
+  standard practice not yet cited.

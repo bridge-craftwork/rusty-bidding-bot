@@ -1,0 +1,29 @@
+# French 2♦ (the default card with French 2D on).
+card    21GF-DEFAULT two_level.french_2d.play=true
+dealer  S
+vul     None
+
+# seat hand             | auction             | expect | why
+S AK4.AQ3.AKJ4.K54      |                     | 2D     | 24 balanced: French 2D (probe)
+S AK4.AQ3.AKJ4.KQ4      |                     | 2D     | 26 balanced: 2D, not 3NT (BBA)
+S AKQJ76.AKQ.AK.32      |                     | 2D     | 25 with six spades
+S AKJ4.AKQ2.AKQ4.4      |                     | 2D     | 26 4-4-4-1
+S AK4.KQ3.AJ54.KQ4      |                     | 2C     | 22 balanced: still 2C
+S AKQJ76.AK3.AQ.32      |                     | 2C     | 23 unbalanced: 2C
+S AK4.AQ3.AKJ4.Q54      |                     | 2C     | 23 balanced: 2C
+S 32.43.KQJ976.K54      |                     | P      | six diamonds: no weak 2D
+S KQJ976.32.54.J43      |                     | 2S     | the weak twos in a major stay
+# Responder: aces.
+N 8632.854.9732.65      | 2D P                | 2H     | no ace, 0-7
+N Q632.K54.Q732.K5      | 2D P                | 2N     | no ace, 9
+N A632.854.9732.65      | 2D P                | 2S     | one major ace
+N 632.A854.9732.65      | 2D P                | 2S     | one major ace
+N 632.854.9732.A65      | 2D P                | 3C     | the club ace
+N 632.854.A732.965      | 2D P                | 3D     | the diamond ace
+N A632.A54.9732.65      | 2D P                | 3N     | two aces
+N 63.KQ654.Q732.65      | 2D P                | 3H     | no ace, 7, five hearts
+N 63.854.KJ8652.95      | 2D P                | 2H     | no ace, six diamonds: 2H (BBA)
+# Opener: natural.
+S AKQJ76.AKQ.AK.32      | 2D P 2H P           | 2S     | five or more spades
+S AK4.AQ3.AKJ4.KQ4      | 2D P 2H P           | 2N     | balanced
+S AKQJ76.AKQ.AK.32      | 2D P 3H P           | 4H     | three hearts: agrees

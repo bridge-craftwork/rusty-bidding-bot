@@ -217,3 +217,122 @@ fn modules_name_their_teaching_skills() {
     let e = errors("module demo \"Demo\"\n\nwhen hcp / 2 >= 4\n");
     assert!(e[0].starts_with("t.bid:3:"), "{e:?}");
 }
+
+#[test]
+fn named_auction_patterns_parse() {
+    let src = "\
+module demo \"Demo\"
+  param kokish = two_level.two_clubs.kokish default false
+
+define auction nt2 = 2N (P) | 2C (P) 2D (P) 2N (P)
+  2C (P) 2D (P) 2H (P) 2S (P) 2N (P)   when kokish
+define auction nt2_x = nt2 | (1x) 2N (P)
+
+after nt2
+  3C  \"Stayman\"
+after nt2 3C (P) 3D (P) | 1N (P) 2C (P) 2D (P) when kokish
+  P   \"x\"
+";
+    let m = bidspec::compile(src, "t.bid", vocab().registry()).unwrap();
+    assert_eq!(m.auctions.len(), 2);
+    let nt2 = &m.auctions[0];
+    assert_eq!(nt2.name, "nt2");
+    assert_eq!(nt2.alts.len(), 3);
+    assert_eq!(
+        nt2.alts.iter().map(|a| a.line).collect::<Vec<_>>(),
+        [4, 4, 5]
+    );
+    assert!(nt2.alts[0].when.is_none() && nt2.alts[1].when.is_none());
+    assert_eq!(nt2.alts[2].when.as_ref().unwrap().to_string(), "kokish");
+    assert!(matches!(
+        &m.auctions[1].alts[0].pattern[0].call,
+        CallSpec::Named { name } if name == "nt2"
+    ));
+    let after = m.contexts[1].after.as_ref().unwrap();
+    assert_eq!(after.len(), 2);
+    assert_eq!(after[0].len(), 5);
+    assert!(matches!(&after[0][0].call, CallSpec::Named { name } if name == "nt2"));
+    assert!(!after[0][1].theirs && after[0][2].theirs);
+    // The IR round-trips.
+    let json = serde_json::to_string(&m).unwrap();
+    let back: bidspec::Module = serde_json::from_str(&json).unwrap();
+    assert_eq!(back, m);
+    // The reference prints what was written.
+    let r = bidspec::reference::entries(std::slice::from_ref(&m));
+    assert_eq!(r[0].rules[0].after, ["nt2"]);
+    assert!(
+        r[0].defines.iter().any(|d| d
+            == "auction nt2 = 2N (P) | 2C (P) 2D (P) 2N (P) | \
+                [2C (P) 2D (P) 2H (P) 2S (P) 2N (P) when kokish]"),
+        "{:?}",
+        r[0].defines
+    );
+}
+
+#[test]
+fn systems_on_parses() {
+    let src = "\
+module demo \"Demo\"
+
+systems on when call = 1N | call = 2N, maybe shown.balanced
+  !me.named(C)
+define auction nt2 = systems 2N (P)
+after systems 1N (P) 2C (P) | nt2
+  P   \"x\"
+";
+    let m = bidspec::compile(src, "t.bid", vocab().registry()).unwrap();
+    assert_eq!(m.systems.len(), 1);
+    assert_eq!(m.systems[0].line, 3);
+    assert!(matches!(&m.systems[0].when, Expr::And { all } if all.len() == 2));
+    assert!(matches!(
+        m.auctions[0].alts[0].pattern[0].call,
+        CallSpec::Systems { level: 2 }
+    ));
+    let after = m.contexts[0].after.as_ref().unwrap();
+    assert!(matches!(after[0][0].call, CallSpec::Systems { level: 1 }));
+    assert!(after[0][1].theirs && !after[0][2].theirs);
+    let r = bidspec::reference::entries(std::slice::from_ref(&m));
+    assert_eq!(r[0].rules[0].after, ["systems 1N (P) 2C (P)", "nt2"]);
+    assert!(
+        r[0].forces[0].starts_with("systems on when "),
+        "{:?}",
+        r[0].forces
+    );
+    let json = serde_json::to_string(&m).unwrap();
+    let back: bidspec::Module = serde_json::from_str(&json).unwrap();
+    assert_eq!(back, m);
+
+    let head = "module demo \"Demo\"\n";
+    let e = errors(&format!("{head}after systems 2N\n  P \"x\"\n"));
+    assert!(e[0].contains("RHO"), "{e:?}");
+    let e = errors(&format!("{head}after systems 2C (P)\n  P \"x\"\n"));
+    assert!(e[0].contains("notrump bid after `systems`"), "{e:?}");
+    let e = errors(&format!("{head}after 1C (P) systems 1N (P)\n  P \"x\"\n"));
+    assert!(e[0].contains("expected a call"), "{e:?}");
+    let e = errors(&format!("{head}systems when call = 1N\n"));
+    assert!(e[0].contains("systems on when"), "{e:?}");
+    let e = errors(&format!("{head}define auction systems = 1N (P)\n"));
+    assert!(e[0].contains("name uses a-z"), "{e:?}");
+}
+
+#[test]
+fn named_auction_pattern_errors() {
+    let head = "module demo \"Demo\"\n";
+    // After the name, our call comes next: the pattern ends with theirs.
+    let e = errors(&format!("{head}after nt2 (P)\n  P \"x\"\n"));
+    assert!(e[0].contains("alternate"), "{e:?}");
+    // A name only starts an alternative.
+    let e = errors(&format!("{head}after 1N (P) nt2\n  P \"x\"\n"));
+    assert!(e[0].contains("expected a call"), "{e:?}");
+    // A suffix ends with the call just before my turn.
+    let e = errors(&format!("{head}after nt2 3C\n  P \"x\"\n"));
+    assert!(e[0].contains("RHO"), "{e:?}");
+    let e = errors(&format!("{head}define auction nt2 =\n"));
+    assert!(e[0].contains("at least one pattern"), "{e:?}");
+    let e = errors(&format!("{head}define auction X = 2N (P)\n"));
+    assert!(e[0].contains("name uses a-z"), "{e:?}");
+    let e = errors(&format!(
+        "{head}define auction nt2 = 2N (P)\n  2C (P) 2D (P) 2N\n"
+    ));
+    assert!(e[0].starts_with("t.bid:3:"), "{e:?}");
+}

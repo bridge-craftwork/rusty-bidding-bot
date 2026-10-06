@@ -1,0 +1,116 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Multi 2♦ (Bridge Bum, "Multi 2D"): an opening 2♦ shows a weak two in
+# one of the majors. The strong options (a 4-4-4-1 or a 20-21 notrump,
+# Lars Multi) are not written: the card has no field for them and BBA
+# opens those hands naturally (probes/multi-openings.toml). With Multi on,
+# the natural weak twos are off (preempts.bid): every weak two in a major
+# opens 2♦, as BBA does.
+#
+# Responder bids "pass or correct":
+#
+#   2♥   happy in 2♥ or 2♠: opener passes with hearts, bids 2♠ with spades
+#   2♠   three or more hearts: opener passes with spades, bids 3♥ with hearts
+#   2NT  asks: 3♣ maximum hearts, 3♦ maximum spades, 3♥ minimum hearts,
+#        3♠ minimum spades
+#   3♥   preemptive, three or more in both majors: pass or correct
+#   4♦   game: opener bids his major
+#   4♥   preemptive game, four or more in both: pass or correct
+#   3♣   to play
+#
+# See multi.notes.md.
+
+module multi "Multi 2♦"
+  card   two_level.two_diamonds.multi
+  needs  preempts
+  skill  bidding_conventions/multi_2d
+
+# ── The opening ──────────────────────────────────────────────────────
+# The weak two of preempts.bid, either major: 5-10 HCP and a six-card
+# suit, vulnerable a good one. A ten-count with the ace-king of the suit,
+# or its ace and a side ace, opens at the one level (BBA, as in
+# preempts.bid's default).
+when opening, seat<=3
+  2D  "Multi: a weak two in hearts or spades"   alert
+      shows hcp=5..10, (H=6, S<=3, hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))) | (S=6, H<=3, hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C)))
+      when  !vul | (H=6, quality(H)>=good | top5(H)>=3) | (S=6, quality(S)>=good | top5(S)>=3)
+      artificial
+
+# ── Responder ────────────────────────────────────────────────────────
+after 2D (P) | 2D (X)
+  2H  "Pass or correct: no game interest"   alert
+      shows hcp<=14
+      priority -1
+  2S  "Pass or correct: three or more hearts, short spades"   alert
+      shows H>=3, S<=2, hcp=6..14
+  3H  "Pass or correct, preemptive: three or more in both majors"   alert
+      shows H>=3, S>=3, H+S>=8, hcp<=10
+  4H  "Pass or correct to game, preemptive: four or more in both majors"   alert
+      shows H>=4, S>=4, hcp<=12
+  4D  "Game: bid your major"   alert
+      shows hcp>=15, H>=3, S>=3
+      artificial
+  3C  "Six or more clubs: to play"
+      shows C>=6, H<=2, S<=2, hcp<=14
+  2N  "Asks: which major, minimum or maximum?"   alert
+      shows hcp>=15
+      sets  forcing=round, ask=multi
+      artificial
+
+# ── Opener: pass or correct ──────────────────────────────────────────
+after 2D (P) 2H (P) | 2D (X) 2H (P)
+  P   "My suit is hearts"     shows H=6
+  2S  "My suit is spades"     shows S=6
+after 2D (P) 2S (P) | 2D (X) 2S (P)
+  P   "My suit is spades"     shows S=6
+  3H  "My suit is hearts"     shows H=6
+after 2D (P) 3H (P) | 2D (X) 3H (P)
+  P   "My suit is hearts"     shows H=6
+  3S  "My suit is spades"     shows S=6
+after 2D (P) 4H (P) | 2D (X) 4H (P)
+  P   "My suit is hearts"     shows H=6
+  4S  "My suit is spades"     shows S=6
+after 2D (P) 4D (P) | 2D (X) 4D (P)
+  4H  "My suit is hearts"     shows H=6
+  4S  "My suit is spades"     shows S=6
+after 2D (P) 3C (P) | 2D (X) 3C (P)
+  P   "Partner's suit: to play"
+
+# They come in over the pass-or-correct response: opener passes (the
+# auction is theirs; responder may still act).
+after 2D (P) 2H (*) | 2D (P) 2S (*)
+  P   "They came in: nothing more to say"
+      priority -5
+
+# Responder after the correction: the contract is placed.
+after 2D (P) 2H (P) 2S (P) | 2D (P) 2S (P) 3H (P) | 2D (P) 3H (P) 3S (P) | 2D (P) 4H (P) 4S (P) | 2D (X) 2H (P) 2S (P) | 2D (X) 2S (P) 3H (P) | 2D (X) 3H (P) 3S (P) | 2D (X) 4H (P) 4S (P)
+  P   "Partner's major: to play"
+
+# Opener after the asker's sign-off: pass.
+after 2D (P) 2N (P) 3C (P) 3H (P) | 2D (P) 2N (P) 3D (P) 3S (P)
+  P   "Partner signed off"
+
+# ── Opener answers 2NT ───────────────────────────────────────────────
+when asked multi
+  3C  "Maximum (8-10) with hearts"   shows H=6, hcp>=8   artificial
+  3D  "Maximum (8-10) with spades"   shows S=6, hcp>=8   artificial
+  3H  "Minimum with hearts"          shows H=6, hcp<=7
+  3S  "Minimum with spades"          shows S=6, hcp<=7
+
+# ── The asker places the contract ────────────────────────────────────
+after 2D (P) 2N (P) 3C (P)
+  4H  "Game opposite a maximum"   shows H>=2 | hcp>=18
+  3H  "No game: sign off"
+      priority -1
+after 2D (P) 2N (P) 3D (P)
+  4S  "Game opposite a maximum"   shows S>=2 | hcp>=18
+  3S  "No game: sign off"
+      priority -1
+after 2D (P) 2N (P) 3H (P)
+  4H  "Game opposite a minimum"   shows H>=2, hcp>=18 | (H>=3, hcp>=16)
+  P   "No game: play 3♥"
+      priority -1
+after 2D (P) 2N (P) 3S (P)
+  4S  "Game opposite a minimum"   shows S>=2, hcp>=18 | (S>=3, hcp>=16)
+  P   "No game: play 3♠"
+      priority -1

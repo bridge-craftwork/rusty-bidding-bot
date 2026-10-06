@@ -1,0 +1,72 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Two-way New Minor Forcing (xyNT): after 1x-1y-1NT, 2C relays to 2D
+# (every invitational hand starts here, and a weak hand with diamonds
+# passes 2D); 2D is an artificial game force; 2NT relays to 3C (a weak
+# hand with clubs passes); jumps to three are natural slam tries. Played
+# instead of NMF. See two-way-nmf.notes.md.
+
+module two-way-nmf "Two-way New Minor Forcing (xyNT)"
+  needs  responder-rebids
+  skill  bidding_conventions/two_way_nmf
+  # On with its own switch, or with XYZ (xyz.bid), which plays the same
+  # structure after every one-level rebid, 1NT included.
+  param  twoway = other_conventions.two_way_nmf default false
+  param  xyz    = other_conventions.xyz default false
+
+after 1x (P) 1y (P) 1N (P) when twoway | xyz, !tw(x)
+  2C  "xyNT: relay to 2♦ (invitational, or weak with diamonds)"   alert
+      shows points=11..12 | (D>=6, points<=10, y is not D, x is not D)
+      sets  forcing=round, ask=xy_relay
+      artificial
+      priority 1
+  2D  "xyNT: artificial game force"   alert
+      shows points>=13, y>=5 | (H>=4, S>=4) | !balanced
+      sets  forcing=game, ask=xy_gf
+      artificial
+      priority 1
+  2N  "xyNT: relay to 3♣ (weak with clubs)"   alert
+      shows C>=6, points<=10
+      when  x is not C, y is not C
+      sets  forcing=round, ask=xy_clubs
+      artificial
+  3y  "Slam try: six or more {y}"
+      shows y>=6, points>=16
+      sets  forcing=game, trump=y
+
+when asked xy_relay
+  2D  "Forced relay"                       alert   artificial
+when asked xy_clubs
+  3C  "Forced relay"                       alert   artificial
+
+# ── After the 2♦ relay: weak with diamonds passes, every other call invites
+after 1x (P) 1M (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(x)
+  P   "To play in 2♦"                      shows D>=6, points<=10
+  2M  "Invitational: five {M}"             shows M=5, points=11..12   sets ask=invite(M)
+  3M  "Invitational: six {M}"              shows M>=6, points=11..12   sets ask=invite(M)
+  2N  "Invitational, balanced"             shows points=11..12, M<=5   sets ask=nt_invite
+      priority -1
+after 1C (P) 1D (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(C)
+  P   "Weak"                               shows points<=10
+      priority -5
+  3D  "Invitational: six diamonds"         shows D>=6, points=11..12   sets ask=invite(D)
+  2N  "Invitational, balanced"             shows points=11..12   sets ask=nt_invite
+      priority -1
+after 1x (P) 1y (P) 1N (P) 2N (P) 3C (P) when twoway | xyz, !tw(x)
+  P   "To play in 3♣"                      shows C>=6
+
+# ── After the 2♦ game force: opener shows three of responder's major,
+# then four hearts after a 1♠ response, else 2NT.
+when asked xy_gf
+  2H  "Three hearts"                       shows H=3        when partner.H>=4
+  2S  "Three spades"                       shows S=3        when partner.S>=4
+  2H  "Four hearts, not three spades"      shows H>=4, S<=2  when partner.S>=4
+  2N  "No fit to show"
+      priority -1
+when answered xy_gf
+  4H  "Game in the heart fit"              shows H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets trump=H
+  4S  "Game in the spade fit"              shows S>=5 | (S>=4, partner.S.min>=4)   when partner.S>=3   sets trump=S
+  4H  "Game: six hearts"                   shows H>=6
+  4S  "Game: six spades"                   shows S>=6
+  3N  "Game, no major fit"
+      priority -1

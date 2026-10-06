@@ -20,6 +20,11 @@ module rebids "Opener's rebid"
   param  support_x = doubles.support.play default false
   param  support_through = doubles.support.through
   param  walsh = minor_openings.walsh.play default true
+  param  weak_js = general.jump_shifts.weak_2 default false
+  param  weak_js3 = general.jump_shifts.weak_3 default false
+  param  gf21 = major_openings.two_over_one.game_force default false
+  param  semi = major_openings.one_nt_response.semi_forcing default false
+  param  twalsh = minor_openings.one_club.transfer_resp default false
 
 # A notrump jump reaches 3NT at most: the last bid is below 2NT, so the
 # cheapest notrump bid is 2NT or lower. In a suit's terms: the cheapest
@@ -29,8 +34,14 @@ module rebids "Opener's rebid"
 # `jump(N)`.
 define nt_jump_to_game = cheapest_rank(S) <= 13 | partner.last=2S | rho.last=2S
 
+# Transfer Walsh (`minor_openings.one_club.transfer_resp`): after 1C the
+# one-level responses are transfers, so the natural rules for the opener
+# and responder that read the response as a suit stand aside there
+# (transfer-walsh.bid has the auction instead). Used across base/.
+define tw(x) = twalsh, x is C
+
 # ── After a one-level new-suit response ───────────────────────────────
-after 1x (P) 1y (P)
+after 1x (P) 1y (P) when !tw(x)
   2y  "Raise: 4+ {y}, minimum"             shows y>=4, tp(y)<=15   sets trump=y
       when  style is not bba
   3y  "Jump raise: 4+ {y}, 16-18"          shows y>=4, tp(y)=16..18   sets trump=y
@@ -67,7 +78,7 @@ after 1x (P) 1y (P)
       priority -4                          # a long suit with 19+ and no 3NT or 4M
   2N  "15-17 balanced, no other rebid"     shows balanced, hcp=15..17, y<=3
       priority -4                          # 1NT would be a lie: the rebid is 12-14
-after 1x (P) 1M (P)
+after 1x (P) 1M (P) when !tw(x)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
       when  style is not bba
       priority 1                           # support first, ahead of a jump shift (BBA)
@@ -78,7 +89,7 @@ after 1x (P) 1M (P)
 # A new suit: at the one level 4+ and up to 18; at the two level below the
 # first suit 4+, not a reverse; a reverse (two level, above the first suit)
 # 17+ with the first suit longer; a jump in a new suit 19+, game forcing.
-after 1C (P) 1D (P)
+after 1C (P) 1D (P) when !tw(C)
   # Walsh (Rick, 2026-09-24; the modern default): balanced 12-14 rebids
   # 1NT even with one or both four-card majors. Standard, and any card
   # with the Walsh switch off (minor_openings.walsh.play, as BBA reads
@@ -108,7 +119,7 @@ after 1C (P) 1D (P)
       when  style is bba
   2S  "Jump shift (BBA): 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game
       when  style is bba
-after 1C (P) 1H (P)
+after 1C (P) 1H (P) when !tw(C)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
       priority 2                           # four spades: 1S before 1NT
@@ -116,7 +127,7 @@ after 1C (P) 1H (P)
       priority 1
   2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
-after 1C (P) 1S (P)
+after 1C (P) 1S (P) when !tw(C)
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
       priority 1
   2H  "Reverse: 4+ hearts, longer clubs, 17+"    shows H>=4, C>H, suit_points>=17  sets forcing=round
@@ -157,8 +168,10 @@ after 1H (P) 1S (P)
 # ── After 1NT (not forcing) ──────────────────────────────────────────
 after 1x (P) 1N (P)
   P   "Minimum, nothing more to show"      shows suit_points<=15
+      when  !semi_1nt(x)
       priority -5
   P   "Balanced, no game opposite 6-10"    shows balanced, hcp<=17
+      when  !semi_1nt(x)
       priority -1                          # BBA passes 5-3-3-2 with 16-17 (major-rebid-1S-1N.toml)
   2x  "Rebids {x}: five or more, too good to pass and no reverse"
       shows x>=5, suit_points=16..18
@@ -254,10 +267,17 @@ after 1M (P) 1y (P) | 1M (P) 2y (P)
 after 1m (P) 1N (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
+# A semi-forcing 1NT (2/1 cards with `one_nt_response.semi_forcing`,
+# 6-12; Todd, Advancing in Bridge #375): opener passes only a balanced
+# minimum and otherwise rebids as over the forcing 1NT below.
+define semi_1nt(x) = semi, gf21, x is H | x is S
+after 1M (P) 1N (P) when semi_1nt(M)
+  P   "Semi-forcing 1NT: balanced minimum, to play"   shows balanced, hcp<=14
+
 # A forcing 1NT (2/1 cards with `one_nt_response.forcing`, 6-12): opener
 # may not pass, so a balanced hand bids its longer minor, three cards if
 # need be, and 18-19 bids 2NT (2026-09-30, 2/1 game force).
-after 1M (P) 1N (P) when we.forcing = round
+after 1M (P) 1N (P) when we.forcing = round | semi_1nt(M)
   2C  "Forcing 1NT: three or more clubs"   shows C>=3, C>=D, suit_points<=18, M<=5
       priority -1
   2D  "Forcing 1NT: three or more diamonds"  shows D>=3, D>C, suit_points<=18, M<=5
@@ -338,13 +358,14 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
       shows points + partner.points.min >= 33
       priority 1
   4N  "Quantitative: 31-32 points between us"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows points + partner.points.min >= 31
       sets  ask=quant
       priority 1
   3N  "Game: no extras"                    shows points + partner.points.min <= 30
 
 # ── After a two-over-one response (forcing one round) ────────────────
-after 1M (P) 2x (P) when x is not M
+after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump shift: weak-jump-shifts.bid
   2M  "Rebids {M}: 5+, minimum"            shows M>=5, suit_points<=15
       priority -1                          # the default minimum rebid
   2M  "Rebids {M}: five or more, too weak to reverse"
@@ -403,7 +424,7 @@ after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
       priority -5
 
 # ── After an invitational jump shift (10-12, six cards) ──────────────
-after 1x (P) 3y (P) when y is not x, we.trump is none   # not a splinter (splinters.bid)
+after 1x (P) 3y (P) when y is not x, we.trump is none, !weak_js3   # not a splinter (splinters.bid); weak ones: weak-jump-shifts.bid
   P   "Minimum, no fit"                    shows hcp<=13
       priority -5
   # With a fit for a minor 3NT is still the game (Basic_Major 44 and 121,
@@ -419,7 +440,7 @@ after 1x (P) 3y (P) when y is not x, we.trump is none   # not a splinter (splint
 # 1♣-1♦-1♥-1♠ is natural on this card, and opener had no third call at
 # all. He raises with four, and otherwise shows his shape once more. The
 # fourth suit at the one level is always a major, so it binds to `M`.
-after 1x (P) 1y (P) 1z (P) 1M (P)
+after 1x (P) 1y (P) 1z (P) 1M (P) when !tw(x)
   2M  "Raise: 4+ {M}, minimum"             shows M>=4, tp(M)<=15   sets trump=M, ask=signoff
   3M  "Jump raise: 4+ {M}, 16-18"          shows M>=4, tp(M)=16..18   sets trump=M, ask=invite(M)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M

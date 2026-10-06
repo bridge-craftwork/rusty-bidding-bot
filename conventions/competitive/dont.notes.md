@@ -28,10 +28,30 @@ HCP plus a point a card beyond four in each suit and ask for 10 (8 HCP
 with a six-card suit or 5-5, 9 with 5-4), with a ceiling of 15 HCP:
 there is no penalty double, and a stronger hand passes and waits. The
 same in the balancing seat (the sources allow even lighter there).
+Since 2026-10-05 (self A/B below) the ceiling is 19 for a shapely hand
+(5-5 or longer, or a seven-card suit): waiting with 6-5 lost when
+partner passed it out. A deviation from the light-only reading; a
+question for Rick.
 
 A 6-4 hand is shown as a two-suiter (2♣ or 2♦), not by the double:
 Wikipedia's "any single suit" and the pass-or-correct structure assume
 the double is one-suited.
+
+## Self A/B (2026-10-05)
+
+BBA does not play it, so it is judged against ourselves (CLAUDE.md,
+"Pace"): the same deals with the card field off and on, every board,
+`probes/tools/self_ab.py --batch probes/self-ab.toml --only dont`. IMPs
+by the errors yardstick, positive when the convention makes fewer;
+"actor" is the side that made the first differing call. Against the
+card's default defence (with its penalty double), DONT: 336 boards
+changed. First -71 to the actor (z -1.2): the 15 HCP ceiling made 16-19
+hands with 6-5 pass "to wait", and partner passed it out. Decision
+(2026-10-05, question for Rick above): the ceiling is 19 with 5-5 or
+longer or a seven-card suit, 15 otherwise (balanced strong hands still
+pass). After: 330 changed (70 without par); actor contract +161,
+doubling -86 (the penalty double DONT gives up); double-dummy +68;
+halves +10/+65 (z +1.3): leans gain.
 
 ## Sources
 

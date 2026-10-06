@@ -17,6 +17,8 @@ impl fmt::Display for CallSpec {
             CallSpec::Double => write!(f, "X"),
             CallSpec::Redouble => write!(f, "XX"),
             CallSpec::Any => write!(f, "*"),
+            CallSpec::Named { name } => write!(f, "{name}"),
+            CallSpec::Systems { level } => write!(f, "systems {level}N"),
             CallSpec::Bid { level, strain } => match strain {
                 StrainSpec::Lit(s) => write!(f, "{level}{s}"),
                 StrainSpec::Var(v) => write!(f, "{level}{v}"),

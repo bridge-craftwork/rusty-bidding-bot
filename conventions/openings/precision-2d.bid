@@ -1,0 +1,98 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Precision 2♦ (Bridge Bum, "Precision 2D"): 11-15 HCP, short in
+# diamonds, 4-4-1-4 or 4-4-0-5; 4-3-1-5 or 3-4-1-5 when the clubs are
+# too weak for a Precision 2♣ (here: fewer than two of the top three).
+# Written as an opening on its own; it does not need the forcing 1♣.
+# The weak 2♦ is off (preempts.bid).
+#
+# Responder:
+#
+#   Pass        six or more diamonds, no interest in the other suits
+#   2♥ 2♠ 3♣    natural, sign-off
+#   2NT         11+, game forcing, asks:
+#               3♣ 3-4-1-5   3♦ 4-3-1-5
+#               3♥ 4-4-1-4 11-13   3♠ 4-4-1-4 14-15
+#               3NT 4-4-1-4 14-15 with the ♦A or ♦K
+#               4♣ 4-4-0-5 11-13   4♦ 4-4-0-5 14-15
+#   3♦          six or more diamonds, invites 3NT
+#   3♥ 3♠       preemptive
+#
+# Responder's rebids are natural. See precision-2d.notes.md.
+
+module precision-2d "Precision 2♦"
+  card   two_level.precision_2d.play
+  needs  preempts
+  skill  bidding_conventions/precision_2d
+
+define prec_2d_shape = (S=4, H=4, D=1, C=4) | (S=4, H=4, D=0, C=5) | (S=4, H=3, D=1, C=5, quality(C)<=fair) | (S=3, H=4, D=1, C=5, quality(C)<=fair)
+
+# ── The opening ──────────────────────────────────────────────────────
+# Priority 1: it takes these hands from the one-level openings.
+when opening
+  2D  "Precision 2♦: 11-15, short diamonds (4-4-1-4, 4-4-0-5)"   alert
+      shows hcp=11..15, prec_2d_shape
+      artificial
+      priority 1
+
+# ── Responder ────────────────────────────────────────────────────────
+after 2D (P) | 2D (X)
+  2N  "Asks for shape and strength: 11+, game forcing"   alert
+      shows hcp>=11
+      sets  forcing=game, ask=precision_2d
+      artificial
+  P   "Six or more diamonds: to play"     shows D>=6, hcp<=10
+      priority 1
+  3D  "Six or more diamonds: invites 3NT"   shows D>=6, hcp=9..10, quality(D)>=good
+      priority 1
+  3H  "Preemptive: six or more hearts"    shows H>=6, hcp<=8
+  3S  "Preemptive: six or more spades"    shows S>=6, hcp<=8
+  2S  "Sign-off"                          shows S>=3, S>H, hcp<=10
+  2H  "Sign-off"                          shows H>=3, hcp<=10
+  3C  "Sign-off"                          shows C>=4, hcp<=10, S<=2, H<=2
+  2H  "Sign-off: the best of a bad lot"   shows hcp<=10
+      priority -2
+
+# Opener passes the sign-offs.
+after 2D (P) 2H (P) | 2D (P) 2S (P) | 2D (P) 3C (P) | 2D (P) 3H (P) | 2D (P) 3S (P) | 2D (X) 2H (P) | 2D (X) 2S (P) | 2D (X) 3C (P)
+  P   "Partner signed off"
+# The invitation: 3NT with a maximum and the diamond singleton an honour.
+after 2D (P) 3D (P)
+  3N  "Accepts: 14-15"     shows hcp>=14
+  P   "Declines"
+      priority -1
+
+# ── Opener answers 2NT ───────────────────────────────────────────────
+when asked precision_2d
+  3C  "3-4-1-5"                       shows S=3, H=4, C=5
+  3D  "4-3-1-5"                       shows S=4, H=3, C=5
+  3H  "4-4-1-4, 11-13"                shows S=4, H=4, D=1, hcp<=13
+  3S  "4-4-1-4, 14-15"                shows S=4, H=4, D=1, hcp>=14
+  3N  "4-4-1-4, 14-15, the ♦A or ♦K"  shows S=4, H=4, D=1, hcp>=14, has(A,D) | has(K,D)
+      priority 1
+  4C  "4-4-0-5, 11-13"                shows S=4, H=4, D=0, hcp<=13
+  4D  "4-4-0-5, 14-15"                shows S=4, H=4, D=0, hcp>=14
+
+# ── Responder places the contract ────────────────────────────────────
+# Opener's shape is known: game in a major with a 4-4 fit (or five
+# opposite three), 3NT with diamonds held, else five clubs.
+after 2D (P) 2N (P) 3x (P) | 2D (P) 2N (P) 4x (P) | 2D (P) 2N (P) 3N (P)
+  4S  "Game in spades"    shows S>=4 | (S>=5, partner.S>=3)
+      when  partner.S>=4 | (partner.S>=3, S>=5)
+      priority 2
+  4H  "Game in hearts"    shows H>=4 | (H>=5, partner.H>=3)
+      when  partner.H>=4 | (partner.H>=3, H>=5)
+      priority 1
+  3N  "Game in notrump: diamonds held"   shows stop(D), D>=3
+  5C  "Game in clubs"     shows C>=3
+      priority -1
+  P   "Partner's 3NT"
+      when  partner.last=3N
+      priority -1
+  3N  "Game in notrump"
+      priority -2
+
+# They come in over the sign-off: opener passes (responder may act).
+after 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)
+  P   "They came in: nothing more to say"
+      priority -5

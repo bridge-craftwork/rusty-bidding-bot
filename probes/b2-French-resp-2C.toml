@@ -1,0 +1,19 @@
+# Responder after a French 2C (strong, 19-24 by BBA's alert), 21GF-DEFAULT with French 2D on.
+card    = "21GF-DEFAULT"
+set     = ["French 2D=1", "Weak natural 2D=0"]
+dealer  = "N"
+prefix  = "2C Pass"
+vuls    = ["None"]
+scoring = ["MP"]
+partner_auto = [20, 23]
+our     = []
+hands = [
+  "bust | 8632.854.9732.65",
+  "3 bal | Q632.854.9732.65",
+  "5 bal | Q632.K54.9732.65",
+  "7 bal | Q632.K54.Q732.J5",
+  "9 bal | Q632.K54.Q732.K5",
+  "5H 6 | 63.KJ854.9732.65",
+  "5S 9 | KJ854.63.K732.Q5",
+  "6D 8 | 63.854.AQ8652.95",
+]

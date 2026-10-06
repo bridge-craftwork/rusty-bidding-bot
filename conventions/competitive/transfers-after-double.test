@@ -1,0 +1,25 @@
+# Transfers after 1M (X) (switched on below; no stock card plays them).
+card    21GF-DEFAULT vs_to_double.new_suit_forcing_tfr=true
+dealer  N
+vul     None
+
+# seat hand                 | auction  | expect | why
+S 72.84.Q93.KQJ954          | 1S X     | 1N     | six clubs, weak: transfer to clubs
+S 72.84.KQJ954.Q93          | 1S X     | 2C     | six diamonds: transfer to diamonds
+S 72.KQJ954.Q93.84          | 1S X     | 2D     | six hearts: transfer to hearts
+S Q72.K84.K93.9542          | 1S X     | 2H     | three spades, 9: the constructive raise by transfer
+S Q72.984.Q93.9542          | 1S X     | 2S     | three spades, 4: the direct raise
+S K872.K84.Q93.954          | 1S X     | 3H     | four spades, 9: one under the major
+S Q72.A84.K93.Q542          | 1S X     | 2N     | three spades, 12: 2NT
+S 72.AQ84.K93.Q542          | 1S X     | XX     | 11, two spades: redouble
+S 84.Q72.KQ3.Q5432          | 1H X     | 2D     | three hearts, 8: constructive raise
+S 72.84.Q93.KQJ954          | 1H X     | 1N     | over 1♥ too
+# Opener
+N AKJ74.Q3.A54.J62          | 1S X 1N P | 2C    | completes
+N AJ874.Q3.A54.J62          | 1S X 2H P | 2S    | minimum: completes
+N AKJ74.K3.AK4.J62          | 1S X 2H P | 4S    | 19: game
+# Responder after the completion
+S 72.84.Q93.KQJ954          | 1S X 1N P 2C P | P | weak: to play
+
+card    21GF-DEFAULT
+S Q72.K84.Q93.9542          | 1S X     | 2S     | off: the simple raise

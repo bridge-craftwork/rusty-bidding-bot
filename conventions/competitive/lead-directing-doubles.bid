@@ -1,0 +1,40 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Lead-directing doubles (`competitive.lead_directing_double.play`;
+# convention-card competitive_bidding/lead_directing_doubles; Bridge
+# Bum, "Lead Directing Double"; PBS btn/Lead_Directing_Double.btn):
+# a double of an artificial bid asks partner to lead that suit. The
+# hand: five cards with three of the top five honours, or six with two
+# of the top three (the scenario's standard; Bridge Bum: a good suit).
+#
+# Written for the artificial bids the engine marks as such (`!rho.named(x)`:
+# RHO has not bid the suit naturally), when it is RHO's call and our
+# side has not bid:
+#
+# - responder's artificial bids over their 1NT or 2NT opening (Stayman,
+#   transfers, minor-suit and other relays);
+# - the 2♦ response to their strong 2♣;
+# - an answer to their 4NT (keycard or ace ask).
+#
+# Not written: the Lightner double of a slam, doubles of their cue bids
+# and of control bids (the engine marks few of those artificial), and
+# the opening leader's actual lead (the engine does not play the cards).
+# Notes: lead-directing-doubles.notes.md.
+
+module lead-directing-doubles "Lead-directing doubles of artificial bids"
+  needs  base
+  skill  competitive_bidding/lead_directing_doubles
+  card   competitive.lead_directing_double.play
+
+define ldd_suit(x) = x>=5, top5(x)>=3 | (x>=6, quality(x)>=good)
+
+after (1N) P (2x) | (1N) P (3x) | (2N) P (3x) | (4N) P (5x) when !rho.named(x)
+  X   "Lead-directing: a good {x} suit, lead it"
+      alert
+      shows ldd_suit(x)
+      priority 1
+after (2C) P (2D) when !rho.named(D)
+  X   "Lead-directing: a good diamond suit, lead it"
+      alert
+      shows ldd_suit(D)
+      priority 1

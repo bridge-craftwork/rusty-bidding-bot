@@ -1,0 +1,28 @@
+# Suction over their 1NT: 21GF-DEFAULT with the Suction defence.
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=suction
+dealer  E
+
+# seat hand             | auction             | expect | why
+S 5.KQJ75.4.AQ8762      | 1NT                 | X      | clubs and hearts
+S 5.K32.AQJ975.Q87      | 1NT                 | 2C     | diamonds one-suiter
+S KJ75.AQ975.4.Q87      | 1NT                 | 2C     | both majors
+S 5.AKJ975.Q74.Q87      | 1NT                 | 2D     | hearts one-suiter
+S KQJ75.5.Q4.AJ987      | 1NT                 | 2D     | spades and clubs
+S KQJ975.5.Q74.A87      | 1NT                 | 2H     | spades one-suiter
+S 5.5.KQ974.AJ9873      | 1NT                 | 2H     | both minors, 5-6
+S 5.K32.Q74.AKJ987      | 1NT                 | 2S     | clubs one-suiter
+S 5.KQ974.AJ987.73      | 1NT                 | 2S     | diamonds and hearts
+S KQ974.5.AJ987.73      | 1NT                 | 2NT    | diamonds and spades
+# Advancer relays to the one-suiter.
+N 9843.875.K32.J94      | 1NT 2C P            | 2D     | relay: assume diamonds
+N 9843.875.K32.J94      | 1NT 2D P            | 2H     | relay: assume hearts
+N 9843.875.K32.J94      | 1NT 2S P            | 3C     | relay: assume clubs
+N 98.8754.K32.J943      | 1NT X P             | 2H     | picks hearts over clubs (equal: the higher)
+# The overcaller passes or shows the two-suiter.
+S 5.K32.AQJ975.Q87      | 1NT 2C P 2D P       | P      | my suit is diamonds
+S KJ75.AQ975.4.Q87      | 1NT 2C P 2D P       | 2H     | both majors
+S KQJ75.5.Q4.AJ987      | 1NT 2D P 2H P       | 2S     | spades and clubs
+N 9843.875.K32.J94      | 1NT 2D P 2H P 2S P  | P      | keep spades
+S 5.5.KQ974.AJ9873      | 1NT 2H P 2S P       | 2NT    | both minors
+S KQJ86..J5.KQT986       | 1NT 2D X 2H X       | 2S     | spades and clubs: correct over their double too (self A/B)
+N 76542.765.T8.J95       | 1NT X XX            | 2H     | over their redouble: preference

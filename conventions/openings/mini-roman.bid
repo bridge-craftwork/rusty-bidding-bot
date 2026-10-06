@@ -1,0 +1,151 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Mini-Roman 2♦ (ACBL Unit 390, "Mini-Roman"; Wikipedia, "Roman 2♦"):
+# an opening 2♦ shows 11-15 HCP and a three-suited hand, 4-4-4-1 or
+# 5-4-4-0. The five-card suit of a 5-4-4-0 is a minor (with five in a
+# major the hand opens 1M). The weak 2♦ is off (preempts.bid).
+#
+# Responder:
+#
+#   Pass  five or more diamonds, weak
+#   2♥ 2♠ 3♣  to play, weak: opener passes, or with a singleton or void
+#            there bids his next four-card suit up the line
+#   2NT   11+, game forcing, asks for the short suit:
+#         3♣ short clubs, 3♦ short diamonds, 3♥ short hearts, 3♠ short spades
+#   3♥/3♠ invitational, five or more
+#   4♥/4♠ to play
+#
+# See mini-roman.notes.md.
+
+module mini-roman "Mini-Roman 2♦"
+  card   two_level.two_diamonds.mini_roman
+  needs  preempts
+  skill  bidding_conventions/mini_roman_2d
+
+define three_suiter = (longest=4, shortest=1) | (longest=5, second_longest=4, shortest=0, S<=4, H<=4)
+
+# ── The opening ──────────────────────────────────────────────────────
+# Priority 1: it takes these hands from the one-level openings.
+when opening
+  2D  "Mini-Roman: 11-15, three-suited (4-4-4-1 or 5-4-4-0)"   alert
+      shows hcp=11..15, three_suiter
+      artificial
+      priority 1
+
+# ── Responder ────────────────────────────────────────────────────────
+# The weak calls: the cheapest four-card suit, which opener holds unless
+# it is his short suit; a diamond pass needs five.
+after 2D (P) | 2D (X)
+  2N  "Asks for the short suit: 11+, game forcing"   alert
+      shows hcp>=11
+      sets  forcing=game, ask=mini_roman
+      artificial
+  4H  "To play"                         shows H>=6, hcp=8..14
+  4S  "To play"                         shows S>=6, hcp=8..14
+  3H  "Invitational: five or more hearts"   shows H>=5, hcp=9..10
+  3S  "Invitational: five or more spades"   shows S>=5, hcp=9..10
+  P   "Five or more diamonds: to play"    shows D>=5, hcp<=10
+      priority 1
+  2H  "To play: four or more hearts"     shows H>=4, hcp<=10
+  2S  "To play: four or more spades"     shows S>=4, hcp<=10, H<=3
+  3C  "To play: five or more clubs"      shows C>=5, hcp<=10, H<=3, S<=3
+  2H  "Weak: pass or correct"            shows hcp<=10
+      priority -2
+
+# ── Opener: pass, or correct from the short suit ─────────────────────
+after 2D (P) 2H (P) | 2D (X) 2H (P)
+  P   "Four or more hearts"              shows H>=4
+  2S  "Short in hearts: four spades"     shows H<=1, S>=4
+  3C  "Short in hearts, no four spades: clubs"   shows H<=1, C>=4
+after 2D (P) 2S (P) | 2D (X) 2S (P)
+  P   "Four or more spades"              shows S>=4
+  3C  "Short in spades: clubs"           shows S<=1, C>=4
+after 2D (P) 3C (P) | 2D (X) 3C (P)
+  P   "Four or more clubs"               shows C>=4
+  3D  "Short in clubs: diamonds"         shows C<=1, D>=4
+# Responder accepts the correction.
+after 2D (P) 2H (P) 2S (P) | 2D (P) 2H (P) 3C (P) | 2D (P) 2S (P) 3C (P) | 2D (P) 3C (P) 3D (P)
+  P   "Partner's suit: to play"
+      priority -1
+
+# Opener over the invitation: game with a maximum and support.
+after 2D (P) 3H (P)
+  4H  "Accepts: 14-15 with four hearts"  shows H>=4, hcp>=14
+  P   "Declines"
+      priority -1
+after 2D (P) 3S (P)
+  4S  "Accepts: 14-15 with four spades"  shows S>=4, hcp>=14
+  P   "Declines"
+      priority -1
+
+# ── Opener answers 2NT: the short suit ───────────────────────────────
+when asked mini_roman
+  3C  "Short clubs"       shows C<=1
+  3D  "Short diamonds"    shows D<=1
+  3H  "Short hearts"      shows H<=1
+  3S  "Short spades"      shows S<=1
+
+# ── Responder places the contract ────────────────────────────────────
+# Game in a major with four (opener holds four of it unless short there),
+# 3NT with the short suit stopped, else five of a minor.
+after 2D (P) 2N (P) 3x (P)
+  4S  "Game in spades"     shows S>=4    when x is not S
+      priority 2
+  4H  "Game in hearts"     shows H>=4    when x is not H
+      priority 1
+  3N  "Game in notrump: the short suit held"   shows x>=4 | stop(x)
+  5C  "Game in clubs"      shows C>=4    when x is not C
+      priority -1
+  5D  "Game in diamonds"   shows D>=4    when x is not D
+      priority -1
+  3N  "Game in notrump"
+      priority -2
+
+# ── They overcall the 2♦ (2026-10-05) ───────────────────────────────
+# The self A/B against the weak 2♦ found responder passing every
+# overcall, 13 HCP and a fit included (2♦ (2♥) P P P on 32 boards). With
+# game values: 3NT with their suit stopped, four of a major with five
+# (four when they bid the other major: opener is then likely short in
+# theirs and holds four of ours), else a double, values for defence
+# or for opener to describe. Weaker hands pass. Standard practice for a
+# three-suited opening, not yet cited.
+after 2D (2y) | 2D (3y) when y is not D
+  4S  "Game: 11+ and spades"           shows S>=5 | (S>=4, y is H), hcp>=11
+      when  y is not S
+      priority 2
+  4H  "Game: 11+ and hearts"           shows H>=5 | (H>=4, y is S), hcp>=11
+      when  y is not H
+      priority 2
+  3N  "Game: 11+, {y} stopped"         shows hcp>=11, stop(y)
+      priority 1
+  X   "11+: values, defence or a game for opener to choose"   shows hcp>=11
+  P   "Not enough to act"
+      priority -3
+
+# Opener after the double: defend with three or more of their suit;
+# short there, bid the cheapest four-card suit, a major first.
+after 2D (2y) X (P) | 2D (3y) X (P)
+  P   "Defend: three or more {y}"      shows y>=3
+      priority 1
+  cheapest(S) "Short in {y}: four spades"    shows S>=4, y<=1   when y is not S   priority 3
+  cheapest(H) "Short in {y}: four hearts"    shows H>=4, y<=1   when y is not H   priority 2
+  cheapest(C) "Short in {y}: four clubs"     shows C>=4, y<=1   when y is not C   priority 1
+  cheapest(D) "Short in {y}: four diamonds"  shows D>=4, y<=1   when y is not D
+
+# Responder places the game: four of opener's major with four, 3NT with
+# their suit stopped, else five of opener's minor.
+after 2D (2y) X (P) 2z (P) | 2D (2y) X (P) 3z (P) | 2D (3y) X (P) 3z (P) | 2D (3y) X (P) 4z (P)
+  4{z} "Game in {z}"                    shows z>=4
+      when  z is H | z is S
+      priority 2
+  3N  "Game in notrump: {y} stopped"   shows stop(y)
+      priority 1
+  5{z} "Game in {z}"                    shows z>=3
+      when  z is C | z is D
+  P   "Partner's suit: to play"
+      priority -2
+
+# They come in over the weak response: opener passes (responder may act).
+after 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)
+  P   "They came in: nothing more to say"
+      priority -5

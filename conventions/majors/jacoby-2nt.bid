@@ -4,6 +4,7 @@ module jacoby-2nt "Jacoby 2NT"
   card   major_openings.jacoby_2nt.play
   needs  base
   skill  bidding_conventions/jacoby_2nt_splinters
+  skill  bidding_conventions/jacoby_2nt
   skill  partnership_bidding/jacoby_2nt
 
 after 1M (P) when !passed_hand

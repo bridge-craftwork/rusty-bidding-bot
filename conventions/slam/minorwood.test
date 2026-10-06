@@ -1,0 +1,38 @@
+card    21GF-DEFAULT slam.minorwood.play=true
+dealer  N
+
+# seat hand             | auction                              | expect | why
+# The ask: four of the agreed minor.
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | 4C     | clubs agreed in a game force, slam values: 4♣ asks
+S A5.K4.AKJ843.KQ2      | 1H P 2D P 3D P                       | 4D     | diamonds: 4♦ asks
+# The answers, 1430 steps above the ask.
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4C P                  | 4D     | one keycard: the first step
+N K4.KQJ86.65.Q952      | 1H P 2C P 3C P 4C P                  | 4H     | none: the second step
+N K4.AQJ86.A5.J952      | 1H P 2C P 3C P 4C P                  | 4S     | two, no queen: the third step
+N K4.AQJ86.A5.Q952      | 1H P 2C P 3C P 4C P                  | 4NT    | two and the ♣Q: the fourth step
+N K4.AQJ86.Q52.952      | 1H P 2D P 3D P 4D P                  | 4H     | diamonds: one keycard is 4♥
+N K4.AQJ86.Q52.A52      | 1H P 2D P 3D P 4D P                  | 5C     | diamonds: two and the queen is 5♣
+# The asker.
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P 4C P 4D P             | 6C     | three of mine and one: slam
+S Q5.K4.KQ2.AKJ843      | 1H P 2C P 3C P 4C P 4D P             | 5C     | two of mine and one: sign off
+S Q5.K4.KQ2.AKJ843      | 1H P 2C P 3C P 4C P 4S P             | 6C     | two and two: one missing, slam
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4C P 4D P 5C P        | P      | one keycard: accept the sign-off
+
+# Interference: no DOPI for Minorwood yet (notes): game in the suit.
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4C 4H                 | 5C     | their 4♥: the answer is lost, game
+
+# The card's keycard treatment: 0314 in the minors.
+card    21GF-DEFAULT slam.minorwood.play=true slam.blackwood.minor_0314=true
+N K4.AQJ86.65.Q952      | 1H P 2C P 3C P 4C P                  | 4H     | one keycard: the second step in 0314
+
+# Kickback, when the card plays both, is the ask.
+card    21GF-DEFAULT slam.minorwood.play=true slam.kickback.play=true
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | 4D     | Kickback's 4♦
+
+# Off the card.
+card    21GF-DEFAULT
+S A5.K4.KQ2.AKJ843      | 1H P 2C P 3C P                       | !4C    | no Minorwood
+
+# The king ask after the answer (self A/B, 2026-10-05).
+card    21GF-DEFAULT slam.minorwood.play=true
+S A.K7.KQT73.AKQ87         | 1D P 2D P 3D P 4D P 4N P | 5N | every keycard and the queen: the 5NT king ask

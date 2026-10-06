@@ -14,7 +14,7 @@ module texas-transfers "Texas Transfers"
 # certain with six trumps). With
 # mild slam interest responder transfers at the two level and jumps to game
 # instead (jacoby-transfers.bid), which lets opener bid on.
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
+after nt1 when !they.bid | systems_on
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, suit_strength=game, suit_points<=30-partner.points.max
       sets  ask=texas(H)
@@ -41,9 +41,9 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
       sets  ask=texas(S)
       artificial
 
-after 1N (P) 4D (P) | (1x) 1N (P) 4D (P) | (1x) P (P) 1N (P) 4D (P) | (1x) 1N (X) 4D (P) | (1x) P (P) 1N (X) 4D (P)
+after nt1 4D (P)
   4H  "Completes the transfer"
-after 1N (P) 4H (P) | (1x) 1N (P) 4H (P) | (1x) P (P) 1N (P) 4H (P) | (1x) 1N (X) 4H (P) | (1x) P (P) 1N (X) 4H (P)
+after nt1 4H (P)
   4S  "Completes the transfer"
 
 when answered texas(M)

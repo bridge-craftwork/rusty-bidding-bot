@@ -1,0 +1,27 @@
+card    21GF-DEFAULT slam.non_serious_3nt.play=true
+dealer  N
+
+# seat hand             | auction                              | expect | why
+# The first hand after 3M: 3NT (mild), a control bid (serious), 4M (none).
+N AJ874.K5.K83.K92      | 1S P 2C P 2S P 3S P                  | 3NT    | 13 HCP, two short of serious: non-serious 3NT
+N AKJ74.K5.Q83.Q92      | 1S P 2C P 2S P 3S P                  | 3NT    | 14, no ace outside: non-serious
+N AJ874.K5.Q83.Q92      | 1S P 2C P 2S P 3S P                  | 4S     | a minimum: no interest
+N AKJ74.K5.Q83.K92      | 1S P 2C P 2S P 3S P                  | 4C     | slam values, a side suit uncontrolled: serious control bid
+# Partner over the 3NT.
+S K52.Q74.A2.AK874      | 1S P 2C P 2S P 3S P 3NT P            | 4C     | extras: start the control bids
+S K52.A74.A2.KQ874      | 1S P 2C P 2S P 3S P 3NT P            | 4NT    | slam values, every suit controlled: keycard
+S K52.Q74.A2.KJ874      | 1S P 2C P 2S P 3S P 3NT P            | 4S     | nothing extra: game
+# The control dialogue goes on as control-bids.bid has it.
+N AKJ74.K5.A83.Q92      | 1S P 2C P 2S P 3S P 3NT P 4C P       | 4D     | the cheapest control
+N AKJ74.Q5.Q83.Q92      | 1S P 2C P 2S P 3S P 3NT P 4C P       | 4S     | no further control: game
+
+# Interference: their double of 3NT leaves the 3NT out of play here.
+S K52.Q74.A2.KJ874      | 1S P 2C P 2S P 3S P 3NT X            | 4S     | nothing extra: game
+
+# Off the card: 3NT is not artificial.
+card    21GF-DEFAULT
+N AJ874.K5.K83.K92      | 1S P 2C P 2S P 3S P                  | !3NT   | no non-serious 3NT
+
+# A control past 4NT (rkcb-1430.bid): every suit covered, bid the slam.
+card    21GF-DEFAULT slam.non_serious_3nt.play=true
+S AJT.AKQ4.AKJ4.97      | 1S P 2D P 2S P 3S P 3NT P 4D P 5C P  | 6S     | ♣ covered by partner's 5♣: slam, not more cueing at five (Serious 17)

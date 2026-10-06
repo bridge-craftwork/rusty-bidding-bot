@@ -1,0 +1,52 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Maximal doubles (`doubles.maximal`). We have bid and raised a major,
+# 1M .. 2M, and they bid three of the suit directly below ours (3D under
+# hearts, 3H under spades): there is no room left for a game try, so the
+# double is the game try and three of our major is only competitive.
+# Partner signs off in 3M with a minimum or bids game with a maximum.
+# (Bridge Bum, "Maximal Double"; Todd, "Non-Takeout Doubles", Advancing
+# in Bridge 357.) Alertable.
+#
+# Applies to the opener after 1M (any) 2M and to the overcaller after
+# (1x) 1M (any) 2M. Against any other three-level bid (not the suit just
+# below ours) the double stays what it was.
+
+module maximal-doubles "Maximal doubles"
+  card   doubles.maximal
+  needs  base
+  needs  overcalls
+  skill  competitive_bidding/maximal_doubles
+
+# ── The opener or the overcaller ─────────────────────────────────────
+# The game try is the opener's usual invitation over a single raise,
+# 17-18 support points (rebids.bid); 3M competes with six trumps (five and
+# a shape) and no game interest.
+after 1M (*) 2M (3x) | (1y) 1M (*) 2M (3x) when (M is H, x is D) | (M is S, x is H)
+  X   "Maximal double: a game try in {M}"
+      alert  artificial
+      shows  tp(M)=17..18
+      sets   trump=M, ask=maximal(M)
+      priority 2
+  3{M} "Competitive: no game interest"
+      shows M>=6 | (M>=5, !balanced), tp(M)<=16
+      sets  trump=M
+      priority 1
+  4{M} "Game: 19+ with the fit"
+      shows tp(M)>=19
+      sets  trump=M
+      priority 1
+  P   "Nothing more to say"  priority -5
+
+# ── Partner answers the game try ─────────────────────────────────────
+# The raise was 6-10: the top of it (9+ support points) accepts.
+when asked maximal(t)
+  4{t} "Accepts the game try: a maximum raise"
+      shows tp(t)>=9
+      priority 1
+  3{t} "Declines: a minimum raise"
+      priority 1
+
+# ── Partner after the competitive 3M ─────────────────────────────────
+after 1M (*) 2M (3x) 3M (P) | (1y) 1M (*) 2M (3x) 3M (P) when (M is H, x is D) | (M is S, x is H)
+  P   "Partner's 3{M} was only competitive"  priority 1

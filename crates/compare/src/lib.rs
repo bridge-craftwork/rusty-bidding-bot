@@ -47,6 +47,8 @@ pub struct Options {
     pub dd_cache: PathBuf,
     /// Card changes applied to both sides' cards, `path=value`
     /// (e.g. `general.style=bba` for an A/B run against BBA's treatments).
+    /// `ns:path=value` or `ew:path=value` changes one side's card only
+    /// (a convention self A/B: one pair plays it, the other does not).
     pub card_changes: Vec<String>,
 }
 
@@ -56,11 +58,25 @@ pub struct Report {
     pub boards: Vec<BoardResult>,
 }
 
+/// The changes in `changes` that apply to `side` (`"ns"` or `"ew"`): the
+/// unprefixed ones and those prefixed `side:`, without the prefix.
+pub fn changes_for<'a>(changes: &'a [String], side: &str) -> Vec<&'a str> {
+    changes
+        .iter()
+        .filter_map(|c| match c.split_once(':') {
+            Some((s, rest)) if s.eq_ignore_ascii_case("ns") || s.eq_ignore_ascii_case("ew") => {
+                s.eq_ignore_ascii_case(side).then_some(rest)
+            }
+            _ => Some(c.as_str()),
+        })
+        .collect()
+}
+
 fn load_card(
     pbs: &std::path::Path,
     vocab: &bridge_card::Vocabulary,
     name: &str,
-    changes: &[String],
+    changes: &[&str],
 ) -> Result<Card, String> {
     let path = pbs.join("bbsa").join(format!("{name}.bbsa"));
     let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
@@ -112,8 +128,18 @@ impl Engines {
             return Ok(e.clone());
         }
         let engine = Arc::new(Engine::new(
-            &load_card(&self.pbs, &self.rules.vocab, ns, &self.changes)?,
-            &load_card(&self.pbs, &self.rules.vocab, ew, &self.changes)?,
+            &load_card(
+                &self.pbs,
+                &self.rules.vocab,
+                ns,
+                &changes_for(&self.changes, "ns"),
+            )?,
+            &load_card(
+                &self.pbs,
+                &self.rules.vocab,
+                ew,
+                &changes_for(&self.changes, "ew"),
+            )?,
             &self.rules,
         ));
         self.cache.lock().unwrap().insert(key, engine.clone());
@@ -130,6 +156,16 @@ impl Report {
 }
 
 /// Run the comparison. `progress` is called with (boards done, total).
+/// Size rayon's global pool to `rbb_engine::cpu_budget` unless
+/// `RAYON_NUM_THREADS` says otherwise. Call it first thing in `main`.
+pub fn init_threads() {
+    if std::env::var_os("RAYON_NUM_THREADS").is_none() {
+        let _ = rayon::ThreadPoolBuilder::new()
+            .num_threads(rbb_engine::cpu_budget())
+            .build_global();
+    }
+}
+
 pub fn run(opts: &Options, progress: &(dyn Fn(usize, usize) + Sync)) -> Result<Report, String> {
     let engines = Engines::for_options(opts)?;
     run_with(opts, &engines, progress)
@@ -185,4 +221,26 @@ pub fn run_with(
         summary: summarize(&boards),
         boards,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::changes_for;
+
+    #[test]
+    fn side_prefixed_changes_go_to_one_side() {
+        let c: Vec<String> = [
+            "general.style=bba",
+            "ns:slam.kickback.play=true",
+            "EW:x.y=1",
+        ]
+        .iter()
+        .map(|s| s.to_string())
+        .collect();
+        assert_eq!(
+            changes_for(&c, "ns"),
+            ["general.style=bba", "slam.kickback.play=true"]
+        );
+        assert_eq!(changes_for(&c, "ew"), ["general.style=bba", "x.y=1"]);
+    }
 }

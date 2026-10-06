@@ -1,0 +1,13 @@
+# Lead-directing doubles (switched on below; no stock card plays them).
+card    21GF-DEFAULT competitive.lead_directing_double.play=true
+dealer  W
+vul     None
+
+# seat hand                 | auction    | expect | why
+S 873.K72.Q4.KQJ95          | 1N P 2C    | X      | Stayman: KQJ95 of clubs, lead them
+S 873.K72.Q4.K9875          | 1N P 2C    | P      | a poor club suit: pass
+S 873.K72.AQJ95.84          | 1N P 2D    | X      | a transfer: lead diamonds
+S 873.KQT95.Q4.842          | 1N P 2H    | X      | a transfer to spades: lead hearts
+S 873.K72.4.AKJ952          | 2N P 3C    | X      | Puppet or Stayman over 2NT: clubs
+card    21GF-DEFAULT
+S 873.K72.Q4.KQJ95          | 1N P 2C    | P      | not played: pass

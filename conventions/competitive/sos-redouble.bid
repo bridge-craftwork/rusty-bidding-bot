@@ -1,0 +1,44 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# SOS redouble (`other_conventions.sos_redouble.play`; convention-card
+# competitive_bidding/sos_redouble; "25 More Bridge Conventions You
+# Should Know", chapter 22): when a low-level contract of ours is
+# doubled for penalty, a redouble asks partner to choose another suit
+# rather than showing strength.
+#
+# Written for the one place where the engine knows the double has
+# become a penalty double: our one-level opening doubled for takeout and
+# passed round by the doubler's partner, 1x (X) P (P). Opener redoubles
+# with three cards or fewer in his suit (a short minor opening); with
+# four or more he passes and plays it. Responder then bids his longest
+# other suit, the cheapest of equals. Notes: sos-redouble.notes.md.
+
+module sos-redouble "SOS redouble"
+  needs  base
+  skill  competitive_bidding/sos_redouble
+  card   other_conventions.sos_redouble.play
+
+after 1x (X) P (P)
+  XX  "SOS: {x} is short, pick another suit"
+      alert  artificial
+      shows x<=3
+      sets  ask=sos
+      priority 1
+  P   "To play: four or more {x}"
+      shows x>=4
+      priority 1
+
+# Responder: his longest suit other than opener's, cheapest of equals.
+after 1x (X) P (P) XX (P)
+  cheapest(C) "Rescue: clubs"     shows C>=D | x is D, C>=H | x is H, C>=S | x is S
+      when  x is not C
+      priority 1
+  cheapest(D) "Rescue: diamonds"  shows D>C | x is C, D>=H | x is H, D>=S | x is S
+      when  x is not D
+      priority 1
+  cheapest(H) "Rescue: hearts"    shows H>C | x is C, H>D | x is D, H>=S | x is S
+      when  x is not H
+      priority 1
+  cheapest(S) "Rescue: spades"    shows S>C | x is C, S>D | x is D, S>H | x is H
+      when  x is not S
+      priority 1

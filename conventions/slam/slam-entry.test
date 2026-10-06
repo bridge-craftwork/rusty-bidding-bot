@@ -47,3 +47,12 @@ N KJ865.5.Q4.KQJ43      | 1S P 2D P 3C P 3S P                  | 4S     | 14: ga
 card    Basic-Bridge
 dealer  N
 S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | Blackwood on the card: no direct slam
+
+# The card's quantitative 4NT (`slam.quantitative_4nt.play`, `quant_4nt`):
+# off, the invitation has no call and the hand settles for game.
+card    21GF-DEFAULT
+dealer  N
+S AQ5.KQ4.QJ82.Q93      | 1NT P                                | 4NT    | quantitative: invites 6NT
+card    21GF-DEFAULT slam.quantitative_4nt.play=false
+S AQ5.KQ4.QJ82.Q93      | 1NT P                                | 3NT    | no quantitative 4NT on the card
+S AQ5.Q74.QJ82.J93      | 2NT P                                | 3NT    | the same over 2NT

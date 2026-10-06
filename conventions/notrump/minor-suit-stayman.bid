@@ -1,0 +1,73 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Minor Suit Stayman over 1NT (`notrump.minor_suit_stayman.play`), as
+# GIB and BBA play it (minor-suit-stayman.notes.md): 2♠ asks for a
+# four-card minor with five-four or better in the minors and game
+# values. Opener bids 3♣ with four or more clubs, 3♦ with four or more
+# diamonds and not four clubs, 2NT with neither.
+#
+# The minor-suit transfers that go with it on 21GF-MSTandMSS (2NT to
+# clubs, 3♣ to diamonds: `notrump.transfers.two_nt_clubs`,
+# `three_c_diamonds`) are here too: `notrump.minor_transfers` has no
+# value for that pair, so it reads `none` there. Responder's next call
+# is written in minor-transfers.bid (`when answered transfer(m)`).
+
+module minor-suit-stayman "Minor Suit Stayman over 1NT"
+  card   notrump.minor_suit_stayman.play
+  needs  notrump-base
+  skill  bidding_conventions/minor_suit_stayman
+  param  systems_on = nt_overcalls.direct.systems_on default true
+  param  minors = notrump.minor_transfers default relay
+  param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
+  param  nt_3c_diamonds = notrump.transfers.three_c_diamonds default false
+
+after nt1_undoubled when !they.bid | systems_on
+  2S  "Minor Suit Stayman: five-four or better in the minors, game values"  alert
+      shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=game
+      sets  forcing=game
+      artificial
+      priority 1                         # ahead of 3NT and the minor slam tries
+  2N  "Transfer to clubs: six or more clubs"  alert
+      shows C>=6, D<=3, H<=3, S<=3
+      when  minors is none, nt_2n_clubs
+      sets  forcing=round, ask=transfer(C)
+      artificial
+      priority 1
+  3C  "Transfer to diamonds: six or more diamonds"  alert
+      shows D>=6, C<=3, H<=3, S<=3
+      when  minors is none, nt_3c_diamonds
+      sets  forcing=round, ask=transfer(D)
+      artificial
+      priority 1                         # ahead of the natural 3♦ slam try
+
+after nt1_undoubled 2N (P) when minors is none, nt_2n_clubs
+  3C  "Completes the transfer"
+after nt1_undoubled 3C (P) when minors is none, nt_3c_diamonds
+  3D  "Completes the transfer"
+
+# Opener answers Minor Suit Stayman.
+after nt1_undoubled 2S (P)
+  3C  "Four or more clubs"                   alert  shows C>=4
+      artificial
+  3D  "Four or more diamonds, not four clubs"  alert  shows D>=4, C<=3
+      artificial
+  2N  "No four-card minor"                   alert  shows C<=3, D<=3
+      artificial
+
+# Responder. With a fit: slam from 33 total points between the hands,
+# else 3NT (or five of the minor with a singleton). Without: 3NT, 4NT
+# quantitative or 6NT.
+after nt1_undoubled 2S (P) 3m (P)
+  6m  "Slam in the minor fit"                shows tp(m)>=33-partner.hcp.min
+      sets  trump=m
+  5m  "Game in the minor fit, a singleton"   shows shortest<=1
+      sets  trump=m
+      priority -1
+  3N  "Game in notrump"
+      priority -2
+after nt1_undoubled 2S (P) 2N (P)
+  6N  "No fit: slam values"                  shows points>=32-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"    shows strength=slam_invite, points<=31-partner.hcp.min
+      sets  ask=quant
+  3N  "No fit: game"
+      priority -1
