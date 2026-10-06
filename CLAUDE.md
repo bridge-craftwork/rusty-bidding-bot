@@ -31,8 +31,10 @@ regression.
   batch convention-card field changes into one PR and tag.
 - **A convention BBA does not play is judged against ourselves**
   (Rick, 2026-10-05): the same deals with the card field off and on
-  (`probes/tools/self_ab.py`), scored by `errors_diff.py` for the side
-  that used it. A convention should usually gain, or nobody would play
+  (`probes/tools/self_ab.py --batch probes/self-ab.toml`, all 500
+  boards, verdict needs both board halves to agree), scored by
+  `errors_diff.py` for the side that used it. `compare --ns-set` /
+  `--ew-set` change one pair's card only (random deals need it). A convention should usually gain, or nobody would play
   it; one that loses points to a bug or a misread definition.
 - **Judgment changes** (competition, slams, valuation) keep the
   yardsticks in "Judging a change", but the big runs (full corpus,
