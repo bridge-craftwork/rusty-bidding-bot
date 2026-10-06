@@ -13,7 +13,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use bidspec::ast::{ArithOp, CallSpec, Expr, Module, Segment, StrainSpec};
+use bidspec::ast::{ArithOp, AuctionAlt, CallSpec, Expr, Module, PatternCall, Segment, StrainSpec};
 
 /// A definition, its body's card parameters already qualified with the
 /// defining module's name (`control-bids::style`).
@@ -176,6 +176,137 @@ impl Defines {
             }
             None => Expr::Path { path },
         }
+    }
+}
+
+/// One alternative of an `after` line as the engine matches it: the
+/// calls, with any named pattern (`define auction`) written out, and the
+/// condition its definition's line adds (`when kokish`), which must hold
+/// too. Bindings work as for any alternative: the first that matches
+/// supplies them, and the condition sees them.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Alt {
+    pub calls: Vec<PatternCall>,
+    pub when: Option<Expr>,
+}
+
+/// Every `define auction` of a rule set, by name, each line's condition
+/// reading its own module's card parameters (`qualified`).
+#[derive(Debug, Clone, Default)]
+pub struct Auctions {
+    defs: HashMap<String, Vec<AuctionAlt>>,
+}
+
+impl Auctions {
+    /// The named patterns of `modules`, active or not. A name defined
+    /// twice keeps the first; `check_terms` reports the second.
+    pub fn new(modules: &[Module]) -> Auctions {
+        let mut defs = HashMap::new();
+        for m in modules {
+            let params: HashSet<&str> = m.params.iter().map(|p| p.name.as_str()).collect();
+            for a in &m.auctions {
+                let alts = a
+                    .alts
+                    .iter()
+                    .map(|alt| AuctionAlt {
+                        pattern: alt.pattern.clone(),
+                        when: alt.when.as_ref().map(|w| qualify(w, &params, &[], &m.name)),
+                        line: alt.line,
+                    })
+                    .collect();
+                defs.entry(a.name.clone()).or_insert(alts);
+            }
+        }
+        Auctions { defs }
+    }
+
+    /// One `after` line's alternatives with every named pattern written
+    /// out: `nt2 3C (P)` becomes one alternative per alternative of
+    /// `nt2`, each followed by `3C (P)`, in the definition's order.
+    /// Conditions are expanded (`Defines`). An unknown name or a pattern
+    /// defined in terms of itself goes to `errors` and contributes no
+    /// alternative.
+    pub fn resolve(
+        &self,
+        alts: &[Vec<PatternCall>],
+        defines: &Defines,
+        errors: &mut Vec<String>,
+    ) -> Vec<Alt> {
+        let mut out = Vec::new();
+        for a in alts {
+            self.one(a, defines, errors, &mut Vec::new(), &mut out);
+        }
+        out
+    }
+
+    /// The alternatives of the definition of `name` written out, for the
+    /// checks: a use of `name` among them is a cycle.
+    pub fn resolve_def(
+        &self,
+        name: &str,
+        alts: &[Vec<PatternCall>],
+        defines: &Defines,
+        errors: &mut Vec<String>,
+    ) -> Vec<Alt> {
+        let mut out = Vec::new();
+        for a in alts {
+            self.one(a, defines, errors, &mut vec![name.to_string()], &mut out);
+        }
+        out
+    }
+
+    fn one(
+        &self,
+        a: &[PatternCall],
+        defines: &Defines,
+        errors: &mut Vec<String>,
+        stack: &mut Vec<String>,
+        out: &mut Vec<Alt>,
+    ) {
+        let Some((
+            PatternCall {
+                call: CallSpec::Named { name },
+                ..
+            },
+            suffix,
+        )) = a.split_first()
+        else {
+            out.push(Alt {
+                calls: a.to_vec(),
+                when: None,
+            });
+            return;
+        };
+        if stack.contains(name) {
+            let mut chain = stack.clone();
+            chain.push(name.clone());
+            errors.push(format!(
+                "the auction pattern `{name}` is defined in terms of itself ({})",
+                chain.join(" -> ")
+            ));
+            return;
+        }
+        let Some(def) = self.defs.get(name) else {
+            errors.push(format!(
+                "no auction pattern `{name}` (`define auction {name} = ...`)"
+            ));
+            return;
+        };
+        stack.push(name.clone());
+        for d in def {
+            let mut inner = Vec::new();
+            self.one(&d.pattern, defines, errors, stack, &mut inner);
+            let when = d.when.as_ref().map(|w| defines.expand(w, errors));
+            for mut alt in inner {
+                alt.calls.extend_from_slice(suffix);
+                alt.when = match (alt.when.take(), when.clone()) {
+                    (None, w) | (w, None) => w,
+                    (Some(a), Some(b)) => Some(Expr::And { all: vec![a, b] }),
+                };
+                out.push(alt);
+            }
+        }
+        stack.pop();
     }
 }
 
@@ -438,6 +569,105 @@ mod tests {
     fn a_definition_reads_its_own_modules_parameters() {
         let (e, _) = expanded("define styled = style is bba", "styled");
         assert_eq!(e, "d::style is bba");
+    }
+
+    /// Resolve the first context's `after` of `uses` against the named
+    /// patterns of `defs`: each alternative as text, its condition after
+    /// ` ? `.
+    fn resolved(defs: &str, uses: &str) -> (Vec<String>, Vec<String>) {
+        let d = module(&format!(
+            "module d \"d\"\n  param kokish = two_level.two_clubs.kokish\ndefine strong = kokish\n{defs}\n"
+        ));
+        let u = module(&format!("module u \"u\"\nafter {uses}\n  P \"x\"\n"));
+        let defines = Defines::new(std::slice::from_ref(&d));
+        let auctions = Auctions::new(&[d]);
+        let mut errors = Vec::new();
+        let alts = auctions.resolve(u.contexts[0].after.as_ref().unwrap(), &defines, &mut errors);
+        let text = alts
+            .iter()
+            .map(|a| {
+                let calls: Vec<String> = a
+                    .calls
+                    .iter()
+                    .map(|p| {
+                        if p.theirs {
+                            format!("({})", p.call)
+                        } else {
+                            p.call.to_string()
+                        }
+                    })
+                    .collect();
+                match &a.when {
+                    None => calls.join(" "),
+                    Some(w) => format!("{} ? {w}", calls.join(" ")),
+                }
+            })
+            .collect();
+        (text, errors)
+    }
+
+    const NT2: &str = "define auction nt2 = 2N (P) | 2C (P) 2D (P) 2N (P)\n  2C (P) 2D (P) 2H (P) 2S (P) 2N (P)  when kokish";
+
+    #[test]
+    fn named_auctions_are_written_out_in_order() {
+        let (alts, err) = resolved(NT2, "nt2");
+        assert!(err.is_empty(), "{err:?}");
+        assert_eq!(
+            alts,
+            [
+                "2N (P)",
+                "2C (P) 2D (P) 2N (P)",
+                "2C (P) 2D (P) 2H (P) 2S (P) 2N (P) ? d::kokish",
+            ]
+        );
+    }
+
+    #[test]
+    fn a_suffix_extends_every_alternative() {
+        let (alts, err) = resolved(NT2, "nt2 3C (P) 3D (P) | 1N (P) 3C (P) 3D (P)");
+        assert!(err.is_empty(), "{err:?}");
+        assert_eq!(
+            alts,
+            [
+                "2N (P) 3C (P) 3D (P)",
+                "2C (P) 2D (P) 2N (P) 3C (P) 3D (P)",
+                "2C (P) 2D (P) 2H (P) 2S (P) 2N (P) 3C (P) 3D (P) ? d::kokish",
+                "1N (P) 3C (P) 3D (P)",
+            ]
+        );
+    }
+
+    #[test]
+    fn named_auctions_nest_and_their_conditions_combine() {
+        let defs = "define auction nt1 = 1N (P) | (1x) 1N (P)\n\
+                    define auction nt1x = nt1 | (1x) 1N (X)\n\
+                    define auction strong_nt1 = nt1x 2C (P) 2D (P) when strong";
+        let (alts, err) = resolved(defs, "strong_nt1 2H (P)");
+        assert!(err.is_empty(), "{err:?}");
+        assert_eq!(
+            alts,
+            [
+                "1N (P) 2C (P) 2D (P) 2H (P) ? d::kokish",
+                "(1x) 1N (P) 2C (P) 2D (P) 2H (P) ? d::kokish",
+                "(1x) 1N (X) 2C (P) 2D (P) 2H (P) ? d::kokish",
+            ]
+        );
+    }
+
+    #[test]
+    fn unknown_and_cyclic_auctions_are_reported() {
+        let (alts, err) = resolved(NT2, "nt3 3C (P) | 2N (P)");
+        assert_eq!(alts, ["2N (P)"]);
+        assert_eq!(
+            err,
+            ["no auction pattern `nt3` (`define auction nt3 = ...`)"]
+        );
+        let defs = "define auction aa = bb 2C (P)\ndefine auction bb = 1N (P) | aa 2D (P)";
+        let (_, err) = resolved(defs, "aa");
+        assert_eq!(
+            err,
+            ["the auction pattern `aa` is defined in terms of itself (aa -> bb -> aa)"]
+        );
     }
 
     #[test]

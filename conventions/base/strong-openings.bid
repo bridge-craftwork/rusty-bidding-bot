@@ -41,6 +41,7 @@ module strong-openings "2♣ and 2NT openings"
   param  benjamin   = two_level.benjamin.play default false
   # French 2♦ (openings/french-2d.bid) takes every 24+ hand: 2♣ stops at 23.
   param  french     = two_level.french_2d.play default false
+  param  style      = general.style
 
 when opening
   2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
@@ -113,6 +114,14 @@ after 2C (P) 2D (P)
   3C  "5+ clubs"                       shows C>=5
   3D  "5+ diamonds"                    shows D>=5
 
+# ── Opener after their overcall and partner's pass (2026-10-05) ──────
+# The balanced hands rebid notrump as on the ladder, with a stopper in
+# their suit; systems are on over the 2NT (one-nt.bid, `systems on`).
+# Only the balanced rebids are written here so far.
+after 2C (2x) P (P) | 2C (3x) P (P)
+  2N  "22-23 HCP, balanced, a stopper in {x}"    shows hcp=22..23, balanced, stop(x)
+  3N  "24-25 HCP, balanced, a stopper in {x}"    shows hcp=24..25, balanced, stop(x)
+
 # ── Opener after a positive response ─────────────────────────────────
 # Partner has a real suit and 8+, so the only questions left are the fit
 # and the strain. `y is not D | partner.D>=5` is what tells the 3♦
@@ -150,7 +159,10 @@ after 2C (P) 2y (P) | 2C (P) 3y (P) when y is not D | partner.D>=5, y is not H |
 # BBA, probes/strong2c-2S-2N-resp.toml and strong2c-2H-2N-resp.toml:
 # a six-card suit rebids, a four-card side suit is shown, 5-3-3-2 bids a
 # quantitative 4NT with 8-9 and 6NT with 10+.
-after 2C (P) 2y (P) 2N (P) when y is H | y is S, y is not H | !bust_2h
+# That is BBA's treatment (`general.style = bba`). By default systems are
+# on over this 2NT (Rick, 2026-10-05; one-nt.bid, `systems on`): the 2NT
+# system of two-nt-responses.bid answers it, Stayman and transfers.
+after 2C (P) 2y (P) 2N (P) when y is H | y is S, y is not H | !bust_2h, style is bba
   3y  "Six or more {y}: the fit is known"      shows y>=6   sets trump=y
       priority 2                             # the fit first, before a side suit
   3S  "Four or more spades"                    shows S>=4
@@ -173,7 +185,7 @@ after 2C (P) 2y (P) 2N (P) when y is H | y is S, y is not H | !bust_2h
 # for keycards at once: 30+ between us and a fit (BBA asks on almost
 # every hand after 2C P 2S P 2NT P 3S P, probes/strong2c-2S-2N-3S-opener.toml).
 # Without 1430 or 0314 on the card, game in the fit.
-after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y, y is not H | !bust_2h
+after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y, y is not H | !bust_2h, style is bba
   4N  "Keycard ask in {z}: four-card support"  shows z>=4
       when  k1430 | k0314
       sets  trump=z, ask=keycards(z)

@@ -150,7 +150,9 @@ impl<'a> Parser<'a> {
             params: Vec::new(),
             skills: Vec::new(),
             defines: Vec::new(),
+            auctions: Vec::new(),
             forces: Vec::new(),
+            systems: Vec::new(),
             contexts: Vec::new(),
         };
         for node in &first.children {
@@ -163,9 +165,24 @@ impl<'a> Parser<'a> {
                         module.contexts.push(ctx);
                     }
                 }
+                Some("systems") => {
+                    if let Some(s) = self.systems_on(node) {
+                        module.systems.push(s);
+                    }
+                }
                 Some("force") => {
                     if let Some(f) = self.force(node) {
                         module.forces.push(f);
+                    }
+                }
+                Some("define")
+                    if matches!(
+                        (lines[node.line].toks.get(1).map(|t| &t.tok), lines[node.line].toks.get(2).map(|t| &t.tok)),
+                        (Some(Tok::Word(a)), Some(Tok::Word(_))) if a == "auction"
+                    ) =>
+                {
+                    if let Some(d) = self.auction_def(node) {
+                        module.auctions.push(d);
                     }
                 }
                 Some("define") => {
@@ -180,7 +197,7 @@ impl<'a> Parser<'a> {
                 _ => self.error(
                     node.line,
                     Some(0),
-                    "expected a context (`after <auction>` or `when <condition>`), a `define` or a `force` at the left margin",
+                    "expected a context (`after <auction>` or `when <condition>`), a `define`, a `force` or `systems on` at the left margin",
                 ),
             }
         }
@@ -359,6 +376,123 @@ impl<'a> Parser<'a> {
         })
     }
 
+    /// `systems on when <condition>`, the condition continuing on indented
+    /// lines, each one more part of it (joined like `,`).
+    fn systems_on(&mut self, node: &Node) -> Option<SystemsOn> {
+        let lines = self.lines;
+        let line = node.line;
+        let l = &lines[line];
+        let head_ok = matches!(
+            (l.toks.get(1).map(|t| &t.tok), l.toks.get(2).map(|t| &t.tok)),
+            (Some(Tok::Word(a)), Some(Tok::Word(b))) if a == "on" && b == "when"
+        );
+        if !head_ok {
+            self.error(line, None, "expected `systems on when <condition>`");
+            return None;
+        }
+        let mut parts = Vec::new();
+        if l.toks.len() > 3 {
+            match self.condition(&l.toks[3..], l.code) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(line, e);
+                    return None;
+                }
+            }
+        }
+        for child in &node.children {
+            let cl = &lines[child.line];
+            if let Some(g) = child.children.first() {
+                self.error(g.line, Some(0), "unexpected indentation under `systems on`");
+            }
+            match self.condition(&cl.toks, cl.code) {
+                Ok(e) => parts.push(e),
+                Err(e) => {
+                    self.perror(child.line, e);
+                    return None;
+                }
+            }
+        }
+        let when = match parts.len() {
+            0 => {
+                self.error(line, None, "`systems on when` needs a condition");
+                return None;
+            }
+            1 => parts.pop().unwrap(),
+            _ => Expr::And { all: parts },
+        };
+        Some(SystemsOn { when, line: l.no })
+    }
+
+    /// `define auction name = <patterns> [when <condition>]`, more
+    /// alternatives following on indented lines (`<patterns> [when
+    /// <condition>]` each). A line's `when` holds for every alternative on
+    /// it, as on an `after` line.
+    fn auction_def(&mut self, node: &Node) -> Option<AuctionDef> {
+        let lines = self.lines;
+        let line = node.line;
+        let l = &lines[line];
+        let toks = &l.toks[2..];
+        let mut c = Cursor::new(toks, l.code);
+        let name = match expr::auction_head(&mut c) {
+            Ok(n) => n,
+            Err(e) => {
+                self.perror(line, e);
+                return None;
+            }
+        };
+        let rest = &toks[toks.len() - c.remaining()..];
+        let mut alts = Vec::new();
+        let mut ok = true;
+        let mut add = |p: &mut Self, at: usize, toks: &[Token], code: &str| match p
+            .after_when(true, toks, code)
+        {
+            Ok((Some(pats), when)) => {
+                for pattern in pats {
+                    alts.push(AuctionAlt {
+                        pattern,
+                        when: when.clone(),
+                        line: lines[at].no,
+                    });
+                }
+            }
+            Ok((None, _)) => unreachable!("an `after` reading gives patterns"),
+            Err(e) => {
+                p.perror(at, e);
+                ok = false;
+            }
+        };
+        if !rest.is_empty() {
+            add(self, line, rest, l.code);
+        }
+        for child in &node.children {
+            let cl = &lines[child.line];
+            if let Some(g) = child.children.first() {
+                self.error(
+                    g.line,
+                    Some(0),
+                    "unexpected indentation in an auction definition",
+                );
+            }
+            add(self, child.line, &cl.toks, cl.code);
+        }
+        if alts.is_empty() && ok {
+            self.error(
+                line,
+                None,
+                "an auction definition needs at least one pattern, after `=` or on the lines below",
+            );
+        }
+        if !ok || alts.is_empty() {
+            return None;
+        }
+        Some(AuctionDef {
+            name,
+            alts,
+            line: l.no,
+        })
+    }
+
     /// `after <patterns> [when <condition>]` (when `after`), or a bare
     /// condition: the tokens after the keyword of a context line.
     #[allow(clippy::type_complexity)]
@@ -482,6 +616,24 @@ impl<'a> Parser<'a> {
     fn pattern(&self, toks: &[Token], text: &str) -> Result<Vec<PatternCall>, PError> {
         let mut c = Cursor::new(toks, text);
         let mut calls = Vec::new();
+        // A named pattern (`define auction`) may start the alternative; it
+        // ends with an opponent's call, so ours comes next.
+        let mut last_theirs = None;
+        // `systems 2N`: our notrump where the system came on, any auction
+        // before it. Ours, so theirs comes next.
+        if let Some(level) = expr::systems_anchor(&mut c)? {
+            calls.push(PatternCall {
+                theirs: false,
+                call: CallSpec::Systems { level },
+            });
+            last_theirs = Some(false);
+        } else if let Some(name) = expr::pattern_name(&mut c) {
+            calls.push(PatternCall {
+                theirs: false,
+                call: CallSpec::Named { name },
+            });
+            last_theirs = Some(true);
+        }
         while !c.at_end() {
             let theirs = c.peek() == Some(&Tok::LParen);
             let start = c.offset();
@@ -490,20 +642,18 @@ impl<'a> Parser<'a> {
             } else {
                 expr::call(&mut c, CallPos::Pattern)?
             };
-            if calls
-                .last()
-                .is_some_and(|p: &PatternCall| p.theirs == theirs)
-            {
+            if last_theirs == Some(theirs) {
                 return Err((
                     start,
                     "calls must alternate between our side and (theirs), in parentheses".into(),
                 ));
             }
+            last_theirs = Some(theirs);
             calls.push(PatternCall { theirs, call });
         }
-        match calls.last() {
+        match last_theirs {
             None => c.err("expected an auction after `after`"),
-            Some(last) if !last.theirs => c.err(
+            Some(false) => c.err(
                 "a pattern ends with the call just before my turn, which is RHO's: add `(P)` or `(*)`",
             ),
             _ => Ok(calls),

@@ -791,6 +791,10 @@ impl<'a> Ctx<'a> {
                     ("shown", _) => {
                         self.knowledge_attr(self.self_knowledge(), self.actor, seg, b)?
                     }
+                    // `me.opened`, `me.named(x)`: the seat attributes, of my seat.
+                    ("me", _) if matches!(seg.name.as_str(), "opened" | "named") => {
+                        self.seat_attr(self.actor, seg, b)?
+                    }
                     ("me", _) => self.name(seg, b)?,
                     ("we", _) => self.we_attr(seg, b)?,
                     _ => self.they_attr(seg, b)?,
@@ -1209,6 +1213,10 @@ impl<'a> Ctx<'a> {
                 .into(),
             ),
             "gf" => Val::Bool(Tri::from_bool(side.forcing == Forcing::Game)),
+            "systems_on" => {
+                let n = self.pos.calls.len();
+                Val::Bool(Tri::from_bool(n >= 2 && side.systems == Some(n - 2)))
+            }
             "hcp" => {
                 let mine = self.num(&self.name(&plain("hcp"), b)?)?;
                 let theirs = self.pos.knowledge(self.partner()).hcp;
@@ -1339,7 +1347,10 @@ impl<'a> Ctx<'a> {
                     strain,
                 }
             }
-            CallSpec::Any | CallSpec::Relative { .. } => return Ok(None),
+            CallSpec::Any
+            | CallSpec::Named { .. }
+            | CallSpec::Systems { .. }
+            | CallSpec::Relative { .. } => return Ok(None),
         }))
     }
 
@@ -2073,7 +2084,7 @@ const SEAT_ATTRS: &[Term] = &[
         "last",
         "that seat's last call (`partner.last=3N`, `=P`, `=X`, `=XX`)",
     ),
-    t("opened", "that seat made the opening bid"),
+    t("opened", "that seat made the opening bid (`me.opened`: I did)"),
     t("bids", "how many bids that seat has made"),
     t(
         "has_bid",
@@ -2101,7 +2112,7 @@ const SEAT_ATTRS: &[Term] = &[
     f(
         "named",
         "(x)",
-        "that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count",
+        "that seat has made a natural bid in x (a suit or N) at any point; calls a rule marks artificial do not count (`me.named(x)`: I have)",
     ),
     f("has", "(rank, x)", "not tracked: unknown"),
     f("stop", "(x)", "not tracked: unknown"),
@@ -2134,6 +2145,10 @@ const WE_ATTRS: &[Term] = &[
         "either of us has made a natural bid in x (a suit or N) at any point; artificial calls do not count",
     ),
     t("gf", "we are in a game force (`we.forcing = game`)"),
+    t(
+        "systems_on",
+        "partner's last call is the notrump where our notrump system came on (`systems on`): I am answering it",
+    ),
     t(
         "hcp",
         "my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends)",
@@ -2314,8 +2329,8 @@ fn check_path(path: &[Segment], params: &[&str], out: &mut Vec<String>) {
             "we" => named(WE_ATTRS, n),
             "they" => named(THEY_ATTRS, n),
             "me" => match &seg.args {
-                Some(_) => named(SELF_FUNCS, n) || named(POSITION_FUNCS, n),
-                None => bare_name_ok(n, params),
+                Some(_) => n == "named" || named(SELF_FUNCS, n) || named(POSITION_FUNCS, n),
+                None => n == "opened" || bare_name_ok(n, params),
             },
             _ => seat_attr_ok(n),
         };
@@ -2454,19 +2469,20 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
 /// every definition inlined (`macros`); the definitions themselves are
 /// checked too. Errors name the file and line.
 pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
-    use crate::macros::{qualified, Defines};
+    use crate::macros::{qualified, Auctions, Defines};
     let defines = Defines::new(modules);
+    let auctions = Auctions::new(modules);
     // A definition's card parameters, as the rules that use it see them.
     let defined: Vec<String> = modules
         .iter()
-        .filter(|m| !m.defines.is_empty())
+        .filter(|m| !m.defines.is_empty() || !m.auctions.is_empty())
         .flat_map(|m| m.params.iter().map(|p| qualified(&m.name, &p.name)))
         .collect();
     fn walk(
         m: &bidspec::Module,
         c: &bidspec::ast::Context,
         params: &[&str],
-        defines: &Defines,
+        (defines, auctions): (&Defines, &Auctions),
         out: &mut Vec<bidspec::Diagnostic>,
     ) {
         let diag = |line: usize, message: String| bidspec::Diagnostic {
@@ -2475,6 +2491,11 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
             col: 0,
             message,
         };
+        if let Some(alts) = &c.after {
+            let mut errors = Vec::new();
+            auctions.resolve(alts, defines, &mut errors);
+            out.extend(errors.into_iter().map(|msg| diag(c.line, msg)));
+        }
         let expand = |line: usize, e: &Expr, out: &mut Vec<bidspec::Diagnostic>| {
             let mut errors = Vec::new();
             let x = defines.expand(e, &mut errors);
@@ -2513,11 +2534,12 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
             }
         }
         for inner in &c.contexts {
-            walk(m, inner, params, defines, out);
+            walk(m, inner, params, (defines, auctions), out);
         }
     }
     let mut out = Vec::new();
     let mut seen: HashMap<&str, &str> = HashMap::new();
+    let mut seen_auctions: HashMap<&str, &str> = HashMap::new();
     for m in modules {
         let mut params: Vec<&str> = m.params.iter().map(|p| p.name.as_str()).collect();
         params.extend(defined.iter().map(String::as_str));
@@ -2550,21 +2572,100 @@ pub fn check_terms(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
                     .map(|msg| diag(format!("`{n}`: {msg}"))),
             );
         }
+        // Named auction patterns: defined once, every name they use
+        // defined and not themselves, each line's condition public.
+        for a in &m.auctions {
+            let n = a.name.as_str();
+            let diag = |line: usize, message: String| bidspec::Diagnostic {
+                file: m.file.clone(),
+                line,
+                col: 0,
+                message,
+            };
+            if let Some(first) = seen_auctions.insert(n, &m.file) {
+                out.push(diag(
+                    a.line,
+                    format!("the auction pattern `{n}` is defined twice (first in {first})"),
+                ));
+            }
+            let mut errors = Vec::new();
+            let alts: Vec<Vec<bidspec::ast::PatternCall>> =
+                a.alts.iter().map(|x| x.pattern.clone()).collect();
+            auctions.resolve_def(n, &alts, &defines, &mut errors);
+            errors.dedup();
+            out.extend(errors.into_iter().map(|msg| diag(a.line, msg)));
+            for alt in &a.alts {
+                let Some(w) = &alt.when else { continue };
+                let mut errors = Vec::new();
+                let w = defines.expand(w, &mut errors);
+                let mut msgs = Vec::new();
+                check_expr(&w, &params, &mut msgs);
+                let mut terms = Vec::new();
+                hand_terms(&w, &mut terms);
+                terms.dedup();
+                if !terms.is_empty() {
+                    msgs.push(format!(
+                        "{} in an auction pattern's `when` depends on the hand: a pattern \
+                         is matched before the hand is known",
+                        terms.join(", ")
+                    ));
+                }
+                out.extend(
+                    errors
+                        .into_iter()
+                        .chain(msgs)
+                        .map(|msg| diag(alt.line, format!("`{n}`: {msg}"))),
+                );
+            }
+        }
         for c in &m.contexts {
-            walk(m, c, &params, &defines, &mut out);
+            walk(m, c, &params, (&defines, &auctions), &mut out);
         }
         // A force is judged when a call is made, by anyone reading it: its
         // condition is public. `call` is the call being made.
         let mut fparams = params.clone();
         fparams.push("call");
+        // `systems on` is public too, judged as the call is made.
+        for s in &m.systems {
+            let mut errors = Vec::new();
+            let w = defines.expand(&s.when, &mut errors);
+            let mut msgs = Vec::new();
+            check_expr(&w, &fparams, &mut msgs);
+            let mut terms = Vec::new();
+            hand_terms(&w, &mut terms);
+            terms.dedup();
+            if !terms.is_empty() {
+                msgs.push(format!(
+                    "{} in `systems on` depends on the caller's hand: it is public, \
+                     judged the same by everyone who reads the call",
+                    terms.join(", ")
+                ));
+            }
+            out.extend(
+                errors
+                    .into_iter()
+                    .chain(msgs)
+                    .map(|message| bidspec::Diagnostic {
+                        file: m.file.clone(),
+                        line: s.line,
+                        col: 0,
+                        message,
+                    }),
+            );
+        }
         for f in &m.forces {
-            let Some(w) = &f.when else { continue };
             let diag = |message: String| bidspec::Diagnostic {
                 file: m.file.clone(),
                 line: f.line,
                 col: 0,
                 message,
             };
+            if let Some(alts) = &f.after {
+                let mut errors = Vec::new();
+                auctions.resolve(alts, &defines, &mut errors);
+                out.extend(errors.into_iter().map(diag));
+            }
+            let Some(w) = &f.when else { continue };
             let mut errors = Vec::new();
             let w = defines.expand(w, &mut errors);
             let mut msgs = Vec::new();
@@ -2680,7 +2781,8 @@ mod term_tests {
         assert!(errors("partner.jumped, me.last=P, hcp>=12, tp(S)>=10").is_empty());
         assert!(errors("style is bba, we.forcing = game, they.bid").is_empty());
         assert!(errors("partner.hcp.min>=15, x>=4, M is not x").is_empty());
-        assert_eq!(errors("me.opened"), ["unknown term `me.opened`"]);
+        assert!(errors("me.opened, me.named(S), we.systems_on").is_empty());
+        assert_eq!(errors("me.jumped"), ["unknown term `me.jumped`"]);
         assert_eq!(errors("opened"), ["unknown term `opened`"]);
         assert_eq!(errors("partner.hpc>=10"), ["unknown term `partner.hpc`"]);
         assert_eq!(errors("we.bid"), ["unknown term `we.bid`"]);
@@ -2778,6 +2880,45 @@ mod term_tests {
                 "{bad}: {msgs:?}"
             );
         }
+    }
+
+    /// Named auction patterns: every name an `after` or a `force` uses is
+    /// defined, none is defined in terms of itself or twice, and a
+    /// pattern's `when` is public and reads its own module's parameters.
+    #[test]
+    fn auction_patterns_are_checked() {
+        let module = |src: &str| bidspec::parse(src, "t.bid").unwrap();
+        let msgs = |mods: &[bidspec::Module]| {
+            check_terms(mods)
+                .into_iter()
+                .map(|d| format!("{}: {}", d.line, d.message))
+                .collect::<Vec<_>>()
+        };
+        let defs = module(
+            "module d \"d\"\n  param kokish = two_level.two_clubs.kokish\n\
+             define auction nt2 = 2N (P)\n  2C (P) 2D (P) 2N (P) when kokish\n",
+        );
+        let ok = module("module u \"u\"\nafter nt2 3C (P)\n  P \"x\"\nforce game after nt2\n");
+        assert!(msgs(&[defs.clone(), ok]).is_empty());
+        let bad = module(
+            "module u \"u\"\nafter nt3\n  P \"x\"\nforce game after nt4 3C (P)\n\
+             define auction aa = bb\ndefine auction bb = aa\n\
+             define auction nt2 = 1N (P)\n\
+             define auction cc = 1N (P) when hcp>=10\ndefine auction dd = 1N (P) when kokish\n",
+        );
+        assert_eq!(
+            msgs(&[defs, bad]),
+            [
+                "5: the auction pattern `aa` is defined in terms of itself (aa -> bb -> aa)",
+                "6: the auction pattern `bb` is defined in terms of itself (bb -> aa -> bb)",
+                "7: the auction pattern `nt2` is defined twice (first in t.bid)",
+                "8: `cc`: `hcp` in an auction pattern's `when` depends on the hand: a pattern \
+                 is matched before the hand is known",
+                "9: `dd`: unknown term `kokish`",
+                "2: no auction pattern `nt3` (`define auction nt3 = ...`)",
+                "4: no auction pattern `nt4` (`define auction nt4 = ...`)",
+            ]
+        );
     }
 
     /// Definitions are checked where they are made and where they are

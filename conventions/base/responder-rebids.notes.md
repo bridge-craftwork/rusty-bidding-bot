@@ -677,6 +677,15 @@ test now expects 4H with that hand and 3H with 11 (Q76 for QJ6), which
 keeps the invitation. Flat 4-3-3-3 hands are not marked down by the
 count; that is the open question if Rick prefers the invitation.
 
+## 2♣–2♦–2NT is the 2NT system now (2026-10-05)
+
+Over 2♣–2♦–2NT responder no longer reaches the notrump catch-all: the
+2NT system answers (two-nt-responses.notes.md, "One system for every
+2NT"). Six hearts opposite 2NT transfers (then game); 11 HCP opposite
+22-23 bids 6NT on the system's slam band (33 total points on opener's
+floor) where the catch-all invited with 4NT (32-33 / 34 HCP). The
+catch-all still serves 1x–1y–2NT and the other natural notrumps.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and

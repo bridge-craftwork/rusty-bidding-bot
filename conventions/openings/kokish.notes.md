@@ -31,6 +31,10 @@
   notrump/two-nt-responses.bid and two-nt-minors.bid (19 blocks). Adding
   the Kokish 2NT means extending those contexts, together with
   2♣–2♦–2NT: left to the notrump work.
+  Done 2026-10-05 (Rick: "all the same responses as after 2C/2NT, just
+  with modified HCP range for opener"): systems are on over the Kokish
+  2NT (one-nt.notes.md, "Systems on"), and the 2NT system counts against
+  its 24-25. Kokish_Relay: 5 of 50 boards changed, each to Stayman.
 - Divergences at 2♣–P (positive responses) and in the opponents'
   overcalls are not Kokish's.
 

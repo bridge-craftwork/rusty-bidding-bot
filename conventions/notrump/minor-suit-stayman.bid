@@ -21,7 +21,7 @@ module minor-suit-stayman "Minor Suit Stayman over 1NT"
   param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
   param  nt_3c_diamonds = notrump.transfers.three_c_diamonds default false
 
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
+after nt1_undoubled when !they.bid | systems_on
   2S  "Minor Suit Stayman: five-four or better in the minors, game values"  alert
       shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=game
       sets  forcing=game
@@ -40,13 +40,13 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) when !they.bid | systems_on
       artificial
       priority 1                         # ahead of the natural 3♦ slam try
 
-after 1N (P) 2N (P) | (1x) 1N (P) 2N (P) | (1x) P (P) 1N (P) 2N (P) when minors is none, nt_2n_clubs
+after nt1_undoubled 2N (P) when minors is none, nt_2n_clubs
   3C  "Completes the transfer"
-after 1N (P) 3C (P) | (1x) 1N (P) 3C (P) | (1x) P (P) 1N (P) 3C (P) when minors is none, nt_3c_diamonds
+after nt1_undoubled 3C (P) when minors is none, nt_3c_diamonds
   3D  "Completes the transfer"
 
 # Opener answers Minor Suit Stayman.
-after 1N (P) 2S (P) | (1x) 1N (P) 2S (P) | (1x) P (P) 1N (P) 2S (P)
+after nt1_undoubled 2S (P)
   3C  "Four or more clubs"                   alert  shows C>=4
       artificial
   3D  "Four or more diamonds, not four clubs"  alert  shows D>=4, C<=3
@@ -57,7 +57,7 @@ after 1N (P) 2S (P) | (1x) 1N (P) 2S (P) | (1x) P (P) 1N (P) 2S (P)
 # Responder. With a fit: slam from 33 total points between the hands,
 # else 3NT (or five of the minor with a singleton). Without: 3NT, 4NT
 # quantitative or 6NT.
-after 1N (P) 2S (P) 3m (P) | (1x) 1N (P) 2S (P) 3m (P) | (1x) P (P) 1N (P) 2S (P) 3m (P)
+after nt1_undoubled 2S (P) 3m (P)
   6m  "Slam in the minor fit"                shows tp(m)>=33-partner.hcp.min
       sets  trump=m
   5m  "Game in the minor fit, a singleton"   shows shortest<=1
@@ -65,7 +65,7 @@ after 1N (P) 2S (P) 3m (P) | (1x) 1N (P) 2S (P) 3m (P) | (1x) P (P) 1N (P) 2S (P
       priority -1
   3N  "Game in notrump"
       priority -2
-after 1N (P) 2S (P) 2N (P) | (1x) 1N (P) 2S (P) 2N (P) | (1x) P (P) 1N (P) 2S (P) 2N (P)
+after nt1_undoubled 2S (P) 2N (P)
   6N  "No fit: slam values"                  shows points>=32-partner.hcp.min
   4N  "No fit: quantitative, invites 6NT"    shows strength=slam_invite, points<=31-partner.hcp.min
       sets  ask=quant

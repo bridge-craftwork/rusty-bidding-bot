@@ -24,3 +24,8 @@ S AK54.KQ3.AJ5.K93          | 2NT P 3S P         | 3NT    | no four-card minor
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 4D P    | 6D     | 11 and a nine-card fit: slam
 N 8.K4.AKT64.QT952          | 2NT P 3S P 4C P    | 6C     | slam in the fit
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 6NT    | no fit, 32 between us: 6NT
+
+# In a game force (2♣–2♦–2NT) there is no weak relay: 3NT.
+card    21GF-DEFAULT
+dealer  S
+N 54.83.976.QJ8642          | 2C P 2D P 2NT P    | 3NT    | weak, six clubs, but game is forced

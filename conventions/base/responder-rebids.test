@@ -206,7 +206,10 @@ N 85.KJ75.Q4.QT975      | 1D P 1H P 1S P                       | 1NT    | 2C wou
 card    21GF-DEFAULT
 dealer  S
 vul     All
-N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 4H     | 4 HCP, six hearts opposite two or more: game in the fit, not 3NT
+# Since 2026-10-05 2C P 2D P 2NT P is the 2NT system (two-nt-responses.bid,
+# `nt2`): the six hearts transfer, and game follows in the fit.
+N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 3D     | 4 HCP, six hearts opposite two or more: transfer, not 3NT
+N 32.KJ9876.T953.4      | 2C P 2D P 2NT P 3D P 3H P            | 4H     | then game in the fit
 # (2C P 2S P 2NT P itself now has its own rules: strong-openings.test.)
 
 # Fast arrival after a two-over-one and opener's second suit (2026-09-30,
@@ -226,9 +229,13 @@ S Q72.K84.K73.QJ95      | 1S P 1N P 2C P                       | 3S     | three 
 
 # Slam over opener's 2NT after 2C (2026-09-30): 6NT with 34 on partner's
 # floor, a quantitative 4NT with 32-33 (Gerber, when played, comes first).
+# Since 2026-10-05 the 2NT system answers there (two-nt-responses.bid,
+# `nt2`), with its strength bands: slam from 33 total points on opener's
+# floor, the 4NT invitation with 32 (two-nt-responses.notes.md).
 card    21GF-DEFAULT slam.gerber.play=false
 dealer  N
-S K83.QJ4.K872.Q95      | 2C P 2D P 2N P                       | 4NT    | 11 facing 22-23: 33 on his floor, quantitative
+S K83.QJ4.K872.Q95      | 2C P 2D P 2N P                       | 6NT    | 11 facing 22-23: 33 on his floor, the 2NT system's slam band
+S K83.QJ4.K872.J95      | 2C P 2D P 2N P                       | 4NT    | 10 facing 22-23: 32-33, quantitative
 S K83.Q54.K872.J95      | 2C P 2D P 2N P                       | 3NT    | 9: 31, game only
 
 # After a game-forcing 2/1, no fit: 3NT is the minimum (fast arrival),

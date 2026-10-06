@@ -706,6 +706,14 @@ with one condition, `when quant_4nt` (the define here, reading this
 module's `q4n`). No stock card turns it off, so nothing changes on the
 corpus; slam-entry.test checks 1NT and 2NT with it off (3NT instead).
 
+## Fast arrival stands aside where systems are on (2026-10-05)
+
+The fast-arrival agreement (`cheapest(x)` "Agrees x: slam interest")
+claimed 3♥ after 2♣–2♠–2NT, where opener's 2NT showed three or four
+hearts: since systems are on there (one-nt.notes.md) 3♥ is a transfer,
+and the reading took the agreement. Its context now has
+`!we.systems_on` (partner's last call is our system's notrump).
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point

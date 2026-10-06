@@ -39,7 +39,9 @@ S 75.AKQ.AKQ95.AT9      | 2C P 2H P  | 3H  | 22 with three hearts raises even wi
 
 # ── Responder's rebid over opener's 2NT, and the slam after it (2026-09-28)
 # NT_Ladder 426 (21GF-DEFAULT, all vul): BBA 2C 2S 2NT 3S 4NT 5H 6S.
-card    21GF-DEFAULT
+# BBA's treatment: natural rebids. By default systems are on over this
+# 2NT (Rick, 2026-10-05), below.
+card    21GF-DEFAULT general.style=bba
 dealer  S
 vul     All
 N AK9876.J4.T9653.      | 2C P 2S P 2NT P            | 3S   | 8 HCP, six spades opposite two: the fit is known
@@ -52,6 +54,13 @@ N AKJ74.T65.J42.64      | 2C P 2S P 2NT P            | 4NT  | 9 HCP, 5-3-3-2: qu
 N KQJ75.Q53.J63.K6      | 2C P 2S P 2NT P            | 6NT  | 12 HCP, 5-3-3-2: 34 between us
 N KJ82.AQ975.43.72      | 2C P 2H P 2NT P            | 3S   | 10 HCP, five hearts and four spades
 S KJ.AKQ4.QJ54.AK5      | 2C P 2S P 2NT P 3H P       | 4NT  | 23 with four hearts: agree them and ask
+# Systems on over 2C-positive-2NT (Rick, 2026-10-05; one-nt.bid).
+card    21GF-DEFAULT
+N AK9876.J4.T9653.      | 2C P 2S P 2NT P            | 3H   | six spades: transfer, opener declares
+S J4.AKT.AKQ2.AJ75      | 2C P 2S P 2NT P 3H P       | 3S   | completes the transfer
+N KQ654.K764.3.Q74      | 2C P 2S P 2NT P            | 3C   | four hearts: Stayman
+N KJ82.AQ975.43.72      | 2C P 2H P 2NT P            | 3C   | four spades: Stayman
+card    21GF-DEFAULT general.style=bba
 # After the balanced positive: 3NT is exactly 22, 4NT invites with 23-24.
 S AQ5.KQ7.AKJ4.K76      | 2C P 2NT P                 | 3NT  | 22 balanced
 S AQ5.KQ7.AKJ4.KJ6      | 2C P 2NT P                 | 4NT  | 23 balanced: quantitative

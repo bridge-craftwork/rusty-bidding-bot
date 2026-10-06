@@ -20,6 +20,40 @@ module notrump-base "1NT opening and natural responses"
   param  allow_5422 = notrump.one_nt.allow_5422 default false
   param  allow_4441 = notrump.one_nt.allow_4441 default false
 
+# ── Systems on (Rick, 2026-10-05) ────────────────────────────────────
+# One notion: partner's last call is a natural notrump showing a
+# balanced range, and our notrump system answers it at that level: at
+# 1NT the two-level structure (Stayman, transfers, ...), at 2NT the
+# three-level one (two-nt-responses.bid, two-nt-minors.bid). Each piece
+# only as the card plays it. Opener's range is whatever the auction
+# showed (1NT 15-17, 2NT 20-21, 2♣–2♦–2NT 22-23, Kokish 24-25, a 1NT
+# overcall 15-18 ...), and the responses count strength bands against it.
+#
+# Where (Rick, 2026-10-05; one-nt.notes.md, "Systems on"): our side has
+# not bid a suit naturally before the notrump. Artificial calls do not
+# count (2♣ strong, 2♦ waiting, the 2♥ bust, Kokish's relays: rules mark
+# them `artificial`), nor do the opponents' calls (2♣ (2♠) P (P) 2NT is
+# on). One exception, Rick's list: a positive response to our artificial
+# opening (2♣–2♠–2NT, 2♣–2♥–2NT) is on too; BBA's treatment
+# (`general.style = bba`) keeps its natural rebids there instead. Not
+# when the notrump answers partner's opening (1♥–1NT, 2♣–2NT), or when it
+# is our second natural notrump. Our notrump overcall or balancing
+# notrump: as the card says (`nt_overcalls.direct.systems_on`).
+systems on when call = 1N | call = 2N, maybe shown.balanced, shown.second_longest.min <= 4
+  !me.named(C), !me.named(D), !me.named(H), !me.named(S), !me.named(N)
+  !partner.opened, !partner.named(N), !(lho.opened | rho.opened) | systems_on
+  (me.opened, style is not bba) | (!partner.named(C), !partner.named(D), !partner.named(H), !partner.named(S))
+
+# The 1NT system's ways in (LANGUAGE.md §4, named auction patterns):
+# our 1NT where the system came on, RHO passing; with `nt1` also RHO's
+# double of our 1NT overcall or balancing 1NT (a double of the 1NT
+# opening has its own rules: `after 1N (X)` in stayman.bid and
+# jacoby-transfers.bid). A context that starts `after nt1` reaches the
+# responses from all of them.
+define auction nt1_undoubled = systems 1N (P)
+define auction nt1 = nt1_undoubled
+  systems 1N (X)   when lho.opened | rho.opened
+
 # The range is in HCP, as BBA plays it (15-17 HCP exactly, whatever the
 # tens or length). With the card option "1NT may be 1 HCP light", a hand one
 # HCP short opens 1NT when its extras bring it to the range in total points.
@@ -46,7 +80,7 @@ when opening
 
 # Responder. Strength bands are total points measured against opener's
 # range, so they follow the card: with 15-17, invite is 8-9 and game 10-15.
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
+after nt1 when !they.bid | systems_on
   6N  "To play: slam values"
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # with five, transfer first
   4N  "Quantitative: invites 6NT"
@@ -160,7 +194,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
 # opener raises to 4M with three or more, else bids 3NT. With 5-5 the
 # higher suit. 5-4 in the majors goes through Stayman (stayman.bid), and
 # bids 3M over the 2♦ denial.
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
+after nt1 when !they.bid | systems_on
   3S  "Five or more spades, game forcing"
       shows S>=5, S>=H, strength>=game
       when  !jacoby
@@ -185,7 +219,7 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
       when  !jacoby
 
 # Opener after the signoff: pass (BBA passed 641 of 642 on the vanilla set).
-after 1N (P) 2H (P) | 1N (P) 2S (P) | (1x) 1N (P) 2H (P) | (1x) 1N (P) 2S (P) | (1x) P (P) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2S (P) | (1x) 1N (X) 2H (P) | (1x) 1N (X) 2S (P) | (1x) P (P) 1N (X) 2H (P) | (1x) P (P) 1N (X) 2S (P) when !jacoby
+after nt1 2H (P) | nt1 2S (P) when !jacoby
   P   "Partner's signoff"
 
 # Opener chooses the game: four of the major with three or more (an

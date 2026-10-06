@@ -6,7 +6,8 @@
 # after an answer is a sign-off. Notes: gerber.notes.md.
 #
 # Where it applies (card `slam.gerber.*`):
-# - directly over partner's 1NT or 2NT opening, and over 2♣–2♦–2NT;
+# - directly over partner's 1NT or 2NT where systems are on (2NT opening,
+#   2♣–2♦–2NT, Kokish's 2NT ...: one-nt.bid, `systems on`);
 # - over partner's 1NT or 2NT rebid after 1x–1y, unless the card says
 #   `gerber.only_over_nt_openings` (BBA's "Gerber only for NT openings").
 # Never where clubs are natural or a suit is agreed: after a transfer, a
@@ -48,7 +49,7 @@ after 1N (P) when !texas_4c
 
 # Over 2NT a long club suit asks too, and plays in 6♣ (BBA from 9 HCP
 # with six clubs; our threshold is the old 4♣ slam try's).
-after 2N (P) | 2C (P) 2D (P) 2N (P)
+after nt2
   4C  "Gerber: how many aces?"  alert
       shows H<=4, S<=4, (balanced, strength>=slam) | (C>=6 | (C>=5, !balanced), strength>=slam_invite)
       when  style is not bba

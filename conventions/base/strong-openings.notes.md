@@ -191,6 +191,24 @@ IMPs by the errors yardstick, positive when the convention makes fewer;
 Opps_Bid_Over_GF_2C: 174 boards changed; actor contract +180, other side
 doubling +193, double-dummy +171, halves +94/+86 (z +2.6): gains.
 
+## Systems on over opener's notrump (Rick, 2026-10-05)
+
+Rick: 2♣–2♠–2NT and 2♣–2♥(positive)–2NT are systems on, like
+2♣–2♦–2NT and 2♣ (2♠) P (P) 2NT (one-nt.notes.md, "Systems on"). So by
+default responder answers opener's 2NT after a positive with the 2NT
+system (Stayman, transfers: the six-card suit transfers and opener
+declares). The natural rebids probed from BBA (2026-09-28, "After a
+positive and opener's 2NT") are now BBA's treatment, `general.style =
+bba` (strong-openings.test keeps their cases there). Measured on the
+tripwire only: Grand_Slam_Invite 23 now stops in 4♥ after the transfer
+where the natural 3♥ and keycard reached 7♥; slam continuations after a
+transfer over a 22+ 2NT are the jacoby-transfers.bid ones.
+
+**After their overcall and partner's pass** (2♣ (2x) P (P)) opener had
+no rule at all. Added the balanced rebids only: 2NT with 22-23 and a
+stopper (systems on over it), 3NT with 24-25 and a stopper. The suit
+rebids and doubles there are still missing.
+
 ## Sources
 
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
@@ -221,3 +239,6 @@ doubling +193, double-dummy +171, halves +94/+86 (z +2.6): gains.
   BBA: see "Accepted differences from BBA".
 - **Rick's guidance (2026-10-01):** the raise of a positive is the 22+
   hand; `probes/slam-2C-2H-opener.toml` (BBA bare SAYC) for BBA's raise.
+- Rick, 2026-10-05: systems on over 2♣–positive–2NT and over 2♣ (2x) P
+  (P) 2NT; the balanced rebids after interference are standard practice,
+  not yet cited.

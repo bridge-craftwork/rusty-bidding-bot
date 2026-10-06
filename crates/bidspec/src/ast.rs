@@ -27,10 +27,29 @@ pub struct Module {
     /// module of the rule set.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub defines: Vec<Define>,
+    /// Named auction patterns (`define auction nt2 = 2N (P) | ...`),
+    /// usable at the start of any module's `after` alternative.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub auctions: Vec<AuctionDef>,
     /// State the auction itself creates (`force game after ... when ...`).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub forces: Vec<Force>,
+    /// Where our notrump system comes on (`systems on when ...`).
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub systems: Vec<SystemsOn>,
     pub contexts: Vec<Context>,
+}
+
+/// `systems on when <condition>`: a natural notrump bid made where the
+/// condition holds starts our notrump system at its level, whichever rule
+/// made or explains it. The condition is judged once the call's meaning
+/// is known (`shown.balanced` is what it showed), with `call` the call
+/// being made and the auction as it stood before it. Patterns reach the
+/// system with `systems 1N` / `systems 2N`.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SystemsOn {
+    pub when: Expr,
+    pub line: usize,
 }
 
 /// `force game [after <pattern>] [when <condition>]`: a call made where
@@ -60,6 +79,27 @@ pub struct Define {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub params: Vec<String>,
     pub body: Expr,
+    pub line: usize,
+}
+
+/// `define auction name = <pattern> | <pattern> [when <condition>]`, with
+/// more alternatives on indented lines below: a named set of auctions
+/// that an `after` alternative may start with (`after nt2`, `after nt2
+/// 3C (P)`). Each line's `when` holds for the alternatives on that line:
+/// a public condition, read with the defining module's card parameters.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuctionDef {
+    pub name: String,
+    pub alts: Vec<AuctionAlt>,
+    pub line: usize,
+}
+
+/// One alternative of a named auction pattern.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuctionAlt {
+    pub pattern: Vec<PatternCall>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub when: Option<Expr>,
     pub line: usize,
 }
 
@@ -133,6 +173,17 @@ pub enum CallSpec {
     Redouble,
     /// `(*)`: any call (patterns only).
     Any,
+    /// A named auction pattern (`define auction`) standing for the start
+    /// of an `after` alternative (patterns only, and only first).
+    Named {
+        name: String,
+    },
+    /// `systems 2N`: our natural notrump at which our notrump system
+    /// came on (a `systems on` declaration held when it was made), with
+    /// any auction before it (patterns only, and only first).
+    Systems {
+        level: u8,
+    },
     Bid {
         level: u8,
         strain: StrainSpec,

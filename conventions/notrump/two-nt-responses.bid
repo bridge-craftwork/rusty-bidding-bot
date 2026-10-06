@@ -5,11 +5,24 @@
 # play, 4NT quantitative. With `notrump.two_nt.puppet` 3♣ is Puppet
 # Stayman instead (at the end of the file).
 #
+# The same system answers every natural, balanced 2NT (Rick, 2026-10-05:
+# "the Kokish system should be all the same responses as after 2C/2NT,
+# but just with modified HCP range for opener"), wherever systems are on
+# (one-nt.bid, `systems on`): the 2NT opening (20-21), 2♣–2♦–2NT
+# (22-23), Kokish's 2♣–2♦–2♥–2♠–2NT (24-25), 2♣ and a positive then
+# 2NT, 2♣ (2♠) P (P) 2NT, a natural 2NT overcall. `nt2` below names
+# them; every context of the system starts `after nt2`. Opener's
+# range comes from what the auction showed, so every count here is a
+# strength band or measured against partner's range (`hcp>=25-partner.
+# hcp.min`), never an absolute number.
+#
 # Only the asking calls and opener's answers are here. What follows is
 # already written against the question in `stayman.bid` and
 # `jacoby-transfers.bid` (`when answered majors`, `when answered
-# transfer(M)`), and the strength bands read opener's 20-21, so the same
-# rules invite and bid game at the right level.
+# transfer(M)`), and the strength bands read opener's range, so the same
+# rules invite and bid game at the right level. After 2♣ the side is in a
+# game force (strong-openings.bid), so the passes here are not available
+# there and the weakest hands bid game.
 #
 # Without these rules responder passed a 2NT opening whatever he held:
 # 4,345 boards across the corpus, 123 of them in the Basic_* scenarios.
@@ -25,7 +38,11 @@ module two-nt-responses "Responses to a 2NT opening"
   param  gerber  = slam.gerber.play default false
   param  style   = general.style
 
-after 2N (P)
+# The 2NT system's way in: our 2NT where the system came on (`systems on`
+# in one-nt.bid), RHO passing.
+define auction nt2 = systems 2N (P)
+
+after nt2
   3C  "Stayman: asks for a four-card major"  alert
       shows H=4 | S=4, strength>=game
       when  stayman, !puppet, !shape 4333
@@ -95,30 +112,30 @@ after 2N (P)
 # responder then bids 6NT with slam values.
 # With Gerber on the card 4♣ asks for aces instead (gerber.bid): the club
 # hands ask and bid 6♣. The diamond try stays.
-after 2N (P) when style is not bba
+after nt2 when style is not bba
   4C  "Slam try: six or more clubs, or five and unbalanced"
       shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
       when  !gerber
   4D  "Slam try: six or more diamonds, or five and unbalanced"
       shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
-after 2N (P) 4x (P) when (x is C, !gerber) | x is D, style is not bba
+after nt2 4x (P) when (x is C, !gerber) | x is D, style is not bba
   6{x}  "A fit: slam"                       shows x>=3
   4N    "No fit"                            shows x<=2
-after 2N (P) 4x (P) 4N (P) when (x is C, !gerber) | x is D, style is not bba
+after nt2 4x (P) 4N (P) when (x is C, !gerber) | x is D, style is not bba
   6N  "Slam values anyway"                  shows strength>=slam
   P   "No fit: 4NT"
       priority -5
 
 # Opener answers Stayman. 3♦ is the negative, as over 1NT.
-after 2N (P) 3C (P) when !puppet
+after nt2 3C (P) when !puppet
   3H  "4+ hearts"                 shows H>=4
   3S  "4 spades, not 4 hearts"    shows S>=4, H<=3
   3D  "No four-card major"        shows H<=3, S<=3
 
 # Opener completes the transfer.
-after 2N (P) 3D (P)
+after nt2 3D (P)
   3H  "Completes transfer"
-after 2N (P) 3H (P)
+after nt2 3H (P)
   3S  "Completes transfer"
 
 # Responder after the completed transfer. The generic rules after a
@@ -126,7 +143,7 @@ after 2N (P) 3H (P)
 # call opposite 20-21: 408 boards across the corpus. BBA: pass with 0-3;
 # from 4 (25 combined), 3NT with five of the major, balanced or not, and
 # game in the major with six. Fallbacks under the generic rules.
-after 2N (P) 3D (P) 3H (P)
+after nt2 3D (P) 3H (P)
   P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
       priority -1
   3N  "Game values, five hearts: choose the game"  shows H=5, hcp>=25-partner.hcp.max
@@ -134,7 +151,7 @@ after 2N (P) 3D (P) 3H (P)
       priority -1
   4H  "Game, six or more hearts"                  shows H>=6, hcp>=25-partner.hcp.max
       priority -1
-after 2N (P) 3H (P) 3S (P)
+after nt2 3H (P) 3S (P)
   P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
       priority -1
   3N  "Game values, five spades: choose the game"  shows S=5, hcp>=25-partner.hcp.max
@@ -153,7 +170,7 @@ after 2N (P) 3H (P) 3S (P)
 # after 2♣–2♦–2NT too (probed: two-nt-responses.notes.md, "Puppet
 # Stayman over 2NT"). Only the ask names an auction; the rest follows
 # the questions and answers.
-after 2N (P) | 2C (P) 2D (P) 2N (P) when puppet
+after nt2 when puppet
   3C  "Puppet Stayman: asks for a four- or five-card major"  alert
       shows strength>=game, H<=4, S<=4, H>=3 | S>=3
       when  style is not bba
@@ -208,7 +225,7 @@ when asked puppet_fit(x)
 when asked puppet_both
   4S  "Four spades"                           shows S=4   sets trump=S
   4H  "Four hearts, not four spades"          shows H=4, S<=3   sets trump=H
-after 2N (P) 3C (P) 3D (P) 3N (P) | 2C (P) 2D (P) 2N (P) 3C (P) 3D (P) 3N (P) when puppet
+after nt2 3C (P) 3D (P) 3N (P) when puppet
   P   "No fit: 3NT"
 
 # Responder once opener has placed the contract in the 4-4 fit.

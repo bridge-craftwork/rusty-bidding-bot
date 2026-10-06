@@ -606,6 +606,60 @@ fit counts after Stayman (fit.test).
 `compare Any_5422_with_15-17 --limit 100`, the opening call: 84 → 89
 of 100. The unmapped `.bbsa` key `1NT opening NT style` is left alone.
 
+## Systems on (Rick, 2026-10-05)
+
+Rick: "The Kokish system should be all the same responses as after
+2C/2NT, but just with modified HCP range for opener — there shouldn't
+need to be a reimplementation of systems." Then: "Other auctions work
+too, like 2C 2S 2NT, 2C 2H (not bust) 2NT. Or opening 1NT. We normally
+call these 'systems on' ... 2C (2S) pass (pass) 2NT would be the same."
+And the boundary: systems are on unless **our side has bid a suit
+naturally** before partner's notrump; artificial calls do not count, nor
+do the opponents' calls.
+
+**How it is written.** One declaration in this module, `systems on when
+...` (engine 0.5.0, LANGUAGE.md §3), marks the notrump where our system
+comes on; the system's contexts start `after nt1 ...` (this file) and
+`after nt2 ...` (two-nt-responses.bid), named patterns for `systems 1N
+(P)` and `systems 2N (P)`, so they reach every auction where systems are
+on without listing them. The declaration holds when:
+
+- the notrump is natural: no rule that explains it is `artificial` or
+  alerts it (an announcement is fine). This is what keeps out the
+  Unusual and Sandwich 1NT, Jacoby 2NT, Lebensohl and the like, from the
+  flags the engine already keeps;
+- it has not shown a two-suiter (`maybe shown.balanced`,
+  `shown.second_longest.min <= 4`; 5-4-2-2 and 4-4-4-1 1NT openings pass);
+- the notrump bidder has made no natural bid (`me.named`), his partner
+  has not opened, bid notrump, or bid a suit naturally. One exception,
+  Rick's list: a positive response to the notrump bidder's artificial
+  opening (2♣–2♠–2NT, 2♣–2♥–2NT) is on too. With `general.style = bba`
+  that exception is off, and strong-openings.bid's natural rebids (BBA's,
+  probed 2026-09-28) answer instead;
+- over their opening (our notrump overcall or balancing notrump), the
+  card's `nt_overcalls.direct.systems_on`. After our opening their calls
+  do not matter (2♣ (2♠) P (P) 2NT).
+
+Decisions taken (for Rick):
+- **A notrump that answers partner's opening** (1♥–1NT, 1♦–2NT, 2♣–2NT
+  positive) is not systems on, though no suit has been bid naturally on
+  our side in 2♣–2NT: there the notrump bidder is not the one with the
+  range, and strong-openings.bid's natural continuations stay.
+- **Advancing a takeout double with notrump** (1♥ P P X P 1NT, 1♥ X 1♠
+  1NT, 1♦ X P 2NT) is systems on by the rule as stated: a double is not a
+  suit bid. Standard practice varies; say if it should be off.
+- **3NT** is not a system point (no 4-level structure written).
+
+**Tripwire** (`compare --limit 50`, all scenarios, against main):
+writing the 1NT system's entry as `nt1` alone (the auction list) changed
+0 of 17,105 boards. With the state, 73 boards change, all at a new
+systems-on notrump: 2♣–2♦–2NT (29), Kokish's 2NT (9), 2♣–2♥–2NT, natural
+2NT overcalls and balancing 2NT over weak twos and Multi (about 20),
+advances of a takeout double (6), and two passed-hand Unusual 1NT
+auctions (Preempts 17, Muiderberg_Two_Bids 4) that the old list wrongly
+treated as systems on (a "transfer" completed over the Unusual 1NT's
+preference): those now read the 1NT as Unusual.
+
 ## Sources
 
 - **The system:** a 15-17 1NT opening and natural responses (2NT
@@ -643,3 +697,7 @@ of 100. The unmapped `.bbsa` key `1NT opening NT style` is left alone.
   (probes/open-15-5422-major-mirror.toml) and BBA's auctions in the
   Any_5422_* and GIB_1N5422 scenarios; 4-4-4-1 standard practice,
   not yet cited.
+- **Systems on:** Rick's rulings of 2026-10-05 (quoted in "Systems on");
+  the boundary is his, the decisions listed there are ours. Standard
+  practice ("systems on" after a natural notrump overcall or rebid) is
+  not yet cited to a book or article.

@@ -13,7 +13,7 @@ module jacoby-transfers "Jacoby Transfers"
 
 # The transfer is a question: "bid my suit". Opener's next call answers it,
 # whether a plain completion or a super-accept.
-after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X) when !they.bid | systems_on
+after nt1 when !they.bid | systems_on
   2D  "Transfer to hearts"  announce "Transfer"  shows H>=5  sets forcing=round, ask=transfer(H)  artificial
   2H  "Transfer to spades"  announce "Transfer"  shows S>=5  sets forcing=round, ask=transfer(S)  artificial
   2H  "Transfer to spades, 5-5 in the majors"  announce "Transfer"  shows S>=5, H>=5
@@ -23,10 +23,10 @@ after 1N (P) | (1x) 1N (P) | (1x) P (P) 1N (P) | (1x) 1N (X) | (1x) P (P) 1N (X)
 
 # Opener completes the transfer. Super-accepts are separate modules
 # (super-accept.bid, superaccept-doubleton.bid), switched on by the card.
-after 1N (P) 2D (P) | (1x) 1N (P) 2D (P) | (1x) P (P) 1N (P) 2D (P) | (1x) 1N (X) 2D (P) | (1x) P (P) 1N (X) 2D (P)
+after nt1 2D (P)
   2H  "Completes transfer"
 
-after 1N (P) 2H (P) | (1x) 1N (P) 2H (P) | (1x) P (P) 1N (P) 2H (P) | (1x) 1N (X) 2H (P) | (1x) P (P) 1N (X) 2H (P)
+after nt1 2H (P)
   2S  "Completes transfer"
 
 # Responder's second call, once opener has answered. There is no auction

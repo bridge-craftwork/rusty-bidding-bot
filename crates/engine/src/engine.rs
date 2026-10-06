@@ -11,6 +11,7 @@ use serde::Serialize;
 use crate::eval::{strain_of_suit, suit_of_strain, Bindings, Ctx, FastHash, PrivateCache, Val};
 use crate::facts::{Facts, Valuation};
 use crate::knowledge::{SeatKnowledge, Tri};
+use crate::macros::Alt;
 use crate::position::{side, Ask, Forcing, Position, SideState};
 use crate::sample;
 use crate::system::{RuleEntry, RuleRef, System};
@@ -705,6 +706,35 @@ impl Engine {
         step.warnings = warnings;
         pos.knowledge[caller.to_index()] = k;
         pos.apply_deck_hcp();
+        // Our notrump system comes on (`systems on when ...`) with a
+        // natural notrump (the rule that explains it neither marks it
+        // artificial nor alerts it; an announcement is fine),
+        // judged with what the call has shown and the auction as it stood
+        // before it.
+        if matches!(
+            call,
+            Call::Bid {
+                strain: bridge_types::Strain::NoTrump,
+                ..
+            }
+        ) && !step.artificial
+            && !matches!(step.alert, Some(Alert::Alert { .. }))
+            && sys.systems_on.iter().any(|s| {
+                let ctx = Ctx {
+                    pos,
+                    actor: caller,
+                    hand: None,
+                    params: &sys.params[s.module],
+                    valuation: self.valuation[side(caller)],
+                    private: None,
+                };
+                let mut b = Bindings::default();
+                b.insert("call".into(), Val::Call(call.clone()));
+                ctx.cond(&s.when, &mut b) == Ok(Tri::True)
+            })
+        {
+            pos.sides[side(caller)].systems = Some(pos.calls.len());
+        }
         pos.artificial.resize(pos.calls.len(), false);
         pos.artificial.push(step.artificial);
         pos.calls.push(call.clone());
@@ -1342,11 +1372,17 @@ fn apply_sets(
 }
 
 /// Does the auction end with any of one `after` line's alternatives?
-/// The first that matches keeps its bindings; the others leave none.
-fn match_any(alts: &[Vec<PatternCall>], calls: &[Call], ctx: &Ctx, b: &mut Bindings) -> bool {
+/// The first that matches keeps its bindings; the others leave none. An
+/// alternative from a named pattern matches only where its definition's
+/// condition holds too (`when kokish`).
+fn match_any(alts: &[Alt], calls: &[Call], ctx: &Ctx, b: &mut Bindings) -> bool {
     for p in alts {
         let mut trial = b.clone();
-        if match_pattern(p, calls, ctx, &mut trial) {
+        if match_pattern(&p.calls, calls, ctx, &mut trial)
+            && p.when
+                .as_ref()
+                .is_none_or(|w| ctx.cond(w, &mut trial) == Ok(Tri::True))
+        {
             *b = trial;
             return true;
         }
@@ -1357,6 +1393,26 @@ fn match_any(alts: &[Vec<PatternCall>], calls: &[Call], ctx: &Ctx, b: &mut Bindi
 /// Does the auction so far end with this pattern (after leading passes)?
 fn match_pattern(p: &[PatternCall], calls: &[Call], ctx: &Ctx, b: &mut Bindings) -> bool {
     let (k, n) = (p.len(), calls.len());
+    // `systems 2N ...`: the auction may hold anything before our notrump,
+    // which must be where our side's system came on.
+    if let Some(PatternCall {
+        call: CallSpec::Systems { level },
+        ..
+    }) = p.first()
+    {
+        if k > n {
+            return false;
+        }
+        let at = n - k;
+        let ours = ctx.pos.sides[crate::position::side(ctx.actor)].systems == Some(at);
+        let nt = matches!(&calls[at], Call::Bid { level: l, strain: bridge_types::Strain::NoTrump } if l == level);
+        return ours
+            && nt
+            && p[1..]
+                .iter()
+                .zip(&calls[at + 1..])
+                .all(|(pc, call)| match_call(&pc.call, call, ctx, b));
+    }
     if k > n || !calls[..n - k].iter().all(Call::is_pass) {
         return false;
     }

@@ -144,6 +144,17 @@ pub fn entries(modules: &[Module]) -> Vec<ModuleRef> {
                         };
                         format!("{}{params} = {}", d.name, d.body)
                     })
+                    .chain(m.auctions.iter().map(|a| {
+                        let alts: Vec<String> = a
+                            .alts
+                            .iter()
+                            .map(|alt| match &alt.when {
+                                None => pattern(&alt.pattern),
+                                Some(w) => format!("[{} when {w}]", pattern(&alt.pattern)),
+                            })
+                            .collect();
+                        format!("auction {} = {}", a.name, alts.join(" | "))
+                    }))
                     .collect(),
                 forces: m
                     .forces
@@ -159,6 +170,11 @@ pub fn entries(modules: &[Module]) -> Vec<ModuleRef> {
                         }
                         t
                     })
+                    .chain(
+                        m.systems
+                            .iter()
+                            .map(|s| format!("systems on when {}", s.when)),
+                    )
                     .collect(),
                 rules,
             }

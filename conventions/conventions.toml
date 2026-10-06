@@ -7,5 +7,6 @@ language = 1
 # The engine version they were developed against (information only):
 # 0.2.0 is the first that reads the modules' `skill` header lines, 0.3.0
 # the first with `define` and the judgment layer's Phase 0 terms, 0.4.0
-# the first with `force game`.
-engine = "0.4.0"
+# the first with `force game`, 0.5.0 the first with `define auction` and
+# `systems on`.
+engine = "0.5.0"

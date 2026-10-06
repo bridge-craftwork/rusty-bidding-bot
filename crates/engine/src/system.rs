@@ -2,13 +2,13 @@
 
 use std::collections::{HashMap, HashSet};
 
-use bidspec::ast::{Context, Expr, Literal, Module, PatternCall, Rule};
+use bidspec::ast::{Context, Expr, Literal, Module, Rule};
 use bridge_card::{Card, Value};
 use serde::Serialize;
 
 use crate::eval::Val;
 use crate::knowledge::Range;
-use crate::macros::{qualified, Defines};
+use crate::macros::{qualified, Alt, Auctions, Defines};
 
 /// Where a rule came from.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize)]
@@ -23,8 +23,9 @@ pub struct RuleRef {
 pub struct RuleEntry {
     pub rule: Rule,
     /// One entry per enclosing `after`; each holds that line's
-    /// alternatives, of which any one matching is enough.
-    pub patterns: Vec<Vec<Vec<PatternCall>>>,
+    /// alternatives (named patterns written out), of which any one
+    /// matching is enough.
+    pub patterns: Vec<Vec<Alt>>,
     pub conditions: Vec<Expr>,
     pub module: usize,
     pub source: RuleRef,
@@ -42,6 +43,8 @@ pub struct System {
     pub rules: Vec<RuleEntry>,
     /// The active modules' `force` declarations.
     pub forces: Vec<ForceEntry>,
+    /// The active modules' `systems on` declarations, expanded.
+    pub systems_on: Vec<SystemsEntry>,
     /// Modules not active, and why.
     pub inactive: Vec<(String, String)>,
 }
@@ -50,8 +53,16 @@ pub struct System {
 /// expanded (`macros`).
 #[derive(Debug, Clone)]
 pub struct ForceEntry {
-    pub after: Option<Vec<Vec<PatternCall>>>,
+    pub after: Option<Vec<Alt>>,
     pub when: Option<Expr>,
+    pub module: usize,
+    pub source: RuleRef,
+}
+
+/// A `systems on when ...` declaration of an active module.
+#[derive(Debug, Clone)]
+pub struct SystemsEntry {
+    pub when: Expr,
     pub module: usize,
     pub source: RuleRef,
 }
@@ -122,8 +133,12 @@ impl System {
         // their own module's parameters under qualified names, active or
         // not (see `macros`).
         let defines = Defines::new(modules);
+        let auctions = Auctions::new(modules);
         let mut defined = crate::eval::Params::default();
-        for m in modules.iter().filter(|m| !m.defines.is_empty()) {
+        for m in modules
+            .iter()
+            .filter(|m| !m.defines.is_empty() || !m.auctions.is_empty())
+        {
             for p in &m.params {
                 defined.insert(qualified(&m.name, &p.name), param_value(p));
             }
@@ -136,9 +151,23 @@ impl System {
                 params.insert(p.name.clone(), param_value(p));
             }
             sys.params.push(params);
+            for s in &m.systems {
+                sys.systems_on.push(SystemsEntry {
+                    when: defines.expand(&s.when, &mut Vec::new()),
+                    module: idx,
+                    source: RuleRef {
+                        module: m.name.clone(),
+                        file: m.file.clone(),
+                        line: s.line,
+                    },
+                });
+            }
             for f in &m.forces {
                 sys.forces.push(ForceEntry {
-                    after: f.after.clone(),
+                    after: f
+                        .after
+                        .as_ref()
+                        .map(|a| auctions.resolve(a, &defines, &mut Vec::new())),
                     when: f.when.as_ref().map(|w| defines.expand(w, &mut Vec::new())),
                     module: idx,
                     source: RuleRef {
@@ -149,7 +178,14 @@ impl System {
                 });
             }
             for ctx in &m.contexts {
-                sys.flatten(ctx, &mut Vec::new(), &mut Vec::new(), idx, m, &defines);
+                sys.flatten(
+                    ctx,
+                    &mut Vec::new(),
+                    &mut Vec::new(),
+                    idx,
+                    m,
+                    (&defines, &auctions),
+                );
             }
         }
         sys
@@ -158,18 +194,18 @@ impl System {
     fn flatten(
         &mut self,
         ctx: &Context,
-        patterns: &mut Vec<Vec<Vec<PatternCall>>>,
+        patterns: &mut Vec<Vec<Alt>>,
         conditions: &mut Vec<Expr>,
         module: usize,
         m: &Module,
-        defines: &Defines,
+        (defines, auctions): (&Defines, &Auctions),
     ) {
         // Problems expanding are reported when the rules are loaded
         // (`check_terms`); here the term is left as written.
         let expand = |e: &Expr| defines.expand(e, &mut Vec::new());
         let (np, nc) = (patterns.len(), conditions.len());
         if let Some(p) = &ctx.after {
-            patterns.push(p.clone());
+            patterns.push(auctions.resolve(p, defines, &mut Vec::new()));
         }
         if let Some(w) = &ctx.when {
             conditions.push(expand(w));
@@ -207,7 +243,7 @@ impl System {
             });
         }
         for child in &ctx.contexts {
-            self.flatten(child, patterns, conditions, module, m, defines);
+            self.flatten(child, patterns, conditions, module, m, (defines, auctions));
         }
         patterns.truncate(np);
         conditions.truncate(nc);

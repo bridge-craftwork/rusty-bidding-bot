@@ -37,6 +37,16 @@ after 2NT–3♠: **80 → 155 of 238**. What is left is BBA style: over
 3NT it bids 4♣ (a natural slam try) where we bid 6NT, over 4m it uses
 keycard (slam/ module), and its own choices with long minors.
 
+## Every 2NT, and the weak relay (2026-10-05)
+
+The module now answers every 2NT where systems are on (`after nt2`;
+two-nt-responses.notes.md, "One system for every 2NT"). The relay's
+"0-3 HCP" was written for 20-21; it is now "too weak for game opposite
+opener's maximum" (`hcp<=24-partner.hcp.max`, game `hcp>=25-partner.
+hcp.max`), the same 0-3 opposite 20-21. In a game force (2♣–2♦–2NT,
+Kokish's 2NT) there is no weak hand to play a partscore with: the relay
+is off there and the weak long minor bids 3NT (two-nt-minors.test).
+
 ## Open questions
 
 - 2NT–3♠ for game hands with a long minor and shortness (5m rather
