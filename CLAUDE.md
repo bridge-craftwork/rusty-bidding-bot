@@ -29,6 +29,11 @@ regression.
   as a tripwire: did calls outside the convention change? Notes:
   sources, deviations, open questions. Several conventions per PR;
   batch convention-card field changes into one PR and tag.
+- **A convention BBA does not play is judged against ourselves**
+  (Rick, 2026-10-05): the same deals with the card field off and on
+  (`probes/tools/self_ab.py`), scored by `errors_diff.py` for the side
+  that used it. A convention should usually gain, or nobody would play
+  it; one that loses points to a bug or a misread definition.
 - **Judgment changes** (competition, slams, valuation) keep the
   yardsticks in "Judging a change", but the big runs (full corpus,
   random deals, vanilla) run as a periodic batch, not on every change.
