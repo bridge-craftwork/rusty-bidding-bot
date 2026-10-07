@@ -96,3 +96,15 @@ S AK52.QJ.Q942.K83      | 1NT P 2D P 2H P 4NT P | P    | 15 and two hearts: decl
 scoring MP
 S AK52.KJ52.Q94.K8      | 1NT P 2D P 2H P 4NT P | 6NT  | matchpoints: 6NT whenever accepting on values
 S AK52.QJ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6H   | matchpoints: the 15 with a ruff still accepts in the fit
+
+# Six cards between the measures: over signoff in total points, under
+# invite in suit points (2026-10-07: these had no rule). HCP decide.
+card    21GF-DEFAULT notrump.transfers.super_accept=false notrump.transfers.texas=false
+N J85.KJ9754.6.J52      | 1NT P 2D P 2H P      | P      | 6 HCP and six hearts: pass
+N T43.KQ9632.T9.82      | 1NT P 2D P 2H P      | P      | 5 HCP: pass, though the length counts 8
+N QT7532.JT7.QJ7.T      | 1NT P 2H P 2S P      | P      | 6 HCP and six spades: pass
+N A85.KJ9754.6.K52      | 1NT P 2D P 2H P      | 4H     | without Texas, game goes through the transfer
+N J9.AQJ942.AQ5.AT      | 1NT P 2D P 2H P      | 6H     | 18 HCP, six hearts: slam (no Texas, then keycard)
+N 92.AQJ942.AQ5.Q3      | 1NT P 2D P 2H P      | 5H     | 15 HCP, six hearts: invites six
+S KQ6.K7.K832.KQ95      | 1NT P 2D P 2H P 5H P | 6H     | 16 of 15-17: accepts
+S KQ6.K73.Q832.K95      | 1NT P 2D P 2H P 5H P | P      | 15: declines
