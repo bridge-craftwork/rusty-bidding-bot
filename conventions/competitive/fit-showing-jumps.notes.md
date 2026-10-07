@@ -42,6 +42,21 @@ we sign off), which is judgment inside the convention.
   `competitive.jump_shift_after_overcall` (weak on the 21GF cards); some
   partnerships play those as fit jumps as well.
 
+## Convention score (2026-10-07)
+
+The off run had 54 no-rule positions (1 on): without fit jumps a
+passed hand's fit raises go through inverted minors, where opener had
+no rule over 1m-2m-2NT-3m and responder none over 4m. Both are now
+written (inverted-minors.bid, the same day's inverted-minors fixes);
+with them the off run had 5 against 1, and the score is measured:
+changed 855 (ours 850, BBA 307), Rusty -1,778, BBA -133, net -1,645 =
+-1.92 a changed board, both halves negative ("poor"). The worst boards
+are the passed hand's jump followed by opener's 3NT where the off
+auction stops in a partscore (P P 1D P 3C P 3NT; P P 1C P 2S P 3C P
+3NT), and over 1M X the fit jump where the off auction uses Jordan
+2NT. For Rick: opener's continuation after a passed hand's fit jump
+bids game too readily; not changed here.
+
 ## Sources
 
 - Robert S. Todd, "Fit-Showing Jumps", Advancing in Bridge 574

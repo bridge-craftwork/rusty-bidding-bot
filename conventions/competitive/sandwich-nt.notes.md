@@ -20,8 +20,9 @@ context now also reads this switch.
   ("or even direct seat by agreement"); the field has no seat option.
   We play it by any hand in the sandwich seat. Question for Rick: limit
   it to passed hands (then it is the Unusual 1NT)?
-- With 16+ the hand passes: there are no other sandwich-seat actions for
-  an unpassed hand yet ((1x) P (1y) X or overcalls). That is a gap in the
+- With 16+ the hand doubles or overcalls (overcalls.bid's sandwich-seat
+  section, 2026-10-07; natural 1NT is off when this convention is on).
+  Before that date it passed: a gap in the
   base competitive rules, not in this convention.
 - GIB_Sandwich_NT_BPH (passed hand) is the Unusual 1NT's scenario;
   BBA hardly bids it (two-suited-overcalls.notes.md).

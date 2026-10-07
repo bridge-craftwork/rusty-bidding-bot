@@ -143,6 +143,18 @@ now two-level only and not in a suit LHO has shown (+29 par, 3 fewer
 short fits), and the competitive 3M sets `ask=signoff` so opener has an
 answer (20 fewer no-rule positions than the first version).
 
+## Convention score (2026-10-07)
+
+The first run found our auctions identical with the card field on and
+off (0 of 500 boards on Support_Double). The module was gated; the
+position never arose: our fourth hand had no rule after (1x) P (1y)
+and always passed, so nobody overcalled partner's response. With the
+sandwich-seat overcalls and double written (overcalls.bid, 2026-10-07)
+the switch changes 485 of 500 boards (BBA's 420): Rusty +589, BBA +151,
+net +438 = +0.88 a changed board, both halves positive ("good"). The
+other side's net is -1,452: the defenders who overcall now get
+support-doubled and competed against.
+
 ## Gaps and open questions
 
 - The +8 no-rule and +8 forcing passes are the defenders' side: after

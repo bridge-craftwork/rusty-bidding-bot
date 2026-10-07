@@ -81,3 +81,13 @@ card    Basic-Bridge
 dealer  W
 vul     None
 N AQT654.85.32.A98          | 1D 1S 2D P P | 2S | six spades and 10 HCP: compete once
+
+# Advancing from the sandwich seat (2026-10-07): I passed their opening.
+card    21GF-DEFAULT
+dealer  S
+W Q74.J52.T873.KJ4      | 1D P 1H 1S P           | 2S     | three spades, 7 points: raise
+W 74.J52.T873.K942      | 1D P 1H 1S P           | P      | no fit
+W Q7432.52.T87.942      | 1D P 1H 1S P           | 3S     | five spades, weak: preempt
+W Q74.J52.T873.K94      | 1H P 1S X P            | 2D     | the longer unbid suit
+W Q742.J52.K873.94      | 1D P 1H X P            | 1S     | four spades
+W K742.J52.AQ73.94      | 1D P 1H X P            | 2S     | four spades and 9: jump

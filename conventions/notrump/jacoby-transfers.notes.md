@@ -72,6 +72,17 @@ auctions, 39.2% the same contract. Jacoby_Super-Accept: 81.7%, 30.8%, 33.8%.
   (RHO's double of the 1NT opening and a 2♣ overcall are now covered —
   see below — but not an overcall of the transfer itself.)
 
+- **Without Texas or the super-accepts (2026-10-07).** The convention
+  score switches them off, and two of responder's positions after the
+  completion had no rule: six-card hands between the bands (over
+  `strength=signoff` in total points, under `suit_strength=invite` in
+  suit points: J85.KJ9754.6.J52, 6 HCP), and without Texas the slam hands
+  with six. The first now pass or invite by HCP (as the 5-5 hands do);
+  the second bid 5M (16-17 suit points: opener bids six unless minimum)
+  or 6M (18+). No keycard ask: 4NT over the completion is the
+  quantitative raise with five. With Texas off the no-rule positions
+  on Texas_Transfer/Texas_or_Jacoby went 51 to 1 (see texas-transfers.notes.md).
+
 ## Questions
 
 - How should responder invite with a five-card major and a four-card minor,

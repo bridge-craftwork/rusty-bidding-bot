@@ -34,6 +34,7 @@ module overcalls "Suit and notrump overcalls"
   param  nt_def  = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
   param  raptor  = competitive.raptor_1nt.play default false
+  param  sandwich = competitive.sandwich_nt.play default false
 
 # ── Simple overcalls at the one level ────────────────────────────────
 # `(1x)` binds x to the suit they opened; the rules below never bid it.
@@ -168,6 +169,115 @@ after (1x) when jump is weak
       when  !vul | quality(H)>=good | top5(H)>=3
   3S  "Jump overcall: seven spades, 4-10"   shows S=7, hcp=4..10
       when  x is not S
+      when  !vul | quality(S)>=good | top5(S)>=3
+
+# ── The sandwich seat: (1x) P (1y) ───────────────────────────────────
+# Fourth hand after opener's partner has responded one of a suit
+# (2026-10-07). Nothing was written here, so this hand always passed
+# ("Defending: nothing more to say"): 78% of the positions where BBA
+# acted and that rule passed were such first entries (total-tricks.notes.md),
+# and conventions that answer this interference (support doubles and
+# redoubles) never arose in our own auctions. The same overcalls as in
+# the direct seat, in the suits they have not bid, and the same weak
+# jumps; 1NT is natural and stops both their suits; the double is for
+# takeout of the two unbid suits. BBA, 21GF-DEFAULT
+# (probes/oc4-1D-P-1H.toml, oc4-1H-P-1S.toml): overcalls 8-17 total
+# points at the one level and 12-17 at the two, 1NT 15-17, the double
+# 12+ with three or more in both unbid suits, weak jumps as in the
+# direct seat. Our double wants eight cards in the two suits (or 15+):
+# BBA passes most 12-14 hands with four-three. A five-card suit
+# overcalls first. Partner has passed, so there is no power double
+# here: strong hands overcall (up to 18 HCP) or double. Not written:
+# BBA's 2NT for the two lowest unbid suits and its natural bids in
+# responder's suit (2H, 3H over 1D P 1H with six or seven hearts).
+after (1x) P (1y) when y is not x
+  1S  "Overcall: five spades, {one_min}-18 total points"
+      shows S>=5, S>=H | x is H | y is H, S>=D | x is D | y is D, S>=C | x is C | y is C
+      shows hcp+length_points>=one_min, hcp<=18
+      when  x is not S, y is not S
+      when  quality(S)>=good | top5(S)>=3 | hcp+length_points>=12
+  1H  "Overcall: five hearts, {one_min}-18 total points"
+      shows H>=5, H>S | x is S | y is S, H>=D | x is D | y is D, H>=C | x is C | y is C
+      shows hcp+length_points>=one_min, hcp<=18
+      when  x is not H, y is not H, y is not S
+      when  quality(H)>=good | top5(H)>=3 | hcp+length_points>=12
+  2C  "Overcall: five clubs, {two_min}-18 total points"
+      shows C>=5, C>S | x is S | y is S, C>H | x is H | y is H, C>D | x is D | y is D
+      shows hcp>=two_min | (C>=6, hcp>=two_min-1), hcp<=18
+      when  x is not C, y is not C
+      when  C>=6 | quality(C)>=good | top5(C)>=4
+  2D  "Overcall: five diamonds, {two_min}-18 total points"
+      shows D>=5, D>S | x is S | y is S, D>H | x is H | y is H, D>=C | x is C | y is C
+      shows hcp>=two_min | (D>=6, hcp>=two_min-1), hcp<=18
+      when  x is not D, y is not D
+      when  D>=6 | quality(D)>=good | top5(D)>=4
+  2H  "Overcall: five hearts, {two_min}-18 total points"
+      shows H>=5, H>S | x is S | y is S, H>=D | x is D | y is D, H>=C | x is C | y is C
+      shows hcp>=two_min | (H>=6, hcp>=two_min-1), hcp<=18
+      when  x is not H, y is S
+      when  H>=6 | quality(H)>=good | top5(H)>=4
+  1N  "{nt_min}-{nt_max} balanced, both their suits stopped"
+      shows balanced, hcp>=nt_min, hcp<=nt_max, S<=4, H<=4
+      when  stop(x), stop(y), !passed_hand, !sandwich   # Sandwich 1NT shows the two unbid suits
+  # The takeout double of the two suits they have not bid.
+  X   "Takeout: hearts and spades, 12+"   shows H>=3, S>=3, H+S>=8 | hcp>=15, hcp>=12
+      when  x is C, y is D
+      priority -1
+  X   "Takeout: diamonds and spades, 12+" shows D>=3, S>=3, D+S>=8 | hcp>=15, hcp>=12
+      when  x is C, y is H
+      priority -1
+  X   "Takeout: diamonds and hearts, 12+" shows D>=3, H>=3, D+H>=8 | hcp>=15, hcp>=12
+      when  x is C, y is S
+      priority -1
+  X   "Takeout: clubs and spades, 12+"    shows C>=3, S>=3, C+S>=8 | hcp>=15, hcp>=12
+      when  x is D, y is H
+      priority -1
+  X   "Takeout: clubs and hearts, 12+"    shows C>=3, H>=3, C+H>=8 | hcp>=15, hcp>=12
+      when  x is D, y is S
+      priority -1
+  X   "Takeout: both minors, 12+"         shows C>=3, D>=3, C+D>=8 | hcp>=15, hcp>=12
+      when  x is H, y is S
+      priority -1
+  # With 15+, four or more in both and not balanced (1NT), the double
+  # comes before an overcall.
+  X   "Takeout: hearts and spades, 15+"     shows H>=4, S>=4, hcp>=15, !balanced
+      when  x is C, y is D
+      priority 1
+  X   "Takeout: diamonds and spades, 15+"   shows D>=4, S>=4, hcp>=15, !balanced
+      when  x is C, y is H
+      priority 1
+  X   "Takeout: diamonds and hearts, 15+"   shows D>=4, H>=4, hcp>=15, !balanced
+      when  x is C, y is S
+      priority 1
+  X   "Takeout: clubs and spades, 15+"      shows C>=4, S>=4, hcp>=15, !balanced
+      when  x is D, y is H
+      priority 1
+  X   "Takeout: clubs and hearts, 15+"      shows C>=4, H>=4, hcp>=15, !balanced
+      when  x is D, y is S
+      priority 1
+  X   "Takeout: both minors, 15+"           shows C>=4, D>=4, hcp>=15, !balanced
+      when  x is H, y is S
+      priority 1
+  P   "No overcall"  priority -10
+
+after (1x) P (1y) when y is not x, jump is weak
+  2S  "Weak jump overcall: six spades, 4-10"   shows S=6, hcp=4..10
+      when  x is not S, y is not S
+      when  !vul | quality(S)>=good | top5(S)>=3
+  2H  "Weak jump overcall: six hearts, 4-10"   shows H=6, hcp=4..10, S<=3
+      when  x is not H, y is not H, y is not S
+      when  !vul | quality(H)>=good | top5(H)>=3
+  3C  "Jump overcall: seven clubs, 4-10"    shows C=7, hcp=4..10, H<=3, S<=3
+      when  x is not C, y is not C
+      when  !vul | quality(C)>=good | top5(C)>=3
+  3D  "Jump overcall: seven diamonds, 4-10" shows D=7, hcp=4..10, H<=3, S<=3
+      when  x is not D, y is not D
+      when  !vul | quality(D)>=good | top5(D)>=3
+  3H  "Jump overcall: seven hearts, 4-10"   shows H=7, hcp=4..10, S<=3
+      when  x is not H, y is not H
+      when  !vul | quality(H)>=good | top5(H)>=3
+  3S  "Jump overcall: seven spades, 4-10"   shows S=7, hcp=4..10
+      when  x is not S, y is not S
       when  !vul | quality(S)>=good | top5(S)>=3
 
 # ── Nothing to say ───────────────────────────────────────────────────

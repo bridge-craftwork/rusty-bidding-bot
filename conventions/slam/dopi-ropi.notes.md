@@ -77,6 +77,18 @@ and the opponents never bid over it: our defenders do not interfere over
 keycard, so the scenario's interference exists only in BBA's auctions.
 No self verdict possible; the `.test` cases are the check.
 
+## Convention score (2026-10-07)
+
+Still unmeasurable. The module is gated by `slam.dopi`/`slam.ropi`; the
+switch changes nothing because our defenders never bid over our 4NT
+(0 of our 394 4NT auctions on DOPI_ROPI). BBA's interference there comes
+mostly from an overcall of Jacoby 2NT followed by a raise over 4NT
+(1H P 2N 3C ... 4N 5C), and BBA's own switch changes only 17 of 472
+boards: the scenario has few chances even for BBA. Writing defenders'
+bids over their keycard ask (a sacrifice or lead-directing bid at the
+five level) and overcalls of Jacoby 2NT would make the position arise;
+not done here. With 17 boards the score would not mean much anyway.
+
 ## Sources
 
 - **The convention:** ACBL Unit 390, "DOPI and ROPI"

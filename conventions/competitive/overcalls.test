@@ -36,3 +36,20 @@ dealer  S
 W J73.J3.K4.KQ6432      | 1D                     | P      | 10 HCP, six clubs: too weak for a two-level overcall
 W J73.Q3.K4.KQ6432      | 1D                     | 2C     | 11 HCP and six clubs
 W J73.Q3.K42.KQ643      | 1D                     | P      | 11 HCP and five clubs: one short
+
+# The sandwich seat: (1x) P (1y) (2026-10-07).
+card    21GF-DEFAULT
+dealer  S
+E AKJ9.T3.62.Q9843      | 1D P 1H                | P      | 10 HCP: too weak to double, clubs too poor for 2C
+E AKJ9.T3.62.AQ843      | 1D P 1H                | 2C     | 14, four spades and five clubs: below 15 the suit comes first
+E AKJ9.T3.6.AKQ843      | 1D P 1H                | X      | 17, four spades and six clubs: double first
+E KQ9643.KT954.4.4      | 1D P 1H                | 2S     | six spades, 8 HCP: weak jump
+E AQJT64.AT86.3.K6      | 1D P 1H                | 1S     | a five-card suit overcalls
+E 73.A43.A8.KQJT43      | 1D P 1H                | 2C     | six good clubs, 14
+E 65.AKQ9.AQ54.654      | 1D P 1H                | 1NT    | 15 balanced, AKQ9 and AQ54 hold their suits
+E AK93.Q83.KT.KT65      | 1D P 1H                | 1NT    | 15 balanced, both their suits held
+E Q.KQ86.Q98.KQJ86      | 1H P 1S                | 2C     | five good clubs, 14
+E K7.KT54.K54.AJT3      | 1H P 1S                | P      | 14, four-three in the minors: pass
+E QJ9.92.AK86.K854      | 1H P 1S                | X      | 13, four-four in the minors
+E 8.AKJ54.AQ953.K5      | 1H P 1S                | 2D     | hearts are theirs: five diamonds
+E 4.T54.765.KJ9853      | 1H P 1S                | P      | 5 HCP

@@ -112,6 +112,48 @@ The balancing seat is `balancing.bid`; responsive doubles are
   `two-suited-overcalls.bid` (2026-09-28), when the card plays them
   (Basic-Bridge does not).
 
+## The sandwich seat: (1x) P (1y) (2026-10-07)
+
+No rule covered the fourth hand after opener's partner responded one
+of a suit, so it always passed (advances.bid's "Defending: nothing more
+to say"), and the conventions that answer an overcall there (support
+doubles and redoubles) never came up in our own auctions: the
+convention score found switching support doubles off changed 0 boards.
+
+BBA, 21GF-DEFAULT, 600 random 6-17 hands each
+(`probes/oc4-1D-P-1H.toml`, `probes/oc4-1H-P-1S.toml`): BBA acts on 186
+and 133 of 600: overcalls ("bidable suit": 8-17 at one level, 12-17 at
+two), the double ("takeout double": 12+, three or more in both unbid
+suits), 1NT 15-17, weak jumps and preempts as in the direct seat, the
+Unusual 2NT, and natural bids in responder's suit with six or seven.
+
+What we play: the direct seat's overcalls in the suits they have not
+bid (the length tests ignore their suits; up to 18 HCP, since partner
+has passed and there is no power double), the weak jumps, 1NT 15-18
+with both their suits stopped (not with Sandwich 1NT on, nor by a
+passed hand), and the takeout double: eight cards in the two unbid
+suits (or 15+), after a five-card suit's overcall; with 15+, four of
+each and an unbalanced hand the double comes first. Agreement with
+BBA's call 414 -> 525 of 600 and 467 -> 528 of 600 (it was every pass).
+Advancing (advances.bid): raise with three (two level) or four (three
+level), preempt with four; answer the double in the longer unbid suit.
+
+Not written: the Unusual 2NT there, BBA's natural bids in responder's
+suit, and BBA's double on four-three with 12-14 (BBA passes most of
+those hands too; we pass all).
+
+Tripwire (`compare --limit 50`, 17,105 boards): 370 changed, all at the
+new calls, Impossible 2♠ (impossible-2s.notes.md) and the inverted-minor
+gaps. By the errors yardstick on our changed boards (errors_diff.py,
+344 scored): contract errors +24 (actor +26), doubling errors -386
+(-133 the actor's, -253 the other side's), distance from par -302. The
+loss is doubling: overcalls that go down undoubled count against the
+side that did not double them, and our penalty doubles of overcalls
+are weak (CLAUDE.md: our engine plays both sides). Worst context
+1C P 1D 1S (-93 over 38 boards). For Rick: keep the contract-error
+gain and look at the opener's side's penalty doubles, or tighten the
+one-level overcall here?
+
 ## Probed over 1C (2026-09-25, `probes/overcall-1C.toml`)
 
 2,500 hands with a five-card or longer suit and 5-17 HCP over 1C

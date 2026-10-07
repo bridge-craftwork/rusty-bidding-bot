@@ -94,10 +94,20 @@ contracts unchanged: the scenario's responder has 11-12 HCP and BBA's
 forcing 1NT, where ours bids 2♣/2♦ at once (the 1NT response is 6-10), so
 our auctions seldom reach the position.
 
+## Convention score (2026-10-07)
+
+The first run (`probes/tools/conv_ab.py --only impossible-2s`) found our
+auctions identical with the card field on and off: on the 2/1 cards the
+6-12 1NT had brought a natural "3m: 4+, 11-12 HCP" raise into
+responder-rebids.bid (2026-09-30) that outranked 2♠ on description and
+took all its hands. 2♠ now has priority 1. Without the convention the
+11+ hands raise to 3m (responder-rebids.bid: "4+, 11+ points", for any
+card, so the old gap where they passed is closed). After the fix the
+switch changes 463 of 500 boards (BBA's 154): Rusty +250, BBA +6, net
++244 = +0.53 a changed board, both halves positive ("good").
+
 ## Gaps
 
-- Without the convention an 11+ responder still has no call over 2m
-  (the `.test` records it).
-- Forcing 1NT is not modelled, so the 11-12 HCP responders the scenario
-  is about do not reach 2♠ here.
+- On the 2/1 cards the 1NT is 6-12 and the scenario's 11-12 responders
+  now reach 2♠; the "6-10" in "What we play" is the standard card's 1NT.
 - Todd's 2♥ variant and Kiva's 6-5 variant: not built.
