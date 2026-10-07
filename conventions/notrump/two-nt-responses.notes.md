@@ -208,15 +208,15 @@ replaced it. The merge now comes with the rules.
 
 | call | shows |
 |---|---|
-| 3♣ | game values, a three- or four-card major, no five (5-4 in the majors transfers to the five) |
+| 3♣ | game values, a three- or four-card major, no five (5-4 in the majors transfers to the five); ahead of Gerber (2026-10-07) |
 | opener 3♦ / 3♥ / 3♠ / 3NT | a four-card major and no five / five hearts / five spades / neither |
 | after 3♦: 3♥ / 3♠ | four spades, not four hearts / four hearts, not four spades: the major he does *not* hold, so opener declares |
 | after 3♦: 4♦ / 4♣ | both majors, no slam interest / slam interest (slam-invite values); opener chooses, spades with both (BBA) |
-| after 3♦: 3NT / 6NT | no four-card major; 6NT from 32 total points on opener's minimum |
+| after 3♦: 3NT / 6NT / 7NT | no four-card major; 6NT from 32 total points on opener's minimum, 7NT from 37 (2026-10-07) |
 | opener after 3♥/3♠/4♣/4♦ | 4M with the fit (`sets trump`), else 3NT |
-| responder after 4M | 6M with 33 support points on opener's minimum, else pass |
+| responder after 4M | with 33 support points on opener's minimum the keycard ask (slam/rkcb-1430.bid), else 6M; else pass |
 | after opener's 3♥/3♠ | 4M with three, 6M with 33 support points; without: 3NT, 6NT from 32 |
-| after 3NT (no major, or no fit) | 6NT from 32, else pass; the minor-suit slam tries of slam/over-3nt.bid behind |
+| after 3NT (no major, or no fit) | from 32: 4♣ Gerber when the card plays it (BBA), else 6NT; else pass; the minor-suit slam tries of slam/over-3nt.bid behind |
 
 The no-fit counts are those after Stayman (stayman.bid). The ask sets
 `ask=puppet`, the second round `ask=puppet_fit(x)` / `ask=puppet_both`,

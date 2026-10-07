@@ -17,3 +17,19 @@ S KQ4.QJ4.KQ.QJ964          | 1NT P 2NT P        | 3C     | completes the transf
 N 543.83.Q5.KJT842          | 1NT P 2NT P 3C P   | P      | weak: play 3♣
 N T6.86.KJ653.AKQ5          | 1NT P 2S P 2NT P   | 3NT    | no fit: game in notrump
 N T6.86.KJ653.AKQ5          | 1NT P 2S P 3D P    | 3NT    | a fit, no slam: 3NT
+
+# Convention score work (2026-10-07; notes, "Convention score").
+# Opener's maximum jumps (BBA: every 17-count, none below).
+S AQ6.QJ5.K52.AJ83          | 1NT P 2S P         | 4C     | four clubs, a maximum
+S AQ53.AJ8.KJ53.Q3          | 1NT P 2S P         | 4D     | four diamonds, a maximum
+S AQJ.KQ54.AJ5.T85          | 1NT P 2S P         | 3NT    | no four-card minor, a maximum
+N T.KQ2.6542.AQJ87          | 1NT P 2S P 3NT P   | P      | no fit opposite the maximum: 3NT
+N 7.KT.AJT83.KQ952          | 1NT P 2S P 4C P    | 4NT    | a fit and slam values: keycard for clubs
+N T.KQ2.6542.AQJ87          | 1NT P 2S P 4C P    | 5C     | a fit, no slam: game in the minor
+# A fit with a short major: show it; opener bids 3NT with the stopper.
+N 5.KT5.AQ953.K743          | 1NT P 2S P 3C P    | 3S     | a singleton spade: asks for a stopper
+S AKT.Q2.K842.AT65          | 1NT P 2S P 3C P 3S P | 3NT  | a spade stopper
+S 754.AK2.KQ2.QJ64          | 1NT P 2S P 3C P 3S P | 4C   | no spade stopper
+N 5.KT5.AQ953.K743          | 1NT P 2S P 3C P 3S P 4C P | 5C | game in the minor fit
+# No fit: a notrump slam on HCP, not on the long minors' length.
+N .8.AKT975.KQJ742          | 1NT P 2S P 2NT P   | 3NT    | 13 HCP: game only

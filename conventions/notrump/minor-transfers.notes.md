@@ -89,6 +89,26 @@ With `points` counting length a six-card minor adds two points, so
 The corpus has no `relay` or `four_way` card, so these are measured only
 through the `none` cards, where every option was within 10 IMPs.
 
+## Convention score: the switch (2026-10-07)
+
+The conv-ab run reported the convention unmeasured: only 9 of our
+auctions changed with it "off". The rules were not at fault; the off
+switch was. `probes/conv-ab.toml` set `notrump.minor_transfers=none`
+and `notrump.two_nt.minor_transfers=false`, but `minor_transfers` is
+derived on import from BBA's `1N-2S/2N/3C transfer` keys
+(`notrump.transfers.two_s_clubs`, `two_nt_clubs`, `two_nt_diamonds`,
+`three_c_diamonds`) and already reads `none` on 21GF-MSTandMSS
+(Minor_Suit_Transfer's card), whose 2NT/3♣ transfers
+minor-suit-stayman.bid reads from those keys. Setting it to `none`
+changed nothing there, and the exported off card kept the keys, so
+BBA went on transferring too (only its 2NT key changed). The off list
+now also clears the four `transfers.*` keys, which switches both
+engines.
+
+Measured (Minor_Suit_Transfer, 2N_and_1_Minor): **+0.60 IMPs per
+changed board** (Rusty's gain +378, BBA's +59; 528 changed boards, 499
+of ours; halves +54/+265, agree): good.
+
 ## Sources
 
 - **The treatments:** `relay`, `four_way` and `four_way_reversed` as Rick

@@ -20,6 +20,8 @@ module minor-suit-stayman "Minor Suit Stayman over 1NT"
   param  minors = notrump.minor_transfers default relay
   param  nt_2n_clubs = notrump.transfers.two_nt_clubs default false
   param  nt_3c_diamonds = notrump.transfers.three_c_diamonds default false
+  param  k1430 = slam.blackwood.rkcb_1430 default false
+  param  k0314 = slam.blackwood.rkcb_0314 default false
 
 after nt1_undoubled when !they.bid | systems_on
   2S  "Minor Suit Stayman: five-four or better in the minors, game values"  alert
@@ -45,8 +47,19 @@ after nt1_undoubled 2N (P) when minors is none, nt_2n_clubs
 after nt1_undoubled 3C (P) when minors is none, nt_3c_diamonds
   3D  "Completes the transfer"
 
-# Opener answers Minor Suit Stayman.
+# Opener answers Minor Suit Stayman. With a maximum BBA jumps: 4♣/4♦
+# with the minor, 3NT without (corpus, 2026-10-07: every 17-count of
+# 15-17 and no other; minimums bid 3♣/3♦/2NT). The jump leaves
+# responder the room for keycard below game in the minor.
 after nt1_undoubled 2S (P)
+  4C  "Four or more clubs, a maximum"        alert  shows C>=4, hcp>=shown.hcp.max
+      artificial
+      priority 1
+  4D  "Four or more diamonds, not four clubs, a maximum"  alert  shows D>=4, C<=3, hcp>=shown.hcp.max
+      artificial
+      priority 1
+  3N  "No four-card minor, a maximum"        shows C<=3, D<=3, hcp>=shown.hcp.max
+      priority 1
   3C  "Four or more clubs"                   alert  shows C>=4
       artificial
   3D  "Four or more diamonds, not four clubs"  alert  shows D>=4, C<=3
@@ -54,20 +67,53 @@ after nt1_undoubled 2S (P)
   2N  "No four-card minor"                   alert  shows C<=3, D<=3
       artificial
 
-# Responder. With a fit: slam from 33 total points between the hands,
-# else 3NT (or five of the minor with a singleton). Without: 3NT, 4NT
-# quantitative or 6NT.
-after nt1_undoubled 2S (P) 3m (P)
+# Responder. With a fit and slam values (33 total points between the
+# hands): keycard for the minor when the card plays it (BBA asks there,
+# "Blackwood 1430, for ♣/♦"), else six. With game values only and a
+# singleton or void in a major, three of that major: shortness, asking
+# for a stopper (BBA's "artificial" 3♥/3♠, read from its auctions);
+# opener bids 3NT with it, else four of the
+# minor, and responder bids five. Otherwise 3NT. Without a fit: 3NT,
+# 4NT quantitative or 6NT, on HCP (a notrump slam takes high cards;
+# the long minors' length points sent 13-counts to 6NT).
+after nt1_undoubled 2S (P) 3m (P) | nt1_undoubled 2S (P) 4m (P)
+  4N  "Keycard ask in {m}"                   alert
+      when  k1430 | k0314
+      shows tp(m)>=33-partner.hcp.min
+      sets  trump=m, ask=keycards(m)
+      artificial
+      priority 1
   6m  "Slam in the minor fit"                shows tp(m)>=33-partner.hcp.min
       sets  trump=m
-  5m  "Game in the minor fit, a singleton"   shows shortest<=1
-      sets  trump=m
+  3H  "Short hearts: asks for a heart stopper"  alert
+      shows H<=1
+      artificial
+      priority -1
+  3S  "Short spades: asks for a spade stopper"  alert
+      shows S<=1, H>=2
+      artificial
       priority -1
   3N  "Game in notrump"
       priority -2
-after nt1_undoubled 2S (P) 2N (P)
-  6N  "No fit: slam values"                  shows points>=32-partner.hcp.min
-  4N  "No fit: quantitative, invites 6NT"    shows strength=slam_invite, points<=31-partner.hcp.min
+after nt1_undoubled 2S (P) 3m (P) 3M (P)
+  3N  "A stopper in {M}: game in notrump"    shows stop(M)
+  4m  "No stopper in {M}"                    shows !stop(M)
+      priority -1
+after nt1_undoubled 2S (P) 3m (P) 3M (P) 4m (P)
+  5m  "Game in the minor fit"
+      sets  trump=m
+after nt1_undoubled 2S (P) 3m (P) 3M (P) 3N (P)
+  P   "Game in notrump"
+after nt1_undoubled 2S (P) 4m (P)
+  5m  "Game in the minor fit"
+      sets  trump=m
+      priority -1
+after nt1_undoubled 2S (P) 2N (P) | nt1_undoubled 2S (P) 3N (P)
+  6N  "No fit: slam values"                  shows hcp>=33-partner.hcp.min
+  4N  "No fit: quantitative, invites 6NT"    shows hcp>=31-partner.hcp.min, hcp<=32-partner.hcp.min
       sets  ask=quant
   3N  "No fit: game"
       priority -1
+after nt1_undoubled 2S (P) 3N (P)
+  P   "No fit: 3NT"
+      priority -2
