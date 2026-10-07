@@ -16,6 +16,7 @@ fn options_for(scenario: &str) -> Options {
         limit: None,
         rules: here.join("../../conventions"),
         par: false,
+        par_all: false,
         dd_cache: std::env::temp_dir().join("rbb-compare-test-dd.jsonl"),
         card_changes: vec![],
     }
@@ -109,6 +110,27 @@ fn par_comes_from_the_files_double_dummy_table() {
         }
     }
     assert!(!opts.dd_cache.exists(), "nothing was solved");
+}
+
+/// `--par` solves only the boards whose contracts differ; `--par-all`
+/// solves every board, so two runs on the same deals can be compared
+/// board by board (probes/tools/conv_ab.py). 1N.pbn has no tables.
+#[test]
+fn par_all_scores_every_board() {
+    let mut opts = options();
+    opts.par = true;
+    let some = run(&opts, &|_, _| {}).unwrap();
+    assert!(some
+        .boards
+        .iter()
+        .all(|b| b.par.is_some() != b.contracts_match()));
+    assert!(
+        some.boards.iter().any(|b| b.contracts_match()),
+        "the fixture has boards whose contracts match"
+    );
+    opts.par_all = true;
+    let all = run(&opts, &|_, _| {}).unwrap();
+    assert!(all.boards.iter().all(|b| b.par.is_some()));
 }
 
 /// Scenario arguments may be patterns, so the workbench can be pointed at

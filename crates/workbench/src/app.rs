@@ -2056,6 +2056,7 @@ mod tests {
             limit: None,
             rules: here.join("../../conventions"),
             par: false,
+            par_all: false,
             dd_cache: std::env::temp_dir().join("rbb-workbench-app-test-dd.jsonl"),
             card_changes: vec!["general.style=bba".into()],
         };

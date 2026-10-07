@@ -2065,6 +2065,7 @@ mod end_to_end {
             limit: Some(193),
             rules: rules.clone(),
             par: false,
+            par_all: false,
             dd_cache: std::env::temp_dir().join("rbb-workbench-ticket-dd.jsonl"),
             card_changes: vec![],
         };

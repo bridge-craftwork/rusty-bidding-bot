@@ -3,7 +3,7 @@
 // no libraries. State lives in the fragment: #q=drury&status=gap&tile=<id>
 // &flat=1 (never a query string, as on the main page).
 
-import { STATUS, BY_CODE, about, band } from './legend.js'
+import { STATUS, BY_CODE, about, band, shows } from './legend.js'
 
 const $ = (id) => document.getElementById(id)
 const state = { q: '', status: '', flat: false, tile: '' }
@@ -82,8 +82,24 @@ function counts(tiles) {
   return n
 }
 
+/** Tiles per legend entry: a background code counts the tiles showing
+ *  it as their colour and those carrying it as the second marker. */
+function legendCounts(tiles) {
+  const n = {}
+  for (const s of STATUS) n[s.code] = tiles.filter((t) => shows(t, s.code)).length
+  return n
+}
+
+/** The second marker: the background on the deals that scored the
+ *  convention, a small square beside the convention's round glyph. */
+function bgMark(t) {
+  if (!t.background) return null
+  const s = BY_CODE[t.background]
+  return el('span', { class: `bgmark st-${t.background}`, title: `${s.label} (on the convention's deals)`, 'aria-hidden': 'true', text: s.glyph })
+}
+
 function renderLegend() {
-  const n = counts(data.tiles)
+  const n = legendCounts(data.tiles)
   const list = $('legend')
   list.replaceChildren(...STATUS.map((s) => el('li', {},
     el('button', {
@@ -98,17 +114,29 @@ function renderLegend() {
   }
   sel.value = state.status
   const t = data.thresholds
-  $('thresholds').textContent =
-    `vs BBA, per item over its scenarios with par as the yardstick: good at errors ≥ ${t.good.errors_per_board} IMPs/board and ≥ ${pct(t.good.ns_agree)} of North-South calls agreeing; ` +
-    `poor below ${t.poor.errors_per_board} IMPs/board or ${pct(t.poor.ns_agree)}; fair between. Judgment items: our boards in their par class over BBA's (good ≤ ${t.class_ratio.good}, fair ≤ ${t.class_ratio.fair}). ` +
-    `Catch-alls: per 1,000 boards (good under ${t.per_thousand.good}, fair under ${t.per_thousand.fair}). ` +
-    'A/B: our engine with the convention against without it, by errors. A tile shows its convention\'s status; each dot below is one treatment (a card setting).'
+  const c = t.conv ?? {}
+  const box = $('thresholds')
+  box.replaceChildren(
+    el('p', {}, el('b', { text: 'Convention (▲ ◆ ▼, the tile\'s colour). ' }),
+      'A convention BBA plays is bid twice on the same deals, by BBA and by us: with it and without it. Its score is what it gains us minus what it gains BBA, ' +
+      'by errors against double-dummy par, over the boards where either auction changed (a board neither changed counts for neither). ' +
+      `Good at ${c.good ?? ''} IMPs per changed board or better; poor at ${c.poor ?? ''} or worse with both halves of the boards agreeing; fair between; ` +
+      `fewer than ${c.min_changed ?? ''} changed boards is too few to judge.`),
+    el('p', {}, el('b', { text: 'Background (✓ ≈ ✗). ' }),
+      `The scenarios scored against BBA, pooled, par as the yardstick: good at errors ≥ ${t.good.errors_per_board} IMPs/board and ≥ ${pct(t.good.ns_agree)} of North-South calls agreeing; ` +
+      `poor below ${t.poor.errors_per_board} or ${pct(t.poor.ns_agree)}; fair between. It measures the bidding around a convention as much as the convention. ` +
+      'Beside a convention score it is the small square, on the same deals; a tile with no convention score (BBA cannot switch it, our rules cannot do without it, too few boards changed) takes it as its colour: background, not isolated.'),
+    el('p', {}, el('b', { text: 'Reading the pair. ' }),
+      'Good convention, poor background: the convention works, the judgment around it needs work. Poor convention, good background: the convention itself needs fixing. Both poor: start with the convention.'),
+    el('p', {}, `Judgment items: our boards in their par class over BBA's (good ≤ ${t.class_ratio.good}, fair ≤ ${t.class_ratio.fair}). ` +
+      `Catch-alls: per 1,000 boards (good under ${t.per_thousand.good}, fair under ${t.per_thousand.fair}). ` +
+      'A/B (BBA does not play it): our engine with the convention against without it, by errors. Each dot below a tile is one treatment (a card setting).'))
 }
 
 // ── The grid ──────────────────────────────────────────────────────────
 
 function matches(t) {
-  if (state.status && t.status !== state.status && !(t.treatments ?? []).some((x) => x.status === state.status)) return false
+  if (state.status && !shows(t, state.status) && !(t.treatments ?? []).some((x) => x.status === state.status)) return false
   if (!state.q) return true
   const q = state.q.toLowerCase()
   const hay = [t.name, t.id, t.summary, ...(t.treatments ?? []).map((x) => `${x.label} ${x.field ?? ''}`),
@@ -118,17 +146,18 @@ function matches(t) {
 
 function tileTitle(t) {
   const s = BY_CODE[t.status]
-  return [`${t.name}: ${s.label}`, t.summary, t.why].filter(Boolean).join('\n')
+  const bg = t.background ? `; ${BY_CODE[t.background].label.toLowerCase()} on its deals` : ''
+  return [`${t.name}: ${s.label}${bg}`, t.summary, t.why].filter(Boolean).join('\n')
 }
 
 function tileButton(t) {
   const trs = t.treatments ?? []
   const b = el('button', {
     class: `tile st-${t.status}`, 'data-id': t.id, title: tileTitle(t),
-    'aria-label': `${t.name}, ${BY_CODE[t.status].label}${t.level ? `, level ${t.level}` : ''}${trs.length ? `, ${trs.length} treatments` : ''}`,
+    'aria-label': `${t.name}, ${BY_CODE[t.status].label}${t.background ? `, ${BY_CODE[t.background].label}` : ''}${t.level ? `, level ${t.level}` : ''}${trs.length ? `, ${trs.length} treatments` : ''}`,
     onclick: () => openDetail(t.id),
   },
-  el('span', { class: 'row1' }, glyph(t.status), el('span', { class: 'name', text: t.name }),
+  el('span', { class: 'row1' }, glyph(t.status), el('span', { class: 'name', text: t.name }), bgMark(t),
     t.level ? el('span', { class: 'lvl', text: t.level, title: `Level ${t.level}` }) : null),
   trs.length ? el('span', { class: 'dots', 'aria-hidden': 'true' },
     trs.slice(0, 18).map((x) => el('span', { class: `dot st-${x.status}`, title: `${x.label}: ${BY_CODE[x.status].label}` })),
@@ -191,6 +220,39 @@ function breakable(text) {
   return text.split('.').flatMap((part, i, all) => (i < all.length - 1 ? [`${part}.`, el('wbr')] : [part]))
 }
 
+const imps = (x) => (x == null ? '—' : signed(x))
+const whole = (x) => (x == null ? '—' : `${x >= 0 ? '+' : '−'}${Math.abs(x)}`)
+
+/** The convention score beside its background, then one row per run. */
+function convSection(t) {
+  const c = t.conv_score
+  const out = [el('h3', { text: 'Convention score: with it against without it, ours and BBA\'s' })]
+  if (c) {
+    const bg = c.background
+    const [e, o] = c.net_halves
+    out.push(el('div', { class: 'pair' },
+      el('div', { class: `pcell st-${c.status ?? 'tested'}` },
+        el('span', { class: 'plabel' }, c.status ? glyph(c.status) : null, ' Convention'),
+        el('b', { class: 'big', text: `${imps(c.net_per_changed)}` }), el('span', { class: 'unit', text: ' IMPs per changed board' }),
+        el('span', { class: 'pline', text: `Our gain ${whole(c.rusty_gain)} (${imps(c.rusty_per_changed)}/bd), BBA's ${whole(c.bba_gain)} (${imps(c.bba_per_changed)}/bd)` }),
+        el('span', { class: 'pline', text: `${c.changed} boards changed (ours ${c.changed_ours}, BBA's ${c.changed_bba}); halves ${whole(e)} / ${whole(o)}, ${c.halves_agree ? 'agree' : 'differ'}` }),
+        el('span', { class: 'pline', text: `Contract ${whole(c.rusty_contract - c.bba_contract)}, doubling ${whole(c.rusty_doubling - c.bba_doubling)}; the other side ${whole(c.net_other)}` })),
+      bg ? el('div', { class: `pcell st-${bg.status}` },
+        el('span', { class: 'plabel' }, glyph(bg.status), ' Background on these deals'),
+        el('b', { class: 'big', text: signed(bg.errors_per_board) }), el('span', { class: 'unit', text: ' IMPs/board vs BBA' }),
+        el('span', { class: 'pline', text: `NS calls agreeing ${pct(bg.ns_agree)}; ${bg.boards} boards (${c.scenarios.join(', ')})` })) : null))
+  }
+  out.push(table(['', 'Run', 'Switched off', 'Changed', 'Ours', 'BBA', 'Net/bd', 'Halves'],
+    t.conv.map((r) => r.unmeasured && r.changed == null
+      ? [r.status ? glyph(r.status) : '—', r.name, el('code', {}, breakable(r.off.join(' '))), el('span', { class: 'why', text: r.unmeasured }), '', '', '', '']
+      : [r.status ? glyph(r.status) : '—', el('span', { title: r.scenarios.join(', ') }, r.name),
+          el('span', {}, el('code', {}, breakable(r.off.join(' '))), r.bba_keys.length ? el('span', { class: 'why', text: ` · BBA: ${r.bba_keys.join(', ')}` }) : null,
+            r.unmeasured ? el('span', { class: 'why', text: ` · not scored: ${r.unmeasured}` }) : null),
+          `${r.changed}`, whole(r.rusty_gain), whole(r.bba_gain), imps(r.net_per_changed),
+          `${whole(r.net_halves[0])}/${whole(r.net_halves[1])}`])))
+  return out
+}
+
 function openDetail(id) {
   const t = data.tiles.find((x) => x.id === id)
   if (!t) return
@@ -201,6 +263,7 @@ function openDetail(id) {
   body.replaceChildren()
   const s = BY_CODE[t.status]
   body.append(el('p', { class: `status-line st-${t.status}` }, glyph(t.status), el('b', { text: s.label }), t.why ? ` · ${t.why}` : ''))
+  if (t.conv?.length) body.append(...convSection(t))
   const meta = [t.level ? `Level ${t.level}` : null, t.id.includes('/') && t.source !== 'curated' ? t.id : null].filter(Boolean)
   if (meta.length) body.append(el('p', { class: 'hint' }, meta.join(' · ')))
   if (t.summary) body.append(el('p', { text: t.summary }))
@@ -227,7 +290,7 @@ function openDetail(id) {
   }
   if (t.scenarios?.length) {
     const b = t.bba
-    body.append(el('h3', { text: 'Against BBA' }))
+    body.append(el('h3', { text: 'Background: the scenarios against BBA' }))
     if (b) body.append(el('p', {}, `Pooled: ${b.boards} boards, errors ${signed(b.errors_per_board)} IMPs/board, NS calls agreeing ${pct(b.ns_agree)}.`))
     body.append(table(['', 'Scenario', 'Boards', 'NS calls', 'IMPs/bd', 'NS card'],
       t.scenarios.map((x) => [glyph(x.status), x.name, String(x.boards), pct(x.ns_agree), signed(x.errors_per_board), x.ns_card ?? ''])))

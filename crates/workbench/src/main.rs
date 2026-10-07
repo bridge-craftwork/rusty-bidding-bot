@@ -67,6 +67,7 @@ fn main() -> eframe::Result {
         limit: args.limit,
         rules: args.rules,
         par: false,
+        par_all: false,
         dd_cache: PathBuf::from(".rbb-cache/dd.jsonl"),
         card_changes: args.set,
     };
