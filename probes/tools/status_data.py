@@ -5,6 +5,7 @@ system stands, tile by tile.
 
     target/release/rbb compare --json /tmp/all.json        # every scenario
     probes/tools/self_ab.py --batch probes/self-ab.toml     # .rbb-cache/self-ab
+    probes/tools/conv_ab.py                                 # .rbb-cache/conv-ab
     probes/tools/status_data.py --compare /tmp/all.json
 
 Sources:
@@ -21,13 +22,21 @@ Sources:
 - performance against BBA: a full `compare --json` (per scenario: calls
   agreeing, errors vs BBA per board), with each scenario's NS card read
   through `rbb card import-bbsa` to see which treatments it plays;
-- self A/B: the JSON pairs self_ab.py writes, judged by its own verdict.
+- self A/B: the JSON pairs self_ab.py writes, judged by its own verdict;
+- the convention score of a convention BBA plays (Rick, 2026-10-07):
+  conv_ab.py's results.json, Rusty's gain from the convention minus
+  BBA's on the boards it changed. The tile's colour is that score; the
+  scenario score on the same deals ("background") rides beside it as a
+  second marker. A tile with no convention score keeps its scenario
+  score as its colour, "background (not isolated)".
 
 Status codes (the page's legend says the same):
   gap       not implemented: no module, or no rule reads the field
   tested    implemented, measured only by its .test cases
   partial   implemented in part (status-items.toml says what is missing)
-  bba-good / bba-fair / bba-poor   scored against BBA (THRESHOLDS)
+  conv-good / conv-fair / conv-poor  the convention score (conv_ab.THRESHOLDS)
+  bba-good / bba-fair / bba-poor   the background: scenarios scored against
+                                   BBA (THRESHOLDS)
   ab-gains / ab-neutral / ab-loses self A/B against ourselves
 """
 import argparse
@@ -44,6 +53,7 @@ import urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
 sys.path.insert(0, HERE)
+import conv_ab  # noqa: E402
 
 REPO_URL = 'https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/'
 PBS = os.path.abspath(os.path.join(ROOT, '..', 'Practice-Bidding-Scenarios'))
@@ -255,6 +265,55 @@ def scenario_rows(compare):
     return rows
 
 
+def conv_results(path):
+    """{tile: [result, ...]} from conv_ab.py's results.json."""
+    out = {}
+    if not path or not os.path.exists(path):
+        return out
+    for r in json.load(open(path))['results'].values():
+        if r.get('tile'):
+            out.setdefault(r['tile'], []).append(r)
+    return out
+
+
+CONV_KEYS = ('changed', 'changed_ours', 'changed_bba', 'rusty_gain', 'bba_gain', 'net', 'net_other',
+             'rusty_contract', 'rusty_doubling', 'bba_contract', 'bba_doubling')
+
+
+def conv_pool(results):
+    """The tile's convention score: its measured runs pooled (Texas with
+    Jacoby, Unusual 2NT with Michaels)."""
+    ms = [r for r in results if r.get('score') and not r.get('unmeasured')]
+    if not ms:
+        return None
+    s = {k: sum(r['score'][k] for r in ms) for k in CONV_KEYS}
+    s['net_halves'] = [sum(r['score']['net_halves'][h] for r in ms) for h in (0, 1)]
+    n = s['changed']
+    s['net_per_changed'] = round(s['net'] / n, 3) if n else None
+    s['rusty_per_changed'] = round(s['rusty_gain'] / n, 3) if n else None
+    s['bba_per_changed'] = round(s['bba_gain'] / n, 3) if n else None
+    e, o = s['net_halves']
+    s['halves_agree'] = (e > 0 and o > 0) or (e < 0 and o < 0) or (e == 0 and o == 0)
+    s['runs'] = [r['name'] for r in ms]
+    s['scenarios'] = sorted({x for r in ms for x in r['used']})
+    st = conv_ab.status_of(s)
+    s['status'] = f'conv-{st}' if st else None
+    return s
+
+
+def conv_row(r):
+    """One conv_ab run as the page shows it."""
+    row = {'name': r['name'], 'off': r['off'], 'scenarios': r.get('used') or r['scenarios'],
+           'bba_keys': sorted((r.get('bba_keys') or {}).keys()), 'notes': r.get('notes', []),
+           'unmeasured': r.get('unmeasured'), 'repro': r.get('repro'), 'status': None}
+    if r.get('score'):
+        s = r['score']
+        row.update({k: s[k] for k in CONV_KEYS + ('net_halves', 'net_per_changed', 'rusty_per_changed',
+                                                  'bba_per_changed', 'halves_agree', 'no_rule_on', 'no_rule_off')})
+        row['status'] = f"conv-{r['status']}" if r.get('status') else None
+    return row
+
+
 def self_ab_results(dirpath, batch):
     """{name: result} for every batch entry whose two JSON files exist."""
     out = {}
@@ -303,6 +362,8 @@ def main():
     ap.add_argument('--compare', help='a full `rbb compare --json` (all scenarios)')
     ap.add_argument('--self-ab', default=os.path.join(ROOT, '.rbb-cache', 'self-ab'))
     ap.add_argument('--batch', default=os.path.join(ROOT, 'probes', 'self-ab.toml'))
+    ap.add_argument('--conv-ab', default=os.path.join(ROOT, '.rbb-cache', 'conv-ab', 'results.json'),
+                    help="conv_ab.py's results (the convention score of conventions BBA plays)")
     ap.add_argument('--items', default=os.path.join(ROOT, 'probes', 'status-items.toml'))
     ap.add_argument('--rbb', default=os.path.join(ROOT, 'target', 'release', 'rbb'))
     ap.add_argument('--spec', help="a spec directory to read instead of the pinned revision's")
@@ -318,6 +379,7 @@ def main():
     compare = json.load(open(a.compare)) if a.compare else None
     scen = scenario_rows(compare)
     ab = self_ab_results(a.self_ab, a.batch)
+    conv = conv_results(a.conv_ab)
     card_cache = {}
 
     groups = items.get('groups', {})
@@ -481,6 +543,13 @@ def main():
                                        'actor_doubling', 'status', 'changes')}
                    for r in ab.values()
                    if any(tr.get('field') and ab_touches(r, tr['field'], tr.get('option')) for tr in t['treatments'])]
+        # The convention score (BBA plays it): Rusty's gain against BBA's
+        # on the boards it changed, with the scenario score on the same
+        # deals beside it as the background.
+        t['conv'] = [conv_row(r) for r in conv.get(tid, [])]
+        t['conv_score'] = conv_pool(conv.get(tid, []))
+        if t['conv_score']:
+            t['conv_score']['background'] = pool([scen[s] for s in t['conv_score']['scenarios'] if s in scen])
         t['partial'] = cur.get('partial')
         t['modules'] = module_list(t['modules'])
         t['tests'] = sum(m['tests'] for m in t['modules'])
@@ -527,12 +596,25 @@ def main():
             t['status'], t['why'] = 'gap', 'no module implements it'
         elif t['partial']:
             t['status'], t['why'] = 'partial', t['partial']
+        elif t['conv_score'] and t['conv_score']['status']:
+            # BBA plays it: the convention score decides, ahead of a self
+            # A/B (which is for conventions BBA does not play).
+            c = t['conv_score']
+            t['status'] = c['status']
+            bg = c.get('background')
+            if bg:
+                t['background'] = bg['status']
+            t['why'] = (f"convention score {c['net_per_changed']:+.2f} IMPs per changed board "
+                        f"(our gain {c['rusty_gain']:+}, BBA's {c['bba_gain']:+}, {c['changed']} boards)"
+                        + (f"; background on these deals {bg['errors_per_board']:+.2f} IMPs/board, "
+                           f"NS calls agreeing {bg['ns_agree'] * 100:.0f}%" if bg else ''))
         elif ab_main:
             t['status'] = ab_main['status']
             t['why'] = f"self A/B {ab_main['name']}: {ab_main['verdict']} ({ab_main['changed']} boards changed)"
         elif t['bba']:
             t['status'] = t['bba']['status']
-            t['why'] = (f"errors {t['bba']['errors_per_board']:+.2f} IMPs/board against BBA's, "
+            t['why'] = (('background (not isolated): ' if t['section'] in ('constructive', 'competitive', 'precision') else '')
+                        + f"errors {t['bba']['errors_per_board']:+.2f} IMPs/board against BBA's, "
                         f"NS calls agreeing {t['bba']['ns_agree'] * 100:.0f}% ({t['bba']['boards']} boards)")
         else:
             t['status'] = 'tested'
@@ -584,7 +666,7 @@ def main():
         'commit_date': date,
         'card_spec': pin,
         'repo': REPO_URL,
-        'thresholds': THRESHOLDS,
+        'thresholds': THRESHOLDS | {'conv': conv_ab.THRESHOLDS},
         'sections': [{'id': s, 'title': n} for s, n in SECTIONS],
         'header': {
             'modules': len(mods), 'rules': rules, 'tests': tests, 'fields_read': len(fields_read),

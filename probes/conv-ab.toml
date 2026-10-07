@@ -1,0 +1,318 @@
+# The convention score of the conventions BBA plays (Rick, 2026-10-07):
+# the same deals bid by BBA and by us with North-South playing the
+# convention (the scenario's card) and not (`off`), East-West unchanged;
+# Rusty's gain minus BBA's gain on the boards where either auction
+# changed, by the errors yardstick.
+#
+#   probes/tools/conv_ab.py [--only a,b] [--reuse]      # .rbb-cache/conv-ab
+#
+# Per convention: `tile` (the status page tile it scores), `scenarios`
+# (those of the tile whose NS card plays it; others are skipped with a
+# note), `off` (the card changes that switch it off, for BBA through the
+# exported .bbsa and for us through the same card), optional `on`
+# (changes both runs share) and `skip` (why it is not measured this
+# way: the tile keeps its scenario score, "background (not isolated)").
+
+# ── Constructive ─────────────────────────────────────────────────────
+
+[[conv]]
+name      = "bergen"
+tile      = "bidding_conventions/bergen_raises"
+scenarios = ["Bergen_Raises"]
+off       = ["major_openings.bergen_raises.play=false"]
+
+[[conv]]
+name      = "drury"
+tile      = "bidding_conventions/drury"
+scenarios = ["Drury"]
+off       = ["major_openings.drury.play=false", "major_openings.drury.reverse=false", "major_openings.drury.two_d=false"]
+
+[[conv]]
+name      = "jacoby-2nt"
+tile      = "bidding_conventions/jacoby_2nt"
+scenarios = ["Jacoby_2N", "Jacoby_2N_4x_void"]
+off       = ["major_openings.jacoby_2nt.play=false"]
+
+[[conv]]
+name      = "splinters"
+tile      = "bidding_conventions/splinters"
+scenarios = ["Splinters", "Splinters_By_Opener", "Splinters_after_Minor"]
+off       = ["major_openings.splinters.play=false"]
+
+[[conv]]
+name      = "stayman"
+tile      = "bidding_conventions/stayman"
+scenarios = ["Stayman", "Slam_after_Stayman"]
+off       = ["notrump.stayman.play=false"]
+
+[[conv]]
+name      = "puppet-stayman"
+tile      = "bidding_conventions/puppet_stayman"
+scenarios = ["Puppet_Stayman_1N", "Puppet_Stayman_2N"]
+off       = ["notrump.stayman.puppet_1nt=false", "notrump.two_nt.puppet=false"]
+
+[[conv]]
+name      = "minor-suit-stayman"
+tile      = "bidding_conventions/minor_suit_stayman"
+scenarios = ["Minor_Suit_Stayman", "2N_and_MSS"]
+off       = ["notrump.minor_suit_stayman.play=false", "notrump.two_nt.minor_stayman=false"]
+
+[[conv]]
+name      = "jacoby-transfers"
+tile      = "bidding_conventions/jacoby_transfers"
+scenarios = ["Jacoby_Transfer", "2N_and_Transfers"]
+off       = ["notrump.transfers.jacoby=false"]
+
+[[conv]]
+name      = "texas"
+tile      = "bidding_conventions/jacoby_transfers"
+scenarios = ["Texas_Transfer", "Texas_or_Jacoby"]
+off       = ["notrump.transfers.texas=false"]
+
+[[conv]]
+name      = "super-accept"
+tile      = "bidding_conventions/super_accept"
+scenarios = ["Jacoby_Super-Accept"]
+off       = ["notrump.transfers.super_accept=false"]
+
+[[conv]]
+name      = "smolen"
+tile      = "bidding_conventions/smolen"
+scenarios = ["Smolen", "Smolen_Invitational", "Smolen_after_2N"]
+off       = ["notrump.smolen.play=false"]
+
+[[conv]]
+name      = "minor-suit-transfers"
+tile      = "bidding_conventions/minor_suit_transfers"
+scenarios = ["Minor_Suit_Transfer", "2N_and_1_Minor"]
+off       = ["notrump.minor_transfers=none", "notrump.two_nt.minor_transfers=false"]
+
+[[conv]]
+name      = "inverted-minors"
+tile      = "bidding_conventions/inverted_minors"
+scenarios = ["Inverted_Minors"]
+off       = ["minor_openings.inverted_minors.play=false"]
+
+[[conv]]
+name      = "walsh"
+tile      = "bidding_conventions/walsh"
+scenarios = ["1C_WalshStyle", "Transfer_Walsh"]
+off       = ["minor_openings.walsh.play=false"]
+
+[[conv]]
+name      = "nmf"
+tile      = "bidding_conventions/new_minor_forcing"
+scenarios = ["New_Minor_Forcing", "Two-Way_New_Minor_Forcing_aka_xyNT"]
+off       = ["other_conventions.new_minor_forcing.play=false", "other_conventions.two_way_nmf=false"]
+
+[[conv]]
+name      = "xyz"
+tile      = "bidding_conventions/xyz"
+scenarios = ["XYZ"]
+off       = ["other_conventions.xyz=false"]
+
+[[conv]]
+name      = "fourth-suit-forcing"
+tile      = "bidding_conventions/fourth_suit_forcing"
+scenarios = ["Fourth_Suit_Forcing"]
+off       = ["other_conventions.fourth_suit_forcing.play=false", "other_conventions.fourth_suit_forcing.one_round=false", "other_conventions.fourth_suit_forcing.game_force=false"]
+
+[[conv]]
+name      = "help-suit-game-try"
+tile      = "bidding_conventions/help_suit_game_try"
+scenarios = ["Help_Suit_Game_Try"]
+off       = ["other_conventions.help_suit_game_tries.play=false"]
+
+[[conv]]
+name      = "two-way-game-tries"
+tile      = "bidding_conventions/help_suit_game_try"
+scenarios = ["Two-Way_Game_Try"]
+off       = ["other_conventions.two_way_game_tries.play=false"]
+
+[[conv]]
+name      = "forcing-1nt"
+tile      = "bidding_conventions/forcing_1nt"
+scenarios = ["Forcing_NT"]
+off       = ["major_openings.one_nt_response.forcing=false"]
+
+[[conv]]
+name      = "two-over-one"
+tile      = "bidding_conventions/two_over_one"
+scenarios = ["Two_Over_One"]
+off       = ["major_openings.two_over_one.game_force=false"]
+
+[[conv]]
+name      = "rkcb"
+tile      = "bidding_conventions/roman_keycard"
+scenarios = ["Slam_After_Major_Fit", "Slam_after_Transfer"]
+off       = ["slam.blackwood.rkcb_1430=false", "slam.blackwood.rkcb_0314=false", "slam.blackwood.minor_0314=false", "slam.blackwood.standard=true"]
+
+[[conv]]
+name      = "control-bids"
+tile      = "bidding_conventions/control_bids"
+scenarios = ["Slam_After_Major_Fit"]
+off       = ["slam.cue_bids.play=false"]
+
+[[conv]]
+name      = "gerber"
+tile      = "bidding_conventions/gerber"
+scenarios = ["Gerber", "Gerber_By_Opener", "Gerber_By_Responder"]
+off       = ["slam.gerber.play=false"]
+
+[[conv]]
+name      = "exclusion"
+tile      = "bidding_conventions/exclusion_blackwood"
+scenarios = ["Exclusion_After_1M", "Exclusion_After_Sta_Jac"]
+off       = ["slam.exclusion_blackwood.play=false"]
+
+[[conv]]
+name      = "dopi-ropi"
+tile      = "bidding_conventions/dopi_ropi"
+scenarios = ["DOPI_ROPI"]
+off       = ["slam.dopi=false", "slam.ropi=false"]
+
+[[conv]]
+name      = "impossible-2s"
+tile      = "bidding_conventions/impossible_2s"
+scenarios = ["Impossible_2S"]
+off       = ["major_openings.impossible_2s.play=false"]
+
+[[conv]]
+name      = "ogust"
+tile      = "bidding_conventions/ogust"
+scenarios = ["Ogust"]
+off       = ["two_level.ogust.play=false", "two_level.weak_two_2nt_response=feature"]
+
+[[conv]]
+name      = "weak-jump-shifts"
+tile      = "bidding_conventions/weak_jump_shifts"
+scenarios = ["Weak_Jump_Shift"]
+off       = ["general.jump_shifts.weak_2=false", "general.jump_shifts.weak_3=false", "other_conventions.weak_jump_shifts_not_in_comp=false", "other_conventions.weak_jump_shifts_in_comp=false"]
+
+[[conv]]
+name      = "soloway"
+tile      = "bidding_conventions/soloway"
+scenarios = ["Soloway_Jump_Shift"]
+off       = ["general.jump_shifts.soloway=false", "general.jump_shifts.soloway_extended=false"]
+
+[[conv]]
+name      = "flannery"
+tile      = "bidding_conventions/flannery"
+scenarios = ["Flannery"]
+off       = ["two_level.flannery.play=false"]
+
+[[conv]]
+name      = "reverse-flannery"
+tile      = "bidding_conventions/flannery"
+scenarios = ["Reverse_Flannery"]
+off       = ["two_level.reverse_flannery.two_h=false", "two_level.reverse_flannery.two_s=false", "two_level.two_diamonds.reverse_flannery=false"]
+
+[[conv]]
+name      = "gambling-3nt"
+tile      = "bidding_conventions/gambling_3nt"
+scenarios = ["Gambling_3N"]
+off       = ["notrump.three_nt.one_suit=false"]
+
+[[conv]]
+name      = "namyats"
+tile      = "bidding_conventions/namyats"
+scenarios = ["Namyats"]
+off       = ["preempts.namyats.play=false", "preempts.transfer_4_minor=false"]
+
+[[conv]]
+name      = "multi-2d"
+tile      = "bidding_conventions/multi_2d"
+scenarios = ["Multi_2D"]
+off       = ["two_level.two_diamonds.multi=false"]
+
+[[conv]]
+name      = "kokish"
+tile      = "bidding_conventions/kokish"
+scenarios = ["Kokish_Relay"]
+off       = ["two_level.two_clubs.kokish=false"]
+
+[[conv]]
+name      = "benjamin"
+tile      = "bidding_conventions/benjamin_2d"
+scenarios = ["Benjamin_2D"]
+off       = ["two_level.benjamin.play=false"]
+
+[[conv]]
+name      = "roudi"
+tile      = "bidding_conventions/roudi"
+scenarios = ["WB5_Roudi"]
+off       = ["other_conventions.roudi.play=false"]
+
+# ── Competitive ──────────────────────────────────────────────────────
+
+[[conv]]
+name      = "negative-doubles"
+tile      = "competitive_bidding/negative_doubles"
+scenarios = ["Negative_Double", "Negative_Free_Bid"]
+off       = ["doubles.negative.play=false"]
+
+[[conv]]
+name      = "responsive-doubles"
+tile      = "competitive_bidding/responsive_doubles"
+scenarios = ["Responsive_Double", "Responsive_Double_after_Overcall"]
+off       = ["doubles.responsive.play=false"]
+
+[[conv]]
+name      = "support-doubles"
+tile      = "competitive_bidding/support_doubles"
+scenarios = ["Support_Double"]
+off       = ["doubles.support.play=false", "doubles.support.rdbl=false"]
+
+[[conv]]
+name      = "michaels"
+tile      = "competitive_bidding/michaels_unusual"
+scenarios = ["Michaels_Cuebid", "Michaels_and_Unusual"]
+off       = ["competitive.michaels.play=false", "direct_cuebids.nat_majors_michaels=false", "direct_cuebids.nat_minors_michaels=false"]
+
+[[conv]]
+name      = "unusual-2nt"
+tile      = "competitive_bidding/michaels_unusual"
+scenarios = ["Unusual_2N", "Michaels_and_Unusual"]
+off       = ["competitive.unusual_2nt.play=false"]
+
+[[conv]]
+name      = "landy"
+tile      = "competitive_bidding/landy"
+scenarios = ["Multi_Landy"]
+off       = ["competitive.vs_1nt_strong.system=other", "competitive.vs_1nt_weak.system=other"]
+
+[[conv]]
+name      = "cappelletti"
+tile      = "competitive_bidding/cappelletti"
+scenarios = ["Cappelletti", "Cappelletti_in_4th"]
+off       = ["competitive.vs_1nt_strong.system=other", "competitive.vs_1nt_weak.system=other"]
+
+[[conv]]
+name      = "jordan-2nt"
+tile      = "competitive_bidding/jordan_2nt"
+scenarios = ["Jordan_2N"]
+off       = ["competitive.jordan_2nt.play=false"]
+
+[[conv]]
+name      = "lebensohl-nt"
+tile      = "competitive_bidding/lebensohl"
+scenarios = ["Lebensohl", "Lebensohl2"]
+off       = ["notrump.lebensohl.over_interference=false"]
+
+[[conv]]
+name      = "lebensohl-weak-twos"
+tile      = "competitive_bidding/lebensohl"
+scenarios = ["Lebensohl_vs_Opps_W2_Bal", "Lebensohl_vs_Opps_W2_Dir"]
+off       = ["competitive.lebensohl_weak_twos.play=false"]
+
+[[conv]]
+name      = "fit-showing-jumps"
+tile      = "competitive_bidding/fit_showing_jumps"
+scenarios = ["Fit_Showing_Jumps", "Fit_Jumps_after_1M_Double"]
+off       = ["competitive.fit_showing_jumps.play=false"]
+
+[[conv]]
+name      = "sandwich-nt"
+tile      = "competitive_bidding/sandwich_nt"
+scenarios = ["GIB_Sandwich_NT_BPH"]
+off       = ["competitive.sandwich_nt.play=false"]

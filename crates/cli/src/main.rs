@@ -45,6 +45,11 @@ enum Command {
         /// time; results are cached).
         #[arg(long)]
         par: bool,
+        /// Solve every board, not only those whose contracts differ, so
+        /// that every board in the JSON carries both tables' errors
+        /// (implies --par).
+        #[arg(long)]
+        par_all: bool,
         /// Double-dummy cache file.
         #[arg(long, default_value = ".rbb-cache/dd.jsonl")]
         dd_cache: PathBuf,
@@ -495,6 +500,7 @@ fn run(cli: Cli) -> Result<()> {
             limit,
             rules,
             par,
+            par_all,
             dd_cache,
             top,
             by_imps,
@@ -519,7 +525,8 @@ fn run(cli: Cli) -> Result<()> {
                 scenarios,
                 limit,
                 rules,
-                par,
+                par: par || par_all,
+                par_all,
                 dd_cache,
                 card_changes,
             };

@@ -43,6 +43,10 @@ pub struct Options {
     pub rules: PathBuf,
     /// Solve double dummy where the final contracts differ.
     pub par: bool,
+    /// With `par`, solve every board, not only those whose contracts
+    /// differ: every table then carries its errors, which a comparison of
+    /// two runs on the same deals needs (`probes/tools/conv_ab.py`).
+    pub par_all: bool,
     /// Where solved double-dummy tables are kept.
     pub dd_cache: PathBuf,
     /// Card changes applied to both sides' cards, `path=value`
@@ -204,8 +208,8 @@ pub fn run_with(
             // every board gets it (how often each side reaches par counts
             // the boards where the contracts match too). Without one it
             // means solving the deal, which is what `--par` asks for, and
-            // only where the contracts differ.
-            if r.dd.is_some() || (!r.contracts_match() && opts.par) {
+            // only where the contracts differ (everywhere with `par_all`).
+            if r.dd.is_some() || (opts.par && (opts.par_all || !r.contracts_match())) {
                 board::add_par(&mut r, board, &cache);
             }
             let n = done.fetch_add(1, Ordering::Relaxed) + 1;

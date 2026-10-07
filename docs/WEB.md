@@ -130,13 +130,37 @@ in the fragment (`#q=drury&status=gap&tile=bidding_conventions/drury&flat=1`).
 
 Statuses (the page's legend, `status/legend.js`): **not implemented**
 (no module, or no rule reads the setting), **implemented, tests only**,
-**partial** (curated in `status-items.toml`), **vs BBA good / fair /
-poor** (the tile's scenarios pooled, par as the yardstick: good at errors
-≥ −0.25 IMPs/board and ≥ 65% of NS calls agreeing, poor below −1.0 or
-55%), **A/B gains / neutral / loses** (`self_ab.py`'s verdict; "leans"
-counts with gains and loses). A tile takes, in order: gap, partial, a
-self A/B of its own convention (BBA does not play it), its BBA measure,
-tests only. A treatment chip is measured only on scenarios whose NS card
+**partial** (curated in `status-items.toml`), **convention good / fair /
+poor** (▲ ◆ ▼; Rick, 2026-10-07: a convention BBA plays, bid by BBA and
+by us on the same deals with North-South playing it and not; what it
+gains us minus what it gains BBA, by errors, over the boards where
+either auction changed: good at ≥ −0.1 IMPs per changed board, poor at
+≤ −0.5 with both board halves agreeing, fewer than 10 changed boards
+unjudged; `probes/tools/conv_ab.py`), **background good / fair / poor**
+(✓ ≈ ✗; the tile's scenarios pooled against BBA, par as the yardstick:
+good at errors ≥ −0.25 IMPs/board and ≥ 65% of NS calls agreeing, poor
+below −1.0 or 55%), **A/B gains / neutral / loses** (`self_ab.py`'s
+verdict; "leans" counts with gains and loses). A tile takes, in order:
+gap, partial, its convention score, a self A/B of its own convention
+(BBA does not play it), its background, tests only. A tile coloured by
+its convention score also carries the background on the same deals as a
+small square beside the name: a good convention with a poor background
+says the judgment around it needs work, a poor convention with a good
+background that the convention itself does. A tile with no convention
+score (BBA cannot switch it: no .bbsa key; our rules have no fallback
+without it; the scenario card does not play it) takes its background as
+its colour, "background (not isolated)". The status filter and the
+legend pick by either signal: a background status matches the tiles
+coloured by it and those carrying it as the square. The details dialog
+shows the convention score beside the background, then each `conv_ab`
+run (switched off, BBA's keys, changed boards, both gains, halves).
+
+The convention score's thresholds are per changed board, so they are
+not the background's: −0.1 lets the convention do a tenth of an IMP
+less for us than for BBA on each board it touches before it stops being
+good (about the noise of a few hundred boards), and −0.5, half an IMP a
+touched board with both halves agreeing, is a loss nobody would accept
+from a convention. A treatment chip is measured only on scenarios whose NS card
 switches it on. Judgment tiles compare our boards in a par class with
 BBA's (good at most BBA's count, fair up to 25% more); catch-alls count
 per 1,000 boards (no-rule positions, calls read as a higher rule).
@@ -148,6 +172,7 @@ measurement run, from the repository root:
 ./dev-build.sh build --release -p rbb-cli
 ./cpu-gate.sh target/release/rbb compare --json /tmp/all.json       # every scenario, 500 boards
 probes/tools/self_ab.py --batch probes/self-ab.toml                 # .rbb-cache/self-ab
+probes/tools/conv_ab.py                                             # .rbb-cache/conv-ab (bba-cli twice per scenario)
 probes/tools/status_data.py --compare /tmp/all.json                 # web/status/status.json
 ```
 
@@ -157,7 +182,12 @@ checkout, else `git show` in `../convention-card`, else GitHub), the
 modules through `rbb bid skills --json`, each corpus card through
 `rbb card import-bbsa`, and warns about curated module or scenario names
 that match nothing. Without `--compare` the BBA columns are empty and
-measured tiles fall back to tests only. `node web/scripts/test.mjs`
+measured tiles fall back to tests only. `conv_ab.py` (driven by
+`probes/conv-ab.toml`: per convention its tile, scenarios and `off`
+changes) needs the installed bba-cli; it writes the cards, both BBA
+runs and both replays under `.rbb-cache/conv-ab/<name>/` and the scores
+in `.rbb-cache/conv-ab/results.json`, which `status_data.py --conv-ab`
+reads (the default path). `node web/scripts/test.mjs`
 checks that the shipped `status.json` parses and every tile has a known
 status.
 

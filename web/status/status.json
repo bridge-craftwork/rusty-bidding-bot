@@ -2,7 +2,7 @@
  "schema": "rbb-status/1",
  "generated": "2026-10-06",
  "engine": "rbb 0.5.0 (rule language 1)",
- "commit": "97c71d6",
+ "commit": "4512d8a",
  "commit_date": "2026-10-06",
  "card_spec": {
   "version": "0.1.0",
@@ -27,6 +27,11 @@
   "per_thousand": {
    "good": 1.0,
    "fair": 5.0
+  },
+  "conv": {
+   "good": -0.1,
+   "poor": -0.5,
+   "min_changed": 10
   }
  },
  "sections": [
@@ -168,11 +173,14 @@
    "date": "2026-10-06"
   },
   "counts": {
-   "bba-fair": 38,
-   "bba-good": 22,
-   "bba-poor": 14,
+   "bba-fair": 25,
+   "bba-good": 11,
+   "bba-poor": 9,
    "tested": 15,
+   "conv-good": 16,
+   "conv-fair": 5,
    "ab-neutral": 9,
+   "conv-poor": 8,
    "partial": 11,
    "gap": 25,
    "ab-gains": 5,
@@ -240,6 +248,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 35,
    "rules": 23,
@@ -319,6 +329,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 21,
@@ -388,6 +400,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 21,
@@ -466,6 +480,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 62,
    "rules": 69,
@@ -544,6 +560,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 197,
    "rules": 255,
@@ -649,6 +667,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 85,
    "rules": 92,
@@ -737,6 +757,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 57,
    "rules": 90,
@@ -816,6 +838,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 105,
    "rules": 120,
@@ -886,6 +910,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 148,
    "rules": 246,
@@ -964,6 +990,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 66,
    "rules": 72,
@@ -1043,6 +1071,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 126,
    "rules": 135,
@@ -1113,6 +1143,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 40,
    "rules": 98,
@@ -1227,6 +1259,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 202,
    "rules": 272,
@@ -1299,6 +1333,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 21,
@@ -1353,6 +1389,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 39,
    "rules": 26,
@@ -1403,6 +1441,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 7,
    "rules": 3,
@@ -1459,6 +1499,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 11,
    "rules": 21,
@@ -1506,6 +1548,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 18,
    "rules": 10,
@@ -1561,6 +1605,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 29,
    "rules": 5,
@@ -1659,6 +1705,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 143,
    "rules": 203,
@@ -1714,6 +1762,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 42,
    "rules": 27,
@@ -1752,6 +1802,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -1834,6 +1886,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 38,
    "rules": 62,
@@ -1870,6 +1924,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 21,
@@ -1906,6 +1962,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 81,
    "rules": 106,
@@ -1932,6 +1990,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -2014,6 +2074,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 148,
    "rules": 246,
@@ -2065,6 +2127,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 24,
    "rules": 31,
@@ -2160,14 +2224,95 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "gerber",
+     "off": [
+      "slam.gerber.play=false"
+     ],
+     "scenarios": [
+      "Gerber",
+      "Gerber_By_Opener",
+      "Gerber_By_Responder"
+     ],
+     "bba_keys": [
+      "Gerber"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 160,
+      "boards": 1500
+     },
+     "status": "conv-good",
+     "changed": 830,
+     "changed_ours": 788,
+     "changed_bba": 516,
+     "rusty_gain": 974,
+     "bba_gain": 208,
+     "net": 766,
+     "net_other": -186,
+     "rusty_contract": 974,
+     "rusty_doubling": 0,
+     "bba_contract": 208,
+     "bba_doubling": 0,
+     "net_halves": [
+      369,
+      397
+     ],
+     "net_per_changed": 0.923,
+     "rusty_per_changed": 1.173,
+     "bba_per_changed": 0.251,
+     "halves_agree": true,
+     "no_rule_on": 1,
+     "no_rule_off": 1
+    }
+   ],
+   "conv_score": {
+    "changed": 830,
+    "changed_ours": 788,
+    "changed_bba": 516,
+    "rusty_gain": 974,
+    "bba_gain": 208,
+    "net": 766,
+    "net_other": -186,
+    "rusty_contract": 974,
+    "rusty_doubling": 0,
+    "bba_contract": 208,
+    "bba_doubling": 0,
+    "net_halves": [
+     369,
+     397
+    ],
+    "net_per_changed": 0.923,
+    "rusty_per_changed": 1.173,
+    "bba_per_changed": 0.251,
+    "halves_agree": true,
+    "runs": [
+     "gerber"
+    ],
+    "scenarios": [
+     "Gerber",
+     "Gerber_By_Opener",
+     "Gerber_By_Responder"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1500,
+     "ns_agree": 0.6906,
+     "errors_per_board": 0.065,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 21,
    "rules": 21,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/slam/gerber.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.07 IMPs/board against BBA's, NS calls agreeing 69% (1500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.92 IMPs per changed board (our gain +974, BBA's +208, 830 boards); background on these deals +0.07 IMPs/board, NS calls agreeing 69%"
   },
   {
    "id": "bidding_conventions/jacoby_transfers",
@@ -2354,6 +2499,68 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "jacoby-transfers",
+     "off": [
+      "notrump.transfers.jacoby=false"
+     ],
+     "scenarios": [
+      "Jacoby_Transfer",
+      "2N_and_Transfers"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Jacoby_Transfer: no .bbsa key changes (notrump.transfers.jacoby=false): BBA cannot be switched",
+      "2N_and_Transfers: no .bbsa key changes (notrump.transfers.jacoby=false): BBA cannot be switched"
+     ],
+     "unmeasured": "Jacoby_Transfer: no .bbsa key changes (notrump.transfers.jacoby=false): BBA cannot be switched; 2N_and_Transfers: no .bbsa key changes (notrump.transfers.jacoby=false): BBA cannot be switched",
+     "repro": null,
+     "status": null
+    },
+    {
+     "name": "texas",
+     "off": [
+      "notrump.transfers.texas=false"
+     ],
+     "scenarios": [
+      "Texas_Transfer",
+      "Texas_or_Jacoby"
+     ],
+     "bba_keys": [
+      "Texas"
+     ],
+     "notes": [],
+     "unmeasured": "our off run hits 51 no-rule positions (12 on): our rules have no fallback without it",
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": null,
+     "changed": 548,
+     "changed_ours": 425,
+     "changed_bba": 434,
+     "rusty_gain": 839,
+     "bba_gain": 152,
+     "net": 687,
+     "net_other": 10,
+     "rusty_contract": 839,
+     "rusty_doubling": 0,
+     "bba_contract": 137,
+     "bba_doubling": 15,
+     "net_halves": [
+      395,
+      292
+     ],
+     "net_per_changed": 1.254,
+     "rusty_per_changed": 1.531,
+     "bba_per_changed": 0.277,
+     "halves_agree": true,
+     "no_rule_on": 12,
+     "no_rule_off": 51
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 146,
    "rules": 134,
@@ -2363,7 +2570,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/two-nt-responses.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors -0.18 IMPs/board against BBA's, NS calls agreeing 73% (2000 boards)"
+   "why": "background (not isolated): errors -0.18 IMPs/board against BBA's, NS calls agreeing 73% (2000 boards)"
   },
   {
    "id": "bidding_conventions/preemptive_bids",
@@ -2416,6 +2623,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 42,
    "rules": 48,
@@ -2423,7 +2632,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/preempts.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -1.03 IMPs/board against BBA's, NS calls agreeing 75% (1000 boards)"
+   "why": "background (not isolated): errors -1.03 IMPs/board against BBA's, NS calls agreeing 75% (1000 boards)"
   },
   {
    "id": "bidding_conventions/stayman",
@@ -2549,6 +2758,27 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "stayman",
+     "off": [
+      "notrump.stayman.play=false"
+     ],
+     "scenarios": [
+      "Stayman",
+      "Slam_after_Stayman"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Stayman: no .bbsa key changes (notrump.stayman.play=false): BBA cannot be switched",
+      "Slam_after_Stayman: no .bbsa key changes (notrump.stayman.play=false): BBA cannot be switched"
+     ],
+     "unmeasured": "Stayman: no .bbsa key changes (notrump.stayman.play=false): BBA cannot be switched; Slam_after_Stayman: no .bbsa key changes (notrump.stayman.play=false): BBA cannot be switched",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 151,
    "rules": 258,
@@ -2557,7 +2787,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/two-nt-responses.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors +0.23 IMPs/board against BBA's, NS calls agreeing 79% (1000 boards)"
+   "why": "background (not isolated): errors +0.23 IMPs/board against BBA's, NS calls agreeing 79% (1000 boards)"
   },
   {
    "id": "bidding_conventions/strong_2c",
@@ -2664,6 +2894,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 50,
    "rules": 67,
@@ -2671,7 +2903,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/strong-openings.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -1.15 IMPs/board against BBA's, NS calls agreeing 66% (505 boards)"
+   "why": "background (not isolated): errors -1.15 IMPs/board against BBA's, NS calls agreeing 66% (505 boards)"
   },
   {
    "id": "bidding_conventions/weak_2s",
@@ -2868,6 +3100,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 105,
    "rules": 120,
@@ -2876,7 +3110,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/weak-two-responses.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.93 IMPs/board against BBA's, NS calls agreeing 80% (1500 boards)"
+   "why": "background (not isolated): errors -0.93 IMPs/board against BBA's, NS calls agreeing 80% (1500 boards)"
   },
   {
    "id": "bidding_conventions/two_over_one",
@@ -2948,6 +3182,25 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "two-over-one",
+     "off": [
+      "major_openings.two_over_one.game_force=false"
+     ],
+     "scenarios": [
+      "Two_Over_One"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Two_Over_One: no .bbsa key changes (major_openings.two_over_one.game_force=false): BBA cannot be switched"
+     ],
+     "unmeasured": "Two_Over_One: no .bbsa key changes (major_openings.two_over_one.game_force=false): BBA cannot be switched",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 1,
    "rules": 0,
@@ -2955,7 +3208,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/game-force.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.91 IMPs/board against BBA's, NS calls agreeing 62% (500 boards)"
+   "why": "background (not isolated): errors -0.91 IMPs/board against BBA's, NS calls agreeing 62% (500 boards)"
   },
   {
    "id": "bidding_conventions/forcing_1nt",
@@ -3059,14 +3312,91 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "forcing-1nt",
+     "off": [
+      "major_openings.one_nt_response.forcing=false"
+     ],
+     "scenarios": [
+      "Forcing_NT"
+     ],
+     "bba_keys": [
+      "Forcing 1NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-fair",
+     "changed": 266,
+     "changed_ours": 36,
+     "changed_bba": 258,
+     "rusty_gain": -28,
+     "bba_gain": 92,
+     "net": -120,
+     "net_other": 51,
+     "rusty_contract": -28,
+     "rusty_doubling": 0,
+     "bba_contract": 92,
+     "bba_doubling": 0,
+     "net_halves": [
+      -61,
+      -59
+     ],
+     "net_per_changed": -0.451,
+     "rusty_per_changed": -0.105,
+     "bba_per_changed": 0.346,
+     "halves_agree": true,
+     "no_rule_on": 2,
+     "no_rule_off": 2
+    }
+   ],
+   "conv_score": {
+    "changed": 266,
+    "changed_ours": 36,
+    "changed_bba": 258,
+    "rusty_gain": -28,
+    "bba_gain": 92,
+    "net": -120,
+    "net_other": 51,
+    "rusty_contract": -28,
+    "rusty_doubling": 0,
+    "bba_contract": 92,
+    "bba_doubling": 0,
+    "net_halves": [
+     -61,
+     -59
+    ],
+    "net_per_changed": -0.451,
+    "rusty_per_changed": -0.105,
+    "bba_per_changed": 0.346,
+    "halves_agree": true,
+    "runs": [
+     "forcing-1nt"
+    ],
+    "scenarios": [
+     "Forcing_NT"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6789,
+     "errors_per_board": -0.908,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 74,
    "rules": 86,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/responses.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.96 IMPs/board against BBA's, NS calls agreeing 73% (1000 boards)"
+   "status": "conv-fair",
+   "background": "bba-fair",
+   "why": "convention score -0.45 IMPs per changed board (our gain -28, BBA's +92, 266 boards); background on these deals -0.91 IMPs/board, NS calls agreeing 68%"
   },
   {
    "id": "bidding_conventions/jacoby_2nt",
@@ -3173,14 +3503,93 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "jacoby-2nt",
+     "off": [
+      "major_openings.jacoby_2nt.play=false"
+     ],
+     "scenarios": [
+      "Jacoby_2N",
+      "Jacoby_2N_4x_void"
+     ],
+     "bba_keys": [
+      "Jacoby 2NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-good",
+     "changed": 879,
+     "changed_ours": 812,
+     "changed_bba": 837,
+     "rusty_gain": 765,
+     "bba_gain": 553,
+     "net": 212,
+     "net_other": -5,
+     "rusty_contract": 765,
+     "rusty_doubling": 0,
+     "bba_contract": 553,
+     "bba_doubling": 0,
+     "net_halves": [
+      118,
+      94
+     ],
+     "net_per_changed": 0.241,
+     "rusty_per_changed": 0.87,
+     "bba_per_changed": 0.629,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 1
+    }
+   ],
+   "conv_score": {
+    "changed": 879,
+    "changed_ours": 812,
+    "changed_bba": 837,
+    "rusty_gain": 765,
+    "bba_gain": 553,
+    "net": 212,
+    "net_other": -5,
+    "rusty_contract": 765,
+    "rusty_doubling": 0,
+    "bba_contract": 553,
+    "bba_doubling": 0,
+    "net_halves": [
+     118,
+     94
+    ],
+    "net_per_changed": 0.241,
+    "rusty_per_changed": 0.87,
+    "bba_per_changed": 0.629,
+    "halves_agree": true,
+    "runs": [
+     "jacoby-2nt"
+    ],
+    "scenarios": [
+     "Jacoby_2N",
+     "Jacoby_2N_4x_void"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.7005,
+     "errors_per_board": 0.417,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 22,
    "rules": 36,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/splinters.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.42 IMPs/board against BBA's, NS calls agreeing 70% (1000 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.24 IMPs per changed board (our gain +765, BBA's +553, 879 boards); background on these deals +0.42 IMPs/board, NS calls agreeing 70%"
   },
   {
    "id": "bidding_conventions/reverse_bids",
@@ -3248,6 +3657,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 197,
    "rules": 255,
@@ -3255,7 +3666,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/rebids.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -1.56 IMPs/board against BBA's, NS calls agreeing 61% (1000 boards)"
+   "why": "background (not isolated): errors -1.56 IMPs/board against BBA's, NS calls agreeing 61% (1000 boards)"
   },
   {
    "id": "bidding_conventions/roman_keycard",
@@ -3378,14 +3789,97 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "rkcb",
+     "off": [
+      "slam.blackwood.rkcb_1430=false",
+      "slam.blackwood.rkcb_0314=false",
+      "slam.blackwood.minor_0314=false",
+      "slam.blackwood.standard=true"
+     ],
+     "scenarios": [
+      "Slam_After_Major_Fit",
+      "Slam_after_Transfer"
+     ],
+     "bba_keys": [
+      "Blackwood 0123",
+      "Blackwood 1430"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-fair",
+     "changed": 555,
+     "changed_ours": 443,
+     "changed_bba": 409,
+     "rusty_gain": -185,
+     "bba_gain": 67,
+     "net": -252,
+     "net_other": 44,
+     "rusty_contract": -185,
+     "rusty_doubling": 0,
+     "bba_contract": 67,
+     "bba_doubling": 0,
+     "net_halves": [
+      -227,
+      -25
+     ],
+     "net_per_changed": -0.454,
+     "rusty_per_changed": -0.333,
+     "bba_per_changed": 0.121,
+     "halves_agree": true,
+     "no_rule_on": 7,
+     "no_rule_off": 7
+    }
+   ],
+   "conv_score": {
+    "changed": 555,
+    "changed_ours": 443,
+    "changed_bba": 409,
+    "rusty_gain": -185,
+    "bba_gain": 67,
+    "net": -252,
+    "net_other": 44,
+    "rusty_contract": -185,
+    "rusty_doubling": 0,
+    "bba_contract": 67,
+    "bba_doubling": 0,
+    "net_halves": [
+     -227,
+     -25
+    ],
+    "net_per_changed": -0.454,
+    "rusty_per_changed": -0.333,
+    "bba_per_changed": 0.121,
+    "halves_agree": true,
+    "runs": [
+     "rkcb"
+    ],
+    "scenarios": [
+     "Slam_After_Major_Fit",
+     "Slam_after_Transfer"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.684,
+     "errors_per_board": -0.409,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 33,
    "rules": 46,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/slam/rkcb-1430.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.41 IMPs/board against BBA's, NS calls agreeing 68% (1000 boards)"
+   "status": "conv-fair",
+   "background": "bba-fair",
+   "why": "convention score -0.45 IMPs per changed board (our gain -185, BBA's +67, 555 boards); background on these deals -0.41 IMPs/board, NS calls agreeing 68%"
   },
   {
    "id": "bidding_conventions/smolen",
@@ -3463,14 +3957,95 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "smolen",
+     "off": [
+      "notrump.smolen.play=false"
+     ],
+     "scenarios": [
+      "Smolen",
+      "Smolen_Invitational",
+      "Smolen_after_2N"
+     ],
+     "bba_keys": [
+      "SMOLEN"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1500
+     },
+     "status": "conv-good",
+     "changed": 1302,
+     "changed_ours": 1302,
+     "changed_bba": 978,
+     "rusty_gain": 1720,
+     "bba_gain": 183,
+     "net": 1537,
+     "net_other": -21,
+     "rusty_contract": 1720,
+     "rusty_doubling": 0,
+     "bba_contract": 194,
+     "bba_doubling": -11,
+     "net_halves": [
+      773,
+      764
+     ],
+     "net_per_changed": 1.18,
+     "rusty_per_changed": 1.321,
+     "bba_per_changed": 0.141,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 1302,
+    "changed_ours": 1302,
+    "changed_bba": 978,
+    "rusty_gain": 1720,
+    "bba_gain": 183,
+    "net": 1537,
+    "net_other": -21,
+    "rusty_contract": 1720,
+    "rusty_doubling": 0,
+    "bba_contract": 194,
+    "bba_doubling": -11,
+    "net_halves": [
+     773,
+     764
+    ],
+    "net_per_changed": 1.18,
+    "rusty_per_changed": 1.321,
+    "bba_per_changed": 0.141,
+    "halves_agree": true,
+    "runs": [
+     "smolen"
+    ],
+    "scenarios": [
+     "Smolen",
+     "Smolen_Invitational",
+     "Smolen_after_2N"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1500,
+     "ns_agree": 0.8491,
+     "errors_per_board": 0.161,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 15,
    "rules": 9,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/smolen.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.16 IMPs/board against BBA's, NS calls agreeing 85% (1500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +1.18 IMPs per changed board (our gain +1720, BBA's +183, 1302 boards); background on these deals +0.16 IMPs/board, NS calls agreeing 85%"
   },
   {
    "id": "bidding_conventions/walsh",
@@ -3588,6 +4163,84 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "walsh",
+     "off": [
+      "minor_openings.walsh.play=false"
+     ],
+     "scenarios": [
+      "1C_WalshStyle"
+     ],
+     "bba_keys": [
+      "Walsh style"
+     ],
+     "notes": [
+      "Transfer_Walsh: 21GF-DEFAULT does not play it or leaves it unset (minor_openings.walsh.play=False)"
+     ],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 304,
+     "changed_ours": 135,
+     "changed_bba": 258,
+     "rusty_gain": 17,
+     "bba_gain": 27,
+     "net": -10,
+     "net_other": -6,
+     "rusty_contract": 17,
+     "rusty_doubling": 0,
+     "bba_contract": 27,
+     "bba_doubling": 0,
+     "net_halves": [
+      -10,
+      0
+     ],
+     "net_per_changed": -0.033,
+     "rusty_per_changed": 0.056,
+     "bba_per_changed": 0.089,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 304,
+    "changed_ours": 135,
+    "changed_bba": 258,
+    "rusty_gain": 17,
+    "bba_gain": 27,
+    "net": -10,
+    "net_other": -6,
+    "rusty_contract": 17,
+    "rusty_doubling": 0,
+    "bba_contract": 27,
+    "bba_doubling": 0,
+    "net_halves": [
+     -10,
+     0
+    ],
+    "net_per_changed": -0.033,
+    "rusty_per_changed": 0.056,
+    "bba_per_changed": 0.089,
+    "halves_agree": false,
+    "runs": [
+     "walsh"
+    ],
+    "scenarios": [
+     "1C_WalshStyle"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.696,
+     "errors_per_board": -0.178,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 102,
    "rules": 181,
@@ -3595,8 +4248,9 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/responses.notes.md",
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/transfer-walsh.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.40 IMPs/board against BBA's, NS calls agreeing 71% (1000 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score -0.03 IMPs per changed board (our gain +17, BBA's +27, 304 boards); background on these deals -0.18 IMPs/board, NS calls agreeing 70%"
   },
   {
    "id": "bidding_conventions/western_cuebid",
@@ -3673,6 +4327,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 16,
@@ -3772,14 +4428,91 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "bergen",
+     "off": [
+      "major_openings.bergen_raises.play=false"
+     ],
+     "scenarios": [
+      "Bergen_Raises"
+     ],
+     "bba_keys": [
+      "Bergen"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 209,
+     "changed_ours": 203,
+     "changed_bba": 102,
+     "rusty_gain": -175,
+     "bba_gain": 9,
+     "net": -184,
+     "net_other": -38,
+     "rusty_contract": -180,
+     "rusty_doubling": 5,
+     "bba_contract": 17,
+     "bba_doubling": -8,
+     "net_halves": [
+      -70,
+      -114
+     ],
+     "net_per_changed": -0.88,
+     "rusty_per_changed": -0.837,
+     "bba_per_changed": 0.043,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 209,
+    "changed_ours": 203,
+    "changed_bba": 102,
+    "rusty_gain": -175,
+    "bba_gain": 9,
+    "net": -184,
+    "net_other": -38,
+    "rusty_contract": -180,
+    "rusty_doubling": 5,
+    "bba_contract": 17,
+    "bba_doubling": -8,
+    "net_halves": [
+     -70,
+     -114
+    ],
+    "net_per_changed": -0.88,
+    "rusty_per_changed": -0.837,
+    "bba_per_changed": 0.043,
+    "halves_agree": true,
+    "runs": [
+     "bergen"
+    ],
+    "scenarios": [
+     "Bergen_Raises"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6246,
+     "errors_per_board": -0.32,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 19,
    "rules": 19,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/bergen.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.32 IMPs/board against BBA's, NS calls agreeing 62% (500 boards)"
+   "status": "conv-poor",
+   "background": "bba-fair",
+   "why": "convention score -0.88 IMPs per changed board (our gain -175, BBA's +9, 209 boards); background on these deals -0.32 IMPs/board, NS calls agreeing 62%"
   },
   {
    "id": "bidding_conventions/control_bids",
@@ -3849,14 +4582,91 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "control-bids",
+     "off": [
+      "slam.cue_bids.play=false"
+     ],
+     "scenarios": [
+      "Slam_After_Major_Fit"
+     ],
+     "bba_keys": [
+      "Cue bid"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 265,
+     "changed_ours": 94,
+     "changed_bba": 240,
+     "rusty_gain": 2,
+     "bba_gain": -40,
+     "net": 42,
+     "net_other": 33,
+     "rusty_contract": 2,
+     "rusty_doubling": 0,
+     "bba_contract": -40,
+     "bba_doubling": 0,
+     "net_halves": [
+      33,
+      9
+     ],
+     "net_per_changed": 0.158,
+     "rusty_per_changed": 0.008,
+     "bba_per_changed": -0.151,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 265,
+    "changed_ours": 94,
+    "changed_bba": 240,
+    "rusty_gain": 2,
+    "bba_gain": -40,
+    "net": 42,
+    "net_other": 33,
+    "rusty_contract": 2,
+    "rusty_doubling": 0,
+    "bba_contract": -40,
+    "bba_doubling": 0,
+    "net_halves": [
+     33,
+     9
+    ],
+    "net_per_changed": 0.158,
+    "rusty_per_changed": 0.008,
+    "bba_per_changed": -0.151,
+    "halves_agree": true,
+    "runs": [
+     "control-bids"
+    ],
+    "scenarios": [
+     "Slam_After_Major_Fit"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6344,
+     "errors_per_board": -0.056,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 21,
    "rules": 23,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/slam/control-bids.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.06 IMPs/board against BBA's, NS calls agreeing 63% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-fair",
+   "why": "convention score +0.16 IMPs per changed board (our gain +2, BBA's -40, 265 boards); background on these deals -0.06 IMPs/board, NS calls agreeing 63%"
   },
   {
    "id": "bidding_conventions/drury",
@@ -3949,14 +4759,93 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "drury",
+     "off": [
+      "major_openings.drury.play=false",
+      "major_openings.drury.reverse=false",
+      "major_openings.drury.two_d=false"
+     ],
+     "scenarios": [
+      "Drury"
+     ],
+     "bba_keys": [
+      "Reverse drury"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 499,
+     "changed_ours": 494,
+     "changed_bba": 468,
+     "rusty_gain": 61,
+     "bba_gain": 78,
+     "net": -17,
+     "net_other": -151,
+     "rusty_contract": 59,
+     "rusty_doubling": 2,
+     "bba_contract": 78,
+     "bba_doubling": 0,
+     "net_halves": [
+      26,
+      -43
+     ],
+     "net_per_changed": -0.034,
+     "rusty_per_changed": 0.122,
+     "bba_per_changed": 0.156,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 499,
+    "changed_ours": 494,
+    "changed_bba": 468,
+    "rusty_gain": 61,
+    "bba_gain": 78,
+    "net": -17,
+    "net_other": -151,
+    "rusty_contract": 59,
+    "rusty_doubling": 2,
+    "bba_contract": 78,
+    "bba_doubling": 0,
+    "net_halves": [
+     26,
+     -43
+    ],
+    "net_per_changed": -0.034,
+    "rusty_per_changed": 0.122,
+    "bba_per_changed": 0.156,
+    "halves_agree": false,
+    "runs": [
+     "drury"
+    ],
+    "scenarios": [
+     "Drury"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6692,
+     "errors_per_board": 0.008,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 20,
    "rules": 18,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/drury.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.01 IMPs/board against BBA's, NS calls agreeing 67% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score -0.03 IMPs per changed board (our gain +61, BBA's +78, 499 boards); background on these deals +0.01 IMPs/board, NS calls agreeing 67%"
   },
   {
    "id": "bidding_conventions/fourth_suit_forcing",
@@ -4051,6 +4940,84 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "fourth-suit-forcing",
+     "off": [
+      "other_conventions.fourth_suit_forcing.play=false",
+      "other_conventions.fourth_suit_forcing.one_round=false",
+      "other_conventions.fourth_suit_forcing.game_force=false"
+     ],
+     "scenarios": [
+      "Fourth_Suit_Forcing"
+     ],
+     "bba_keys": [
+      "Fourth suit game force"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 275,
+     "changed_ours": 122,
+     "changed_bba": 232,
+     "rusty_gain": 80,
+     "bba_gain": 43,
+     "net": 37,
+     "net_other": 32,
+     "rusty_contract": 80,
+     "rusty_doubling": 0,
+     "bba_contract": 43,
+     "bba_doubling": 0,
+     "net_halves": [
+      -17,
+      54
+     ],
+     "net_per_changed": 0.135,
+     "rusty_per_changed": 0.291,
+     "bba_per_changed": 0.156,
+     "halves_agree": false,
+     "no_rule_on": 1,
+     "no_rule_off": 1
+    }
+   ],
+   "conv_score": {
+    "changed": 275,
+    "changed_ours": 122,
+    "changed_bba": 232,
+    "rusty_gain": 80,
+    "bba_gain": 43,
+    "net": 37,
+    "net_other": 32,
+    "rusty_contract": 80,
+    "rusty_doubling": 0,
+    "bba_contract": 43,
+    "bba_doubling": 0,
+    "net_halves": [
+     -17,
+     54
+    ],
+    "net_per_changed": 0.135,
+    "rusty_per_changed": 0.291,
+    "bba_per_changed": 0.156,
+    "halves_agree": false,
+    "runs": [
+     "fourth-suit-forcing"
+    ],
+    "scenarios": [
+     "Fourth_Suit_Forcing"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.725,
+     "errors_per_board": 0.44,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 154,
    "rules": 257,
@@ -4058,8 +5025,9 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/fourth-suit-forcing.notes.md",
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/responder-rebids.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.44 IMPs/board against BBA's, NS calls agreeing 72% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.14 IMPs per changed board (our gain +80, BBA's +43, 275 boards); background on these deals +0.44 IMPs/board, NS calls agreeing 72%"
   },
   {
    "id": "bidding_conventions/help_suit_game_try",
@@ -4155,14 +5123,107 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "help-suit-game-try",
+     "off": [
+      "other_conventions.help_suit_game_tries.play=false"
+     ],
+     "scenarios": [
+      "Help_Suit_Game_Try"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Help_Suit_Game_Try: 21GF-GIB does not play it or leaves it unset (other_conventions.help_suit_game_tries.play=None)"
+     ],
+     "unmeasured": "Help_Suit_Game_Try: 21GF-GIB does not play it or leaves it unset (other_conventions.help_suit_game_tries.play=None)",
+     "repro": null,
+     "status": null
+    },
+    {
+     "name": "two-way-game-tries",
+     "off": [
+      "other_conventions.two_way_game_tries.play=false"
+     ],
+     "scenarios": [
+      "Two-Way_Game_Try"
+     ],
+     "bba_keys": [
+      "Two way game tries"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 317,
+     "changed_ours": 262,
+     "changed_bba": 199,
+     "rusty_gain": -81,
+     "bba_gain": -56,
+     "net": -25,
+     "net_other": 38,
+     "rusty_contract": -81,
+     "rusty_doubling": 0,
+     "bba_contract": -56,
+     "bba_doubling": 0,
+     "net_halves": [
+      -61,
+      36
+     ],
+     "net_per_changed": -0.079,
+     "rusty_per_changed": -0.256,
+     "bba_per_changed": -0.177,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 317,
+    "changed_ours": 262,
+    "changed_bba": 199,
+    "rusty_gain": -81,
+    "bba_gain": -56,
+    "net": -25,
+    "net_other": 38,
+    "rusty_contract": -81,
+    "rusty_doubling": 0,
+    "bba_contract": -56,
+    "bba_doubling": 0,
+    "net_halves": [
+     -61,
+     36
+    ],
+    "net_per_changed": -0.079,
+    "rusty_per_changed": -0.256,
+    "bba_per_changed": -0.177,
+    "halves_agree": false,
+    "runs": [
+     "two-way-game-tries"
+    ],
+    "scenarios": [
+     "Two-Way_Game_Try"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.7958,
+     "errors_per_board": -0.094,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 19,
    "rules": 22,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/game-tries.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors -0.16 IMPs/board against BBA's, NS calls agreeing 80% (1000 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score -0.08 IMPs per changed board (our gain -81, BBA's -56, 317 boards); background on these deals -0.09 IMPs/board, NS calls agreeing 80%"
   },
   {
    "id": "bidding_conventions/inverted_minors",
@@ -4243,14 +5304,91 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "inverted-minors",
+     "off": [
+      "minor_openings.inverted_minors.play=false"
+     ],
+     "scenarios": [
+      "Inverted_Minors"
+     ],
+     "bba_keys": [
+      "Inverted minors"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 479,
+     "changed_ours": 444,
+     "changed_bba": 409,
+     "rusty_gain": -323,
+     "bba_gain": 208,
+     "net": -531,
+     "net_other": 63,
+     "rusty_contract": -335,
+     "rusty_doubling": 12,
+     "bba_contract": 208,
+     "bba_doubling": 0,
+     "net_halves": [
+      -308,
+      -223
+     ],
+     "net_per_changed": -1.109,
+     "rusty_per_changed": -0.674,
+     "bba_per_changed": 0.434,
+     "halves_agree": true,
+     "no_rule_on": 93,
+     "no_rule_off": 20
+    }
+   ],
+   "conv_score": {
+    "changed": 479,
+    "changed_ours": 444,
+    "changed_bba": 409,
+    "rusty_gain": -323,
+    "bba_gain": 208,
+    "net": -531,
+    "net_other": 63,
+    "rusty_contract": -335,
+    "rusty_doubling": 12,
+    "bba_contract": 208,
+    "bba_doubling": 0,
+    "net_halves": [
+     -308,
+     -223
+    ],
+    "net_per_changed": -1.109,
+    "rusty_per_changed": -0.674,
+    "bba_per_changed": 0.434,
+    "halves_agree": true,
+    "runs": [
+     "inverted-minors"
+    ],
+    "scenarios": [
+     "Inverted_Minors"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6284,
+     "errors_per_board": -0.198,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 5,
    "rules": 53,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/inverted-minors.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.20 IMPs/board against BBA's, NS calls agreeing 63% (500 boards)"
+   "status": "conv-poor",
+   "background": "bba-fair",
+   "why": "convention score -1.11 IMPs per changed board (our gain -323, BBA's +208, 479 boards); background on these deals -0.20 IMPs/board, NS calls agreeing 63%"
   },
   {
    "id": "bidding_conventions/minor_suit_transfers",
@@ -4432,6 +5570,51 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "minor-suit-transfers",
+     "off": [
+      "notrump.minor_transfers=none",
+      "notrump.two_nt.minor_transfers=false"
+     ],
+     "scenarios": [
+      "Minor_Suit_Transfer",
+      "2N_and_1_Minor"
+     ],
+     "bba_keys": [
+      "Minor Suit Transfers after 2NT"
+     ],
+     "notes": [],
+     "unmeasured": "our auctions changed on 9 boards: our rules do not switch it off with notrump.minor_transfers=none, notrump.two_nt.minor_transfers=false",
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": null,
+     "changed": 36,
+     "changed_ours": 9,
+     "changed_bba": 30,
+     "rusty_gain": 38,
+     "bba_gain": -11,
+     "net": 49,
+     "net_other": 30,
+     "rusty_contract": 38,
+     "rusty_doubling": 0,
+     "bba_contract": -11,
+     "bba_doubling": 0,
+     "net_halves": [
+      34,
+      15
+     ],
+     "net_per_changed": 1.361,
+     "rusty_per_changed": 1.056,
+     "bba_per_changed": -0.306,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 46,
    "rules": 48,
@@ -4440,7 +5623,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/two-nt-minors.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.90 IMPs/board against BBA's, NS calls agreeing 76% (1000 boards)"
+   "why": "background (not isolated): errors -0.90 IMPs/board against BBA's, NS calls agreeing 76% (1000 boards)"
   },
   {
    "id": "bidding_conventions/new_minor_forcing",
@@ -4573,6 +5756,85 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "nmf",
+     "off": [
+      "other_conventions.new_minor_forcing.play=false",
+      "other_conventions.two_way_nmf=false"
+     ],
+     "scenarios": [
+      "New_Minor_Forcing",
+      "Two-Way_New_Minor_Forcing_aka_xyNT"
+     ],
+     "bba_keys": [
+      "New Minor Forcing"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-good",
+     "changed": 639,
+     "changed_ours": 567,
+     "changed_bba": 500,
+     "rusty_gain": 159,
+     "bba_gain": 108,
+     "net": 51,
+     "net_other": -27,
+     "rusty_contract": 159,
+     "rusty_doubling": 0,
+     "bba_contract": 108,
+     "bba_doubling": 0,
+     "net_halves": [
+      -138,
+      189
+     ],
+     "net_per_changed": 0.08,
+     "rusty_per_changed": 0.249,
+     "bba_per_changed": 0.169,
+     "halves_agree": false,
+     "no_rule_on": 4,
+     "no_rule_off": 4
+    }
+   ],
+   "conv_score": {
+    "changed": 639,
+    "changed_ours": 567,
+    "changed_bba": 500,
+    "rusty_gain": 159,
+    "bba_gain": 108,
+    "net": 51,
+    "net_other": -27,
+    "rusty_contract": 159,
+    "rusty_doubling": 0,
+    "bba_contract": 108,
+    "bba_doubling": 0,
+    "net_halves": [
+     -138,
+     189
+    ],
+    "net_per_changed": 0.08,
+    "rusty_per_changed": 0.249,
+    "bba_per_changed": 0.169,
+    "halves_agree": false,
+    "runs": [
+     "nmf"
+    ],
+    "scenarios": [
+     "New_Minor_Forcing",
+     "Two-Way_New_Minor_Forcing_aka_xyNT"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.7222,
+     "errors_per_board": -0.69,
+     "status": "bba-fair"
+    }
+   },
    "partial": "Two-way NMF: the continuations after 2♣ (3♠/3NT after 3♣) are not written; only the club sign-off.",
    "tests": 30,
    "rules": 50,
@@ -4659,14 +5921,92 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "ogust",
+     "off": [
+      "two_level.ogust.play=false",
+      "two_level.weak_two_2nt_response=feature"
+     ],
+     "scenarios": [
+      "Ogust"
+     ],
+     "bba_keys": [
+      "Ogust"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 379,
+     "changed_ours": 184,
+     "changed_bba": 361,
+     "rusty_gain": -79,
+     "bba_gain": 229,
+     "net": -308,
+     "net_other": -149,
+     "rusty_contract": -79,
+     "rusty_doubling": 0,
+     "bba_contract": 229,
+     "bba_doubling": 0,
+     "net_halves": [
+      -202,
+      -106
+     ],
+     "net_per_changed": -0.813,
+     "rusty_per_changed": -0.208,
+     "bba_per_changed": 0.604,
+     "halves_agree": true,
+     "no_rule_on": 2,
+     "no_rule_off": 2
+    }
+   ],
+   "conv_score": {
+    "changed": 379,
+    "changed_ours": 184,
+    "changed_bba": 361,
+    "rusty_gain": -79,
+    "bba_gain": 229,
+    "net": -308,
+    "net_other": -149,
+    "rusty_contract": -79,
+    "rusty_doubling": 0,
+    "bba_contract": 229,
+    "bba_doubling": 0,
+    "net_halves": [
+     -202,
+     -106
+    ],
+    "net_per_changed": -0.813,
+    "rusty_per_changed": -0.208,
+    "bba_per_changed": 0.604,
+    "halves_agree": true,
+    "runs": [
+     "ogust"
+    ],
+    "scenarios": [
+     "Ogust"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.7378,
+     "errors_per_board": -0.378,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 63,
    "rules": 72,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/weak-two-responses.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.38 IMPs/board against BBA's, NS calls agreeing 74% (500 boards)"
+   "status": "conv-poor",
+   "background": "bba-fair",
+   "why": "convention score -0.81 IMPs per changed board (our gain -79, BBA's +229, 379 boards); background on these deals -0.38 IMPs/board, NS calls agreeing 74%"
   },
   {
    "id": "bidding_conventions/splinters",
@@ -4779,14 +6119,95 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "splinters",
+     "off": [
+      "major_openings.splinters.play=false"
+     ],
+     "scenarios": [
+      "Splinters",
+      "Splinters_By_Opener",
+      "Splinters_after_Minor"
+     ],
+     "bba_keys": [
+      "Splinter"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1500
+     },
+     "status": "conv-good",
+     "changed": 552,
+     "changed_ours": 302,
+     "changed_bba": 504,
+     "rusty_gain": 250,
+     "bba_gain": 132,
+     "net": 118,
+     "net_other": -41,
+     "rusty_contract": 250,
+     "rusty_doubling": 0,
+     "bba_contract": 132,
+     "bba_doubling": 0,
+     "net_halves": [
+      39,
+      79
+     ],
+     "net_per_changed": 0.214,
+     "rusty_per_changed": 0.453,
+     "bba_per_changed": 0.239,
+     "halves_agree": true,
+     "no_rule_on": 45,
+     "no_rule_off": 45
+    }
+   ],
+   "conv_score": {
+    "changed": 552,
+    "changed_ours": 302,
+    "changed_bba": 504,
+    "rusty_gain": 250,
+    "bba_gain": 132,
+    "net": 118,
+    "net_other": -41,
+    "rusty_contract": 250,
+    "rusty_doubling": 0,
+    "bba_contract": 132,
+    "bba_doubling": 0,
+    "net_halves": [
+     39,
+     79
+    ],
+    "net_per_changed": 0.214,
+    "rusty_per_changed": 0.453,
+    "bba_per_changed": 0.239,
+    "halves_agree": true,
+    "runs": [
+     "splinters"
+    ],
+    "scenarios": [
+     "Splinters",
+     "Splinters_By_Opener",
+     "Splinters_after_Minor"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1500,
+     "ns_agree": 0.6122,
+     "errors_per_board": -0.827,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 21,
    "rules": 30,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/splinters.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.83 IMPs/board against BBA's, NS calls agreeing 61% (1500 boards)"
+   "status": "conv-good",
+   "background": "bba-fair",
+   "why": "convention score +0.21 IMPs per changed board (our gain +250, BBA's +132, 552 boards); background on these deals -0.83 IMPs/board, NS calls agreeing 61%"
   },
   {
    "id": "bidding_conventions/super_accept",
@@ -4863,6 +6284,49 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "super-accept",
+     "off": [
+      "notrump.transfers.super_accept=false"
+     ],
+     "scenarios": [
+      "Jacoby_Super-Accept"
+     ],
+     "bba_keys": [
+      "Super acceptance after NT"
+     ],
+     "notes": [],
+     "unmeasured": "our off run hits 13 no-rule positions (0 on): our rules have no fallback without it",
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": null,
+     "changed": 482,
+     "changed_ours": 482,
+     "changed_bba": 0,
+     "rusty_gain": -1,
+     "bba_gain": 0,
+     "net": -1,
+     "net_other": 59,
+     "rusty_contract": -1,
+     "rusty_doubling": 0,
+     "bba_contract": 0,
+     "bba_doubling": 0,
+     "net_halves": [
+      72,
+      -73
+     ],
+     "net_per_changed": -0.002,
+     "rusty_per_changed": -0.002,
+     "bba_per_changed": 0.0,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 13
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 1,
    "rules": 5,
@@ -4871,7 +6335,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/superaccept-doubleton.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors +0.47 IMPs/board against BBA's, NS calls agreeing 77% (500 boards)"
+   "why": "background (not isolated): errors +0.47 IMPs/board against BBA's, NS calls agreeing 77% (500 boards)"
   },
   {
    "id": "bidding_conventions/weak_jump_shifts",
@@ -4965,14 +6429,95 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "weak-jump-shifts",
+     "off": [
+      "general.jump_shifts.weak_2=false",
+      "general.jump_shifts.weak_3=false",
+      "other_conventions.weak_jump_shifts_not_in_comp=false",
+      "other_conventions.weak_jump_shifts_in_comp=false"
+     ],
+     "scenarios": [
+      "Weak_Jump_Shift"
+     ],
+     "bba_keys": [
+      "Weak Jump Shifts 2",
+      "Weak Jump Shifts 3"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 372,
+     "changed_ours": 370,
+     "changed_bba": 366,
+     "rusty_gain": 233,
+     "bba_gain": 464,
+     "net": -231,
+     "net_other": -389,
+     "rusty_contract": -73,
+     "rusty_doubling": 306,
+     "bba_contract": 420,
+     "bba_doubling": 44,
+     "net_halves": [
+      -188,
+      -43
+     ],
+     "net_per_changed": -0.621,
+     "rusty_per_changed": 0.626,
+     "bba_per_changed": 1.247,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 372,
+    "changed_ours": 370,
+    "changed_bba": 366,
+    "rusty_gain": 233,
+    "bba_gain": 464,
+    "net": -231,
+    "net_other": -389,
+    "rusty_contract": -73,
+    "rusty_doubling": 306,
+    "bba_contract": 420,
+    "bba_doubling": 44,
+    "net_halves": [
+     -188,
+     -43
+    ],
+    "net_per_changed": -0.621,
+    "rusty_per_changed": 0.626,
+    "bba_per_changed": 1.247,
+    "halves_agree": true,
+    "runs": [
+     "weak-jump-shifts"
+    ],
+    "scenarios": [
+     "Weak_Jump_Shift"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.7774,
+     "errors_per_board": -0.74,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 14,
    "rules": 28,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/weak-jump-shifts.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.74 IMPs/board against BBA's, NS calls agreeing 78% (500 boards)"
+   "status": "conv-poor",
+   "background": "bba-fair",
+   "why": "convention score -0.62 IMPs per changed board (our gain +233, BBA's +464, 372 boards); background on these deals -0.74 IMPs/board, NS calls agreeing 78%"
   },
   {
    "id": "bidding_conventions/checkback",
@@ -5010,6 +6555,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 12,
    "rules": 16,
@@ -5132,6 +6679,127 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "flannery",
+     "off": [
+      "two_level.flannery.play=false"
+     ],
+     "scenarios": [
+      "Flannery"
+     ],
+     "bba_keys": [
+      "Flannery"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 500,
+     "changed_ours": 500,
+     "changed_bba": 499,
+     "rusty_gain": -30,
+     "bba_gain": -104,
+     "net": 74,
+     "net_other": -19,
+     "rusty_contract": -63,
+     "rusty_doubling": 33,
+     "bba_contract": -146,
+     "bba_doubling": 42,
+     "net_halves": [
+      74,
+      0
+     ],
+     "net_per_changed": 0.148,
+     "rusty_per_changed": -0.06,
+     "bba_per_changed": -0.208,
+     "halves_agree": false,
+     "no_rule_on": 2,
+     "no_rule_off": 2
+    },
+    {
+     "name": "reverse-flannery",
+     "off": [
+      "two_level.reverse_flannery.two_h=false",
+      "two_level.reverse_flannery.two_s=false",
+      "two_level.two_diamonds.reverse_flannery=false"
+     ],
+     "scenarios": [
+      "Reverse_Flannery"
+     ],
+     "bba_keys": [
+      "Reverse Flannery 2H",
+      "Reverse Flannery 2S"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 498,
+     "changed_ours": 497,
+     "changed_bba": 497,
+     "rusty_gain": -128,
+     "bba_gain": 246,
+     "net": -374,
+     "net_other": -71,
+     "rusty_contract": -128,
+     "rusty_doubling": 0,
+     "bba_contract": 171,
+     "bba_doubling": 75,
+     "net_halves": [
+      -271,
+      -103
+     ],
+     "net_per_changed": -0.751,
+     "rusty_per_changed": -0.257,
+     "bba_per_changed": 0.494,
+     "halves_agree": true,
+     "no_rule_on": 4,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 998,
+    "changed_ours": 997,
+    "changed_bba": 996,
+    "rusty_gain": -158,
+    "bba_gain": 142,
+    "net": -300,
+    "net_other": -90,
+    "rusty_contract": -191,
+    "rusty_doubling": 33,
+    "bba_contract": 25,
+    "bba_doubling": 117,
+    "net_halves": [
+     -197,
+     -103
+    ],
+    "net_per_changed": -0.301,
+    "rusty_per_changed": -0.158,
+    "bba_per_changed": 0.142,
+    "halves_agree": true,
+    "runs": [
+     "flannery",
+     "reverse-flannery"
+    ],
+    "scenarios": [
+     "Flannery",
+     "Reverse_Flannery"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.8088,
+     "errors_per_board": -0.517,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 40,
    "rules": 64,
@@ -5139,8 +6807,9 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/openings/flannery.notes.md",
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/openings/reverse-flannery.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.52 IMPs/board against BBA's, NS calls agreeing 81% (1000 boards)"
+   "status": "conv-fair",
+   "background": "bba-fair",
+   "why": "convention score -0.30 IMPs per changed board (our gain -158, BBA's +142, 998 boards); background on these deals -0.52 IMPs/board, NS calls agreeing 81%"
   },
   {
    "id": "bidding_conventions/gambling_3nt",
@@ -5210,14 +6879,91 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "gambling-3nt",
+     "off": [
+      "notrump.three_nt.one_suit=false"
+     ],
+     "scenarios": [
+      "Gambling_3N"
+     ],
+     "bba_keys": [
+      "Gambling"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 500,
+     "changed_ours": 500,
+     "changed_bba": 494,
+     "rusty_gain": 10,
+     "bba_gain": 16,
+     "net": -6,
+     "net_other": -193,
+     "rusty_contract": -124,
+     "rusty_doubling": 134,
+     "bba_contract": -113,
+     "bba_doubling": 129,
+     "net_halves": [
+      -17,
+      11
+     ],
+     "net_per_changed": -0.012,
+     "rusty_per_changed": 0.02,
+     "bba_per_changed": 0.032,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 7
+    }
+   ],
+   "conv_score": {
+    "changed": 500,
+    "changed_ours": 500,
+    "changed_bba": 494,
+    "rusty_gain": 10,
+    "bba_gain": 16,
+    "net": -6,
+    "net_other": -193,
+    "rusty_contract": -124,
+    "rusty_doubling": 134,
+    "bba_contract": -113,
+    "bba_doubling": 129,
+    "net_halves": [
+     -17,
+     11
+    ],
+    "net_per_changed": -0.012,
+    "rusty_per_changed": 0.02,
+    "bba_per_changed": 0.032,
+    "halves_agree": false,
+    "runs": [
+     "gambling-3nt"
+    ],
+    "scenarios": [
+     "Gambling_3N"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.8532,
+     "errors_per_board": -1.75,
+     "status": "bba-poor"
+    }
+   },
    "partial": null,
    "tests": 11,
    "rules": 12,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/gambling-3nt.notes.md"
    ],
-   "status": "bba-poor",
-   "why": "errors -1.75 IMPs/board against BBA's, NS calls agreeing 85% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-poor",
+   "why": "convention score -0.01 IMPs per changed board (our gain +10, BBA's +16, 500 boards); background on these deals -1.75 IMPs/board, NS calls agreeing 85%"
   },
   {
    "id": "bidding_conventions/grand_slam_force",
@@ -5266,6 +7012,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -5356,6 +7104,86 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "minor-suit-stayman",
+     "off": [
+      "notrump.minor_suit_stayman.play=false",
+      "notrump.two_nt.minor_stayman=false"
+     ],
+     "scenarios": [
+      "Minor_Suit_Stayman",
+      "2N_and_MSS"
+     ],
+     "bba_keys": [
+      "1N-2S Minor Suit Stayman",
+      "Minor Suit Stayman after 2NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-poor",
+     "changed": 677,
+     "changed_ours": 619,
+     "changed_bba": 639,
+     "rusty_gain": -201,
+     "bba_gain": 343,
+     "net": -544,
+     "net_other": 64,
+     "rusty_contract": -201,
+     "rusty_doubling": 0,
+     "bba_contract": 345,
+     "bba_doubling": -2,
+     "net_halves": [
+      -379,
+      -165
+     ],
+     "net_per_changed": -0.804,
+     "rusty_per_changed": -0.297,
+     "bba_per_changed": 0.507,
+     "halves_agree": true,
+     "no_rule_on": 3,
+     "no_rule_off": 3
+    }
+   ],
+   "conv_score": {
+    "changed": 677,
+    "changed_ours": 619,
+    "changed_bba": 639,
+    "rusty_gain": -201,
+    "bba_gain": 343,
+    "net": -544,
+    "net_other": 64,
+    "rusty_contract": -201,
+    "rusty_doubling": 0,
+    "bba_contract": 345,
+    "bba_doubling": -2,
+    "net_halves": [
+     -379,
+     -165
+    ],
+    "net_per_changed": -0.804,
+    "rusty_per_changed": -0.297,
+    "bba_per_changed": 0.507,
+    "halves_agree": true,
+    "runs": [
+     "minor-suit-stayman"
+    ],
+    "scenarios": [
+     "2N_and_MSS",
+     "Minor_Suit_Stayman"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.6936,
+     "errors_per_board": -0.164,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 28,
    "rules": 32,
@@ -5363,8 +7191,9 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/minor-suit-stayman.notes.md",
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/two-nt-minors.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors -0.16 IMPs/board against BBA's, NS calls agreeing 69% (1000 boards)"
+   "status": "conv-poor",
+   "background": "bba-good",
+   "why": "convention score -0.80 IMPs per changed board (our gain -201, BBA's +343, 677 boards); background on these deals -0.16 IMPs/board, NS calls agreeing 69%"
   },
   {
    "id": "bidding_conventions/namyats",
@@ -5431,6 +7260,26 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "namyats",
+     "off": [
+      "preempts.namyats.play=false",
+      "preempts.transfer_4_minor=false"
+     ],
+     "scenarios": [
+      "Namyats"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Namyats: 21GF-SPECIALS does not play it or leaves it unset (preempts.namyats.play=False, preempts.transfer_4_minor=None)"
+     ],
+     "unmeasured": "Namyats: 21GF-SPECIALS does not play it or leaves it unset (preempts.namyats.play=False, preempts.transfer_4_minor=None)",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 13,
    "rules": 12,
@@ -5438,7 +7287,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/openings/namyats.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.56 IMPs/board against BBA's, NS calls agreeing 72% (500 boards)"
+   "why": "background (not isolated): errors -0.56 IMPs/board against BBA's, NS calls agreeing 72% (500 boards)"
   },
   {
    "id": "bidding_conventions/picture_3nt",
@@ -5479,6 +7328,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -5538,6 +7389,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -5655,6 +7508,51 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "dopi-ropi",
+     "off": [
+      "slam.dopi=false",
+      "slam.ropi=false"
+     ],
+     "scenarios": [
+      "DOPI_ROPI"
+     ],
+     "bba_keys": [
+      "DOPI",
+      "ROPI"
+     ],
+     "notes": [],
+     "unmeasured": "our auctions changed on 0 boards: our rules do not switch it off with slam.dopi=false, slam.ropi=false",
+     "repro": {
+      "differ": 0,
+      "boards": 472
+     },
+     "status": null,
+     "changed": 17,
+     "changed_ours": 0,
+     "changed_bba": 17,
+     "rusty_gain": 0,
+     "bba_gain": 8,
+     "net": -8,
+     "net_other": 11,
+     "rusty_contract": 0,
+     "rusty_doubling": 0,
+     "bba_contract": 16,
+     "bba_doubling": -8,
+     "net_halves": [
+      0,
+      -8
+     ],
+     "net_per_changed": -0.471,
+     "rusty_per_changed": 0.0,
+     "bba_per_changed": 0.471,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 26,
    "rules": 40,
@@ -5662,7 +7560,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/slam/dopi-ropi.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -1.36 IMPs/board against BBA's, NS calls agreeing 63% (472 boards)"
+   "why": "background (not isolated): errors -1.36 IMPs/board against BBA's, NS calls agreeing 63% (472 boards)"
   },
   {
    "id": "bidding_conventions/exclusion_blackwood",
@@ -5736,14 +7634,93 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "exclusion",
+     "off": [
+      "slam.exclusion_blackwood.play=false"
+     ],
+     "scenarios": [
+      "Exclusion_After_1M",
+      "Exclusion_After_Sta_Jac"
+     ],
+     "bba_keys": [
+      "Exclusion"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-poor",
+     "changed": 661,
+     "changed_ours": 156,
+     "changed_bba": 635,
+     "rusty_gain": 220,
+     "bba_gain": 561,
+     "net": -341,
+     "net_other": -115,
+     "rusty_contract": 220,
+     "rusty_doubling": 0,
+     "bba_contract": 561,
+     "bba_doubling": 0,
+     "net_halves": [
+      -101,
+      -240
+     ],
+     "net_per_changed": -0.516,
+     "rusty_per_changed": 0.333,
+     "bba_per_changed": 0.849,
+     "halves_agree": true,
+     "no_rule_on": 17,
+     "no_rule_off": 17
+    }
+   ],
+   "conv_score": {
+    "changed": 661,
+    "changed_ours": 156,
+    "changed_bba": 635,
+    "rusty_gain": 220,
+    "bba_gain": 561,
+    "net": -341,
+    "net_other": -115,
+    "rusty_contract": 220,
+    "rusty_doubling": 0,
+    "bba_contract": 561,
+    "bba_doubling": 0,
+    "net_halves": [
+     -101,
+     -240
+    ],
+    "net_per_changed": -0.516,
+    "rusty_per_changed": 0.333,
+    "bba_per_changed": 0.849,
+    "halves_agree": true,
+    "runs": [
+     "exclusion"
+    ],
+    "scenarios": [
+     "Exclusion_After_1M",
+     "Exclusion_After_Sta_Jac"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.5856,
+     "errors_per_board": -1.453,
+     "status": "bba-poor"
+    }
+   },
    "partial": null,
    "tests": 14,
    "rules": 52,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/slam/exclusion.notes.md"
    ],
-   "status": "bba-poor",
-   "why": "errors -1.45 IMPs/board against BBA's, NS calls agreeing 59% (1000 boards)"
+   "status": "conv-poor",
+   "background": "bba-poor",
+   "why": "convention score -0.52 IMPs per changed board (our gain +220, BBA's +561, 661 boards); background on these deals -1.45 IMPs/board, NS calls agreeing 59%"
   },
   {
    "id": "bidding_conventions/impossible_2s",
@@ -5808,6 +7785,49 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "impossible-2s",
+     "off": [
+      "major_openings.impossible_2s.play=false"
+     ],
+     "scenarios": [
+      "Impossible_2S"
+     ],
+     "bba_keys": [
+      "Imposible 2S"
+     ],
+     "notes": [],
+     "unmeasured": "our auctions changed on 0 boards: our rules do not switch it off with major_openings.impossible_2s.play=false",
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": null,
+     "changed": 154,
+     "changed_ours": 0,
+     "changed_bba": 154,
+     "rusty_gain": 0,
+     "bba_gain": 6,
+     "net": -6,
+     "net_other": 101,
+     "rusty_contract": 0,
+     "rusty_doubling": 0,
+     "bba_contract": 17,
+     "bba_doubling": -11,
+     "net_halves": [
+      34,
+      -40
+     ],
+     "net_per_changed": -0.039,
+     "rusty_per_changed": 0.0,
+     "bba_per_changed": 0.039,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 14,
    "rules": 13,
@@ -5815,7 +7835,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/majors/impossible-2s.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors +0.03 IMPs/board against BBA's, NS calls agreeing 68% (500 boards)"
+   "why": "background (not isolated): errors +0.03 IMPs/board against BBA's, NS calls agreeing 68% (500 boards)"
   },
   {
    "id": "bidding_conventions/ingberman",
@@ -5883,6 +7903,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 11,
    "rules": 25,
@@ -5951,6 +7973,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": "Mini only: the Maxi half (19+, PBS Mini-Maxi_Roman_2D) is not written.",
    "tests": 26,
    "rules": 48,
@@ -6020,6 +8044,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": "No queen ask and no king ask after the keycard answer.",
    "tests": 17,
    "rules": 23,
@@ -6077,6 +8103,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 5,
    "rules": 7,
@@ -6122,6 +8150,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 19,
    "rules": 27,
@@ -6216,14 +8246,95 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "puppet-stayman",
+     "off": [
+      "notrump.stayman.puppet_1nt=false",
+      "notrump.two_nt.puppet=false"
+     ],
+     "scenarios": [
+      "Puppet_Stayman_1N",
+      "Puppet_Stayman_2N"
+     ],
+     "bba_keys": [
+      "1N-3C Puppet Stayman",
+      "2N-3C Puppet Stayman"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-poor",
+     "changed": 994,
+     "changed_ours": 784,
+     "changed_bba": 987,
+     "rusty_gain": -235,
+     "bba_gain": 640,
+     "net": -875,
+     "net_other": 40,
+     "rusty_contract": -235,
+     "rusty_doubling": 0,
+     "bba_contract": 645,
+     "bba_doubling": -5,
+     "net_halves": [
+      -552,
+      -323
+     ],
+     "net_per_changed": -0.88,
+     "rusty_per_changed": -0.236,
+     "bba_per_changed": 0.644,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 994,
+    "changed_ours": 784,
+    "changed_bba": 987,
+    "rusty_gain": -235,
+    "bba_gain": 640,
+    "net": -875,
+    "net_other": 40,
+    "rusty_contract": -235,
+    "rusty_doubling": 0,
+    "bba_contract": 645,
+    "bba_doubling": -5,
+    "net_halves": [
+     -552,
+     -323
+    ],
+    "net_per_changed": -0.88,
+    "rusty_per_changed": -0.236,
+    "bba_per_changed": 0.644,
+    "halves_agree": true,
+    "runs": [
+     "puppet-stayman"
+    ],
+    "scenarios": [
+     "Puppet_Stayman_1N",
+     "Puppet_Stayman_2N"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.7294,
+     "errors_per_board": -0.236,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 10,
    "rules": 2,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/puppet-1nt.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors -0.24 IMPs/board against BBA's, NS calls agreeing 73% (1000 boards)"
+   "status": "conv-poor",
+   "background": "bba-good",
+   "why": "convention score -0.88 IMPs per changed board (our gain -235, BBA's +640, 994 boards); background on these deals -0.24 IMPs/board, NS calls agreeing 73%"
   },
   {
    "id": "bidding_conventions/wolff_signoff",
@@ -6274,6 +8385,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 5,
    "rules": 4,
@@ -6321,6 +8434,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -6385,14 +8500,91 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "benjamin",
+     "off": [
+      "two_level.benjamin.play=false"
+     ],
+     "scenarios": [
+      "Benjamin_2D"
+     ],
+     "bba_keys": [
+      "Benjamin 2D"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-poor",
+     "changed": 393,
+     "changed_ours": 339,
+     "changed_bba": 320,
+     "rusty_gain": -215,
+     "bba_gain": 52,
+     "net": -267,
+     "net_other": 54,
+     "rusty_contract": -239,
+     "rusty_doubling": 24,
+     "bba_contract": 52,
+     "bba_doubling": 0,
+     "net_halves": [
+      -158,
+      -109
+     ],
+     "net_per_changed": -0.679,
+     "rusty_per_changed": -0.547,
+     "bba_per_changed": 0.132,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 1
+    }
+   ],
+   "conv_score": {
+    "changed": 393,
+    "changed_ours": 339,
+    "changed_bba": 320,
+    "rusty_gain": -215,
+    "bba_gain": 52,
+    "net": -267,
+    "net_other": 54,
+    "rusty_contract": -239,
+    "rusty_doubling": 24,
+    "bba_contract": 52,
+    "bba_doubling": 0,
+    "net_halves": [
+     -158,
+     -109
+    ],
+    "net_per_changed": -0.679,
+    "rusty_per_changed": -0.547,
+    "bba_per_changed": 0.132,
+    "halves_agree": true,
+    "runs": [
+     "benjamin"
+    ],
+    "scenarios": [
+     "Benjamin_2D"
+    ],
+    "status": "conv-poor",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.5645,
+     "errors_per_board": -1.124,
+     "status": "bba-poor"
+    }
+   },
    "partial": null,
    "tests": 14,
    "rules": 15,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/openings/benjamin.notes.md"
    ],
-   "status": "bba-poor",
-   "why": "errors -1.12 IMPs/board against BBA's, NS calls agreeing 56% (500 boards)"
+   "status": "conv-poor",
+   "background": "bba-poor",
+   "why": "convention score -0.68 IMPs per changed board (our gain -215, BBA's +52, 393 boards); background on these deals -1.12 IMPs/board, NS calls agreeing 56%"
   },
   {
    "id": "bidding_conventions/french_2d",
@@ -6430,6 +8622,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 21,
    "rules": 18,
@@ -6502,14 +8696,91 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "kokish",
+     "off": [
+      "two_level.two_clubs.kokish=false"
+     ],
+     "scenarios": [
+      "Kokish_Relay"
+     ],
+     "bba_keys": [
+      "Kokish Relay"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 401,
+     "changed_ours": 383,
+     "changed_bba": 288,
+     "rusty_gain": 159,
+     "bba_gain": 55,
+     "net": 104,
+     "net_other": -263,
+     "rusty_contract": 159,
+     "rusty_doubling": 0,
+     "bba_contract": 55,
+     "bba_doubling": 0,
+     "net_halves": [
+      6,
+      98
+     ],
+     "net_per_changed": 0.259,
+     "rusty_per_changed": 0.397,
+     "bba_per_changed": 0.137,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 401,
+    "changed_ours": 383,
+    "changed_bba": 288,
+    "rusty_gain": 159,
+    "bba_gain": 55,
+    "net": 104,
+    "net_other": -263,
+    "rusty_contract": 159,
+    "rusty_doubling": 0,
+    "bba_contract": 55,
+    "bba_doubling": 0,
+    "net_halves": [
+     6,
+     98
+    ],
+    "net_per_changed": 0.259,
+    "rusty_per_changed": 0.397,
+    "bba_per_changed": 0.137,
+    "halves_agree": true,
+    "runs": [
+     "kokish"
+    ],
+    "scenarios": [
+     "Kokish_Relay"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.7773,
+     "errors_per_board": -1.104,
+     "status": "bba-poor"
+    }
+   },
    "partial": null,
    "tests": 14,
    "rules": 13,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/openings/kokish.notes.md"
    ],
-   "status": "bba-poor",
-   "why": "errors -1.10 IMPs/board against BBA's, NS calls agreeing 78% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-poor",
+   "why": "convention score +0.26 IMPs per changed board (our gain +159, BBA's +55, 401 boards); background on these deals -1.10 IMPs/board, NS calls agreeing 78%"
   },
   {
    "id": "bidding_conventions/mccabe",
@@ -6602,6 +8873,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 13,
    "rules": 14,
@@ -6649,6 +8922,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -6745,6 +9020,82 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "multi-2d",
+     "off": [
+      "two_level.two_diamonds.multi=false"
+     ],
+     "scenarios": [
+      "Multi_2D"
+     ],
+     "bba_keys": [
+      "Multi"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 351,
+     "changed_ours": 351,
+     "changed_bba": 351,
+     "rusty_gain": 3,
+     "bba_gain": -46,
+     "net": 49,
+     "net_other": 59,
+     "rusty_contract": -7,
+     "rusty_doubling": 10,
+     "bba_contract": 104,
+     "bba_doubling": -150,
+     "net_halves": [
+      78,
+      -29
+     ],
+     "net_per_changed": 0.14,
+     "rusty_per_changed": 0.009,
+     "bba_per_changed": -0.131,
+     "halves_agree": false,
+     "no_rule_on": 5,
+     "no_rule_off": 9
+    }
+   ],
+   "conv_score": {
+    "changed": 351,
+    "changed_ours": 351,
+    "changed_bba": 351,
+    "rusty_gain": 3,
+    "bba_gain": -46,
+    "net": 49,
+    "net_other": 59,
+    "rusty_contract": -7,
+    "rusty_doubling": 10,
+    "bba_contract": 104,
+    "bba_doubling": -150,
+    "net_halves": [
+     78,
+     -29
+    ],
+    "net_per_changed": 0.14,
+    "rusty_per_changed": 0.009,
+    "bba_per_changed": -0.131,
+    "halves_agree": false,
+    "runs": [
+     "multi-2d"
+    ],
+    "scenarios": [
+     "Multi_2D"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.7884,
+     "errors_per_board": -0.988,
+     "status": "bba-fair"
+    }
+   },
    "partial": "Weak options only: the strong options (4-4-4-1, Lars Multi's 20-21) are not written.",
    "tests": 31,
    "rules": 55,
@@ -6806,14 +9157,91 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "roudi",
+     "off": [
+      "other_conventions.roudi.play=false"
+     ],
+     "scenarios": [
+      "WB5_Roudi"
+     ],
+     "bba_keys": [
+      "Roudi"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-fair",
+     "changed": 257,
+     "changed_ours": 199,
+     "changed_bba": 189,
+     "rusty_gain": -4,
+     "bba_gain": 56,
+     "net": -60,
+     "net_other": -100,
+     "rusty_contract": -4,
+     "rusty_doubling": 0,
+     "bba_contract": 56,
+     "bba_doubling": 0,
+     "net_halves": [
+      -77,
+      17
+     ],
+     "net_per_changed": -0.233,
+     "rusty_per_changed": -0.016,
+     "bba_per_changed": 0.218,
+     "halves_agree": false,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 257,
+    "changed_ours": 199,
+    "changed_bba": 189,
+    "rusty_gain": -4,
+    "bba_gain": 56,
+    "net": -60,
+    "net_other": -100,
+    "rusty_contract": -4,
+    "rusty_doubling": 0,
+    "bba_contract": 56,
+    "bba_doubling": 0,
+    "net_halves": [
+     -77,
+     17
+    ],
+    "net_per_changed": -0.233,
+    "rusty_per_changed": -0.016,
+    "bba_per_changed": 0.218,
+    "halves_agree": false,
+    "runs": [
+     "roudi"
+    ],
+    "scenarios": [
+     "WB5_Roudi"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.762,
+     "errors_per_board": -0.894,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 11,
    "rules": 18,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/roudi.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.89 IMPs/board against BBA's, NS calls agreeing 76% (500 boards)"
+   "status": "conv-fair",
+   "background": "bba-fair",
+   "why": "convention score -0.23 IMPs per changed board (our gain -4, BBA's +56, 257 boards); background on these deals -0.89 IMPs/board, NS calls agreeing 76%"
   },
   {
    "id": "bidding_conventions/soloway",
@@ -6880,14 +9308,92 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "soloway",
+     "off": [
+      "general.jump_shifts.soloway=false",
+      "general.jump_shifts.soloway_extended=false"
+     ],
+     "scenarios": [
+      "Soloway_Jump_Shift"
+     ],
+     "bba_keys": [
+      "Soloway Jump Shifts"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 489,
+     "changed_ours": 477,
+     "changed_bba": 438,
+     "rusty_gain": 335,
+     "bba_gain": 134,
+     "net": 201,
+     "net_other": -43,
+     "rusty_contract": 335,
+     "rusty_doubling": 0,
+     "bba_contract": 141,
+     "bba_doubling": -7,
+     "net_halves": [
+      110,
+      91
+     ],
+     "net_per_changed": 0.411,
+     "rusty_per_changed": 0.685,
+     "bba_per_changed": 0.274,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 489,
+    "changed_ours": 477,
+    "changed_bba": 438,
+    "rusty_gain": 335,
+    "bba_gain": 134,
+    "net": 201,
+    "net_other": -43,
+    "rusty_contract": 335,
+    "rusty_doubling": 0,
+    "bba_contract": 141,
+    "bba_doubling": -7,
+    "net_halves": [
+     110,
+     91
+    ],
+    "net_per_changed": 0.411,
+    "rusty_per_changed": 0.685,
+    "bba_per_changed": 0.274,
+    "halves_agree": true,
+    "runs": [
+     "soloway"
+    ],
+    "scenarios": [
+     "Soloway_Jump_Shift"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.6033,
+     "errors_per_board": -1.708,
+     "status": "bba-poor"
+    }
+   },
    "partial": null,
    "tests": 12,
    "rules": 12,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/base/soloway.notes.md"
    ],
-   "status": "bba-poor",
-   "why": "errors -1.71 IMPs/board against BBA's, NS calls agreeing 60% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-poor",
+   "why": "convention score +0.41 IMPs per changed board (our gain +335, BBA's +134, 489 boards); background on these deals -1.71 IMPs/board, NS calls agreeing 60%"
   },
   {
    "id": "bidding_conventions/spiral",
@@ -6974,6 +9480,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 14,
    "rules": 11,
@@ -7041,6 +9549,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": "Partial (2026-10-05): after 1♥/1♠–1NT and 1♥–1♠ only; see gazzilli.notes.md.",
    "tests": 15,
    "rules": 63,
@@ -7089,6 +9599,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -7173,6 +9685,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": "No queen ask over the 1-or-4 / 0-or-3 answers.",
    "tests": 20,
    "rules": 34,
@@ -7206,6 +9720,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -7266,6 +9782,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -7297,6 +9815,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -7340,6 +9860,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": "Interference beyond a double, and opener's strength after the 2NT ask, are not written.",
    "tests": 15,
    "rules": 27,
@@ -7424,6 +9946,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 12,
    "rules": 6,
@@ -7465,6 +9989,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -7563,6 +10089,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": "Only after a major: transfers after 1m (X) are not written.",
    "tests": 15,
    "rules": 36,
@@ -7608,6 +10136,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 21,
    "rules": 37,
@@ -7692,6 +10222,25 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "xyz",
+     "off": [
+      "other_conventions.xyz=false"
+     ],
+     "scenarios": [
+      "XYZ"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "XYZ: 21GF-DEFAULT does not play it or leaves it unset (other_conventions.xyz=None)"
+     ],
+     "unmeasured": "XYZ: 21GF-DEFAULT does not play it or leaves it unset (other_conventions.xyz=None)",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 15,
    "rules": 10,
@@ -7761,6 +10310,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 19,
    "rules": 28,
@@ -7768,7 +10319,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/overcalls.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.71 IMPs/board against BBA's, NS calls agreeing 78% (1500 boards)"
+   "why": "background (not isolated): errors -0.71 IMPs/board against BBA's, NS calls agreeing 78% (1500 boards)"
   },
   {
    "id": "competitive_bidding/takeout_doubles",
@@ -7865,6 +10416,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 78,
    "rules": 209,
@@ -7873,7 +10426,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/vs-preempts.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.43 IMPs/board against BBA's, NS calls agreeing 70% (1500 boards)"
+   "why": "background (not isolated): errors -0.43 IMPs/board against BBA's, NS calls agreeing 70% (1500 boards)"
   },
   {
    "id": "competitive_bidding/negative_doubles",
@@ -7952,6 +10505,27 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "negative-doubles",
+     "off": [
+      "doubles.negative.play=false"
+     ],
+     "scenarios": [
+      "Negative_Double",
+      "Negative_Free_Bid"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "Negative_Double: 21GF-DEFAULT does not play it or leaves it unset (doubles.negative.play=None)",
+      "Negative_Free_Bid: 21GF-DEFAULT does not play it or leaves it unset (doubles.negative.play=None)"
+     ],
+     "unmeasured": "Negative_Double: 21GF-DEFAULT does not play it or leaves it unset (doubles.negative.play=None); Negative_Free_Bid: 21GF-DEFAULT does not play it or leaves it unset (doubles.negative.play=None)",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 81,
    "rules": 106,
@@ -7959,7 +10533,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/after-interference.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.72 IMPs/board against BBA's, NS calls agreeing 73% (1000 boards)"
+   "why": "background (not isolated): errors -0.72 IMPs/board against BBA's, NS calls agreeing 73% (1000 boards)"
   },
   {
    "id": "competitive_bidding/advancing_overcalls",
@@ -8012,6 +10586,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 38,
    "rules": 62,
@@ -8019,7 +10595,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/advances.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.74 IMPs/board against BBA's, NS calls agreeing 65% (1000 boards)"
+   "why": "background (not isolated): errors -0.74 IMPs/board against BBA's, NS calls agreeing 65% (1000 boards)"
   },
   {
    "id": "competitive_bidding/balancing",
@@ -8063,6 +10639,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 11,
    "rules": 10,
@@ -8070,7 +10648,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/balancing.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.97 IMPs/board against BBA's, NS calls agreeing 69% (500 boards)"
+   "why": "background (not isolated): errors -0.97 IMPs/board against BBA's, NS calls agreeing 69% (500 boards)"
   },
   {
    "id": "competitive_bidding/defense_vs_preempts",
@@ -8141,6 +10719,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 38,
    "rules": 111,
@@ -8148,7 +10728,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/vs-preempts.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -1.03 IMPs/board against BBA's, NS calls agreeing 72% (2000 boards)"
+   "why": "background (not isolated): errors -1.03 IMPs/board against BBA's, NS calls agreeing 72% (2000 boards)"
   },
   {
    "id": "competitive_bidding/landy",
@@ -8238,14 +10818,92 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "landy",
+     "off": [
+      "competitive.vs_1nt_strong.system=other",
+      "competitive.vs_1nt_weak.system=other"
+     ],
+     "scenarios": [
+      "Multi_Landy"
+     ],
+     "bba_keys": [
+      "Multi-Landy"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 414,
+     "changed_ours": 346,
+     "changed_bba": 300,
+     "rusty_gain": 6,
+     "bba_gain": -150,
+     "net": 156,
+     "net_other": 87,
+     "rusty_contract": 152,
+     "rusty_doubling": -146,
+     "bba_contract": 127,
+     "bba_doubling": -277,
+     "net_halves": [
+      74,
+      82
+     ],
+     "net_per_changed": 0.377,
+     "rusty_per_changed": 0.014,
+     "bba_per_changed": -0.362,
+     "halves_agree": true,
+     "no_rule_on": 17,
+     "no_rule_off": 22
+    }
+   ],
+   "conv_score": {
+    "changed": 414,
+    "changed_ours": 346,
+    "changed_bba": 300,
+    "rusty_gain": 6,
+    "bba_gain": -150,
+    "net": 156,
+    "net_other": 87,
+    "rusty_contract": 152,
+    "rusty_doubling": -146,
+    "bba_contract": 127,
+    "bba_doubling": -277,
+    "net_halves": [
+     74,
+     82
+    ],
+    "net_per_changed": 0.377,
+    "rusty_per_changed": 0.014,
+    "bba_per_changed": -0.362,
+    "halves_agree": true,
+    "runs": [
+     "landy"
+    ],
+    "scenarios": [
+     "Multi_Landy"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.853,
+     "errors_per_board": 0.662,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 12,
    "rules": 12,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/multi-landy.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.66 IMPs/board against BBA's, NS calls agreeing 85% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.38 IMPs per changed board (our gain +6, BBA's -150, 414 boards); background on these deals +0.66 IMPs/board, NS calls agreeing 85%"
   },
   {
    "id": "competitive_bidding/michaels_unusual",
@@ -8526,6 +11184,129 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "michaels",
+     "off": [
+      "competitive.michaels.play=false",
+      "direct_cuebids.nat_majors_michaels=false",
+      "direct_cuebids.nat_minors_michaels=false"
+     ],
+     "scenarios": [
+      "Michaels_Cuebid",
+      "Michaels_and_Unusual"
+     ],
+     "bba_keys": [
+      "Michaels Cuebid"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-fair",
+     "changed": 719,
+     "changed_ours": 702,
+     "changed_bba": 608,
+     "rusty_gain": 221,
+     "bba_gain": 315,
+     "net": -94,
+     "net_other": -544,
+     "rusty_contract": 178,
+     "rusty_doubling": 43,
+     "bba_contract": 198,
+     "bba_doubling": 117,
+     "net_halves": [
+      -52,
+      -42
+     ],
+     "net_per_changed": -0.131,
+     "rusty_per_changed": 0.307,
+     "bba_per_changed": 0.438,
+     "halves_agree": true,
+     "no_rule_on": 19,
+     "no_rule_off": 22
+    },
+    {
+     "name": "unusual-2nt",
+     "off": [
+      "competitive.unusual_2nt.play=false"
+     ],
+     "scenarios": [
+      "Unusual_2N",
+      "Michaels_and_Unusual"
+     ],
+     "bba_keys": [
+      "Unusual 2NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-poor",
+     "changed": 652,
+     "changed_ours": 635,
+     "changed_bba": 647,
+     "rusty_gain": -131,
+     "bba_gain": 339,
+     "net": -470,
+     "net_other": -304,
+     "rusty_contract": 114,
+     "rusty_doubling": -245,
+     "bba_contract": 248,
+     "bba_doubling": 91,
+     "net_halves": [
+      -244,
+      -226
+     ],
+     "net_per_changed": -0.721,
+     "rusty_per_changed": -0.201,
+     "bba_per_changed": 0.52,
+     "halves_agree": true,
+     "no_rule_on": 53,
+     "no_rule_off": 58
+    }
+   ],
+   "conv_score": {
+    "changed": 1371,
+    "changed_ours": 1337,
+    "changed_bba": 1255,
+    "rusty_gain": 90,
+    "bba_gain": 654,
+    "net": -564,
+    "net_other": -848,
+    "rusty_contract": 292,
+    "rusty_doubling": -202,
+    "bba_contract": 446,
+    "bba_doubling": 208,
+    "net_halves": [
+     -296,
+     -268
+    ],
+    "net_per_changed": -0.411,
+    "rusty_per_changed": 0.066,
+    "bba_per_changed": 0.477,
+    "halves_agree": true,
+    "runs": [
+     "michaels",
+     "unusual-2nt"
+    ],
+    "scenarios": [
+     "Michaels_Cuebid",
+     "Michaels_and_Unusual",
+     "Unusual_2N"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 1500,
+     "ns_agree": 0.8084,
+     "errors_per_board": -1.099,
+     "status": "bba-poor"
+    }
+   },
    "partial": "Direct jump cue bids: over a major the `minor` option and the strong variety's continuations are not written.",
    "tests": 61,
    "rules": 241,
@@ -8600,6 +11381,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 119,
    "rules": 168,
@@ -8637,6 +11420,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 7,
    "rules": 3,
@@ -8749,14 +11534,94 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "cappelletti",
+     "off": [
+      "competitive.vs_1nt_strong.system=other",
+      "competitive.vs_1nt_weak.system=other"
+     ],
+     "scenarios": [
+      "Cappelletti",
+      "Cappelletti_in_4th"
+     ],
+     "bba_keys": [
+      "Cappelletti"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-good",
+     "changed": 805,
+     "changed_ours": 739,
+     "changed_bba": 614,
+     "rusty_gain": 420,
+     "bba_gain": 170,
+     "net": 250,
+     "net_other": -246,
+     "rusty_contract": -525,
+     "rusty_doubling": 945,
+     "bba_contract": -92,
+     "bba_doubling": 262,
+     "net_halves": [
+      158,
+      92
+     ],
+     "net_per_changed": 0.311,
+     "rusty_per_changed": 0.522,
+     "bba_per_changed": 0.211,
+     "halves_agree": true,
+     "no_rule_on": 11,
+     "no_rule_off": 22
+    }
+   ],
+   "conv_score": {
+    "changed": 805,
+    "changed_ours": 739,
+    "changed_bba": 614,
+    "rusty_gain": 420,
+    "bba_gain": 170,
+    "net": 250,
+    "net_other": -246,
+    "rusty_contract": -525,
+    "rusty_doubling": 945,
+    "bba_contract": -92,
+    "bba_doubling": 262,
+    "net_halves": [
+     158,
+     92
+    ],
+    "net_per_changed": 0.311,
+    "rusty_per_changed": 0.522,
+    "bba_per_changed": 0.211,
+    "halves_agree": true,
+    "runs": [
+     "cappelletti"
+    ],
+    "scenarios": [
+     "Cappelletti",
+     "Cappelletti_in_4th"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.8337,
+     "errors_per_board": -0.172,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 28,
    "rules": 22,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/cappelletti.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors -0.17 IMPs/board against BBA's, NS calls agreeing 83% (1000 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.31 IMPs per changed board (our gain +420, BBA's +170, 805 boards); background on these deals -0.17 IMPs/board, NS calls agreeing 83%"
   },
   {
    "id": "competitive_bidding/defense_vs_1nt",
@@ -8845,6 +11710,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 114,
    "rules": 119,
@@ -8857,7 +11724,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/vs-1nt.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors +0.20 IMPs/board against BBA's, NS calls agreeing 94% (500 boards)"
+   "why": "background (not isolated): errors +0.20 IMPs/board against BBA's, NS calls agreeing 94% (500 boards)"
   },
   {
    "id": "competitive_bidding/dont",
@@ -8967,6 +11834,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 21,
    "rules": 12,
@@ -9089,14 +11958,91 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "jordan-2nt",
+     "off": [
+      "competitive.jordan_2nt.play=false"
+     ],
+     "scenarios": [
+      "Jordan_2N"
+     ],
+     "bba_keys": [
+      "Jordan Truscott 2NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": "conv-good",
+     "changed": 455,
+     "changed_ours": 326,
+     "changed_bba": 391,
+     "rusty_gain": 430,
+     "bba_gain": 50,
+     "net": 380,
+     "net_other": -203,
+     "rusty_contract": 409,
+     "rusty_doubling": 21,
+     "bba_contract": 39,
+     "bba_doubling": 11,
+     "net_halves": [
+      120,
+      260
+     ],
+     "net_per_changed": 0.835,
+     "rusty_per_changed": 0.945,
+     "bba_per_changed": 0.11,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 1
+    }
+   ],
+   "conv_score": {
+    "changed": 455,
+    "changed_ours": 326,
+    "changed_bba": 391,
+    "rusty_gain": 430,
+    "bba_gain": 50,
+    "net": 380,
+    "net_other": -203,
+    "rusty_contract": 409,
+    "rusty_doubling": 21,
+    "bba_contract": 39,
+    "bba_doubling": 11,
+    "net_halves": [
+     120,
+     260
+    ],
+    "net_per_changed": 0.835,
+    "rusty_per_changed": 0.945,
+    "bba_per_changed": 0.11,
+    "halves_agree": true,
+    "runs": [
+     "jordan-2nt"
+    ],
+    "scenarios": [
+     "Jordan_2N"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 500,
+     "ns_agree": 0.78,
+     "errors_per_board": 0.05,
+     "status": "bba-good"
+    }
+   },
    "partial": null,
    "tests": 19,
    "rules": 18,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/vs-takeout-double.notes.md"
    ],
-   "status": "bba-good",
-   "why": "errors +0.05 IMPs/board against BBA's, NS calls agreeing 78% (500 boards)"
+   "status": "conv-good",
+   "background": "bba-good",
+   "why": "convention score +0.83 IMPs per changed board (our gain +430, BBA's +50, 455 boards); background on these deals +0.05 IMPs/board, NS calls agreeing 78%"
   },
   {
    "id": "competitive_bidding/lead_directing_doubles",
@@ -9177,6 +12123,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": "No Lightner double and no doubles of their cue bids; the engine does not choose leads, so the compare cannot show the gain.",
    "tests": 6,
    "rules": 2,
@@ -9368,6 +12316,128 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "lebensohl-nt",
+     "off": [
+      "notrump.lebensohl.over_interference=false"
+     ],
+     "scenarios": [
+      "Lebensohl",
+      "Lebensohl2"
+     ],
+     "bba_keys": [
+      "Lebensohl after 1NT"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-good",
+     "changed": 224,
+     "changed_ours": 145,
+     "changed_bba": 111,
+     "rusty_gain": 58,
+     "bba_gain": 42,
+     "net": 16,
+     "net_other": 33,
+     "rusty_contract": -90,
+     "rusty_doubling": 148,
+     "bba_contract": -23,
+     "bba_doubling": 65,
+     "net_halves": [
+      -44,
+      60
+     ],
+     "net_per_changed": 0.071,
+     "rusty_per_changed": 0.259,
+     "bba_per_changed": 0.188,
+     "halves_agree": false,
+     "no_rule_on": 14,
+     "no_rule_off": 7
+    },
+    {
+     "name": "lebensohl-weak-twos",
+     "off": [
+      "competitive.lebensohl_weak_twos.play=false"
+     ],
+     "scenarios": [
+      "Lebensohl_vs_Opps_W2_Bal",
+      "Lebensohl_vs_Opps_W2_Dir"
+     ],
+     "bba_keys": [
+      "Lebensohl after double"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-poor",
+     "changed": 556,
+     "changed_ours": 422,
+     "changed_bba": 413,
+     "rusty_gain": -83,
+     "bba_gain": 293,
+     "net": -376,
+     "net_other": 37,
+     "rusty_contract": -83,
+     "rusty_doubling": 0,
+     "bba_contract": 308,
+     "bba_doubling": -15,
+     "net_halves": [
+      -127,
+      -249
+     ],
+     "net_per_changed": -0.676,
+     "rusty_per_changed": -0.149,
+     "bba_per_changed": 0.527,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 780,
+    "changed_ours": 567,
+    "changed_bba": 524,
+    "rusty_gain": -25,
+    "bba_gain": 335,
+    "net": -360,
+    "net_other": 70,
+    "rusty_contract": -173,
+    "rusty_doubling": 148,
+    "bba_contract": 285,
+    "bba_doubling": 50,
+    "net_halves": [
+     -171,
+     -189
+    ],
+    "net_per_changed": -0.462,
+    "rusty_per_changed": -0.032,
+    "bba_per_changed": 0.429,
+    "halves_agree": true,
+    "runs": [
+     "lebensohl-nt",
+     "lebensohl-weak-twos"
+    ],
+    "scenarios": [
+     "Lebensohl",
+     "Lebensohl2",
+     "Lebensohl_vs_Opps_W2_Bal",
+     "Lebensohl_vs_Opps_W2_Dir"
+    ],
+    "status": "conv-fair",
+    "background": {
+     "boards": 2000,
+     "ns_agree": 0.7527,
+     "errors_per_board": -0.292,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 93,
    "rules": 247,
@@ -9376,8 +12446,9 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/vs-preempts.notes.md",
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/notrump/lebensohl.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.29 IMPs/board against BBA's, NS calls agreeing 75% (2000 boards)"
+   "status": "conv-fair",
+   "background": "bba-fair",
+   "why": "convention score -0.46 IMPs per changed board (our gain -25, BBA's +335, 780 boards); background on these deals -0.29 IMPs/board, NS calls agreeing 75%"
   },
   {
    "id": "competitive_bidding/meckwell",
@@ -9474,6 +12545,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 16,
    "rules": 10,
@@ -9555,14 +12628,93 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "responsive-doubles",
+     "off": [
+      "doubles.responsive.play=false"
+     ],
+     "scenarios": [
+      "Responsive_Double",
+      "Responsive_Double_after_Overcall"
+     ],
+     "bba_keys": [
+      "Responsive double"
+     ],
+     "notes": [],
+     "unmeasured": null,
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": "conv-good",
+     "changed": 325,
+     "changed_ours": 173,
+     "changed_bba": 244,
+     "rusty_gain": 76,
+     "bba_gain": -6,
+     "net": 82,
+     "net_other": -211,
+     "rusty_contract": 114,
+     "rusty_doubling": -38,
+     "bba_contract": -18,
+     "bba_doubling": 12,
+     "net_halves": [
+      50,
+      32
+     ],
+     "net_per_changed": 0.252,
+     "rusty_per_changed": 0.234,
+     "bba_per_changed": -0.018,
+     "halves_agree": true,
+     "no_rule_on": 20,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": {
+    "changed": 325,
+    "changed_ours": 173,
+    "changed_bba": 244,
+    "rusty_gain": 76,
+    "bba_gain": -6,
+    "net": 82,
+    "net_other": -211,
+    "rusty_contract": 114,
+    "rusty_doubling": -38,
+    "bba_contract": -18,
+    "bba_doubling": 12,
+    "net_halves": [
+     50,
+     32
+    ],
+    "net_per_changed": 0.252,
+    "rusty_per_changed": 0.234,
+    "bba_per_changed": -0.018,
+    "halves_agree": true,
+    "runs": [
+     "responsive-doubles"
+    ],
+    "scenarios": [
+     "Responsive_Double",
+     "Responsive_Double_after_Overcall"
+    ],
+    "status": "conv-good",
+    "background": {
+     "boards": 1000,
+     "ns_agree": 0.7735,
+     "errors_per_board": -0.275,
+     "status": "bba-fair"
+    }
+   },
    "partial": null,
    "tests": 10,
    "rules": 12,
    "notes": [
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/responsive-doubles.notes.md"
    ],
-   "status": "bba-fair",
-   "why": "errors -0.28 IMPs/board against BBA's, NS calls agreeing 77% (1000 boards)"
+   "status": "conv-good",
+   "background": "bba-fair",
+   "why": "convention score +0.25 IMPs per changed board (our gain +76, BBA's -6, 325 boards); background on these deals -0.28 IMPs/board, NS calls agreeing 77%"
   },
   {
    "id": "competitive_bidding/support_doubles",
@@ -9640,6 +12792,50 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "support-doubles",
+     "off": [
+      "doubles.support.play=false",
+      "doubles.support.rdbl=false"
+     ],
+     "scenarios": [
+      "Support_Double"
+     ],
+     "bba_keys": [
+      "Support double redouble"
+     ],
+     "notes": [],
+     "unmeasured": "our auctions changed on 0 boards: our rules do not switch it off with doubles.support.play=false, doubles.support.rdbl=false",
+     "repro": {
+      "differ": 0,
+      "boards": 500
+     },
+     "status": null,
+     "changed": 420,
+     "changed_ours": 0,
+     "changed_bba": 420,
+     "rusty_gain": 0,
+     "bba_gain": 151,
+     "net": -151,
+     "net_other": 230,
+     "rusty_contract": 0,
+     "rusty_doubling": 0,
+     "bba_contract": 163,
+     "bba_doubling": -12,
+     "net_halves": [
+      -17,
+      -134
+     ],
+     "net_per_changed": -0.36,
+     "rusty_per_changed": 0.0,
+     "bba_per_changed": 0.36,
+     "halves_agree": true,
+     "no_rule_on": 0,
+     "no_rule_off": 0
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 29,
    "rules": 25,
@@ -9647,7 +12843,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/support-doubles.notes.md"
    ],
    "status": "bba-fair",
-   "why": "errors -0.40 IMPs/board against BBA's, NS calls agreeing 86% (500 boards)"
+   "why": "background (not isolated): errors -0.40 IMPs/board against BBA's, NS calls agreeing 86% (500 boards)"
   },
   {
    "id": "competitive_bidding/equal_level_conversion",
@@ -9687,6 +12883,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -9733,6 +12931,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -9830,6 +13030,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 10,
    "rules": 7,
@@ -9911,6 +13113,50 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [
+    {
+     "name": "fit-showing-jumps",
+     "off": [
+      "competitive.fit_showing_jumps.play=false"
+     ],
+     "scenarios": [
+      "Fit_Showing_Jumps",
+      "Fit_Jumps_after_1M_Double"
+     ],
+     "bba_keys": [
+      "Fit showing jumps"
+     ],
+     "notes": [],
+     "unmeasured": "our off run hits 54 no-rule positions (1 on): our rules have no fallback without it",
+     "repro": {
+      "differ": 0,
+      "boards": 1000
+     },
+     "status": null,
+     "changed": 855,
+     "changed_ours": 850,
+     "changed_bba": 307,
+     "rusty_gain": -1761,
+     "bba_gain": -133,
+     "net": -1628,
+     "net_other": -80,
+     "rusty_contract": -1777,
+     "rusty_doubling": 16,
+     "bba_contract": -140,
+     "bba_doubling": 7,
+     "net_halves": [
+      -741,
+      -887
+     ],
+     "net_per_changed": -1.904,
+     "rusty_per_changed": -2.06,
+     "bba_per_changed": -0.156,
+     "halves_agree": true,
+     "no_rule_on": 1,
+     "no_rule_off": 54
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 13,
    "rules": 22,
@@ -9918,7 +13164,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/fit-showing-jumps.notes.md"
    ],
    "status": "bba-poor",
-   "why": "errors -2.00 IMPs/board against BBA's, NS calls agreeing 70% (1000 boards)"
+   "why": "background (not isolated): errors -2.00 IMPs/board against BBA's, NS calls agreeing 70% (1000 boards)"
   },
   {
    "id": "competitive_bidding/mathe",
@@ -9964,6 +13210,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10046,6 +13294,25 @@
      }
     }
    ],
+   "conv": [
+    {
+     "name": "sandwich-nt",
+     "off": [
+      "competitive.sandwich_nt.play=false"
+     ],
+     "scenarios": [
+      "GIB_Sandwich_NT_BPH"
+     ],
+     "bba_keys": [],
+     "notes": [
+      "GIB_Sandwich_NT_BPH: 21GF-GIB does not play it or leaves it unset (competitive.sandwich_nt.play=None)"
+     ],
+     "unmeasured": "GIB_Sandwich_NT_BPH: 21GF-GIB does not play it or leaves it unset (competitive.sandwich_nt.play=None)",
+     "repro": null,
+     "status": null
+    }
+   ],
+   "conv_score": null,
    "partial": null,
    "tests": 8,
    "rules": 6,
@@ -10053,7 +13320,7 @@
     "https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/conventions/competitive/sandwich-nt.notes.md"
    ],
    "status": "bba-good",
-   "why": "errors -0.05 IMPs/board against BBA's, NS calls agreeing 72% (500 boards)"
+   "why": "background (not isolated): errors -0.05 IMPs/board against BBA's, NS calls agreeing 72% (500 boards)"
   },
   {
    "id": "competitive_bidding/scrambling_2nt",
@@ -10134,6 +13401,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 9,
    "rules": 5,
@@ -10185,6 +13454,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": "Only 1x (X) P (P): other SOS positions (a passed round, our 1NT doubled) are not written.",
    "tests": 4,
    "rules": 6,
@@ -10230,6 +13501,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 19,
    "rules": 18,
@@ -10271,6 +13544,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10316,6 +13591,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10377,6 +13654,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 14,
    "rules": 24,
@@ -10418,6 +13697,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10478,6 +13759,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 12,
    "rules": 23,
@@ -10519,6 +13802,8 @@
     "status": "bba-poor"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10611,6 +13896,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 8,
    "rules": 15,
@@ -10704,6 +13991,8 @@
      }
     }
    ],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 21,
    "rules": 16,
@@ -10736,6 +14025,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10791,6 +14082,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 61,
    "rules": 241,
@@ -10823,6 +14116,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10854,6 +14149,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10905,6 +14202,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -10951,6 +14250,8 @@
     "status": "bba-fair"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -11002,6 +14303,8 @@
     "status": "bba-good"
    },
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -11026,6 +14329,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -11050,6 +14355,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
@@ -11074,6 +14381,8 @@
    "scenarios_missing": [],
    "bba": null,
    "ab": [],
+   "conv": [],
+   "conv_score": null,
    "partial": null,
    "tests": 0,
    "rules": 0,
