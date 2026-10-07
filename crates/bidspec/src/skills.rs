@@ -6,7 +6,8 @@
 
 use std::collections::{BTreeMap, BTreeSet};
 
-use bridge_card::{Registry, SkillSource, Skills};
+use bridge_card::{Registry, SkillSource, Skills, Vocabulary};
+use serde::Serialize;
 
 use crate::ast::Module;
 use crate::Diagnostic;
@@ -270,6 +271,67 @@ fn list(out: &mut String, items: impl Iterator<Item = String>) {
     }
 }
 
+/// One module as `rbb bid skills --json` lists it: what it implements and
+/// what it reads (probes/tools/status_data.py builds the status page on it).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct ModuleInfo {
+    pub name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    pub file: String,
+    /// Skill paths from its `skill` lines.
+    pub skills: Vec<String>,
+    /// Card fields it reads (`card` conditions and `param`s), canonical paths.
+    pub reads: Vec<String>,
+    /// Its rules (every rule of every context).
+    pub rules: usize,
+}
+
+/// Every module, and the card fields the rule set reads as `rbb card
+/// coverage` counts them (a field feeding a derived one that is read
+/// counts as read).
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+pub struct Inventory {
+    pub modules: Vec<ModuleInfo>,
+    pub fields_read: Vec<String>,
+}
+
+fn count_rules(contexts: &[crate::ast::Context]) -> usize {
+    contexts
+        .iter()
+        .map(|c| c.rules.len() + count_rules(&c.contexts))
+        .sum()
+}
+
+/// The inventory of `modules` in `vocab` (`rbb bid skills --json`).
+pub fn inventory(modules: &[Module], vocab: &Vocabulary) -> Inventory {
+    let modules_out = modules
+        .iter()
+        .map(|m| {
+            let reads: BTreeSet<String> = m
+                .card
+                .iter()
+                .map(|c| c.path.clone())
+                .chain(m.params.iter().map(|p| p.path.clone()))
+                .collect();
+            ModuleInfo {
+                name: m.name.clone(),
+                title: m.title.clone(),
+                file: m.file.clone(),
+                skills: m.skills.iter().map(|s| s.path.clone()).collect(),
+                reads: reads.into_iter().collect(),
+                rules: count_rules(&m.contexts),
+            }
+        })
+        .collect();
+    Inventory {
+        modules: modules_out,
+        fields_read: crate::coverage::fields_read(modules, vocab)
+            .into_iter()
+            .collect(),
+    }
+}
+
 /// `doc` with the text between [`BEGIN`] and [`END`] replaced by `text`;
 /// `None` when the markers are missing.
 pub fn splice(doc: &str, text: &str) -> Option<String> {
@@ -331,6 +393,30 @@ mod tests {
         let warnings = check(&modules, &registry, &known, "fields.toml");
         assert_eq!(warnings.len(), 1);
         assert!(warnings[0].message.contains("bidding_conventions/xyz"));
+    }
+
+    #[test]
+    fn inventory_lists_modules_and_reads() {
+        let vocab = bridge_card::standard::vocabulary().unwrap();
+        let m = crate::parse(
+            concat!(
+                "module stayman \"S\"\n",
+                "  skill bidding_conventions/stayman\n",
+                "  param on = notrump.stayman.play default false\n",
+                "after 1N (P) when on\n",
+                "  2C \"Stayman\"\n",
+                "  2D \"x\"\n",
+            ),
+            "t.bid",
+        )
+        .unwrap();
+        let inv = inventory(&[m], &vocab);
+        assert_eq!(inv.modules[0].skills, ["bidding_conventions/stayman"]);
+        assert_eq!(inv.modules[0].reads, ["notrump.stayman.play"]);
+        assert_eq!(inv.modules[0].rules, 2);
+        assert!(inv
+            .fields_read
+            .contains(&"notrump.stayman.play".to_string()));
     }
 
     #[test]

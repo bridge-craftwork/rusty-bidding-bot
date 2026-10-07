@@ -8,7 +8,7 @@
   Cloudflare Pages serves this file, with a 404 status, for any path that
   matches no file. Without it Pages would answer every path with index.html
   and 200, and a client could not tell a missing page from a real one. The
-  real routes are files: index.html (/), reference.txt, and the assets.
+  real routes are files: index.html (/), status.html, reference.txt, and the assets.
   Links are relative, so they work at / and under /rusty-bidding-bot/ ...
   except that a 404 can be at any depth; the page is the tool's root.
 -->
@@ -26,6 +26,7 @@
   <p>There is no page at that address.</p>
   <ul>
     <li><a href="./" id="home">The bidding engine</a></li>
+    <li><a href="./status.html" id="status">Status</a>: what is implemented, and how well it bids</li>
     <li><a href="./reference.txt" id="ref">Reference</a> (plain text)</li>
   </ul>
   <script>
@@ -35,6 +36,7 @@
     var root = m ? m[0] : '/'
     document.getElementById('home').href = root
     document.getElementById('ref').href = root + 'reference.txt'
+    document.getElementById('status').href = root + 'status.html'
   </script>
 </body>
 </html>

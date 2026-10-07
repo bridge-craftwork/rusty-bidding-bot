@@ -318,6 +318,20 @@ await test('the practice-table loop: bots, a human, the fallback for a call with
   assert.equal(unknown.step.explanation, null)
 })
 
+await test('the status page: status.json parses and every tile has a status', async () => {
+  const { checkData, STATUS } = await import(pathToFileURL(path.join(dist, 'status', 'legend.js')).href)
+  const data = JSON.parse(await readFile(path.join(dist, 'status', 'status.json'), 'utf8'))
+  assert.deepEqual(checkData(data), [])
+  assert.ok(data.tiles.length > 50)
+  // Every section the page draws has tiles, and the legend's statuses
+  // are the ones the generator writes.
+  for (const s of data.sections) assert.ok(data.tiles.some((t) => t.section === s.id), s.id)
+  assert.ok(data.tiles.every((t) => STATUS.some((s) => s.code === t.status)))
+  const html = await readFile(path.join(dist, 'status.html'), 'utf8')
+  assert.match(html, /src="status\/status\.js"/)
+  assert.match(await readFile(path.join(dist, 'index.html'), 'utf8'), /href="status\.html"/)
+})
+
 if (pbsDir) {
   await test('a PBS scenario from the corpus, with its cards and BBA\'s auction', async () => {
     const s = new Session(rbb, { fetchImpl })

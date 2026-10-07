@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rusty-bidding-bot: status</title>
+<meta name="description" content="Where rusty-bidding-bot stands: every part of the bidding system, basic bridge, judgment, catch-alls and conventions, with what is implemented and how well it bids against BBA or against itself.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" href="status/status.json" title="Status data (JSON)">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="status/status.css">
+</head>
+<body>
+<header class="top">
+  <h1><a href="./" class="home">rusty-bidding-bot</a> <span class="sub">status</span></h1>
+  <p class="tagline">What the engine bids, and how well: implemented, measured against BBA, or A/B against itself.</p>
+  <nav>
+    <a href="./">Bid a deal</a>
+    <a href="reference.txt">Reference</a>
+    <a href="status/status.json">Data</a>
+    <a href="https://github.com/bridge-craftwork/rusty-bidding-bot">Source</a>
+  </nav>
+</header>
+
+<noscript>
+  <p class="panel wrapish">This page draws its grid with JavaScript. The same data is
+  <a href="status/status.json">status.json</a>.</p>
+</noscript>
+
+<main class="status">
+  <section class="panel summary" aria-label="Summary" id="summary"></section>
+
+  <section class="panel legend" aria-label="Legend and filters">
+    <div class="tools">
+      <label class="search">Search <input id="q" type="search" placeholder="Drury, 1NT, Lebensohl…" autocomplete="off" spellcheck="false"></label>
+      <label class="narrow">Show
+        <select id="status-filter">
+          <option value="">every status</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="by-level" checked> Group conventions by level</label>
+    </div>
+    <ul class="legend-list" id="legend" aria-label="Legend: click a status to show only it"></ul>
+    <details class="how">
+      <summary>How the colours are chosen</summary>
+      <p class="hint" id="thresholds"></p>
+    </details>
+  </section>
+
+  <div id="grid"></div>
+</main>
+
+<dialog id="detail" aria-labelledby="detail-title">
+  <div class="dhead">
+    <h2 id="detail-title"></h2>
+    <button id="detail-close" class="close" aria-label="Close">×</button>
+  </div>
+  <div id="detail-body"></div>
+</dialog>
+
+<footer class="foot">
+  <p id="foot">Data: <a href="status/status.json">status.json</a>, written by
+  <code>probes/tools/status_data.py</code> from the rules, convention-card's
+  spec, a full comparison with BBA over Practice-Bidding-Scenarios and the
+  self A/B runs.</p>
+</footer>
+
+<script type="module" src="status/status.js"></script>
+</body>
+</html>

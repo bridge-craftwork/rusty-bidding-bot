@@ -1,0 +1,70 @@
+// The status page's vocabulary (no DOM): every status a tile or a
+// treatment can have, in legend order, with its glyph and what it means.
+// probes/tools/status_data.py writes the codes; web/scripts/test.mjs
+// checks that status.json uses no other.
+
+export const STATUS = [
+  { code: 'bba-good', glyph: '✓', label: 'vs BBA: good', kind: 'bba' },
+  { code: 'bba-fair', glyph: '≈', label: 'vs BBA: fair', kind: 'bba' },
+  { code: 'bba-poor', glyph: '✗', label: 'vs BBA: poor', kind: 'bba' },
+  { code: 'ab-gains', glyph: '↑', label: 'A/B: gains', kind: 'ab' },
+  { code: 'ab-neutral', glyph: '=', label: 'A/B: neutral', kind: 'ab' },
+  { code: 'ab-loses', glyph: '↓', label: 'A/B: loses', kind: 'ab' },
+  { code: 'tested', glyph: '◇', label: 'Implemented, tests only', kind: 'impl' },
+  { code: 'partial', glyph: '◐', label: 'Partial', kind: 'impl' },
+  { code: 'gap', glyph: '○', label: 'Not implemented', kind: 'gap' },
+]
+
+export const BY_CODE = Object.fromEntries(STATUS.map((s) => [s.code, s]))
+
+export const ABOUT = {
+  'bba-good': 'Scored against BBA on the scenarios that test it, with par as the yardstick: errors no worse than {good_epb} IMPs a board and {good_agree}% of North-South calls agreeing.',
+  'bba-fair': 'Scored against BBA: between good and poor.',
+  'bba-poor': 'Scored against BBA: worse than {poor_epb} IMPs a board, or under {poor_agree}% of North-South calls agreeing.',
+  'ab-gains': 'BBA does not play it: our engine with it against our engine without it, on the same deals. Fewer errors with it (halves agree, |z| at least 1; "leans" under 2).',
+  'ab-neutral': 'A/B against ourselves: no clear difference.',
+  'ab-loses': 'A/B against ourselves: more errors with it.',
+  tested: 'Rules written and covered by test cases; nothing measures it on deals yet.',
+  partial: 'Rules for part of it; the details say what is missing.',
+  gap: 'Not implemented: no module, or no rule reads the card setting.',
+}
+
+/** Level bands, as convention-card names them (derived, never stored). */
+export function band(level) {
+  if (!level) return { id: 'none', name: 'No level' }
+  if (level <= 3) return { id: 'basic', name: 'Basic (levels 1–3)' }
+  if (level <= 6) return { id: 'intermediate', name: 'Intermediate (4–6)' }
+  if (level <= 8) return { id: 'advanced', name: 'Advanced (7–8)' }
+  return { id: 'expert', name: 'Expert (9–10)' }
+}
+
+/** The about text with the thresholds filled in. */
+export function about(code, thresholds) {
+  const t = thresholds ?? {}
+  const pct = (x) => Math.round((x ?? 0) * 100)
+  return (ABOUT[code] ?? '')
+    .replace('{good_epb}', String(t.good?.errors_per_board ?? ''))
+    .replace('{good_agree}', String(pct(t.good?.ns_agree)))
+    .replace('{poor_epb}', String(t.poor?.errors_per_board ?? ''))
+    .replace('{poor_agree}', String(pct(t.poor?.ns_agree)))
+}
+
+/** Problems with a status.json, for the tests: [] when it is sound. */
+export function checkData(data) {
+  const problems = []
+  if (data?.schema !== 'rbb-status/1') problems.push(`schema ${data?.schema}`)
+  const sections = new Set((data?.sections ?? []).map((s) => s.id))
+  if (!Array.isArray(data?.tiles) || !data.tiles.length) problems.push('no tiles')
+  const ids = new Set()
+  for (const t of data?.tiles ?? []) {
+    if (!t.id || ids.has(t.id)) problems.push(`tile id ${t.id} missing or repeated`)
+    ids.add(t.id)
+    if (!BY_CODE[t.status]) problems.push(`${t.id}: status ${t.status}`)
+    if (!sections.has(t.section)) problems.push(`${t.id}: section ${t.section}`)
+    if (!t.name) problems.push(`${t.id}: no name`)
+    for (const tr of t.treatments ?? []) {
+      if (!BY_CODE[tr.status]) problems.push(`${t.id}: treatment ${tr.label}: status ${tr.status}`)
+    }
+  }
+  return problems
+}

@@ -1,0 +1,435 @@
+# The status page's curated half (web/status.html, docs/WEB.md "Status
+# page"). probes/tools/status_data.py reads it beside convention-card's
+# spec (at the pinned revision), the modules (`rbb bid skills --json`),
+# a full `compare --json` and the self A/B results.
+#
+# What lives here, because the spec does not say it:
+#   [groups]      conventions shown as treatments of another's tile
+#                 (Reverse Drury under Drury); the child's own fields
+#                 become chips on the parent tile
+#   [items.<id>]  per tile: `scenarios` (PBS scenarios that measure it
+#                 against BBA), `partial` (what is not written yet, one
+#                 line), `treatments` (extra chips for treatments the
+#                 pinned card has no field for: { label, status, note }),
+#                 `fields` (extra card fields to show, e.g. an untagged
+#                 field the rules read), `modules` (extra modules)
+#   [[basic]]     basic-bridge tiles beyond the spec's basic_bidding
+#   [[judgment]]  judgment tiles (not conventions: docs/JUDGMENT-LAYER.md)
+#   [[catchall]]  the fallback rules
+#
+# Judgment and catch-all tiles carry a `measure`: a par class from
+# compare's "how each table met par" (ours against BBA's count), or
+# `no_rule` / `read_as` (our counts per 1,000 boards).
+
+[groups]
+"bidding_conventions/drury" = ["bidding_conventions/reverse_drury", "bidding_conventions/two_way_drury"]
+"bidding_conventions/bergen_raises" = ["bidding_conventions/reverse_bergen_raises"]
+"bidding_conventions/jacoby_2nt" = ["bidding_conventions/modified_jacoby_2nt", "bidding_conventions/jacoby_2nt_splinters"]
+"bidding_conventions/new_minor_forcing" = ["bidding_conventions/two_way_nmf"]
+"bidding_conventions/roman_keycard" = ["bidding_conventions/six_key_rkcb"]
+"bidding_conventions/help_suit_game_try" = ["bidding_conventions/two_way_game_tries"]
+"bidding_conventions/walsh" = ["bidding_conventions/transfer_walsh"]
+"bidding_conventions/forcing_1nt" = ["bidding_conventions/semi_forcing_1nt"]
+"bidding_conventions/flannery" = ["bidding_conventions/reverse_flannery"]
+"bidding_conventions/dopi_ropi" = ["bidding_conventions/depo"]
+"bidding_conventions/stayman" = ["bidding_conventions/range_stayman"]
+"bidding_conventions/multi_2d" = ["bidding_conventions/lars_multi"]
+"competitive_bidding/michaels_unusual" = ["competitive_bidding/leaping_michaels", "competitive_bidding/non_leaping_michaels"]
+"competitive_bidding/cappelletti" = ["competitive_bidding/modified_cappelletti"]
+"competitive_bidding/landy" = ["competitive_bidding/multi_landy"]
+"competitive_bidding/lebensohl" = ["competitive_bidding/rubensohl"]
+"competitive_bidding/lead_directing_doubles" = ["competitive_bidding/anti_lead_directing_doubles"]
+
+# ── Basic bridge ──────────────────────────────────────────────────────
+[items."basic_bidding/major_suit_openings"]
+scenarios = ["Major_Opener", "Basic_Major", "Open_and_Rebid", "Basic_What_To_Open"]
+[items."basic_bidding/minor_suit_openings"]
+scenarios = ["Minor_Suit_Opener", "Basic_Minor", "Minor_Suit_Opener_Resp_Structure"]
+[items."basic_bidding/notrump_openings"]
+scenarios = ["1N", "Basic_NT", "2N", "Notrump_18-19"]
+[items."basic_bidding/hand_evaluation"]
+scenarios = ["Losing_Trick_Count", "Rule_of_2"]
+# No module declares the skill: valuation (HCP, length, support points)
+# is the engine's, and these modules open and raise on it.
+modules = ["base", "fit"]
+
+[[basic]]
+id = "basic/responses"
+name = "Responses to one of a suit"
+level = 1
+summary = "New suits, raises and notrump responses to a one-level opening, and the passed hand's responses."
+modules = ["responses", "jump-raises"]
+scenarios = ["Basic_Responses", "Major_Suit_Fit", "1m-1N", "1m-2N", "1m-3N", "After_1M_2M"]
+
+[[basic]]
+id = "basic/rebids"
+name = "Opener's rebids"
+level = 1
+summary = "Opener's second call: raises, new suits, notrump rebids, jump shifts and reverses."
+modules = ["rebids"]
+scenarios = ["Basic_Openers_Rebid", "Open_and_Rebid", "3N_Rebid_by_Opener", "1m_1x_2m"]
+
+[[basic]]
+id = "basic/responder_rebids"
+name = "Responder's rebids"
+level = 2
+summary = "Responder's second call: placing the contract, invitations and game forces."
+modules = ["responder-rebids"]
+scenarios = ["Reverse_By_Responder", "Fourth_Bid_Inviting", "Misfit"]
+
+[[basic]]
+id = "basic/strong_openings"
+name = "Strong openings"
+level = 2
+summary = "2♣ and the 2NT/3NT openings, with their first responses."
+modules = ["strong-openings", "two-nt-responses"]
+scenarios = ["Game_Forcing_2C", "2N", "3N"]
+
+[[basic]]
+id = "basic/preempts"
+name = "Preempts"
+level = 2
+summary = "Weak twos, three- and four-level preempts and the responses to them."
+modules = ["preempts", "weak-two-responses"]
+scenarios = ["Preempts", "Weak_2_Bids", "Basic_Weak_2"]
+
+[[basic]]
+id = "basic/overcalls"
+name = "Overcalls and advances"
+level = 2
+summary = "Simple and jump overcalls, the 1NT overcall, and partner's advances."
+modules = ["overcalls", "advances"]
+scenarios = ["Basic_Overcall", "We_Overcall", "Jump_Overcalls", "After_Partner_Overcalls"]
+
+[[basic]]
+id = "basic/takeout_double"
+name = "Takeout double"
+level = 2
+summary = "The takeout double and the advancer's replies."
+modules = ["takeout-double"]
+scenarios = ["Basic_Takeout_Double", "Takeout_Double", "After_Partner_Takeout_Double"]
+
+[[basic]]
+id = "basic/interference"
+name = "Bidding after interference"
+level = 3
+summary = "Our side's calls after they overcall or double: free bids, cue raises, redoubles."
+modules = ["after-interference", "vs-takeout-double", "nt-interference", "their-1nt-overcall"]
+scenarios = ["Dealing_with_Overcalls_Strong", "Dealing_with_Overcalls_Weak", "Opps_Takeout_X", "Opps_Overcall_1NT", "Opps_Double_1_NT"]
+
+[[basic]]
+id = "basic/notrump_responses"
+name = "Responses to 1NT"
+level = 2
+summary = "Raises, invitations and sign-offs over 1NT, and choosing between notrump and a major."
+modules = ["notrump-base", "choice-of-games"]
+scenarios = ["1N_Balanced_Raise", "1N_5M_and_6m", "GIB_1N_Basic"]
+
+# ── Constructive conventions ─────────────────────────────────────────
+[items."bidding_conventions/blackwood"]
+scenarios = []
+[items."bidding_conventions/gerber"]
+scenarios = ["Gerber", "Gerber_By_Opener", "Gerber_By_Responder"]
+[items."bidding_conventions/jacoby_transfers"]
+scenarios = ["Jacoby_Transfer", "Texas_Transfer", "Texas_or_Jacoby", "2N_and_Transfers"]
+[items."bidding_conventions/preemptive_bids"]
+scenarios = ["Preempts", "Preemptive_Raise"]
+[items."bidding_conventions/stayman"]
+scenarios = ["Stayman", "Slam_after_Stayman"]
+[items."bidding_conventions/strong_2c"]
+scenarios = ["Game_Forcing_2C", "Bust_Over_Strong_2C"]
+[items."bidding_conventions/weak_2s"]
+scenarios = ["Weak_2_Bids", "Basic_Weak_2", "Weak_2_Bids_Lax"]
+[items."bidding_conventions/forcing_1nt"]
+scenarios = ["Forcing_NT", "Gavin_Semi-Forcing_NT_with_Fit"]
+[items."bidding_conventions/jacoby_2nt"]
+scenarios = ["Jacoby_2N", "Jacoby_2N_4x_void"]
+[items."bidding_conventions/reverse_bids"]
+scenarios = ["Reverse_By_Opener", "Reverse_After_Two_Over_One"]
+[items."bidding_conventions/roman_keycard"]
+scenarios = ["Slam_After_Major_Fit", "Slam_after_Transfer"]
+[items."bidding_conventions/smolen"]
+scenarios = ["Smolen", "Smolen_Invitational", "Smolen_after_2N"]
+[items."bidding_conventions/two_over_one"]
+scenarios = ["Two_Over_One"]
+treatments = [
+  { label = "Standard: 2/1 forces one round", status = "tested", note = "Standard American cards keep the 11+ one-round force (responses.notes.md)" },
+  { label = "2/1 GF except when responder rebids his suit", status = "gap", note = "a field in convention-card after the pinned tag; not played yet" },
+]
+[items."bidding_conventions/walsh"]
+scenarios = ["1C_WalshStyle", "Transfer_Walsh"]
+[items."bidding_conventions/western_cuebid"]
+scenarios = ["Western_Cue_Bid"]
+[items."bidding_conventions/bergen_raises"]
+scenarios = ["Bergen_Raises"]
+[items."bidding_conventions/control_bids"]
+scenarios = ["Slam_After_Major_Fit"]
+[items."bidding_conventions/drury"]
+scenarios = ["Drury"]
+[items."bidding_conventions/fourth_suit_forcing"]
+scenarios = ["Fourth_Suit_Forcing"]
+[items."bidding_conventions/help_suit_game_try"]
+scenarios = ["Help_Suit_Game_Try", "Two-Way_Game_Try"]
+[items."bidding_conventions/inverted_minors"]
+scenarios = ["Inverted_Minors"]
+[items."bidding_conventions/minor_suit_transfers"]
+scenarios = ["Minor_Suit_Transfer", "2N_and_1_Minor"]
+[items."bidding_conventions/new_minor_forcing"]
+scenarios = ["New_Minor_Forcing", "Two-Way_New_Minor_Forcing_aka_xyNT"]
+partial = "Two-way NMF: the continuations after 2♣ (3♠/3NT after 3♣) are not written; only the club sign-off."
+[items."bidding_conventions/ogust"]
+scenarios = ["Ogust"]
+[items."bidding_conventions/splinters"]
+scenarios = ["Splinters", "Splinters_By_Opener", "Splinters_after_Minor"]
+[items."bidding_conventions/super_accept"]
+scenarios = ["Jacoby_Super-Accept"]
+[items."bidding_conventions/weak_jump_shifts"]
+scenarios = ["Weak_Jump_Shift"]
+[items."bidding_conventions/flannery"]
+scenarios = ["Flannery", "Reverse_Flannery"]
+[items."bidding_conventions/gambling_3nt"]
+scenarios = ["Gambling_3N"]
+[items."bidding_conventions/grand_slam_force"]
+scenarios = ["Grand_Slam_Force", "Grand_Slam_Force_2"]
+[items."bidding_conventions/minor_suit_stayman"]
+scenarios = ["Minor_Suit_Stayman", "2N_and_MSS"]
+[items."bidding_conventions/namyats"]
+scenarios = ["Namyats"]
+[items."bidding_conventions/dopi_ropi"]
+scenarios = ["DOPI_ROPI"]
+[items."bidding_conventions/exclusion_blackwood"]
+scenarios = ["Exclusion_After_1M", "Exclusion_After_Sta_Jac"]
+[items."bidding_conventions/impossible_2s"]
+scenarios = ["Impossible_2S"]
+[items."bidding_conventions/mini_roman_2d"]
+partial = "Mini only: the Maxi half (19+, PBS Mini-Maxi_Roman_2D) is not written."
+[items."bidding_conventions/minorwood"]
+partial = "No queen ask and no king ask after the keycard answer."
+[items."bidding_conventions/kickback"]
+partial = "No queen ask over the 1-or-4 / 0-or-3 answers."
+[items."bidding_conventions/picture_3nt"]
+scenarios = ["1M-3N_Picture_Bid"]
+[items."bidding_conventions/puppet_stayman"]
+scenarios = ["Puppet_Stayman_1N", "Puppet_Stayman_2N"]
+[items."bidding_conventions/bart"]
+scenarios = ["BART"]
+[items."bidding_conventions/benjamin_2d"]
+scenarios = ["Benjamin_2D"]
+[items."bidding_conventions/kokish"]
+scenarios = ["Kokish_Relay"]
+[items."bidding_conventions/mccabe"]
+scenarios = ["McCabe_After_Weak_2", "McCabe_after_WJO"]
+[items."bidding_conventions/muiderberg"]
+scenarios = ["Muiderberg_Two_Bids"]
+[items."bidding_conventions/multi_2d"]
+scenarios = ["Multi_2D", "Opps_Multi_2D"]
+partial = "Weak options only: the strong options (4-4-4-1, Lars Multi's 20-21) are not written."
+[items."bidding_conventions/roudi"]
+scenarios = ["WB5_Roudi"]
+[items."bidding_conventions/soloway"]
+scenarios = ["Soloway_Jump_Shift"]
+[items."bidding_conventions/spiral"]
+scenarios = ["Spiral_Raises_Weinstein", "Spiral_Raises_Wolpert"]
+[items."bidding_conventions/gazzilli"]
+scenarios = ["Gazzilli"]
+partial = "Partial (2026-10-05): after 1♥/1♠–1NT and 1♥–1♠ only; see gazzilli.notes.md."
+[items."bidding_conventions/last_train"]
+scenarios = ["Last_Train_Game_Try", "Last_Train_GT2"]
+[items."bidding_conventions/polish_two_suiters"]
+partial = "Interference beyond a double, and opener's strength after the 2NT ask, are not written."
+[items."bidding_conventions/preempt_keycard"]
+scenarios = ["Preempt_Keycard"]
+[items."bidding_conventions/serious_3nt"]
+scenarios = ["Serious"]
+[items."bidding_conventions/tislevoll"]
+scenarios = ["Tislevoll_after_Opps_Preempt"]
+[items."bidding_conventions/xyz"]
+scenarios = ["XYZ"]
+
+# ── Competitive conventions ──────────────────────────────────────────
+[items."competitive_bidding/overcalls"]
+scenarios = ["Basic_Overcall", "We_Overcall", "Jump_Overcalls"]
+[items."competitive_bidding/takeout_doubles"]
+scenarios = ["Takeout_Double", "Basic_Takeout_Double", "After_Partner_Takeout_Double"]
+[items."competitive_bidding/advancing_overcalls"]
+scenarios = ["After_Partner_Overcalls", "Transfer_Advances"]
+[items."competitive_bidding/negative_doubles"]
+scenarios = ["Negative_Double", "Negative_Free_Bid"]
+[items."competitive_bidding/balancing"]
+scenarios = ["Balancing"]
+[items."competitive_bidding/defense_vs_preempts"]
+scenarios = ["We_X_Opps_Preempt", "We_X_Opps_Weak_2", "Opps_Preempt", "Opps_Weak_Two"]
+[items."competitive_bidding/landy"]
+scenarios = ["Multi_Landy"]
+[items."competitive_bidding/michaels_unusual"]
+scenarios = ["Michaels_Cuebid", "Michaels_and_Unusual", "Unusual_2N", "Leaping_Michaels", "Non_Leaping_Michaels_After_2-Bid"]
+fields = ["competitive.direct_jump_cuebid_major", "competitive.direct_jump_cuebid_minor"]
+partial = "Direct jump cue bids: over a major the `minor` option and the strong variety's continuations are not written."
+[items."competitive_bidding/cappelletti"]
+scenarios = ["Cappelletti", "Cappelletti_in_4th"]
+[items."competitive_bidding/defense_vs_1nt"]
+scenarios = ["Opps_Open_1N_15-17"]
+[items."competitive_bidding/dont"]
+scenarios = ["DONT"]
+[items."competitive_bidding/jordan_2nt"]
+scenarios = ["Jordan_2N"]
+[items."competitive_bidding/lead_directing_doubles"]
+partial = "No Lightner double and no doubles of their cue bids; the engine does not choose leads, so the compare cannot show the gain."
+[items."competitive_bidding/lebensohl"]
+scenarios = ["Lebensohl", "Lebensohl2", "Lebensohl_vs_Opps_W2_Bal", "Lebensohl_vs_Opps_W2_Dir"]
+[items."competitive_bidding/meckwell"]
+scenarios = ["Meckwell"]
+[items."competitive_bidding/responsive_doubles"]
+scenarios = ["Responsive_Double", "Responsive_Double_after_Overcall"]
+[items."competitive_bidding/support_doubles"]
+scenarios = ["Support_Double"]
+[items."competitive_bidding/equal_level_conversion"]
+scenarios = ["Equal_Level_Conversion"]
+[items."competitive_bidding/forcing_pass"]
+scenarios = ["Forcing_Pass"]
+[items."competitive_bidding/maximal_doubles"]
+scenarios = ["Maximal_Double", "Maximal_After_Overcall"]
+[items."competitive_bidding/fit_showing_jumps"]
+scenarios = ["Fit_Showing_Jumps", "Fit_Jumps_after_1M_Double"]
+[items."competitive_bidding/mathe"]
+scenarios = ["Mathe"]
+[items."competitive_bidding/sandwich_nt"]
+scenarios = ["GIB_Sandwich_NT_BPH"]
+[items."competitive_bidding/scrambling_2nt"]
+scenarios = ["Scrambling_2NT"]
+[items."competitive_bidding/sos_redouble"]
+partial = "Only 1x (X) P (P): other SOS positions (a passed round, our 1NT doubled) are not written."
+[items."competitive_bidding/collante"]
+scenarios = ["WB5_Collante"]
+[items."competitive_bidding/exit_transfers"]
+scenarios = ["Exit_Transfers"]
+[items."competitive_bidding/mitchell_stayman"]
+scenarios = ["Mitchell_Stayman"]
+[items."competitive_bidding/rodrigue"]
+scenarios = ["WB5_Rodrigue"]
+[items."competitive_bidding/snapdragon"]
+scenarios = ["Snapdragon_Double"]
+[items."competitive_bidding/suction"]
+scenarios = ["Suction"]
+[items."competitive_bidding/rosenkranz"]
+scenarios = ["Rosenkranz_Double"]
+[items."competitive_bidding/spear"]
+scenarios = ["Spear"]
+[items."competitive_bidding/transfer_advances"]
+scenarios = ["Transfer_Advances"]
+[items."bidding_conventions/transfers_after_double"]
+scenarios = ["Transfers_after_1M_X", "Xfer_after_1M_X"]
+partial = "Only after a major: transfers after 1m (X) are not written."
+
+# ── Judgment ──────────────────────────────────────────────────────────
+# measure.class: compare's par classes (ours against BBA's count; good
+# when ours is no more than BBA's, fair up to 25% more, poor beyond).
+[[judgment]]
+id = "judgment/slam_entry"
+name = "Slam entry and valuation"
+level = 6
+summary = "Whether to try for slam at all, and how: the judgment layer's slam entry, before any ask (docs/JUDGMENT-LAYER.md)."
+modules = ["slam-entry", "slam-catch", "over-3nt"]
+measure = { class = ["short_of_slam"] }
+
+[[judgment]]
+id = "judgment/game_and_level"
+name = "Game and partscore placement"
+level = 3
+summary = "Bidding game when it makes and stopping short when it does not."
+modules = ["base", "fit", "choice-of-games"]
+measure = { class = ["short_of_game", "short_level", "overbid"] }
+
+[[judgment]]
+id = "judgment/strain"
+name = "Strain: fit against agreement"
+level = 4
+summary = "Finding the right strain and declarer: a publicly agreed suit against a fit only one hand can see."
+modules = ["fit", "choice-of-games"]
+measure = { class = ["wrong_strain"] }
+
+[[judgment]]
+id = "judgment/competition"
+name = "Competitive judgment (LoTT)"
+level = 4
+summary = "Whether to compete, sacrifice or let them play, by total tricks (total-tricks.bid)."
+modules = ["total-tricks"]
+measure = { class = ["did_not_compete", "no_sacrifice"] }
+
+[[judgment]]
+id = "judgment/penalty_doubles"
+name = "Penalty doubles"
+level = 4
+summary = "Doubling them when they are too high, and not doubling contracts that make."
+modules = ["penalty-doubles"]
+measure = { class = ["doubling_only"] }
+
+[[judgment]]
+id = "judgment/game_force"
+name = "Game-force state"
+level = 4
+summary = "Tracking who has forced to game and never passing below it (`force game`, base.bid)."
+modules = ["game-force", "base"]
+measure = { class = ["passed_out"] }
+
+[[judgment]]
+id = "judgment/systems_on"
+name = "Systems on"
+level = 5
+summary = "One notrump system for every natural notrump: after an overcall, a balancing 1NT, a 2NT rebid (engine 0.5.0)."
+modules = ["notrump-base", "nt-interference"]
+scenarios = ["We_Overcall_NT_then_Stayman", "We_Overcall_NT_then_Jacoby", "We_Overcall_NT_then_Texas", "We_Overcall_NT_then_Smolen"]
+
+[[judgment]]
+id = "judgment/opening"
+name = "Opening judgment"
+level = 2
+summary = "Whether to open, and what: the 12 total points rule, third and fourth seat, the rule of 15."
+modules = ["base"]
+scenarios = ["Basic_What_To_Open", "Open_In_Fourth_Seat", "Rule_of_16"]
+
+# ── Catch-alls ────────────────────────────────────────────────────────
+# measure.no_rule: our calls no rule explains, per 1,000 boards (good
+# under 1, fair under 5). measure.read_as: our calls partner reads by a
+# higher rule than chose them, per 1,000 boards (same thresholds).
+[[catchall]]
+id = "catchall/no_rule"
+name = "Positions with no rule"
+level = 1
+summary = "Calls the engine made with no rule to say why: gaps in the system."
+measure = { no_rule = true }
+
+[[catchall]]
+id = "catchall/read_as_higher"
+name = "Calls read as a higher rule"
+level = 1
+summary = "Our calls partner reads by a higher-priority rule than the one that bid them (docs/JUDGMENT-LAYER.md §4)."
+measure = { read_as = true }
+
+[[catchall]]
+id = "catchall/game_reached"
+name = "Game reached: pass"
+level = 1
+summary = "Once our side has bid game, a player with nothing more to add passes (base.bid)."
+modules = ["base"]
+
+[[catchall]]
+id = "catchall/defending_side"
+name = "Defending side: nothing more to say"
+level = 1
+summary = "The defending side passes once both have described their hands (advances.bid, below every real rule)."
+modules = ["advances"]
+
+[[catchall]]
+id = "catchall/after_interference"
+name = "Opening side after a pass"
+level = 1
+summary = "A player on the opening side who passed last time passes again with nothing new (after-interference.bid)."
+modules = ["after-interference"]
+
+[[catchall]]
+id = "catchall/notrump_rebid"
+name = "After partner's notrump rebid"
+level = 2
+summary = "Responder's catch-all after opener's notrump rebid (responder-rebids.bid, Rick 2026-09-27)."
+modules = ["responder-rebids"]

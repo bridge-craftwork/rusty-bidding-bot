@@ -47,6 +47,7 @@ cards you choose. Generated from the page's own vocabulary and the engine it
 ships, so it describes exactly the tool served beside it.
 
   Page:    https://bridge-craftwork.com/${TOOL}/
+  Status:  https://bridge-craftwork.com/${TOOL}/status.html (data: status/status.json)
   Source:  https://github.com/bridge-craftwork/rusty-bidding-bot
   Engine:  ${info.modules} convention modules, ${info.rules} rules
 

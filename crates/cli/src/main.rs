@@ -383,8 +383,13 @@ enum BidCommand {
         rules: PathBuf,
         /// Instead of printing, rewrite the generated section of this
         /// Markdown file (docs/SKILLS.md) between its markers.
-        #[arg(long)]
+        #[arg(long, conflicts_with = "json")]
         doc: Option<PathBuf>,
+        /// Print the module inventory as JSON instead: each module's skills,
+        /// the card fields it reads and its rule count, and every field the
+        /// rule set reads (probes/tools/status_data.py, the status page).
+        #[arg(long)]
+        json: bool,
     },
     /// Print a .bid file's compiled JSON IR.
     Compile {
@@ -1634,7 +1639,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 }
             }
         }
-        BidCommand::Skills { rules, doc } => {
+        BidCommand::Skills { rules, doc, json } => {
             let vocab = vocab_from(&rules)?;
             let known = bridge_card::standard::conventions()?;
             let mut files = Vec::new();
@@ -1652,6 +1657,11 @@ fn bid(cmd: BidCommand) -> Result<()> {
                             .join("\n")
                     })?;
                 modules.push(m);
+            }
+            if json {
+                let inv = bidspec::skills::inventory(&modules, &vocab);
+                println!("{}", serde_json::to_string_pretty(&inv)?);
+                return Ok(());
             }
             let map = bidspec::skills::map(&modules, vocab.registry(), &known);
             let text = bidspec::skills::markdown(&map);
