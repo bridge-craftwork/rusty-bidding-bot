@@ -62,28 +62,41 @@ when mwplay, asked minorwood(t), rho.last = P
   4D  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, !kc_first_14(t)
   4H  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, kc_first_14(t)
   4H  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, !kc_first_14(t)
-  4S  "Minorwood: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is C
-  4N  "Minorwood: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is C
+  4S  "Minorwood: 2 or 5 keycards, no {t} queen"    shows keycards(t) in 2|5, !has(Q,t)   artificial   when t is C
+  4N  "Minorwood: 2 or 5 keycards and the {t} queen"  shows keycards(t) in 2|5, has(Q,t)   artificial   when t is C
 
   4H  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, kc_first_14(t)
   4H  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, !kc_first_14(t)
   4S  "Minorwood: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, kc_first_14(t)
   4S  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, !kc_first_14(t)
-  4N  "Minorwood: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is D
-  5C  "Minorwood: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is D
+  4N  "Minorwood: 2 or 5 keycards, no {t} queen"    shows keycards(t) in 2|5, !has(Q,t)   artificial   when t is D
+  5C  "Minorwood: 2 or 5 keycards and the {t} queen"  shows keycards(t) in 2|5, has(Q,t)   artificial   when t is D
 
 # ── The asker places the contract ─────────────────────────────────────
+#
+# The queen: mine, or partner's fourth step (4NT in clubs, 5♣ in
+# diamonds); `partner.has(Q,t)` is never known (2026-10-07).
 
 when mwplay, answered minorwood(t)
   7{t}  "Grand slam: every keycard and the {t} queen"
-        when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+        when  we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
   # The king ask, as after 4NT (rkcb-1430.bid answers it; 2026-10-05).
   5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
-        when  kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t)
+        when  kask5n, we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
         sets  ask=kings(t)
         artificial
   6{t}  "Small slam: at most one keycard missing"
         when  we.keycards(t)>=4
+  # The count that fits (rkcb-1430.bid, `kc_high`): with 30 HCP between
+  # us the low count of an open answer is impossible.
+  7{t}  "Grand slam: the high count is the one that fits, all five and the {t} queen"
+        when  kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
+  5N    "King ask: the high count fits, all the keycards and the {t} queen are ours"
+        when  kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
+        sets  ask=kings(t)
+        artificial
+  6{t}  "Small slam: the high count is the one that fits"
+        when  kc_high(t)
   5{t}  "Sign off: two keycards missing"
         when  we.keycards(t).max<=3
         sets  ask=mw_correct(t)
@@ -92,5 +105,5 @@ when mwplay, answered minorwood(t)
         sets  ask=mw_correct(t)
 
 when mwplay, asked mw_correct(t)
-  6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
+  6{t}  "Corrects to six: the higher count"   shows keycards(t) in 3|4|5
   P     "Accepts the sign-off"

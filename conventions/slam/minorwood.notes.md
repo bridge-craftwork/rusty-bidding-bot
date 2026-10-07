@@ -52,6 +52,19 @@ king ask added, +478 before), double-dummy +641, halves +236/+256 (z
 +8.5): gains. Mostly the 1m-2m-4m auctions our base passed out in four
 (Corpus, above).
 
+## Five keycards and the count that fits (2026-10-07)
+
+As in rkcb-1430.bid (rkcb-1430.notes.md, same date): five keycards
+answer with the third/fourth step, as two (the steps wrap 0/3, 1/4,
+2/5; before, a five-keycard answerer had no answer and passed the
+ask), and the asker settles an open count by the high cards
+(`kc_high`): with 30 HCP between us the low count is impossible, so six
+(or the king ask with all five and the queen) instead of the sign-off.
+With the king ask on the card the asker asks before the 35-HCP grand.
+The correction to six now shows `keycards in 3|4|5`, which the engine
+can combine with the first answer. `.test` cases: the five-keycard
+answers.
+
 ## Sources
 
 - **The convention:** Robert S. Todd, "Slam Bidding: Minorwood",
