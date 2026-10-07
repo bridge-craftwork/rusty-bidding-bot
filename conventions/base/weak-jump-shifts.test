@@ -15,6 +15,8 @@ S AKQT86.JT864.QJ.      | 1S P 3C P                | P      | 13 opposite a weak
 S AQJT654.AJ2.KQ4.      | 1S P 3C P                | 4S     | seven good spades and 17: game in my suit (BBA 4S)
 N QJT874.T83.T85.8      | 1D P 2S P 2N P           | 3S     | 3 HCP: minimum
 N KQT874.T83.T85.8      | 1D P 2S P 2N P           | 3N     | 5 HCP with KQ: a good suit, maximum
+S A.AK5.Q43.KQJT42      | 1C P 2S P                | 3C     | 19, six clubs, a singleton spade: not 3NT opposite 2-5
+S A.AK2.KQ852.A983      | 1D P 2S P 3C P 3S P      | P      | 21 and a misfit: no 3NT opposite 2-5
 
 # A card without weak jump shifts keeps the strong ones.
 card    21GF-DEFAULT

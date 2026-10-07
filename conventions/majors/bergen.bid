@@ -80,17 +80,28 @@ after 1M (P) 3x (P) when x is C | x is D, bergen | reverse, bergen_constructive(
   4M  "Game opposite a constructive raise"
       shows tp(M)>=16
       priority -1                      # with more, the slam rules first
+  # The game try outranks the control bids (slam/control-bids.bid, 12),
+  # which would otherwise read it as a control bid opposite a limited
+  # raise and send responder cue-bidding to the five level (as in
+  # game-tries.bid).
   3D  "Game try opposite a constructive raise: 15-16"  alert
       shows tp(M)=15..16
       when  x is C
       artificial
-      priority 3
+      priority 13
   3H  "Game try opposite a constructive raise: 15-16"  alert
       shows tp(M)=15..16
       when  x is D, M is S
       artificial
-      priority 3
+      priority 13
+  # A minimum: with more than 16 and no slam route, the 4M fallback.
   3M  "Sign off opposite a constructive raise"
+      shows tp(M)<=14
+      when  M is S | x is C
+      priority 2
+  3M  "Sign off opposite a constructive raise"
+      shows tp(M)<=15
+      when  M is H, x is D
       priority 2
 
 # Opposite 11-12: game from 14.
@@ -117,6 +128,23 @@ after 1S (P) 3D (P) 3H (P) when reverse
       shows tp(S)>=9
       priority 3
   3S  "Declines the game try"
+      priority 2
+
+# Opener after responder declines: the try was 15-16, so pass. A bigger
+# hand that got here through a control bid (read as the try) bids game.
+after 1M (P) 3C (P) 3D (P) 3M (P) when bergen, !reverse
+  P   "Responder declined the game try"
+      shows tp(M)<=16
+      priority 2
+  4M  "Game after the declined try: extra values"
+      shows tp(M)>=17
+      priority 2
+after 1S (P) 3D (P) 3H (P) 3S (P) when reverse
+  P   "Responder declined the game try"
+      shows tp(S)<=16
+      priority 2
+  4S  "Game after the declined try: extra values"
+      shows tp(S)>=17
       priority 2
 
 # Responder after opener's sign-off.

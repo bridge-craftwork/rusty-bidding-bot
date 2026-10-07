@@ -29,6 +29,10 @@ after 1x (P) 2y (P) when weak2, y is not x, partner.jumped
       sets  forcing=round, ask=wjs_feature
       artificial
   3x  "Rebids {x}: seven or more, not forcing"   shows x>=7, y<=1, hcp<=17
+  # 18-21 with a long minor: rebids.bid's 3NT is off here (the conv-ab
+  # run, 2026-10-07: 3NT opposite 2-5 and a misfit rarely makes).
+  3x  "Rebids {x}: six or more, 18+, not forcing"   shows x>=6, y<=1, hcp>=18
+      when  x is C | x is D
   4x  "Game in my own major: seven, or six good ones, 18+"
       shows x>=7 | (x>=6, quality(x)>=good), y<=1, hcp>=18
       when  x is H | x is S
@@ -83,7 +87,7 @@ after 1x (P) 2y (P) 2z (P) * (P) | 1x (P) 2y (P) 3z (P) * (P) when weak2, y is n
   P   "No game: stop here"                       priority -5
   4z  "Game in the fit"                          shows z>=4, hcp>=19
       when  partner.z>=4, z is H | z is S
-  3N  "Game in notrump: 19+"                     shows hcp>=19
+  3N  "Game in notrump: 22+"                     shows hcp>=22
       priority -1
 
 # ── Opener after a weak jump shift at the three level ──────────────────

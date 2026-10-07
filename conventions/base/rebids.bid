@@ -253,7 +253,7 @@ after 1C (P) 1N (P)
 after 1m (P) 1y (P) | 1m (P) 2y (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
-      when  y is not m
+      when  y is not m, !weak_js | !partner.jumped   # opposite a weak jump shift: weak-jump-shifts.bid
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
