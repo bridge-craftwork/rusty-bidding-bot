@@ -44,8 +44,8 @@ mkdir -p "$dist" "$cache"
 # The page: copied as it is (no bundler; relative URLs throughout, so it
 # works at / and under /rusty-bidding-bot/).
 cp "$here"/index.html "$here"/404.html "$here"/_headers "$here"/favicon.svg \
-   "$here"/app.js "$here"/app.css "$here"/styles.css "$dist"/
-cp -R "$here"/lib "$here"/cards "$dist"/
+   "$here"/app.js "$here"/app.css "$here"/styles.css "$here"/status.html "$dist"/
+cp -R "$here"/lib "$here"/cards "$here"/status "$dist"/
 
 # The engine.
 RBB_WASM_OUT="$dist/pkg" "$root/crates/wasm/build.sh" $dev

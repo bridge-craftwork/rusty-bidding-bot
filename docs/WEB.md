@@ -45,6 +45,7 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 | `lib/reference.js` | `reference.txt` |
 | `styles.css` | the bridge-craftwork design tokens, copied from Bridge-Classroom (not fetched) |
 | `cards/21_intermediate_card.json` | Bridge-Classroom's 2/1 Intermediate card (seed data), offered as `BC-21-Intermediate` |
+| `status.html`, `status/` | the status page (below): `status.js` draws, `legend.js` the status vocabulary, `status.css`, and `status.json`, its data (committed) |
 | `_headers`, `404.html` | Pages headers; the real 404 |
 | `scripts/` | `emit-reference.mjs`, `check-reference.mjs` (drift), `test.mjs` |
 
@@ -106,6 +107,59 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 - **Missing conventions**: for each card, the settings it switches on that no
   rule reads (WASM `coverage`, the same buckets as `rbb card coverage`), and
   the settings with no card field (`.bbsa` keys, card JSON paths).
+
+## Status page
+
+`status.html` (linked from the page's header, the 404 page and
+`reference.txt`; Rick, 2026-10-06): where the system stands, as a compact
+grid of tiles. Sections: Basic bridge, Judgment, Catch-alls, Conventions:
+constructive, Conventions: competitive, Precision. Within the convention
+sections tiles are grouped by convention-card's level bands (basic 1–3,
+intermediate 4–6, advanced 7–8, expert 9–10) and ordered by level, then
+name; a checkbox turns the grouping off (alphabetical). A tile is a
+convention with its variants folded in (Reverse and Two-way Drury under
+Drury; `[groups]` in `probes/status-items.toml`), its colour and glyph the
+convention's status, and one dot per treatment: each card field carrying
+the convention's skill, each option of an enum field. Hover gives the
+summary and the reason for the colour; a click (or Enter) opens a dialog
+with the spec summary, the treatments and their card settings, the
+scenarios measured against BBA, the self A/B runs, the modules with rule
+and test counts and links to the source and notes, and citations.
+Escape closes it. Search and a status filter narrow the grid; state is
+in the fragment (`#q=drury&status=gap&tile=bidding_conventions/drury&flat=1`).
+
+Statuses (the page's legend, `status/legend.js`): **not implemented**
+(no module, or no rule reads the setting), **implemented, tests only**,
+**partial** (curated in `status-items.toml`), **vs BBA good / fair /
+poor** (the tile's scenarios pooled, par as the yardstick: good at errors
+≥ −0.25 IMPs/board and ≥ 65% of NS calls agreeing, poor below −1.0 or
+55%), **A/B gains / neutral / loses** (`self_ab.py`'s verdict; "leans"
+counts with gains and loses). A tile takes, in order: gap, partial, a
+self A/B of its own convention (BBA does not play it), its BBA measure,
+tests only. A treatment chip is measured only on scenarios whose NS card
+switches it on. Judgment tiles compare our boards in a par class with
+BBA's (good at most BBA's count, fair up to 25% more); catch-alls count
+per 1,000 boards (no-rule positions, calls read as a higher rule).
+
+**Regenerating** (not in CI: the measurements take minutes). After a
+measurement run, from the repository root:
+
+```sh
+./dev-build.sh build --release -p rbb-cli
+./cpu-gate.sh target/release/rbb compare --json /tmp/all.json       # every scenario, 500 boards
+probes/tools/self_ab.py --batch probes/self-ab.toml                 # .rbb-cache/self-ab
+probes/tools/status_data.py --compare /tmp/all.json                 # web/status/status.json
+```
+
+and commit `web/status/status.json`. `status_data.py` reads the
+convention-card spec at the revision `Cargo.lock` pins (cargo's
+checkout, else `git show` in `../convention-card`, else GitHub), the
+modules through `rbb bid skills --json`, each corpus card through
+`rbb card import-bbsa`, and warns about curated module or scenario names
+that match nothing. Without `--compare` the BBA columns are empty and
+measured tiles fall back to tests only. `node web/scripts/test.mjs`
+checks that the shipped `status.json` parses and every tile has a known
+status.
 
 ## Later
 
