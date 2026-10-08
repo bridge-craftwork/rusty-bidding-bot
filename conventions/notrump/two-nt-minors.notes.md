@@ -30,6 +30,16 @@ points between the hands, else five; over 3NT 6NT from 32, 4NT
 quantitative with a slam invitation, else pass. If a card has both
 switches on, 3♠ is Minor Suit Stayman.
 
+## Slam hands (2026-10-07)
+
+From the Minor Suit Stayman convention score
+(minor-suit-stayman.notes.md, "Convention score"): over the fit
+(2NT–3♠–4m) responder with slam values asks for keycards in the minor
+when the card plays it (BBA: "Blackwood 1430, for ♣/♦"), else bids
+six; over 3NT (no four-card minor) slam hands ask with Gerber first
+when the card plays it, as they do directly over 2NT without the
+convention.
+
 ## Scenario check (2026-10-05)
 
 `compare 2N_and_MSS 2N_and_1_Minor --limit 100`, calls after 2NT and

@@ -17,6 +17,10 @@ S KQJ976.32.A4.J43      | 2S P 2NT P | 3S     | Ogust: maximum, good suit
 S J87654.32.A4.KJ3      | 2S P 2NT P | 3H     | Ogust: maximum, poor suit
 S KQJ976.32.54.543      | 2S P 2NT P | 3D     | Ogust: minimum, good suit
 S J87654.32.543.K3      | 2S P 2NT P | 3C     | Ogust: minimum, poor suit
+S QJT853.Q75.53.Q3      | 2S P 2NT P | 3C     | Ogust: 7 is a minimum (bridgebum 5-7; was 3H before 2026-10-07)
+S AQ8743.952.J43.6      | 2S P 2NT P | 3D     | Ogust: 7, two top honours: minimum, good suit
+S KQ8743.952.K43.6      | 2S P 2NT P | 3S     | Ogust: 8 is a maximum, good suit
+S AKQ874.95.843.62      | 2S P 2NT P | 3NT    | Ogust: AKQ, 3NT ahead of 3S
 
 # ── BBA's responses (probed 2026-09-24, weak-two-responses.notes.md)
 card    Basic-Bridge general.style=bba
@@ -108,5 +112,5 @@ N AJ94.AT6.K95.A62      | 2H P 2NT P 3C P      | 4H     | 16 opposite a maximum 
 N Q82.Q64.KT9.AQ72      | 2H P 2NT P 3C P      | 4H     | 13 opposite a feature (8-10): game
 N AJ94.AT6.K95.A62      | 2H P 2NT P 3H P      | P      | 16 opposite a minimum: no game
 card    Basic-Bridge two_level.weak_two_2nt_response=ogust
-N K94.A85.KQ64.Q93      | 2S P 2NT P 3H P      | 4S     | Ogust maximum (7-10) and 14: game
+N K94.A85.KQ64.Q93      | 2S P 2NT P 3H P      | 4S     | Ogust maximum (8-10) and 14: game
 N K94.A85.KQ64.Q93      | 2S P 2NT P 3C P      | 3S     | Ogust minimum and 14: sign off

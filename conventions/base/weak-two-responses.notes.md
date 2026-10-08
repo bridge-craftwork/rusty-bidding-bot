@@ -305,7 +305,8 @@ and too much opposite a feature (8-10).
 Now responder counts partner at the floor of his answer: game with
 `hcp + partner.hcp.min >= 21` (four of the major, 3NT over a minor),
 ranked above the sign-offs. Facing a feature (8+) every 2NT asker (13+)
-bids game; facing an Ogust maximum (7+) from 14; facing a minimum (4)
+bids game, and facing an Ogust maximum (8+ since 2026-10-07; it was 7+,
+so game from 14); facing a minimum (4)
 the old 17 is unchanged.
 
 | combined threshold | full corpus vs BBA | side IMPs | par-distance (sideimps) | boards |
@@ -332,10 +333,39 @@ time at love all and half or more with NS vulnerable, where our rule
 waits for 17: left alone here (not part of the ticket; a candidate for
 a later par test).
 
+## Ogust ranges (2026-10-07, convention score)
+
+The convention score (`probes/tools/conv_ab.py --only ogust`, the Ogust
+scenario, NS with Ogust on and off) was poor: Rusty's gain -79, BBA's
++229, net -0.81 per changed board (379 boards). Cause: our Ogust split
+minimum and maximum at 6/7 HCP, so every 7-count answered 3♥/3♠
+(maximum), and responder, counting partner at 7, bid game opposite a
+minimum (Ogust 394: J3.T5.AJT874.J76 answered 3♥ and North bid 3NT,
+down; BBA 3♦, passed). The source (bridgebum.com/ogust.php) says bad
+hand 5-7, good hand 8-10, a good suit two of the top three honours,
+3NT the good hand with all three; BBA, Ogust corpus: 7 HCP minimum on
+all 77 boards, 8+ maximum on all 140, every AKQ suit 3NT (61). Now
+minimum `hcp<=7`, maximum `hcp>=8` (as the feature answers' maximum),
+and 3NT ranked above 3♠ for AKQ. Game facing a maximum (21 between us)
+now comes from 13 again, as facing a feature.
+
+| | Rusty's gain | BBA's gain | net / changed board | halves |
+|---|---|---|---|---|
+| before | -79 | +229 | -0.81 (379) | agree |
+| after | -22 | +229 | -0.67 (373) | agree (-157/-94) |
+
+Background (Ogust scenario, vs BBA by par): +17 -> +24. Most of what is
+left is BBA's own off run (its feature answers) doing worse than ours:
+on the changed boards where our auction did not change BBA gains +190.
+BBA counts AJT as a good suit (3♠/3♦, 17 boards) and KJT/QJT as poor;
+the source counts only A, K, Q, so AJT stays poor here.
+
 ## Sources
 
-- **The conventions:** the 2NT feature ask and Ogust, with the usual
-  answers. Standard practice, not yet cited to a book or article.
+- **The conventions:** the 2NT feature ask, standard practice, not yet
+  cited. Ogust: bridgebum.com/ogust.php (3♣ 5-7 one top honour, 3♦ 5-7
+  two, 3♥ 8-10 one, 3♠ 8-10 two, 3NT 8-10 all three); the PBS Ogust
+  scenario's chat cites the same page.
 - **Rick's rulings:** both treatments of the 2NT ask, chosen by the card
   (2026-09-22); the standard feature answer as the default (2026-09-24);
   BBA's responses become the default after a par test, the old ones kept
@@ -352,6 +382,7 @@ a later par test).
 - **Corpus measurements:** the par test of BBA's responses (+453), the
   sign-off pass, slam after the ask (+308), the game threshold table
   (21 adopted), judged by par and by side IMPs.
-- **Where we differ:** we pass 2x-2NT-3y-3x, where BBA sometimes bids on
+- **Where we differ:** AJT is a poor suit for our Ogust answers (the
+  source), a good one for BBA's; we pass 2x-2NT-3y-3x, where BBA sometimes bids on
   (par decides); game opposite a feature from 13 where BBA wants about 14;
   the vulnerability split for asking is a question for Rick.

@@ -20,6 +20,9 @@ module two-nt-minors "Minor-suit transfers and Minor Suit Stayman over 2NT"
   skill  bidding_conventions/minor_suit_stayman
   param  mst = notrump.two_nt.minor_transfers default false
   param  mss = notrump.two_nt.minor_stayman default false
+  param  k1430 = slam.blackwood.rkcb_1430 default false
+  param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  gerber = slam.gerber.play default false
 
 # ── Minor-suit transfer: 3♠ relays to 4♣ ────────────────────────────
 after nt2 when mst, !mss
@@ -54,11 +57,31 @@ after nt2 3S (P) when mss
   4D  "Four or more diamonds, not four clubs"  shows D>=4, C<=3
   3N  "No four-card minor"                 alert  shows C<=3, D<=3
       artificial
+# With a fit and slam values, keycard for the minor when the card plays
+# it (BBA: "Blackwood 1430, for ♣/♦"; the grand comes from the answers),
+# else six.
 after nt2 3S (P) 4m (P) when mss
+  4N  "Keycard ask in {m}"                 alert
+      when  k1430 | k0314
+      shows tp(m)>=33-partner.hcp.min
+      sets  trump=m, ask=keycards(m)
+      artificial
+      priority 1
   6m  "Slam in the minor fit"              shows tp(m)>=33-partner.hcp.min
+      sets  trump=m
   5m  "Game in the minor fit"
       priority -1
+# No fit: with slam values check the aces first when the card plays
+# Gerber (partner's 3NT is natural, no suit agreed; BBA does not, but
+# the same hands without the convention ask over 2NT and reach the
+# grands).
 after nt2 3S (P) 3N (P) when mss
+  4C  "Gerber: how many aces?"             alert
+      when  gerber
+      shows points>=32-partner.hcp.min
+      sets  ask=gerber
+      artificial
+      priority 1
   6N  "No fit: slam values"                shows points>=32-partner.hcp.min
   6C  "Slam in my long clubs"              shows C>=6, points>=32-partner.hcp.min
   6D  "Slam in my long diamonds"           shows D>=6, points>=32-partner.hcp.min

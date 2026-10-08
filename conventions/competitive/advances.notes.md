@@ -222,6 +222,18 @@ of them where we jumped). Now 2{y}, 10+. Small and positive everywhere
 (errors yardstick): vanilla +43 over 38 boards, corpus +23 over 24,
 21GF +31 over 33; distance from par +7 / +2 / +1.
 
+## Advancing from the sandwich seat (2026-10-07)
+
+Partner came in after (1x) P (1y) (overcalls.bid, same date). I am a
+passed hand and both of them have bid, so the advance is short: raise
+with three at the two level, compete at three with four, preempt with
+four and a weak hand (`weak_jump_raise`); otherwise pass. After the
+takeout double: the longer unbid suit (a major with equal length), a
+jump with four and 9-11, 1NT with both their suits stopped, else the
+longer unbid suit however short; a free bid over their call with four
+(a major) or five (a minor). Standard practice, not yet cited; not
+probed against BBA.
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,

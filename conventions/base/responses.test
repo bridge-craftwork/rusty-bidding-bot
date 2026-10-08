@@ -118,3 +118,5 @@ S K92.A82.KQ93.854      | 1S P                                 | 2D     | three 
 S KJ43.K82.Q93.Q54      | 1H P                                 | 2H     | four spades, three hearts and 11: the raise before 1S
 card    Basic-Bridge
 S KT43.KQ86.875.K7      | 1S P                                 | 3S     | the same four-trump 11 with the limit raise played
+card    21GF-DEFAULT minor_openings.inverted_minors.play=false
+S 5.A97.KJ83.KT865      | 1D P                                 | 3D     | 11, four diamonds and five clubs: the limit raise (no 2/1, no 2NT)

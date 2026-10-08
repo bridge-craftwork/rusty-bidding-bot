@@ -19,7 +19,7 @@ summed over the changed boards: those where either engine's auction
 differs between on and off (a board where neither changed adds nothing
 to either gain). Positive: the convention does more for us than for BBA.
 
-    probes/tools/conv_ab.py [--batch probes/conv-ab.toml] [--only a,b] [--reuse]
+    probes/tools/conv_ab.py [--batch probes/conv-ab.toml] [--only a,b] [--reuse | --reuse-bba]
 
 How a run is made, per convention and scenario:
 
@@ -188,7 +188,7 @@ def make_cards(spec, ns_card, d, a):
 
 def bba_run(scen, ns_name, ew_card, scoring, which_dir, a):
     out = os.path.join(which_dir, 'bba', scen + '.pbn')
-    if a.reuse and os.path.exists(out):
+    if (a.reuse or a.reuse_bba) and os.path.exists(out):
         return out
     os.makedirs(os.path.dirname(out), exist_ok=True)
     ew_src = os.path.join(PBS, 'bbsa', ew_card + '.bbsa')
@@ -387,6 +387,8 @@ def main():
     ap.add_argument('--dd-cache', default=os.path.join(ROOT, '.rbb-cache', 'dd.jsonl'))
     ap.add_argument('--rbb')
     ap.add_argument('--reuse', action='store_true', help='keep PBN and JSON files already written')
+    ap.add_argument('--reuse-bba', action='store_true',
+                    help="keep BBA's PBNs (its auctions don't change with our rules) but re-run our compares")
     ap.add_argument('--max-no-rule', type=float, default=2.0,
                     help='extra no-rule positions per 100 boards in our off run that make it unmeasurable')
     a = ap.parse_args()

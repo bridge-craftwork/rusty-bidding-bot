@@ -7,16 +7,16 @@
 #
 #   2♣  22-23, or an unbalanced 20+ with a good six-card suit or a
 #       strong two-suiter and at most four losers
-#   2♦  24+, or 23 without a five-card suit
+#   2♦  24+, or 23 without a five-card suit, or 22+ with one loser
 #
 # The ranges are BBA's (Benjamin_2D: 2♣ 20-23 and every distributional
 # powerhouse, 2♦ 24+ and some 23s without a long suit); Wikipedia and
 # the PBS chat put game-in-hand hands in 2♦.
 #
 # Responses to 2♣ are those of strong-openings.bid (2♦ waiting, the
-# positives, the second negative). Responses to 2♦ (PBS): 2NT negative,
-# 2♥/2♠ five or more and 5+ HCP, 3♣/3♦ six or more, 3NT balanced
-# positive. See benjamin.notes.md.
+# positives, the second negative). Responses to 2♦ (PBS): 2NT negative
+# (0-6), 2♥/2♠ five or more, 3♣/3♦ six or more, any strength, 3NT 7+
+# without a long suit. See benjamin.notes.md.
 
 module benjamin "Benjamin 2♣ and 2♦"
   card   two_level.benjamin.play
@@ -34,6 +34,13 @@ when opening
       sets  forcing=game, ask=benjamin
       artificial
       priority 1
+  # Game in hand (Wikipedia: 2♦ is the game force on playing tricks):
+  # BBA opens 2♦ with 22-23 and at most one loser (Benjamin_2D: 4 of 4).
+  2D  "Benjamin 2♦: game in hand, 22+ and at most one loser"   alert
+      shows hcp>=22, losers<=1
+      sets  forcing=game, ask=benjamin
+      artificial
+      priority 2
 
 # ── Responder to 2♣ ──────────────────────────────────────────────────
 # Benjamin's 2♣ is forcing for one round, and passable after opener's
@@ -47,14 +54,81 @@ after 2C (P) 2D (P) 2M (P)
       priority 1
 
 # ── Responder to 2♦ ──────────────────────────────────────────────────
+# PBS chat (Benjamin_2D.btn): 2NT is the negative, "5- HCP, no 5-card
+# major"; 2♥/2♠ five or more, 3♣/3♦ six or more, with no strength
+# floor (the 5+ HCP is the chat's 2♣ responses; until 2026-10-07 we read
+# it into 2♦ too and bid 2NT with a weak five-card major, notes). BBA
+# (Benjamin_2D corpus): every five-card major bids it, 0-13 HCP; a
+# six-card minor bids it from 1 HCP; without either 2NT up to 6 and 3NT
+# from 7.
 when asked benjamin
-  2H  "Five or more hearts, 5+ HCP"      shows H>=5, hcp>=5
-  2S  "Five or more spades, 5+ HCP"      shows S>=5, hcp>=5
-  3C  "Six or more clubs, 5+ HCP"        shows C>=6, hcp>=5, H<=4, S<=4
-  3D  "Six or more diamonds, 5+ HCP"     shows D>=6, hcp>=5, H<=4, S<=4
-  3N  "Balanced positive: 8+ HCP, no five-card major"   shows balanced, hcp>=8, H<=4, S<=4
-  2N  "Negative: no positive to show"     artificial
+  2S  "Five or more spades (any strength)"         shows S>=5, S>=H
+  2H  "Five or more hearts (any strength)"         shows H>=5, H>S
+  3C  "Six or more clubs, no five-card major"      shows C>=6, C>=D, H<=4, S<=4
+  3D  "Six or more diamonds, no five-card major"   shows D>=6, D>C, H<=4, S<=4
+  3N  "Positive: 7+ HCP, no five-card major or six-card minor"   shows hcp>=7, H<=4, S<=4, D<=5, C<=5
+  2N  "Negative: 0-6, no five-card major or six-card minor"      artificial
       priority -1
+
+# ── Opener after a positive suit ─────────────────────────────────────
+# Game is forced; opener has 24+, so the questions are the fit and the
+# strain (BBA raises with three, else shows a suit or bids notrump). The
+# raise agrees the suit, and the slam modules take over (keycards).
+# Until 2026-10-07 opener had no rule here and the base 3NT ended the
+# auction (Benjamin_2D: 2♦-2♥-3NT-pass on boards with a grand slam).
+after 2D (P) 2y (P) | 2D (P) 3y (P) when y is not N
+  cheapest(y) "Raise: three or more {y}"   shows y>=3   sets trump=y
+      priority 1
+  cheapest(S) "Five or more spades"        shows S>=5   when y is not S
+  cheapest(H) "Five or more hearts"        shows H>=5   when y is not H
+  cheapest(D) "Five or more diamonds"      shows D>=5   when y is not D
+  cheapest(C) "Five or more clubs"         shows C>=5   when y is not C
+  cheapest(N) "No fit, no suit to show"
+      priority -1
+
+# Responder after opener's raise of the major: with 0-5 the fast arrival
+# to game (BBA: 4 of 4 with 0-6 there, two of them 3NT); more cue-bids
+# (control-bids.bid) or asks.
+after 2D (P) 2M (P) 3M (P)
+  4M  "Weak: 0-5, game"    shows hcp<=5
+      priority 2
+
+# Opener over responder's game in the agreed major (0-5 after the raise,
+# 0-6 after the negative): slam needs the playing tricks, at most two
+# losers (BBA: asked on 4 of 4 with two or fewer, passed 5 of 6 with
+# three or more, Benjamin_2D). With fewer the generic keycard ask
+# (rkcb-1430.bid, 18 of my own) asks anyway.
+after 2D (P) 2M (P) 3M (P) 4M (P) | 2D (P) 2N (P) 3M (P) 4M (P)
+  P   "Game: partner is weak and I have three losers or more"   shows losers>=3
+      priority 1
+
+# Responder after opener's suit: raise with three (agreeing it), rebid a
+# six-card major or a seven-card minor, else notrump. (A six-card minor
+# rebid at the four level left opener without a rule: four boards.)
+after 2D (P) 2y (P) 2z (P) | 2D (P) 2y (P) 3z (P) | 2D (P) 3y (P) 3z (P) when y is not N, z is not N, z is not y
+  cheapest(z) "Three or more {z}: agrees it"   shows z>=3   sets trump=z
+      priority 1
+  cheapest(y) "Six or more {y}"                shows y>=6
+      when  y is H | y is S
+  cheapest(y) "Seven or more {y}"              shows y>=7
+      when  y is C | y is D
+  cheapest(N) "No fit"
+      priority -1
+
+# ── Opener over the 3NT positive ─────────────────────────────────────
+# 24+ facing 7+: slam is there. BBA (Benjamin_2D, 41 boards) bids slam
+# on every one: mostly 5NT, which responder answers 6NT, or 7NT with a
+# maximum; 6NT or 7NT directly with more.
+after 2D (P) 3N (P)
+  7N  "Grand slam: 37 or more between us"   shows hcp + partner.hcp.min >= 37
+      priority 3
+  5N  "Slam: 6NT, or 7NT with a maximum"    shows hcp>=23
+      sets  forcing=game
+      priority 2
+after 2D (P) 3N (P) 5N (P)
+  7N  "A maximum: 12+ HCP"    shows hcp>=12
+      priority 1
+  6N  "6NT"
 
 # ── Opener after the negative 2NT: natural ───────────────────────────
 after 2D (P) 2N (P)
@@ -67,3 +141,11 @@ after 2D (P) 2N (P)
   4N  "Balanced 28+: invites 6NT"   shows balanced, hcp>=28
       sets  ask=quant
       priority 2
+
+# Responder after opener's suit over the negative: raise with three
+# (agreeing it: opener's 24+ then asks for keycards), else 3NT.
+after 2D (P) 2N (P) 3z (P) when z is not N
+  4z  "Three or more {z}"    shows z>=3   sets trump=z
+      when  z is H | z is S
+      priority 1
+  3N  "No fit"

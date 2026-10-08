@@ -24,6 +24,15 @@ auctions. See `superaccept-doubleton.notes.md`.
 
 - Responder's slam tries over 3M other than keycard.
 
+## Convention score (2026-10-07)
+
+Unmeasurable as BBA's convention: its key (`Super acceptance after NT`)
+does not change BBA's auctions on Jacoby_Super-Accept (0 boards). Our
+own off run had 13 no-rule positions (0 on): with no super-accept the
+plain completion is the whole 1NT range, and six-card responders
+between the strength bands had no call; jacoby-transfers.bid now passes
+or invites them by HCP. Judge it against ourselves (self A/B) instead.
+
 ## Sources
 
 - **The convention:** the Jacoby super-accept (3M with four-card support

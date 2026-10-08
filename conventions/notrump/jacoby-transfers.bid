@@ -50,6 +50,19 @@ when answered transfer(M)
       sets ask=invite(M)
   3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, suit_strength=invite
       sets ask=invite(M)
+  # Six cards and a count between the two measures: too much to pass in
+  # total points (the sixth card counts two), too little to invite in
+  # suit points (it counts one). J85.KJ9754.6.J52 (6 HCP) had no call at all
+  # (convention score, 2026-10-07: 6 no-rule boards with Texas, 26
+  # without; 13 without super-accepts, whose plain completion is then
+  # the whole 1NT range). HCP decide, as for the five-card hands below.
+  3M  "Invitational: 6+ {M}"                   shows M>=6, strength>=invite, suit_strength=signoff, hcp>=25-partner.hcp.max
+      when partner.last=2{M}
+      sets ask=invite(M)
+      priority -1
+  P   "Weak in HCP: play here"                 shows M>=6, strength>=invite, suit_strength=signoff, hcp<=24-partner.hcp.max
+      when partner.last=2{M}
+      priority -1
   3N  "Game: {game} total points, 5 {M}: choose the game"  shows M=5, balanced, strength=game
       when maybe partner.M<=2                  # only while the fit is unknown
       sets ask=choice                          # opener corrects with 3+ {M}
@@ -64,6 +77,14 @@ when answered transfer(M)
       priority -1                              # a fallback: 4M still reads as the slam try
   4M  "Game in the known fit"                  shows suit_strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
+  # Without Texas the slam hands with six come through the transfer too
+  # (convention score, 2026-10-07: 39 had no rule). Five of the major
+  # invites six; six bids it.
+  5M  "Slam invitation: 6+ {M}"                shows M>=6, suit_strength=slam_invite
+      when !texas, partner.last=2{M}
+      sets ask=major_slam_invite(M)
+  6M  "Slam: 6+ {M}"                           shows M>=6, suit_strength>=slam
+      when !texas, partner.last=2{M}
   3m  "Second suit, game forcing"              shows m>=4, strength>=game
       sets forcing=game, ask=new_suit(M)
   4N  "Quantitative, 5 {M}"                    shows M=5, balanced, strength=slam_invite
@@ -119,6 +140,11 @@ when asked slam_try(M)
       sets ask=keycards(M)
       artificial
   P   "No slam: plays game"
+
+# Opener answers five of the major: six unless minimum.
+when asked major_slam_invite(M)
+  6M  "Accepts the slam invitation: not a minimum"   shows hcp>=shown.hcp.max-1
+  P   "Declines: a minimum"           shows hcp<=shown.hcp.max-2
 
 # BBA's treatment (probed 2026-09-24, jacoby-transfers.notes.md), our
 # default since Rick's ruling the same day: with five hearts, four spades

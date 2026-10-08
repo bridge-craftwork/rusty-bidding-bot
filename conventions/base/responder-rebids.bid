@@ -28,6 +28,7 @@ module responder-rebids "Responder's second call"
   param  roudi = other_conventions.roudi.play default false
   param  twoway_sw = other_conventions.two_way_nmf default false
   param  xyz = other_conventions.xyz default false   # xyz.bid: two-way NMF after 1NT too
+  param  imp2s = major_openings.impossible_2s.play default false
 
 # ── Opener rebid 1NT (12-14) ─────────────────────────────────────────
 after 1x (P) 1y (P) 1N (P) when !tw(x)
@@ -206,6 +207,10 @@ after 1x (P) 1N (P) 2z (P) when z is not x
       sets  ask=signoff
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
   3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
+  # The good raise (11+ points) is the Impossible 2♠ after 1♥ when the
+  # card plays it (impossible-2s.bid); otherwise it raises too (it passed).
+  3z  "Raise: 4+ {z}, 11+ points"          shows z>=4, points>=11   sets ask=invite(z)
+      when  z is C | z is D, x is not H | !imp2s
 # Six hearts too weak for 2H at once, opposite 1S and a minor: to play
 # (2026-09-30, random deals: J.AT75432.6.QJ53 had no call; BBA 2H).
 after 1S (P) 1N (P) 2m (P)

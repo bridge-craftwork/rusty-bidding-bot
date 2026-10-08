@@ -75,6 +75,15 @@ The top four divergences in Texas_Transfer are this choice (234 boards).
 - Interference over Texas (an overcall of the 4♦/4♥ transfer). A 2♣
   overcall of the 1NT opening is covered; see below.
 
+## Convention score: the off switch (2026-10-07)
+
+With `notrump.transfers.texas=false` our off run had 51 no-rule
+positions (12 on): responder after the Jacoby completion, six-card
+hands between the strength bands, and the slam hands that would have
+used Texas then keycards. Both are now written in jacoby-transfers.bid
+(jacoby-transfers.notes.md, Gaps). The score itself is in the
+convention-score table (status page).
+
 ## Unexplained
 
 - After `1NT P 4D P 4H P 4NT P 5H P`, BBA passes 5H (6 boards) even with

@@ -41,11 +41,44 @@ Corpus, together with the Basic-Bridge fixes below: -163,528 ->
 - **3NT:** the fallback with 13+, a fit and no major, as BBA. We had no
   call.
 
+## Convention score (2026-10-07)
+
+`probes/tools/conv_ab.py --only inverted-minors` (Inverted_Minors, 500
+boards): -1.11 IMPs per changed board before (Rusty -323, BBA +208, 479
+boards), -0.14 after (Rusty +142, BBA +208; halves +24/-90, differ),
+fair. What was wrong:
+
+- **Responder stopped short of game.** Over opener's 2NT (12-14
+  balanced) responder bid 3NT only from 13; the 11-12 counts the scenario
+  deals passed 2NT, where 3NT makes about half the time with the
+  nine-card minor fit (corpus DD: 11 HCP 49%, 12 HCP 54%), and our own
+  off run (2NT invitation, opener accepts from 13) reached it. Now 3NT
+  from 12, or 11 with a fifth trump; over opener's 3m (minimum,
+  unbalanced) 3NT from 12 with both majors held.
+- **Opener's 4m slam try was passed**: responder had no rule there and
+  played 4m with 26-29 HCP between the hands (5m made on 14 of 15). Now
+  5m declines; the keycard rules take a hand with more.
+- **Opener bid 3NT over the weak 3m with 14** (rebids.bid's acceptance
+  of the standard limit raise). Opposite 5-9 game now needs 18: 3NT
+  balanced, 5m otherwise, else pass.
+- Opener had no rule after 2NT-3m or a splinter-4m: pass.
+- The off run (no inverted minors) had no response with 11-12, four
+  diamonds and five clubs over 1♦ on a 2/1 card: a limit raise 3♦ now
+  (responses.bid). That made our off run better, so it lowered our gain
+  (from +192 to +142) without changing any inverted auction.
+
+Tripwire (`compare --limit 50`, all scenarios): the 3NT-from-12 changes
+other inverted-minor scenarios (1m-2N 17 boards -28 errors,
+Vics_Bal_Resp_to_1m 7 boards -30): a coin flip on those deals. Kept,
+as par on the Inverted_Minors deals favours it; a question for Rick.
+
 ## Sources
 
 - **The convention:** inverted minor raises. The structure is modelled on
   BBA's treatment, learned by probing; otherwise standard practice, not
-  yet cited to a book or article.
+  yet cited to a book or article. The game thresholds after opener's
+  rebid (12 opposite 2NT, 18 opposite the weak raise) are par on the
+  Inverted_Minors corpus deals (2026-10-07), not a cited source.
 - **Rick's rulings:** none recorded for this module.
 - **BBA probes:** `probes/minor-resp-inv-1C.toml`,
   `probes/minor-resp-inv-1D.toml`, `probes/inv-opener-1C.toml`,

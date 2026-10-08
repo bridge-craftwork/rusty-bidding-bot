@@ -35,6 +35,33 @@ level. Cases: `bergen.test`.
   card without the limit raise.
 - Off in competition (any overcall or double): the natural raises apply.
 
+## Convention score (2026-10-07)
+
+`probes/tools/conv_ab.py --only bergen` (Bergen_Raises, 500 boards):
+-0.88 IMPs per changed board before (Rusty -175, BBA +9, 209 boards),
+-0.18 after (Rusty -28, BBA +9; halves -22/-15), fair. What was wrong:
+
+- **The game try was read as a control bid.** Opener's 3♦ (3♥ over
+  Reverse Bergen's 3♦) was chosen by the Bergen rule at priority 3, but
+  partner reads a call by the highest rule that could have made it, and
+  control-bids.bid's "control bid opposite a limited raise" (12) claimed
+  it: responder cue-bid back and the pair drove to the five level or a
+  slam on 15-16 opposite 7-10 (about -80 on the 1♠-3♣ boards alone). The
+  try now has priority 13, as game-tries.bid's tries do. A slam-going
+  opener who picks 3♦ as a control bid is read as the try; when
+  responder declines he bids 4M (`Game after the declined try`).
+- **Big hands signed off.** Opposite the constructive raise 4M showed
+  17-20 and the sign-off had no upper limit, so with 21+ (or 17+ in
+  points the slam rules did not take) opener bid 3M and played there.
+  The sign-off now shows at most 14 (15 with hearts over Reverse
+  Bergen's 3♦), and the 4M fallback takes the rest.
+- Opener had no rule after the try was declined: pass now.
+
+The limit raise (3♦) still loses a little against BBA: our off run
+stops in 2M with 11-12 and four trumps, and when the 3♦ game fails that
+shows as Rusty's loss; BBA, which bids those hands through 2NT on and off,
+reaches the same games both ways. Not a Bergen fault.
+
 ## BBA
 
 Probed (`probes/bergen-resp-1H.toml`, 21GF-GIB-Bergen) and in the

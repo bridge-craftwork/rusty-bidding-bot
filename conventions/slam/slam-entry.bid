@@ -198,6 +198,14 @@ define fit_slam_values(x) = slam_count(x) | (slam_count_max(x), losers <= 4, par
 define bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)
 define two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(C,t), bare_beside(H,t)) | (bare_beside(C,t), bare_beside(S,t)) | (bare_beside(D,t), bare_beside(H,t)) | (bare_beside(D,t), bare_beside(S,t)) | (bare_beside(H,t), bare_beside(S,t))
 
+# An ambiguous keycard answer ("1 or 4" facing my one: 2 or 5) settled
+# by the high cards (2026-10-07, rkcb-1430.notes.md "The count that
+# fits"): three keycards missing are at least 11 HCP (two aces and the
+# trump king), so with 30 HCP on our floor at most two are missing and
+# the low count is impossible. The answers that stay open after the
+# deck's limit are 3 apart (2|5, 1|4, 0|3), so the count is the high one.
+define kc_high(t) = maybe we.keycards(t) >= 4, hcp + partner.hcp.min >= 30
+
 # ── Fast arrival (Phase 1, 2026-09-30) ────────────────────────────────
 #
 # In a game force with an eight-card fit known and no suit agreed, the

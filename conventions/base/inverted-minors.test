@@ -8,3 +8,14 @@ N 52.K86.96.KQJ742      | 1C P             | 3C     | 8 HCP, six clubs: the weak
 S AQ5.K83.QJ4.Q982      | 1C P 2C P        | 2NT    | 14 balanced
 S AK5.KQ3.AJ4.K982      | 1C P 2C P        | 3NT    | 19 balanced
 N 743.AK4.64.QJ752      | 1C P 2C P 2NT P  | P      | 11 balanced-ish: 2NT is enough
+# Game opposite 12-14 from 12, or 11 with five trumps (notes, 2026-10-07)
+N A43.K54.Q6.Q8752      | 1C P 2C P 2NT P  | 3NT    | 11 HCP and five clubs opposite 12-14: game
+N K43.K54.Q62.KJ87      | 1C P 2C P 2NT P  | 3NT    | 12 balanced opposite 12-14: game
+N A43.K54.Q62.QT87      | 1C P 2C P 2NT P  | P      | 11 HCP, four clubs: 2NT is enough
+N K6.JT8.A543.KJ74      | 1D P 2D P 2NT P  | 3NT    | 12 HCP opposite 12-14: game
+S AQJ5.Q753.QJT2.Q      | 1D P 2D P 2NT P 3D P | P  | responder signed off
+# The slam try is answered, not passed
+N JT3.KQ.Q965.A642      | 1D P 2D P 4D P   | 5D     | 12 HCP opposite the slam try: decline in game
+# Over the weak raise game needs about 18
+S AKT6.K986.KJ7.83      | 1D P 3D P        | P      | 14 opposite 5-9: no game
+S KQ32.AKQ4.K5.J53      | 1C P 3C P        | 3NT    | 18 balanced opposite 5-9: game

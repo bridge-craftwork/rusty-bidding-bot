@@ -18,12 +18,17 @@ module impossible-2s "Impossible 2♠"
 # ── Responder: the good raise ────────────────────────────────────────
 # Our 1NT is 6-10 HCP, so the raise to 3m (9-10 points) is the courtesy
 # raise and 2♠ takes the 11+ hands (10 HCP and a fifth trump, or a
-# sixth), which had no call at all and passed.
+# sixth). Without the convention they raise to 3m (responder-rebids.bid).
+# Priority 1: the 6-12 1NT of the 2/1 cards brought a natural 11-12 HCP
+# raise to 3m (responder-rebids.bid, 2026-09-30) that outranked 2♠ on
+# description and took every hand, so switching the convention off
+# changed nothing (convention score, 2026-10-07).
 after 1H (P) 1N (P) 2m (P)
   2S  "Impossible 2♠: good raise of {m}, 4+ {m}, 11+ points"  alert
       shows m>=4, H<=2, points>=11
       sets  trump=m, forcing=round
       artificial
+      priority 1
 
 # ── Opener answers ───────────────────────────────────────────────────
 # Responder has 11-13 with the fit, so opener goes to game with 15+

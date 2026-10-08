@@ -17,6 +17,19 @@ card    21GF-DEFAULT two_level.benjamin.play=true
 N 8642.J72.9643.82      | 2D P                | 2N     | nothing: the negative
 N 86.KQ972.9643.82      | 2D P                | 2H     | five hearts, 5 HCP
 N K86.QJ7.9643.K82      | 2D P                | 3N     | balanced, 9 HCP
+N 86.Q9762.9643.82      | 2D P                | 2H     | five hearts, any strength (PBS chat; BBA)
+N 8.QT6.952.J98643      | 2D P                | 3C     | six clubs, any strength
+N K86.J72.9643.Q82      | 2D P                | 2N     | 6, no long suit: the negative
+N K86.Q72.9643.Q82      | 2D P                | 3N     | 7, no long suit: 3NT
+S AKQT632.AKQ94..A      |                     | 2D     | game in hand: 22 and no losers
+# Opener after a positive.
+S AK4.KQ3.AQJ4.KQ2      | 2D P 2H P           | 3H     | three hearts: the raise agrees them
+S AK4.KQ3.AQJ4.KQ2      | 2D P 3N P           | 5N     | 25 facing 7+: slam
+N K86.Q72.9643.Q82      | 2D P 3N P 5N P      | 6N     | 7: 6NT
+N KQ6.Q72.K643.Q82      | 2D P 3N P 5N P      | 7N     | 12: 7NT
+N QJ9865.J87.42.76      | 2D P 2S P 3S P      | 4S     | 4 HCP: game, nothing to cue
+S A92.AJ3.AKQ6.AQ2      | 2D P 2S P 3S P 4S P | P      | five losers facing a weak raise: game
+N 86.Q2.964.KQ9643      | 2D P 3C P 3H P      | 3N     | six clubs, no heart fit: 3NT, not 4C
 # Opener after the negative.
 S AKQJ76.AK3.AQ.32      | 2D P 2N P           | 3S     | spades
 S AK4.KQ3.AQJ4.KQ2      | 2D P 2N P           | 3N     | balanced

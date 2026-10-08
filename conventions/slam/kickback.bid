@@ -103,24 +103,28 @@ when kickback_on, asked kickback(t), rho.last = P
   4H  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, !kb_first_14
   4S  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is C, kb_first_14
   4S  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, !kb_first_14
-  4N  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is C
-  5C  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is C
+  4N  "Kickback: 2 or 5 keycards, no {t} queen"    shows keycards(t) in 2|5, !has(Q,t)   artificial   when t is C
+  5C  "Kickback: 2 or 5 keycards and the {t} queen"  shows keycards(t) in 2|5, has(Q,t)   artificial   when t is C
 
   4S  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, kb_first_14
   4S  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, !kb_first_14
   4N  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is D, kb_first_14
   4N  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is D, !kb_first_14
-  5C  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is D
-  5D  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is D
+  5C  "Kickback: 2 or 5 keycards, no {t} queen"    shows keycards(t) in 2|5, !has(Q,t)   artificial   when t is D
+  5D  "Kickback: 2 or 5 keycards and the {t} queen"  shows keycards(t) in 2|5, has(Q,t)   artificial   when t is D
 
   4N  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is H, kb_first_14
   4N  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is H, !kb_first_14
   5C  "Kickback: 0 or 3 keycards"             shows keycards(t) in 0|3   artificial   when t is H, kb_first_14
   5C  "Kickback: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is H, !kb_first_14
-  5D  "Kickback: 2 keycards, no {t} queen"    shows keycards(t)=2, !has(Q,t)   artificial   when t is H
-  5H  "Kickback: 2 keycards and the {t} queen"  shows keycards(t)=2, has(Q,t)   artificial   when t is H
+  5D  "Kickback: 2 or 5 keycards, no {t} queen"    shows keycards(t) in 2|5, !has(Q,t)   artificial   when t is H
+  5H  "Kickback: 2 or 5 keycards and the {t} queen"  shows keycards(t) in 2|5, has(Q,t)   artificial   when t is H
 
 # ── The asker places the contract ─────────────────────────────────────
+#
+# The queen: mine, or partner's fourth step, which is always five of our
+# suit (`partner.has(Q,t)` is never known: the engine does not track
+# another hand's honours; 2026-10-07, as rkcb-1430.bid's 5♠).
 #
 # As after 4NT (rkcb-1430.bid): `we.keycards(t)` combines my count with
 # the answer, within the deck's five. The fourth step is five of our
@@ -128,15 +132,25 @@ when kickback_on, asked kickback(t), rho.last = P
 
 when kickback_on, answered kickback(t)
   7{t}  "Grand slam: every keycard and the {t} queen"
-        when  we.keycards(t)=5, has(Q,t) | partner.has(Q,t), grand_try
+        when  we.keycards(t)=5, has(Q,t) | partner.last = 5{t}, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
   # The king ask, as after 4NT (rkcb-1430.bid answers it); the self A/B
   # (2026-10-05) lost the grands that 4NT-5NT found.
   5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
-        when  kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t)
+        when  kask5n, we.keycards(t)=5, has(Q,t) | partner.last = 5{t}
         sets  ask=kings(t)
         artificial
   6{t}  "Small slam: at most one keycard missing"
         when  we.keycards(t)>=4
+  # The count that fits (rkcb-1430.bid, `kc_high`): with 30 HCP between
+  # us the low count of an open answer is impossible.
+  7{t}  "Grand slam: the high count is the one that fits, all five and the {t} queen"
+        when  kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5{t}, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
+  5N    "King ask: the high count fits, all the keycards and the {t} queen are ours"
+        when  kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5{t}
+        sets  ask=kings(t)
+        artificial
+  6{t}  "Small slam: the high count is the one that fits"
+        when  kc_high(t)
   P     "Sign off: partner's answer is five of our suit"
         when  partner.last=5{t}, we.keycards(t).max<=3
   5{t}  "Sign off: two keycards missing"
@@ -147,5 +161,5 @@ when kickback_on, answered kickback(t)
         sets  ask=kb_correct(t)
 
 when kickback_on, asked kb_correct(t)
-  6{t}  "Corrects to six: the higher count"   shows keycards(t)>=3
+  6{t}  "Corrects to six: the higher count"   shows keycards(t) in 3|4|5
   P     "Accepts the sign-off"

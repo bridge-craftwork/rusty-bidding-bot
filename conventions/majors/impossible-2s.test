@@ -23,4 +23,11 @@ N 62.32.A64.AQT764      | 1H P 1NT P 2C P 2S P 3C P      | P      | opener is mi
 # Without the convention 2♠ has no meaning here, and 3♣ is the only raise.
 card    21GF-DEFAULT major_openings.impossible_2s.play=false
 N 853.J4.K962.AQ75      | 1H P 1NT P 2C P                | 3C     | 10 points, four clubs
-N 62.32.A64.AQT764      | 1H P 1NT P 2C P                | P      | 12 points has no raise without it (a gap: notes)
+N 62.32.A64.AQT764      | 1H P 1NT P 2C P                | 3C     | 12 points: the good raise is 3C without it
+N K86.9.AJ42.K9542      | 1H P 1NT P 2C P                | 3C     | 11 HCP (2/1 1NT): the natural invitational raise
+
+# The 2/1 1NT is 6-12, and its 11-12 HCP raise to 3m must not take 2♠'s
+# hands (the convention score found the switch did nothing, 2026-10-07).
+card    21GF-DEFAULT
+N K86.9.AJ42.K9542      | 1H P 1NT P 2C P                | 2S     | 11 HCP, five clubs: the good raise
+N 974.K.KQJ3.K7432      | 1H P 1NT P 2C P                | 2S     | 12 HCP, five clubs and a singleton heart

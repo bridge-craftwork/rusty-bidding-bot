@@ -156,12 +156,18 @@ when asked weak_two(t), ask2nt is feature, style is bba
   3N  "Maximum, 8-10, no side honour to show"               shows hcp>=8
   3{t}  "Minimum, 5-7"                                      shows hcp<=7
 
+# Ogust (bridgebum.com/ogust.php): a minimum is 5-7, a maximum 8-10
+# (the feature answers' maximum too); a good suit two of the top three
+# honours; 3NT all three. Until 2026-10-07 the split was 6/7, which sent
+# every 7-count to the maximum answers (BBA: 7 is a minimum on all 77
+# corpus boards) and game opposite it (notes).
 when asked weak_two(t), ask2nt is ogust
-  3C  "Ogust: minimum, poor suit"         shows hcp<=6, quality(t)<=1   artificial
-  3D  "Ogust: minimum, good suit"         shows hcp<=6, quality(t)>=2   artificial
-  3H  "Ogust: maximum, poor suit"         shows hcp>=7, quality(t)<=1   artificial
-  3S  "Ogust: maximum, good suit"         shows hcp>=7, quality(t)>=2   artificial
+  3C  "Ogust: minimum (5-7), poor suit"   shows hcp<=7, quality(t)<=1   artificial
+  3D  "Ogust: minimum (5-7), good suit"   shows hcp<=7, quality(t)>=2   artificial
+  3H  "Ogust: maximum (8-10), poor suit"  shows hcp>=8, quality(t)<=1   artificial
+  3S  "Ogust: maximum (8-10), good suit"  shows hcp>=8, quality(t)>=2   artificial
   3N  "Ogust: the top three honours"      shows quality(t)=3
+      priority 1
 
 after 2x (P) 2N (P) 3N (P) 4x (P) when weak_two_suit(x), x is C | x is D, style is bba
   5x  "A shortness: game in the minor"   shows shortest<=1
@@ -210,8 +216,8 @@ when answered weak_two(t)
   # basic-weak-2-b278: 16 opposite 3C, a maximum with a club feature,
   # signed off in 3H). The answers record partner's range: counting him
   # at its floor, game with 21 between us, so every asker (13+) facing
-  # a feature (8-10), 14 facing an Ogust maximum (7-10); facing a
-  # minimum (4) the 17 above still rules. 21 beat 22 and 23 on both
+  # a feature or an Ogust maximum (both 8-10); facing a minimum (4)
+  # the 17 above still rules. 21 beat 22 and 23 on both
   # yardsticks (notes).
   4{t}  "Game: partner showed a maximum"   shows hcp + partner.hcp.min >= 21
         when  t is H | t is S

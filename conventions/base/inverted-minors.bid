@@ -25,6 +25,17 @@ after 1m (P)
   3m  "Weak raise: 5-9, 5+ {m}, no 4-card major"  shows m>=5, hcp=5..9, H<=3, S<=3
       sets  trump=m
 
+# Opener over the weak raise (5-9): game needs about 18 (rebids.bid's
+# 14+ is for the limit raise without inverted minors; conv-ab 2026-10-07
+# found 14-counts bidding 3NT opposite 5-9).
+after 1m (P) 3m (P)
+  3N  "Game opposite the weak raise: 18+, balanced"   shows hcp>=18, balanced | semibalanced
+      priority 1
+  5m  "Game opposite the weak raise: 18+, unbalanced"  shows hcp>=18
+      priority 1
+  P   "No game opposite the weak raise"              shows hcp<=17
+      priority 1
+
 # ── 1C-2C ─────────────────────────────────────────────────────────
 after 1C (P) 2C (P)
   2N  "12-14 balanced"                        shows balanced, hcp<=14
@@ -41,15 +52,26 @@ after 1C (P) 2C (P)
   3S  "Splinter: spade shortness, four clubs"  shows S<=1, C>=4, hcp>=13
       priority 1
   4C  "Slam try, extras and a fit"            shows C>=4, hcp>=16, !balanced
+# Opposite 12-14 and a nine-card minor fit, game from 12 (11 with a
+# fifth trump): 3NT makes about half the time there (conv-ab, 2026-10-07).
 after 1C (P) 2C (P) 2N (P)
-  3N  "Game values"                           shows hcp>=13
-  3C  "Minimum, to play"                      shows hcp<=12, !balanced
-  P   "Minimum, balanced: 2NT is enough"      shows hcp<=12, balanced
+  3N  "Game values"                           shows hcp>=12 | (hcp>=11, C>=5)
+  3C  "Minimum, to play"                      shows hcp<=11, hcp<=10 | C<=4, !balanced
+  P   "Minimum, balanced: 2NT is enough"      shows hcp<=11, hcp<=10 | C<=4, balanced
+after 1C (P) 2C (P) 2N (P) 3C (P)
+  P   "Responder signed off"
+      priority -1
 after 1C (P) 2C (P) 3C (P)
-  3N  "Game values, the majors held"          shows hcp>=13, stop(S), stop(H)
+  3N  "Game values, the majors held"          shows hcp>=12, stop(S), stop(H)
   5C  "Game values"                           shows hcp>=13
       priority -1
   P   "Minimum"                               shows hcp<=12
+      priority -2
+# Opener's slam try: responder declines in game; with more, the slam
+# rules (keycards) come first.
+after 1C (P) 2C (P) 4C (P)
+  5C  "Declines the slam try"
+      priority -1
 after 1C (P) 2C (P) 2D (P) | 1C (P) 2C (P) 2H (P) | 1C (P) 2C (P) 2S (P)
   2N  "10-12, balanced"                       shows hcp<=12, balanced
   3N  "Game values"                           shows hcp>=13
@@ -86,15 +108,26 @@ after 1D (P) 2D (P)
   3S  "Splinter: spade shortness, four diamonds"  shows S<=1, D>=4, hcp>=13
       priority 1
   4D  "Slam try, extras and a fit"            shows D>=4, hcp>=16, !balanced
+# Opposite 12-14 and a nine-card minor fit, game from 12 (11 with a
+# fifth trump): 3NT makes about half the time there (conv-ab, 2026-10-07).
 after 1D (P) 2D (P) 2N (P)
-  3N  "Game values"                           shows hcp>=13
-  3D  "Minimum, to play"                      shows hcp<=12, !balanced
-  P   "Minimum, balanced: 2NT is enough"      shows hcp<=12, balanced
+  3N  "Game values"                           shows hcp>=12 | (hcp>=11, D>=5)
+  3D  "Minimum, to play"                      shows hcp<=11, hcp<=10 | D<=4, !balanced
+  P   "Minimum, balanced: 2NT is enough"      shows hcp<=11, hcp<=10 | D<=4, balanced
+after 1D (P) 2D (P) 2N (P) 3D (P)
+  P   "Responder signed off"
+      priority -1
 after 1D (P) 2D (P) 3D (P)
-  3N  "Game values, the majors held"          shows hcp>=13, stop(S), stop(H)
+  3N  "Game values, the majors held"          shows hcp>=12, stop(S), stop(H)
   5D  "Game values"                           shows hcp>=13
       priority -1
   P   "Minimum"                               shows hcp<=12
+      priority -2
+# Opener's slam try: responder declines in game; with more, the slam
+# rules (keycards) come first.
+after 1D (P) 2D (P) 4D (P)
+  5D  "Declines the slam try"
+      priority -1
 after 1D (P) 2D (P) 2H (P) | 1D (P) 2D (P) 2S (P)
   2N  "10-12, balanced"                       shows hcp<=12, balanced
   3N  "Game values"                           shows hcp>=13
@@ -117,3 +150,11 @@ after 1D (P) 2D (P) 3S (P)
   4D  "Minimum"                               shows hcp<=11
       priority -1
 
+
+# Opener after responder's minimum over the splinter.
+after 1C (P) 2C (P) 3x (P) 4C (P) when x is H | x is S
+  P   "Responder signed off"
+      priority -1
+after 1D (P) 2D (P) 3x (P) 4D (P) when x is H | x is S
+  P   "Responder signed off"
+      priority -1

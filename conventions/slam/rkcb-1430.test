@@ -6,7 +6,9 @@ dealer  S
 
 # seat hand             | auction                              | expect | why
 N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT P 5C P           | 5H     | "1 or 4" facing my two: only 1 fits, two are missing
-N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT P 5D P           | 5H     | "0 or 3" facing my two: 2 or 5, unresolved: sign off
+N 8.AQ9732.K94.AJ2      | 1NT P 4D P 4H P 4NT P 5D P           | 5H     | "0 or 3" facing my two: 2 or 5, and 29 HCP leave both open: sign off
+N 8.AQ9732.K94.AKJ      | 1NT P 4D P 4H P 4NT P 5D P           | 5NT    | the same with 32 HCP between us: three missing would be 11 HCP, so 5, and the queen is mine
+N KQ8.AQ9732.K4.KQ      | 1NT P 4D P 4H P 4NT P 5D P           | 6H     | "0 or 3" facing my one, 34 HCP: 4, one missing, six without the sign-off
 S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P 5D P 5H P      | 6H     | three keycards: correct to six
 S KJ5.K74.KQ82.Q93      | 1NT P 4D P 4H P 4NT P 5D P 5H P      | P      | no keycards: accept the sign-off
 
@@ -42,6 +44,13 @@ N K5.843.K72.AQ852      | 1C P 2C P 4NT P                      | 5D     | clubs 
 card    21GF-DEFAULT
 N K5.843.K72.AQ852      | 1C P 2C P 4NT P                      | 5C     | without the treatment: 1430, one keycard is 5♣
 
+# Five keycards answer as two (the steps wrap: 0/3, 1/4, 2/5;
+# Benjamin_2D 222, 2026-10-07, passed the ask).
+card    21GF-DEFAULT
+dealer  N
+N A5.AKQ873.A52.A3      | 1H P 1S P 2H P 4NT P                 | 5S     | all five and the ♥Q: as two and the queen
+N A5.AK9873.A52.A3      | 1H P 1S P 2H P 4NT P                 | 5H     | all five, no queen: as two
+
 # The keycard suit (Rick, 2026-10-03): a 4NT with no notrump bid by us
 # is keycard, for the agreed suit, else the last suit bid; a major fit
 # agreed later replaces a minor trump. The answers show which suit.
@@ -65,7 +74,9 @@ card    21GF-DEFAULT
 dealer  S
 N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 5NT    | three keycards and partner's two with the queen: all five
 S KQ5.KQ4.Q82.A932      | 1NT P 4D P 4H P 4NT P 5S P 5NT P     | 6D     | one side king, the ♠K (the ♥K was a keycard)
-N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 7H    | two side kings between us and 33 HCP
+N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 7H    | two side kings between us, 33 HCP and six trumps
+N A8.AJ97.A942.KQ3      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 6H    | the same flat: the missing king is a finesse for the grand (2026-10-07)
+N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6H P | 7H    | every side king is ours: the grand
 N A8.AJ9732.A94.QJ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6C P | 6H    | a side king missing: six
 card    21GF-DEFAULT slam.king_ask.five_nt=false
 N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 6H     | no king ask on the card: six

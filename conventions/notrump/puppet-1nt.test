@@ -14,3 +14,9 @@ S AQ5.KQ8.QJ93.A64          | 1NT P 3C P         | 3NT    | no major
 N KQ54.832.AQ5.K64          | 1NT P 3C P 3D P    | 3H     | four spades: names hearts
 S AQ52.KQ8.QJ9.A64          | 1NT P 3C P 3D P 3H P | 4S   | four spades: game in the fit
 N KJ5.A82.Q543.K64          | 1NT P 3C P 3H P    | 4H     | three hearts: game in the five-three fit
+
+# Slam after the Puppet answers (2026-10-07; notes, "Convention score").
+N KQ4.AKQ7.QT6.A62          | 1NT P 3C P 3NT P   | 4C     | no fit, slam values: Gerber
+N AQ9.AJT9.J4.AKQJ          | 1NT P 3C P 3D P 3H P 3NT P | 4C | no 4-4 fit, slam values: Gerber
+N AKQ7.A6.T98.AQJ6          | 1NT P 3C P 3D P 3H P 4S P | 4NT | the 4-4 fit, slam values: keycard
+N KJ6.AK7.AK76.AT6          | 1NT P 3C P 3D P    | 7NT    | no four-card major, 37 between us

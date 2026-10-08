@@ -21,8 +21,16 @@ N 54.A3.KJ75.AQ864          | 2NT P              | 3S     | five-four in the min
 S AK5.KQ3.AJ54.K93          | 2NT P 3S P         | 4D     | four diamonds, not four clubs
 S AK5.KQ3.AJ5.K973          | 2NT P 3S P         | 4C     | four clubs
 S AK54.KQ3.AJ5.K93          | 2NT P 3S P         | 3NT    | no four-card minor
+N 54.A3.KJ75.QJ864          | 2NT P 3S P 4D P    | 4NT    | 11 and a nine-card fit: keycard for diamonds
+N 8.K4.AKT64.QT952          | 2NT P 3S P 4C P    | 4NT    | slam values in the fit: keycard for clubs
+N T.K6.K7543.AQ974          | 2NT P 3S P 4C P    | 4NT    | a club fit: keycard for clubs
+N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 4C     | no fit, 32 between us: Gerber first
+N .KJ3.Q9743.AKQ65          | 2NT P 3S P 3NT P   | 4C     | no fit, slam values: Gerber first
+
+# Without keycard or Gerber on the card: six directly.
+card    21GF-MSS slam.blackwood.rkcb_1430=false slam.gerber.play=false
+dealer  S
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 4D P    | 6D     | 11 and a nine-card fit: slam
-N 8.K4.AKT64.QT952          | 2NT P 3S P 4C P    | 6C     | slam in the fit
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 6NT    | no fit, 32 between us: 6NT
 
 # In a game force (2♣–2♦–2NT) there is no weak relay: 3NT.
