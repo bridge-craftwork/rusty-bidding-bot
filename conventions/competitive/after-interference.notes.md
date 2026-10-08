@@ -426,7 +426,9 @@ with six hearts and 7-9 HCP: hence the 2-7 range.
 **For Rick:** with `weak` and a new suit not forcing (the Precision
 cards), a 13+ responder with a long suit now has no jump; he bids the
 non-forcing new suit or doubles. Fine, or should the jump stay strong
-there?
+there? **Rick, 2026-10-08: deferred to the Precision project**, which
+needs research first. Options then: the non-forcing new suit or a
+double (today), or a cue bid of their suit as the forcing route.
 
 ## Sources
 
