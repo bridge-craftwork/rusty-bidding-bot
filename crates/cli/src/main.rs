@@ -8,6 +8,7 @@ use rbb_engine::RuleSet;
 
 mod bid_pbn;
 mod coverage;
+mod dd;
 
 #[derive(Parser)]
 #[command(name = "rbb", about = "rusty-bidding-bot command-line tools", version = version())]
@@ -253,6 +254,22 @@ enum Command {
         /// Directory of .bid modules; default: the rules built into rbb.
         #[arg(long)]
         rules: Option<PathBuf>,
+    },
+    /// Double-dummy tables and par for the deals of PBN files: one JSON
+    /// line per distinct (deal, vulnerability), with the tricks by declarer
+    /// (N E S W) and strain (C D H S NT), par for North-South, the par
+    /// contracts and the rank of the highest (1C = 1, 7NT = 35). A field
+    /// PBN's repeated boards are solved once; `[Deal "#"]` repeats the
+    /// previous game's deal.
+    ///
+    /// Example: rbb dd field.pbn > dd.jsonl
+    Dd {
+        /// PBN files.
+        #[arg(required = true)]
+        inputs: Vec<PathBuf>,
+        /// Double-dummy cache file (shared with compare).
+        #[arg(long, default_value = ".rbb-cache/dd.jsonl")]
+        dd_cache: PathBuf,
     },
     /// Choose a call for a hand and show why.
     Call {
@@ -761,6 +778,7 @@ fn run(cli: Cli) -> Result<()> {
             }
             Ok(())
         }
+        Command::Dd { inputs, dd_cache } => Ok(dd::run(&inputs, &dd_cache)?),
         Command::BidPbn {
             input,
             output,
