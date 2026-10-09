@@ -108,5 +108,97 @@ when they.bid, direct | passed_round, !asked | asked signoff, our_game_bid, they
       sets  ask=penalty
       priority -5
 
-when asked penalty
+# They ran from our redouble or from partner's penalty double
+# (2026-10-09): the redouble said we hold the balance (10+ opposite an
+# opening), a penalty double the same, and what they bid now is a
+# rescue, not forcing. The hand behind the rescuer doubles it with four
+# or more of their suit (penalty-doubles.notes.md, "Doubling errors
+# after the convention batches").
+# The redouble is mine, of their takeout double of partner's opening
+# (not a support, SOS or McCabe redouble: those show a holding), and
+# the doubler has run from it, directly in front of me. Opener's double
+# of the advance (1x X XX 1y/2y X) and mine of a forced one-level
+# advance passed round to me lost on the random sets: left out.
+define we_redoubled = me.last=XX, partner.opened, me.bids=0, partner.hcp.min>=10, direct
+define they_ran = we_redoubled | asked nt_penalty | asked penalty
+define ran_into(x) = x>=4
+
+when they.bid, direct | passed_round, they_ran
+  X   "Penalty: they ran into my spades"
+      shows ran_into(S)
+      when  natural_theirs(S)
+      sets  ask=penalty
+      priority 0
+  X   "Penalty: they ran into my hearts"
+      shows ran_into(H)
+      when  natural_theirs(H)
+      sets  ask=penalty
+      priority 0
+  X   "Penalty: they ran into my diamonds"
+      shows ran_into(D)
+      when  natural_theirs(D)
+      sets  ask=penalty
+      priority 0
+  X   "Penalty: they ran into my clubs"
+      shows ran_into(C)
+      when  natural_theirs(C)
+      sets  ask=penalty
+      priority 0
+
+# Partner preempted (a weak two or a three-level opening) and they
+# overcalled: partner's hand is described and has little defence, so my
+# double is for penalty (Berkowitz-Cohen, low-level doubles: penalty
+# "after 2♦, 2M openings"), on my own strength and their trumps
+# (2026-10-09, notes).
+define partner_preempted = partner.opened, partner.bids=1, partner.hcp.max<=11
+define vs_overcall_of_preempt(x) = (x>=2, hcp>=15) | (x>=4, hcp>=12) | (x>=3, hcp>=12, quality(x)>=good | top5(x)>=3) | (x>=5, hcp>=9)
+
+when they.bid, direct | passed_round, !asked, partner_preempted, me.bids=0
+  X   "Penalty: they overcalled partner's preempt in spades"
+      shows vs_overcall_of_preempt(S)
+      when  natural_theirs(S)
+      sets  ask=penalty
+      priority -6
+  X   "Penalty: they overcalled partner's preempt in hearts"
+      shows vs_overcall_of_preempt(H)
+      when  natural_theirs(H)
+      sets  ask=penalty
+      priority -6
+  X   "Penalty: they overcalled partner's preempt in diamonds"
+      shows vs_overcall_of_preempt(D)
+      when  natural_theirs(D)
+      sets  ask=penalty
+      priority -6
+  X   "Penalty: they overcalled partner's preempt in clubs"
+      shows vs_overcall_of_preempt(C)
+      when  natural_theirs(C)
+      sets  ask=penalty
+      priority -6
+
+# Their one-level overcall after we have both bid, passed round to me:
+# opener's pass denied a fit and extras, so the hand is a misfit for
+# them and ours on strength; the double is for penalty (2026-10-09,
+# notes).
+define one_level_pen(x) = (x>=3, we.hcp.min>=19) | (x>=2, we.hcp.min>=22)
+
+when they.bid, passed_round, !asked, they.level=1, me.has_bid, partner.has_bid
+  X   "Penalty: their one-level spades, we have both bid"
+      shows one_level_pen(S)
+      when  natural_theirs(S)
+      sets  ask=penalty
+      priority -6
+  X   "Penalty: their one-level hearts, we have both bid"
+      shows one_level_pen(H)
+      when  natural_theirs(H)
+      sets  ask=penalty
+      priority -6
+  X   "Penalty: their one-level diamonds, we have both bid"
+      shows one_level_pen(D)
+      when  natural_theirs(D)
+      sets  ask=penalty
+      priority -6
+
+# Partner sits when RHO passed; when they run, the double of the
+# runout above answers it (2026-10-09).
+when asked penalty, rho.last=P
   P   "Sitting for partner's penalty double"  priority -1
