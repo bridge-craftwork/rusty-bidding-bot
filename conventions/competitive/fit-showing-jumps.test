@@ -29,3 +29,17 @@ N AQJ76.K5.A42.Q87          | 1D 1S P 3C P    | 4S     | the club queen fits
 card    21GF-DEFAULT
 dealer  S
 S 87.Q4.KQJ84.K932          | P P 1C P        | 2C     | fit jumps off: the inverted raise
+
+# Continuations measured by the convention score (2026-10-09; notes).
+card    21GF-GIB
+dealer  N
+N QT864.QJ.AQJ84.8          | 1S X 3C P       | 4S     | 14 total points with five trumps: game as over Jordan 2NT
+N AQ985.AT8.Q973.K          | 1S X 3C P       | 4S     | 16 HCP: game, the club king or not
+N Q8654.KJ5.Q42.87          | 1S X 3C P       | 3S     | 11 HCP, no club fit: sign off
+dealer  S
+N J752.AQ63.AK2.KQ          | P P 1D P 2S P   | 4S     | four spades: the major side suit is the game
+N AK8.QT6.AJ42.A83          | P P 1D P 2S P   | 4S     | three spades and 18: four spades, not notrump
+N AK96.J972.Q6.A82          | P P 1C P 2D P   | 3C     | 14 balanced opposite a passed 10-12: no game
+N AKT8.KJ.42.AKJ76          | P P 1C P 2D P   | 3N     | 19: game in notrump without the diamond fit
+S Q.AJ543.QJ42.972          | P P 1D P 2H P 3D P | P   | the sign-off is passed, not read as a two-over-one
+S A4.94.AQ952.8542          | P P 1C P 2D P 3C P | P   | likewise over 3C

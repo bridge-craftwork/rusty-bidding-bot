@@ -130,13 +130,28 @@ after (1x) 1y (P) | (1x) 1y (X) | (1x) P (P) 1y (P)
 # length, makes the hands fit; a singleton or void there is wasted
 # opposite partner's length. Game with a fitting maximum, else the
 # cheapest bid in the trump suit, which partner passes.
+#
+# In a major the jump is at least a limit raise with four trumps, so
+# opener accepts it as he accepts Jordan's 2NT (14+ total points), and
+# with 12+ when the side suit fits (2026-10-09: with HCP alone opener
+# signed off on 5-5 hands opposite the over-double jump, where the off
+# auction 1M (X) 2NT reached a making game; notes).
+# In a minor a passed hand's 10-12 needs more: four of the side suit
+# when it is a major and three cards there make the major the game;
+# 3NT needs 16+ with the side suit covered (a balanced 1m opener is
+# 12-14 or 18-19, so in practice the strong notrump hand), or 18+ with
+# any shape (2026-10-09: 14 balanced bid 3NT opposite 8-11 HCP).
 after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z (P) | 1x (1y) 3z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | (1y) 1x (P) 2z (P) | (1y) 1x (P) 3z (P) | (1y) 1x (X) 2z (P) | (1y) 1x (X) 3z (P) | (1y) P (P) 1x (P) 2z (P) | (1y) P (P) 1x (P) 3z (P) when asked fit_jump(t), z is not t
-  4{t} "Game: the side suit {z} fits"
-      shows hcp>=14 | (hcp>=12, z>=3 | quality(z)>=fair), z>=2
+  4{t} "Game: 14+ total points, or 12+ with the side suit {z} fitting"
+      shows tp(t)>=14 | (hcp>=12, z>=3 | quality(z)>=fair, z>=2)
       when  t is H | t is S
       priority 2
-  3N  "Game in notrump: 14+, {z} fits, balanced"
-      shows hcp>=14, z>=2, balanced
+  4{z} "Game in {z}: three or more, 14+ total points"
+      shows z>=3, tp(z)>=14
+      when  t is C | t is D, z is H | z is S
+      priority 3
+  3N  "Game in notrump: 16+ with {z} covered, or 18+"
+      shows (hcp>=16, z>=2, balanced) | hcp>=18
       when  t is C | t is D
       priority 2
   5{t} "Game in {t}: 16+, the side suit {z} fits"
@@ -149,8 +164,11 @@ after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z
 # ── The jumper after partner's sign-off ──────────────────────────────
 # The jump described the hand; partner has judged. Pass, unless an
 # unlimited jump (over their double, or advancer's) holds 13+ for game
-# in a major.
+# in a major. The pass outranks the base rules' rebids after a two-over-
+# one (2026-10-09: 1D-2H-3D read as a two-over-one, and the passed hand
+# bid 3NT over the sign-off).
 after 1x (P) 2z (P) 3x (P) | 1x (P) 3z (P) 3x (P) | 1x (P) 3z (P) 4x (P) | 1x (X) 2z (P) 3x (P) | 1x (X) 3z (P) 3x (P) | 1x (X) 3z (P) 4x (P) | 1x (1y) 2z (P) 3x (P) | 1x (1y) 3z (P) 3x (P) | 1x (1y) 3z (P) 4x (P) | 1x (2y) 3z (P) 3x (P) | 1x (2y) 3z (P) 4x (P) | (1y) 1x (P) 2z (P) 3x (P) | (1y) 1x (P) 3z (P) 3x (P) | (1y) 1x (P) 3z (P) 4x (P) when answered fit_jump(x), z is not x
   4{x} "13+: game after all"                 shows hcp+length_points>=13
       when  x is H | x is S, !passed_hand
-  P   "Partner has signed off"               priority -5
+      priority 4
+  P   "Partner has signed off"               priority 3
