@@ -324,3 +324,19 @@ S AKJ54.Q3.K543.32      | 1S P 1NT P          | 2D     | 5-4 minimum: natural 2D
 S AKJ54.Q32.KQ4.32      | 1S P 1NT P          | 2D     | 15 balanced: does not pass, three-card diamonds
 card    21GF-DEFAULT
 S AKJ54.Q32.K54.32      | 1S P 1NT P          | 2D     | forcing 1NT: no pass
+
+# The call partner reads must fit the hand that bids it (2026-10-09,
+# Brill report "own-misdescribed"; rebids.notes.md, "Read as the hand
+# holds"). Over a forcing 1NT a minor rebid is three or more, four-card
+# or three-card alike.
+card    21GF-DEFAULT
+dealer  S
+S AKJ54.K3.Q32.J32      | 1S P 1NT P          | 2C     | forcing 1NT, three clubs: read as three or more
+S AKJ54.K3.Q2.J532      | 1S P 1NT P          | 2C     | four clubs: the same 2C
+# A forcing free bid: five diamonds and nothing better, read as five or more.
+S 432.KQ3.AQJ54.32      | 1D 1S 2C P          | 2D     | no stopper, no fit, no second suit: rebid five diamonds
+card    Basic-Bridge
+dealer  S
+S A2.32.KJ32.AQJ32      | 1C P 1S P           | 2C     | 5-4 with 15, too weak to reverse: 2C, read as five or more
+# The reverse opposite responder's forced 2NT (6-10, no fit): still game.
+S J.AQ95.AK973.AQ3      | 1D P 1S P 2H P 2NT P | 3NT  | 20 opposite the forced minimum: game

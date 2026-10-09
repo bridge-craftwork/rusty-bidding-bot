@@ -159,8 +159,14 @@ after 1x (P) 1y (P) 2z (P) when z is not x, z is not y, !tw(x)
   2y  "Weak: 6+ {y}"                       shows y>=6, points<=10   sets ask=signoff
   3z  "Invitational raise: 4+ {z}"         shows z>=4, points=11..12   sets ask=invite(z)
   3x  "Invitational: 3+ {x}"               shows x>=3, points=11..12   sets ask=invite(x)
+  # After a reverse (17+, forcing) 2NT is the forced minimum, not an
+  # invitation, and 11-12 opposite 17+ is game (2026-10-09: the forced
+  # 2NT read as 11-12).
   2N  "Invitational: 11-12"                shows points=11..12, z<=3   sets ask=nt_invite
+      when  !(we.forcing = round)
   3N  "Game: 13+"                          shows points>=13, z<=3 | z is C | z is D
+  3N  "Game opposite the reverse: 11+"     shows points>=11, z<=3 | z is C | z is D
+      when  we.forcing = round
   2N  "Forced to bid: minimum, no fit"     shows points<=10
       when  we.forcing = round             # after a reverse
       priority -4
@@ -218,7 +224,7 @@ after 1S (P) 1N (P) 2m (P)
       sets  ask=signoff
 # After the 6-12 1NT of the 2/1 cards (2026-09-30, 2/1 game force): the
 # 11-12 hands invite, and three-card support is a limit raise.
-after 1M (P) 1N (P) 2z (P) when z is not M, shown.hcp.max >= 11
+after 1M (P) 1N (P) 2z (P) when z is not M, shown.hcp.max >= 11, !(we.forcing = round)   # a reverse: below
   2N  "Invitational: 11-12, no fit"        shows hcp=11..12, M<=2, z<=3   sets ask=nt_invite
   3M  "Limit raise: three-card support, 10-12"   shows M=3, tp(M)=10..12   sets ask=invite(M)
       priority 1
@@ -241,6 +247,7 @@ after 1x (P) 1N (P) 2x (P)
   3x  "Raise: 2+ {x}, 8-10: invites game"
       shows x>=2, hcp>=8   sets ask=invite(x)
       when  x is H | x is S                # over a minor, 3m rarely reaches game
+      when  shown.hcp.max <= 10            # a 6-12 1NT (2/1) invites with 11-12 above
       priority -1
 after 1x (P) 1N (P) 3x (P)
   P   "No game"                            shows points<=8

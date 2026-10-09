@@ -430,6 +430,28 @@ there? **Rick, 2026-10-08: deferred to the Precision project**, which
 needs research first. Options then: the non-forcing new suit or a
 double (today), or a cue bid of their suit as the forcing route.
 
+## Opener's five-card rebid after the negative double (2026-10-09)
+
+`1S (2H) X (P) 2S` on QJT63.QJ.972.AK9 (no stopper, no second suit) was
+bid by "Five cards in {x}" and read as "Six cards, minimum" (Brill
+report, own-misdescribed). Standard practice: with no four-card major,
+no stopper and no second suit opener rebids a five-card suit. The
+minimum rebid now reads "five or more (usually six)" (`shows x>=5`,
+`when x>=6`: six-card hands still bid it first), and the five-card
+fallback is a minimum too (it went to 18; 16-18 now falls to "nothing
+better"). Case in after-interference.test. Measured with the rest of
+the read-as work: rebids.notes.md, "Read as the hand holds".
+
+The cue-bid raise's sign-off (`1D (1H) 2H (P) 3D` on four diamonds) read
+as rebids.bid's "Rebids diamonds: six or more": that block now takes
+only natural free bids (`partner.named(z)`), so the sign-off reads as
+it is meant.
+
+Still open here (rebids.notes.md, work queue): the three-card major for
+partner's double read as four (6 misdescribed at --limit 50), the
+"nothing better" 1S/2S read as four spades (9), 5m after the cue-bid
+raise read as 16+ (8).
+
 ## Sources
 
 - **Jump shifts in competition** (2026-10-05): the ACBL convention card's
@@ -458,3 +480,5 @@ double (today), or a cue bid of their suit as the forcing route.
 - **The Law of Total Tricks** for the minor raises (2026-10-02): Larry
   Cohen, *To Bid or Not to Bid* (1992); BBA's bare-SAYC raises on the
   vanilla random set, and the measurements in that section.
+- **Opener's five-card rebid after a negative double** (2026-10-09):
+  standard practice, not yet cited to a book.

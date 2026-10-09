@@ -387,7 +387,7 @@ after (1x) 2N (P) 3x (P)
 # rules for it (gap, in the notes).
 after 1H (2H) when rho.S>=5
   2S  "Cue bid: limit raise or better in hearts"
-      alert
+      alert  artificial
       shows H>=3, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(H)
       priority 1
@@ -406,7 +406,7 @@ after 1H (2H) when rho.S>=5
   P   "Nothing to say over their Michaels"  priority -10
 after 1S (2S) when rho.H>=5
   3H  "Cue bid: limit raise or better in spades"
-      alert
+      alert  artificial
       shows S>=3, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(S)
       priority 1
@@ -425,7 +425,7 @@ after 1S (2S) when rho.H>=5
   P   "Nothing to say over their Michaels"  priority -10
 after 1m (2m) when rho.H>=5, rho.S>=5
   2H  "Cue bid: limit raise or better in {m}"
-      alert
+      alert  artificial
       shows m>=4, hcp+length_points>=11
       sets  forcing=round, ask=limit_raise(m)
       priority 1
@@ -454,7 +454,7 @@ after 1M (2N) when rho.C>=5, rho.D>=5
   P   "Nothing to say over their 2NT"  priority -10
 after 1M (2N) when rho.C>=5, rho.D>=5, !uvu
   3C  "Cue bid: limit raise or better in {M}"
-      alert
+      alert  artificial
       shows M>=3, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(M)
       priority 1
@@ -468,7 +468,7 @@ after 1M (2N) when rho.C>=5, rho.D>=5, !uvu
       when  M is H
 after 1M (2N) when rho.C>=5, rho.D>=5, uvu
   3D  "Unusual vs Unusual: limit raise or better in {M}"
-      alert
+      alert  artificial
       shows M>=3, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(M)
       priority 1
@@ -483,7 +483,7 @@ after 1M (2N) when rho.C>=5, rho.D>=5, uvu
 # Over 1m (2NT): they have hearts and the other minor.
 after 1C (2N) when rho.D>=5, rho.H>=5
   3D  "Cue bid: limit raise or better in clubs"
-      alert
+      alert  artificial
       shows C>=5, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(C)
       priority 1
@@ -496,7 +496,7 @@ after 1C (2N) when rho.D>=5, rho.H>=5
   P   "Nothing to say over their 2NT"  priority -10
 after 1D (2N) when rho.C>=5, rho.H>=5
   3C  "Cue bid: limit raise or better in diamonds"
-      alert
+      alert  artificial
       shows D>=4, hcp+length_points>=10
       sets  forcing=round, ask=limit_raise(D)
       priority 1
