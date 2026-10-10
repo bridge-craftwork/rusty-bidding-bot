@@ -25,8 +25,10 @@ answer was higher, or four of a major.
 
 ## Gaps
 
-- A new suit by responder (natural and forcing), and slam tries.
-- Continuations after the 3NT Ogust answer beyond signing off.
+- A new suit by responder at the four level after the answer (over
+  3♠ or 3NT), and over a minor answer the other minor; slam with a
+  singleton facing any answer but AKQ (2026-10-09, "Slam after the
+  answer").
 
 ## BBA treatment (2026-09-24)
 
@@ -360,12 +362,93 @@ on the changed boards where our auction did not change BBA gains +190.
 BBA counts AJT as a good suit (3♠/3♦, 17 boards) and KJT/QJT as poor;
 the source counts only A, K, Q, so AJT stays poor here.
 
+## Slam after the answer (2026-10-09, Rick: "start on the 4NTs")
+
+The Ogust convention score's worst boards (45, 102, 114) stopped in
+3NT after the answer with 22-25 HCP opposite. After the 2NT ask our
+responder never went past game: the only slam rule asked with 33 HCP on
+opener's floor and two trumps (25 opposite a maximum, 28 opposite a
+minimum), and on the Ogust corpus no 2NT auction reached slam at all.
+The big responder hands are short in opener's suit (the scenario's
+weak twos are mostly 2♦), so most of the missed slams (46 boards where
+twelve tricks made) need either the solid suit or responder's own suit.
+
+**Decisions**
+- **4NT is keycard in opener's suit.** The 2NT ask is artificial, so
+  our side has bid no notrump, and opener's six-card suit is shown
+  (`shown_fit`); Rick's rule (2026-10-03, rkcb-1430.notes.md "The
+  keycard suit") makes 4NT keycard for it. So 4NT here is never
+  quantitative; there is no quantitative 4NT after the ask. No source
+  found that says otherwise (bridgebum's Ogust page only says "rebids
+  by the Ogust bidder are natural"; Neil Timm's Ogust handout covers
+  game only).
+- **With two or more trumps** the ask needs slam-entry's count
+  (`fit_slam_values`: 31 on opener's floor for the support hand, or 32
+  on his maximum with four losers or fewer, his range seven wide or
+  less) and no two bare side suits, or the old 33 HCP on his floor.
+- **A singleton opposite the AKQ answer** (3NT, Ogust or the standard
+  feature answer; not bba's 3NT, which is a maximum without a feature):
+  the ask with 21 HCP, the 9 of AKQ making the 30 a minor slam needs.
+  Corpus, 3NT answer and a singleton: twelve tricks in the suit on 7 of
+  8 boards at 21+, 3 of 7 at 19-20. Not with a five-card major of my
+  own: on 45 and 271 the minor slam made eleven where the major or
+  notrump made twelve.
+- **No ask with a singleton facing any other answer**: at 19-23 HCP
+  opposite 3♥/3♠ twelve tricks made on about half the boards.
+- **Responder's own major**: natural and forcing at the three level
+  over a lower answer (3♥ over 3♣/3♦, 3♠ over 3♣/3♦/3♥), with five or
+  more, a singleton or void in opener's suit, and 27 HCP on opener's
+  floor (22 facing a minimum, 19 facing a maximum). Opener raises to
+  four with three (which agrees the suit; the keycard ask follows from
+  rkcb-1430.bid), else bids 3NT; responder then bids 6NT on 33 HCP,
+  four of his suit with six, else passes.
+- **No-fit quantitative slam by HCP**: not written. On 102 (25 HCP
+  opposite a maximum, a singleton queen) 6NT makes ten tricks: a weak
+  two's values are in a suit responder cannot reach. Only the 6NT
+  after opener's 3NT denial above.
+
+**Measured** (`conv_ab.py --only ogust --reuse-bba`, contract errors
+for NS):
+
+| | Rusty's gain | BBA's gain | net / changed board | halves |
+|---|---|---|---|---|
+| before | -22 | +229 | -0.67 (373) | agree (-157/-94) |
+| after | -50 | +229 | -0.75 (373) | agree (-157/-122) |
+
+The convention score falls because the continuations serve both of our
+runs: our Ogust run gains 83 IMPs of contract errors (13 boards changed:
+13, 76, 109, 114, 121, 212, 278, 302 to slam), our feature run 111 (19
+boards; with the feature answers 3♠ stays free for responder's spades
+over a 3♥ feature, 415 reaching 6♠). The Ogust background (our side
+against par) improves by those amounts; what the score measures, Ogust
+against the feature ask, does not.
+
+**Random deals** (BBA-bid Pavlicek 100,000, 21GF both sides, so the
+feature ask; `.rbb-cache/random/`, base rules from main against these):
+25 boards changed, contract errors on them 287 -> 139 (NS 108 -> 23, EW
+179 -> 116), +148 IMPs, halves +93/+55. 21 better (missed slams bid,
+mostly after a keycard ask in a major), 1 level, 3 worse: 93382 (6♠
+down, -14: 15 HCP and a doubleton facing 3♥, two quick club losers),
+41375 (-3), 31728 (0).
+
+**Tripwire** (`compare --limit 50`, all scenarios): 6 of 17,105 boards
+changed, all in the weak-two scenarios and Preempt_Keycard (Weak_2_Bids
+32 and Preempt_Keycard 49 to 6♥, Lax_Leveled 39 to 6♦, Ogust 10 and 13).
+
 ## Sources
 
 - **The conventions:** the 2NT feature ask, standard practice, not yet
   cited. Ogust: bridgebum.com/ogust.php (3♣ 5-7 one top honour, 3♦ 5-7
-  two, 3♥ 8-10 one, 3♠ 8-10 two, 3NT 8-10 all three); the PBS Ogust
-  scenario's chat cites the same page.
+  two, 3♥ 8-10 one, 3♠ 8-10 two, 3NT 8-10 all three; "rebids by the
+  Ogust bidder are natural"); the PBS Ogust scenario's chat cites the
+  same page. Neil H. Timm, "OGUST and Modified OGUST"
+  (bridge-tips.co.il, 2022): the answers, game decisions only.
+- **Slam after the answer** (2026-10-09): 4NT keycard in opener's suit
+  from Rick's keycard-suit rule (2026-10-03) and the fit-vs-agreement
+  rule (opener's six-card suit is public); thresholds from slam-entry
+  (`fit_slam_values`) and the Ogust corpus (21 opposite AKQ); the
+  natural new major below 3NT and opener's raise, standard practice,
+  not yet cited.
 - **Rick's rulings:** both treatments of the 2NT ask, chosen by the card
   (2026-09-22); the standard feature answer as the default (2026-09-24);
   BBA's responses become the default after a par test, the old ones kept

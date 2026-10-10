@@ -114,3 +114,26 @@ N AJ94.AT6.K95.A62      | 2H P 2NT P 3H P      | P      | 16 opposite a minimum:
 card    Basic-Bridge two_level.weak_two_2nt_response=ogust
 N K94.A85.KQ64.Q93      | 2S P 2NT P 3H P      | 4S     | Ogust maximum (8-10) and 14: game
 N K94.A85.KQ64.Q93      | 2S P 2NT P 3C P      | 3S     | Ogust minimum and 14: sign off
+
+# ── Slam after the answer (2026-10-09, Ogust convention score; notes
+# "Slam after the answer"). 4NT is keycard in opener's suit.
+card    21GF-Ogust
+dealer  S
+vul     None
+N AJ9.AK74.5.AKQ82      | 2D P 2NT P 3NT P     | 4NT    | AKQ opposite, a singleton and 21: keycard in diamonds (Ogust 109)
+N KQJT3.AK8.6.AKQJ      | 2D P 2NT P 3NT P     | P      | AKQ opposite, but a five-card major of my own: no minor-suit ask (Ogust 271)
+N AQ82.AQ2.7.AKT87      | 2D P 2NT P 3NT P     | P      | 19 with a singleton: 3NT
+N AKJT5.AJ53.AK6.Q      | 2D P 2NT P 3C P      | 4NT    | three diamonds, 22 opposite a minimum: keycard (Ogust 121)
+N AK862.AQ3.AK9.Q2      | 2D P 2NT P 3H P      | 4NT    | three diamonds, 22 opposite a maximum: keycard (Ogust 278)
+N AJ94.AT6.K95.A62      | 2H P 2NT P 3S P      | 4H     | 16 opposite a maximum: game, no slam
+S T.T85.AKQ632.763      | 2D P 2NT P 3NT P 4NT P | 5S   | keycard answer: two and the queen
+N AJ9.AK74.5.AKQ82      | 2D P 2NT P 3NT P 4NT P 5S P | 5NT/6D | two keycards and the queen opposite: slam (king ask first with it)
+# Responder's own major: natural, forcing, slam interest
+N AQ.AQT53.A.AKQ72      | 2D P 2NT P 3D P      | 3H     | five hearts, 25 opposite a minimum: natural (Ogust 114)
+N AQJ85.AK9.K.AQT3      | 2D P 2NT P 3D P      | 3S     | five spades, 23 opposite a minimum (Ogust 456)
+N AQJ85.AK9.K.AQT3      | 2D P 2NT P 3H P      | 3S     | five spades opposite a maximum
+S 984.962.KQJ732.3      | 2D P 2NT P 3D P 3H P | 4H     | three hearts: raise, agreeing them
+S 984.96.KQJ732.T3      | 2D P 2NT P 3D P 3H P | 3NT    | two hearts: 3NT
+N AQ.AQT53.A.AKQ72      | 2D P 2NT P 3D P 3H P 4H P | 4NT | hearts agreed: keycard
+N AQJ85.AK9.K.AQT3      | 2D P 2NT P 3D P 3S P 3NT P | P | no spade fit, 28 between us: 3NT
+N AQJ853.AK9.K.AQT      | 2D P 2NT P 3D P 3S P 3NT P | 4S | six spades: game in them
