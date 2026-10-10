@@ -1297,6 +1297,11 @@ fn card_or_stock(vocab: &Vocabulary, spec: &str) -> Result<Card> {
     if path.exists() {
         return load_card(vocab, path);
     }
+    // A stock card that also comes as card JSON plays the JSON: it carries
+    // settings its .bbsa cannot (Natural without transfers).
+    if let Some(text) = rbb_assets::card_json(spec) {
+        return Ok(Card::from_json(vocab, text)?.0);
+    }
     match rbb_assets::card(spec) {
         Some(text) => Ok(bbsa::import(vocab, text, Some(spec))?.0),
         None => Err(format!(

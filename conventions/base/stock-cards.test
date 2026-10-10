@@ -13,10 +13,11 @@ W 8.KJ985.AQJ63.75      | 1S               | 2S     | Michaels: hearts and a min
 N AJ94.KQ82.K93.76      | 1H X             | 2NT    | Jordan: "2NT = limit raise (at least 10 points) or better"
 S AK3.QJ2.KJ5.QT87      | 1NT P 4C P       | 4H     | Gerber over 1NT: 4♥ = one ace
 
-# ── Natural: the .bbsa card. BBA plays Stayman and Jacoby transfers on
-# every card (bbsa-map [implied]), so the stock Natural still transfers.
+# ── Natural: the stock card plays its card JSON (cards/json/Natural.json),
+# which turns the transfers off. Its .bbsa cannot: BBA plays Stayman and
+# Jacoby transfers on every card (bbsa-map [implied]).
 card    Natural
-N 85.KJ9862.743.92      | 1NT P            | 2D     | Jacoby is implied by every .bbsa card
+N 85.KJ9862.743.92      | 1NT P            | 2H     | natural: five or more hearts, to play
 N KQ4.AJ83.K92.T76      | 1H P             | 2C     | no Jacoby 2NT: a new suit first, support later
 W 2.KJ985.AQJ63.75      | 1C               | 1H     | no Unusual 2NT: overcall the higher five-card suit
 N AJ94.KQ82.K93.76      | 1H X             | XX     | no Jordan 2NT: redouble with 10+

@@ -76,8 +76,11 @@ JSON also turns the Jacoby transfers off (1NT–2♥ to play), and the rules
 then fall back on natural responses to 1NT.
 
 Its `.bbsa` cannot: **BBA plays Stayman and Jacoby transfers on every card**
-(`bbsa-map.toml` `[implied]`), so the stock `Natural` transfers over 1NT and
-2NT. The rest matches the JSON. Coverage 94% (`.bbsa`), 54% (JSON).
+(`bbsa-map.toml` `[implied]`), so `Natural.bbsa` transfers over 1NT and 2NT
+(that is what BBA plays with it). Our engine plays the JSON whenever a stock
+card has one (`rbb_assets::card_json`, the `.test` runner, `rbb` and the
+WASM build, 2026-10-10), so the stock `Natural` is transfer-free everywhere
+but in BBA. Coverage 94% (`.bbsa`), 54% (JSON).
 
 ## Natural-4CM
 
