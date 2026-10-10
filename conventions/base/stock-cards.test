@@ -1,0 +1,29 @@
+# The stock cards SAYC and Natural (cards/README.md): the calls that tell
+# them apart. Both sides play each section's card.
+dealer  S
+
+# ── SAYC (ACBL Standard American Yellow Card booklet).
+card    SAYC
+# seat hand             | auction          | expect | why
+N 85.KJ9862.743.92      | 1NT P            | 2D     | Jacoby transfer: "2♦ is a transfer to hearts"
+N 85.KJ986.743.Q92      | 1NT X            | 2D     | "If the opponents double, all conventional responses are on"
+N KQ4.AJ83.K92.T76      | 1H P             | 2NT    | Jacoby 2NT: game-forcing raise, 13+ dummy points
+W 2.KJ985.AQJ63.75      | 1C               | 2NT    | Unusual 2NT: the lower two unbid suits
+W 8.KJ985.AQJ63.75      | 1S               | 2S     | Michaels: hearts and a minor
+N AJ94.KQ82.K93.76      | 1H X             | 2NT    | Jordan: "2NT = limit raise (at least 10 points) or better"
+S AK3.QJ2.KJ5.QT87      | 1NT P 4C P       | 4H     | Gerber over 1NT: 4♥ = one ace
+
+# ── Natural: the .bbsa card. BBA plays Stayman and Jacoby transfers on
+# every card (bbsa-map [implied]), so the stock Natural still transfers.
+card    Natural
+N 85.KJ9862.743.92      | 1NT P            | 2D     | Jacoby is implied by every .bbsa card
+N KQ4.AJ83.K92.T76      | 1H P             | 2C     | no Jacoby 2NT: a new suit first, support later
+W 2.KJ985.AQJ63.75      | 1C               | 1H     | no Unusual 2NT: overcall the higher five-card suit
+N AJ94.KQ82.K93.76      | 1H X             | XX     | no Jordan 2NT: redouble with 10+
+S 2.AQJ85.KQ3.KQ75      | 1H P 4H P        | 4NT    | plain Blackwood
+
+# ── Natural as card JSON (cards/json/Natural.json), which can turn the
+# transfers off: 1NT–2♥ is to play.
+card    ../../cards/json/Natural.json
+N 85.KJ9862.743.92      | 1NT P            | 2H     | natural: five or more hearts, to play
+N KQ4.AJ83.K92.T76      | 1H P             | 2C     | no Jacoby 2NT
