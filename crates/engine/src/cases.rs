@@ -299,9 +299,15 @@ fn load_card_file(
     test_dir: &Path,
     cards_dir: &Path,
 ) -> Result<Card, String> {
+    // A stock card that also comes as card JSON (`cards/json/`, beside
+    // `cards/bbsa/`) plays the JSON, as rbb_assets::card_json does.
+    let json_dir = cards_dir.parent().map(|p| p.join("json"));
     let candidates = [
         test_dir.join(spec),
         PathBuf::from(spec),
+        json_dir
+            .map(|d| d.join(format!("{spec}.json")))
+            .unwrap_or_default(),
         cards_dir.join(format!("{spec}.bbsa")),
     ];
     let path = candidates.iter().find(|p| p.is_file()).ok_or_else(|| {

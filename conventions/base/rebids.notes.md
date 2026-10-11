@@ -779,6 +779,123 @@ Gavin_Semi-Forcing_NT_with_Fit and Forcing_NT: 29 boards changed; actor
 contract +9, other side doubling +22, double-dummy -12, halves -14/+23
 (z +0.3): neutral.
 
+## Read as the hand holds (2026-10-09)
+
+The Brill report's "own-misdescribed" flag (probes/tools/brill_report.py
+on probes/fixtures/brill/field.pbn, card 21GF-GIB) found two of our calls
+describing hands they do not hold: `1S (2H) X (P) 2S` on five spades,
+read as "six cards, minimum", and `1D (1H) 2H (P) 3D` on four diamonds,
+read as "rebids diamonds: six or more". Both are the kind compare counts
+as "calls read as a higher rule than chose them" (docs/JUDGMENT-LAYER.md
+§4): a fallback rule bids the call, partner reads the natural rule above
+it. Every such call fails the higher rule's `when` or its `shows`; only
+the second misleads partner, so the measure here is the `shows` failures
+(a script asks `rbb call` why each hand did not take the read-as rule).
+
+Fixed, with the selection unchanged where it could be:
+
+- **Opener's suit rebid read as five or more.** Where a five-card rebid
+  with nothing better to say exists below the six-card one (the answer
+  to a negative double, after-interference.bid; partner's free bid at
+  the one or two level, here; 1m-1y-2m, here), the six-card rule now
+  `shows x>=5` with `when x>=6`: six-card hands still bid it there, and
+  partner reads "five or more (usually six)". Standard practice: after
+  a negative double opener with no four-card major, no stopper and no
+  second suit rebids a five-card suit; 1m-1M-2m may be five when 5-4 is
+  too weak to reverse. The majors uncontested stay 6+ (no five-card
+  major rebid reaches that call).
+- **A cue bid is not a free bid.** The free-bid block (`1x (*) 2z (*)`)
+  also caught partner's cue-bid raise of their suit, so opener's sign-off
+  in his suit there read as "six or more". It now needs
+  `partner.named(z)`: artificial calls are answered where they are
+  defined (after-interference.bid, two-suited-overcalls.bid, whose seven
+  cue-bid raises are now marked `artificial` as they are).
+- **Minors over a forcing 1NT** (2/1): the four-card 2C/2D was read "4+"
+  and the three-card one (standard 2/1: opener's forced minor may be
+  three) bid the same call. Over a forcing or semi-forcing 1NT both now
+  read "three or more"; the natural 4+ rules stand aside there.
+- **Responder's 2NT after a reverse** (responder-rebids.bid) is the
+  forced minimum (6-10, no fit); it was read as 11-12 and opener
+  accepted. 11+ with no fit now bids 3NT, and opener bids 3NT opposite
+  the forced 2NT with 16+ HCP (new block "After a reverse and responder's
+  forced 2NT"): the reverse is 17+ suit points, so 23+ between us.
+  Without that rule opener passed 2NT with 17-21 (27 boards, -96 IMPs by
+  errors at --limit 50).
+- **Responder's preference after a reverse over a 6-12 1NT** read as the
+  three-card limit raise (the 2/1 block now stands aside after a reverse),
+  and **8-10 with a doubleton raising 1M-1NT-2M to three** read as 11-12
+  on 2/1 cards: the raise is now SAYC-only (a 6-10 1NT); on 2/1 cards
+  responder invites with 11-12 (+17 IMPs on 5 boards).
+
+### Numbers (compare --limit 50, all scenarios)
+
+- Read-as calls: 2,194 -> 2,052; of them, hands failing the read-as
+  rule's `shows` (misdescribed): 1,465 -> 1,173. Full corpus read-as:
+  22,523 -> 20,907.
+- Tripwire: 96 of 17,105 boards changed in 54 scenarios, all at the calls
+  above or the calls partner makes on their new reading.
+- Errors on the changed boards (errors_diff.py): -41 (contract -52,
+  doubling +11), distance from par -81. Where it comes from: responder no
+  longer corrects 3NT to 4M or raises opener's rebid suit with a
+  doubleton, since the rebid now reads five or more (-22 on 6 boards,
+  -6 on 4); responder no longer competes to 4m over a sign-off after his
+  cue-bid raise that used to read as six (-22 on 4 boards, most of it a
+  later penalty double by opener that went wrong); opener after a
+  reverse and the three-level preference (-14 on 2 boards: 3NT by the
+  misreading, now passed). Full corpus against BBA: errors -97,969 ->
+  -98,106 (contract -77,114 -> -77,438, doubling -20,855 -> -20,668),
+  par distance -71,558 -> -72,026. Honest meanings cost those boards; the
+  calls that won them were bid on a misreading. Decision taken: keep
+  the meanings honest (question for Rick below).
+- Tried and dropped: excluding the "18-21 with six or more of the minor"
+  3NT and the 2/1 block's 3NT 18-19 after a strong jump shift (130
+  misdescribed calls: base.bid's bare 3NT read as them). Responder then
+  passed the bare 3NT where he had bid 6NT (-33 IMPs on 89 boards): the
+  rebids after a strong jump shift need writing first (work queue).
+
+### Work queue: calls still read as a rule they do not fit
+
+Counts are misdescribed calls at --limit 50 (v. 1,173 in all).
+
+1. **Opener's bare 3NT after a strong jump shift** (base.bid's catch-all,
+   read as rebids.bid's "18-21 with six or more {m}" or the 2/1 block's
+   "18-19 balanced"): 130. Opener has no rebids at the three level after
+   1x-2y (jump): write them (a suit rebid, a raise, 2NT/3NT by range),
+   then let the 3NT rules stand aside there.
+2. **Weak-notrump and Precision cards** (Mathe, SCS16_*): "15-17
+   balanced, no other rebid" 2NT read as 18-19 (42), and the 1NT rebid
+   ranges assume a 15-17 1NT opening. Rebid ranges from the card's 1NT
+   range.
+3. **1NT "minimum, no better rebid"** (a singleton in partner's suit)
+   read as "12-14 balanced" (40 + 13 + 5 + 5): widen the 1NT reading to
+   the 5-4-3-1/4-4-4-1 minimum with a singleton in partner's suit, or
+   give those hands another rebid. Standard 2/1 practice allows the 1NT
+   rebid with a singleton in partner's major; question for Rick.
+4. **Pass of 1x-1NT "minimum, nothing more"** read as "balanced, no game
+   opposite 6-10" (35): the unbalanced minimum passes too; the two
+   passes need one reading.
+5. **2m too weak to reverse with 16-18** (27 + 10 read-as, 12
+   misdescribed on points) and the 2/1 rebid 2M "five or more, too weak
+   to reverse" up to 18 (6): read as a minimum. Needs a decision on the
+   5-4-2-2 15-18 minor hand (2NT? 2m?).
+6. **The free-bid rebid at the four level** (`cheapest(x)` reaching 4M
+   over a three-level free bid, read as "Game: 19+"): 5.
+7. Outside base/ (flagged, not touched): competitive/total-tricks.bid's
+   LoTT raises read as natural rebids (30+), after-interference.bid's
+   three-card major for the negative double read as four (6) and its
+   "nothing better" 1S/2S read as four spades (9), opener's 5m read as
+   16+ after the cue-bid raise (8), and responder's pass after the
+   negative double with 11+ unbalanced read as 10 or less
+   (responder-rebids.bid:466, 13).
+
+### Questions for Rick
+
+- Honest "five or more" readings cost about 30 IMPs at --limit 50
+  (responder with a doubleton no longer counts on six). Kept; the
+  alternative is a "usually six" reading the engine cannot express.
+- 1NT rebid with a singleton in partner's suit (queue item 3): allow it
+  in the reading, or rebid something else?
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -804,3 +921,8 @@ contract +9, other side doubling +22, double-dummy -12, halves -14/+23
   Bridge #375 (https://www.advinbridge.com/this-week-in-bridge/375),
   cited by convention-card `semi_forcing_1nt.toml`: opener passes a
   balanced minimum, otherwise as over the forcing 1NT.
+- **Read as the hand holds (2026-10-09):** opener's five-card rebid after
+  a negative double and the three-card minor over a forcing 1NT are
+  standard 2/1 practice, not yet cited to a book; the Brill report's
+  own-misdescribed flag (probes/tools/brill_report.py) and compare's
+  read-as counts for the evidence.

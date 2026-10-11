@@ -686,6 +686,27 @@ Over 2♣–2♦–2NT responder no longer reaches the notrump catch-all: the
 floor) where the catch-all invited with 4NT (32-33 / 34 HCP). The
 catch-all still serves 1x–1y–2NT and the other natural notrumps.
 
+## Read as the hand holds (2026-10-09)
+
+Calls of responder's that partner read as a rule they do not fit
+(rebids.notes.md, "Read as the hand holds", for the method and figures):
+
+- After a reverse, the forced 2NT (6-10, no fit) was read as the 11-12
+  invitation. The invitation stands aside after a reverse; 11+ with no
+  fit bids 3NT (17+ opposite), and opener bids 3NT opposite the forced
+  2NT with 16+ (rebids.bid).
+- After a reverse over a 6-12 1NT (2/1), the preference to three of
+  opener's major read as the three-card limit raise: the 2/1 block now
+  stands aside after a reverse.
+- 1M-1NT-2M-3M with 8-10 and a doubleton (BBA's raise opposite a 6-10
+  1NT) read as 11-12 on 2/1 cards: it is now SAYC-only
+  (`shown.hcp.max <= 10`); on 2/1 cards 8-10 passes and 11-12 invites
+  (+17 IMPs by errors on 5 boards at --limit 50).
+
+Cases at the end of responder-rebids.test. Still open: the pass after
+partner's answer to our negative double with 11+ unbalanced, read as
+10 or less (13 misdescribed at --limit 50).
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -712,3 +733,5 @@ catch-all still serves 1x–1y–2NT and the other natural notrumps.
   3NT. Measured on the vanilla SAYC and 21GF random sets and the corpus.
 - **2026-10-03:** the 4H/3H pair in responder-rebids.test, from the
   knowledge change; the count is Rick's ruling of 2026-10-01.
+- **Responder after a reverse** (2026-10-09): the forced 2NT as the
+  minimum, game with 11+ opposite 17+: standard practice, not yet cited.

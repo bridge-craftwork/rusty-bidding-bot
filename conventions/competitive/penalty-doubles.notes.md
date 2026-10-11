@@ -55,6 +55,22 @@ reopening double in with four of their suit only when they are good
 (two of the top three, three of the top five), five long, or he has
 8 HCP.
 
+Three more (2026-10-09, below "Doubling errors after the convention
+batches"):
+- **they ran** (`they_ran`): the redoubler doubles the doubler's rescue
+  from our redouble (`1x (X) XX (P) P (2y) X`), and partner of a
+  penalty double (ours, or a 1NT defence's `nt_penalty`) doubles their
+  runout, with four or more of their suit (`ran_into(x)`), priority 0;
+- **partner preempted** (`partner_preempted`: one bid, 11 HCP at
+  most) and they overcalled: my double is for penalty with 15+ and two
+  of their trumps, 12+ and four (or three good), 9+ and five
+  (`vs_overcall_of_preempt(x)`);
+- **their one-level overcall, we have both bid**, passed round to me:
+  three of their suit and 19 known between us, or two and 22
+  (`one_level_pen(x)`).
+Partner sits only when RHO has passed (`asked penalty, rho.last=P`):
+when they run, the double of the runout answers it.
+
 ## Diagnosis (vanilla SAYC random set, main e10a172, 2026-10-01)
 
 Every undoubled final contract by the opponents in our auctions, from
@@ -468,6 +484,25 @@ way from the doubling errors on the corpus.
     best; 16 and 15 are there if the doubling yardstick alone decides.
     Their game at 16 likewise gains doubling errors (+204) at -605 par
     and 123 more doubles of contracts that made: not kept.
+13. **Penalty doubles over partner's preempt** (2026-10-09; touches
+    JUDGMENT-LAYER.md question 6). Taken from Berkowitz-Cohen's list
+    (penalty after our 2♦ and 2M openings) and measured, not decided as
+    a style: if you teach a negative or card-showing double there, the
+    preempt rule goes (it is a third of this batch's gain).
+14. **The one-level double after we have both bid** (question 6 too):
+    responder's double of a sandwich overcall passed round to him reads
+    as penalty here. Two trumps at 22 known gains over three-only on
+    every set; a "card-showing" style would want it as takeout.
+15. **The doubler's rescue from our redouble.** `1S X XX P P 2D` with
+    K3.AQ87.QT32.K54 (takeout-double.bid, "Rescue", ticket b197): the
+    doubler runs with 13 HCP and a four-card suit, where most books
+    pass with defence. Now doubled for penalty, which cures our side's
+    error; the run itself is takeout-double.bid's, left alone here.
+16. **Opener's double after our redouble** (`1x X XX 2y X` with four
+    of theirs) lost on both random sets (r12 vs r12d below): opener
+    passes and leaves it to the redoubler, whose double follows any
+    rescue. Larry Cohen's "any subsequent doubles are penalty" would
+    let opener double too; we measure it as a loss.
 
 
 ## Higher floors, more doubles (2026-10-03)
@@ -567,6 +602,188 @@ vanilla, +704 21GF, +864 corpus, both halves each. The contract loss
 is about two thirds the doubler's side ("actor": -70 / -117 / -207),
 where a double now takes the place of our own contract.
 
+## Doubling errors after the convention batches (2026-10-09)
+
+The task: our doubling errors against BBA grew with every convention
+batch (50-board tripwire: -1,014 at 1c4528c on 2026-10-05, -1,433 at
+1e240af, -1,796 at main 3342483; the sandwich-seat overcalls of
+b4d6d37 added -386), while the contract errors improved over the same
+batches (-8,560 -> -7,027). Full sets at main 3342483: corpus -21,083
+(-12,546 on 2026-10-03), vanilla -10,914, 21GF -18,857.
+
+### Where the doubling errors are
+
+Our defenders' doubling errors (IMPs) and BBA's, each on its own
+auctions, by the shape of the auction before the final contract
+(`probes/tools/double_context.py RUN.json`; the corpus columns also
+give the chances, a contract above par that went down, and how many
+the defenders doubled):
+
+| context | corpus: ours / BBA | chances, doubled: ours / BBA | vanilla: ours / BBA | 21GF: ours / BBA |
+|---|---|---|---|---|
+| they bid alone (we never bid) | 74,698 / 50,519 | 18,999, 1,328 / 14,487, 1,184 | 50,027 / 34,883 | 53,189 / 37,638 |
+| we opened, their overcall passed out (preempts too) | 7,616 / 6,127 | 1,808, 471 / 1,818, 680 | 5,472 / 5,018 | 6,564 / 5,600 |
+| they opened, we bid, they compete in their fit | 23,356 / 22,164 | 5,435, 377 / 5,992, 752 | 17,277 / 17,622 | 20,760 / 18,448 |
+| we opened, their takeout double, then their bid | 10,670 / 10,006 | 2,228, 225 / 2,592, 401 | 6,342 / 5,511 | 6,982 / 6,602 |
+| they opened, we bid, no fit for them | 5,824 / 5,572 | 1,150, 24 / 1,291, 107 | 6,607 / 5,731 | 5,852 / 4,736 |
+| they opened, we only doubled | 7,265 / 7,281 | 1,735, 245 / 1,823, 202 | 3,286 / 3,138 | 4,973 / 4,010 |
+| we opened, their overcall, then more bidding | 15,566 / 15,654 | 3,940, 602 / 4,066, 1,019 | 8,232 / 11,911 | 12,771 / 13,410 |
+| we opened and responded, their (sandwich) overcall | 2,389 / 5,389 | 640, 229 / 1,598, 677 | 2,968 / 3,458 | 3,436 / 3,562 |
+| they bid over our game | 2,672 / 6,190 | 652, 333 / 2,303, 1,445 | 677 / 2,619 | 1,336 / 2,955 |
+| total | 150,056 / 128,902 | 36,587, 3,834 / 35,970, 6,467 | 100,888 / 89,891 | 115,863 / 96,961 |
+
+The same gap split by how our final contract compares with BBA's on
+the board (doubling errors of both sides, ours minus BBA's;
+`--by relation`):
+
+| our contract against BBA's | corpus | vanilla | 21GF |
+|---|---|---|---|
+| same declaring side, ours higher | +30,457 (9,591 boards) | +19,842 | +22,047 |
+| same declaring side, ours lower | -23,482 (10,655) | -16,719 | -16,705 |
+| the other side declares, ours lower | +10,347 (9,610) | +4,478 | +8,041 |
+| the other side declares, ours higher | +4,128 (4,622) | +3,717 | +5,800 |
+| the same contract, doubled or not | -21 (1,358) | +98 | +131 |
+| one of us passed it out | -346 | -502 | -457 |
+| total | +21,083 | +10,914 | +18,857 |
+
+What it says:
+- **Where both engines reach the same contract, our defenders double
+  as well as BBA's** (-21, +98, +131). The gap is in the auctions that
+  differ.
+- **Half of it is our declarers.** "They bid alone" is the largest
+  context: our declaring side reaches 18,999 failing contracts
+  uncontested to BBA's 14,487 (corpus), and the defenders, who never
+  bid, cannot know (BBA doubles 8% of those chances, we 7%). The
+  errors yardstick charges the overbid to the declarers (contract) and
+  again to the silent defenders (doubling): "same declaring side,
+  ours higher" is the largest row of the split, and the same boards
+  carry a larger contract gap still. That is placement work (For Rick
+  10), not a double.
+- **In competitive auctions we are about level** with BBA, ahead where
+  they bid over our game and after their sandwich overcalls, behind
+  where they ran from our doubles: what is left is a few auction shapes
+  where nobody had a double to make.
+
+The shapes (corpus, our auctions; suits renamed x, y, z in order;
+chances, how many we doubled, BBA's chances and doubles in the same
+shape; `--by shape`):
+
+| shape, then passed out | ours: errors (chances, doubled) | BBA | who passed |
+|---|---|---|---|
+| `1x X XX P P 2y` | 1,576 (168, 0) | 12 (10, 10) | the redoubler, "Partner passed: nothing new to say" (after-interference.bid) |
+| `2x 3y` | 1,175 (163, 0) | 335 (105, 36) | responder, "They came in: nothing to add" (vs-preempts.bid) |
+| `1x X 3x` | 1,021 (208, 9) | 154 (34, 8) | advancer: a double would be responsive |
+| `2x X P 2N P 3y` | 725 (117, 0) | 181 (37, 1) | Lebensohl over our weak two |
+| `1x P 1y 1z` | 693 (127, 4) | 19 (5, 3) | responder, "Minimum: they have bought it" (responder-rebids.bid) |
+| `1N X 2x` | 486 (128, 16) | 37 (7, 0) | partner of the penalty double of 1NT, "Defending: nothing more to say" |
+| `1x X XX P P 1y` | 456 (56, 0) | 0 (1, 1) | the redoubler |
+| `3x 4y`, `3x 3y` | 510, 389 (77, 0; 71, 0) | 141, 144 | responder to the preempt |
+
+In `1x X XX P P 2y` and `1N X 2x` the penalty double was blocked by
+"the contract will stand" (a run is not forcing, but the rule only
+knew passed-round, a fit or game); over partner's preempt by "not
+responder's first call" (meant for the negative double). Neither rule
+said anything about one-level contracts.
+
+### Rules added
+
+1. **They ran** (`they_ran`, priority 0): the redoubler's double of the
+   doubler's rescue, directly over it (`1x (X) XX (P) P (2y) X`), and
+   partner's double of their runout from a penalty double (ours, or a
+   1NT defence's), with four or more of their suit. "After our
+   redouble, any subsequent doubles are penalty" (Larry Cohen, "Over
+   opps' takeout double"); Berkowitz-Cohen's "already penalized".
+2. **Partner preempted** (`partner_preempted`, priority -6): their
+   overcall of a weak two or a three-level opening, doubled for
+   penalty by responder with 15+ and two of their trumps, 12+ and four
+   (or three good), 9+ and five. Berkowitz-Cohen, penalty "after 2♦,
+   2M openings". Thresholds from a static count first (every undoubled
+   overcall of our preempt in the three sets, the double's double-dummy
+   value by responder's HCP and holding: 15+ gains with two trumps
+   (+3.40 a board), 12-14 with four (+2.94) or three good (+4.33),
+   9-11 only with five (+5.47 good, +0.73 poor); under 9 loses
+   everywhere), then measured.
+3. **Their one-level overcall, we have both bid** (priority -6):
+   `1x P 1y (1z) P (P) X` and alike, passed round to me: three of
+   their suit and 19 known between us, or two and 22. Opener's pass
+   denied a fit and extras; the sandwich overcall is alone against
+   the balance of strength. Static count first (responder 12-14: +3.21
+   a board with two trumps, +4.67 with three; 9-11: +0.67 with three,
+   +2.82 with four; under 9 loses but for four).
+4. Partner sits for my penalty double only when RHO passed: when they
+   run, rule 1 answers it.
+
+### Measured (errors_diff against main 3342483)
+
+Each rule alone, then the variants tried, on the three sets. Doubling
+errors with the even / odd halves (positive: fewer), contract errors,
+distance from par, our doubles and doubles of contracts that made
+(base: corpus 3,834 / 1,401, vanilla 1,617 / 495, 21GF 2,179 / 762).
+
+| rule | set | doubling (even / odd) | contract | par | doubled / made |
+|---|---|---|---|---|---|
+| they ran: any of us, four trumps (r12) | corpus | +1,545 (+801 / +744) | -360 | -874 | 4,100 / 1,439 |
+| | vanilla | +112 (+56 / +56) | -368 | -605 | 1,766 / 549 |
+| | 21GF | +175 | -249 | -481 | 2,308 / 807 |
+| ... opener only with five or good four (r12c) | corpus | +1,538 | -301 | -784 | 4,076 / 1,435 |
+| | vanilla | +159 | -285 | -452 | 1,721 / 529 |
+| | 21GF | +188 | -213 | -374 | 2,271 / 793 |
+| **... the redoubler, directly over the rescue (r12d, kept)** | corpus | **+1,496 (+808 / +688)** | -239 | -640 | 4,015 / 1,419 |
+| | vanilla | **+162 (+53 / +106)** | -80 | -186 | 1,652 / 503 |
+| | 21GF | **+178 (+57 / +121)** | -82 | -181 | 2,215 / 769 |
+| **partner preempted (kept)** | corpus | **+2,430 (+1,181 / +1,249)** | -304 | -837 | 4,265 / 1,476 |
+| | vanilla | **+535 (+222 / +313)** | -59 | -275 | 1,709 / 513 |
+| | 21GF | **+1,378 (+654 / +724)** | -135 | -1,148 | 2,501 / 852 |
+| **one level, three at 19 or two at 22 (kept)** | corpus | **+334 (+167 / +167)** | -27 | +14 | 3,923 / 1,450 |
+| | vanilla | **+364 (+136 / +228)** | -84 | -19 | 1,734 / 552 |
+| | 21GF | **+205 (+70 / +135)** | -76 | -72 | 2,255 / 801 |
+| ... three at 19 only | corpus | +234 | -21 | +5 | 3,903 / 1,446 |
+| | vanilla | +213 | -81 | -49 | 1,701 / 546 |
+| | 21GF | +111 | -71 | -81 | 2,235 / 796 |
+
+The r12 losses were opener's doubles of the advance (`1x X XX 2C X`,
+-55 / -47 on the random sets) and the redoubler's of a forced
+one-level advance passed round to him (`1C X XX 1H P P X`, -50 / -44);
+the doubler's rescue (`... P P 2C X`) gained everywhere (+728 on 101
+corpus boards). r12d keeps only that, and the runouts from a penalty
+double. The contract losses are "contract other" in errors_diff, the
+doubled side: in self-play a double that collects more than the
+undoubled contract moves the doubled side's error by the same amount
+(the caution in "Re-judged by errors"); the doubler's own contract
+errors ("actor") are level or better in every row of the kept rules.
+
+The three together (`final`, against main 3342483):
+
+| set | doubling errors vs BBA | change (even / odd) | contract | par | errors line | doubled | doubled, made | W doubled, par was to bid on | W let them play |
+|---|---|---|---|---|---|---|---|---|---|
+| full corpus | -21,083 -> -16,823 | +4,260 (+2,156 / +2,104) | -570 | -1,463 | +3,690 (+1,807 / +1,883) | 3,834 -> 4,535 | 1,401 -> 1,543 | 1,775 / 13,196 -> 2,030 / 14,950 (BBA 2,355 / 16,322) | 10,516 / 68,272 -> 10,030 / 64,454 |
+| vanilla SAYC random | -10,914 -> -9,853 | +1,061 (+411 / +647) | -223 | -480 | +838 (+318 / +520) | 1,617 -> 1,861 | 495 -> 578 | 841 / 6,074 -> 940 / 6,649 (BBA 1,042 / 6,529) | 8,236 / 46,615 -> 8,065 / 45,432 |
+| 21GF random | -18,857 -> -17,096 | +1,761 (+781 / +980) | -293 | -1,401 | +1,468 (+653 / +815) | 2,179 -> 2,613 | 762 -> 898 | 1,026 / 7,401 -> 1,167 / 8,226 (BBA 1,127 / 7,108) | 9,217 / 54,879 -> 8,968 / 53,175 |
+
+- **Doubling errors** fall on every set and both halves: 20% of the
+  corpus gap, 10% of each random set's (the rest is our declarers,
+  above).
+- **Doubles of contracts that made** rise by 142, 83 and 136, on 701,
+  244 and 434 more doubles; their cost is inside the doubling column,
+  which still gains.
+- **The guard** ("W doubled, par was to bid on", par_blame) rises by
+  12-14% in boards (+1,754, +575, +825 IMPs), less than "W let them
+  play" falls (-3,818, -1,183, -1,704). On 21GF it now passes BBA's
+  (1,167 boards against 1,127); on the corpus and vanilla it stays
+  below.
+- **Par** loses (the known artefact: a double that collects more than
+  par counts as a loss).
+- **Tripwire** (50 boards a scenario, against a fresh base of main
+  3342483): 118 boards changed, every first changed call one of this
+  module's doubles; doubling -1,796 -> -1,255, contract -7,027 ->
+  -7,093.
+- **Re-measured on main b8ac1d0** (after the fit-showing-jump and
+  rebid changes): the same boards change by the same amounts (corpus
+  +4,260, vanilla +1,066, 21GF +1,761 doubling; contract -570, -223,
+  -293). Whole-set doubling errors vs BBA: corpus -20,668 -> -16,408,
+  vanilla -10,674 -> -9,608, 21GF -18,216 -> -16,455. Tripwire: 118
+  boards, doubling -1,736 -> -1,195, contract -6,846 -> -6,912.
+
 ## Sources
 
 - **Standard practice, not yet cited:** double when they are too high
@@ -601,3 +818,23 @@ where a double now takes the place of our own contract.
   from `rbb compare` on main 53f1d3a (after PRs #44 and #45) and
   `probes/tools/errors_diff.py`, `probes/tools/penalty_x.py`; the
   thresholds are calibrated here, not quoted.
+- **2026-10-09, after the convention batches:**
+  - Larry Cohen, "Over Opps' T/O Double"
+    (larryco.com/bridge-articles/over-opps-to-double): "After our
+    redouble, any subsequent doubles are penalty." The rule takes only
+    the redoubler's double of the doubler's rescue; opener's double
+    lost here (For Rick 16).
+  - David Berkowitz and Larry Cohen, "Berk-Co Exceptions to Low-Level
+    Doubles" (larryco.com/bridge-articles/berk-co-exceptions-to-low-level-doubles):
+    doubles below 2NT are takeout except, among others, when "the
+    opponents have already been 'left in' or doubled for penalties"
+    (their runout from our penalty double) and after our 2♦ and 2M
+    openings (the preempt rule). Their list is one partnership's
+    style; JUDGMENT-LAYER.md question 6 stays open.
+  - The one-level double after we have both bid: standard practice,
+    not yet cited; thresholds from the static count and the three-set
+    measurement above.
+  - Measurements: `rbb compare` on the three sets at main 3342483 and
+    with each rule (rule copies under `--rules`), `probes/tools/errors_diff.py`,
+    `probes/tools/par_blame.py`, and `probes/tools/double_context.py`
+    (new) for the context tables.

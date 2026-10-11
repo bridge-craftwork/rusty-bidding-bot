@@ -480,6 +480,17 @@ type Loaded = (Card, String, Vec<String>);
 /// Bridge-Classroom's export wrapper `{schema, name, card_data, ...}`).
 fn load_card(spec: &Json, field: &str, vocab: &Vocabulary, d: &mut Diags) -> Option<Loaded> {
     let stock = |name: &str, d: &mut Diags| match rbb_assets::card(name) {
+        // A stock card that also comes as card JSON plays the JSON: it
+        // carries settings its .bbsa cannot (Natural without transfers).
+        Some(_) if rbb_assets::card_json(name).is_some() => {
+            match Card::from_json(vocab, rbb_assets::card_json(name).unwrap()) {
+                Ok((card, _)) => Some((card, name.to_string(), Vec::new())),
+                Err(e) => {
+                    d.error(format!("{field}: stock card {name}: {e}"));
+                    None
+                }
+            }
+        }
         Some(text) => {
             import_bbsa(vocab, text, Some(name), field, d).map(|(c, u)| (c, name.to_string(), u))
         }

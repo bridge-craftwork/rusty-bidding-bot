@@ -258,6 +258,14 @@ Questions for Rick (decisions taken):
 - Michaels-over-preempt strength (13 / 11 / 14 / 16 total points) is
   ours, not probed; worth a grid if the Leaping scenarios matter.
 
+## Cue-bid raises are artificial (2026-10-09)
+
+The seven "Cue bid: limit raise or better" rules carried a bare `alert`,
+so `partner.named(z)` counted them as natural bids of their suit and
+rebids.bid's free-bid block read opener's sign-off as "six or more"
+(rebids.notes.md, "Read as the hand holds"). They are now `alert
+artificial`, as the cue bids in after-interference.bid are.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump

@@ -237,6 +237,25 @@ local checkouts").
   `[Note]`s for alerts, `--all-meanings` for every call). Uses the rules
   compiled into the binary unless `--rules`; cards may be stock names
   (`21GF-DEFAULT`). docs/RELEASING.md covers it and the release builds.
+- `target/release/rbb dd FILE.pbn...`: double-dummy table and par of every
+  distinct deal in PBN files, one JSON line each (tricks by declarer N E S
+  W and strain C D H S NT, `par_ns`, `par`, `par_rank`), cached with
+  `compare`'s in `.rbb-cache/dd.jsonl`.
+- `probes/tools/brill_report.py FIELD.pbn... [--out report.md]`: Rusty in
+  the Brill dailies (sibling repo `rusty-seat-service`). Input: the field
+  PBN of the daily results mail, one game per table, the entrant named
+  in `[South]` (ours matches `--us`, default `Rusty`), events by
+  `[Event]`+`[Date]`; the docstring lists the format assumptions to
+  confirm on the first real file. Per board: our auction, score against
+  the field (MP% or cross-IMPs), bidding vs play (every contract scored
+  at its DD result, and the rest), par and the errors yardstick, flags
+  from `explain-auction` (no rule, a call the hand contradicts, a
+  forcing call passed, an artificial suit raised, a misfit contract),
+  what today's engine would bid instead, and every table's auction on
+  the worst boards. Appends to a running table
+  (`--history .rbb-cache/brill/history.jsonl`, `--table-only` prints
+  it). `--self-test` runs it on `probes/fixtures/brill/field.pbn`
+  (synthetic, from `make_fixture.py` there).
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference

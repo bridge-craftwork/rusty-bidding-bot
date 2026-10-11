@@ -18,6 +18,13 @@ pub fn card(name: &str) -> Option<&'static str> {
     CARDS.iter().find(|(n, _)| *n == name).map(|(_, t)| *t)
 }
 
+/// The stock card called `name` as card JSON, where it has one
+/// (`cards/json/`). Prefer it to [`card`]: it carries settings a `.bbsa`
+/// cannot, such as Natural without Jacoby transfers.
+pub fn card_json(name: &str) -> Option<&'static str> {
+    CARD_JSON.iter().find(|(n, _)| *n == name).map(|(_, t)| *t)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -33,6 +40,8 @@ mod tests {
         assert_eq!(BBSA_MAP.0, "convention-card/spec/formats/bbsa-map.toml");
         assert!(FIELDS.1.contains("[notrump"));
         assert!(card("21GF-DEFAULT").is_some());
+        assert!(card_json("Natural").is_some());
+        assert!(card_json("21GF-DEFAULT").is_none());
         assert_eq!(RULES_ID.len(), 16);
     }
 }

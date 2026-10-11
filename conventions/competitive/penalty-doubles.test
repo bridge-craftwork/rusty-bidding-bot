@@ -59,3 +59,28 @@ W AQ4.K5.KJ93.AJ62      | 1NT P 3NT           | X   | 17+ against their 3NT
 N A4.KQJ54.K93.T96      | 1H 2S 4H 4S         | X   | 12+ and two spades: they bid over our game
 N 4.KQJ54.K93.AT96      | 1H 2S 4H 4S         | !X  | one spade: not a penalty double
 S K32.A87.QJ4.8765      | 1H 2S 4H 4S P P     | X   | 20 known between us, three spades
+# They ran from our redouble (2026-10-09): the redoubler doubles the
+# doubler's rescue with four of their suit (Basic_Takeout_Double 130).
+dealer  E
+vul     NS
+W J.T96.AK9864.J83      | 1S X XX P P 2D        | X   | they ran from our redouble: six diamonds
+# Opener's double of the advance lost on the random sets: he leaves
+# it to the redoubler.
+E AQT87.J5.JT98.A9      | 1S X XX 2D            | P   | opener: the redoubler decides
+# They ran from partner's penalty double of 1NT (a card whose double
+# of 1NT is for penalty).
+card    21GF-DEFAULT
+dealer  E
+vul     None
+N 98.Q32.J854.Q862      | 1N X 2D               | X   | four diamonds: they ran into them
+N 9843.Q2.J54.Q862      | 1N X 2D               | P   | three diamonds: not a penalty double
+card    Basic-Bridge
+# Partner preempted and they overcalled: my double is for penalty
+# (Berkowitz-Cohen: penalty after our 2D and 2M openings).
+dealer  N
+S AQ4.K5.KJ93.QJ62      | 2H 3D                 | X   | 15+ and their suit: penalty
+S 84.K5.KQT93.J652      | 2H 3D                 | X   | five diamonds and 9 HCP
+S AQ4.K52.J93.QJ62      | 2H 3D                 | !X  | 13 and three poor diamonds: not enough
+# Their one-level overcall after we have both bid, passed round to me.
+S Q82.KJ7.T85.KJ74      | 1C P 1H 1S P P        | X   | three spades and 22 known between us
+S 82.KJ7.QT85.KJ74      | 1C P 1H 1S P P        | !X  | two spades and 21 known: not yet

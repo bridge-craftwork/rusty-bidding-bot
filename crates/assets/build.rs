@@ -2,7 +2,8 @@
 //! manifest (`conventions/conventions.toml`), the card vocabulary (the
 //! standard one from `bridge_card::standard`, unless the rules bring their
 //! own `conventions/card/fields.toml` and `bbsa-map.toml`), and every stock
-//! card `cards/bbsa/*.bbsa`, as `include_str!`s, so a
+//! card `cards/bbsa/*.bbsa` (and `cards/json/*.json` where a card has one),
+//! as `include_str!`s, so a
 //! binary (the release `rbb`, the WASM build) carries its rules and needs no
 //! filesystem to load them.
 //!
@@ -57,9 +58,11 @@ fn main() {
         .expect("workspace root");
     let rules_dir = root.join("conventions");
     let cards_dir = root.join("cards/bbsa");
+    let json_dir = root.join("cards/json");
     // A directory is scanned recursively for changes.
     println!("cargo:rerun-if-changed={}", rules_dir.display());
     println!("cargo:rerun-if-changed={}", cards_dir.display());
+    println!("cargo:rerun-if-changed={}", json_dir.display());
 
     let mut rules = Vec::new();
     collect(&rules_dir, "bid", &mut rules);
@@ -158,6 +161,24 @@ fn main() {
     out.push_str("/// Stock cards: (name, .bbsa text).\n");
     out.push_str("pub static CARDS: &[(&str, &str)] = &[\n");
     for abs in &cards {
+        let name = abs.file_stem().unwrap().to_string_lossy().into_owned();
+        println!("cargo:rerun-if-changed={}", abs.display());
+        writeln!(
+            out,
+            "    ({name:?}, include_str!({:?})),",
+            abs.display().to_string()
+        )
+        .unwrap();
+    }
+    out.push_str("];\n\n");
+    // Card JSON for the stock cards that have one: settings a .bbsa cannot
+    // carry (Natural without Jacoby transfers, SAYC's 2S relay).
+    let mut jsons = Vec::new();
+    collect(&json_dir, "json", &mut jsons);
+    jsons.sort();
+    out.push_str("/// Stock cards that also come as card JSON: (name, JSON text).\n");
+    out.push_str("pub static CARD_JSON: &[(&str, &str)] = &[\n");
+    for abs in &jsons {
         let name = abs.file_stem().unwrap().to_string_lossy().into_owned();
         println!("cargo:rerun-if-changed={}", abs.display());
         writeln!(

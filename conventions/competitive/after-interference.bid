@@ -352,8 +352,13 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
       when  stop(y)
-  cheapest(x) "Six cards in {x}, minimum"
-      shows x>=6, hcp<=15
+  # Read as five or more (2026-10-09): the five-card rebid below with
+  # nothing better to say bids the same call, so partner must not count
+  # on six. Only six-card hands bid it here; five-card ones only when no
+  # other call fits.
+  cheapest(x) "Rebids {x}: five or more (usually six), minimum"
+      shows x>=5, hcp<=15
+      when  x>=6
   jump(x) "Six cards in {x}, 16-18"
       shows x>=6, hcp=16..18
   # Partner promised four, so three is an eight-card fit and BBA bids it:
@@ -389,8 +394,8 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       shows H>=3, hcp<=15
       when  x is not H, y is not H, partner.H>=4
       priority -2
-  cheapest(x) "Five cards in {x}"
-      shows x>=5, hcp<=18
+  cheapest(x) "Five cards in {x}, minimum, nothing better to say"
+      shows x>=5, hcp<=15
       priority -2
   # Strong hands with no fit and no balanced notrump (2026-09-25: 19-20
   # counts rebid their suit as "nothing better" and were passed). From

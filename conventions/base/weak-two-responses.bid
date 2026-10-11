@@ -193,21 +193,57 @@ when answered weak_two(t), style is bba, !partner.last=3{t}
         when  t is C | t is D, partner.last=3N
         priority 1
 
+# Slam values with opener's suit as trump: 33 HCP on partner's floor
+# (2026-09-27), or slam-entry's count with no two bare side suits.
+define w2_slam(t) = hcp + partner.hcp.min >= 33 | (fit_slam_values(t), !two_bare_beside(t))
+
+# Partner's 3NT answer showed AKQ of the suit (Ogust, or the standard
+# feature answers; bba's 3NT is a maximum with no side honour).
+define w2_solid = partner.last=3N, ask2nt is ogust | style is not bba
+
+# The ask: two trumps and the values, or a singleton opposite AKQ with
+# 21 of mine and no five-card major of my own (Ogust 45, 271: a minor
+# slam one trick short where my major or notrump made twelve).
+define w2_fit_slam(t) = (t>=2, w2_slam(t)) | (w2_solid, t>=1, hcp>=21, S<=4 | t is S, H<=4 | t is H)
+
 when answered weak_two(t)
   # Slam values opposite the answer (2026-09-27, ticket b201: 26 HCP
   # opposite a maximum with a feature stopped in 4H): agree the suit and
   # ask for keycards, with 33 HCP between us counting partner at the
   # floor of his answer.
-  4N    "Keycard ask in {t}"          shows t>=2, hcp + partner.hcp.min >= 33
+  #
+  # Slam after the answer (2026-10-09, notes "Slam after the answer"):
+  # the 2NT ask is artificial, so no notrump has been bid, and opener's
+  # six-card suit is the public fit: 4NT is keycard in it (Rick,
+  # 2026-10-03: 4NT with no notrump bid is keycard, for the last suit
+  # bid). The values are slam-entry's count (`fit_slam_values`) with two
+  # or more trumps; opposite the AKQ answer (3NT, Ogust or the standard
+  # feature treatment) a singleton is fit enough, and 21 of mine with the
+  # 9 of AKQ make the 30 a minor slam needs.
+  4N    "Keycard ask in {t}"          shows w2_fit_slam(t)
         when  k1430 | k0314
         sets  trump=t, ask=keycards(t)
         artificial
         priority 2
-  4N    "Blackwood: aces, {t} agreed"  shows t>=2, hcp + partner.hcp.min >= 33
+  4N    "Blackwood: aces, {t} agreed"  shows w2_fit_slam(t)
         when  aces, !k1430, !k0314
         sets  trump=t, ask=aces
         artificial
         priority 2
+  # My own major, with no fit for partner's suit and slam interest
+  # (2026-10-09): natural and forcing at the three level, below 3NT
+  # (bridgebum: "rebids by the Ogust bidder are natural"). 27 between us
+  # on partner's floor: 22 facing a minimum, 19 facing a maximum.
+  # Opener raises with three; the raise agrees it and the keycard ask
+  # follows (rkcb-1430.bid).
+  3S    "Natural: five or more spades, slam interest"   shows S>=5, S>=H, t<=1, hcp + partner.hcp.min >= 27
+        when  t is not S, partner.last=3C | partner.last=3D | partner.last=3H
+        sets  forcing=game
+        priority 3
+  3H    "Natural: five or more hearts, slam interest"   shows H>=5, H>S, t<=1, hcp + partner.hcp.min >= 27
+        when  t is not H, partner.last=3C | partner.last=3D
+        sets  forcing=game
+        priority 3
   4{t}  "Game in the weak two suit"   shows hcp>=17
         when  t is H | t is S
   3N    "Game in notrump"             shows hcp>=17
@@ -244,6 +280,20 @@ when answered weak_two(t)
 # (notes, 2026-09-25).
 after 2x (P) 2N (P) 3y (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural, y is not x
   P   "Partner signed off in our suit"
+
+# Opener after responder's own major over the answer (2026-10-09): raise
+# with three, which agrees it; else 3NT.
+after 2x (P) 2N (P) 3y (P) 3z (P) when weak_two_suit(x), x is not C | two_c is natural, z is H | z is S, z is not x, y is not z
+  4z  "Three-card support: agrees {z}"   shows z>=3
+      sets  trump=z
+  3N  "No support for {z}"               shows z<=2
+
+# Responder after opener's 3NT, no support for my major: slam in
+# notrump on 33 between us, game in my suit with six, else pass.
+after 2x (P) 2N (P) 3y (P) 3z (P) 3N (P) when weak_two_suit(x), x is not C | two_c is natural, z is H | z is S, z is not x, y is not z
+  6N  "Slam in notrump: 33 between us"   shows hcp + partner.hcp.min >= 33
+  4z  "Six-card suit: game in it"        shows z>=6
+  P   "3NT is game"
 
 # Opener after the preemptive raise: pass.
 after 2x (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural
