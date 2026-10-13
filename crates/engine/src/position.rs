@@ -82,6 +82,10 @@ pub struct Position {
     /// Beside `calls`: whether the rule that read each call marked it
     /// `artificial` (missing entries count as natural).
     pub artificial: Vec<bool>,
+    /// Beside `calls`: whether each call answered partner's question
+    /// (`sets ask=...`): a relay completion, a keycard answer. Missing
+    /// entries count as no.
+    pub answers: Vec<bool>,
     /// By `Direction::to_index`.
     pub knowledge: [SeatKnowledge; 4],
     /// By `side`.
@@ -96,6 +100,7 @@ impl Position {
             scoring,
             calls: Vec::new(),
             artificial: Vec::new(),
+            answers: Vec::new(),
             knowledge: Default::default(),
             sides: Default::default(),
         }
@@ -180,6 +185,22 @@ impl Position {
                 && matches!(self.calls[i], Call::Bid { strain: s, .. } if s == strain)
                 && !self.artificial.get(i).copied().unwrap_or(false)
         })
+    }
+
+    /// The auction's last bid is `d`'s side's, a rule marked it
+    /// artificial (a cue bid, a transfer, a relay), and it did not answer
+    /// partner's question: if the auction ended now, our side would play
+    /// a contract nobody chose. An answer (a relay completion, a keycard
+    /// answer) is left out: the asker may choose to play it.
+    pub fn artificial_contract(&self, d: Direction) -> bool {
+        (0..self.calls.len())
+            .rev()
+            .find(|&i| matches!(self.calls[i], Call::Bid { .. }))
+            .is_some_and(|i| {
+                side(self.caller(i)) == side(d)
+                    && self.artificial.get(i).copied().unwrap_or(false)
+                    && !self.answers.get(i).copied().unwrap_or(false)
+            })
     }
 
     pub fn side_acted(&self, d: Direction) -> bool {
@@ -413,6 +434,43 @@ mod tests {
         assert!(pos.named(Direction::North, Strain::Hearts));
         assert!(!pos.named(Direction::South, Strain::Diamonds));
         assert!(!pos.named(Direction::South, Strain::NoTrump));
+    }
+
+    #[test]
+    fn artificial_contract_is_our_unanswered_artificial_bid() {
+        let mut pos = Position::new(
+            Direction::North,
+            Vulnerability::None,
+            ScoringMethod::from_pbn("IMP").unwrap(),
+        );
+        let bid = |level, strain| Call::Bid { level, strain };
+        // N 1NT, E P, S 2D (a transfer: artificial), W X.
+        for (c, art) in [
+            (bid(1, Strain::NoTrump), false),
+            (Call::Pass, false),
+            (bid(2, Strain::Diamonds), true),
+            (Call::Double, false),
+        ] {
+            pos.calls.push(c);
+            pos.artificial.push(art);
+        }
+        assert!(pos.artificial_contract(Direction::North));
+        assert!(pos.artificial_contract(Direction::South));
+        assert!(!pos.artificial_contract(Direction::East));
+        // N 2H completes the transfer: natural.
+        pos.calls.push(bid(2, Strain::Hearts));
+        pos.artificial.push(false);
+        assert!(!pos.artificial_contract(Direction::South));
+        // An artificial answer to partner's question (a relay
+        // completion) is a contract the asker may choose.
+        pos.calls.push(Call::Pass);
+        pos.calls.push(bid(3, Strain::Clubs));
+        pos.artificial.extend([false, true]);
+        pos.answers = vec![false; 6];
+        pos.answers.push(true);
+        assert!(!pos.artificial_contract(Direction::North));
+        pos.answers[6] = false;
+        assert!(pos.artificial_contract(Direction::North));
     }
 
     fn pos(calls: &str) -> Position {

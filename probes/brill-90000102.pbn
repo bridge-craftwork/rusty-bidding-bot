@@ -1,0 +1,19 @@
+% Brill round robin 2026-10-09, board 90000102 (Thorvald Aagaard's round
+% robin, emailed to Rick 2026-10-12): Rusty N/S (21GF-GIB), BBA E/W.
+% Played: 1S 2S X 3S X P P P, 3S doubled down eight, -1,700.
+[Event "Brill round robin 2026-10-09"]
+[Board "90000102"]
+[West "BBA"]
+[North "Rusty"]
+[East "BBA"]
+[South "Rusty"]
+[Dealer "E"]
+[Vulnerable "EW"]
+[Deal "N:864.K7.KQT9.A942 AKQJ952.6.6.KJT5 .QT9532.AJ854.86 T73.AJ84.732.Q73"]
+[Scoring "IMP"]
+[Contract "3SX"]
+[Declarer "N"]
+[Result "2"]
+[Auction "E"]
+1S 2S X 3S
+X Pass Pass Pass

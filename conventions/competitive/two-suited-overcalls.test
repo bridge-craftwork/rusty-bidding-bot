@@ -93,3 +93,58 @@ N KJ6.Q874.952.KT4          | 1S 3S P    | 3N  | spades held: to play
 N 986.Q874.J92.KT4          | 1S 3S P    | 4C  | no stopper: pass or correct
 S 7.A4.AKQ7643.Q53          | 1S 3S P 4C P | 4D | diamonds
 S 7.Q42.96.KQJT843         | 1C         | 3C  | 7 HCP, seven clubs: preempt in their minor
+
+# ── The Michaels bidder answers the cue bid (2026-10-12) ─────────────
+card    21GF-DEFAULT
+dealer  E
+vul     None
+S 9.QT953.AJ854.86          | 1S 2S P 3S P | 4H  | the cue showed hearts: a minimum bids the game
+S 9.AKQ53.A4.QJ854          | 1S 2S P 3S P | 4C  | 16 HCP: a maximum names the minor, below 4H
+S AJ952.6.KQJ54.86          | 1H 2H P 3H P | 3S  | 11 HCP over 1H: minimum, spades
+S AQ952.6.KQJ54.A6          | 1H 2H P 3H P | 4D  | 16 HCP: maximum, names the minor
+S AQ952.6.KQJ54.A6          | 1H 2H P 3H X | 4D  | the same when RHO doubles the cue
+S AQ952.6.KQJ54.A6          | 1H 2H P 2N X | 3D  | the 2NT ask doubled: still names the minor
+S AQ952.KJ864.6.86          | 1C 2C P 3C X | 3S  | over a doubled minor cue: the minimum still bids
+N 864.KJ7.KQT9.A94          | 1S 2S P 3S P 4D P | 4H | three hearts: game in the major
+
+# Brill round robin 2026-10-09, board 90000102 (21GF-GIB both of our
+# seats): 1S 2S X 3S X P P P went down eight doubled, -1,700. 4D makes.
+card    21GF-GIB
+vul     EW
+S .QT9532.AJ854.86          | 1S 2S X 3S X     | 4H | the doubled cue is no contract: a minimum bids the game
+N 864.K7.KQT9.A942          | 1S 2S X 3S X P P | 4H | never pass out our own cue bid: the best fit
+
+# ── 2NT asks for the minor; the cue raises the major (Rick, 2026-10-13) ─
+# Brill board 90000102: North asks with 2NT (not the cue bid), then
+# places the contract in diamonds (12 HCP, four diamonds, a doubleton).
+N 864.K7.KQT9.A942          | 1S 2S X          | 2N | wants partner's minor: which one?
+S .QT9532.AJ854.86          | 1S 2S X 2N P     | 3D | the minor
+N 864.K7.KQT9.A942          | 1S 2S X 2N P 3D P | 5D | 13 support points: game in the minor
+N 864.K7.KQT9.A942          | 1S 2S X 2N P 3D 4S | 5D | the same over their game
+
+card    21GF-DEFAULT
+vul     None
+N 864.73.QT92.J942          | 1S 2S P         | 2N  | 3 HCP, both minors: ask, then pass
+N 864.73.QT92.J942          | 1S 2S P 2N P 3C P | P | weak: to play
+N 864.K7.KQT9.Q942          | 1S 2S P 2N P 3D P | 4D | 10 HCP, four diamonds: invites
+N 86.AK.KQT9.AK942          | 1S 2S P         | 2N  | 19 HCP, no heart fit: the minor first
+N 86.AK.KQT9.AK942          | 1S 2S P 2N P 3D P | 4S | four diamonds, 17+: slam try
+S 9.KQ953.AQJ54.86          | 1S 2S P 2N P 3D P 4S P | 5D | 12 HCP: declines
+S 9.AKQ53.AQJ54.86          | 1S 2S P 2N P 3D P 4S P | 6D | 16 HCP: accepts
+S 9.AKQ53.AQJ54.86          | 1S 2S P 2N P 3D P 4D P | 5D | 16 HCP: accepts the invitation
+N 82.AQ4.KJ43.KJ75          | 1H 2H P         | 2N  | 3NT values, but both minors fit: ask first
+N 82.AQ4.KJ43.KJ75          | 1H 2H P 2N P 3C P | 3N | hearts held: game
+N 82.AQ4.KJ8432.K5          | 1H 2H P         | 3N  | 13 HCP, hearts held, a doubleton club: 3NT
+N 86.73.KQJ9742.J4          | 1S 2S P         | 3D  | natural: seven diamonds of my own
+N 86.73.A4.KQJ9742          | 1H 2H P         | 3C  | natural: seven clubs, two spades
+S 9.KQ953.A4.QJ854          | 1S 2S P 3D P    | P   | partner's own suit: to play
+N 864.KJ7.KQT9.K94          | 1S 2S P         | 3S  | 12 HCP, three hearts: the cue raise
+N AK4.K42.KQ83.J42          | 1H 2H P         | 3H  | 16 HCP, three spades: the cue raise
+N 864.KJ7.KQT9.K94          | 1S 2S P 3S P 4D P | 4H | the fit the cue showed
+
+# Interference over the ask and its answer.
+S .QT9532.AJ854.86          | 1S 2S P 2N 3S   | P   | RHO bids over the ask: a minimum passes
+S 9.AKQ53.AQJ54.86          | 1S 2S P 2N 3S   | 4D  | 16 HCP: names the minor over their bid
+N 864.K7.KQT9.Q942          | 1S 2S P 2N P 3D 3S | 4D | 10 HCP: competes
+N 864.73.QT92.J942          | 1S 2S P 2N P 3D 3S | P  | weak: done
+N AK4.K42.KQ83.J42          | 1H 2H P 3H P 3S P | 4S | 16 HCP opposite the minimum: game

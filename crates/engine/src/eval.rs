@@ -892,6 +892,11 @@ impl<'a> Ctx<'a> {
             "game_reached" => Val::Bool(Tri::from_bool(
                 self.pos.side_acted(self.actor) && !self.pos.below_game(self.actor),
             )),
+            // Our side's last bid is the contract so far and a rule marked
+            // it artificial: passing it out plays a contract nobody chose.
+            "artificial_contract" => Val::Bool(Tri::from_bool(
+                self.pos.artificial_contract(self.actor),
+            )),
             "imps" => Val::Bool(Tri::from_bool(self.pos.is_imps())),
             "matchpoints" => Val::Bool(Tri::from_bool(!self.pos.is_imps())),
             "favourable" | "unfavourable" => {
@@ -1690,7 +1695,7 @@ pub fn counts_conditions(e: &Expr) -> bool {
         ) || matches!(x, Expr::Path { path } if path.iter().any(|s| matches!(
             s.name.as_str(),
             "vul" | "favourable" | "unfavourable" | "imps" | "matchpoints" | "balanced"
-                | "opening" | "game_reached" | "captain" | "still_bidding" | "bid"
+                | "opening" | "game_reached" | "artificial_contract" | "captain" | "still_bidding" | "bid"
         )))
     };
     match e {
@@ -2016,6 +2021,10 @@ const STATE_TERMS: &[Term] = &[
     t(
         "game_reached",
         "our side's last bid is game or higher and it is our contract",
+    ),
+    t(
+        "artificial_contract",
+        "our side made the auction's last bid, a rule marks it artificial, and it answered no question of partner's (relay completions and keycard answers are left out): passing it out plays a contract nobody chose",
     ),
     t("imps", "IMPs or other total-point scoring"),
     t("matchpoints", "matchpoints or board-a-match"),

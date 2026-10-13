@@ -22,3 +22,17 @@ card    21GF-DEFAULT general.forcing_opening_2c=false
 S AKQJ5.AK3.KQ4.Q3      |         | 1S     | 24 HCP: no 2C, so 1S
 card    21GF-DEFAULT
 S AKQJ5.AK3.KQ4.Q3      |         | 2C     | 24 HCP: 2C
+
+# Never pass out our own artificial bid (2026-10-12; Brill round robin
+# 2026-10-09, board 90000102): a pass that would end the auction in
+# partner's or my own artificial bid is ruled out, and the hand runs to
+# its best known fit.
+dealer  N
+S 8642.QJ853.73.42      | 1N P 2D X P P | 2H  | my transfer doubled and passed back: bid the hearts
+N AK2.K74.QJ5.A863      | 1N P 2C X     | P   | a pass that gives partner another turn is allowed
+S KJ84.Q853.T73.42      | 1N P 2C X P P | 2S  | Stayman doubled and passed back: the best fit (a major)
+S 8642.QJ853.73.42      | 1N P 2D P 2H P | P  | the completed transfer is natural: pass
+# Partner's game-forcing cue of their preempt, RHO passes: the doubler
+# names his suit (3N_over_RHO_3x 414: passed out in 4S before).
+dealer  E
+S AJ86.AKT962.AQ.Q      | 3S X P 4S P   | 5H  | the cue is no place to play: six hearts
