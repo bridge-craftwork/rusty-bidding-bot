@@ -121,7 +121,11 @@ columns None / NS (we vulnerable) / EW.
 - **The cue bid** by advancer is 16+, game or slam interest, forcing
   (BBA 17+, Bridgebum "game or slam interest"); over 1♠ (2♠), where the
   hearts can only be shown at the three level, the cue is 12+ (game
-  interest), since there is no room for an invitational jump.
+  interest), since there is no room for an invitational jump. Since
+  2026-10-13 the cue of a major promises three of partner's major (a
+  strong raise); a hand that wants partner's minor asks with 2NT
+  instead, and three of a minor is natural (section "2NT asks for the
+  minor", below).
 - **The opening side**: the cue of their known suit (after Michaels) or
   of their lower suit (after 2NT) is the limit raise, as BBA; the
   raise itself is competitive (BBA uses a double for the 6-9 raise and
@@ -328,10 +332,97 @@ meaning of pass and redouble after their double "requires discussion".
 Naming the minor at the four level is the extension of the 2NT ask,
 standard practice, not yet cited.
 
+## 2NT asks for the minor; the cue raises the major (2026-10-13)
+
+**Rick (2026-10-13)**: "If partner wants to play in the cue bidder's
+minor, they bid 2NT to ask 'which minor'. Normally bidding the minor
+says 'I have a 6+ card suit of my own'." On board 90000102 (above)
+North, `864.K7.KQT9.A942`, 12 HCP with both minors and a doubleton
+heart, had cue-bid 3♠ ("12+, describe your hand"); by the ruling he
+asks with 2NT and places the contract after South's 3♦.
+
+What we play after (1M) 2M, both majors:
+
+- **2NT asks for the minor** at any strength, with a doubleton or less
+  in partner's major (still priority −1: the fallback for every hand
+  without a major fit that has no better call). The Michaels bidder
+  names it at the three level over a pass or a double. When RHO bids
+  over the ask the force is off: he names it at the four level with 13+
+  or a six-card minor, else passes (naming it with any hand lost 23
+  IMPs on 14 corpus boards; the restriction about broke even).
+- **After the answer** advancer counts HCP (shortness in partner's
+  major is no value: support points made two invitations with a void
+  in it go down): pass up to 9, four of the minor invites (10-12 with
+  three-card support, 10-11 with four; the Michaels bidder accepts with
+  14+, or 12+ and a sixth card), 3NT with 13+ and their major held,
+  five of the minor with 13+ (12 with four trumps), and with 17+ and
+  four-card support the cue of their major as a slam try (the Michaels
+  bidder bids six with 13+, else five). The same over RHO's bid, where
+  a pass is the weak hand's.
+- **Three of a minor by advancer is natural**: six or more of his own,
+  at most two of partner's major, up to 12 HCP, to play; the Michaels
+  bidder passes.
+- **3NT direct** (13+, their major held, no fit) only without three
+  cards in both minors; with three of each, 2NT first.
+- **The cue bid is the strong raise of partner's major**: three-card
+  support, 16+ over 1♥ (2♥), 12+ over 1♠ (2♠). The Michaels bidder's
+  answers follow from the known fit: over 1♥ (2♥) 3♥ a minimum bids 3♠
+  (the cue bidder then bids 4♠, or 3NT without a fit after a minor cue),
+  a maximum names the minor at the four level or bids 4♠ with six; over
+  1♠ (2♠) 3♠ a minimum bids 4♥, a maximum (13+) names the minor at the
+  four level. Once the minor is named the cue bidder bids game in the
+  major (slam bidding after it is a gap).
+- **Minor-suit Michaels and the Unusual 2NT**: both suits are known, so
+  no ask is needed; their cue bids stay "16+, game or slam interest".
+  Nothing changed there.
+- The guard of 2026-10-12 stays: no passing out our own artificial bid.
+
+On the board North now bids `1♠ 2♠ X 2NT`, South 3♦, and North 5♦
+over a pass or over 4♠ (13 support points, four diamonds; 5♦ takes ten
+tricks double dummy, -100 or -300 doubled, against E/W's 4♠ +1, -650;
+par N/S -300). E/W's calls after 2NT are BBA's and not reproduced here
+(our own West raises to 3♠ instead of doubling).
+
+Measured (`probes/tools/conv_ab.py --only michaels,unusual-2nt
+--reuse-bba`): the Michaels convention score -90 -> **-78** (Rusty's
+gain +225 -> +237, halves -45/-45 -> -43/-35); the Unusual 2NT
+unchanged (-497). Tripwire (`compare --limit 50`, all scenarios): 16
+boards changed, every one an auction after a major-suit Michaels (11
+of them in other scenarios: Opps_Michaels_*, Namyats, Goulash and
+such). Full Michaels_Cuebid, Michaels_and_Unusual, Unusual_2N and
+Opps_2-Suited_Overcalls against main (`errors_diff.py`, 36 changed
+boards): errors **+34** (halves +28/+6), contract -16, doubling +50;
+distance from par -27. By first call: natural 3♦ +43 (6 boards),
+natural 3♣ over 1♥ -14 (4), the four-level answer over RHO's bid
+4♣ +18 / 4♦ -18 (5 each). The natural three of a minor is Rick's
+definition and stays.
+
+
+Questions for Rick (decisions taken):
+- After the cue raise of a major and the Michaels bidder's maximum
+  (naming the minor), slam is not explored: the cue bidder bids game.
+- Advancer's natural three of a minor is capped at 12 HCP; a stronger
+  hand with its own suit asks with 2NT, or bids 3NT.
+- With a weak hand that fits only one minor, advancer still asks and
+  passes the answer (no pass-or-correct correction).
+
+Sources: Bridgebum, "Michaels Cuebid": after (1♥) 2♥, 2NT "asks the
+overcaller to bid his minor suit at the 3-level", three of a minor
+"natural, showing a very good club suit (usually 6+)", non-forcing;
+after the raise of the cue the Michaels bidder bids his cheapest suit
+with 0-10, everything else game forcing (we: a minimum up to 12, the
+cue of a major as a raise is ours). Larry Cohen, "Michaels Cue Bid":
+3♣ pass or correct to play in partner's minor, 2NT as an ask among
+"sophisticated methods"; we follow Rick and Bridgebum (natural 3m).
+The invite / slam-try structure after the answer is ours: standard
+practice, not yet cited.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
-  preference as invitational.
+  preference as invitational. (2026-10-13): 2NT asks for the minor
+  whenever advancer wants to play in it; three of a minor is advancer's
+  own six-card suit.
 - **Bridgebum**, "Michaels Cuebid"
   (<https://www.bridgebum.com/michaels_cuebid.php>): what the cue shows,
   "no point minimum" with vulnerability considered, the mini-maxi option

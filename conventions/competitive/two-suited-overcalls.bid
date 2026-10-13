@@ -49,8 +49,11 @@
 # Advancer: preference at the cheapest level, a jump preference to
 # invite (10-12), game in the fit (or a preemptive game with four-card
 # support), the cue bid of their suit with 16+ (game or slam interest,
-# forcing), 2NT asking for the minor after a major-suit Michaels, and
-# 3NT with their suit held and no fit. Notes: two-suited-overcalls.notes.md.
+# forcing; after a major-suit Michaels a raise of partner's major), 2NT
+# asking for the minor after a major-suit Michaels (whenever advancer
+# wants to play in it), three of a minor natural (his own six-card
+# suit), and 3NT with their suit held and no fit. Notes:
+# two-suited-overcalls.notes.md.
 
 module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
   needs  base
@@ -217,49 +220,71 @@ after (1m) 2m (*) when partner.H>=5, partner.S>=5
   P   "No fit worth competing with"  priority -10
 
 # ── Advancer after Michaels over a major ─────────────────────────────
-# Partner has the other major and an unknown minor. 2NT asks for the
-# minor (BBA: "to the partner's longer", probes/michaels-adv-1H.toml),
-# with a doubleton or less in partner's major.
+# Partner has the other major and an unknown minor (Rick, 2026-10-13:
+# "If partner wants to play in the cue bidder's minor, they bid 2NT to
+# ask 'which minor'. Normally bidding the minor says 'I have a 6+ card
+# suit of my own'."):
+# - 2NT asks for the minor, at any strength, with a doubleton or less in
+#   partner's major: a weak hand passes the answer, a better one invites
+#   or bids the game after it (BBA: "to the partner's longer",
+#   probes/michaels-adv-1H.toml).
+# - Three of a minor is natural: six or more of my own, no fit for
+#   partner's major, to play.
+# - The cue bid is the strong raise of partner's major: three-card
+#   support, 16+ over 1♥ (game or slam interest), 12+ over 1♠ (game
+#   interest; there is no invitational jump to 3♥).
+# - 3NT direct: 13+ with their suit held and no fit for partner's major
+#   nor for both minors (with three of each, 2NT finds the minor first).
 after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
   2S  "Preference: three or more spades"
       shows S>=3
       priority -1
-  2N  "Asks for your minor: at most two spades"
+  2N  "Asks for your minor, to play in it: at most two spades"
       alert  artificial
       shows S<=2
       sets  forcing=round
       priority -1
+  3C  "Natural: six or more clubs of my own, no spade fit, to play"
+      shows C>=6, S<=2, hcp<=12
+  3D  "Natural: six or more diamonds of my own, no spade fit, to play"
+      shows D>=6, S<=2, hcp<=12
   3S  "Jump preference: invitational, 10-12 with three spades"
       shows S>=3, hcp>=10, hcp<=12
   4S  "Game in spades: to play (a preempt with four, or 13-15)"
       shows (S>=4, hcp<=9) | (S>=3, hcp>=13, hcp<=15)
-  3H  "Cue bid: 16+, game or slam interest; describe your hand"
+  3H  "Cue bid: a strong spade raise, 16+, game or slam interest"
       alert  artificial
-      shows hcp>=16
+      shows S>=3, hcp>=16
       sets  forcing=round
   3N  "To play: 13+, hearts held, no spade fit"
       shows hcp>=13, S<=2, stop(H)
+      when  C<=2 | D<=2
 
 # Over 1S (2S) partner's hearts can only be shown at the three level, so
 # there is no invitational jump: 3H is any preference, and the cue bid
-# is 12+ (game interest).
+# is the raise with 12+ (game interest).
 after (1S) 2S (P) | (1S) 2S (X) when partner.H>=5
   3H  "Preference: three or more hearts"
       shows H>=3
       priority -1
-  2N  "Asks for your minor: at most two hearts"
+  2N  "Asks for your minor, to play in it: at most two hearts"
       alert  artificial
       shows H<=2
       sets  forcing=round
       priority -1
+  3C  "Natural: six or more clubs of my own, no heart fit, to play"
+      shows C>=6, H<=2, hcp<=12
+  3D  "Natural: six or more diamonds of my own, no heart fit, to play"
+      shows D>=6, H<=2, hcp<=12
   4H  "Game in hearts: to play (a preempt with four, or 13-15)"
       shows (H>=4, hcp<=9) | (H>=3, hcp>=13, hcp<=15)
-  3S  "Cue bid: 12+, game interest; describe your hand"
+  3S  "Cue bid: a heart raise, 12+, game interest"
       alert  artificial
-      shows hcp>=12
+      shows H>=3, hcp>=12
       sets  forcing=round
   3N  "To play: 13+, spades held, no heart fit"
       shows hcp>=13, H<=2, stop(S)
+      when  C<=2 | D<=2
 
 after (1M) 2M (*) when partner.S>=5 | partner.H>=5
   cheapest(S) "Competes: three or more spades"
@@ -272,19 +297,55 @@ after (1M) 2M (*) when partner.S>=5 | partner.H>=5
       priority -2
   P   "No fit worth competing with"  priority -10
 
-# The Michaels bidder names the minor; advancer passes it, or with 13+
-# bids the game: 3NT with their suit held, else five of the minor.
-# The same when they double the ask: 2NT is no place to play (Brill
-# round robin 2026-10-09, board 90000102, where a doubled cue bid was
-# passed out).
+# The Michaels bidder passes advancer's own suit.
+after (1M) 2M (*) 3m (*)
+  P   "Partner's own suit: to play"  priority -1
+
+# The Michaels bidder names the minor, also when they double the ask
+# (2NT is no place to play: Brill round robin 2026-10-09, board
+# 90000102, where a doubled cue bid was passed out). When RHO bids over
+# the ask the force is off: he names the minor at the four level with
+# 13+ or a six-card minor, else passes (the corpus: the free four-level
+# answer with a minimum lost 23 IMPs on 14 boards).
 after (1M) 2M (*) 2N (P) | (1M) 2M (*) 2N (X)
   3C  "My minor is clubs"      shows C>=5, C>=D
   3D  "My minor is diamonds"   shows D>=5, D>C
-after (1M) 2M (P) 2N (P) 3m (P)
-  P    "To play in partner's minor"   shows hcp<=12
-  3N   "Game: 13+, {M} held"          shows hcp>=13, stop(M)
-  5{m} "Game in partner's minor: 13+, three-card support"  shows hcp>=13, m>=3
+after (1M) 2M (*) 2N (*) when they.bid
+  cheapest(C)  "Competes: my minor is clubs, 13+ or six"
+      shows C>=5, C>=D, hcp>=13 | C>=6
+  cheapest(D)  "Competes: my minor is diamonds, 13+ or six"
+      shows D>=5, D>C, hcp>=13 | D>=6
+  P   "A minimum over their bid"   priority -1
+
+# Advancer places the contract in partner's minor: pass with less than
+# 10 HCP, raise to four to invite (10-12 HCP), 3NT with their suit held
+# or five of the minor with 13+ (12 with four trumps), and with 17+ and
+# four-card support a slam try: the cue of their major. HCP, not
+# support points: shortness in partner's major is no value (the corpus:
+# a void in it made two 4m invitations go down). Over a bid by RHO the
+# same calls compete; a pass is the weak hand's.
+after (1M) 2M (*) 2N (*) 3m (*) | (1M) 2M (*) 2N (*) 4m (*)
+  P    "To play in partner's minor"                        priority -1
+  4{m} "Invites game in partner's minor: 10-12, three-card support"
+      shows hcp>=10, hcp<=12, m>=3
+      when  m<=3 | hcp<=11
+  3N   "Game: 13+, {M} held"                               shows hcp>=13, stop(M)
+  5{m} "Game in partner's minor: 13+ (12 with four trumps)"
+      shows (hcp>=13, m>=3) | (hcp>=12, m>=4)
       priority -1
+  4{M} "Slam try in partner's minor: 17+, four-card support"
+      alert  artificial
+      shows hcp>=17, m>=4
+      sets  forcing=round
+# The Michaels bidder answers: accepts the invitation with 14+ (or 12+
+# and a sixth card in the minor); over the slam try, six with 13+, else
+# five.
+after (1M) 2M (*) 2N (*) 3m (*) 4m (*)
+  5{m} "Accepts: 14+, or 12+ with six of the minor"   shows hcp>=14 | (hcp>=12, m>=6)
+  P    "Declines: a minimum"                priority -5
+after (1M) 2M (*) 2N (*) 3m (*) 4M (*)
+  6{m} "Accepts the slam try: 13+"          shows hcp>=13
+  5{m} "Declines: a minimum"                priority -1
 
 # ── Advancer after the Unusual 2NT ───────────────────────────────────
 # BBA (probes/unusual-2n-adv-1H.toml): the preference at the three
@@ -362,12 +423,12 @@ after (1m) 2m (*) 3m (P) | (1m) 2m (*) 3m (X)
   4S  "Maximum: game in spades"   shows S>=H, hcp>=13
   4H  "Maximum: game in hearts"   shows H>S, hcp>=13
 
-# After the cue of a major the minor is still unknown. Over 1H (2H) 3H a
-# minimum shows the spades at the three level, and a maximum (13+)
-# names the minor at the four level, below 4S. Over 1S (2S) 3S (12+,
-# game interest) there is no room below 4H: the Michaels bidder names
-# the minor at the four level whatever his strength, and the cue bidder
-# places the contract (4H with three hearts, the minor with four).
+# After the cue of a major (2026-10-13: the raise of partner's major,
+# three-card support) the fit is known and the minor is not. Over
+# 1H (2H) 3H (16+) a minimum (up to 12) bids 3S, a maximum names the
+# minor at the four level, below 4S (a slam try), or bids 4S with six.
+# Over 1S (2S) 3S (12+) a minimum bids the game, 4H; a maximum names the
+# minor at the four level, still below 4H.
 after (1H) 2H (*) 3H (P) | (1H) 2H (*) 3H (X)
   3S  "Minimum: spades"                     shows hcp<=12
   4C  "Maximum: my minor is clubs"          shows C>=5, C>=D, hcp>=13
@@ -375,28 +436,27 @@ after (1H) 2H (*) 3H (P) | (1H) 2H (*) 3H (X)
   4S  "Maximum: six or more spades"         shows S>=6, hcp>=13
       priority 1
 after (1S) 2S (*) 3S (P) | (1S) 2S (*) 3S (X)
-  4C  "My minor is clubs"      shows C>=5, C>=D
-  4D  "My minor is diamonds"   shows D>=5, D>C
+  4H  "Minimum: game in hearts"             shows hcp<=12
+  4C  "Maximum: my minor is clubs"          shows C>=5, C>=D, hcp>=13
+  4D  "Maximum: my minor is diamonds"       shows D>=5, D>C, hcp>=13
 
-# The cue bidder places the contract once the minor is known: game in
-# the major with three or more, five of the minor with four and 13+,
-# else four of the minor (a pass) or the major's five-two fit.
+# The cue bidder, with the fit in partner's major, bids its game once
+# partner has named the minor (slam is a gap: notes).
 after (1M) 2M (*) 3M (*) 4m (P) | (1M) 2M (*) 3M (*) 4m (X)
-  4H   "Game in hearts: three or more"           shows H>=3
+  4H   "Game in hearts: the fit the cue bid showed"
       when  M is S
       priority 1
-  4S   "Game in spades: three or more"           shows S>=3
+  4S   "Game in spades: the fit the cue bid showed"
       when  M is H
       priority 1
-  5{m} "Game in partner's minor: four or more, 13+"   shows m>=4, hcp>=13
-  P    "Partner's minor: four or more, no game"       shows m>=4, hcp<=12
-      when  M is S
-  4H   "Hearts: the best fit we have"
-      when  M is S
+# After the minimum at the three level: the cue bidder (16+) bids the
+# game, in the major with three or more, else 3NT with their suit held.
+after (1x) 2x (*) 3x (*) 3y (*) when y is H | y is S, y is not x
+  4{y} "Game: three or more {y} opposite the minimum"   shows y>=3
+  3N   "Game: {x} held, no {y} fit"                     shows stop(x)
       priority -1
-  4S   "Spades: the best fit we have"
-      when  M is H
-      priority -1
+  4{y} "Game: the best fit we have"
+      priority -2
 
 # The Unusual 2NT after a preference: a minimum passes; 17+ bids the
 # game in hearts or 3NT with their suit held.
