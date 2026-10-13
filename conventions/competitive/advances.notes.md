@@ -234,6 +234,58 @@ longer unbid suit however short; a free bid over their call with four
 (a major) or five (a minor). Standard practice, not yet cited; not
 probed against BBA.
 
+## Never pass out our own artificial bid (2026-10-12)
+
+Brill round robin 2026-10-09, board 90000102: `1S 2S X 3S X P P P`,
+-1,700. South's Michaels 2♠ and North's cue 3♠ were both artificial;
+after E's double both our passes came from "Defending: nothing more to
+say" (priority -20), and the auction ended in our cue bid, doubled.
+
+The guard, in the rules with one new engine term:
+
+- `artificial_contract` (engine 0.7.0, CONTRACT.md): our side made the
+  auction's last bid, the rule that explained it says `artificial`, and
+  it did not answer partner's question. Answers (Lebensohl's and other
+  relay completions, keycard answers) are left out: the asker may choose
+  to play them, and does (418 corpus boards pass "Lebensohl: as asked"
+  with clubs, 165 keycard answers in our suit are passed at the slam).
+- `passes_out_artificial` (base.bid, a `define`):
+  `artificial_contract, rho.last=P`: RHO has passed our artificial bid,
+  so my pass leaves LHO to end the auction, or ends it. After RHO's
+  double my pass is allowed (it gives partner another turn: opener's
+  pass of a doubled Stayman 2♣ means something), and partner runs.
+- The catch-all passes carry `when !passes_out_artificial`: this file's
+  "Defending: nothing more to say", base.bid's "Game reached",
+  after-interference.bid's two "nothing new to say", and two transfer
+  fallbacks with the same hole: jacoby-transfers.bid's "Weak: play here"
+  (responder passed his own transfer, doubled and passed back) and
+  nt-interference.bid's "Nothing more to show".
+- The runout (base.bid, priority -60, below every real rule): the
+  cheapest bid in our best known fit (my length plus partner's shown
+  minimum), never in a suit they have bid naturally.
+
+For the Michaels case the Michaels bidder now describes instead of
+passing (two-suited-overcalls.notes.md, 2026-10-12); were he to pass,
+North would run to 4♥.
+
+**Measured** (full corpus, 170,633 boards, against main; the boards
+where our auction changed):
+
+- Boards whose final contract was our artificial bid, passed by a
+  catch-all: 76 → 9 (the 9 are doubled Lebensohl completions the asker
+  had chosen to play: answers, left alone). The runout fires on 48
+  boards, the game-force fallbacks take over on 25 more (the force of
+  the cue bid now applies once the pass is gone).
+- Most of it is the advancer's game-forcing cue of their preempt
+  (`3x X P 4x P`), which the doubler passed out: 67 boards before, 0
+  after; We_X_Opps_Preempt alone 51 boards.
+- 77 boards changed. Errors yardstick +583 IMPs (halves +341 / +242),
+  contract errors +450, doubling +133; distance from par +402 (+242 /
+  +160); side IMPs +698. Whole set vs BBA, net errors -101,747 →
+  -101,164.
+- The tripwire: no change outside the guard's own positions and the
+  Michaels scenarios.
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,
@@ -248,6 +300,9 @@ probed against BBA.
   yet.
 - **Corpus measurements:** the whole slice (2026-09-23) and the
   defending-side fallback (2026-09-25).
+- **Brill round robin 2026-10-09, board 90000102**
+  (`probes/brill-90000102.pbn`): the guard against passing out our own
+  artificial bid (2026-10-12).
 - **Where we differ from BBA's stated meanings:** the raise of a
   two-level overcall asks for four trumps, as every BBA hand that raised
   had, although its meaning allows three (for Rick).

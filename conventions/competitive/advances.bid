@@ -357,4 +357,6 @@ after (1N) 2y (*) | (1N) 3y (*)
 # 1S (2D) 2S (P) 4S and 1S (2D) X (3D) 3H). Positions where the
 # defending side has more to say need rules of their own above this.
 when lho.opened | rho.opened
-  P   "Defending: nothing more to say"  priority -20
+  P   "Defending: nothing more to say"
+      when  !passes_out_artificial   # never pass out our own artificial bid (base.bid)
+      priority -20

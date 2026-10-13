@@ -318,6 +318,7 @@ after 1N (2y) when y is not C, (maybe rho.y<=3), (maybe rho.H<=3) | (maybe rho.S
 # A gap to fill, not a treatment: nt-interference.notes.md.
 when answered transfer(M), they.bid
   P   "Nothing more to show"                         priority -10
+      when  !passes_out_artificial   # never pass out my own transfer, doubled (base.bid)
 
 # Their relay over our Stayman double (Cappelletti 2♣, X, 2♦): opener
 # still shows a major, doubles 2♦ with four of them, else passes.

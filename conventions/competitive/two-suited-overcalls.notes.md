@@ -266,6 +266,68 @@ rebids.bid's free-bid block read opener's sign-off as "six or more"
 (rebids.notes.md, "Read as the hand holds"). They are now `alert
 artificial`, as the cue bids in after-interference.bid are.
 
+## Answering advancer's cue bid; Michaels is artificial (2026-10-12)
+
+Brill round robin 2026-10-09, board 90000102 (Rusty N/S on 21GF-GIB,
+BBA E/W; E/W vulnerable): `1S 2S X 3S X P P P`, North in 3♠ doubled
+down eight, -1,700. South (`.QT953.AJ854.86`, Michaels) passed the
+doubled cue bid with advances.bid's catch-all "Defending: nothing more
+to say", and North passed it out the same way. Two holes: no rule for
+the Michaels bidder after a cue of a major (the old `(1x) 2x (P) 3x (P)`
+block was written for both majors: over 1♠ (2♠) 3♠ its "minimum: spades"
+was 4♠, their suit), and nothing kept a catch-all pass from leaving our
+cue bid as the contract (advances.notes.md, "Never pass out our own
+artificial bid").
+
+What we play now:
+
+- **Every Michaels-family call is `artificial`**, not only alerted: the
+  cue bids over one-level openings and preempts, the Unusual 1NT, 2NT
+  and 4NT, advancer's cue bids and 2NT ask, the opening side's cue
+  bids, the jump cue bids (but the preempt in their minor, which is a
+  place to play) and Leaping Michaels' 4♦ over 2♦. Leaping and
+  Non-Leaping Michaels' minor bids and the pass-or-correct bids stay
+  bare alerts: they name a suit we may play in. `partner.named(S)` no
+  longer reads a Michaels 2♠ as spades.
+- **The cue of a minor** (both majors known): as before, a minimum names
+  the longer major cheaply, 13+ bids its game, now also when RHO doubles
+  the cue (`(1m) 2m (*) 3m (P|X)`).
+- **The cue of a major**: over 1♥ (2♥) 3♥ a minimum (up to 12) bids 3♠,
+  a maximum names the minor at the four level (below 4♠), or bids 4♠
+  with six. Over 1♠ (2♠) 3♠ (12+, game interest) there is no room below
+  4♥, so the Michaels bidder names the minor at the four level whatever
+  his strength; advancer places the contract: game in the major with
+  three, five of the minor with four and 13+, else pass the minor with
+  four, or the major's five-two fit.
+- **RHO doubles the cue**: the Michaels bidder still describes (a pass
+  is not "nothing extra, you choose": the cue bidder could not choose
+  without knowing the minor). The same over a doubled 2NT ask.
+- On the board: South now bids 4♦ (makes ten tricks double dummy;
+  E/W make 4♠ +1, par N/S -300 in 6♦X/6♥X). Had South passed, North
+  would run to 4♥ (the runout, base.bid).
+
+Measured: the Michaels convention score (`probes/tools/conv_ab.py
+--only michaels --reuse-bba`, main's rules against these) -105 → -90
+(Rusty's gain +210 → +225, halves -60/-45 → -45/-45); the Unusual 2NT
+unchanged (-497). On the full corpus the four Michaels_Cuebid boards
+whose 1♠ (2♠) 3♠ answer changed gained 27 IMPs (errors); the opening
+side's 3♦ "game force without a fit" over their 2NT, now artificial,
+moved three boards from opener's 3♥/3♠ rebid to the game-force 3NT
+(-4 IMPs): opener has no rebid rule over the artificial cue (gap).
+
+Not written: BBA's double of our Michaels (W,
+7 HCP, a spade void) and its double of the cue bid (E) read as "no
+rule". Writing them means a meaning for our own side too (the 6-9 raise
+double BBA plays, or values) with opener's answers; left as a gap.
+
+Sources: Bridgebum's "Michaels Cuebid" covers the 2NT ask and the
+minimum rebid after the raise of the cue, not the cue of a major or a
+doubled cue; Larry Cohen's "Michaels Cue Bid"
+(<https://www.larryco.com/bridge-articles/michaels-cue-bid>) says the
+meaning of pass and redouble after their double "requires discussion".
+Naming the minor at the four level is the extension of the 2NT ask,
+standard practice, not yet cited.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
@@ -319,6 +381,14 @@ artificial`, as the cue bids in after-interference.bid are.
   Unusual 1NT, the Unusual 4NT. Lengths and strength (five-four and 6+
   HCP for 1NT; six-six / seven-five for 4NT) are ours: standard
   practice, not yet cited.
+- **Brill round robin 2026-10-09, board 90000102**
+  (`probes/brill-90000102.pbn`): the answers to the cue bid and the
+  artificial marks (2026-10-12 section).
+- **Larry Cohen**, "Michaels Cue Bid"
+  (<https://www.larryco.com/bridge-articles/michaels-cue-bid>): passes and
+  redoubles after their double need discussion. Our answer to the cue of
+  a major (name the minor at the four level) is ours: standard practice,
+  not yet cited.
 - **Practice-Bidding-Scenarios** `btn/Jump_Cuebid_Strong.btn`,
   `Jump_Cuebid_Weak.btn`: the direct jump cue bids.
 - **BBA corpus** (2026-10-05): "Michaels Cuebid" notes over weak twos

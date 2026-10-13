@@ -654,6 +654,10 @@ impl Engine {
             }
         }
         // State: questions answered, forcing satisfied, then this call's effects.
+        let answers_partner = pos.sides[side(caller)]
+            .ask
+            .as_ref()
+            .is_some_and(|a| a.by == caller.partner());
         advance_state(&mut pos.sides[side(caller)], caller);
         if !call.is_pass() {
             pos.sides[1 - side(caller)].opponent_acted(caller);
@@ -737,6 +741,8 @@ impl Engine {
         }
         pos.artificial.resize(pos.calls.len(), false);
         pos.artificial.push(step.artificial);
+        pos.answers.resize(pos.calls.len(), false);
+        pos.answers.push(answers_partner);
         pos.calls.push(call.clone());
         step
     }

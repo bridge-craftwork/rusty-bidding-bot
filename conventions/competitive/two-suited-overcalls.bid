@@ -87,68 +87,68 @@ module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
 # file's Unusual 2NT.
 after (1m) when mich_minors | mich_quasi | mich_play, !ghestem
   2{m} "Michaels: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
       when  strength is wide_range, !vul
   2{m} "Michaels: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
   2{m} "Michaels, weak: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
   2{m} "Michaels, weak: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
   2{m} "Michaels, strong: five or more in each major, 16+"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp>=16
       when  strength is weak_or_strong
 
 # ── Michaels over a major: the other major and a minor ───────────────
 after (1H) when mich_majors | mich_play, !ghestem
   2H  "Michaels: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=17
       when  strength is wide_range, !vul
   2H  "Michaels: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
   2H  "Michaels, weak: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
   2H  "Michaels, weak: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
   2H  "Michaels, strong: five or more spades and a five-card minor, 16+"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp>=16
       when  strength is weak_or_strong
 
 after (1S) when mich_majors | mich_play, !ghestem
   2S  "Michaels: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=17
       when  strength is wide_range, !vul
   2S  "Michaels: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
   2S  "Michaels, weak: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
   2S  "Michaels, weak: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
   2S  "Michaels, strong: five or more hearts and a five-card minor, 16+"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp>=16
       when  strength is weak_or_strong
 
@@ -157,15 +157,15 @@ after (1S) when mich_majors | mich_play, !ghestem
 # vulnerability, and no upper limit (it bids 2NT on 19 HCP too).
 after (1H) | (1S) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more in each minor"
-      alert
+      alert  artificial
       shows C>=5, D>=5, hcp+length_points>=9
 after (1C) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more diamonds and hearts"
-      alert
+      alert  artificial
       shows D>=5, H>=5, hcp+length_points>=9
 after (1D) when u2n_play | u2n_jump | ghestem
   2N  "Unusual 2NT: five or more clubs and hearts"
-      alert
+      alert  artificial
       shows C>=5, H>=5, hcp+length_points>=9
 
 # ── Advancer after Michaels over a minor ─────────────────────────────
@@ -191,7 +191,7 @@ after (1m) 2m (P) | (1m) 2m (X) when partner.H>=5, partner.S>=5
       shows S>=H
       shows (S>=4, hcp<=9) | (S>=3, hcp>=13, hcp<=15)
   3{m} "Cue bid: 16+, game or slam interest; describe your hand"
-      alert
+      alert  artificial
       shows hcp>=16
       sets  forcing=round
   3N  "To play: 13+, their suit held, no major fit"
@@ -225,7 +225,7 @@ after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
       shows S>=3
       priority -1
   2N  "Asks for your minor: at most two spades"
-      alert
+      alert  artificial
       shows S<=2
       sets  forcing=round
       priority -1
@@ -234,7 +234,7 @@ after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
   4S  "Game in spades: to play (a preempt with four, or 13-15)"
       shows (S>=4, hcp<=9) | (S>=3, hcp>=13, hcp<=15)
   3H  "Cue bid: 16+, game or slam interest; describe your hand"
-      alert
+      alert  artificial
       shows hcp>=16
       sets  forcing=round
   3N  "To play: 13+, hearts held, no spade fit"
@@ -248,14 +248,14 @@ after (1S) 2S (P) | (1S) 2S (X) when partner.H>=5
       shows H>=3
       priority -1
   2N  "Asks for your minor: at most two hearts"
-      alert
+      alert  artificial
       shows H<=2
       sets  forcing=round
       priority -1
   4H  "Game in hearts: to play (a preempt with four, or 13-15)"
       shows (H>=4, hcp<=9) | (H>=3, hcp>=13, hcp<=15)
   3S  "Cue bid: 12+, game interest; describe your hand"
-      alert
+      alert  artificial
       shows hcp>=12
       sets  forcing=round
   3N  "To play: 13+, spades held, no heart fit"
@@ -274,7 +274,10 @@ after (1M) 2M (*) when partner.S>=5 | partner.H>=5
 
 # The Michaels bidder names the minor; advancer passes it, or with 13+
 # bids the game: 3NT with their suit held, else five of the minor.
-after (1M) 2M (P) 2N (P)
+# The same when they double the ask: 2NT is no place to play (Brill
+# round robin 2026-10-09, board 90000102, where a doubled cue bid was
+# passed out).
+after (1M) 2M (*) 2N (P) | (1M) 2M (*) 2N (X)
   3C  "My minor is clubs"      shows C>=5, C>=D
   3D  "My minor is diamonds"   shows D>=5, D>C
 after (1M) 2M (P) 2N (P) 3m (P)
@@ -299,7 +302,7 @@ after (1M) 2N (P) | (1M) 2N (X) when partner.C>=5, partner.D>=5
   5D  "Game in diamonds: 12+ with four-card support"   shows D>=4, D>=C, hcp>=12
   3N  "To play: 13+, both majors held"   shows hcp>=13, stop(H), stop(S)
   3{M} "Cue bid: 16+, game or slam interest"
-      alert
+      alert  artificial
       shows hcp>=16
       sets  forcing=round
 after (1C) 2N (P) | (1C) 2N (X) when partner.D>=5, partner.H>=5
@@ -313,7 +316,7 @@ after (1C) 2N (P) | (1C) 2N (X) when partner.D>=5, partner.H>=5
       shows (H>=4, hcp<=8) | (H>=3, hcp>=12, hcp<=15)
   3N  "To play: 13+, clubs and spades held"   shows hcp>=13, stop(C), stop(S)
   3C  "Cue bid: 16+, game or slam interest"
-      alert
+      alert  artificial
       shows hcp>=16
       sets  forcing=round
 after (1D) 2N (P) | (1D) 2N (X) when partner.C>=5, partner.H>=5
@@ -327,7 +330,7 @@ after (1D) 2N (P) | (1D) 2N (X) when partner.C>=5, partner.H>=5
       shows (H>=4, hcp<=8) | (H>=3, hcp>=12, hcp<=15)
   3N  "To play: 13+, diamonds and spades held"   shows hcp>=13, stop(D), stop(S)
   3D  "Cue bid: 16+, game or slam interest"
-      alert
+      alert  artificial
       shows hcp>=16
       sets  forcing=round
 
@@ -348,12 +351,52 @@ after (1x) 2x (P) 3y (P) when y is not x, y is H | y is S, partner.jumped
   4{y} "Accepts the invitation"            shows hcp>=11
   P    "Declines: a minimum"               priority -5
 # After the cue bid (forcing, 16+): a minimum names its longer (or only
-# known) major at the cheapest level; 13+ bids the game in it.
-after (1x) 2x (P) 3x (P)
+# known) major at the cheapest level; 13+ bids the game in it. The cue
+# is artificial, so when RHO doubles it the Michaels bidder still
+# describes: a pass would leave partner in their suit (Brill round robin
+# 2026-10-09, board 90000102: 1S 2S X 3S X P P P, -1,700). Only when RHO
+# bids over the cue is the force off.
+after (1m) 2m (*) 3m (P) | (1m) 2m (*) 3m (X)
   cheapest(S) "Minimum: spades"   shows S>=H, hcp<=12
   cheapest(H) "Minimum: hearts"   shows H>S, hcp<=12
   4S  "Maximum: game in spades"   shows S>=H, hcp>=13
   4H  "Maximum: game in hearts"   shows H>S, hcp>=13
+
+# After the cue of a major the minor is still unknown. Over 1H (2H) 3H a
+# minimum shows the spades at the three level, and a maximum (13+)
+# names the minor at the four level, below 4S. Over 1S (2S) 3S (12+,
+# game interest) there is no room below 4H: the Michaels bidder names
+# the minor at the four level whatever his strength, and the cue bidder
+# places the contract (4H with three hearts, the minor with four).
+after (1H) 2H (*) 3H (P) | (1H) 2H (*) 3H (X)
+  3S  "Minimum: spades"                     shows hcp<=12
+  4C  "Maximum: my minor is clubs"          shows C>=5, C>=D, hcp>=13
+  4D  "Maximum: my minor is diamonds"       shows D>=5, D>C, hcp>=13
+  4S  "Maximum: six or more spades"         shows S>=6, hcp>=13
+      priority 1
+after (1S) 2S (*) 3S (P) | (1S) 2S (*) 3S (X)
+  4C  "My minor is clubs"      shows C>=5, C>=D
+  4D  "My minor is diamonds"   shows D>=5, D>C
+
+# The cue bidder places the contract once the minor is known: game in
+# the major with three or more, five of the minor with four and 13+,
+# else four of the minor (a pass) or the major's five-two fit.
+after (1M) 2M (*) 3M (*) 4m (P) | (1M) 2M (*) 3M (*) 4m (X)
+  4H   "Game in hearts: three or more"           shows H>=3
+      when  M is S
+      priority 1
+  4S   "Game in spades: three or more"           shows S>=3
+      when  M is H
+      priority 1
+  5{m} "Game in partner's minor: four or more, 13+"   shows m>=4, hcp>=13
+  P    "Partner's minor: four or more, no game"       shows m>=4, hcp<=12
+      when  M is S
+  4H   "Hearts: the best fit we have"
+      when  M is S
+      priority -1
+  4S   "Spades: the best fit we have"
+      when  M is H
+      priority -1
 
 # The Unusual 2NT after a preference: a minimum passes; 17+ bids the
 # game in hearts or 3NT with their suit held.
@@ -459,7 +502,7 @@ after 1M (2N) when rho.C>=5, rho.D>=5, !uvu
       sets  forcing=round, ask=limit_raise(M)
       priority 1
   3D  "Cue bid: game force without a fit"
-      alert
+      alert  artificial
       shows hcp>=13, M<=2
       sets  forcing=game
   3S  "Natural: five or more spades, 12+, forcing"
@@ -473,7 +516,7 @@ after 1M (2N) when rho.C>=5, rho.D>=5, uvu
       sets  forcing=round, ask=limit_raise(M)
       priority 1
   3C  "Unusual vs Unusual: game force with five of the other major"
-      alert
+      alert  artificial
       shows hcp>=13, M<=2, S>=5 | M is S, H>=5 | M is H
       sets  forcing=game
   3S  "Natural: five or more spades, 7-10"
@@ -555,17 +598,17 @@ when asked limit_raise(t)
 # better, a hand that did not open.
 after (1x) when u1n_play, passed_hand
   1N  "Unusual 1NT (passed hand): diamonds and hearts, five-four or better"
-      alert
+      alert  artificial
       shows D>=4, H>=4, D>=5 | H>=5, hcp>=6
       when  x is C
       priority 1
   1N  "Unusual 1NT (passed hand): clubs and hearts, five-four or better"
-      alert
+      alert  artificial
       shows C>=4, H>=4, C>=5 | H>=5, hcp>=6
       when  x is D
       priority 1
   1N  "Unusual 1NT (passed hand): both minors, five-four or better"
-      alert
+      alert  artificial
       shows C>=4, D>=4, C>=5 | D>=5, hcp>=6
       when  x is H | x is S
       priority 1
@@ -574,32 +617,32 @@ after (1x) when u1n_play, passed_hand
 # (GIB_Sandwich_NT_BPH). We bid the convention as defined (notes).
 after (1x) P (1y) when u1n_play, passed_hand, y is not x
   1N  "Unusual 1NT: the two unbid suits, hearts and spades"
-      alert
+      alert  artificial
       shows H>=4, S>=4, H>=5 | S>=5, hcp>=6
       when  x is C, y is D
       priority 1
   1N  "Unusual 1NT: the two unbid suits, diamonds and spades"
-      alert
+      alert  artificial
       shows D>=4, S>=4, D>=5 | S>=5, hcp>=6
       when  x is C, y is H
       priority 1
   1N  "Unusual 1NT: the two unbid suits, diamonds and hearts"
-      alert
+      alert  artificial
       shows D>=4, H>=4, D>=5 | H>=5, hcp>=6
       when  x is C, y is S
       priority 1
   1N  "Unusual 1NT: the two unbid suits, clubs and spades"
-      alert
+      alert  artificial
       shows C>=4, S>=4, C>=5 | S>=5, hcp>=6
       when  x is D, y is H
       priority 1
   1N  "Unusual 1NT: the two unbid suits, clubs and hearts"
-      alert
+      alert  artificial
       shows C>=4, H>=4, C>=5 | H>=5, hcp>=6
       when  x is D, y is S
       priority 1
   1N  "Unusual 1NT: the two unbid suits, both minors"
-      alert
+      alert  artificial
       shows C>=4, D>=4, C>=5 | D>=5, hcp>=6
       when  x is H, y is S
       priority 1
@@ -641,39 +684,39 @@ after (1x) 1N (P) | (1x) 1N (X) | (1x) P (1y) 1N (P) | (1x) P (1y) 1N (X) when u
 # major, where it is also a two-suited takeout).
 after (1x) | (1x) P (2x) | (1x) P (3x) | (1x) P (4x) when u4n_play
   4N  "Unusual 4NT: both minors, six-six or seven-five"
-      alert
+      alert  artificial
       shows (C>=6, D>=6) | (C>=7, D>=5) | (C>=5, D>=7)
       when  x is H | x is S
       priority 1
   4N  "Unusual 4NT: diamonds and hearts, six-six or seven-five"
-      alert
+      alert  artificial
       shows (D>=6, H>=6) | (D>=7, H>=5) | (D>=5, H>=7)
       when  x is C
       priority 1
   4N  "Unusual 4NT: clubs and hearts, six-six or seven-five"
-      alert
+      alert  artificial
       shows (C>=6, H>=6) | (C>=7, H>=5) | (C>=5, H>=7)
       when  x is D
       priority 1
 after (2x) | (3x) when u4n_play, x is not N, rho.hcp.max <= 12, rho.x>=5
   4N  "Unusual 4NT: five-five or better in both minors, strong"
-      alert
+      alert  artificial
       shows C>=5, D>=5, losers<=4
       when  x is H | x is S
       priority 1
   4N  "Unusual 4NT: five-five or better in clubs and hearts, strong"
-      alert
+      alert  artificial
       shows C>=5, H>=5, losers<=4
       when  x is D
       priority 1
   4N  "Unusual 4NT: five-five or better in diamonds and hearts, strong"
-      alert
+      alert  artificial
       shows D>=5, H>=5, losers<=4
       when  x is C
       priority 1
 after (4M) when u4n_play, rho.hcp.max <= 12, rho.M>=5
   4N  "Unusual 4NT: five-five or better in both minors"
-      alert
+      alert  artificial
       shows C>=5, D>=5, losers<=5
       priority 1
 
@@ -704,49 +747,49 @@ after (1x) 4N (P) | (2x) 4N (P) | (3x) 4N (P) | (4x) 4N (P) | (1x) P (2x) 4N (P)
 # not Michaels (Rosen: it asks for a stopper; not written).
 after (2x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5, !leaping
   3{x} "Michaels over their weak two: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=13
       when  x is C | x is D
       priority 1
   3{x} "Michaels over their weak two: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=13
       when  x is H
       priority 1
   3{x} "Michaels over their weak two: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=13
       when  x is S
       priority 1
 after (2x) P (P) | (2x) P (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, lho.hcp.max <= 12, lho.x>=5
   cheapest(x) "Michaels: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11
       when  x is C | x is D
       priority 1
   cheapest(x) "Michaels: five or more spades and a five-card minor"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=11
       when  x is H
       priority 1
   cheapest(x) "Michaels: five or more hearts and a five-card minor"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11
       when  x is S
       priority 1
 after (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
   4{x} "Michaels over their preempt: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp+length_points>=16
       when  x is C | x is D
       priority 1
   4{x} "Michaels over their preempt: five or more spades and a five-card minor, game values"
-      alert
+      alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=16
       when  x is H
       priority 1
   4{x} "Michaels over their preempt: five or more hearts and a five-card minor, game values"
-      alert
+      alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=16
       when  x is S
       priority 1
@@ -762,7 +805,7 @@ after (2x) when leaping, x is not N, rho.hcp.max <= 12, rho.x>=5
       when  x is D
       priority 1
   4D  "Leaping Michaels: five or more in each major"
-      alert
+      alert  artificial
       shows H>=5, S>=5, losers<=5
       when  x is D
       priority 1
@@ -1007,7 +1050,7 @@ when asked poc_minor
 # for Rick).
 after (1M) when djc_major is gambling | djc_major is strong
   3{M} "Jump cue bid: a solid suit of seven or more; bid 3NT with {M} stopped"
-      alert
+      alert  artificial
       shows (C>=7, quality(C)>=excellent) | (D>=7, quality(D)>=excellent) | (M is H, S>=7, quality(S)>=excellent) | (M is S, H>=7, quality(H)>=excellent)
       sets  forcing=round, ask=jump_cue_stopper
       when  !stop(M)
@@ -1015,14 +1058,14 @@ after (1M) when djc_major is gambling | djc_major is strong
       priority 1
 after (1m) when djc_minor is gambling
   3{m} "Jump cue bid: a solid suit of seven or more; bid 3NT with {m} stopped"
-      alert
+      alert  artificial
       shows (C>=7, quality(C)>=excellent, m is D) | (D>=7, quality(D)>=excellent, m is C) | (H>=7, quality(H)>=excellent) | (S>=7, quality(S)>=excellent)
       sets  forcing=round, ask=jump_cue_stopper
       when  !stop(m)
       priority 1
 after (1m) when djc_minor is majors
   3{m} "Jump cue bid: five or more in each major, preemptive"
-      alert
+      alert  artificial
       shows H>=5, S>=5, hcp<=10
       priority 1
 after (1m) when djc_minor is preempt

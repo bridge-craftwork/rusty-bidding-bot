@@ -255,8 +255,9 @@ LANGUAGE.md §3 and §4), the `systems on` declaration and the `systems 1N`
 / `systems 2N` start of a pattern, and the terms `me.opened`,
 `me.named(x)` and `we.systems_on`. No existing file can notice them
 (each was a parse error or an unknown term before), so they came without
-a new language version. This repository's manifest names `engine =
-"0.5.0"`.
+a new language version. Engine 0.7.0 adds the term `artificial_contract`
+(our side's last bid is one a rule marks artificial) the same way. This
+repository's manifest names `engine = "0.7.0"`.
 
 What the
 engine *knows* may also get sharper within a version (the deck limits,
@@ -445,6 +446,7 @@ Bare or with `me.`. Public, so fine in a context's `when`, except the judgment h
 | `seat` | my seat from the dealer, 1 to 4 |
 | `vul` | my side is vulnerable |
 | `game_reached` | our side's last bid is game or higher and it is our contract |
+| `artificial_contract` | our side made the auction's last bid, a rule marks it artificial, and it answered no question of partner's (relay completions and keycard answers are left out): passing it out plays a contract nobody chose |
 | `imps` | IMPs or other total-point scoring |
 | `matchpoints` | matchpoints or board-a-match |
 | `favourable` | we are not vulnerable and they are |

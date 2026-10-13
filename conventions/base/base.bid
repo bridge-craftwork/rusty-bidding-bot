@@ -83,7 +83,46 @@ when opening, seat=4
 # Slam tries and corrections are separate rules that outrank this.
 when game_reached
   P   "Game reached: nothing more to say"
+      when  !passes_out_artificial
       priority -50
+
+# ── Never pass out our own artificial bid ────────────────────────────
+# Brill round robin 2026-10-09, board 90000102: 1S 2S X 3S X P P P, a
+# doubled Michaels cue bid passed out for -1,700. The catch-all passes
+# (this file's "Game reached", advances.bid's "Defending: nothing more
+# to say", after-interference.bid's "nothing new to say", and two
+# transfer fallbacks) do not apply when our side's last bid is
+# artificial (a cue bid, a transfer, Stayman, a relay; not an answer to
+# partner's question, which the asker may choose to play) and RHO has
+# passed it: my pass would leave LHO to end the auction, or end it
+# (partner's game-forcing cue of their preempt, 3S X P 4S P, was passed
+# out by the doubler 67 times on the corpus). After RHO's double, a pass
+# that gives partner another turn may mean something (opener's pass of a
+# doubled Stayman 2C), and partner, the hand that knows what the bid
+# meant, runs at his turn.
+#
+# With no real rule left, the hand to call bids its best known fit
+# naturally (its own length plus partner's shown length) at the cheapest
+# level, never in a suit they have bid naturally. A fallback below every
+# real rule.
+define passes_out_artificial = artificial_contract, rho.last=P
+when passes_out_artificial
+  cheapest(S) "Runout: our last bid is artificial; the best fit we know"
+      prefer we.fit(S).min
+      when  !lho.named(S), !rho.named(S)
+      priority -60
+  cheapest(H) "Runout: our last bid is artificial; the best fit we know"
+      prefer we.fit(H).min
+      when  !lho.named(H), !rho.named(H)
+      priority -60
+  cheapest(D) "Runout: our last bid is artificial; the best fit we know"
+      prefer we.fit(D).min
+      when  !lho.named(D), !rho.named(D)
+      priority -60
+  cheapest(C) "Runout: our last bid is artificial; the best fit we know"
+      prefer we.fit(C).min
+      when  !lho.named(C), !rho.named(C)
+      priority -60
 
 # A game force must not be passed below game. When no better rule applies,
 # bid game: in the agreed suit, or in notrump without one.
