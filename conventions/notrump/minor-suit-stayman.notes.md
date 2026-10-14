@@ -22,12 +22,15 @@ describe it and BBA bids it:
   on HCP: 6NT from 33, 4NT quantitative with 31-32, else 3NT.
 
 With 21GF-MSTandMSS the minor transfers are 2NT (clubs) and 3♣
-(diamonds), read from `notrump.transfers.two_nt_clubs` and
-`three_c_diamonds` because `notrump.minor_transfers` has no value for
-that pair (it reads `none` there). Any strength, six or more of the
-minor and no four-card side minor (with one, 2♠); opener completes and
-responder's next call is minor-transfers.bid's. The natural 2NT
-invitation of one-nt.bid steps aside when 2NT is the transfer.
+(diamonds): `notrump.minor_transfers = two_nt_three_c`, which the card
+import derives from BBA's `1N-2N transfer to clubs` and `1N-3C transfer
+to diamonds` keys (convention-card PR #55, v0.9.1). Any strength, six
+or more of the minor and no four-card side minor (with one, 2♠); opener
+completes and responder's next call is minor-transfers.bid's, which
+now owns the transfers too (2026-10-13; before, this module read the
+two `notrump.transfers.*` switches because the field had no value for
+the pair). The natural 2NT invitation of one-nt.bid steps aside when
+2NT is the transfer.
 
 ## Convention score (2026-10-07)
 
@@ -76,10 +79,9 @@ and over our 1NT overcall BBA passes some 9-counts we take to game.
 
 ## Open questions
 
-- `notrump.minor_transfers` lacks a value for "2NT clubs, 3♣ diamonds"
-  (GIB/BBA's MSTandMSS combination); a field value in convention-card
-  would let minor-transfers.bid own it. For now this module reads the
-  two transfer switches.
+- (Settled 2026-10-13) `notrump.minor_transfers` had no value for "2NT
+  clubs, 3♣ diamonds" (GIB/BBA's MSTandMSS combination); convention-card
+  added `two_nt_three_c` and minor-transfers.bid owns the transfers.
 
 ## Sources
 
