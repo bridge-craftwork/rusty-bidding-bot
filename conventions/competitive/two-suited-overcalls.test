@@ -148,3 +148,31 @@ S 9.AKQ53.AQJ54.86          | 1S 2S P 2N 3S   | 4D  | 16 HCP: names the minor ov
 N 864.K7.KQT9.Q942          | 1S 2S P 2N P 3D 3S | 4D | 10 HCP: competes
 N 864.73.QT92.J942          | 1S 2S P 2N P 3D 3S | P  | weak: done
 N AK4.K42.KQ83.J42          | 1H 2H P 3H P 3S P | 4S | 16 HCP opposite the minimum: game
+
+# ── Advancing a major-suit Michaels: pass or correct (Larry Cohen) ───
+# competitive.michaels.minor_advance=pass_or_correct: 3♣ asks partner
+# to pass with clubs or correct to 3♦; 2NT is the ask with 10+; 3♦ is
+# advancer's own diamonds.
+card    21GF-DEFAULT competitive.michaels.minor_advance=pass_or_correct
+dealer  E
+vul     None
+N 864.73.QT92.J942          | 1S 2S P         | 3C  | 3 HCP, both minors: pass or correct
+N 86.732.QT92.J942          | 1H 2H P         | 3C  | the same over 1H: two spades
+N 864.K7.KQT9.Q942          | 1S 2S P         | 2N  | 10 HCP: the stronger ask
+N 864.K7.KQT9.Q942          | 1S 2S P 2N P 3D P | 4D | 10 HCP, four diamonds: invites
+N 86.AK.KQT9.AK942          | 1S 2S P         | 2N  | 19 HCP: the ask first
+N 86.73.KQJ9742.J4          | 1S 2S P         | 3D  | natural: seven diamonds of my own
+N 864.KJ7.KQT9.K94          | 1S 2S P         | 3S  | three hearts, 12 HCP: still the cue raise
+S 9.KQ953.A4.QJ854          | 1S 2S P 3C P    | P   | clubs: pass
+S AQJ85.7.KQT84.93          | 1H 2H P 3C P    | 3D  | diamonds: correct
+S AQJ85.7.KQT84.93          | 1H 2H P 3C X    | 3D  | the same over a double
+S 9.KQ953.A4.QJ854          | 1S 2S P 3D P    | P   | partner's own diamonds: to play
+S .QT9532.AJ854.86          | 1S 2S P 3C 3S   | P   | RHO bids: a minimum passes
+S 9.AKQ53.AQJ54.86          | 1S 2S P 3C 3S   | 4D  | 16 HCP: names the minor over their bid
+N 864.73.QT92.J942          | 1S 2S P 3C P 3D P | P | the partscore: pass the correction
+S AQJ85.7.KQT84.93          | 1H 2H P 2N P    | 3D  | the 2NT ask: names the minor
+
+# The default (ask_2nt) on the same hands: 2NT at any strength.
+card    21GF-DEFAULT competitive.michaels.minor_advance=ask_2nt
+N 864.73.QT92.J942          | 1S 2S P         | 2N  | ask_2nt: 2NT at any strength
+N 86.73.A4.KQJ9742          | 1H 2H P         | 3C  | ask_2nt: 3♣ natural, seven clubs

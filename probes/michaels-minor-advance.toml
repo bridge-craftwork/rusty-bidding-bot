@@ -1,0 +1,28 @@
+# Advancing a major-suit Michaels with a hand that wants partner's minor
+# (2026-10-13, two-suited-overcalls.notes.md "Two treatments"): does BBA
+# play 2NT as the ask at any strength (ask_2nt) or 3C pass or correct
+# (pass_or_correct)? Weak hands with 3+ in both minors, invitational
+# ones, and a long minor of advancer's own.
+card    = "21GF-DEFAULT"
+dealer  = "E"
+prefix  = "1S 2S Pass"
+vuls    = ["None", "NS"]
+scoring = ["IMP"]
+partner = ["J.AQT65.83.Q8763", "Q.A9632.K8653.K7", "T.KJ952.Q5.AKJT5", "K.KQJT6.AT876.74", ".AQT95.AT753.873", ".JT953.A8752.A87", ".AT943.A82.KJ853", "Q.JT985.Q8652.A5", "K.QJT84.T8.KQJ72"]
+our     = ["general.style=bba"]
+hands = [
+  "weak 3 hcp 4-4 minors | 864.73.QT92.J942",
+  "weak 3 hcp 4-4 minors, stiff H | 8642.7.QT92.J942",
+  "weak 4 hcp 3-3 minors, 3 H | 8642.J73.K92.942",
+  "weak 5 hcp 3-4 minors | 8642.73.K92.Q942",
+  "weak 6 hcp 3-5 minors | 864.73.QT9.KJ942",
+  "weak 6 hcp 5-3 minors | 864.73.KJ942.QT9",
+  "weak 6 hcp 4-4 minors, stiff H | 8643.7.KQ92.J942",
+  "comp 8 hcp 4-5 minors | 86.73.KQ92.QJ942",
+  "inv 10 hcp 4-4 minors | 864.K7.KQT9.Q942",
+  "inv 11 hcp 4-4 minors | 864.A7.KQT9.Q942",
+  "inv 12 hcp 4-4 minors | 864.K7.KQT9.A942",
+  "own clubs weak | 86.73.94.KQJ9742",
+  "own diamonds weak | 86.73.KQJ9742.94",
+  "own clubs 10 hcp | 86.73.A4.KQJ9742",
+]
