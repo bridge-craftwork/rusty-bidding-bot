@@ -199,8 +199,12 @@ Rick: "we want Puppet over 2NT working."
 `notrump.stayman.puppet` while this module read `notrump.two_nt.puppet`
 (the path Bridge-Classroom's card editor and PDFs use), so the switch
 never reached the rules. There is now one field, `two_nt.puppet`; the
-key maps to it and `notrump.stayman.puppet` (the catalog's other path)
-is an alias. Merging the fields without Puppet rules was measured first
+key maps to it. `notrump.stayman.puppet` (the catalog's other path) was
+an alias of it until convention-card v0.9.1 (PR #55, 2026-10-13), where
+it became an alias of `notrump.stayman.puppet_1nt`, Puppet over 1NT:
+Bridge-Classroom's editor, its PDFs and the BBO and Bridgodex importers
+write it for the 1NT box. `.bbsa` imports are unaffected, and no card
+in `cards/json/` writes the old path. Merging the fields without Puppet rules was measured first
 at −168 par / −354 side IMPs: ordinary Stayman switched off and nothing
 replaced it. The merge now comes with the rules.
 

@@ -52,7 +52,10 @@
 # forcing; after a major-suit Michaels a raise of partner's major), 2NT
 # asking for the minor after a major-suit Michaels (whenever advancer
 # wants to play in it), three of a minor natural (his own six-card
-# suit), and 3NT with their suit held and no fit. Notes:
+# suit), and 3NT with their suit held and no fit. That is
+# `competitive.michaels.minor_advance = ask_2nt` (the default); with
+# `pass_or_correct` (Larry Cohen) 3♣ is pass or correct to partner's
+# minor (up to 9 HCP) and 2NT the ask with 10+. Notes:
 # two-suited-overcalls.notes.md.
 
 module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
@@ -67,6 +70,7 @@ module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
   param  mich_quasi  = direct_cuebids.quasi_michaels default false
   param  mich_majors = direct_cuebids.nat_majors_michaels default false
   param  strength    = competitive.michaels.strength default wide_range
+  param  mich_adv    = competitive.michaels.minor_advance default ask_2nt
   param  u2n_play    = competitive.unusual_2nt.play default false
   param  u2n_jump    = nt_overcalls.jump_2nt_lowest_unbid default false
   param  uvu         = competitive.unusual_vs_unusual.play default false
@@ -235,6 +239,9 @@ after (1m) 2m (*) when partner.H>=5, partner.S>=5
 #   interest; there is no invitational jump to 3♥).
 # - 3NT direct: 13+ with their suit held and no fit for partner's major
 #   nor for both minors (with three of each, 2NT finds the minor first).
+# - pass_or_correct (`competitive.michaels.minor_advance`; Larry Cohen,
+#   "Michaels Cue Bid"): 3♣ is pass or correct, up to 9 HCP; 2NT asks
+#   with 10+; 3♦ stays natural; there is no natural 3♣.
 after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
   2S  "Preference: three or more spades"
       shows S>=3
@@ -243,9 +250,22 @@ after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
       alert  artificial
       shows S<=2
       sets  forcing=round
+      when  mich_adv is ask_2nt
       priority -1
   3C  "Natural: six or more clubs of my own, no spade fit, to play"
       shows C>=6, S<=2, hcp<=12
+      when  mich_adv is ask_2nt
+  2N  "Asks for your minor: 10+, at most two spades"
+      alert  artificial
+      shows S<=2, hcp>=10
+      sets  forcing=round
+      when  mich_adv is pass_or_correct
+      priority -1
+  3C  "Pass or correct: to play in your minor, up to 9, at most two spades"
+      alert  artificial
+      shows S<=2, hcp<=9
+      when  mich_adv is pass_or_correct
+      priority -1
   3D  "Natural: six or more diamonds of my own, no spade fit, to play"
       shows D>=6, S<=2, hcp<=12
   3S  "Jump preference: invitational, 10-12 with three spades"
@@ -271,9 +291,22 @@ after (1S) 2S (P) | (1S) 2S (X) when partner.H>=5
       alert  artificial
       shows H<=2
       sets  forcing=round
+      when  mich_adv is ask_2nt
       priority -1
   3C  "Natural: six or more clubs of my own, no heart fit, to play"
       shows C>=6, H<=2, hcp<=12
+      when  mich_adv is ask_2nt
+  2N  "Asks for your minor: 10+, at most two hearts"
+      alert  artificial
+      shows H<=2, hcp>=10
+      sets  forcing=round
+      when  mich_adv is pass_or_correct
+      priority -1
+  3C  "Pass or correct: to play in your minor, up to 9, at most two hearts"
+      alert  artificial
+      shows H<=2, hcp<=9
+      when  mich_adv is pass_or_correct
+      priority -1
   3D  "Natural: six or more diamonds of my own, no heart fit, to play"
       shows D>=6, H<=2, hcp<=12
   4H  "Game in hearts: to play (a preempt with four, or 13-15)"
@@ -297,9 +330,27 @@ after (1M) 2M (*) when partner.S>=5 | partner.H>=5
       priority -2
   P   "No fit worth competing with"  priority -10
 
-# The Michaels bidder passes advancer's own suit.
-after (1M) 2M (*) 3m (*)
+# The Michaels bidder passes advancer's own suit (with pass_or_correct
+# only 3♦ is advancer's own).
+after (1M) 2M (*) 3m (*) when mich_adv is ask_2nt | m is D
   P   "Partner's own suit: to play"  priority -1
+
+# pass_or_correct (Larry Cohen, "Michaels Cue Bid"): 3♣ asks the
+# Michaels bidder to pass with clubs and correct to 3♦ with diamonds.
+# Over a double the same; when RHO bids, the force is off as over the
+# 2NT ask: the minor at the four level with 13+ or a six-card minor.
+after (1M) 2M (*) 3C (P) | (1M) 2M (*) 3C (X) when mich_adv is pass_or_correct
+  P   "My minor is clubs: to play"   shows C>=5, C>=D
+  3D  "My minor is diamonds"         shows D>=5, D>C
+after (1M) 2M (*) 3C (*) when mich_adv is pass_or_correct, they.bid
+  cheapest(C)  "Competes: my minor is clubs, 13+ or six"
+      shows C>=5, C>=D, hcp>=13 | C>=6
+  cheapest(D)  "Competes: my minor is diamonds, 13+ or six"
+      shows D>=5, D>C, hcp>=13 | D>=6
+  P   "A minimum over their bid"   priority -1
+# Advancer chose a partscore: he passes the correction.
+after (1M) 2M (*) 3C (*) 3D (*) when mich_adv is pass_or_correct
+  P   "To play in partner's minor"   priority -1
 
 # The Michaels bidder names the minor, also when they double the ask
 # (2NT is no place to play: Brill round robin 2026-10-09, board

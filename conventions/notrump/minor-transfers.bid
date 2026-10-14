@@ -56,6 +56,25 @@ after nt1 2S (P) when style is bba
 after nt1 3C (P) when style is bba
   3D  "Completes the transfer"
 
+# ── two_nt_three_c: 2NT transfers to clubs, 3C to diamonds; opener always
+# completes. 2S stays free for Minor Suit Stayman (21GF-MSTandMSS). Any
+# strength: with game values responder goes on after the completion.
+after nt1_undoubled when (!they.bid | systems_on), style is two_nt_three_c
+  2N  "Transfer to clubs: six or more clubs"  alert
+      shows C>=6, D<=3, H<=3, S<=3
+      sets  forcing=round, ask=transfer(C)
+      artificial
+      priority 1
+  3C  "Transfer to diamonds: six or more diamonds"  alert
+      shows D>=6, C<=3, H<=3, S<=3
+      sets  forcing=round, ask=transfer(D)
+      artificial
+      priority 1                         # ahead of the natural 3♦ slam try
+after nt1_undoubled 2N (P) when style is two_nt_three_c
+  3C  "Completes the transfer"
+after nt1_undoubled 3C (P) when style is two_nt_three_c
+  3D  "Completes the transfer"
+
 # ── Responder after any minor transfer. Game values: 3NT. Opposite good
 # support the long minor should run, so invitational values bid 3NT too.
 # Otherwise play the minor at the three level.

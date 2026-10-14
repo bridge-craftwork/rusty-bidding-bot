@@ -14,6 +14,14 @@ Responses to 1NT with a long minor. One card field,
 - **four_way_reversed**: the same, with the two answers swapped (the suit
   shows good support).
 - **bba**: BBA's own treatment (below).
+- **two_nt_three_c** (2026-10-13): 2NT transfers to clubs, 3♣ to
+  diamonds, any strength, opener always completes; 2♠ stays free for
+  Minor Suit Stayman. BBA's 21GF-MSTandMSS, derived on import from its
+  `1N-2N transfer to clubs` and `1N-3C transfer to diamonds` keys
+  (convention-card PR #55). The rules moved here unchanged from
+  minor-suit-stayman.bid, which had read the two `notrump.transfers.*`
+  switches while the field had no value for the pair. Not offered over
+  a 2♣ overcall (`vs_2c`): it never was; open question.
 - Treatments are card choices, not separate conventions; only the calls
   that differ are written per treatment (LANGUAGE.md, "Treatments").
 - Another variant Rick mentioned, not built: a 2S range ask, where 2S is
@@ -103,7 +111,8 @@ minor-suit-stayman.bid reads from those keys. Setting it to `none`
 changed nothing there, and the exported off card kept the keys, so
 BBA went on transferring too (only its 2NT key changed). The off list
 now also clears the four `transfers.*` keys, which switches both
-engines.
+engines. (Since 2026-10-13 21GF-MSTandMSS reads `two_nt_three_c`, and
+`minor_transfers=none` alone switches our side off.)
 
 Measured (Minor_Suit_Transfer, 2N_and_1_Minor): **+0.60 IMPs per
 changed board** (Rusty's gain +378, BBA's +59; 528 changed boards, 499

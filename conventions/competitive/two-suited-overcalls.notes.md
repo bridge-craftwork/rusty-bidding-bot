@@ -27,6 +27,7 @@ they make one. Cases: `two-suited-overcalls.test`.
 | `direct_cuebids.{art,quasi,nat_minors,nat_majors}_{michaels,natural,other}`, `direct_cuebids.description` | the rest of the matrix and its notes | recorded, not read |
 | `competitive.michaels.play` | Bridge-Classroom's catalog switch: Michaels over both | existing |
 | `competitive.michaels.strength` | `wide_range` (default) or `weak_or_strong` | was free text; now an enum. `weak_or_strong` is the value Bridge-Classroom's seed card writes |
+| `competitive.michaels.minor_advance` | advancing a major-suit Michaels with a hand for partner's minor: `ask_2nt` (default) or `pass_or_correct` | convention-card PR #55 (2026-10-13); no `.bbsa` key, so every imported card plays `ask_2nt` |
 | `competitive.unusual_2nt.play`, `nt_overcalls.jump_2nt_lowest_unbid` | the Unusual 2NT (catalog switch, and the card's NT-overcall box) | existing; either turns the rules on |
 | `competitive.unusual_vs_unusual.play` | the opening side's cue bids over their 2NT, Bridgebum's way | existing |
 
@@ -404,7 +405,8 @@ Questions for Rick (decisions taken):
 - Advancer's natural three of a minor is capped at 12 HCP; a stronger
   hand with its own suit asks with 2NT, or bids 3NT.
 - With a weak hand that fits only one minor, advancer still asks and
-  passes the answer (no pass-or-correct correction).
+  passes the answer (no pass-or-correct correction). Pass or correct is
+  now the card's other treatment (below).
 
 Sources: Bridgebum, "Michaels Cuebid": after (1♥) 2♥, 2NT "asks the
 overcaller to bid his minor suit at the 3-level", three of a minor
@@ -417,12 +419,81 @@ cue of a major as a raise is ours). Larry Cohen, "Michaels Cue Bid":
 The invite / slam-try structure after the answer is ours: standard
 practice, not yet cited.
 
+## Two treatments: `competitive.michaels.minor_advance` (2026-10-13)
+
+After a Michaels cue bid of a major (1♥ (2♥), 1♠ (2♠): the other major
+and a minor), advancer who wants to play in partner's minor has two
+treatments, chosen by the card field (convention-card PR #55):
+
+- **`ask_2nt`** (default; Rick 2026-10-13, Bridge Bum): everything in
+  the section above. 2NT asks for the minor at any strength; 3♣ and 3♦
+  are natural (six of advancer's own, up to 12 HCP, to play); the cue
+  raises partner's major.
+- **`pass_or_correct`** (Larry Cohen, "Michaels Cue Bid": "If you want
+  to play in the minor, you should bid 3♣ to allow partner to pass or
+  correct (don't guess!)", and as the "advanced method", "2NT with
+  invitational hands"):
+  - **3♣ pass or correct**: up to 9 HCP, at most two of partner's major
+    (the fallback, as the 2NT ask is under `ask_2nt`). The Michaels
+    bidder passes with clubs and bids 3♦ with diamonds, also over a
+    double; when RHO bids, the force is off as over the 2NT ask (the
+    minor at the four level with 13+ or a six-card minor, else pass).
+    Advancer passes the correction: he chose a partscore.
+  - **2NT asks with 10+** (invitational or better), at most two of
+    partner's major; the answer and everything after it are
+    `ask_2nt`'s (invite with four of the minor, 3NT, five, the slam
+    try).
+  - **3♦ natural**: six of advancer's own, as under `ask_2nt`; the
+    Michaels bidder passes. Cohen's article does not say how advancer
+    shows a long minor of his own; 3♦ stays natural because 3♣ is the
+    only call pass or correct needs. **There is no natural 3♣**: with
+    long clubs of his own advancer bids 3♣ (partner passes with clubs,
+    else plays 3♦ in a probable misfit) or, with 13+ and their major
+    held, 3NT. A gap, recorded rather than invented.
+  - Unchanged: the preferences, the jump preference, game in the
+    major, the cue raise, 3NT.
+
+**Which BBA plays** (`probes/michaels-minor-advance.toml`, 1♠ (2♠) P,
+21GF-DEFAULT, 14 hands, none and NS vulnerable): **2NT on every hand
+without a heart fit**, from 3 HCP with both minors to 12 HCP, and with
+advancer's own seven-card minor too; its alert is "to the partner's
+longer", 0-37 total points. So BBA's style is `ask_2nt` with no natural
+three of a minor (our `ask_2nt` keeps 3m natural: Rick's definition).
+With 12 HCP vulnerable BBA bids 3NT. With three hearts it prefers 3♥.
+
+**Self A/B** (`probes/tools/self_ab.py --name michaels-minor-advance
+--scenarios Michaels_Cuebid Michaels_and_Unusual --base
+competitive.michaels.minor_advance=ask_2nt --variant
+...=pass_or_correct --side ns`, 1,000 boards): 40 changed (2NT -> 3♣
+on 35 of them); actor errors contract -4, doubling +3 (halves -5/+4,
+differ), z -0.1: **neutral**. Distance from par +22. The worst board
+(Michaels_Cuebid 121, -6) is the four-level answer over RHO's bid.
+It is the card's choice; neither treatment is better on these deals.
+
+Tests: `two-suited-overcalls.test`, the "pass or correct" section
+(card override `competitive.michaels.minor_advance=pass_or_correct`)
+and two `ask_2nt` cases on the same hands.
+
+Questions for Rick (decisions taken):
+- `pass_or_correct` has no natural 3♣ (above); should a long club suit
+  of advancer's own have a route (e.g. 3♣ then 4♣ over the correction)?
+- 3♣ pass or correct is capped at 9 HCP and 2NT starts at 10 (Cohen:
+  "invitational hands"); a 10-12 hand that only wants a partscore asks
+  and passes the answer.
+
+Sources: Larry Cohen, "Michaels Cue Bid"
+(<https://www.larryco.com/bridge-articles/michaels-cue-bid>), fetched
+2026-10-13: the pass-or-correct 3♣ and the invitational 2NT; it does
+not cover 3♦, advancer's own minor or the cue raise. Bridge Bum and
+Rick for `ask_2nt` (above). The BBA probe above.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
   preference as invitational. (2026-10-13): 2NT asks for the minor
   whenever advancer wants to play in it; three of a minor is advancer's
-  own six-card suit.
+  own six-card suit (`minor_advance = ask_2nt`, the default), and Cohen's
+  pass or correct as the card's alternative.
 - **Bridgebum**, "Michaels Cuebid"
   (<https://www.bridgebum.com/michaels_cuebid.php>): what the cue shows,
   "no point minimum" with vulnerability considered, the mini-maxi option
@@ -477,7 +548,9 @@ practice, not yet cited.
   artificial marks (2026-10-12 section).
 - **Larry Cohen**, "Michaels Cue Bid"
   (<https://www.larryco.com/bridge-articles/michaels-cue-bid>): passes and
-  redoubles after their double need discussion. Our answer to the cue of
+  redoubles after their double need discussion; 3♣ pass or correct and
+  the invitational 2NT ask (`minor_advance = pass_or_correct`,
+  2026-10-13). Our answer to the cue of
   a major (name the minor at the four level) is ours: standard practice,
   not yet cited.
 - **Practice-Bidding-Scenarios** `btn/Jump_Cuebid_Strong.btn`,
