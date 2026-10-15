@@ -256,6 +256,12 @@ local checkouts").
   (`--history .rbb-cache/brill/history.jsonl`, `--table-only` prints
   it). `--self-test` runs it on `probes/fixtures/brill/field.pbn`
   (synthetic, from `make_fixture.py` there).
+  The daily mails reach disk through Google Drive: the Apps Script
+  `probes/tools/brill-drive-saver.gs` (installed once in Rick's Google
+  account) saves each mail's PBNs to Drive daily, and
+  `probes/tools/brill_fetch.py [--report]` pulls new days into
+  `.rbb-cache/brill/<day>/` through the script's token-protected web app
+  (config `~/.config/rusty-bidding-bot/brill-drive.json`) and reports on them.
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference
