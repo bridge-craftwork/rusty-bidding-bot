@@ -262,6 +262,17 @@ local checkouts").
   `probes/tools/brill_fetch.py [--report]` pulls new days into
   `.rbb-cache/brill/<day>/` through the script's token-protected web app
   (config `~/.config/rusty-bidding-bot/brill-drive.json`) and reports on them.
+- `probes/tools/brill_probe.py run [--top 2000]`: where our reading of
+  auctions on 21GF-GIB differs from Brill's. The top N auctions of a
+  compare JSON (`auctions`), Brill's `/explain` of each from Thorvald's
+  public service (`fetch`), against `explain-auction --json` call by
+  call (`report`: HCP, suit lengths, artificial, no rule; grouped by
+  (our rule, Brill rule set), weighted by corpus boards; Brill
+  conventions seen). **A guest on someone's server:** sequential, one
+  request a second, a named User-Agent, stops after 5 failures in a row;
+  every response cached in `.rbb-cache/brill-service/explain/` (main
+  checkout) and never fetched twice, so a rerun resumes. Run the fetch
+  in the background (2000 auctions take ~35 min).
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference
