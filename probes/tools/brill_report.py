@@ -998,8 +998,9 @@ def main():
     ap.add_argument("--card", default="21GF-GIB", help="the card all four seats play (stock name or file)")
     ap.add_argument("--scoring", default="MP", choices=["MP", "IMP"],
                     help="scoring when the file does not say")
-    ap.add_argument("--history", default=os.path.join(ROOT, ".rbb-cache", "brill", "history.jsonl"),
-                    help="running table (JSON lines); '' to skip")
+    ap.add_argument("--history", default="",
+                    help="append to this running table (JSON lines), e.g. .rbb-cache/brill/history.jsonl; "
+                         "off by default so a trial run leaves the table alone")
     ap.add_argument("--table-only", action="store_true", help="print the running table and stop")
     ap.add_argument("--out", help="write the report here (default stdout)")
     ap.add_argument("--json", help="also write the analysis as JSON here")
@@ -1014,7 +1015,7 @@ def main():
         self_test(args)
         return
     if args.table_only:
-        print(render_history(load_history(args.history)))
+        print(render_history(load_history(args.history or os.path.join(ROOT, ".rbb-cache", "brill", "history.jsonl"))))
         return
     if not args.pbn:
         ap.error("give the field PBN file(s)")
