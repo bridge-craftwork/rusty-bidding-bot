@@ -245,6 +245,24 @@ def brill_state(c):
     return {"hcp": (hmin, hmax), "len": {s: (ln[s][0], ln[s][1], given[s]) for s in SUITS}}
 
 
+def merge_brill(prev, cur):
+    """Brill's constraints are mostly cumulative, but some calls (a fallback
+    pass, say) come back with less than was known: keep what was known."""
+    if cur is None:
+        return prev
+    (pmin, pmax), (cmin, cmax) = prev["hcp"], cur["hcp"]
+    hmin = max(x for x in (pmin, cmin) if x is not None) if (pmin, cmin) != (None, None) else None
+    hmax = min(x for x in (pmax, cmax) if x is not None) if (pmax, cmax) != (None, None) else None
+    ln = {}
+    for s in SUITS:
+        p, c = prev["len"][s], cur["len"][s]
+        ln[s] = [max(p[0], c[0]), min(p[1], c[1]), p[2] or c[2]]
+    for s in SUITS:
+        others = sum(ln[t][0] for t in SUITS if t != s)
+        ln[s][1] = min(ln[s][1], 13 - others)
+    return {"hcp": (hmin, hmax), "len": {s: tuple(v) for s, v in ln.items()}}
+
+
 def tighten(ln):
     for s in SUITS:
         others = sum(ln[t][0] for t in SUITS if t != s)
@@ -300,10 +318,11 @@ def hcp_diff(ours, brill, tol):
     cands = ours["strength"]
     if all(c[1] < lo_b or hi_b < c[0] for c in cands):
         return "hcp-conflict"
-    for lo, hi in cands:
-        if (bmin is None or abs(lo - bmin) <= tol) and (bmax is None or abs(hi - bmax) <= tol):
-            return None
-    return "hcp"
+    # each end against the closest of our ranges (our rules mix units:
+    # `hcp+length_points>=8, hcp<=16` puts the floor in dp, the top in hcp)
+    lo_ok = bmin is None or any(abs(c[0] - bmin) <= tol for c in cands)
+    hi_ok = bmax is None or any(abs(c[1] - bmax) <= tol for c in cands)
+    return None if lo_ok and hi_ok else "hcp"
 
 
 def len_diff(ours, brill):
@@ -319,7 +338,7 @@ def len_diff(ours, brill):
 
 
 # kinds that do not count as a disagreement (Brill states nothing there)
-INFO_KINDS = {"len-max-ours-only", "hcp-ours-only"}
+INFO_KINDS = {"len-max-ours-only", "len-min-ours-only", "hcp-ours-only"}
 
 
 def real_diffs(c):
@@ -363,7 +382,7 @@ def compare_auction(row, brill, ours, tol):
         st = ours[i]["step"]
         rule = st.get("rule")
         rule_id = f"{rule['file'].split('conventions/')[-1]}:{rule['line']}" if rule else "(no rule)"
-        bs = brill_state(be["constraints"]) or prev_b[seat]
+        bs = merge_brill(prev_b[seat], brill_state(be["constraints"]))
         os_ = our_state(st.get("knowledge")) or prev_o[seat]
         pb, po = prev_b[seat], prev_o[seat]
         diffs = []
@@ -373,16 +392,21 @@ def compare_auction(row, brill, ours, tol):
             if k == "hcp" and bs["hcp"] == pb["hcp"]:
                 k = "hcp-ours-only"  # Brill's rule says nothing new on strength here
             if k:
-                best = min(os_["strength"], key=lambda c: abs(c[0] - (bs["hcp"][0] or 0))
-                           + abs(c[1] - (bs["hcp"][1] or UNB)))
+                best = (min((c[0] for c in os_["strength"]), key=lambda v: abs(v - (bs["hcp"][0] or 0))),
+                        min((c[1] for c in os_["strength"]), key=lambda v: abs(v - (bs["hcp"][1] or UNB))))
                 diffs.append({"kind": k, "dim": "hcp", "ours": os_["hcp"], "ours_pts": best,
                               "brill": bs["hcp"]})
         for s in SUITS:
             if bs["len"][s] == pb["len"][s] and os_["len"][s] == po["len"][s]:
                 continue
             k = len_diff(os_["len"][s], bs["len"][s])
-            if k == "len-max" and bs["len"][s] == pb["len"][s]:
-                k = "len-max-ours-only"  # a limit only we draw (a denial by priority, say)
+            if bs["len"][s] == pb["len"][s]:
+                # Brill's rule says nothing new on this suit: a limit or a
+                # length only we draw (a denial by priority, a shape inference)
+                if k == "len-max":
+                    k = "len-max-ours-only"
+                elif k == "len-min" and os_["len"][s][0] > bs["len"][s][0]:
+                    k = "len-min-ours-only"
             if k:
                 diffs.append({"kind": k, "dim": s, "ours": os_["len"][s][:2], "brill": bs["len"][s][:2]})
         art_o = bool(st.get("artificial"))
@@ -461,6 +485,8 @@ def cmd_report(args):
         wt["compared"] += c["boards"]
         if not real:
             t["agree"] += 1; wt["agree"] += c["boards"]
+        if not real - {"artificial"}:
+            t["agree_noart"] += 1; wt["agree_noart"] += c["boards"]
         for k in kinds:
             t["kind:" + k] += 1; wt["kind:" + k] += c["boards"]
         if c["call"] != "Pass":
@@ -574,6 +600,8 @@ def markdown(o, ngroups):
     L.append(f"| compared (both have a rule) | {t.get('compared', 0)} | {w.get('compared', 0)} |")
     L.append(f"| agree within tolerance | {t.get('agree', 0)} ({pct(t.get('agree', 0), t.get('compared', 0))}) "
              f"| {w.get('agree', 0)} ({pct(w.get('agree', 0), w.get('compared', 0))}) |")
+    L.append(f"| agree, ignoring the artificial flag | {t.get('agree_noart', 0)} ({pct(t.get('agree_noart', 0), t.get('compared', 0))}) "
+             f"| {w.get('agree_noart', 0)} ({pct(w.get('agree_noart', 0), w.get('compared', 0))}) |")
     L.append(f"| bids (not Pass) compared | {t.get('compared_bids', 0)} | {w.get('compared_bids', 0)} |")
     L.append(f"| bids agreeing | {t.get('agree_bids', 0)} ({pct(t.get('agree_bids', 0), t.get('compared_bids', 0))}) "
              f"| {w.get('agree_bids', 0)} ({pct(w.get('agree_bids', 0), w.get('compared_bids', 0))}) |")
@@ -583,8 +611,21 @@ def markdown(o, ngroups):
         L.append(f"\n{len(o['skipped'])} auctions skipped (no reading on one side).")
     L.append("\n## Differences by (our rule, Brill rule set), by corpus boards\n")
     L.append("`boards` counts each board once per differing call; `of` is the boards of all calls "
-             "with that pairing (agreeing or not).\n")
-    for n, g in enumerate(o["groups"][:ngroups], 1):
+             "with that pairing (agreeing or not). Kinds ending `-ours-only` are inferences "
+             "Brill's rule does not state (not counted as disagreement). Bids first, then passes "
+             "and calls one side has no rule for.\n")
+    def is_bid(g):
+        return g["calls_seen"][0][0] != "Pass" and "(no rule)" not in g["our_rule"] \
+            and not g["brill_set"].startswith("(")
+    bids = [g for g in o["groups"] if is_bid(g)]
+    rest = [g for g in o["groups"] if not is_bid(g)]
+    ordered = bids[:ngroups] + [None] + rest[: ngroups // 2]
+    n = 0
+    for g in ordered:
+        if g is None:
+            L.append("## Passes and calls without a rule\n")
+            continue
+        n += 1
         kinds = ", ".join(f"{k} {v}" for k, v in sorted(g["kinds"].items(), key=lambda kv: -kv[1]))
         calls = ", ".join(f"{c} {n_}" for c, n_ in g["calls_seen"])
         L.append(f"### {n}. `{g['our_rule']}` / Brill \"{g['brill_set']}\": {g['boards']} boards "
