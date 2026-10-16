@@ -953,11 +953,100 @@ says more, opener's 3NT less).
 - 1M-2x-2M on a 5-3-3-2 minimum is the least lie that costs most (the
   -62 above). Many 2/1 players rebid 2NT there (12-14 or 15+). Rebid
   2NT with a minimum 5-3-3-2 and keep 2M for six, or keep 2M as now?
+  **Answered for the pure 2/1 game force** (Rick, same day): 2M is the
+  default rebid, five or more (next section). Still open for the other
+  two treatments.
 - Minor rebids: same "six in any context" for 1m-1y-2m, or keep "five or
   more (usually six)"? (Kept five or more.)
 - Soloway jump shift (opener's 3x "five or more, no support") and
   fourth-suit forcing (opener's cheapest rebid of his suit "five or
   more"): the conventions' definitions say five. Keep as defined?
+
+## 1M-2x-2M in a 2/1 game force: the default rebid (Rick, 2026-10-16)
+
+Rick, refining the ruling above the same day: "For 2-over-1 sequences,
+1M - 2x - 2M is the default response, not promising 6+ for one of the
+three treatments we have for 2/1. That is a special case for 2/1."
+
+The card has three 2/1 treatments: `two_over_one.game_force` (a pure
+2/1 game force), `two_over_one.game_forcing_except` (game forcing
+except when responder rebids his suit), and neither (forcing one
+round). Read as: in the pure game force (`gf21` and `we.gf`, so not
+after a passed hand's 2/1) 1M-2x-2M is opener's default, waiting
+rebid: five or more, any strength (the auction is already forcing to
+game), the cheapest call, which saves room. The other rebids (a new
+suit, the raise, 2NT 15-17, 3NT 18-19, the 3M jump) keep their
+meanings and come first when they fit; 2M is priority -1 below them.
+The five-card least lie is gone there (it is no lie). In the other two
+treatments 2M stays six or more with the five-card least lie, as
+above.
+
+- `game_forcing_except` is read by no rule today (no stock card sets
+  it; the rules know only `game_force`), so treatment (2) bids as (3).
+  Decision: (2) keeps the six-card reading, as the ruling says one of
+  the three; question below.
+- Responder (responder-rebids.bid): the "no fit" game bids after
+  1y-2x-2z (3NT in a round force, fast-arrival 3NT and the 16+ 2NT in
+  the game force) now count opener's shown length,
+  `y+partner.y.min<=7`, in place of `y<=2`. Under the game force that
+  is the same doubleton (opposite five); in a round force two cards
+  opposite the six-card 2M is the fit, so 13+ bids 4M, not 3NT (until
+  now the two rules tied and 3NT usually won on score). The
+  invitational 2NT keeps `y<=2` (there is no three-level major invite
+  for it to give way to). Two responder-rebids.test expectations on
+  Basic-Bridge moved 3NT -> 4S with it (JT.QT62.QT.AK876 and
+  T4.AT943.K5.KJ76 after 1S-2C/2H-2S).
+- serious-3nt.test (21GF-DEFAULT) goes back to its five-card opener
+  hands of before d24a9f6.
+
+Which cards: every stock 21GF card but 21GF-MSTandMSS plays
+`game_force`, and so does Brill (21GF-GIB based); Basic-Bridge, SAYC,
+Natural, Natural-4CM and 21GF-MSTandMSS do not.
+
+- Over responder's 16+ 2NT (no fit) opener with six and no extras
+  bids 3M, the sixth card (new). Tried first with every six-card
+  hand: errors -66 on the 72 changed boards (0 without that), the
+  4NT/6NT notrump count lost
+  to a 3M that responder then left in 3NT; so only without extras
+  (`points + partner.points.min <= 30`), and with extras he counts
+  slam in notrump as before.
+
+### Numbers (compare --limit 50, all scenarios, base main d24a9f6)
+
+- Tripwire: 51 of 17,105 boards in 23 scenarios: the 2/1 game-force
+  continuations after 1M-2x-2M (responder's 16+ 2NT for the old
+  3M/4NT with a doubleton opposite "six", 3M slam-interest agreements
+  then 4M where 4NT came at once, the sixth-card 3M), and on round-force
+  cards (Basic-Bridge, Precision) 3NT -> 4M with a doubleton opposite
+  the six-card 2M.
+- Errors on the changed boards (errors_diff.py): +0 (contract +2,
+  doubling -2; halves +1 / -1), distance from par +2 (+7 / -5). The
+  round-force 3NT -> 4M part is -7 by errors on 8 boards (3NT -> 4S -13
+  on 4, 3NT -> 4H +6 on 4); the game-force part +7. The d24a9f6 loss
+  (3NT -> 3M on 7 boards, -62) did not come back here: on the 2/1
+  cards responder's doubleton already bid 3NT at that base (3NT and 4M
+  tied and 3NT won), so those boards were not game-force ones.
+- Brill dailies replay (`brill_replay.py --card Brill`, 224 boards,
+  2026-10-08..14; Brill plays `game_force`): no board changed by this
+  work; week IMP +0.53, MP +0.8%, as before.
+- Kept: Rick's ruling; neutral on the corpus.
+
+### Questions for Rick (2026-10-16, the 2/1 default rebid)
+
+- Treatment (2), "game forcing except when responder rebids his suit":
+  1M-2x-2M is then also inside a forcing auction (only responder's own
+  rebid can stop short), so the 2/1 texts' waiting-bid logic applies
+  there as well. Kept as six (your ruling names one treatment); make
+  it the default rebid there too? (No rule reads the field yet.)
+- Sources disagree on the pure 2/1 default: Larry Cohen's 2/1 material
+  carries an appendix "Rebid of a Major Promising 6+" as an option, and
+  his forcing-1NT notes make 1M-1NT-2M six; Bridge Club Live's 2/1
+  article calls 1M-2x-2M the default that does not promise six. Kept as
+  your ruling.
+- Round-force cards: with 2M read as six, responder's 13+ doubleton now
+  bids 4M, not 3NT (the 6+ reading followed through; -7 by errors on 8
+  boards at --limit 50, mostly five-card least lies). Keep, or let
+  3NT stay the doubleton's game there?
 
 ## The reopening double on 5-4-2-2: tried, not kept (2026-10-15)
 
@@ -1013,3 +1102,11 @@ reopening double), not the double; for Rick with the question above
   read-as counts for the evidence.
 - **Rick, 2026-10-16** (Brill daily board 8): opener's rebid of his major
   is six or more in any context; a five-card one is the least lie.
+- **Rick, 2026-10-16** (refinement): in a 2/1 game force 1M-2x-2M is
+  the default rebid, five or more. Background, as found by a web search
+  (texts not read in full): Bridge Club Live, "Two Over One Game Force"
+  (https://members.bridgeclublive.com/MembersArticles/TwoOverOneGameForceforBCL_v2.pdf),
+  the default rebid not promising six; Larry Cohen's 2/1 workbook
+  (https://www.larryco.com/uploaded/product/03569baa-88a2-4cbb-b338-e047536f3368.pdf),
+  "Rebid of a Major Promising 6+" as an appendix option. Max Hardy's
+  2/1 books, not checked.

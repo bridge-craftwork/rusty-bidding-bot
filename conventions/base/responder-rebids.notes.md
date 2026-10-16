@@ -729,6 +729,26 @@ Brill daily, Rick 2026-10-16, board 8: P 1♠ (3♥) X (P) 3♠ (P) 3NT on
 Measured with the major-rebid change: rebids.notes.md, "A major rebid
 is six or more".
 
+## After 1M-2x-2M: no fit counted from opener's shown length (Rick, 2026-10-16)
+
+Rick: "For 2-over-1 sequences, 1M - 2x - 2M is the default response,
+not promising 6+" in the pure 2/1 game force (rebids.notes.md, "1M-2x-2M
+in a 2/1 game force"). After `1y (P) 2x (P) 2z (P)` the no-fit game
+bids (3NT when not game forcing; the fast-arrival 3NT and the 16+ 2NT
+in the game force) read `y+partner.y.min<=7` instead of `y<=2`:
+
+- 2/1 game force: opener's 2M is five or more, so a doubleton is no fit
+  and 13-15 bids 3NT, 16+ 2NT (the same as `y<=2`); the 4M/3M rules'
+  `M>=2, partner.M>=6` branch does not apply. Three cards: 4M or 3M.
+- Forcing one round: 2M is six or more, so a doubleton is the
+  eight-card fit and 13+ bids 4M (the 4M rule), no longer tied with
+  3NT. Two Basic-Bridge cases moved 3NT -> 4S.
+- The 11-12 2NT invitation keeps `y<=2`: with a doubleton opposite six
+  there is no three-level major invitation to give way to (a gap).
+
+Cases at the end of responder-rebids.test (21GF-DEFAULT, Brill, SAYC,
+21GF-DEFAULT without the game force).
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -759,3 +779,6 @@ is six or more".
   minimum, game with 11+ opposite 17+: standard practice, not yet cited.
 - **Rick, 2026-10-16** (Brill daily board 8): no stopper, no 3NT; a
   known eight-card major fit bids game in it.
+- **Rick, 2026-10-16** (refinement): 1M-2x-2M is the default rebid,
+  five or more, in a 2/1 game force; six or more otherwise. Sources as
+  in rebids.notes.md.

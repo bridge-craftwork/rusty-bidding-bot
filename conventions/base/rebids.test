@@ -345,3 +345,24 @@ dealer  S
 S A2.32.KJ32.AQJ32      | 1C P 1S P           | 2C     | 5-4 with 15, too weak to reverse: 2C, read as five or more
 # The reverse opposite responder's forced 2NT (6-10, no fit): still game.
 S J.AQ95.AK973.AQ3      | 1D P 1S P 2H P 2NT P | 3NT  | 20 opposite the forced minimum: game
+
+# 1M-2x-2M (Rick, 2026-10-16): in a pure 2/1 game force the default,
+# waiting rebid, five or more and any strength; on a card where the 2/1
+# forces one round it reads six or more and a five-card hand bids it as
+# the least lie. The same 5-3-3-2 minimum rebids 2S either way; what
+# partner reads differs (responder-rebids.test).
+card    21GF-DEFAULT
+dealer  S
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | 2/1 GF: the default rebid, five spades
+S AQ9542.K84.Q3.J2      | 1S P 2C P           | 2S     | 2/1 GF: six spades, the same default rebid
+S AQ952.K84.Q73.J2      | 1S P 2C P 2S P 3NT P | P     | five spades opposite fast-arrival 3NT: pass
+card    Brill
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | Brill plays the 2/1 game force: the default rebid
+card    SAYC
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | forcing one round: five spades, the least lie (read as six)
+card    21GF-DEFAULT major_openings.two_over_one.game_force=false
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | the 2/1 card without the game force: the least lie
+# Over responder's 16+ 2NT the sixth card, with no extras, is news.
+card    21GF-DEFAULT
+S AJ9852.K84.Q3.J2      | 1S P 2C P 2S P 2N P  | 3S     | six spades, a minimum: the sixth card
+S AQJ95.K84.Q73.J2      | 1S P 2C P 2S P 2N P  | 3NT    | five spades, no extras: game

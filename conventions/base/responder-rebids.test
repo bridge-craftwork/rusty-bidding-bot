@@ -58,7 +58,7 @@ N 3.85.QT97.AQ9642      | 1S P 1NT P 3S P  | 3NT    | eight HCP and six clubs: 1
 # ── After a 2/1 and opener's rebid
 N 9743.J5.KQ8.AJT2      | 1S P 2C P 2S P   | 4S     | support: game
 N A.K983.Q873.K754      | 1S P 2C P 2S P   | 2NT    | no fit, 12
-N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 3NT    | 12, two spades: 3NT
+N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 4S     | 12, two spades opposite six (Rick, 2026-10-16): game in the fit
 N AT2.8753.K2.A742      | 1H P 2C P 2D P   | 4H     | four hearts: game
 
 # ── Opener reversed: forcing, so responder always has a call.
@@ -73,7 +73,7 @@ N 43.K86.9542.K986      | 1S P 1NT P 2H P  | 2S     | not a reverse: a simple pr
 N A854.Q7.K7.QT984      | 1D P 2C P 2D P      | 2NT    | 11: invitational, no fit
 N K42.Q43.974.AKJ4      | 1D P 2C P 2D P      | 3NT    | 13: game
 N J8.AQ72.T32.A762      | 1S P 2C P 2NT P     | 3NT    | the two-over-one was 11+: game
-N T4.AT943.K5.KJ76      | 1S P 2H P 2S P      | 3NT    | 11 HCP, two tens, five hearts: 13 total, game (BBA 2NT)
+N T4.AT943.K5.KJ76      | 1S P 2H P 2S P      | 4S     | 11 HCP, two tens, five hearts: 13 total, game; two spades opposite six is the fit (Rick, 2026-10-16; BBA 2NT)
 # The two-over-one is measured in suit points, so its follow-ups are too:
 # this 10-count bid 2♣ on shape and has a spade fit.
 N KJ74.Q95.9.KJ762      | 1S P 2C P 2D P      | 4S     | four spades and a singleton: game
@@ -302,3 +302,21 @@ N 93.875.AK42.AKQ8      | P 1S 3H X P 3S P | 4S  | 15 and two spades opposite si
 N 93.AQ5.K942.AQ82      | P 1S 3H X P 3S P | 4S  | the fit before notrump, even with the stopper
 N 9.AQ5.KJ942.AQ82      | P 1S 3H X P 3S P | 3NT | a singleton spade and the hearts stopped: 3NT
 N 9.875.AKQ42.AKJ8      | P 1S 3H X P 3S P | !3NT | no heart stopper: never 3NT
+
+# 1M-2x-2M (Rick, 2026-10-16): opener's 2M is five or more in a pure 2/1
+# game force (the default rebid) and six or more otherwise, so the same
+# doubleton is no fit in the first and the eight-card fit in the second.
+card    21GF-DEFAULT
+dealer  S
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 3NT    | 2/1 GF: two spades opposite five, no fit: fast-arrival 3NT
+N K93.Q8.65.AKJ752      | 1S P 2C P 2S P      | 4S     | three spades: the fit is known
+N K3.AQ4.Q5.AKJ752      | 1S P 2C P 2S P      | 2NT    | two spades and 16+: no fit, room for slam
+N Q84.KQ.65.KJT752      | 1H P 2C P 2H P      | 3NT    | the same in hearts
+card    Brill
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 3NT    | Brill (2/1 GF): two opposite five, 3NT
+card    SAYC
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | forcing one round: 2S is six, two cards is the fit: game
+card    21GF-DEFAULT major_openings.two_over_one.game_force=false
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | the 2/1 card without the game force: six, the fit
+card    21GF-DEFAULT
+N K3.AQ4.Q85.KQJ75      | 1S P 2C P 2S P 2N P 3S P | 4S  | two spades opposite the sixth: the fit, game
