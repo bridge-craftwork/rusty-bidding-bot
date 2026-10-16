@@ -137,8 +137,21 @@ would be Stayman first; for Rick.
 - Interference over 4♣ (DOPI/ROPI) is not handled here: after a double
   the answers are as without it.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+Gerber over a 3NT opening too (Brill, after 3N P: "Gerber" `slammish`),
+from 31 HCP between the hands as over-3nt.bid counts; our default reads 4C
+there as a club slam try. Brill's derived floor is lower (3+ opposite 25), so
+the probe still counts an HCP difference at 4C; the answer (4D...) now
+agrees.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 4C's meaning now matches; the answers 0% -> 100% of 284 boards.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **The convention:** Bridge Bum, "Gerber"
   (https://www.bridgebum.com/gerber.php), read 2026-09-28: "An
   immediate 4♣ response to any no-trumps bid (or overcall) is Gerber";

@@ -108,3 +108,14 @@ N J9.AQJ942.AQ5.AT      | 1NT P 2D P 2H P      | 6H     | 18 HCP, six hearts: sl
 N 92.AQJ942.AQ5.Q3      | 1NT P 2D P 2H P      | 5H     | 15 HCP, six hearts: invites six
 S KQ6.K7.K832.KQ95      | 1NT P 2D P 2H P 5H P | 6H     | 16 of 15-17: accepts
 S KQ6.K73.Q832.K95      | 1NT P 2D P 2H P 5H P | P      | 15: declines
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+N Q632.KJ3.KQ4.A43      | 1NT P 2H P | 2S     | brill: 4-3-3-3 minimum, four spades: a plain completion
+N QJ6.KJ3.KQ54.A43      | 1NT P 2H P | 2S     | brill: three spades
+N Q3.KJ32.KQ54.A43      | 1NT P 2D P | 3H     | brill: four hearts, a minimum: the jump
+card    21GF-GIB
+N Q3.KJ32.KQ54.A43      | 1NT P 2D P | 2H     | default: a minimum completes

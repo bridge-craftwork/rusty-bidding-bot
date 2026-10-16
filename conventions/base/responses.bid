@@ -26,6 +26,7 @@ module responses "Responses to one-level suit openings"
   param  over_1c     = minor_openings.one_club_responses default up_the_line
   param  nt2         = minor_openings.two_nt_response default invitational
   param  style       = general.style
+  param  system      = general.system   # `brill`: the Brill card's treatments (limit raises)
   param  inverted    = minor_openings.inverted_minors.play default false
   param  drury       = major_openings.drury.play default false
   param  drury_rev   = major_openings.drury.reverse default false
@@ -152,8 +153,8 @@ after 1H (P)
   1N  "Forcing 1NT: 6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2, S<=3
       when  gf21, f1n
       sets forcing=round
-  1N  "6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2, S<=3
-      when  gf21, !f1n, !semi
+  1N  "6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2 | (system is brill, H=3, tp(H)>=10), S<=3
+      when  gf21, !f1n, !semi             # brill: a three-card limit raise starts here (3H below)
   1N  "Semi-forcing 1NT: 6-12 HCP, no heart fit, no 4 spades"   shows hcp=6..12, H<=2, S<=3
       when  gf21, !f1n, semi
   2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, hcp>=15  when strong_js, !weak_js, !soloway, !passed_hand
@@ -178,8 +179,15 @@ after 1H (P)
       sets forcing=game
   3H  "Limit raise: 11-12 support points, 3+ hearts"  shows H>=3, tp(H)=11..12 | (H>=4, tp(H)=10, shortest<=2), hcp<=12
       when  !passed_hand | (!drury, !drury_rev)
-      when inv_jump_raise, H>=4 | S<=3, style is not bba
+      when inv_jump_raise, H>=4 | S<=3, style is not bba, system is not brill
       priority -1                      # 3 hearts: a new suit, then a jump raise, when there is one
+      sets trump=H
+  # brill (the Brill card): the limit raise promises four trumps; with
+  # three, 1NT and then 3H (responder-rebids.bid). Brill /explain,
+  # 2026-10-15, "Nat, Inv, 10-12": `hcp >= 9 and hcp< 12 and H >= 4`.
+  3H  "Limit raise: 10-12 support points, 4+ hearts"  shows H>=4, tp(H)=10..12, hcp<=12
+      when  !passed_hand | (!drury, !drury_rev)
+      when inv_jump_raise, system is brill
       sets trump=H
   3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js, !weak_js3
   3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js, !weak_js3
@@ -190,8 +198,8 @@ after 1S (P)
   1N  "Forcing 1NT: 6-12 HCP, no spade fit"             shows hcp=6..12, S<=2
       when  gf21, f1n
       sets forcing=round
-  1N  "6-12 HCP, no spade fit"             shows hcp=6..12, S<=2
-      when  gf21, !f1n, !semi
+  1N  "6-12 HCP, no spade fit"             shows hcp=6..12, S<=2 | (system is brill, S=3, tp(S)>=10)
+      when  gf21, !f1n, !semi             # brill: a three-card limit raise starts here (3S below)
   1N  "Semi-forcing 1NT: 6-12 HCP, no spade fit"   shows hcp=6..12, S<=2
       when  gf21, !f1n, semi
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (S>=3, tp(S)>=11), suit_points>=10, C>=D, C>=H
@@ -222,8 +230,14 @@ after 1S (P)
       sets forcing=game
   3S  "Limit raise: 11-12 support points, 3+ spades"  shows S>=3, tp(S)=11..12 | (S>=4, tp(S)=10, shortest<=2), hcp<=12
       when  !passed_hand | (!drury, !drury_rev)
-      when inv_jump_raise, style is not bba
+      when inv_jump_raise, style is not bba, system is not brill
       priority -1                      # 3 spades: a new suit, then a jump raise, when there is one
+      sets trump=S
+  # brill (the Brill card): four trumps, as over 1H above. Brill /explain,
+  # 2026-10-15, "Nat, Inv, 10-12": `hcp >= 9 and hcp< 12 and S >= 4`.
+  3S  "Limit raise: 10-12 support points, 4+ spades"  shows S>=4, tp(S)=10..12, hcp<=12
+      when  !passed_hand | (!drury, !drury_rev)
+      when inv_jump_raise, system is brill
       sets trump=S
   2H  "10+ HCP, 5+ hearts (BBA)"       shows H>=5, hcp>=10, S<=2 | hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, S>=4)
       when  style is bba, !gf21          # BBA: ten HCP and five hearts are enough (not a 2/1 game force)
@@ -328,7 +342,12 @@ after 1S (P) when weak_js3
 # the scenario's own (Soloway_Jump_Shift.btn): strong is four of the top
 # five honours with six cards, solid is AKQJ, rebiddable three of the top
 # five with five cards. Continuations: soloway.bid.
-define soloway_js(y, x) = controls>=4, y>=5
+# brill (the Brill card): every type has 16+ HCP. Brill /explain,
+# 2026-10-15, "Soloway": `hcp >= 16 and (solid('H') or semisolid('H') or
+# H >= 7) and singlesuited and controls >= 4`, `H >= 5 and D >= 4 and hcp>
+# 17 and controls >= 4`, `H >= 6 and balish and hcp>= 17 and controls >= 4`
+# (over 1C, 2D: `hcp >= 17 or diamondpoints >= 20`).
+define soloway_js(y, x) = controls>=4, y>=5, hcp>=16 | system is not brill
     (y>=6, top5(y)>=4, points>=17, second_longest<=3, x<=3) | (y>=6, quality(y)>=excellent, has(J,y), points>=17, x<=3) | (top5(y)>=3, hcp>=18, x<=3, balanced | (y=6, second_longest=3, shortest=2)) | (top5(y)>=3, x>=4, tp(x)>=17)
 after 1C (P) when soloway, !weak_js, !passed_hand
   2D  "Soloway jump shift: game forcing, a strong one-suiter, 18+ balanced, or a fit"   alert

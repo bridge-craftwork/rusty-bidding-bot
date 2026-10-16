@@ -4,13 +4,24 @@ module super-accept "Super-accepting a Jacoby transfer"
   card   notrump.transfers.super_accept
   needs  jacoby-transfers
   skill  bidding_conventions/super_accept
+  param  system = general.system   # `brill`: the Brill card's treatments
 
 # Four-card support and 16-17 (2026-09-25: any four-card super-accept cost
 # 1,517 IMPs to our side against 16+; see jacoby-transfers.notes.md): jump in
 # the major. With superaccept-doubleton on as well,
 # maximums with a doubleton choose the more descriptive doubleton bids, so
 # this is left for maximums without one (4-3-3-3).
-after nt1 2D (P)
+after nt1 2D (P) when system is not brill
   3H  "Super-accept: 4+ hearts, a maximum"   shows H>=4, hcp>=16
-after nt1 2H (P)
+after nt1 2H (P) when system is not brill
   3S  "Super-accept: 4+ spades, a maximum"   shows S>=4, hcp>=16
+
+# brill (the Brill card): the jump is the minimum with four trumps (a
+# 4-3-3-3 minimum completes, jacoby-transfers.bid); maximums with four
+# go through 2NT or the doubleton (superaccept-doubleton.bid). Brill
+# /explain, 2026-10-15, "4+ hearts, min": `hearts > 3 and not max`;
+# "4+ spades, min": `spades > 3 and not max`.
+after nt1 2D (P) when system is brill
+  3H  "Four or more hearts, a minimum"   shows H>=4, hcp<=15, shortest<=2
+after nt1 2H (P) when system is brill
+  3S  "Four or more spades, a minimum"   shows S>=4, hcp<=15, shortest<=2

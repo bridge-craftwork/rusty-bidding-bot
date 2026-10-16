@@ -42,17 +42,23 @@ module strong-openings "2♣ and 2NT openings"
   # French 2♦ (openings/french-2d.bid) takes every 24+ hand: 2♣ stops at 23.
   param  french     = two_level.french_2d.play default false
   param  style      = general.style
+  param  system     = general.system   # `brill`: the Brill card's treatments (3NT)
 
 when opening
   2N  "{two_nt_min}-{two_nt_max} HCP, balanced"
       shows hcp=two_nt_min..two_nt_max, balanced
   3N  "{three_nt_min}-{three_nt_max} HCP, balanced"
       shows hcp=three_nt_min..three_nt_max, balanced
+      shows S<=4 | system is not brill, H<=4 | system is not brill
       when  !gambling, !french
+  # brill (the Brill card: 3NT 25-27): no five-card major in the 3NT
+  # opening, which then opens 2C (below). Brill /explain, 2026-10-15,
+  # "Balanced hand, 25-27 HCP": `(balanced or semibalanced) and hcp>= 25
+  # and hcp<= 27 and H<= 4 and S <= 4`.
   # Three ways in, written apart because one condition for all of them
   # cannot be read. Any of them is a 2♣ opening.
   2C  "Strong, artificial: 22+ HCP"    alert
-      shows hcp>=22, !balanced | hcp<=25 | hcp>=28 | gambling   # balanced 26-27 opens 3NT, unless 3NT is Gambling
+      shows hcp>=22, !balanced | (system is not brill, hcp<=25) | (system is brill, hcp<=24 | S>=5 | H>=5) | hcp>=28 | gambling   # balanced 26-27 opens 3NT, unless 3NT is Gambling (brill: 25-27 without a five-card major)
       when  two_c is strong | two_c is very_strong, forcing_2c | forcing_1c, !benjamin   # Benjamin: openings/benjamin.bid
       shows !french | hcp<=23
       sets  forcing=game, ask=strong_2c

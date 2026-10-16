@@ -33,8 +33,20 @@ plain completion is the whole 1NT range, and six-card responders
 between the strength bands had no call; jacoby-transfers.bid now passes
 or invites them by HCP. Judge it against ourselves (self A/B) instead.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+The jump to 3M is the minimum with four trumps (not 4-3-3-3, which
+completes); maximums go through 2NT or the doubleton (superaccept-doubleton.bid).
+Brill "4+ hearts, min": `hearts > 3 and not max`; "4+ spades, min": `spades >
+3 and not max`.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): see jacoby-transfers.notes.md.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **The convention:** the Jacoby super-accept (3M with four-card support
   over a transfer). Standard practice, not yet cited to a book or
   article.

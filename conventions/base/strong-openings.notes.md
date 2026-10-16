@@ -209,8 +209,20 @@ no rule at all. Added the balanced rebids only: 2NT with 22-23 and a
 stopper (systems on over it), 3NT with 24-25 and a stopper. The suit
 rebids and doubles there are still missing.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+3NT is 25-27 (the card) with no five-card major ("Balanced hand, 25-27
+HCP": `(balanced or semibalanced) and hcp>= 25 and hcp<= 27 and H<= 4 and S
+<= 4`); a balanced 25-27 with a five-card major opens 2C. The 2C rule's
+`hcp<=25` stays for every other card (their 3NT is 26-27 or the card's).
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 0% -> 100% of 1,170 boards.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **Rick's rulings (2026-09-23):** the balanced ladder (2NT 20-21, 2♣
   then 2NT 22-23, 2♣ then 3NT 24-25, 3NT 26-27, 2♣ then 4NT 28+); the
   unbalanced 2♣ on 23 total points or within a trick of game; responder's

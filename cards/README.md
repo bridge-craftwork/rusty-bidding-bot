@@ -91,6 +91,68 @@ natural bot). **Our rules do not read the major's length yet**
 bid it exactly as `Natural`; it is right for BBA and as a description of the
 opponents' system only. Coverage 84% (`.bbsa`).
 
+## Brill
+
+What the Brill robots play, for the Brill dailies, where Rusty sits South
+with three Brill robots (partner and both opponents). Built from `21GF-GIB`
+(Brill's system is a GIB-style 2/1) with the card-level differences that
+`probes/tools/brill_probe.py` found against Brill's own explanations
+(Thorvald Aagaard's public Brill service, `/explain`, answers cached in
+`.rbb-cache/brill-service/explain/`, 2026-10-15). Each setting and Brill's
+rule text behind it:
+
+| Setting | Brill /explain |
+|---|---|
+| `notrump.minor_transfers = two_nt_three_c` (2NT clubs, 3♣ diamonds, always completed; `transfers.two_nt_clubs`, `three_c_diamonds` on, `two_s_clubs` off) | 1NT–2NT "MinorTransfer" `C >= 6 and (hcp >= 13 or hcp <= 7 or shouldinvestigateslam('C'))`; 1NT–3♣ the same with `D >= 6`; the completions 3♣ / 3♦ `true`, no super-accept |
+| `notrump.minor_suit_stayman.play` | 1NT–2♠ "MinorStayman -- both minors, no 4-card major" `C >= 5 and D >= 4 and H <= 3 and S <= 3 and totalpoints >= 10`; answers 2NT `min and D <= 3 and C <= 3`, 3♣/3♦ "Shows 4+ minor", 3NT `max`, 4♣/4♦ "Shows 5+" |
+| `notrump.two_nt.minor_stayman` on, `two_nt.minor_transfers` off | 2NT–3♠ "MinorStayman" `C >= 4 and D >= 4 and CombinedPointsMin >= 31` or `C >= 5 and D >= 5 and CombinedPointsMin >= 25`; no 3♠ relay |
+| `notrump.transfers.super_accept_doubleton` (and `super_accept`) | 1NT–2♦–2♠ "Superaccept, doubleton" `max and S <= 2 and hearts > 3`; 2NT "Superaccept, no doubleton" `max and ExplicitShape == '3=4=3=3'` |
+| `notrump.three_nt.range_min/max = 25/27` | 3NT opening "Balanced hand, 25-27 HCP" |
+| `nt_overcalls.direct.range 15-17`, `balance.range 11-15` | "Overcalling 1Mi with 1N" "15-17" `hcp>= 15 and hcp<= 17`; "Balancing 1Mi Opening" `hcp >= 11 and hcp<= 15 and balish` |
+| `general.jump_shifts.soloway` | 1m–2♥ "Soloway" `hcp >= 16 and (solid('H') or semisolid('H') or H >= 7) and singlesuited and controls >= 4` (and the 5-4 and 6-card balanced types) |
+| `general.system = brill` | Turns on Brill's rule-level treatments (below) |
+
+As 21GF-GIB and checked against Brill: 15-17 1NT, Stayman and Smolen,
+Jacoby transfers, Texas, 1NT–3♦/3♥/3♠ splinters ("SplinterOver1N"),
+Cappelletti and a penalty double of 1NT, Gerber, quantitative 4NT,
+inverted minors, Jacoby 2NT, splinters, two-way game tries
+("TwoWayGameTrySpades": 2NT shortness, 3x help suit), Drury, Jordan 2NT,
+Lebensohl over their overcall of 1NT and after doubling a weak two, NMF,
+fourth suit, support doubles, Michaels and the Unusual 2NT, weak twos with
+the 2NT feature ask, inviting jump shifts to three of a minor (1M–3m
+"Nat, Inv, 10-12 hcp"), no Gambling 3NT.
+
+Kept from 21GF-GIB against Brill's label: 1M–1NT is not forcing on the
+card. Brill calls it "Forcing" and its opener bids a three-card minor over
+it, but `one_nt_response.forcing = true` measured slightly worse in the
+probe (bids agreeing 66.0% -> 65.8%); a question for Rick.
+
+**Rule-level treatments** (`general.system = brill`): what no card field
+says. `general.style` has no value for them (convention-card's options are
+`standard` and `bba`), so until it takes a `brill` value the rules key on
+the text field `general.system`, which only this card sets. Each is in its
+module's notes ("Brill"), with Brill's rule text:
+
+- weak twos: no five-card side major, a four-card one allowed (preempts);
+  three-level preempts likewise;
+- the transfer completion denies four trumps (but a minimum 4-3-3-3); 3M
+  is four trumps and a minimum, 2NT a maximum 4-3-3-3 (jacoby-transfers,
+  super-accept, superaccept-doubleton);
+- the limit raise 1M–3M has four trumps; three-card limit raises bid 1NT
+  first (responses);
+- Soloway has 16+ HCP (responses);
+- the 1NT overcall may be semi-balanced with a five-card major (overcalls);
+- Cappelletti: 10+ HCP, 2♦ five-five in the majors (cappelletti);
+- 3NT opening without a five-card major (strong-openings);
+- Jordan 2NT with three trumps (vs-takeout-double);
+- Gerber over a 3NT opening (gerber).
+
+Measured (`brill_probe.py report --card Brill`, the top 2000 corpus
+auctions, our reading against Brill's): see the commit messages and the
+modules' notes. The `.bbsa` (`bbsa/Brill.bbsa`, exported from the JSON)
+loses the ranges, the 1NT overcall and `general.system`, which have no
+`.bbsa` key; our engine plays the JSON.
+
 ## Known gaps (fields or mappings missing)
 
 For a convention-card pull request:

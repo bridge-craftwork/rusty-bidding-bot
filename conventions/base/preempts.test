@@ -73,3 +73,17 @@ N AK84.Q98.A864.A4      | 3C P       | 3N     | 17, the club ace, the side suits
 N J73.AKQT965.4.A6      | 3D P       | 4H     | seven hearts and 14: 4H to play
 S 85.432.AQJT632.Q      | 3D P 4D P  | P      | partner's raise: pass
 S A8.J3.92.AT97642      | 3C P 4C P  | P      | partner's raise: pass
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+N KQT952.Q852.4.73      |            | 2S     | brill: a four-card side major is fine
+N KQT952.85432.4.7      |            | P      | brill: five hearts, no weak two
+N 82.Q853.KQJ852.4      |            | 2D     | brill: four hearts with the queen
+N 5.Q852.4.KQJ9762      |            | 3C     | brill: a four-card side major is fine at the three level too
+N KQJ9764.85432.4.      |            | P      | brill: seven spades and five hearts, no preempt
+card    21GF-GIB
+N KQT952.85432.4.7      |            | 2S     | default: no honour in the side hearts
+N 5.Q852.4.KQJ9762      |            | P      | default: no four-card major with the queen

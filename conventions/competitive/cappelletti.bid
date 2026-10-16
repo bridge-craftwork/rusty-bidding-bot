@@ -26,6 +26,7 @@ module cappelletti "Cappelletti and Modified Cappelletti over their 1NT"
   skill  competitive_bidding/modified_cappelletti
   skill  competitive_bidding/defense_vs_1nt
   param  def = competitive.vs_1nt_strong.system default other
+  param  system = general.system   # `brill`: the Brill card's treatments (below)
 
 # ── Direct and balancing: the calls both versions share ──────────────
 after (1N) | (1N) P (P) when def is cappelletti | def is modified_cappelletti
@@ -34,23 +35,43 @@ after (1N) | (1N) P (P) when def is cappelletti | def is modified_cappelletti
       sets  ask=nt_penalty
   2D  "Cappelletti: both majors, 5-4 or longer"   alert
       shows H>=4, S>=4, H+S>=9, hcp+length_points>=10, hcp<=17
+      when  system is not brill
       sets  ask=nt_majors
   2N  "Cappelletti: both minors, 5-5 or longer"   alert
       shows C>=5, D>=5, hcp+length_points>=8, hcp<=17
+      when  system is not brill
+      sets  ask=nt_minors
+
+# brill (the Brill card): every Cappelletti bid has 10+ HCP, and 2D is
+# 5-5 in the majors. Brill /explain, 2026-10-15, "Cappelletti - majors":
+# `H >= 5 and S >= 5 and hcp >= 10`; "Cappelletti - minors": `C >= 5 and
+# D >= 5 and totalpoints >= 15 and hcp >= 10`; "Cappelletti - single
+# suited": `totalpoints >= 10 and lengthlongestsuit >= 6 and singlesuited
+# and hcp >= 10`; "Cappelletti - S and a minor": `S >= 5 and (C >= 4 or D
+# >= 4) and loserlevel >= 2 and totalpoints >= 12 and hcp >= 10`.
+after (1N) | (1N) P (P) when def is cappelletti | def is modified_cappelletti, system is brill
+  2D  "Cappelletti: both majors, 5-5 or longer, 10+ HCP"   alert
+      shows H>=5, S>=5, hcp>=10, hcp<=17
+      sets  ask=nt_majors
+  2N  "Cappelletti: both minors, 5-5 or longer, 10+ HCP"   alert
+      shows C>=5, D>=5, hcp>=10, hcp<=17
       sets  ask=nt_minors
 
 # ── Cappelletti ──────────────────────────────────────────────────────
 after (1N) | (1N) P (P) when def is cappelletti
   2C  "Cappelletti: one long suit, six or more"   alert
-      shows longest>=6, second_longest<=4, hcp+length_points>=12, hcp<=17
+      shows longest>=6, second_longest<=4, hcp+length_points>=12, hcp<=17 | (system is brill, hcp<=18)
+      shows hcp>=10 | system is not brill
       sets  ask=capp_one
   2H  "Cappelletti: five hearts and a four-card minor"   alert
       shows H>=5, S<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
       shows hcp+length_points>=10, hcp<=17
+      shows hcp>=10 | system is not brill
       sets  ask=nt_mm(H)
   2S  "Cappelletti: five spades and a four-card minor"   alert
       shows S>=5, H<=3, ((C>=4, quality(C)>=fair) | (D>=4, quality(D)>=fair))
       shows hcp+length_points>=10, hcp<=17
+      shows hcp>=10 | system is not brill
       sets  ask=nt_mm(S)
 
 # Advancer over 2♣: the 2♦ relay asks for the suit. BBA and GIB pass with

@@ -415,8 +415,30 @@ Not built: weak and mixed jump raises (`major_openings.jump_raise.weak`,
 `.mixed`) and Bergen. A card that plays one of them without the limit
 raise gets this widened 2M for the invitational hands.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+The limit raise 1M-3M promises four trumps ("Nat, Inv, 10-12": `hcp >= 9
+and hcp< 12 and S >= 4`); a three-card limit raise bids 1NT (Brill's 1NT:
+`hcp <= 12 and S < 4 and hcp>= 6`) and then 3M (responder-rebids.bid,
+"Limit raise: three-card support, 10-12"). Soloway (the card turns it on)
+has 16+ HCP in every type under brill (Brill "Soloway": `hcp >= 16 and
+(solid('H') or semisolid('H') or H >= 7) and singlesuited and controls >=
+4`, `H >= 5 and D >= 4 and hcp> 17 and controls >= 4`, `H >= 6 and balish
+and hcp>= 17 and controls >= 4`).
+
+Brill labels the 1NT response "Forcing", and its opener bids a three-card
+minor over it; `major_openings.one_nt_response.forcing = true` on the Brill
+card measured slightly worse in the probe (bids 66.0% -> 65.8%: our forcing
+1NT rebids read differently), so the card keeps 21GF-GIB's non-forcing 1NT.
+Question for Rick.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 1M-3M 0% -> 100% of 2,678 boards; 1M-1NT stays 100% of 3,409; Soloway 92% ignoring the artificial flag, as before the card turned it on (0% without the 16+ floor).
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **The system:** Standard American responses as BBA's Basic-Bridge card
   plays them. The general framework is standard practice, not yet cited
   to a book or article.
