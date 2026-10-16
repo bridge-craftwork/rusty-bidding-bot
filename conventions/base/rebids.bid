@@ -23,6 +23,7 @@ module rebids "Opener's rebid"
   param  weak_js = general.jump_shifts.weak_2 default false
   param  weak_js3 = general.jump_shifts.weak_3 default false
   param  gf21 = major_openings.two_over_one.game_force default false
+  param  style21 = major_openings.two_over_one.rebid_style default bergen
   param  semi = major_openings.one_nt_response.semi_forcing default false
   param  twalsh = minor_openings.one_club.transfer_resp default false
 
@@ -39,6 +40,15 @@ define nt_jump_to_game = cheapest_rank(S) <= 13 | partner.last=2S | rho.last=2S
 # and responder that read the response as a suit stand aside there
 # (transfer-walsh.bid has the auction instead). Used across base/.
 define tw(x) = twalsh, x is C
+
+# Opener's rebid after 1M-2x in a 2/1 game force, by the card's style
+# (`major_openings.two_over_one.rebid_style`; Vic Quiros, ACBL Bridge
+# Bulletin, September 2026, p. 70; Rick, 2026-10-16: Bergen the
+# default). Outside the game force (a round-forcing 2/1, a passed hand)
+# none applies: 2M is six or more there (d24a9f6).
+define bergen21 = gf21, we.gf, style21 is bergen
+define lawrence21 = gf21, we.gf, style21 is lawrence
+define schuler21 = gf21, we.gf, style21 is schuler
 
 # ── After a one-level new-suit response ───────────────────────────────
 after 1x (P) 1y (P) when !tw(x)
@@ -386,29 +396,76 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
       sets  ask=quant
       priority 1
   3N  "Game: no extras"                    shows points + partner.points.min <= 30
-# In a 2/1 game force opener's 2M was the default rebid, five or more
+# In the Lawrence style opener's 2M was the default rebid, five or more
 # (Rick, 2026-10-16), so over responder's 2NT (16+, two or fewer of the
 # major) a sixth card is news: it makes the doubleton an eight-card fit.
 # Only without extras: with them opener counts slam in notrump as above
 # (measured: 3M first with every hand lost the 4NT/6NT count, -51 by
-# errors on 22 boards at --limit 50).
-after 1M (P) 2x (P) 2M (P) 2N (P) when x is not M, gf21, we.gf
+# errors on 22 boards at --limit 50). Bergen's 2M was six already, and
+# Schuler's exactly five (six bid 2NT).
+after 1M (P) 2x (P) 2M (P) 2N (P) when x is not M, lawrence21
   3M  "Six or more {M}, no extras: the sixth card (2M was five or more)"
       shows M>=6, points + partner.points.min <= 30
       priority 2                           # the fit before 3NT
 
 # ── After a two-over-one response (forcing one round) ────────────────
+# In a 2/1 game force the rebid follows one of three styles, the card's
+# `major_openings.two_over_one.rebid_style` (Vic Quiros, "Vic's Views:
+# Building a new partnership - part 1", ACBL Bridge Bulletin, September
+# 2026, p. 70; Rick, 2026-10-16: rules for all three, Bergen the
+# default):
+#
+#                       Bergen     Lawrence    Schuler
+#   default (nothing)   2NT        2M          2M
+#   2M shows            six+       five+       exactly five
+#   new suit: extras?   no         yes         yes
+#   2NT shows           nothing    stoppers    six+ in M
+#
+# "New suit" is a reverse (1H-2m-2S) or a new suit at the three level
+# (1H-2D-3C, 1S-2H-3m); a lower suit at the two level (1S-2C-2D/2H,
+# 1S-2D-2H, 1H-2C-2D) is natural with no extras in every style. Raises
+# of responder's suit and the jumps (3M six 16-18, 3NT 18-19) are the
+# same in all three.
 after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump shift: weak-jump-shifts.bid
-  # A pure 2/1 game force (`major_openings.two_over_one.game_force`, the
-  # two-over-one made the force): 2M is the default, waiting rebid, five
-  # or more and any strength, the cheapest call that keeps the room the
-  # force has bought (Rick, 2026-10-16: "for 2-over-1 sequences, 1M - 2x
-  # - 2M is the default response, not promising 6+"). The other rebids
-  # keep their meanings and come first when they fit.
-  2M  "Rebids {M}: 5+, the default rebid in a 2/1 game force"
+  # Bergen: 2NT says nothing: any hand without a better call, a 5-3-3-2
+  # of any strength below the 3NT rebid, no stopper promised. 2M is six
+  # or more, any strength; a new suit is shape, not strength.
+  2N  "The default rebid (Bergen): nothing more to say"
       shows M>=5
-      when  gf21, we.gf
+      when  bergen21
+      priority -1                          # a new suit, 2M with six, a raise, a jump first
+  # The six-card suit comes before a four-card side suit (6-4: 2M, not
+  # the new suit; BBA and Brill alike, probes/rebid-style-*.toml), and
+  # the jump keeps its 16-18 above it.
+  2M  "Rebids {M}: 6+ (Bergen), any strength"
+      shows M>=6, x<=2 | x is C | x is D    # 1S-2H: a heart fit raises first
+      when  bergen21
+      priority 1
+  3M  "Jump rebid: 6+ {M}, 16-18"          shows M>=6, suit_points=16..18
+      when  bergen21
+      priority 1
+  # Lawrence: 2M is the default, waiting rebid, five or more and any
+  # strength (Rick, 2026-10-16: "for 2-over-1 sequences, 1M - 2x - 2M is
+  # the default response, not promising 6+", 481e3ad). 2NT is balanced
+  # with the unbid suits stopped and no fit for a major 2/1.
+  2M  "Rebids {M}: 5+, the default rebid (Lawrence)"
+      shows M>=5
+      when  lawrence21
       priority -1                          # a new suit, a raise, a jump first
+  2N  "Balanced, the unbid suits stopped (Lawrence)"
+      shows balanced, hcp<=17, x<=2 | x is C | x is D
+      shows stop(C) | x is C, stop(D) | x is D, stop(H) | x is H | M is H, stop(S) | x is S | M is S
+      when  lawrence21
+  # Schuler shift: 2M is the default with exactly five, 2NT shows six or
+  # more (any strength below the jump), so the six-card fit opposite a
+  # doubleton is known at once.
+  2M  "Rebids {M}: exactly five, the default rebid (Schuler)"
+      shows M=5
+      when  schuler21
+      priority -1
+  2N  "Six or more {M} (Schuler shift)"
+      shows M>=6
+      when  schuler21
   # Otherwise (forcing one round, or "game forcing except" a suit rebid)
   # it reads six or more (Rick, 2026-10-16: a major rebid is six or more
   # in any context). A five-card hand with nothing better still rebids
@@ -422,30 +479,52 @@ after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump 
       when  !(gf21, we.gf)
       priority -2
   3M  "Jump rebid: 6+ {M}, 16-18"          shows M>=6, suit_points=16..18
+      when  !bergen21
   3x  "Raise: 4+ {x}"                      shows x>=4
       sets  trump=x                        # agreed: keycard and the fit follow (ticket b173)
   2N  "15-17 HCP, balanced"                shows balanced, hcp=15..17
+      when  !(gf21, we.gf)
       priority -3                          # a 5-3-3-2 rebids its major (below every 2M)
   3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
 after 1S (P) 2C (P)
   2D  "4+ diamonds"                        shows D>=4
   2H  "4+ hearts"                          shows H>=4
+# A reverse or a new suit at the three level shows extras, except in the
+# Bergen style, where it is shape alone (the table above).
 after 1S (P) 2D (P)
   2H  "4+ hearts"                          shows H>=4
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
+      when  !bergen21
+  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+      when  bergen21
 after 1S (P) 2H (P)
   3H  "Raise: 3+ hearts"                   shows H>=3
   4H  "Game raise: 3+ hearts, 14-17"       shows H>=3, suit_points=14..17
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
+      when  !bergen21
   3D  "4+ diamonds, extras"                shows D>=4, suit_points>=16
+      when  !bergen21
+  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+      when  bergen21
+  3D  "4+ diamonds (Bergen): no extras promised"   shows D>=4
+      when  bergen21
 after 1H (P) 2C (P)
   2D  "4+ diamonds"                        shows D>=4
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
+      when  !bergen21
       priority 1
+  2S  "4+ spades (Bergen): no extras promised"   shows S>=4
+      when  bergen21
 after 1H (P) 2D (P)
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
+      when  !bergen21
       priority 1
+  2S  "4+ spades (Bergen): no extras promised"   shows S>=4
+      when  bergen21
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
+      when  !bergen21
+  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+      when  bergen21
 after 1D (P) 2C (P)
   2D  "Rebids diamonds: minimum"           shows D>=5, suit_points<=15
       priority -1

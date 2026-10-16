@@ -964,6 +964,10 @@ says more, opener's 3NT less).
 
 ## 1M-2x-2M in a 2/1 game force: the default rebid (Rick, 2026-10-16)
 
+*Later the same day this became one of three styles, the **Lawrence**
+style, and Bergen the default (next section). What follows describes
+it as first written.*
+
 Rick, refining the ruling above the same day: "For 2-over-1 sequences,
 1M - 2x - 2M is the default response, not promising 6+ for one of the
 three treatments we have for 2/1. That is a special case for 2/1."
@@ -1048,6 +1052,133 @@ Natural, Natural-4CM and 21GF-MSTandMSS do not.
   boards at --limit 50, mostly five-card least lies). Keep, or let
   3NT stay the doubleton's game there?
 
+## Three 2/1 rebid styles: Bergen, Lawrence, Schuler (Rick, 2026-10-16)
+
+Source: Vic Quiros, "Vic's Views: Building a new partnership – part 1",
+ACBL Bridge Bulletin, September 2026, p. 70. Three common versions of
+opener's rebid after a 2/1 game force (his example 1♥-2♦):
+
+| | Bergen | Lawrence | Schuler |
+|---|---|---|---|
+| default bid (says nothing) | 2NT | 2♥ | 2♥ |
+| 2♥ shows | 6 hearts | 5+ | exactly 5 |
+| 2♠ shows extras? | no | yes | yes |
+| 3♣ shows extras? | no | yes | yes |
+| 2NT shows | nothing | stoppers | 6+ hearts |
+
+Rick: "We should label them as treatments, and use the Bergen treatment
+as our default 2/1 treatment", and "we should have rules for all three,
+so play my card will work as desired." The card field is
+`major_openings.two_over_one.rebid_style` (`bergen` | `lawrence` |
+`schuler`, default `bergen`; convention-card PR #60, bc21394; no `.bbsa`
+key, so every imported card plays Bergen).
+
+The rules (rebids.bid, `after 1M (P) 2x (P)`; defines `bergen21`,
+`lawrence21`, `schuler21` = the 2/1 game force in force and the style):
+
+- **Bergen** (default): 2NT is the default rebid, priority -1, shows
+  nothing beyond the opening (by negative inference partner reads five
+  in the major and no four-card side suit: 5-3-3-2, 11-21 HCP); 2M is
+  six or more, any strength, priority 1, so a 6-4 hand shows the six
+  first (and the 3M jump, also priority 1 there, keeps 16-18); with
+  three or more of responder's major the raise comes first. A reverse
+  (1♥-2♣/2♦-2♠) and a new suit at the three level (1♥-2♦-3♣, 1♠-2♦-3♣,
+  1♠-2♥-3♣/3♦) are natural, four or more, no extras.
+- **Lawrence**: 481e3ad's structure: 2M the default, five or more,
+  priority -1; the reverse 17+ and the three-level suits 16+ (the
+  existing "extras" rules); 2NT balanced, at most 17 HCP, the two unbid
+  suits stopped, no three-card fit for a major 2/1 (Quiros: "stoppers";
+  strength not given, so decided: any balanced minimum to 17, 18-19
+  keeps the 3NT rebid). Over responder's 16+ 2NT the sixth card (3M) is
+  Lawrence only now: Bergen's 2M already showed six, Schuler's denies it.
+- **Schuler shift**: 2M exactly five, the default (priority -1); 2NT
+  six or more, any strength below the 3M jump; new suits with extras as
+  in Lawrence.
+- Every style: a lower suit at the two level (1♠-2♣-2♦/2♥, 1♠-2♦-2♥,
+  1♥-2♣-2♦) natural without extras, the raise of responder's suit, the
+  3M jump (six, 16-18) and 3NT (18-19 balanced) as before.
+- Outside the game force (a round-forcing 2/1, a passed hand's 2/1) none
+  applies: 2M is six or more with the five-card least lie (d24a9f6), 2NT
+  15-17 balanced.
+- The styles also apply after 1♥-2♠ (a strong jump shift; we.gf), as
+  481e3ad's 2M did; not separated.
+
+Responder (responder-rebids.bid) needed no new rules: his fit tests
+count `partner.M.min`, which each style sets (Bergen 2M six, 2NT five;
+Lawrence 2M five; Schuler 2M five, 2NT six). Over opener's 2NT fit.bid
+bids 4M with an eight-card fit, slam-entry agrees below game with more,
+and otherwise "Game: the two-over-one was 11+" bids 3NT.
+
+### BBA's and Brill's styles
+
+- **BBA** (`probes/rebid-style-1H-2D.toml`, `rebid-style-1S-2C.toml`,
+  21GF-DEFAULT, 28 hands): a hybrid. 2NT is the default, "minimum, 11
+  to 15 total points", exactly five in the major, any 5-3-3-2 including
+  no stopper and 5-4 minimums (Bergen); 2M six minimum, 3M six 15+
+  (Bergen with a strength split); but 2♠ over 1♥-2♦ needs 15+ and a
+  four-card club suit with 16 still bids 2NT (Lawrence's extras).
+  1♠-2♣-2♥ natural 11-20; 1♠-2♣ with five-four in diamonds jumps to 3♦
+  (not explained; noted, not followed). 5-3-3-2 with 17+ bids 3NT
+  (17-20 total). Our default (Bergen) is unchanged by it.
+- **Brill** (the /explain cache, `.rbb-cache/brill-service/explain/`):
+  the same hybrid. 2M "M >= 6" at priority 0 with a "M >= 5" least-lie
+  fallback at -1; 2NT "hcp <= 14 and balanced" at priority 20 (above
+  2M); 2♠ over 1♥-2♣ "S >= 4 and hcp >= 14"; 3♣ over 1♥/1♠-2♦ "C >= 4
+  and hcp >= 14"; 3♣/3♦ over 1♠-2♥ "totalpoints >= 15". Lower suits at
+  the two level natural, 4+. The defaults (2NT balanced minimum, 2M six)
+  are Bergen's, the new suits Lawrence's. `cards/json/Brill.json` sets
+  `rebid_style = bergen` explicitly: the defaults decide what responder
+  reads about the major; the new-suit difference is a question below.
+
+### Numbers
+
+- Tests: rebids.test (the same hands under the three styles on
+  21GF-DEFAULT with `rebid_style=lawrence` / `=schuler`; Brill; SAYC
+  and the card without the game force unchanged), responder-rebids.test
+  (responder's reading of 2M and 2NT per style), serious-3nt.test (the
+  six-card hands back for Bergen, the five-card ones under Lawrence).
+- Tripwire (`compare --limit 50`, base main 481e3ad with the same
+  binary): 173 of 17,105 boards in 48 scenarios, every first change at
+  opener's rebid after 1M-2x or the call after it (Misfit6-5 17,
+  Two_Over_One 17, 1M-3N_Picture_Bid, Serious, BART, Vics_2C_Relay, ...).
+- Errors on the changed boards (errors_diff.py): +121 (+124 / -3),
+  contract +78 (+81 / -3), doubling +43 (other side), distance from par
+  +70 (+72 / -2). Before the six-first priority for Bergen's 2M the run
+  was contract +21: showing the six-card major before a four-card side
+  suit was worth the rest.
+- Self A/B (`self_ab.py`, both sides, 8 scenarios x 500: Two_Over_One,
+  Reverse_After_Two_Over_One, 1M-3N_Picture_Bid, Serious, Misfit6-5,
+  Vics_2C_Relay, Misfit_13-Plus, Slam_After_Major_Fit; information,
+  not a verdict):
+  - Bergen -> Lawrence: 992 boards changed, contract -708 (halves -480 /
+    -228), par -657. Most of it 1♥-2♣-2♥, responder 3♥ -> 2NT (-188 on 28
+    boards) and the like: responder's doubleton opposite the
+    five-or-more 2M goes 16+ 2NT and notrump where Bergen's six-card 2M
+    agreed the suit; and 1♥-2♦: 2♠ -> 2♥ (-89 on 53).
+  - Bergen -> Schuler: 1,265 changed, contract -225 (-181 / -44),
+    doubling +283 (other side), par -274; Schuler's 2NT with six gains
+    (+363 on 202 boards of 1♠-2♣: 2♥ -> 2NT), its 2M/2NT split loses
+    elsewhere.
+  - So Rick's default is also the best of the three here.
+- Brill dailies replay (`--card Brill`, 224 boards, cached): no board
+  changed by this work; week IMP +0.53, MP +0.8%, as before.
+
+### Questions for Rick (2026-10-16, the three styles)
+
+- Brill and BBA both play a hybrid (Bergen's 2NT and six-card 2M,
+  Lawrence's extras for a reverse or three-level new suit). Brill.json
+  says `bergen`, so our Brill partner bids 2♠/3♣ on a minimum where
+  Brill's would not. Add a fourth value (`hybrid`, or BBA's name for it)
+  to the field, or take Bergen as close enough?
+- Bergen's 2NT has no upper limit below the 3NT rebid (18-19). BBA caps
+  its 2NT at 15 total points, Brill at 14 HCP. Keep "says nothing"?
+- Lawrence's 2NT strength: decided any balanced hand to 17 with the
+  unbid suits stopped. Is that Lawrence's meaning, or 12-14 / 15-17?
+- Over Bergen's 2NT, responder with 16+ and no fit bids 3NT (no
+  quantitative or slam try written for it); opener's range is wide, so
+  slam can be missed. Worth a rule?
+- The styles apply after 1♥-2♠ (strong jump shift) too. Keep?
+
 ## The reopening double on 5-4-2-2: tried, not kept (2026-10-15)
 
 Brill daily 2026-10-14 board 1 (MP): P P 1♠ (2♦) P (P), Rusty South
@@ -1110,3 +1241,10 @@ reopening double), not the double; for Rick with the question above
   (https://www.larryco.com/uploaded/product/03569baa-88a2-4cbb-b338-e047536f3368.pdf),
   "Rebid of a Major Promising 6+" as an appendix option. Max Hardy's
   2/1 books, not checked.
+- **Vic Quiros**, "Vic's Views: Building a new partnership – part 1",
+  ACBL Bridge Bulletin, September 2026, p. 70: the Bergen, Lawrence and
+  Schuler rebid styles after a 2/1 game force (the table in "Three 2/1
+  rebid styles"). **Rick, 2026-10-16:** rules for all three, Bergen the
+  default. Where we differ from the table: Lawrence's 2NT strength (to
+  17) and Bergen's six-card 2M before a four-card side suit are our
+  decisions; BBA and Brill evidence in that section.

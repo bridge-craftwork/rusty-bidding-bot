@@ -134,7 +134,8 @@
       "play": true
     },
     "two_over_one": {
-      "game_force": true
+      "game_force": true,
+      "rebid_style": "bergen"
     }
   },
   "minor_openings": {

@@ -731,6 +731,9 @@ is six or more".
 
 ## After 1M-2x-2M: no fit counted from opener's shown length (Rick, 2026-10-16)
 
+*Written for what is now the Lawrence style; the next section has all
+three.*
+
 Rick: "For 2-over-1 sequences, 1M - 2x - 2M is the default response,
 not promising 6+" in the pure 2/1 game force (rebids.notes.md, "1M-2x-2M
 in a 2/1 game force"). After `1y (P) 2x (P) 2z (P)` the no-fit game
@@ -748,6 +751,24 @@ in the game force) read `y+partner.y.min<=7` instead of `y<=2`:
 
 Cases at the end of responder-rebids.test (21GF-DEFAULT, Brill, SAYC,
 21GF-DEFAULT without the game force).
+
+## Opener's 2M and 2NT by the 2/1 rebid style (Rick, 2026-10-16)
+
+The 2/1 game force now has three rebid styles (rebids.notes.md, "Three
+2/1 rebid styles"; Quiros, ACBL Bridge Bulletin, September 2026; Rick:
+Bergen the default). The section above, written for the Lawrence style,
+holds for each through `partner.y.min`, which the style sets:
+
+| opener's rebid | Bergen | Lawrence | Schuler |
+|---|---|---|---|
+| 2M | six or more: a doubleton is the fit, 4M (3M with slam interest) | five or more: a doubleton is no fit, 3NT 13-15 / 2NT 16+ | exactly five: as Lawrence |
+| 2NT | the default, read as exactly five (negative inference): three cards 4M (fit.bid), else 3NT | balanced, stoppers: three cards 4M, else 3NT | six or more: a doubleton is the fit, 4M; slam-entry's count may agree or ask keycard |
+
+No new responder rule was needed: over 2NT fit.bid ("Game in the spade
+fit: my length and partner's make eight") and slam-entry make the fit
+calls, and "Game: the two-over-one was 11+" bids 3NT without one. Gap:
+over Bergen's 2NT responder's 16+ without a fit also bids 3NT (question
+in rebids.notes.md). Cases at the end of responder-rebids.test.
 
 ## Sources
 
@@ -782,3 +803,7 @@ Cases at the end of responder-rebids.test (21GF-DEFAULT, Brill, SAYC,
 - **Rick, 2026-10-16** (refinement): 1M-2x-2M is the default rebid,
   five or more, in a 2/1 game force; six or more otherwise. Sources as
   in rebids.notes.md.
+- **Vic Quiros**, "Vic's Views: Building a new partnership – part 1",
+  ACBL Bridge Bulletin, September 2026, p. 70; **Rick, 2026-10-16**:
+  the Bergen (default), Lawrence and Schuler rebid styles; responder
+  reads opener's length as each shows it.

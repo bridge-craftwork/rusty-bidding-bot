@@ -1,0 +1,25 @@
+# Opener's rebid after 1S P 2C P in a 2/1 game force: which of Quiros's
+# three styles BBA plays (see rebid-style-1H-2D.toml). rebids.notes.md,
+# 2026-10-16.
+card    = "21GF-DEFAULT"
+dealer  = "N"
+prefix  = "1S Pass 2C Pass"
+vuls    = ["None"]
+scoring = ["IMP"]
+partner = ["7.QJ3.AK2.AK9532", "T7.QT3.AJ2.AKJ53", "J2.T6.A84.AKQ987"]
+partner_auto = [12, 16]
+our     = []
+hands = [
+  "5332 min, H and D stopped | AQ952.K84.Q73.J2",
+  "5332 min, no H or D stop  | AKJ52.984.732.K2",
+  "5332 15-16                | AQ952.K84.KQ3.J2",
+  "5332 18-19                | AKQ52.KJ4.AJ3.Q2",
+  "6-card min                | AQ9542.K84.Q3.J2",
+  "6-card 15                 | AKJ542.K84.A3.J2",
+  "6-card 17                 | AKQ542.K8.A3.QJ2",
+  "5-4 hearts min            | AQ952.KJ84.73.Q2",
+  "5-4 hearts 17             | AKJ52.AQ84.73.K2",
+  "5-4 diamonds min          | AQ952.84.KJ73.Q2",
+  "5-4 diamonds 17           | AKJ52.84.AQ73.K2",
+  "5-3 clubs min             | AQ952.K84.73.J32",
+]

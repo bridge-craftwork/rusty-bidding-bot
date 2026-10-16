@@ -1,0 +1,30 @@
+# Opener's rebid after 1H P 2D P in a 2/1 game force: which of Quiros's
+# three styles BBA plays (Bergen: 2NT default, 2H six, new suits no
+# extras; Lawrence: 2H default 5+, new suits extras, 2NT stoppers;
+# Schuler: 2H exactly five, 2NT six+). rebids.notes.md, 2026-10-16.
+card    = "21GF-DEFAULT"
+dealer  = "N"
+prefix  = "1H Pass 2D Pass"
+vuls    = ["None"]
+scoring = ["IMP"]
+partner = ["A7.J3.KQJ52.A953", "Q7.T3.AKJ52.A953", "J2.T6.AKQ84.T987"]
+partner_auto = [12, 16]
+our     = []
+hands = [
+  "5332 min, S and C stopped | K84.AQ952.73.QJ2",
+  "5332 min, no S or C stop  | 984.AKJ52.KQ3.32",
+  "5332 15-16                | K84.AQ952.A3.QJ2",
+  "5332 17                   | KJ4.AQ952.A3.KJ2",
+  "5332 18-19                | KJ4.AKQ52.A3.KJ2",
+  "6-card min                | K8.AQ9542.73.QJ2",
+  "6-card 15                 | K8.AKJ542.73.KJ2",
+  "6-card 17                 | K8.AKQ542.A3.QJ2",
+  "5-4 spades min            | KJ84.AQ952.73.Q2",
+  "5-4 spades 15             | KJ84.AKJ52.73.A2",
+  "5-4 spades 17             | AK84.AQ952.73.K2",
+  "5-4 clubs min             | 84.AQ952.73.KQJ2",
+  "5-4 clubs 15              | K4.AQ952.73.AQ82",
+  "5-4 clubs 17              | A4.AQ952.73.KQJ2",
+  "6-4 clubs min             | 4.AQ9752.73.KJ82",
+  "5-3 diamonds min          | 84.AQ952.K73.QJ2",
+]

@@ -346,23 +346,47 @@ S A2.32.KJ32.AQJ32      | 1C P 1S P           | 2C     | 5-4 with 15, too weak t
 # The reverse opposite responder's forced 2NT (6-10, no fit): still game.
 S J.AQ95.AK973.AQ3      | 1D P 1S P 2H P 2NT P | 3NT  | 20 opposite the forced minimum: game
 
-# 1M-2x-2M (Rick, 2026-10-16): in a pure 2/1 game force the default,
-# waiting rebid, five or more and any strength; on a card where the 2/1
-# forces one round it reads six or more and a five-card hand bids it as
-# the least lie. The same 5-3-3-2 minimum rebids 2S either way; what
-# partner reads differs (responder-rebids.test).
+# 1M-2x: opener's rebid in a 2/1 game force by the card's style
+# (major_openings.two_over_one.rebid_style; Quiros, ACBL Bridge Bulletin,
+# September 2026; Rick, 2026-10-16: Bergen the default). The same hands
+# under each style: Bergen 2NT default, 2M six, new suits no extras;
+# Lawrence 2M default 5+, new suits extras, 2NT balanced with stoppers;
+# Schuler 2M exactly five, 2NT six+, new suits extras.
 card    21GF-DEFAULT
 dealer  S
-S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | 2/1 GF: the default rebid, five spades
-S AQ9542.K84.Q3.J2      | 1S P 2C P           | 2S     | 2/1 GF: six spades, the same default rebid
-S AQ952.K84.Q73.J2      | 1S P 2C P 2S P 3NT P | P     | five spades opposite fast-arrival 3NT: pass
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2NT    | Bergen: 5-3-3-2 minimum, the default 2NT
+S AKJ52.984.732.K2      | 1S P 2C P           | 2NT    | Bergen: the default promises no stopper
+S AQ952.K84.KQ3.J2      | 1S P 2C P           | 2NT    | Bergen: 5-3-3-2 with 15, still the default
+S AQ9542.K84.Q3.J2      | 1S P 2C P           | 2S     | Bergen: six spades
+S AQ952.KJ84.73.Q2      | 1S P 2C P           | 2H     | four hearts: natural in every style
+S KJ84.AQ952.73.Q2      | 1H P 2D P           | 2S     | Bergen: four spades, a minimum (no extras promised)
+S 84.AQ952.73.KQJ2      | 1H P 2D P           | 3C     | Bergen: four clubs, a minimum
+S K8.AQ9542.73.QJ2      | 1H P 2D P           | 2H     | Bergen: six hearts
+S AQ9542.KJ84.3.Q2      | 1S P 2C P           | 2S     | Bergen: 6-4, the six first
+S AQ9542.KJ84.3.Q2      | 1S P 2H P           | 3H     | Bergen: a heart fit raises before the six spades
+S AKJ542.K8.A3.J32      | 1S P 2C P           | 3S     | the jump keeps 16-18 in every style
+S AQ952.K84.Q73.J2      | 1S P 2C P 2NT P 3NT P | P    | Bergen: the default opposite fast-arrival 3NT: pass
 card    Brill
-S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | Brill plays the 2/1 game force: the default rebid
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2NT    | Brill: 2NT the balanced minimum, 2S six (Bergen's defaults)
+card    21GF-DEFAULT major_openings.two_over_one.rebid_style=lawrence
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2NT    | Lawrence: balanced, hearts and diamonds stopped
+S AKJ52.984.732.K2      | 1S P 2C P           | 2S     | Lawrence: no heart or diamond stopper: the default 2S
+S AQ9542.K84.Q3.J2      | 1S P 2C P           | 2S     | Lawrence: six spades, the same default rebid
+S AQ9542.KJ84.3.Q2      | 1S P 2C P           | 2H     | Lawrence: 6-4, the natural 2H before the default 2S
+S KJ84.AQ952.73.Q2      | 1H P 2D P           | 2H     | Lawrence: 2S would show extras: the default 2H
+S AK84.AQ952.73.K2      | 1H P 2D P           | 2H     | Lawrence: 16 is not the reverse's 17
+S 84.AQ952.73.KQJ2      | 1H P 2D P           | 2H     | Lawrence: 3C would show extras
+S A4.AQ952.73.AKJ2      | 1H P 2D P           | 3C     | Lawrence: four clubs with extras
+S AJ9852.K84.Q3.J2      | 1S P 2C P 2S P 2N P  | 3S     | Lawrence: six spades, a minimum: the sixth card
+S AQJ95.K84.Q73.J2      | 1S P 2C P 2S P 2N P  | 3NT    | Lawrence: five spades, no extras: game
+card    21GF-DEFAULT major_openings.two_over_one.rebid_style=schuler
+S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | Schuler: exactly five, the default 2S
+S AQ9542.K84.Q3.J2      | 1S P 2C P           | 2NT    | Schuler: six spades bid 2NT
+S KJ84.AQ952.73.Q2      | 1H P 2D P           | 2H     | Schuler: five hearts, 2S would show extras
+S K8.AQ9542.73.QJ2      | 1H P 2D P           | 2NT    | Schuler: six hearts
+# Outside the game force 2M is six or more and a five-card hand bids it
+# as the least lie (d24a9f6); the style does not apply.
 card    SAYC
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | forcing one round: five spades, the least lie (read as six)
 card    21GF-DEFAULT major_openings.two_over_one.game_force=false
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | the 2/1 card without the game force: the least lie
-# Over responder's 16+ 2NT the sixth card, with no extras, is news.
-card    21GF-DEFAULT
-S AJ9852.K84.Q3.J2      | 1S P 2C P 2S P 2N P  | 3S     | six spades, a minimum: the sixth card
-S AQJ95.K84.Q73.J2      | 1S P 2C P 2S P 2N P  | 3NT    | five spades, no extras: game
