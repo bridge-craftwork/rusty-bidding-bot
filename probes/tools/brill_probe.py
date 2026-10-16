@@ -3,7 +3,7 @@
 
     probes/tools/brill_probe.py auctions [--compare ALL.json] [--top 2000]
     probes/tools/brill_probe.py fetch    [--top 2000] [--max N]
-    probes/tools/brill_probe.py report   [--top 2000] [--card cards/bbsa/21GF-GIB.bbsa]
+    probes/tools/brill_probe.py report   [--top 2000] [--card 21GF-GIB] [--set P=V] [--tag NAME]
     probes/tools/brill_probe.py run      [--top 2000]     # all three
 
 Rusty plays the Brill dailies with three Brill robots (GIB-style 2/1).
@@ -40,6 +40,12 @@ side narrowed that dimension at this call), not again at later calls:
 - artificial against natural;
 - a call one side has no rule for (ours: no rule; Brill: no system rule,
   only an "Inferred (...)" reading).
+`--card` is a stock card's name (`Brill`: `cards/json/<name>.json` where
+there is one, else `cards/bbsa/<name>.bbsa`) or a path; `--set path=value`
+(repeatable) changes it, as `rbb explain-auction --set` does. A report
+re-uses the cached answers and sends no requests. `--tag NAME` writes
+`report-top<N>-NAME.*` (and `calls-top<N>-NAME.jsonl`), so a trial run
+leaves the base report alone.
 Writes `report-top<N>.md` and `.json`: totals, the differences grouped by
 (our rule, Brill rule set) weighted by the corpus boards whose auctions
 carry them, with examples; and Brill conventions seen, with how we read
@@ -211,9 +217,19 @@ def report_fetch(done, errors, t0):
 
 # ---------------------------------------------------------- our readings
 
-def our_reading(rbb, card, rules, auction):
+def resolve_card(card):
+    """A stock card's name (its JSON where it has one, as `rbb` plays it) or a path."""
+    if "/" not in card and not card.endswith((".json", ".bbsa")):
+        for c in (ROOT / "cards/json" / f"{card}.json", ROOT / "cards/bbsa" / f"{card}.bbsa"):
+            if c.exists():
+                return str(c)
+    return str((ROOT / card).resolve())
+
+
+def our_reading(rbb, card, rules, auction, sets=()):
+    extra = [a for s in sets for a in ("--set", s)]
     p = subprocess.run([rbb, "explain-auction", "-a", auction, "-d", "N", "-c", card,
-                        "--rules", rules, "--json"], capture_output=True, text=True)
+                        "--rules", rules, "--json", *extra], capture_output=True, text=True)
     if p.returncode != 0:
         return {"error": p.stderr.strip()[:500]}
     return json.loads(p.stdout)
@@ -449,10 +465,11 @@ def cmd_report(args):
     have = [r for r in rows if (ed / f"{sha(r['brill'])}.json").exists()]
     print(f"{len(have)}/{len(rows)} auctions have Brill's reading; computing ours ...", file=sys.stderr)
     rbb = str(ROOT / "target/release/rbb")
-    card = str((ROOT / args.card).resolve())
+    card = resolve_card(args.card)
     rules = str(ROOT / "conventions")
+    print(f"card {card}" + "".join(f" --set {s}" for s in args.set), file=sys.stderr)
     with ThreadPoolExecutor(args.jobs) as ex:
-        ours = list(ex.map(lambda r: our_reading(rbb, card, rules, r["auction"]), have))
+        ours = list(ex.map(lambda r: our_reading(rbb, card, rules, r["auction"], args.set), have))
 
     calls = []
     skipped = []
@@ -546,6 +563,7 @@ def cmd_report(args):
         "list": {k: v for k, v in lst.items() if k != "auctions"},
         "auctions": len(have), "skipped": skipped, "totals": dict(t), "board_weighted": dict(wt),
         "hcp_tol": args.hcp_tol,
+        "card": Path(card).stem + "".join(f" {s}" for s in args.set),
         "groups": [{"our_rule": k[0], "brill_set": k[1], "calls": g["calls"], "boards": g["boards"],
                     "pair_boards": pair_total[k], "kinds": dict(g["kinds"]),
                     "our_means": g["our_means"].most_common(3), "brill_means": g["brill_means"].most_common(3),
@@ -557,13 +575,14 @@ def cmd_report(args):
                          "our_modules": g["our_modules"].most_common(4), "examples": g["examples"]}
                         for k, g in sorted(convs.items(), key=lambda kv: -kv[1]["boards"])],
     }
+    tag = f"-{args.tag}" if args.tag else ""
     if args.calls_out:
-        with open(cd / f"calls-top{args.top}.jsonl", "w") as f:
+        with open(cd / f"calls-top{args.top}{tag}.jsonl", "w") as f:
             for c in calls:
                 f.write(json.dumps(c) + "\n")
-    jp = cd / f"report-top{args.top}.json"
+    jp = cd / f"report-top{args.top}{tag}.json"
     json.dump(out, open(jp, "w"), indent=1, default=list)
-    mp = cd / f"report-top{args.top}.md"
+    mp = cd / f"report-top{args.top}{tag}.md"
     mp.write_text(markdown(out, args.groups))
     print(f"-> {mp}\n-> {jp}", file=sys.stderr)
 
@@ -587,7 +606,7 @@ def markdown(o, ngroups):
     t, w = o["totals"], o["board_weighted"]
     L = []
     v = o["brill_version"]
-    L.append(f"# Brill vs Rusty (21GF-GIB): how each reads the top {o['list']['top']} auctions\n")
+    L.append(f"# Brill vs Rusty ({o.get('card', '21GF-GIB')}): how each reads the top {o['list']['top']} auctions\n")
     L.append(f"Brill service {v.get('version', '?')} ({v.get('ruleCount', '?')} rules); corpus "
              f"{o['list']['boards']} boards, {o['list']['distinct']} distinct auctions; these "
              f"{o['auctions']} cover {o['list']['covered_boards']} boards. Dealer N, vul None, MP. "
@@ -659,7 +678,10 @@ def main():
     ap.add_argument("--cache", help="cache dir (default: the main checkout's .rbb-cache/brill-service)")
     ap.add_argument("--interval", type=float, default=1.0, help="seconds between requests (>= 1)")
     ap.add_argument("--max", type=int, default=0, help="fetch at most N this run")
-    ap.add_argument("--card", default="cards/bbsa/21GF-GIB.bbsa")
+    ap.add_argument("--card", default="21GF-GIB", help="a stock card's name or a path")
+    ap.add_argument("--set", action="append", default=[], metavar="PATH=VALUE",
+                    help="change a card field for our reading (repeatable)")
+    ap.add_argument("--tag", help="suffix for the output files (report-top<N>-TAG.*)")
     ap.add_argument("--hcp-tol", type=int, default=2)
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--groups", type=int, default=60, help="groups in the markdown")
