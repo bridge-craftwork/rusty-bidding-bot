@@ -110,6 +110,7 @@ rule text behind it:
 | `notrump.three_nt.range_min/max = 25/27` | 3NT opening "Balanced hand, 25-27 HCP" |
 | `nt_overcalls.direct.range 15-17`, `balance.range 11-15` | "Overcalling 1Mi with 1N" "15-17" `hcp>= 15 and hcp<= 17`; "Balancing 1Mi Opening" `hcp >= 11 and hcp<= 15 and balish` |
 | `general.jump_shifts.soloway` | 1m–2♥ "Soloway" `hcp >= 16 and (solid('H') or semisolid('H') or H >= 7) and singlesuited and controls >= 4` (and the 5-4 and 6-card balanced types) |
+| `preempts.namyats.play` off | 4♣/4♦ openings are natural: "Preemptive_4_Level_Openings" `C >= 8 and hcp>= 5 and hcp<= 11 and loserlevel >= 3 and H <= 4 and S <= 4` (or `C >= 7 ... loserlevel >= 4`); at the table, 2026-10-14 IMP board 5, Brill opened 4♣ with KJT8763 in clubs |
 | `general.system = brill` | Turns on Brill's rule-level treatments (below) |
 
 As 21GF-GIB and checked against Brill: 15-17 1NT, Stayman and Smolen,
@@ -134,7 +135,8 @@ the text field `general.system`, which only this card sets. Each is in its
 module's notes ("Brill"), with Brill's rule text:
 
 - weak twos: no five-card side major, a four-card one allowed (preempts);
-  three-level preempts likewise;
+  three-level preempts likewise; 4♣/4♦ natural preempts with eight (or
+  seven and a void), 5♣/5♦ with nine (we had no natural 4m opening);
 - the transfer completion denies four trumps (but a minimum 4-3-3-3); 3M
   is four trumps and a minimum, 2NT a maximum 4-3-3-3 (jacoby-transfers,
   super-accept, superaccept-doubleton);
@@ -149,7 +151,10 @@ module's notes ("Brill"), with Brill's rule text:
 
 Measured (`brill_probe.py report --card Brill`, the top 2000 corpus
 auctions, our reading against Brill's): see the commit messages and the
-modules' notes. The `.bbsa` (`bbsa/Brill.bbsa`, exported from the JSON)
+modules' notes. The dailies so far (`brill_replay.py --card Brill`,
+224 boards to 2026-10-14, South ours, the other seats Brill's `/bid`):
+IMP +0.53 ± 0.26 a board over the actual results (21GF-GIB: +0.20 ±
+0.17), MP +0.8 ± 1.1% (21GF-GIB: -0.3 ± 0.8). The `.bbsa` (`bbsa/Brill.bbsa`, exported from the JSON)
 loses the ranges, the 1NT overcall and `general.system`, which have no
 `.bbsa` key; our engine plays the JSON.
 

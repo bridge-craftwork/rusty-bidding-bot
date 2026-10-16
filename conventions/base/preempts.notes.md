@@ -351,6 +351,18 @@ Three-level preempts: a side major of four is allowed, never five ("Preempt":
 `clubs >= 7 and hcp>= 5 and hcp<= 11 and totalpoints >= 6 and not
 shapeopenings and H <= 4 and S <= 4`; 3H `S <= 4`, 3S `H <= 4`).
 
+Four of a minor (the Brill card has no Namyats): a natural preempt,
+eight cards or seven and a void, no five-card major; five of a minor
+with nine ("Preemptive_4_Level_Openings": `C >= 8 and hcp>= 5 and
+hcp<= 11 and loserlevel >= 3 and H <= 4 and S <= 4 and not
+shapeopenings`, and `C >= 7 ... loserlevel >= 4`;
+"Preemptive_5_Level_Openings" `C >= 8 ... loserlevel >= 5`). A void
+stands in for Brill's `loserlevel >= 4` with seven (we have no loser
+level term). Seen at the table: 2026-10-14 IMP board 5, Brill opened 4C
+with KJT8763 in clubs, which 21GF-GIB (Namyats) reads as a strong heart
+preempt. No card had a natural 4m opening before: without Namyats an
+eight-card minor opened 5m.
+
 Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): weak twos 0% -> 100% of 7,839 boards; three-level preempts 0% -> 100% of 2,254.
 
 ## Sources

@@ -2,7 +2,7 @@
 """Replay our Brill daily tables with today's engine: how would we have
 scored, bidding only, with the rules as they are now?
 
-    probes/tools/brill_replay.py [FIELD.pbn ...] [--card 21GF-GIB]
+    probes/tools/brill_replay.py [FIELD.pbn ...] [--card 21GF-GIB] [--ew-card Brill]
         [--check 10] [--offline] [--out-dir .rbb-cache/brill]
 
 With no files, every `.rbb-cache/brill/<date>/daily-*-field.pbn` of the
@@ -32,8 +32,12 @@ ctx, dealer, seat, vul, matchtype) under the main checkout's
 resumes; a stop after 5 consecutive failures (rerun to resume).
 `--offline` uses the cache only (a board that needs a fetch is skipped).
 
-`--card` is a stock name (`cards/bbsa/<name>.bbsa`, `cards/json/<name>.json`)
-or a file; a card that does not exist is reported and the run skipped.
+`--card` is a stock name (`cards/json/<name>.json` where there is one, as
+`rbb` plays it, else `cards/bbsa/<name>.bbsa`) or a file; a card that does
+not exist is reported and the run skipped. It is North-South's (our engine
+gives a side one card, so South and partner share it); `--ew-card` reads
+the opponents with another (default: the same). The plan for the dailies is
+`--card Brill`: Rusty plays Brill's card.
 Build first: `./dev-build.sh --ci build --release -p rbb-cli`.
 """
 
@@ -160,8 +164,8 @@ class Brill:
 # ----------------------------------------------------------------- engine
 
 def find_card(card):
-    for p in (os.path.join(ROOT, "cards", "bbsa", card + ".bbsa"),
-              os.path.join(ROOT, "cards", "json", card + ".json"),
+    for p in (os.path.join(ROOT, "cards", "json", card + ".json"),
+              os.path.join(ROOT, "cards", "bbsa", card + ".bbsa"),
               os.path.join(ROOT, "cards", card + ".json"), card):
         if os.path.isfile(p):
             return os.path.abspath(p)
@@ -175,8 +179,9 @@ def rule_id(rule):
 
 
 class Engine:
-    def __init__(self, args, card):
+    def __init__(self, args, card, ew_card=None):
         self.rbb, self.card = args.rbb, card
+        self.ew = ["--ew-card", ew_card] if ew_card else []
         self.rules = os.path.join(ROOT, "conventions")
         self.memo = {}
 
@@ -185,7 +190,7 @@ class Engine:
         if k not in self.memo:
             d = br.run_json([self.rbb, "call", br.sorted_hand(hand), "-a", " ".join(calls),
                              "-d", dealer, "-v", br.vul_arg(vul), "-s", scoring, "-c", self.card,
-                             "--rules", self.rules, "--json"])
+                             *self.ew, "--rules", self.rules, "--json"])
             self.memo[k] = {"call": br.call_name(d["call"]), "rule": rule_id(d.get("rule")),
                             "module": (d.get("rule") or {}).get("module") or "(no rule)",
                             "explanation": d.get("explanation") or ""}
@@ -281,7 +286,14 @@ def run(args):
         raise SystemExit("no field PBN files")
     tables, warnings = load_tables(paths, args.us)
     dd = br.dd_tables(tables, args.rbb, args.dd_cache)
-    eng = Engine(args, card)
+    ew_card = None
+    if args.ew_card:
+        ew_card = find_card(args.ew_card)
+        if ew_card is None:
+            print(f"card {args.ew_card!r} not found (cards/json, cards/bbsa, or a path): skipped",
+                  file=sys.stderr)
+            return 2
+    eng = Engine(args, card, ew_card)
     brill = Brill(args)
 
     # boards: (event, date, board) -> tables with the deal of ours
@@ -535,7 +547,8 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("pbn", nargs="*", help="field PBN files (default: the main checkout's "
                     ".rbb-cache/brill/*/daily-*-field.pbn)")
-    ap.add_argument("--card", default="21GF-GIB", help="South's card: stock name or file")
+    ap.add_argument("--card", default="21GF-GIB", help="North-South's card: stock name or file")
+    ap.add_argument("--ew-card", help="East-West's card (default: --card)")
     ap.add_argument("--us", default="Rusty")
     ap.add_argument("--check", type=int, default=10, help="boards for the determinism check")
     ap.add_argument("--interval", type=float, default=1.0, help="seconds between requests (>= 1)")

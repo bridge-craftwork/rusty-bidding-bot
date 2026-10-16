@@ -235,7 +235,7 @@
   },
   "preempts": {
     "namyats": {
-      "play": true
+      "play": false
     }
   },
   "slam": {

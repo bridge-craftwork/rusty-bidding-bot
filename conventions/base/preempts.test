@@ -84,6 +84,10 @@ N KQT952.85432.4.7      |            | P      | brill: five hearts, no weak two
 N 82.Q853.KQJ852.4      |            | 2D     | brill: four hearts with the queen
 N 5.Q852.4.KQJ9762      |            | 3C     | brill: a four-card side major is fine at the three level too
 N KQJ9764.85432.4.      |            | P      | brill: seven spades and five hearts, no preempt
+N 5.32.KJ.KJT87632      |            | 4C     | brill: no Namyats; 4C is a natural preempt, eight clubs
+N .9532.Q8.KJT8763      |            | 4C     | brill: seven clubs and a void
+N 5.3.KJ.KJT876532      |            | 5C     | brill: nine clubs
 card    21GF-GIB
+N 5.32.KJ.KJT87632      |            | 5C     | default: 4C is Namyats on 21GF-GIB
 N KQT952.85432.4.7      |            | 2S     | default: no honour in the side hearts
 N 5.Q852.4.KQJ9762      |            | P      | default: no four-card major with the queen

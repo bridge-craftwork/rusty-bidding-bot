@@ -136,7 +136,27 @@ when opening, seat<=3
   4H  "Preempt: eight hearts"          shows H>=8, hcp=4..10, S<=3
   4S  "Preempt: eight spades"          shows S>=8, hcp=4..10
   5C  "Preempt: eight clubs"           shows C>=8, hcp=4..10, H<=3, S<=3
+      when  system is not brill
   5D  "Preempt: eight diamonds"        shows D>=8, hcp=4..10, H<=3, S<=3
+      when  system is not brill
+  # brill (the Brill card, no Namyats): four of a minor is a natural
+  # preempt with eight, five with nine. Brill /explain, 2026-10-15,
+  # "Preemptive_4_Level_Openings": `C >= 8 and hcp>= 5 and hcp<= 11 and
+  # loserlevel >= 3 and H <= 4 and S <= 4 and not shapeopenings` (and
+  # `C >= 7 ... loserlevel >= 4`); "Preemptive_5_Level_Openings" `C >= 8
+  # ... loserlevel >= 5`. Seen at the table: 2026-10-14 IMP board 5,
+  # Brill opened 4C with KJT8763 in clubs. Brill's seven-card 4m wants
+  # `loserlevel >= 4`; we take a void as that shape (an approximation).
+  4C  "Preempt: seven or eight clubs, no five-card major"  shows C=8 | (C=7, shortest=0), hcp=4..10, H<=4, S<=4
+      when  system is brill
+      priority 1                         # a seven-card suit with a void: ahead of 3C
+  4D  "Preempt: seven or eight diamonds, no five-card major"  shows D=8 | (D=7, shortest=0), hcp=4..10, H<=4, S<=4
+      when  system is brill
+      priority 1
+  5C  "Preempt: nine or more clubs"                   shows C>=9, hcp=4..10, H<=4, S<=4
+      when  system is brill
+  5D  "Preempt: nine or more diamonds"                shows D>=9, hcp=4..10, H<=4, S<=4
+      when  system is brill
 
 # bba: not vulnerable, six-four in the minors opens at the three level
 # with 4-8 (9-10 open 2D, and six clubs have no weak two).
