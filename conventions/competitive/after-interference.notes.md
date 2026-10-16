@@ -452,6 +452,35 @@ partner's double read as four (6 misdescribed at --limit 50), the
 "nothing better" 1S/2S read as four spades (9), 5m after the cue-bid
 raise read as 16+ (8).
 
+## Opener's major rebid is six or more (Rick, 2026-10-16)
+
+Brill daily, Rick 2026-10-16, board 8 (dealer W, None; Rusty South,
+Brill North): P 1♠ (3♥) X (P) 3♠ (P) 3NT, all pass, on
+93.875.AK42.AKQ8 opposite AKJT85.Q9.J9.T32 (6 spades). Par is 4♠ NS;
+3NT had no heart stopper. Rick: "North has promised 6+ spades here, so
+we have a spade fit, and also we don't have a heart stopper. The lack of
+a stopper prohibits the 3NT bid, and the spade fit indicates a 4S bid."
+And, widening it: "When opener opens 1M and rebids that M, it should be
+treated as 6+ in any context, even though there will be some times
+where it's the 'least lie' and there isn't a 6th card in the suit."
+
+- Opener's minimum rebid of his **major** over the negative double now
+  reads six or more (`shows x>=6`), at the two and three level. The
+  five-card "nothing better to say" rebid below it is kept as the least
+  lie and is read by the six-card rule: a read-as call by design, not a
+  bug in compare's count. A minor's rebid keeps the 2026-10-09 honest
+  "five or more (usually six)".
+- Responder's raise and game after the double count the fit from what
+  opener showed (`z>=8-partner.z.min`, responder-rebids.bid): two cards
+  opposite the six-card rebid, four opposite a four-card answer.
+- Responder's notrump after the double (2NT invitation, 3NT game) needs
+  their suit stopped (`stop(they.strain)` when their last bid was a
+  suit); a 13+ hand with no fit and their suit stopped may bid 3NT
+  unbalanced. The fit comes first (4M at priority 0, 3NT below).
+
+The rest (rebids.bid's other major rebids, measurements): rebids.notes.md,
+"A major rebid is six or more".
+
 ## Sources
 
 - **Jump shifts in competition** (2026-10-05): the ACBL convention card's
@@ -482,3 +511,6 @@ raise read as 16+ (8).
   vanilla random set, and the measurements in that section.
 - **Opener's five-card rebid after a negative double** (2026-10-09):
   standard practice, not yet cited to a book.
+- **Rick, 2026-10-16** (Brill daily board 8): opener's major rebid is six
+  or more in any context, a five-card one the least lie; no stopper, no
+  3NT; the known fit bids 4M.

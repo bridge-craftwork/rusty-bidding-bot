@@ -896,6 +896,69 @@ Counts are misdescribed calls at --limit 50 (v. 1,173 in all).
 - 1NT rebid with a singleton in partner's suit (queue item 3): allow it
   in the reading, or rebid something else?
 
+## A major rebid is six or more (Rick, 2026-10-16)
+
+Brill daily, Rick 2026-10-16, board 8: P 1♠ (3♥) X (P) 3♠ (P) 3NT on
+93.875.AK42.AKQ8 opposite six spades, no heart stopper; par 4♠. Rick:
+"North has promised 6+ spades here", then widened: "When opener opens
+1M and rebids that M, it should be treated as 6+ in any context, even
+though there will be some times where it's the 'least lie' and there
+isn't a 6th card in the suit." This revises the 2026-10-09 "read as the
+hand holds" change above for **major** rebids only:
+
+- every major rebid's reading is six or more: the free-bid rebids
+  (`1x (*) 1z (*)`, `1x (*) 2z (*)`), the answer to the negative double
+  (after-interference.bid), 1M-2x-2M (was "5+, minimum"), and 1M-1NT-2M
+  over a forcing or semi-forcing 1NT (was "six, or five with no
+  three-card minor"). Uncontested 1M-1y-2M and 1M-1NT-2M (6-10) were
+  already six.
+- the five-card hands keep the call as a lower-priority least lie
+  ("five, nothing better to say (read as six)"), read by the six-card
+  rule. Those are read-as calls by design: compare's "calls read as a
+  higher rule than chose them" rose 2,052 -> 2,186 at --limit 50, the
+  rise being these.
+- minors keep "five or more (usually six)"; Soloway's 3x and
+  fourth-suit-forcing's "Five or more {x}" (a convention's own answer)
+  are unchanged (questions below).
+- 1M-2x-2M: the 15-17 2NT moved from priority -2 to -3 so a 5-3-3-2
+  with 15-17 still rebids the major (now the -2 least lie).
+
+Knock-on: with the rebid read as six, responder counts a doubleton as
+the fit (responder-rebids.bid "A doubleton opposite opener's six-card
+rebid is a fit", 2026-10-02) and his slam count (slam-entry.bid) grows,
+so after 1M-2x-2M he agrees the major (3M, slam interest) or asks for
+keycards where he bid 3NT. serious-3nt.test's opener hands were five
+spades; they are six now and its strength examples moved (the 3S raise
+says more, opener's 3NT less).
+
+### Numbers (compare --limit 50, all scenarios, base main 2358856)
+
+- Tripwire: 78 of 17,105 boards in 36 scenarios: 1M-2x-2M continuations
+  (3NT -> 3M/4NT, slams), the negative-double fit and stopper rules
+  (responder-rebids.bid), keycard asks after the six-card rebid.
+- Errors on the changed boards (errors_diff.py): -60 (contract -16,
+  doubling -44, halves +14 / -74), distance from par -10 (+22 / -32).
+  The biggest loss is `1M-2x-2M` 3NT -> 3M on 7 boards (-62): the
+  five-card least lie read as six puts responder in a 5-2 major or a
+  slam try. The gains: 2NT -> 3M or 4NT after the six-card rebid (+37 on
+  11 boards), and the board's kind (4M for 3NT after the double).
+- Brill dailies replay (`brill_replay.py --card Brill`, 224 boards,
+  2026-10-08..14): one more board changed (IMP -0.02); week IMP +0.53,
+  MP +0.8% before and after. Board 8 of 2026-10-16 is not in the cache;
+  it is a `.test` case (responder-rebids.test, after-interference.test).
+- Kept: Rick's ruling, not a measured choice. Question below.
+
+### Questions for Rick (2026-10-16)
+
+- 1M-2x-2M on a 5-3-3-2 minimum is the least lie that costs most (the
+  -62 above). Many 2/1 players rebid 2NT there (12-14 or 15+). Rebid
+  2NT with a minimum 5-3-3-2 and keep 2M for six, or keep 2M as now?
+- Minor rebids: same "six in any context" for 1m-1y-2m, or keep "five or
+  more (usually six)"? (Kept five or more.)
+- Soloway jump shift (opener's 3x "five or more, no support") and
+  fourth-suit forcing (opener's cheapest rebid of his suit "five or
+  more"): the conventions' definitions say five. Keep as defined?
+
 ## The reopening double on 5-4-2-2: tried, not kept (2026-10-15)
 
 Brill daily 2026-10-14 board 1 (MP): P P 1♠ (2♦) P (P), Rusty South
@@ -948,3 +1011,5 @@ reopening double), not the double; for Rick with the question above
   standard 2/1 practice, not yet cited to a book; the Brill report's
   own-misdescribed flag (probes/tools/brill_report.py) and compare's
   read-as counts for the evidence.
+- **Rick, 2026-10-16** (Brill daily board 8): opener's rebid of his major
+  is six or more in any context; a five-card one is the least lie.

@@ -707,6 +707,28 @@ Cases at the end of responder-rebids.test. Still open: the pass after
 partner's answer to our negative double with 11+ unbalanced, read as
 10 or less (13 misdescribed at --limit 50).
 
+## After the negative double: the fit from opener's rebid, notrump with a stopper (Rick, 2026-10-16)
+
+Brill daily, Rick 2026-10-16, board 8: P 1♠ (3♥) X (P) 3♠ (P) 3NT on
+93.875.AK42.AKQ8; par 4♠. Rick: "the spade fit indicates a 4S bid" and
+"the lack of a stopper prohibits the 3NT bid". In `1x (*) X (*) 1z/2z/3z`:
+
+- the raise (11-12) and the game in a major count the fit from what
+  opener showed: `z>=8-partner.z.min` (four opposite a four-card answer,
+  two opposite his six-card major rebid, three opposite a five-card
+  minor rebid), in place of `z>=4`.
+- 2NT and 3NT need their suit stopped when their last bid was a suit
+  (`stop(they.strain)`); 3NT also with an unbalanced 13+ hand that has
+  no fit and their suit stopped (new, priority -2: it covers a
+  three-level overcall, where the cue-bid block does not run). Opener's
+  3NT over a raise of his minor in competition (rebids.bid) likewise.
+- Gap: over a three-level overcall a 13+ hand with no fit and no stopper
+  still passes opener's rebid (the cue bid is only played over one- and
+  two-level overcalls).
+
+Measured with the major-rebid change: rebids.notes.md, "A major rebid
+is six or more".
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -735,3 +757,5 @@ partner's answer to our negative double with 11+ unbalanced, read as
   knowledge change; the count is Rick's ruling of 2026-10-01.
 - **Responder after a reverse** (2026-10-09): the forced 2NT as the
   minimum, game with 11+ opposite 17+: standard practice, not yet cited.
+- **Rick, 2026-10-16** (Brill daily board 8): no stopper, no 3NT; a
+  known eight-card major fit bids game in it.

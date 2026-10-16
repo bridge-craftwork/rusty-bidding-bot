@@ -144,7 +144,7 @@ N AK653.J53.AT7.86      | 1H P 1S P 2H P  | 4H  | 12 HCP and three hearts: 13 to
 N A86.T93.T6432.K2      | 1D P 2D P 3D P  | P   | 7: declines the invitation (BBA passes)
 N Q8.QJT4.JT8754.Q      | 1C P 1D P 2NT P | 3NT | 8 with six diamonds: game
 N K852.Q5.Q965.J62      | 1D 1H X P 2S P   | 4S | opener jumped: game with 8
-N A762.T9.6.AKQ863      | 1H 1S X P 2H P   | 2S  | 13 unbalanced: cue bid, forcing to game
+N A762.T9.6.AKQ863      | 1H 1S X P 2H P   | 4H  | 13 and two hearts opposite six (Rick, 2026-10-16): game in the fit
 N A762.T9.K6.KQJ86      | 1D 1S X P 2D P   | 3NT | 13 with a spade stopper: game
 N J93.A76.T954.A63      | 1D 1S P P 1NT P  | 3NT | 9 opposite a reopening 18-19: game
 N J93.876.T954.J63      | 1D 1S P P 1NT P  | P   | 2: no game
@@ -293,3 +293,12 @@ card    Basic-Bridge
 dealer  S
 N KQ54.32.432.KJ32      | 1D P 1S P 2H P      | 2NT    | 9, no fit: the forced 2NT, a minimum
 N KQ54.Q32.43.KJ32      | 1D P 1S P 2H P      | 3NT    | 11, no fit, opposite the reverse's 17+: game
+
+# Brill daily, Rick 2026-10-16, board 8: opener's 3S over the negative
+# double is six or more; two spades is the fit, and 3NT needs a heart stopper.
+card    Brill
+dealer  E
+N 93.875.AK42.AKQ8      | P 1S 3H X P 3S P | 4S  | 15 and two spades opposite six: game in the fit, not 3NT
+N 93.AQ5.K942.AQ82      | P 1S 3H X P 3S P | 4S  | the fit before notrump, even with the stopper
+N 9.AQ5.KJ942.AQ82      | P 1S 3H X P 3S P | 3NT | a singleton spade and the hearts stopped: 3NT
+N 9.875.AKQ42.AKJ8      | P 1S 3H X P 3S P | !3NT | no heart stopper: never 3NT

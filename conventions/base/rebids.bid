@@ -303,9 +303,13 @@ after 1M (P) 1N (P) when we.forcing = round | semi_1nt(M)
       priority -1
   2N  "Forcing 1NT: 18-19, balanced"       shows balanced, hcp=18..19
   # Six, or five when the hand has no three-card minor to bid (5-4-2-2
-  # with the other major): the forced rebid, read as either.
-  2M  "Rebids {M}: six, or five with no three-card minor, minimum"
-      shows M>=5, suit_points<=15, M>=6 | (C<=2, D<=2)
+  # with the other major). Read as six (Rick, 2026-10-16: a major rebid
+  # is six or more in any context); the five-card one is the least lie.
+  2M  "Rebids {M}: six or more, minimum"
+      shows M>=6, suit_points<=15
+  2M  "Rebids {M}: five, no three-card minor to bid (read as six)"
+      shows M>=5, suit_points<=15, C<=2, D<=2
+      priority -1
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
@@ -385,16 +389,20 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
 
 # ── After a two-over-one response (forcing one round) ────────────────
 after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump shift: weak-jump-shifts.bid
-  2M  "Rebids {M}: 5+, minimum"            shows M>=5, suit_points<=15
+  # Read as six or more (Rick, 2026-10-16: a major rebid is six or more
+  # in any context). A five-card hand with nothing better still rebids
+  # it, the least lie, read by the six-card rule (a read-as call by
+  # design); until then it was read as 5+.
+  2M  "Rebids {M}: 6+, minimum"            shows M>=6, suit_points<=15
       priority -1                          # the default minimum rebid
-  2M  "Rebids {M}: five or more, too weak to reverse"
+  2M  "Rebids {M}: five, nothing better to say (read as six)"
       shows M>=5, suit_points<=18
       priority -2
   3M  "Jump rebid: 6+ {M}, 16-18"          shows M>=6, suit_points=16..18
   3x  "Raise: 4+ {x}"                      shows x>=4
       sets  trump=x                        # agreed: keycard and the fit follow (ticket b173)
   2N  "15-17 HCP, balanced"                shows balanced, hcp=15..17
-      priority -2                          # a 5-3-3-2 minimum rebids its major
+      priority -3                          # a 5-3-3-2 rebids its major (below the five-card 2M)
   3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
 after 1S (P) 2C (P)
   2D  "4+ diamonds"                        shows D>=4
@@ -608,10 +616,18 @@ after 1x (*) 1z (*) when they.bid, z is not x
       shows z>=4, tp(z)>=19
       when  partner.z>=4, z is H | z is S
       sets  trump=z
-  # Read as five or more (2026-10-09): the five-card rebid with nothing
-  # better to say, below, bids the same call. Six-card hands bid it here.
+  # A major rebid is read as six or more (Rick, 2026-10-16): the
+  # five-card rebid with nothing better to say, below, is the least lie
+  # and is read by this rule. A minor's stays five or more (2026-10-09):
+  # six-card hands bid it here.
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, suit_points<=15
+      when  x is H | x is S
+      sets  ask=signoff
+      priority -1
   cheapest(x) "Rebids {x}: five or more (usually six), minimum"
       shows x>=5, suit_points<=15
+      when  x is C | x is D
       when  x>=6
       sets  ask=signoff
       priority -1
@@ -751,10 +767,18 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x, p
       shows z>=3, tp(z)>=18
       when  partner.z>=4, z is H | z is S
       sets  trump=z
-  # Read as five or more (2026-10-09): the five-card rebid with nothing
-  # better to say, below, bids the same call. Six-card hands bid it here.
+  # A major rebid is read as six or more (Rick, 2026-10-16): the
+  # five-card rebid with nothing better to say, below, is the least lie
+  # and is read by this rule. A minor's stays five or more (2026-10-09):
+  # six-card hands bid it here.
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, suit_points<=15
+      when  x is H | x is S
+      sets  ask=signoff
+      priority -1
   cheapest(x) "Rebids {x}: five or more (usually six), minimum"
       shows x>=5, suit_points<=15
+      when  x is C | x is D
       when  x>=6
       sets  ask=signoff
       priority -1
@@ -837,9 +861,15 @@ after 1x (*) 2x (*) when they.bid
       shows tp(x)>=19
       when  x is H | x is S
       sets  trump=x
+  # Their suit stopped (Rick, 2026-10-16: no stopper prohibits 3NT).
+  3N  "Game: 19+ balanced, nowhere else to play"
+      shows balanced, hcp>=19, stop(they.strain)
+      when  x is C | x is D
+      when  they.strain is not none, they.strain is not N
   3N  "Game: 19+ balanced, nowhere else to play"
       shows balanced, hcp>=19
       when  x is C | x is D
+      when  they.strain is none | they.strain is N
   P   "Nothing to say"  priority -10
 # A jump raise over their call is preemptive, so opener bids the game or
 # lets it alone.

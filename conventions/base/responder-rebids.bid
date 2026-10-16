@@ -441,28 +441,52 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
   P   "Minimum for the double: nothing more to say"
       shows hcp+length_points<=10
       priority -5
-  cheapest(z) "Raise: four or more {z}, 11-12"
-      shows z>=4, hcp+length_points=11..12
+  # The fit is eight cards between us, counted from what opener showed:
+  # four with his four-card major, two with his own major rebid, which is
+  # six or more (Rick, 2026-10-16, Brill daily board 8: 1S (3H) X (P) 3S
+  # on 93.875.AK42.AKQ8 bid 3NT with no heart stopper; 4S is par).
+  cheapest(z) "Raise: an eight-card fit in {z}, 11-12"
+      shows z>=8-partner.z.min, hcp+length_points=11..12
       when  partner.z>=3          # opener's answer may be a three-card major
       sets  trump=z, ask=invite(z)
-  4{z} "Game in {z}: 13+ with the fit"
-      shows z>=4, hcp+length_points>=13
+  4{z} "Game in {z}: 13+ with an eight-card fit"
+      shows z>=8-partner.z.min, hcp+length_points>=13
       when  partner.z>=3, z is H | z is S
       sets  trump=z
   # Opener jumped (16-18 support points): game with 8+ (2026-09-25; we
   # stopped in 2M/3M on hands that reached game uncontested).
-  4{z} "Game opposite opener's jump: 8+ with the fit"
-      shows z>=4, hcp+length_points>=8
+  4{z} "Game opposite opener's jump: 8+ with an eight-card fit"
+      shows z>=8-partner.z.min, hcp+length_points>=8
       when  partner.z>=3, z is H | z is S, partner.jumped
       sets  trump=z
       priority 1
-  cheapest(N) "Invitational: 11-12 balanced"
-      shows balanced, hcp+length_points=11..12
+  # Notrump needs their suit stopped (Rick, 2026-10-16, same board): no
+  # stopper and no fit is the cue bid below or a pass.
+  cheapest(N) "Invitational: 11-12 balanced, their suit stopped"
+      shows balanced, hcp+length_points=11..12, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
       sets  ask=nt_invite
       priority -1                 # the fit first
-  3N  "Game: 13+ balanced"            # was jump(N): 4NT over a three-level answer
-      shows balanced, hcp+length_points>=13
+  cheapest(N) "Invitational: 11-12 balanced"
+      shows balanced, hcp+length_points=11..12
+      when  they.strain is none | they.strain is N
+      sets  ask=nt_invite
+      priority -1                 # the fit first
+  3N  "Game: 13+ balanced, their suit stopped"   # was jump(N): 4NT over a three-level answer
+      shows balanced, hcp+length_points>=13, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
       priority -1
+  3N  "Game: 13+ balanced"
+      shows balanced, hcp+length_points>=13
+      when  they.strain is none | they.strain is N
+      priority -1
+  # Game values, no fit and not balanced, their suit stopped: 3NT
+  # (over a three-level overcall too, where the cue bid below is not
+  # played).
+  3N  "Game: 13+, no fit, their suit stopped"
+      shows hcp+length_points>=13, z<=7-partner.z.min, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
+      priority -2
   P   "Nothing more to say"  priority -10
 
 # Game values that are not balanced (2026-09-25: A762.T9.6.AKQ863 passed
