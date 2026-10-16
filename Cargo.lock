@@ -538,7 +538,7 @@ dependencies = [
 [[package]]
 name = "bridge-card"
 version = "0.1.0"
-source = "git+https://github.com/bridge-craftwork/convention-card?tag=v0.9.1#81e76740c30ee18bdc5d47171043e72e46d1502c"
+source = "git+https://github.com/bridge-craftwork/convention-card?rev=bc21394#bc213940bf06904ea7092321b24ebdc913df7121"
 dependencies = [
  "serde",
  "serde_json",

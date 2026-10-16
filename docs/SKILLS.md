@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-129 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 86 proposed, 0 unknown. 99 modules declare a skill; 214 card fields carry one.
+129 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 86 proposed, 0 unknown. 99 modules declare a skill; 215 card fields carry one.
 
 ### The map
 
@@ -106,7 +106,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/transfer_walsh` (Transfer Walsh) | proposed | `minor_openings.one_club.transfer_resp` | `transfer-walsh` |
 | `bidding_conventions/transfers_after_double` (Transfers after a takeout double) | proposed | `vs_to_double.new_suit_forcing_tfr` | `transfers-after-double` |
 | `bidding_conventions/two_heart_bust` (2♥ bust over 2♣) | proposed | `two_level.two_clubs.parrish_bust` | — |
-| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force`, `major_openings.two_over_one.game_forcing_except` | `game-force` |
+| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force`, `major_openings.two_over_one.rebid_style`, `major_openings.two_over_one.game_forcing_except` | `game-force` |
 | `bidding_conventions/two_way_drury` (Two-way Drury) | proposed | `major_openings.drury.two_d` | `drury` |
 | `bidding_conventions/two_way_game_tries` (Two-way game tries) | proposed | `other_conventions.two_way_game_tries.play` | `game-tries` |
 | `bidding_conventions/two_way_nmf` (Two-way new minor forcing) | proposed | `other_conventions.two_way_nmf`, `other_conventions.two_way_nmf_by_passed_hand` | `two-way-nmf` |
