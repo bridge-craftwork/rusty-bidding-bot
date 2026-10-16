@@ -273,6 +273,14 @@ local checkouts").
   every response cached in `.rbb-cache/brill-service/explain/` (main
   checkout) and never fetched twice, so a rerun resumes. Run the fetch
   in the background (2000 auctions take ~35 min).
+- `probes/tools/brill_replay.py [FIELD.pbn...] [--card 21GF-GIB]`: our
+  past Brill tables replayed with today's engine: the actual auction up
+  to the first South call that changes, then South from `rbb call` and
+  N/E/W from Brill's public `/bid` (same courtesy, cache
+  `.rbb-cache/brill-service/bid/`, `--offline`), both contracts at DD
+  against the field's at DD (MP% / cross-IMPs). A determinism check
+  (`--check 10`) asks Brill again along unchanged auctions. Writes
+  `.rbb-cache/brill/replay-<card>.md` and `.json`.
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference
