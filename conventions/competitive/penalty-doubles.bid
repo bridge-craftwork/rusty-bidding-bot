@@ -31,7 +31,14 @@ define big_hand_vs_game = they.game_reached, hcp>=17
 # (we.hcp.min: my HCP and the bottom of partner's range). Good four at
 # 17 and any four at 20 since partner's floor is known more often
 # (2026-10-03, after PRs #44/#45; notes, "Retuned on the higher floors").
-define pen_suit(x) = (good_trumps(x), we.hcp.min>=17) | (x>=4, we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22 | big_hand_vs_game
+# The big hand doubles their game on strength, but not short in their
+# suit (a void or a singleton) with six or more of its own: that hand
+# declares (vs-preempts.bid; Brill daily 2026-10-14 board 4, 5D doubled
+# with a void and six hearts made, 6H on; 2026-10-15). A void and five
+# still doubles (2026-10-14 board 7, 4S doubled went down). The
+# takeout doubler keeps the old count: his pass of their game still
+# denies 17+ (else the advancer loses the shape the double showed).
+define pen_suit(x) = (good_trumps(x), we.hcp.min>=17) | (x>=4, we.hcp.min>=20) | (x>=3, we.hcp.min>=21) | we.hcp.min>=22 | (big_hand_vs_game, x>=2 | longest<=5 | me.last=X)
 
 # Responder's first call over their overcall: the double is negative.
 define responder_first = partner.opened, me.bids=0, !passed_hand, !me.last=X, !me.last=XX
@@ -121,27 +128,34 @@ when they.bid, direct | passed_round, !asked | asked signoff, our_game_bid, they
 # advance passed round to me lost on the random sets: left out.
 define we_redoubled = me.last=XX, partner.opened, me.bids=0, partner.hcp.min>=10, direct
 define they_ran = we_redoubled | asked nt_penalty | asked penalty
+# After partner's penalty double of their suit, a run is a new suit:
+# the runner's partner has not bid it. A raise of the doubled suit is
+# not a rescue (Brill daily 2026-10-08 board 2: 1NT 2D 2H (X) 4H,
+# doubled on T764 and made; 2026-10-15). After our redouble or a
+# penalty double of their notrump every bid of theirs is a run (the
+# doubler's side raising the rescue included).
+define ran_to(x) = !(asked penalty) | (direct, !lho.named(x)) | (passed_round, !rho.named(x))
 define ran_into(x) = x>=4
 
 when they.bid, direct | passed_round, they_ran
   X   "Penalty: they ran into my spades"
       shows ran_into(S)
-      when  natural_theirs(S)
+      when  natural_theirs(S), ran_to(S)
       sets  ask=penalty
       priority 0
   X   "Penalty: they ran into my hearts"
       shows ran_into(H)
-      when  natural_theirs(H)
+      when  natural_theirs(H), ran_to(H)
       sets  ask=penalty
       priority 0
   X   "Penalty: they ran into my diamonds"
       shows ran_into(D)
-      when  natural_theirs(D)
+      when  natural_theirs(D), ran_to(D)
       sets  ask=penalty
       priority 0
   X   "Penalty: they ran into my clubs"
       shows ran_into(C)
-      when  natural_theirs(C)
+      when  natural_theirs(C), ran_to(C)
       sets  ask=penalty
       priority 0
 

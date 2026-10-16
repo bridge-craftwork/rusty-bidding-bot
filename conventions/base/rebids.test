@@ -163,6 +163,11 @@ S A64.A82.A.J97543      | 1C 2S P P    | 3C  | six clubs over their two-level ov
 S AK7.J98.A542.KQJ      | 1D 2S P P    | 2NT | 18 balanced with a spade stopper
 S A76.A82.AQT8542.      | 1D 2H P P    | 3D  | seven diamonds in the reopening seat
 S AQ65.KJ83.KQ876.      | 1D 2C P P    | X   | reopening double: no clubs, the other three suits
+# Brill daily 2026-10-14 board 1: 5-4-2-2 with two of theirs passes.
+# Reopening it with the double lost on the corpus (rebids.notes.md,
+# 2026-10-15): par decides, the pass stays.
+S AT543.AKJ5.J6.Q7      | 1S 2D P P    | P   | 5-4-2-2, two clubs: no double without three clubs
+S AT6543.AKJ5.J6.7      | 1S 2D P P    | 2S  | six spades rebid
 
 # They competed over partner's free bid.
 S KQT8.AKJ.KQ4.T94      | 1C 1D 1S 2D  | 3S  | four spades and 16-18 support points

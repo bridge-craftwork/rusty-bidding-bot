@@ -31,6 +31,7 @@ module overcalls "Suit and notrump overcalls"
   param  jump    = overcalls.jump default weak
   param  nt_min  = nt_overcalls.direct.range_min default 15
   param  nt_max  = nt_overcalls.direct.range_max default 18
+  param  system  = general.system   # `brill`: the Brill card's treatments (1NT overcall)
   param  nt_def  = competitive.vs_1nt_strong.system default other
   param  dont_play = competitive.dont.play default false
   param  raptor  = competitive.raptor_1nt.play default false
@@ -98,6 +99,15 @@ after (1x)
   1N  "{nt_min}-{nt_max} balanced with a stopper in {x}"
       shows balanced, hcp>=nt_min, hcp<=nt_max, S<=4, H<=4
       when  stop(x), !raptor             # Raptor 1NT shows two suits (raptor.bid)
+      when  system is not brill
+# brill (the Brill card, 15-17): balanced or semi-balanced, so a five-card
+# major will do. Brill /explain, 2026-10-15, "Overcalling 1Mi with 1N" and
+# "Overcalling 1Ma with 1N", "15-17": `stopper('C') and hcp>= 15 and hcp<=
+# 17 and (balanced or semibalanced)`.
+after (1x) when system is brill
+  1N  "{nt_min}-{nt_max} balanced or semi-balanced with a stopper in {x}"
+      shows balanced | semibalanced, C=2..5, D=2..5, H=2..5, S=2..5, hcp>=nt_min, hcp<=nt_max
+      when  stop(x), !raptor
 
 # Advancer when their partner raises over our 1NT overcall: nothing was
 # written (~160 corpus boards). BBA, 2026-09-25: a five-card suit at the

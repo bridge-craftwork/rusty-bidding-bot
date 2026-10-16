@@ -41,3 +41,13 @@ N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4NT    | 4C is not G
 # No Gerber on the card (Basic-Bridge): 6NT directly, as before.
 card    Basic-Bridge
 N A3.K98.KJT7.AQ87      | 1NT P                           | 6NT    | 17 opposite 15-17: slam, no ace check
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+S Q32.K52.Q862.J52      | 3NT P      | 4C     | brill: Gerber over the 3NT opening
+N AKQ2.AKJ.KQ2.K32      | 3NT P 4C P | 4S     | brill: and its answer (two aces)
+card    21GF-GIB
+S Q32.K52.Q862.J52      | 3NT P      | 4NT    | default: quantitative

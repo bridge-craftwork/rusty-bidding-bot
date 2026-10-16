@@ -25,6 +25,7 @@ module gerber "Gerber: 4♣ asks for aces over partner's notrump"
   param  only_openings = slam.gerber.only_over_nt_openings default false
   param  texas_4c = notrump.transfers.texas_4c default false
   param  style = general.style
+  param  system = general.system   # `brill`: the Brill card's treatments (over 3NT)
 
 # ── The ask ───────────────────────────────────────────────────────────
 # The hands that would bid 6NT directly (one-nt.bid, two-nt-responses.bid)
@@ -59,6 +60,17 @@ after nt2
   4C  "Gerber: how many aces?"  alert
       shows H<=4, S<=4, (balanced, hcp>=31-partner.hcp.min) | (C>=6, hcp>=29-partner.hcp.min)
       when  style is bba
+      sets  ask=gerber
+      artificial
+      priority 1
+
+# brill (the Brill card): Gerber over a 3NT opening too (25-27), where
+# our default reads 4C as a club slam try (over-3nt.bid). Brill /explain,
+# 2026-10-15, after 3N P: "Gerber" `slammish`. Slam values: 31 between
+# the hands, as over-3nt.bid counts.
+after 3N (P) when system is brill
+  4C  "Gerber: how many aces?"  alert
+      shows hcp>=31-partner.hcp.min
       sets  ask=gerber
       artificial
       priority 1

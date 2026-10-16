@@ -30,3 +30,12 @@ N AJ853.AK2.KQ4.J3          | 1S X 2C P | 4S    | 19 HCP: game
 card    21GF-DEFAULT competitive.bromad.play=true competitive.jordan_2nt.play=false
 S KQ72.T74.QJ9.A86          | 1S X     | 3D     | four spades, 11 HCP: limit raise
 S 7.84.QT853.J9642          | 1S X     | 2N     | weak with both minors
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+S Q82.AJ3.K9832.95      | 1H X       | 2NT    | brill: Jordan with three trumps
+card    21GF-GIB
+S Q82.AJ3.K9832.95      | 1H X       | XX     | default: three trumps and 10+ redouble

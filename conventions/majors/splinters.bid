@@ -96,7 +96,11 @@ after 1x (P) 1M (P) when by_open, !(twalsh, x is C)
 # king), else the keycard ask; with fewer, game. Corpus (splinters.notes.md):
 # 14 on support points beat 13 and 15, and beat BBA's own line, which
 # is about 13 HCP less wasted honours (probes/splinter-opener-*.toml).
-after 1H (P) 3S (P)
+# The same over their double of the splinter (lead-directing, it takes
+# no room): 4M is still the sign-off. Without it 4M read as a Law-of-
+# total-tricks raise or a 19+ game bid (Brill daily 2026-10-11 board 1,
+# 1S P 4D X 4S; 2026-10-15).
+after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
   4H  "Game: no slam interest"
       shows !((!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20))
       priority 13                      # ahead of the control bids (12) and any natural reading
@@ -138,7 +142,7 @@ after 1H (P) 3S (P)
       sets  ask=keycards(trump)
       artificial
       priority 12
-after 1M (P) 4x (P) when x is not M, M is S | x is not S
+after 1M (P) 4x (P) | 1M (P) 4x (X) when x is not M, M is S | x is not S
   4M  "Game: no slam interest"
       shows !((!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20))
       priority 13                      # ahead of the control bids (12) and any natural reading

@@ -256,6 +256,31 @@ local checkouts").
   (`--history .rbb-cache/brill/history.jsonl`, `--table-only` prints
   it). `--self-test` runs it on `probes/fixtures/brill/field.pbn`
   (synthetic, from `make_fixture.py` there).
+  The daily mails reach disk through Google Drive: the Apps Script
+  `probes/tools/brill-drive-saver.gs` (installed once in Rick's Google
+  account) saves each mail's PBNs to Drive daily, and
+  `probes/tools/brill_fetch.py [--report]` pulls new days into
+  `.rbb-cache/brill/<day>/` through the script's token-protected web app
+  (config `~/.config/rusty-bidding-bot/brill-drive.json`) and reports on them.
+- `probes/tools/brill_probe.py run [--top 2000]`: where our reading of
+  auctions on 21GF-GIB differs from Brill's. The top N auctions of a
+  compare JSON (`auctions`), Brill's `/explain` of each from Thorvald's
+  public service (`fetch`), against `explain-auction --json` call by
+  call (`report`: HCP, suit lengths, artificial, no rule; grouped by
+  (our rule, Brill rule set), weighted by corpus boards; Brill
+  conventions seen). **A guest on someone's server:** sequential, one
+  request a second, a named User-Agent, stops after 5 failures in a row;
+  every response cached in `.rbb-cache/brill-service/explain/` (main
+  checkout) and never fetched twice, so a rerun resumes. Run the fetch
+  in the background (2000 auctions take ~35 min).
+- `probes/tools/brill_replay.py [FIELD.pbn...] [--card 21GF-GIB]`: our
+  past Brill tables replayed with today's engine: the actual auction up
+  to the first South call that changes, then South from `rbb call` and
+  N/E/W from Brill's public `/bid` (same courtesy, cache
+  `.rbb-cache/brill-service/bid/`, `--offline`), both contracts at DD
+  against the field's at DD (MP% / cross-IMPs). A determinism check
+  (`--check 10`) asks Brill again along unchanged auctions. Writes
+  `.rbb-cache/brill/replay-<card>.md` and `.json`.
 - `crates/wasm/build.sh`: the WASM package (`crates/wasm/pkg`); API in
   docs/WASM.md, which a website builds on: change it compatibly or bump
   `API_VERSION`. `rbb bid reference` prints the conventions reference

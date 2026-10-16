@@ -336,8 +336,38 @@ that changed its call (3C P 18 boards, 3D P 23), par distance +62. All
 the changed boards diverge over a minor: the pass rules make the call the
 engine made anyway, and the gain is the 3NT and 4M rules.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+Weak twos: six cards, 5-10 HCP (Brill 5-11; our top stays at 10 so that
+the choice against a one-level opening is the default's), with no five-card
+side major; a four-card one is allowed whatever its honours. Brill's "Weak 2
+S": `hcp<= 11 and S == 6 and hcp> 4 and bestsuit('S') and loserlevel >= 2
+and S_points >= 6 and H <= 4 and not shapeopenings` (its second rule:
+`HasTopHonors('S', 2, 3) and H <= 3`); 2D `S <= 4 and H <= 4`. No
+vulnerability condition in Brill's rules; ours keeps none for brill either.
+Three-level preempts: a side major of four is allowed, never five ("Preempt":
+`clubs >= 7 and hcp>= 5 and hcp<= 11 and totalpoints >= 6 and not
+shapeopenings and H <= 4 and S <= 4`; 3H `S <= 4`, 3S `H <= 4`).
+
+Four of a minor (the Brill card has no Namyats): a natural preempt,
+eight cards or seven and a void, no five-card major; five of a minor
+with nine ("Preemptive_4_Level_Openings": `C >= 8 and hcp>= 5 and
+hcp<= 11 and loserlevel >= 3 and H <= 4 and S <= 4 and not
+shapeopenings`, and `C >= 7 ... loserlevel >= 4`;
+"Preemptive_5_Level_Openings" `C >= 8 ... loserlevel >= 5`). A void
+stands in for Brill's `loserlevel >= 4` with seven (we have no loser
+level term). Seen at the table: 2026-10-14 IMP board 5, Brill opened 4C
+with KJT8763 in clubs, which 21GF-GIB (Namyats) reads as a strong heart
+preempt. No card had a natural 4m opening before: without Namyats an
+eight-card minor opened 5m.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): weak twos 0% -> 100% of 7,839 boards; three-level preempts 0% -> 100% of 2,254.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **Rick's rulings:** the opening guidelines (weak two 4-9 with six;
   looser third seat; no weak two in fourth seat; seven cards at the three
   level; third-seat four-card majors; the rule of 15 in fourth seat; 12

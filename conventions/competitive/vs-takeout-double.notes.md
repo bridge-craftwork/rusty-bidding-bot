@@ -51,8 +51,19 @@ with 14+ support points, else the cheapest bid in the suit).
 - The convention-card field `vs_to_double.two_nt_raise_majors.*` (limit
   or weak) is not read; Jordan's field is.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+Jordan 2NT with three trumps too (Brill "TruscottMajor, 10+ hcp":
+`(suitpoints('S') > 12 or hcp >= 10) and S >= 3`); it ranks above the
+redouble, as ours does.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 0% -> 100% of 703 boards.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **Bridge Bum**, "Jordan 2NT" (<https://www.bridgebum.com/jordan_2nt.php>):
   2NT limit raise or better with four trumps, the redouble for a
   balanced 10-12, the jump to 3M weak (5-9), opener's sign-off in 3M.

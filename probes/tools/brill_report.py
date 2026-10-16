@@ -212,9 +212,21 @@ def parse_pbn(text):
     games, cur, section, prev = [], None, None, {}
     in_comment = False
 
+    # Brill's field PBN names the event only on a file's first game: the
+    # file-level tags carry forward to the games that leave them out.
+    carried = {}
+
     def close():
         nonlocal cur, prev
         if cur and cur["tags"]:
+            # A game naming another event starts a new set of carried tags.
+            if cur["tags"].get("Event", carried.get("Event")) != carried.get("Event"):
+                carried.clear()
+            for k in ("Event", "Site", "Date", "Scoring"):
+                if k in cur["tags"]:
+                    carried[k] = cur["tags"][k]
+                elif k in carried:
+                    cur["tags"][k] = carried[k]
             games.append(cur)
             prev = dict(cur["tags"])
         cur = None
@@ -360,8 +372,19 @@ def deal_hands(deal):
     return {SEATS[(i + k) % 4]: hands[k] for k in range(4)}
 
 
+RANK_ORDER = "AKQJT98765432"
+
+
+def sorted_hand(hand):
+    """A hand with each suit's cards in rank order: Brill's field PBN
+    writes them unsorted (`7K.8T3.24T9.A583`), `rbb dd` sorts them."""
+    return ".".join(
+        "".join(sorted(suit.upper(), key=RANK_ORDER.index)) for suit in hand.split(".")
+    )
+
+
 def deal_north(hands):
-    return "N:" + " ".join(hands[s] for s in SEATS)
+    return "N:" + " ".join(sorted_hand(hands[s]) for s in SEATS)
 
 
 def parse_score(text):
@@ -975,8 +998,9 @@ def main():
     ap.add_argument("--card", default="21GF-GIB", help="the card all four seats play (stock name or file)")
     ap.add_argument("--scoring", default="MP", choices=["MP", "IMP"],
                     help="scoring when the file does not say")
-    ap.add_argument("--history", default=os.path.join(ROOT, ".rbb-cache", "brill", "history.jsonl"),
-                    help="running table (JSON lines); '' to skip")
+    ap.add_argument("--history", default="",
+                    help="append to this running table (JSON lines), e.g. .rbb-cache/brill/history.jsonl; "
+                         "off by default so a trial run leaves the table alone")
     ap.add_argument("--table-only", action="store_true", help="print the running table and stop")
     ap.add_argument("--out", help="write the report here (default stdout)")
     ap.add_argument("--json", help="also write the analysis as JSON here")
@@ -991,7 +1015,7 @@ def main():
         self_test(args)
         return
     if args.table_only:
-        print(render_history(load_history(args.history)))
+        print(render_history(load_history(args.history or os.path.join(ROOT, ".rbb-cache", "brill", "history.jsonl"))))
         return
     if not args.pbn:
         ap.error("give the field PBN file(s)")

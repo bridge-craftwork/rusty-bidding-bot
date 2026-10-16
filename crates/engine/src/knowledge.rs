@@ -4,7 +4,10 @@
 //! Narrowing is interval reasoning. It is sound (never excludes a hand that
 //! satisfies the constraints) but not complete: a disjunction narrows to the
 //! hull of its branches, and terms other than HCP, suit lengths, balance and
-//! the point counts are kept in `constraints` without narrowing.
+//! the point counts are kept in `constraints` without narrowing. What the
+//! hull and pairwise suit relations lose through the deck (1♣ shows `C>D |
+//! (C=3, D=3)` and no major above four: three or more clubs, though no
+//! branch says so) comes back by shaving the suit lengths (`shave`).
 //!
 //! The point counts are tied to the HCP and the suit lengths both ways
 //! (`Bounds::bridge`): length points are bounded by the known lengths and
@@ -315,7 +318,15 @@ impl SeatKnowledge {
                 b = again;
             }
         }
-        Some(b)
+        // Shaved by `e`, and by the earlier constraints too when the
+        // lengths moved: the lengths they were shaved against have changed
+        // (most added constraints leave them alone, and shaving by every
+        // constraint each time cost a fifth of a compare run).
+        if b.len == self.len {
+            Some(shave(b, std::iter::once(e)))
+        } else {
+            Some(shave(b, self.constraints.iter().chain(std::iter::once(e))))
+        }
     }
 
     /// A copy whose ranges are exactly what `add(e)` would leave on a
@@ -351,7 +362,7 @@ impl SeatKnowledge {
                 b = again;
             }
         }
-        self.set_bounds(b);
+        self.set_bounds(shave(b, self.constraints.iter()));
     }
 
     /// What the constraints alone say, without the deck's narrowing from
@@ -1037,6 +1048,74 @@ fn constrain(out: &mut Bounds, t: &Term, op: CmpOp, n: i32) {
     }
 }
 
+/// Does narrowing `e` take a hull of cases, or relate two attributes?
+/// Interval reasoning loses what such a constraint implies through the
+/// deck (`shave`); for the others it is already as tight as shaving.
+fn has_cases(e: &Expr, positive: bool) -> bool {
+    match e {
+        Expr::Or { any } => positive || any.iter().any(|s| has_cases(s, false)),
+        Expr::And { all } => !positive || all.iter().any(|s| has_cases(s, true)),
+        Expr::Not { expr } => has_cases(expr, !positive),
+        Expr::InRange { .. } => !positive,
+        Expr::Cmp { lhs, rhs, .. } => int_of(lhs).is_none() && int_of(rhs).is_none(),
+        _ => false,
+    }
+}
+
+/// Suit lengths the constraints rule out, one value at a time: a length
+/// at an end of its range goes when the ranges with that length fixed
+/// cannot satisfy one of the constraints (only those `has_cases` picks:
+/// for the rest the ranges already say all they imply). This catches
+/// what the hull of a disjunction and pairwise suit relations lose
+/// through the deck: the 1♣ opening shows `C>D |
+/// (C=3, D=3)` with neither major above four (or shorter than clubs), and
+/// though no one of those bounds clubs, clubs of two or fewer leave the
+/// four suits short of thirteen, so clubs are three or more. Sound
+/// because `narrow` is: only a length no hand within the ranges can hold
+/// goes.
+fn shave<'a>(b: Bounds, constraints: impl Iterator<Item = &'a Expr>) -> Bounds {
+    let cases: Vec<&Expr> = constraints.filter(|e| has_cases(e, true)).collect();
+    if cases.is_empty() {
+        return b;
+    }
+    let fails = |b: &Bounds, i: usize, v: i32| {
+        let mut p = *b;
+        p.len[i] = Range::point(v);
+        p.normalize();
+        p.is_contradiction() || cases.iter().any(|e| narrow(p, e, true).is_contradiction())
+    };
+    let orig = b;
+    let mut b = b;
+    // Each length narrowed lets the others narrow; a second round
+    // settles nearly all of it.
+    for _ in 0..2 {
+        let before = b.len;
+        for i in 0..4 {
+            while b.len[i].lo < b.len[i].hi && fails(&b, i, b.len[i].lo) {
+                b.len[i].lo += 1;
+            }
+            while b.len[i].lo < b.len[i].hi && fails(&b, i, b.len[i].hi) {
+                b.len[i].hi -= 1;
+            }
+            // Shaved to one length: if that fails too, nothing holds.
+            if b.len[i] != before[i] && b.len[i].lo == b.len[i].hi && fails(&b, i, b.len[i].lo) {
+                return orig;
+            }
+        }
+        if b.len == before {
+            break;
+        }
+        b.normalize();
+    }
+    // Calls whose meanings cannot all hold (a misread auction) shave to
+    // nothing: keep the ranges interval reasoning left, as before.
+    if b.is_contradiction() {
+        orig
+    } else {
+        b
+    }
+}
+
 fn hull_of<'a>(k: Bounds, branches: impl Iterator<Item = (&'a Expr, bool)>) -> Bounds {
     let mut acc = Bounds::contradiction();
     for (e, pos) in branches {
@@ -1112,7 +1191,8 @@ mod tests {
         let mut k = SeatKnowledge::default();
         k.add(expr("S>=5, S>=H, H>=5"));
         assert_eq!(k.len[3].lo, 5);
-        assert_eq!(k.len[2], Range::new(5, 8));
+        // Seven hearts would need seven spades: the deck says six.
+        assert_eq!(k.len[2], Range::new(5, 6));
     }
 
     /// Total points raise the HCP floor by what length can add at most,
@@ -1208,6 +1288,41 @@ mod tests {
             )),
         }));
         assert_eq!(k.hcp.hi, 16);
+    }
+
+    /// The minor openings (base.bid, `may5` resolved true): no one
+    /// branch bounds the minor, the deck does.
+    #[test]
+    fn suit_relations_bound_lengths_through_the_deck() {
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("hcp>=10, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C")));
+        assert_eq!(k.len[0], Range::new(3, 13), "1♣: three or more clubs");
+        assert_eq!(k.len[1].hi, 6, "fewer diamonds than clubs");
+        assert_eq!(
+            (k.len[2].hi, k.len[3].hi),
+            (6, 6),
+            "a major longer than four is shorter than clubs"
+        );
+        // 1♦: three or more, and never fewer than clubs.
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D")));
+        assert_eq!(k.len[1].lo, 3);
+        assert_eq!(k.len[0].hi, 6, "clubs no longer than diamonds");
+        // Three diamonds means 4=4=3=2, so a later heart limit of three
+        // makes diamonds four or more (the earlier constraint shaved again).
+        assert!(k.add(expr("H<=3")));
+        assert_eq!(k.len[1].lo, 4);
+        // A relation alone: more clubs than diamonds, with both majors
+        // at most four, makes clubs three or more (2C > 2D >= 5).
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("C>D, H<=4, S<=4")));
+        assert_eq!(k.len[0].lo, 3);
+        // A disjunction takes the hull of its branches, each carried
+        // through the deck: four spades and four hearts, or five spades.
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("(S=4, H=4) | (S=5, H<=3), D<=3, C<=3")));
+        assert_eq!(k.len[3], Range::new(4, 5));
+        assert_eq!(k.len[2], Range::new(2, 4));
     }
 
     #[test]

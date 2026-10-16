@@ -108,6 +108,25 @@ Splinters_By_Opener −1,107 → −859.
   transfer-walsh.notes.md). Opener's splinters in the transfer's major
   are not written.
 
+## Their double of the splinter (2026-10-15)
+
+Brill daily 2026-10-11 board 1 (MP): 1♠ (P) 4♦ (X) 4♠ (P), Rusty South
+the splinterer with AKT87.KQT62.3.64 (12 HCP). On the day it bid 4NT and
+reached 6♠ (12 tricks double dummy, one off at the table); the replay
+passed 4♠ under rebids.bid's "Nothing to add: partner's rebid was a
+minimum". Not a regression in the slam rules: on the day opener's 4♠
+over the double was read by rebids.bid as "Game: six or more spades,
+19+" (no rule here covered the doubled splinter), which made South's
+keycard ask look right; since 2026-10-09 it was read as total-tricks'
+"ten trumps, 10-12". Both are misreadings: opener's 4M is the sign-off
+whether or not they double the artificial splinter (it takes no room).
+The opener's block now covers `1M (P) 4x (X)` and `1H (P) 3S (X)`, so 4♠
+reads "Game: no slam interest", and the splinterer with no extras passes
+it, as he does uncontested (`1S P 4D P 4S P` passes too). 12 HCP
+opposite a sign-off is no slam try by any count here; the slam on the
+day was the misreading's luck. Opener's redouble or pass over the
+double (control-showing) is not written.
+
 ## Sources
 
 - **Convention description**: Wikipedia, "Splinter bid" (double jump in
@@ -128,3 +147,6 @@ Splinters_By_Opener −1,107 → −859.
   unprotected, and the 33-support-point slam count (control-bids.bid,
   rkcb-1430.bid, 2026-09-25/27); the wasted-honour count here is a
   refinement of that count, not a ruling.
+- **The doubled splinter** (2026-10-15): opener's game bid stays the
+  sign-off over a lead-directing double, standard practice, not yet
+  cited; the Brill daily 2026-10-11 board 1 for the motive.

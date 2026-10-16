@@ -53,3 +53,13 @@ E K7.KT54.K54.AJT3      | 1H P 1S                | P      | 14, four-three in th
 E QJ9.92.AK86.K854      | 1H P 1S                | X      | 13, four-four in the minors
 E 8.AKJ54.AQ953.K5      | 1H P 1S                | 2D     | hearts are theirs: five diamonds
 E 4.T54.765.KJ9853      | 1H P 1S                | P      | 5 HCP
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+E KQ.AJ932.KQ2.J52      | 1D         | 1NT    | brill: semi-balanced with five hearts, 16: 1NT
+E KQ2.AJ3.KQ32.J52      | 1S         | 1NT    | brill: 15-17
+card    21GF-GIB
+E KQ.AJ932.KQ2.J52      | 1D         | 1H     | default: the five-card major is overcalled

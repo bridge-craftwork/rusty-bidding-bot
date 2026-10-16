@@ -337,8 +337,23 @@ the table at both vulnerabilities. `--report-only` re-tallies the cache,
 scores against another contract, `--json` writes the table. 3,000-4,000
 deals per class took about 40 minutes on a loaded machine.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+The plain completion denies four trumps, except 4-3-3-3 with a minimum
+(Brill "No superaccept": `hearts < 4 or (not max and ExplicitShape ==
+'3=4=3=3')`). With four, Brill jumps to 3M with a minimum ("4+ hearts, min":
+`hearts > 3 and not max`, super-accept.bid), bids 2NT with a maximum 4-3-3-3
+and the doubleton with a maximum otherwise (superaccept-doubleton.bid).
+"Max" is taken as 16-17. Brill marks the completion artificial; we do not
+(the flag would stop partner passing it).
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): the completions' lengths 0% -> 100% of 4,312 boards (still 2% with the artificial flag counted).
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **The convention:** Jacoby transfers over 1NT. Standard practice, not
   yet cited to a book or article.
 - **Rick's rulings:** responder's new suit (3m) is game forcing

@@ -43,3 +43,15 @@ S Q5.AQT76.QJT3.QT          | 1NT 2C P 2D P        | 2H     | hearts and a minor
 S T82.J.AK9643.QJ8          | 1NT 2C P 2D P        | P      | long diamonds
 S 4.J83.A2.AKQT742          | 1NT 2C P 2D P        | 3C     | long clubs
 N 954.8.Q8743.KJ54          | 1NT 2C P 2D P 2H P   | 2NT    | a singleton heart: which minor?
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+E KJ852.AQJ93.75.5      | 1NT        | 2D     | brill: both majors, five-five
+E KJ852.AQJ9.753.5      | 1NT        | P      | brill: five-four majors is not 2D
+E 5.952.KQJ9832.K5      | 1NT        | P      | brill: 9 HCP, below the 10 floor
+card    21GF-GIB
+E KJ852.AQJ9.753.5      | 1NT        | 2D     | default: five-four will do
+E 5.952.KQJ9832.K5      | 1NT        | 2C     | default: 9 HCP and seven cards

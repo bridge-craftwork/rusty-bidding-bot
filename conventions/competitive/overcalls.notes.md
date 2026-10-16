@@ -327,3 +327,19 @@ the overcall shows what partner can count on.** (PR #48, 7ed6129.)
 
 Sources: Rick's ticket b238 (2026-10-04); BBA probe
 `probes/oc-2C-over-1D.toml`; the measurements above.
+
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+The 1NT overcall is 15-17 (the card) and balanced or semi-balanced, so a
+five-card major will do ("Overcalling 1Ma with 1N", "15-17": `stopper('S')
+and hcp>= 15 and hcp<= 17 and (balanced or semibalanced)`). The rule spells
+out 2-5 cards in every suit: the engine does not derive suit lengths from
+`semibalanced` or `shortest`.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 0% -> 100% of 3,734 boards.
+
+## Sources
+
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").

@@ -22,6 +22,7 @@ module preempts "Weak two-bids and preempts"
   param  two_h = two_level.two_hearts.meaning default weak
   param  two_s = two_level.two_spades.meaning default weak
   param  style = general.style
+  param  system = general.system   # `brill`: the Brill card's treatments (below)
   param  flannery = two_level.flannery.play default false
   param  multi    = two_level.two_diamonds.multi default false
   param  benjamin = two_level.benjamin.play default false
@@ -66,17 +67,31 @@ when opening, seat<=2
 # hand conditions are in `shows` and `when` stays public, so that these
 # rules never widen what a weak two shows under the default style.
   2D  "Weak two: six diamonds, 4-10"   shows D=6, hcp=4..10, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,D) | (!has(A,S), !has(A,H), !has(A,C))
-      when two_d is weak, weak_2d_open, style is not standard, !vul
+      when two_d is weak, weak_2d_open, style is not standard, system is not brill, !vul
   2D  "Weak two: six diamonds, 4-10, a good suit"   shows D=6, hcp=4..10, quality(D)>=good | top5(D)>=3, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,D) | (!has(A,S), !has(A,H), !has(A,C))
-      when two_d is weak, weak_2d_open, style is not standard, vul
+      when two_d is weak, weak_2d_open, style is not standard, system is not brill, vul
   2H  "Weak two: six hearts, 4-10"     shows H=6, hcp=4..10, S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))
-      when two_h is weak, weak_2h_open, style is not standard, !vul
+      when two_h is weak, weak_2h_open, style is not standard, system is not brill, !vul
   2H  "Weak two: six hearts, 4-10, a good suit"     shows H=6, hcp=4..10, quality(H)>=good | top5(H)>=3, S<=3 | (!has(A,S), !has(K,S), !has(Q,S), !has(J,S)), hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))
-      when two_h is weak, weak_2h_open, style is not standard, vul
+      when two_h is weak, weak_2h_open, style is not standard, system is not brill, vul
   2S  "Weak two: six spades, 4-10"     shows S=6, hcp=4..10, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C))
-      when two_s is weak, weak_2s_open, style is not standard, !vul
+      when two_s is weak, weak_2s_open, style is not standard, system is not brill, !vul
   2S  "Weak two: six spades, 4-10, a good suit"     shows S=6, hcp=4..10, quality(S)>=good | top5(S)>=3, H<=3 | (!has(A,H), !has(K,H), !has(Q,H), !has(J,H)), hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C))
-      when two_s is weak, weak_2s_open, style is not standard, vul
+      when two_s is weak, weak_2s_open, style is not standard, system is not brill, vul
+
+# brill (the Brill card, general.system = brill): Brill's weak two is
+# six cards, 5-11 HCP, with no five-card side major; a four-card one is
+# allowed. Brill /explain, 2026-10-15: "Weak 2 S" requires `hcp<= 11 and
+# S == 6 and hcp> 4 and bestsuit('S') and loserlevel >= 2 and S_points >= 6
+# and H <= 4 and not shapeopenings` (2D: `S <= 4 and H <= 4`). No
+# vulnerability condition. The top stays at 10 and the ace clause stays,
+# so the choice against a one-level opening is the default's.
+  2D  "Weak two: six diamonds, 5-10, no five-card major"   shows D=6, hcp=5..10, H<=4, S<=4, hcp<=9 | !has(A,D) | (!has(A,S), !has(A,H), !has(A,C))
+      when two_d is weak, weak_2d_open, system is brill
+  2H  "Weak two: six hearts, 5-10, no five spades"         shows H=6, hcp=5..10, S<=4, hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))
+      when two_h is weak, weak_2h_open, system is brill
+  2S  "Weak two: six spades, 5-10, no five hearts"         shows S=6, hcp=5..10, H<=4, hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C))
+      when two_s is weak, weak_2s_open, system is brill
 
 # ── Third seat: five cards will do, and no quality requirement ───────
 when opening, seat=3
@@ -99,17 +114,49 @@ when opening, seat=4
 # ── Three- and four-level preempts (not in fourth seat) ─────────────
 when opening, seat<=3
   3C  "Preempt: seven clubs, 4-9"      shows C=7, hcp=4..9, H<=3, S<=3
-      when !vul | quality(C)>=good | top5(C)>=3
+      when !vul | quality(C)>=good | top5(C)>=3, system is not brill
   3D  "Preempt: seven diamonds, 4-9"   shows D=7, hcp=4..9, H<=3, S<=3
-      when !vul | quality(D)>=good | top5(D)>=3
+      when !vul | quality(D)>=good | top5(D)>=3, system is not brill
   3H  "Preempt: seven hearts, 4-9"     shows H=7, hcp=4..9, S<=3
-      when !vul | quality(H)>=good | top5(H)>=3
+      when !vul | quality(H)>=good | top5(H)>=3, system is not brill
   3S  "Preempt: seven spades, 4-9"     shows S=7, hcp=4..9
-      when !vul | quality(S)>=good | top5(S)>=3
+      when !vul | quality(S)>=good | top5(S)>=3, system is not brill
+  # brill: a side major may be four cards, never five (Brill /explain,
+  # 2026-10-15, "Preempt": `clubs >= 7 and hcp>= 5 and hcp<= 11 and
+  # totalpoints >= 6 and not shapeopenings and H <= 4 and S <= 4`; 3H
+  # `S <= 4`, 3S `H <= 4`).
+  3C  "Preempt: seven clubs, 4-9, no five-card major"     shows C=7, hcp=4..9, H<=4, S<=4
+      when !vul | quality(C)>=good | top5(C)>=3, system is brill
+  3D  "Preempt: seven diamonds, 4-9, no five-card major"  shows D=7, hcp=4..9, H<=4, S<=4
+      when !vul | quality(D)>=good | top5(D)>=3, system is brill
+  3H  "Preempt: seven hearts, 4-9, no five spades"        shows H=7, hcp=4..9, S<=4
+      when !vul | quality(H)>=good | top5(H)>=3, system is brill
+  3S  "Preempt: seven spades, 4-9, no five hearts"        shows S=7, hcp=4..9, H<=4
+      when !vul | quality(S)>=good | top5(S)>=3, system is brill
   4H  "Preempt: eight hearts"          shows H>=8, hcp=4..10, S<=3
   4S  "Preempt: eight spades"          shows S>=8, hcp=4..10
   5C  "Preempt: eight clubs"           shows C>=8, hcp=4..10, H<=3, S<=3
+      when  system is not brill
   5D  "Preempt: eight diamonds"        shows D>=8, hcp=4..10, H<=3, S<=3
+      when  system is not brill
+  # brill (the Brill card, no Namyats): four of a minor is a natural
+  # preempt with eight, five with nine. Brill /explain, 2026-10-15,
+  # "Preemptive_4_Level_Openings": `C >= 8 and hcp>= 5 and hcp<= 11 and
+  # loserlevel >= 3 and H <= 4 and S <= 4 and not shapeopenings` (and
+  # `C >= 7 ... loserlevel >= 4`); "Preemptive_5_Level_Openings" `C >= 8
+  # ... loserlevel >= 5`. Seen at the table: 2026-10-14 IMP board 5,
+  # Brill opened 4C with KJT8763 in clubs. Brill's seven-card 4m wants
+  # `loserlevel >= 4`; we take a void as that shape (an approximation).
+  4C  "Preempt: seven or eight clubs, no five-card major"  shows C=8 | (C=7, shortest=0), hcp=4..10, H<=4, S<=4
+      when  system is brill
+      priority 1                         # a seven-card suit with a void: ahead of 3C
+  4D  "Preempt: seven or eight diamonds, no five-card major"  shows D=8 | (D=7, shortest=0), hcp=4..10, H<=4, S<=4
+      when  system is brill
+      priority 1
+  5C  "Preempt: nine or more clubs"                   shows C>=9, hcp=4..10, H<=4, S<=4
+      when  system is brill
+  5D  "Preempt: nine or more diamonds"                shows D>=9, hcp=4..10, H<=4, S<=4
+      when  system is brill
 
 # bba: not vulnerable, six-four in the minors opens at the three level
 # with 4-8 (9-10 open 2D, and six clubs have no weak two).

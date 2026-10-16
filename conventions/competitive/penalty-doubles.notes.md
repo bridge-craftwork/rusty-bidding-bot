@@ -784,6 +784,48 @@ The three together (`final`, against main 3342483):
   vanilla -10,674 -> -9,608, 21GF -18,216 -> -16,455. Tripwire: 118
   boards, doubling -1,736 -> -1,195, contract -6,846 -> -6,912.
 
+## Brill dailies: a raise is not a run; the big hand with a suit (2026-10-15)
+
+Two doubles from the Brill dailies (Rusty South, 21GF-GIB):
+
+- **Brill daily 2026-10-08 board 2** (MP): (P) P (1NT) P (2D) P (2H) X
+  (4H), South K87.T764.87.J742 doubled "they ran into my hearts" and 4H
+  made (-590 against -420). Partner's double of the transfer completion
+  read as a penalty double (`asked penalty`), so `they_ran` held; but
+  East raised the doubled suit, he did not run from it. After
+  partner's penalty double of a suit, `ran_to(x)` now asks for a new
+  suit: the runner's partner has not bid it (`!lho.named(x)` directly,
+  `!rho.named(x)` passed round). After our redouble or a penalty double
+  of 1NT every bid is still a run (the doubler's side raising its
+  rescue, 1C X XX 1D 2C 2D, included), and four small still doubles
+  (measured below).
+- **Brill daily 2026-10-14 board 4** (IMP): (2D) P (5D), South
+  AQJ7.AKQT94.-.K84 doubled on strength (`big_hand_vs_game`); 5DX made,
+  6H and 6S were on. The strength double now stands aside with a void
+  or singleton in their suit and six or more of my own: that hand
+  declares (vs-preempts.bid's new block for their raised preempt bids
+  5H). A void and only five still doubles: Brill daily 2026-10-14
+  board 7 (1H 1S P 2H P 2S P 4S, .AKJT7.A854.AJ63) doubled and 4S went
+  down; a first version that excluded every void lost it.
+
+  The takeout doubler keeps the old count (`me.last=X`): without it
+  his pass of their game no longer denied 17+, the advancer lost the
+  shape the double showed and stopped bidding 4S in 1H X 3H P 4H P P
+  (9 boards, contract -25, par -20 on the full corpus).
+
+Measured against main a12e72e, `compare --par`, errors_diff, together
+with the vs-preempts.bid blocks (2026-10-15), split by the rule that
+changed. Full corpus: 210 boards, errors +235 (+129 / +106), contract
++108, doubling +127, par +234. The strength doubles given up: 144
+boards, contract +7, doubling +34, par +70; the new bids in their
+place and over their raised preempts (vs-preempts.bid): 66 boards,
+contract +101, doubling +93, par +164. "They ran" changes no corpus
+board (only the Brill one). An earlier version that also limited the
+runs after our redouble and wanted an honour in four trumps lost 284
+doubling IMPs on the corpus (the redoubler's AT7.AQ75.Q9.8762 over 2C
+and alike): not kept. Tripwire (`--limit 50`): 18 boards, errors +20
+(+3 / +17), contract +5, doubling +15, par +7.
+
 ## Sources
 
 - **Standard practice, not yet cited:** double when they are too high
@@ -838,3 +880,7 @@ The three together (`final`, against main 3342483):
     with each rule (rule copies under `--rules`), `probes/tools/errors_diff.py`,
     `probes/tools/par_blame.py`, and `probes/tools/double_context.py`
     (new) for the context tables.
+- **2026-10-15, the Brill dailies:** after a penalty double of a suit,
+  a rescue is a new suit, not a raise; the big hand short in their
+  suit with a long suit of its own bids it. Standard practice, not yet
+  cited; the boards named above and the measurement there.

@@ -3,3 +3,15 @@ dealer  S
 
 # seat hand             | auction    | expect | why
 S AK5.KJ72.Q94.KQ3      | 1NT P 2D P | 3H     | four hearts, 17
+
+# ── The Brill card's treatments (general.system = brill; notes, "Brill").
+# Each Brill line has a 21GF-GIB line beside it: the default is unchanged.
+dealer  N
+vul     None
+card    Brill
+N Q632.K3.KQ54.A43      | 1NT P 2H P | 3S     | brill: the jump is a minimum with four spades
+N AQ32.KJ3.KQ4.Q43      | 1NT P 2H P | 2NT    | brill: a maximum 4-3-3-3 bids 2NT
+N KQ3.AJ32.KQ5.A43      | 1NT P 2D P | 2NT    | brill: a maximum 3-4-3-3 bids 2NT
+N 83.AJ32.KQ54.AQ3      | 1NT P 2D P | 2S     | brill: a maximum with a doubleton spade
+card    21GF-GIB
+N AQ32.KJ3.KQ4.Q43      | 1NT P 2H P | 3S     | default: the jump is the maximum

@@ -14,7 +14,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.8.0 (rule language 1)`), and so does the last line of
+(`rbb 0.9.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
@@ -223,7 +223,9 @@ move with it, as with any engine release. The meaning of every term and
 of negative inference stays the same. (2026-10-03: total points, support
 points and declarer points tied to the HCP through the known lengths,
 and denials kept in their sound part, came this way, without a new
-language version.)
+language version; so did, 2026-10-15, suit lengths shaved through the
+deck, so that a 1♣ opening's `C>D | (C=3, D=3)` with no major above four
+reads as three or more clubs.)
 
 Additions that no existing file can notice may come without a new version:
 a new term, a new function, a new tool or option. A rule set that uses one

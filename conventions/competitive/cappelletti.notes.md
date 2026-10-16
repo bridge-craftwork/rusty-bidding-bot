@@ -74,8 +74,25 @@ live.
   (11-12 invites, 13+ bids game); BBA's continuations there were not
   probed.
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+Every Cappelletti bid has 10+ HCP, 2D is five-five in the majors, and the
+2C one-suiter goes to 18 ("Cappelletti - majors": `H >= 5 and S >= 5 and hcp
+>= 10`; "- minors": `C >= 5 and D >= 5 and totalpoints >= 15 and hcp >= 10`;
+"- single suited": `totalpoints >= 10 and lengthlongestsuit >= 6 and
+singlesuited and hcp >= 10`; "- S and a minor": `S >= 5 and (C >= 4 or D >=
+4) and loserlevel >= 2 and totalpoints >= 12 and hcp >= 10`). With five-four
+in the majors brill passes. Brill marks the calls artificial and so should
+we, on every card (our Cappelletti rules carry `alert` but not
+`artificial`): left for Rick, as it changes the default cards' reading.
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 0% -> 0% of 3,456 boards, all of it the artificial flag (39% -> 100% ignoring it).
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - Bridge Bum, "Cappelletti (Hamilton)", https://www.bridgebum.com/cappelletti.php
   (the calls; advancer's 2♦ relay, pass with long clubs, 2♥/2♠ natural;
   and its "Modified Cappelletti" section: 2♣ "a minor one-suiter, or at

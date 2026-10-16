@@ -384,6 +384,12 @@ For each scenario and in total:
   and no length at notrump, as BBA does. Treatments so far: the
   valuation, raises of a major, Stayman, weak twos. The point is also to
   learn how BBA values hands in general, which should speed up the rest.
+  **Brill's treatments** (2026-10-15) are a fourth set, for the Brill
+  dailies: the stock card `Brill` sets `general.system = brill` and the
+  rules test `system is brill` (`param system = general.system`). That is a
+  stand-in: `general.style` has no `brill` value yet (a convention-card
+  change), and when it has, the tests become `style is brill`
+  (cards/README.md, "Brill").
 - **Card coverage**: a card is a few hundred switches and the rules read a few
   dozen; `rbb card coverage` splits what a card switches on into read,
   ignored, and play-only (carding and leads cannot change a call), and counts

@@ -28,3 +28,17 @@ S 2.AQJ85.KQ3.KQ75      | 1H P 4H P        | 4NT    | plain Blackwood
 card    ../../cards/json/Natural.json
 N 85.KJ9862.743.92      | 1NT P            | 2H     | natural: five or more hearts, to play
 N KQ4.AJ83.K92.T76      | 1H P             | 2C     | no Jacoby 2NT
+
+# ── Brill: 21GF-GIB with what the Brill robots play (cards/README.md,
+# "Brill"): 2♠ Minor Suit Stayman, 2NT and 3♣ minor transfers, 2NT–3♠
+# Minor Suit Stayman, Soloway jump shifts, the 1NT overcall 15-17.
+card    Brill
+N 5.92.KJ94.AQ9832      | 1NT P            | 2S     | Minor Suit Stayman: five-four in the minors, game values
+N 85.92.743.KJ9832      | 1NT P            | 2NT    | 2NT transfers to clubs
+N 85.92.KJ9832.743      | 1NT P            | 3C     | 3C transfers to diamonds
+S KQ5.AJ3.K942.Q83      | 1NT P 2NT P      | 3C     | the transfer is always completed
+N 5.92.AKJ94.KQ983      | 2NT P            | 3S     | 2NT–3S: Minor Suit Stayman
+N K5.AKQJ952.A4.53      | 1C P             | 2H     | Soloway jump shift
+W AQ3.KJ2.K852.QJ5      | 1D               | 1NT    | the 1NT overcall, 15-17
+card    21GF-GIB
+N 85.92.743.KJ9832      | 1NT P            | 2S     | 21GF-GIB: 2S transfers to clubs

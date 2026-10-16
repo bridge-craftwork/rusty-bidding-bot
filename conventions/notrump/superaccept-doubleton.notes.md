@@ -49,8 +49,22 @@ corpus):
 - Cuebidding after a super-accept: build it (with controls, not
   stoppers?), or keep bidding game directly?
 
+## Brill (general.system = brill, 2026-10-15)
+
+Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
+
+A maximum 4-3-3-3 bids 2NT, since the jump to three of the major is the
+minimum. Brill "Superaccept, no doubleton": `max and ExplicitShape ==
+'3=4=3=3'`; over 2H "Superaccept, max": `max and ExplicitShape == '4=3=3=3'`;
+"Superaccept, doubleton": `max and S <= 2 and hearts > 3` (we keep 2NT with
+Qx of spades, as for BBA). Not seen in the cache: what Brill bids with a
+maximum, four trumps and a minor doubleton (we bid 2NT).
+
+Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): see jacoby-transfers.notes.md.
+
 ## Sources
 
+- Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
 - **The convention:** BBA's "Extended acceptance after NT" `.bbsa` key,
   as BBA plays it; learned from BBA's auctions, not from a published
   description. Not yet cited to a book or article.
