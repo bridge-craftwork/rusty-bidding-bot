@@ -3201,6 +3201,12 @@ mod knowledge_soundness {
         "(H>=5, hcp+length_points>=12) | hcp>=17",
         "(S>=5, hcp+length_points=8..16) | (H>=5, hcp+length_points=8..16)",
         "!(H>=5, hcp+length_points>=8)",
+        // The minor openings: lengths shaved through the deck.
+        "C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C",
+        "D>=3, D>C | D>=4, D>=C, H<=4 | H<D, S<=4 | S<D",
+        "C>D, H<=4, S<=4",
+        "!(S>=H, S>=D | C>=5)",
+        "H>S | D=0",
     ];
 
     fn holds(f: &Facts, v: Valuation, e: &Expr) -> bool {

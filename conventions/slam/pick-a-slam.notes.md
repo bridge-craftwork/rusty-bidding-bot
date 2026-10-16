@@ -19,8 +19,15 @@ Pick-a-slam 5NT (2026-10-05), gated on `slam.pick_a_slam_5nt.play`.
   a stopper ask here, not Todd's preference), so the ask is rare.
 - Not built: 5NT pick-a-slam after their preempt (1♥-(4♠)-5NT) or over a
   1NT opening (where 5NT is the invitation to seven).
-- The answerer does not see the asker's fits (his `shows` is a
-  disjunction), so he picks from what he knows himself.
+- The answerer sees the asker's fits only as far as the knowledge
+  derives them: the asker's `shows` is a disjunction of fit pairs, and
+  since 2026-10-15 (suit lengths shaved through the deck, engine
+  `knowledge::shave`) a pair the auction rules out no longer hides the
+  rest. After 1♠-2♦-3♦-5NT hearts and clubs cannot fit, so the asker
+  holds three spades: opener with six spades and four diamonds now
+  knows nine spades and eight diamonds and bids 6♠ (the `.test` case
+  expected 6♦, "nine or more diamonds", which nothing in the auction
+  showed: the rule's "most cards between us" picks spades).
 
 ## Sources
 
