@@ -164,6 +164,47 @@ the convention's calls, classified:
 **For Rick:** the doubler's strong relay break (BBA's artificial cue)
 is not written; tell us if you want it.
 
+## Their 4C / 4D, and their preempt raised (2026-10-15)
+
+From the Brill dailies (Rusty South, 21GF-GIB):
+
+- **Brill daily 2026-10-14 board 5** (IMP): (P) 4C, South
+  T865.AQ.AQ74.A95 (16 HCP) passed: nothing was written over a
+  four-level minor. Now: a takeout double with 14+ short in the minor
+  and both majors, or 16+ with any shape (the strong hand's only call
+  at the four level); 4M natural with five, 14+; the other minor with
+  five, 16+; balancing a little lighter; the advancer bids a four-card
+  major or the other minor with five, else leaves it in. Not fixed in
+  the replay: the 21GF cards play Namyats, so our engine reads Brill's
+  natural 4C (KJT8763) as a strong heart preempt, and the defence
+  stays out for an artificial 4C. That needs the opponents' own card
+  (the Brill stock card under way elsewhere, `--ew-card`). A 4m that no
+  rule reads (Basic-Bridge has no 4m opening) counts as natural.
+- **Brill daily 2026-10-14 board 4** (IMP): (2D) P (5D), South
+  AQJ7.AKQT94.-.K84 doubled for penalty on strength and 5DX made with
+  6H/6S on. Over their preempt raised to the four or five level: a
+  six-card major from 16 total points (18 at the five level) bids it,
+  ahead of the double; a six-card minor from 18; the double is takeout,
+  16+ with at most one of theirs; the advancer pulls only with a
+  five-card major and at most one of theirs. Replay: 5H (doubled,
+  making), +18 IMPs on the board.
+
+Measured with the penalty-doubles.bid change of the same day (full
+corpus, `compare --par` against main a12e72e, errors_diff): the calls
+these blocks now make, 66 boards, contract +101, doubling +93, par
++164 (mostly 4S/4H/5m over their raised preempt where the strength
+double or a pass stood before). Tripwire at `--limit 50`: 3 boards
+(3C P 4C 4S twice, 2H P 4H 4S). The four-level minor defence changes
+no corpus board (BBA's corpora open 4m rarely, and our cards read it
+as Namyats).
+
+**For Rick:** the takeout double of the raised preempt is the same
+call as penalty-doubles.bid's strength double (balanced 17+ with two or
+more of theirs); partner reads it by the takeout rule here, which has
+the higher priority, and pulls with five of a major and shortness.
+Fine for the Brill board; say if the double there should be "cards"
+(optional) rather than takeout.
+
 ## Next
 
 The weak-two side's own continuations over our double (redouble, new
@@ -195,3 +236,9 @@ suits).
   game rather than going through the cue; the cue promises exactly four.
   Played on the cards that list it, against the earlier par result
   (the section above); Rick's pace ruling, 2026-10-05.
+- **Four-level minors and raised preempts** (2026-10-15): doubles of
+  preempts below 4S are for takeout, partner converting with length in
+  their suit (Bridge World Standard's treatment of doubles of
+  preempts; not checked against the text here). The thresholds (14 /
+  16 / 18 total points) are ours, a level up from the three-level
+  block, not quoted. Motive: the Brill dailies named above.

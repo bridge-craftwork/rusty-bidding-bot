@@ -896,6 +896,28 @@ Counts are misdescribed calls at --limit 50 (v. 1,173 in all).
 - 1NT rebid with a singleton in partner's suit (queue item 3): allow it
   in the reading, or rebid something else?
 
+## The reopening double on 5-4-2-2: tried, not kept (2026-10-15)
+
+Brill daily 2026-10-14 board 1 (MP): P P 1♠ (2♦) P (P), Rusty South
+AT543.AKJ5.J6.Q7 passed (2♦ made); the double would have found 2♠
+(+45.8 MP on the replay). The reopening double (`1x (2y) P (P) X`)
+wants three cards in every unbid suit or 16+; standard negative-double
+practice reopens with two or fewer of theirs and most shapes, partner
+holding the trap pass. Tried on the full corpus (`compare --par`,
+errors_diff against main a12e72e):
+
+| variant | boards | contract | doubling | par |
+|---|---|---|---|---|
+| no singleton, no six-card suit, short in theirs, 1y/2y only | 215 | -365 | +50 | -390 |
+| 5-4 in the majors, 2-2 outside, 1y/2y only | 67 | -175 | -21 | -191 |
+
+Both lose (par decides): the advancer's takeout of a double opener
+made light, at the two and three level, costs more than the penalty
+passes win. Not kept; the board is a `.test` case for the pass. The
+gap is likely in the advance (responder-rebids.bid's answers to the
+reopening double), not the double; for Rick with the question above
+("should a long suit of his own reopen with the double as well?").
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.

@@ -52,3 +52,27 @@ S A762.3.KQJ4.AK32      | 2H X P 3H P      | 3S  | the doubler shows four spades
 S 843.92.KQ763.A42      | 2S P P X P       | 3D  | the balancing double too
 card    21GF-DEFAULT competitive.lebensohl_weak_twos.play=false
 N K43.Q92.A763.KQ2      | 2H X P           | 3N  | without Lebensohl: natural 3NT with the stopper
+
+# Their four-level minor preempt (Brill daily 2026-10-14 board 5). The
+# Basic-Bridge card has no 4m opening: read as natural. (21GF cards
+# play Namyats, which reads it as a strong heart preempt.)
+card    Basic-Bridge
+dealer  N
+vul     NS
+S T865.AQ.AQ74.A95      | P 4C             | X   | 16 HCP, three clubs: the double, partner converts or bids
+S T865.Q2.AQ74.A95      | P 4C             | P   | 12 HCP and three clubs: no double
+S KQ86.AJ95.KQ74.5      | P 4C             | X   | short in clubs, both majors
+S AKJ875.Q2.A74.95      | P 4C             | 4S  | six spades, 14+
+S KJ74.Q93.T862.J3      | P 4C P P X P     | 4S  | four spades: take it out
+S K74.Q93.T862.J73      | P 4C P P X P     | P   | no four-card major: leave it in
+
+# Their preempt raised to game (Brill daily 2026-10-14 board 4): with a
+# void in theirs and six of my own I declare; the big flat hand still
+# doubles for penalty.
+card    21GF-GIB
+dealer  W
+vul     All
+S AQJ7.AKQT94..K84      | 2D P 5D          | 5H  | void in diamonds, six hearts: bid them
+S AQJ7.AKQ94.5.K84      | 2D P 5D          | X   | five hearts and a singleton: takeout
+S Q87.AK.KQ84.A984      | 2D P 5D          | X   | four diamonds and 18: penalty, as before
+N KT543.J8.Q5.7532      | 2D P 5D X P      | P   | two diamonds: leave the double in

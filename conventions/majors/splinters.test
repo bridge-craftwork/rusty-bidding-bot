@@ -33,3 +33,11 @@ S AK74.K5.AQJ83.K2      | 1D P 1S P            | 4S     | 20 HCP but no shortnes
 # ── Responder over opener's splinter ──────────────────────────────────
 N Q9852.K84.K4.953      | 1D P 1S P 4H P       | 4S     | ♥K wasted, 8 HCP: game
 N KQ852.84.K94.A53      | 1D P 1S P 4H P       | 4NT    | 12 HCP, nothing wasted in hearts, no bare suit: the keycard ask
+# ── Their double of the splinter ──────────────────────────────────────
+# Brill daily 2026-10-11 board 1: opener's 4S is still the sign-off,
+# and the splinterer with nothing extra passes it.
+dealer  N
+vul     None
+N J6543.A8.Q9.AQ98      | 1S P 4D X            | 4S     | 13 HCP, the diamond queen wasted: sign-off
+S AKT87.KQT62.3.64      | 1S P 4D X 4S P       | P      | partner signed off; 12 HCP is nothing extra
+N AKJ65.A8.865.AQ9      | 1S P 4D X            | 4NT    | 18 HCP, nothing wasted: the slam try stands
