@@ -390,3 +390,10 @@ card    SAYC
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | forcing one round: five spades, the least lie (read as six)
 card    21GF-DEFAULT major_openings.two_over_one.game_force=false
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | the 2/1 card without the game force: the least lie
+# After a minor's jump rebid (2026-10-20, Brill daily board 7).
+card    Basic-Bridge
+dealer  S
+S 83.Q5.AKQ972.AQ6      | 1D P 1S P 3D P 4D P | P      | 17 HCP but two bare side suits: 5D needs tricks it lacks (board 7, DD 10 tricks)
+S A3.Q5.AKQ972.K63      | 1D P 1S P 3D P 4D P | 5D     | 18 HCP, one bare suit: accepts
+S K83.Q5.AKQ972.A6      | 1D P 1S P 3D P 3S P | 4S     | three spades opposite five
+S 83.KQ5.AKQ972.A6      | 1D P 1S P 3D P 3S P | 3NT    | two spades: 3NT

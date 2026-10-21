@@ -336,3 +336,10 @@ card    SAYC
 N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | forcing one round: 2S is six, two cards is the fit: game
 card    21GF-DEFAULT major_openings.two_over_one.game_force=false
 N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | the 2/1 card without the game force: six, the fit
+# After a minor's jump rebid (2026-10-20, Brill daily board 7).
+card    Basic-Bridge
+dealer  S
+N A942.942.J65.K94      | 1D P 1S P 3D P      | 4D     | 8 HCP, three diamonds: the invitational raise (board 7)
+N KJ43.Q94.65.Q932      | 1D P 1S P 3D P      | P      | 8 HCP, two diamonds: no game
+N AQ842.94.J65.K94      | 1D P 1S P 3D P      | 3S     | 10 HCP, five spades: 3S forcing, find the 5-3 fit
+N AQJ842.94.J5.K94      | 1D P 1S P 3D P      | 4S     | 11 HCP, six spades: game in spades

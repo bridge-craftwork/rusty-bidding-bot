@@ -770,6 +770,20 @@ calls, and "Game: the two-over-one was 11+" bids 3NT without one. Gap:
 over Bergen's 2NT responder's 16+ without a fit also bids 3NT (question
 in rebids.notes.md). Cases at the end of responder-rebids.test.
 
+## After a minor's jump rebid: 4m, 3M, 4M (2026-10-20)
+
+Brill daily 2026-10-20, board 7 (IMP, all vul, dealer S): 1D P 1S P 3D
+P 4D P, and our opener (83.Q5.AKQ972.AQ6) had no rule for the raise.
+Brill /explain reads the raise as "D >= 3, HCP 7-9". After 1m-1y-3m
+responder had only Pass (up to 8) and 3NT (9+). Added, standard
+practice not yet cited: 4m invites with three-card support and 8
+points (7 passes: BBA's pass on the Basic-Bridge corpus hand
+A853.82.QJ86.T76, responder-rebids.test; 9+ bids 3NT); over 1m-1M-3m,
+3M with exactly five (forcing: opener raises with three, else 3NT) and
+4M with six or more and 9+. Opener's answers are in rebids.bid. A new
+suit at the three level (a stopper probe) is not written. On the tripwire these rules and opener's answers changed 29
+boards: +8 contract errors, +1 doubling, +7 against par.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -807,3 +821,5 @@ in rebids.notes.md). Cases at the end of responder-rebids.test.
   ACBL Bridge Bulletin, September 2026, p. 70; **Rick, 2026-10-16**:
   the Bergen (default), Lawrence and Schuler rebid styles; responder
   reads opener's length as each shows it.
+- Brill daily 2026-10-20, board 7 and Brill /explain of 4D ("D >= 3,
+  HCP 7-9"); the 3M/4M continuations: standard practice, not yet cited.

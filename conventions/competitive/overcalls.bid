@@ -290,6 +290,85 @@ after (1x) P (1y) when y is not x, jump is weak
       when  x is not S, y is not S
       when  !vul | quality(S)>=good | top5(S)>=3
 
+# ── Over their raise: (1x) P (2x), (1x) P (3x) ─────────────────────
+# Direct seat after opener's partner raised (2026-10-20, Brill daily
+# board 4: 1C P 2C with AKQJ85.QT8732.5.- passed twice, every other
+# entrant bid). Nothing was written here, so the seat fell through to
+# advances.bid's "Defending: nothing more to say". Standard practice,
+# the direct-seat overcalls one level up: a natural suit at the cheapest
+# level, five or more (a good suit or six) with 10+ total points at the
+# two level; at the three level six cards from 10 HCP, or five with 14+
+# and not balanced (the tripwire: five-card 3C overcalls on 11-13, and a
+# balanced 15, went down where the pass defended); up to 16 HCP;
+# a jump with six (seven at the four level is not written) and 4-10,
+# weak as over their opening. The takeout double of the raise is
+# takeout-double.bid's, the cue bid and 2NT two-suiters
+# two-suited-overcalls.bid's. Higher of equal-length suits, as above.
+after (1x) P (2x)
+  2S  "Overcall over their raise: five or more spades"
+      shows S>=5, S>=H | x is H, S>=D | x is D, S>=C | x is C
+      shows hcp+length_points>=10, hcp<=one_max
+      when  x is not S
+      when  S>=6 | quality(S)>=good | top5(S)>=3
+  2H  "Overcall over their raise: five or more hearts"
+      shows H>=5, H>S, H>=D | x is D, H>=C | x is C
+      shows hcp+length_points>=10, hcp<=one_max
+      when  x is C | x is D
+      when  H>=6 | quality(H)>=good | top5(H)>=3
+  2D  "Overcall over their raise: five or more diamonds"
+      shows D>=5, D>S, D>H, D>=C | x is C
+      shows hcp+length_points>=10, hcp<=one_max
+      when  x is C
+      when  D>=6 | quality(D)>=good | top5(D)>=3
+  3H  "Overcall over their raise: five or more hearts, three level"
+      shows H>=5, H>=D, H>=C
+      shows (H>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is S
+      when  H>=6 | quality(H)>=good | top5(H)>=4
+  3D  "Overcall over their raise: five or more diamonds, three level"
+      shows D>=5, D>S | x is S, D>H | x is H, D>=C
+      shows (D>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is H | x is S
+      when  D>=6 | quality(D)>=good | top5(D)>=4
+  3C  "Overcall over their raise: five or more clubs, three level"
+      shows C>=5, C>S | x is S, C>H | x is H, C>D | x is D
+      shows (C>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is not C
+      when  C>=6 | quality(C)>=good | top5(C)>=4
+  P   "No overcall over their raise"  priority -10
+
+after (1x) P (2x) when jump is weak
+  3S  "Weak jump over their raise: six spades, 4-10"   shows S=6, hcp=4..10
+      when  x is not S
+      when  !vul | quality(S)>=good | top5(S)>=3
+  3H  "Weak jump over their raise: six hearts, 4-10"   shows H=6, hcp=4..10, S<=3
+      when  x is C | x is D
+      when  !vul | quality(H)>=good | top5(H)>=3
+  3D  "Weak jump over their raise: six diamonds, 4-10" shows D=6, hcp=4..10, H<=3, S<=3
+      when  x is C
+      when  !vul | quality(D)>=good | top5(D)>=3
+
+# Over the jump raise only the three level is left below game: a natural
+# suit with the three-level overcall's values; four of a suit is not
+# written.
+after (1x) P (3x)
+  3S  "Overcall over their jump raise: five or more spades"
+      shows S>=5, S>=H | x is H, S>=D | x is D, S>=C | x is C
+      shows (S>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is not S
+      when  S>=6 | quality(S)>=good | top5(S)>=4
+  3H  "Overcall over their jump raise: five or more hearts"
+      shows H>=5, H>S, H>=D | x is D, H>=C | x is C
+      shows (H>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is C | x is D
+      when  H>=6 | quality(H)>=good | top5(H)>=4
+  3D  "Overcall over their jump raise: five or more diamonds"
+      shows D>=5, D>S, D>H, D>=C | x is C
+      shows (D>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
+      when  x is C
+      when  D>=6 | quality(D)>=good | top5(D)>=4
+  P   "No overcall over their jump raise"  priority -10
+
 # ── Nothing to say ───────────────────────────────────────────────────
 # An explicit pass, so that the seat is covered and partner can draw the
 # negative inference that we had no overcall.

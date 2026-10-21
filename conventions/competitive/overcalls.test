@@ -63,3 +63,16 @@ E KQ.AJ932.KQ2.J52      | 1D         | 1NT    | brill: semi-balanced with five h
 E KQ2.AJ3.KQ32.J52      | 1S         | 1NT    | brill: 15-17
 card    21GF-GIB
 E KQ.AJ932.KQ2.J52      | 1D         | 1H     | default: the five-card major is overcalled
+
+# Over their raise (2026-10-20, Brill daily board 4): the direct seat
+# after (1x) P (2x) or (3x). North is the direct seat with dealer East.
+card    21GF-DEFAULT
+dealer  E
+vul     None
+N KQJ75.A84.T93.82      | 1C P 2C    | 2S     | 10 HCP, five good spades: overcall over their raise
+N KQT987.43.J52.83      | 1D P 2D    | 3S     | 6 HCP, six spades: the weak jump over their raise
+N 83.AQJ95.K4.Q972      | 1S P 2S    | P      | 12 HCP, five hearts: the three level needs six or 14+
+N 83.AQJ952.K4.Q97      | 1S P 2S    | 3H     | 12 HCP, six good hearts: three-level overcall
+N 9873.Q42.J65.K83      | 1H P 2H    | P      | nothing to say over their raise
+N A3.K42.KQJ875.83      | 1C P 3C    | 3D     | 13 HCP, six good diamonds over the jump raise
+N 8.Q3.KQT94.AJ852      | 1S P 3S    | P      | five-five minors over the jump raise: no rule above 3S, pass

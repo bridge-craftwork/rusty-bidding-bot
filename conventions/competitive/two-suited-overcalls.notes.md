@@ -487,6 +487,27 @@ Sources: Larry Cohen, "Michaels Cue Bid"
 not cover 3♦, advancer's own minor or the cue raise. Bridge Bum and
 Rick for `ask_2nt` (above). The BBA probe above.
 
+
+## Over their raise (2026-10-20)
+
+Brill daily 2026-10-20, board 4: 1C P 2C, AKQJ85.QT8732.5.- passed; one
+entrant bid 3C for the majors. Now the cue of their raised minor,
+(1m) P (2m) 3m, shows both majors (five-five or better, the wide-range
+values of the direct cue bid: 9+ total points not vulnerable, 11+
+vulnerable, up to 17 HCP; at either `competitive.michaels.strength`),
+and 2NT over a raise the two lowest unbid suits (over a major the
+minors, over 1C diamonds and hearts, over 1D clubs and hearts) when the
+card plays the Unusual 2NT. Advancer: the longer major at the three
+level (spades with equal length), game with four-card support or three
+and 10+, 3NT with 13+ and their minor held; over a bid by RHO a
+preference with three cards, else pass. After 2NT: the preference, 4H
+with four (or three and 10+), five of a minor with four and 12+. The
+two-suiter bids game over the preference with 16+ or four losers or
+fewer (six-six, six-five: the board's hand has three), else passes.
+Standard practice, not yet cited; the cue of a raised major is not
+written. Tripwire: 9 boards changed by these rules, +14 contract
+errors, +2 doubling, +15 against par.
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
@@ -558,3 +579,5 @@ Rick for `ask_2nt` (above). The BBA probe above.
 - **BBA corpus** (2026-10-05): "Michaels Cuebid" notes over weak twos
   and three-level preempts in Leaping_Michaels and the Non-Leaping
   scenarios; "Unusual 1NT" and "Unusual 4NT" notes across the corpus.
+- Brill daily 2026-10-20, board 4: the cue of the raised minor; the
+  rest of "Over their raise" is standard practice, not yet cited.

@@ -340,6 +340,52 @@ out 2-5 cards in every suit: the engine does not derive suit lengths from
 
 Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 0% -> 100% of 3,734 boards.
 
+
+## Over their raise: (1x) P (2x), (1x) P (3x) (2026-10-20)
+
+Brill daily 2026-10-20, board 4 (IMP, all vul, dealer W): 1C P 2C
+(inverted, 10+) and South, AKQJ85.QT8732.5.-, passed ("Defending:
+nothing more to say", advances.bid) and passed again over 2NT-3NT.
+Every other entrant bid (4S doubled made +1, 2S, 3C for the majors, 3S);
+par NS 5HX/5SX -1, they make 3NT. Nothing was written for the direct
+seat over a raise, so it fell to advances.bid.
+
+Now, standard practice (not yet cited): a natural suit at the cheapest
+level, five or more (six, or a good suit) with 10+ total points at the
+two level, up to 16 HCP; at the three level six cards from 10 HCP, or
+five with 14+ and not balanced; weak jumps with six and 4-10 as over
+the opening; over the jump raise the three-level natural calls only.
+The takeout double of the raise stays takeout-double.bid's; the cue bid
+and 2NT are two-suited-overcalls.bid's (that hand now bids 3C, Michaels,
+and 4S over partner's 3S: 4SX= +790 when our engine bids all four seats).
+
+The first try allowed a five-card three-level overcall from 11 HCP
+(the two-level overcall's minimum less one): on the tripwire the 3C
+overcalls lost 25 contract IMPs and 29 against par (five-card suits on
+11-13, a balanced 15 doubled for -800), so the three level needs six
+or 14+ unbalanced. By rule after that (changed boards, IMPs gained in
+contract errors / doubling errors / par distance): 2S 20 boards
+-2/-10/0, 2H 6 +13/-5/+10, 2D 3 +4/+3/+1, 3C 26 +1/-28/-7, 3D 10
++16/+3/+17, 3H 25 +5/-11/-7, weak jumps 10 +14/+14/+4, over the jump
+raise 7 +7/-8/+3. The doubling losses are mostly the opponents' (our
+engine on both sides) not doubling a failing overcall. Several 2S
+overcalls over an inverted minor raise were passed out or doubled
+because opener has no rule after (1m) P (2m) 2S: a gap on the opening
+side, not written here.
+
+Tripwire (`compare --limit 50`, all scenarios, against main 2358856):
+145 of 17,105 boards changed in 50 scenarios, all at the new calls.
+Against BBA: errors -8,497 -> -8,461 (contract -7,228 -> -7,148,
+doubling -1,269 -> -1,313), distance from par -6,907 -> -6,865 IMPs.
+
+Not written: four of a suit over the raise, the cue of a raised major
+(other major and a minor), and the passed hand's later balancing with a
+6-6 hand after 2NT-3NT (the board's second pass; once it bids 3C at its
+first turn that pass does not arise).
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
+- Brill daily 2026-10-20, board 4 (the field's calls over 1C P 2C);
+  the overcalls over a raise: standard practice, not yet cited;
+  the three-level minimum from the tripwire above.

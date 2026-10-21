@@ -175,6 +175,101 @@ after (1D) when u2n_play | u2n_jump | ghestem
       alert  artificial
       shows C>=5, H>=5, hcp+length_points>=9
 
+# ── Over their raise: (1m) P (2m) 3m, (1x) P (2x) 2NT ───────────────
+# The same two-suiters once responder has raised (2026-10-20, Brill
+# daily board 4: 1C P 2C, AKQJ85.QT8732.5.- passed; the field's 3C
+# was the cue for the majors). Standard practice, not yet cited: the cue
+# of their raised minor shows both majors, 2NT the two lowest unbid
+# suits, with the wide-range values of the direct cue bid at either
+# card strength (weak_or_strong has no strong rebid this high). The cue
+# of a raised major (the other major and a minor) is not written.
+after (1m) P (2m) when mich_minors | mich_quasi | mich_play, !ghestem
+  3{m} "Michaels over their raise: five or more in each major"
+      alert  artificial
+      shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
+      when  !vul
+  3{m} "Michaels over their raise: five or more in each major"
+      alert  artificial
+      shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
+      when  vul
+after (1M) P (2M) when u2n_play | u2n_jump | ghestem
+  2N  "Unusual 2NT over their raise: five or more in each minor"
+      alert  artificial
+      shows C>=5, D>=5, hcp+length_points>=9
+after (1C) P (2C) when u2n_play | u2n_jump | ghestem
+  2N  "Unusual 2NT over their raise: five or more diamonds and hearts"
+      alert  artificial
+      shows D>=5, H>=5, hcp+length_points>=9
+after (1D) P (2D) when u2n_play | u2n_jump | ghestem
+  2N  "Unusual 2NT over their raise: five or more clubs and hearts"
+      alert  artificial
+      shows C>=5, H>=5, hcp+length_points>=9
+
+# Advancer: the longer major at the three level (spades with equal
+# length); game with four-card support (preemptive) or three and 10+;
+# 3NT with their minor held and no major fit. When RHO bids, a
+# preference only with three cards, else pass.
+after (1m) P (2m) 3m (P) | (1m) P (2m) 3m (X) when partner.H>=5, partner.S>=5
+  3H  "Preference: more hearts than spades"
+      shows H>S
+      priority -1
+  3S  "Preference: spades, at least as many as hearts"
+      shows S>=H
+      priority -1
+  4H  "Game in hearts: four-card support, or three and 10+"
+      shows H>S, H>=4 | (H>=3, hcp>=10)
+  4S  "Game in spades: four-card support, or three and 10+"
+      shows S>=H, S>=4 | (S>=3, hcp>=10)
+  3N  "To play: 13+, {m} held, no major fit"
+      shows hcp>=13, H<=2, S<=2, stop(m)
+after (1m) P (2m) 3m (*) when partner.H>=5, partner.S>=5, !rho.last=P, !rho.last=X
+  cheapest(H) "Competes: three or more hearts, more than spades"
+      shows H>=3, H>S
+      priority -2
+  cheapest(S) "Competes: three or more spades"
+      shows S>=3, S>=H
+      priority -2
+  P   "No fit worth competing with"  priority -10
+# The cue bidder: a minimum passes the preference; 16+ or a playing
+# hand (four losers or fewer: six-six, six-five) bids the game.
+after (1m) P (2m) 3m (*) 3y (*) when y is H | y is S
+  P    "Minimum: partner has chosen"                  priority -5
+  4{y} "Game: 16+ or four losers or fewer"            shows hcp>=16 | losers<=4
+
+# After the Unusual 2NT over their raise: the preference at the three
+# level (the higher with equal length, as after the direct 2NT), game in
+# hearts with four, or three and 10+; five of a minor with four-card
+# support and 12+.
+after (1M) P (2M) 2N (P) | (1M) P (2M) 2N (X) when partner.C>=5, partner.D>=5
+  3C  "Preference: more clubs than diamonds"   shows C>D
+      priority -1
+  3D  "Preference: diamonds, at least as many as clubs"   shows D>=C
+      priority -1
+  5C  "Game in clubs: 12+ with four-card support"   shows C>=4, C>D, hcp>=12
+  5D  "Game in diamonds: 12+ with four-card support"   shows D>=4, D>=C, hcp>=12
+after (1C) P (2C) 2N (P) | (1C) P (2C) 2N (X) when partner.D>=5, partner.H>=5
+  3D  "Preference: more diamonds than hearts"   shows D>H
+      priority -1
+  3H  "Preference: hearts, at least as many as diamonds"   shows H>=D
+      priority -1
+  4H  "Game in hearts: four-card support, or three and 10+"
+      shows H>=D, H>=4 | (H>=3, hcp>=10)
+after (1D) P (2D) 2N (P) | (1D) P (2D) 2N (X) when partner.C>=5, partner.H>=5
+  3C  "Preference: more clubs than hearts"   shows C>H
+      priority -1
+  3H  "Preference: hearts, at least as many as clubs"   shows H>=C
+      priority -1
+  4H  "Game in hearts: four-card support, or three and 10+"
+      shows H>=C, H>=4 | (H>=3, hcp>=10)
+after (1x) P (2x) 2N (*) when partner.longest>=5, partner.second_longest>=5, !rho.last=P, !rho.last=X
+  P   "No fit worth competing with"  priority -10
+# The 2NT bidder: a minimum passes; 16+ or four losers bids game in
+# hearts.
+after (1x) P (2x) 2N (*) 3y (*) when y is not x
+  P    "Minimum: partner has chosen"                  priority -5
+  4{y} "Game in hearts: 16+ or four losers or fewer"  shows hcp>=16 | losers<=4
+      when  y is H
+
 # ── Advancer after Michaels over a minor ─────────────────────────────
 # Partner has both majors. BBA never passes the cue (probes/
 # michaels-adv-1C.toml). With equal length it prefers spades, as BBA

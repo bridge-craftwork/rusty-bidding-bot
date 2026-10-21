@@ -192,6 +192,20 @@ after 1x (P) 1y (P) 3y (P) when !tw(x)
       when  y is not H, y is not S         # with a major fit, 4M
 after 1x (P) 1M (P) 3M (P) when !tw(x)
   4M  "Game: 9+"                           shows points>=9
+# After a minor's jump rebid (2026-10-20, Brill daily board 7: 1D 1S 3D
+# 4D, and opener had no rule for the raise). Standard practice, not yet
+# cited; Brill /explain reads the 4m raise as "D >= 3, HCP 7-9". The
+# raise invites five of the minor with three-card support and 8 points
+# (7 passes, as BBA on the Basic-Bridge corpus: responder-rebids.test; 9+
+# bids 3NT above, or the major); five of a responder's major goes back
+# to opener as 3M, forcing, so that a 5-3 fit is found before 3NT; six
+# or more bids the game in it.
+after 1m (P) 1y (P) 3m (P) when !tw(m)
+  4{m} "Invitational raise: 3+ {m}, 8"   shows m>=3, points=8
+after 1m (P) 1M (P) 3m (P) when !tw(m)
+  3{M} "Five {M}, forcing: choose 3NT or 4{M}"   shows M=5, points>=9
+      sets  forcing=round
+  4{M} "Game: six or more {M}, 9+"          shows M>=6, points>=9
 
 # ── Opener's 2NT (18-19) ─────────────────────────────────────────────
 after 1x (P) 1y (P) 2N (P) when !tw(x)

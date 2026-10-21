@@ -408,6 +408,23 @@ after 1M (P) 2x (P) 2M (P) 2N (P) when x is not M, lawrence21
       shows M>=6, points + partner.points.min <= 30
       priority 2                           # the fit before 3NT
 
+# ── After the jump rebid of a minor, responder's continuation ───────
+# (2026-10-20, Brill daily board 7: 1D 1S 3D 4D, opener had no rule.)
+# Responder's 4m invites (3+, 8 points; responder-rebids.bid): accept with a
+# maximum (17+ HCP) unless two side suits are bare (no ace or king), the
+# notrump game's tricks are not there for five of a minor either; a
+# minimum passes. Responder's 3M (five, forcing): 4M with three, else
+# 3NT.
+after 1m (P) 1y (P) 3m (P) 4m (P)
+  5{m} "Accepts: a maximum, 17+"            shows hcp>=17
+      when  !two_bare_suits
+  P    "Declines: minimum, or two bare side suits"
+      priority -5
+after 1m (P) 1M (P) 3m (P) 3M (P)
+  4{M} "Three-card support"                 shows M>=3
+  3N   "No three-card support"              shows M<=2
+      priority -1
+
 # ── After a two-over-one response (forcing one round) ────────────────
 # In a 2/1 game force the rebid follows one of three styles, the card's
 # `major_openings.two_over_one.rebid_style` (Vic Quiros, "Vic's Views:

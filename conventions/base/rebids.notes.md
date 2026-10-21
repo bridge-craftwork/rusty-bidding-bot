@@ -1201,6 +1201,19 @@ gap is likely in the advance (responder-rebids.bid's answers to the
 reopening double), not the double; for Rick with the question above
 ("should a long suit of his own reopen with the double as well?").
 
+
+## Over responder's 4m after the jump rebid (2026-10-20)
+
+Brill daily 2026-10-20, board 7: 1D P 1S P 3D P 4D P, opener
+83.Q5.AKQ972.AQ6 had no rule. Field: 5D x7, 3NT x6; par NS 3NT=, and
+five diamonds makes only ten tricks double dummy. Opener now accepts
+the invitation (5m) with 17+ HCP unless two side suits are bare (no ace
+or king: `two_bare_suits`, slam-entry.bid), and passes otherwise: this
+hand, with 83 and Q5, passes 4D (+130; the 5D tables were -100). 3NT
+is past. Over responder's forcing 3M (five cards): 4M with three, else
+3NT. Standard practice, not yet cited; the bare-suit test is our
+judgment, for Rick to check.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -1248,3 +1261,6 @@ reopening double), not the double; for Rick with the question above
   default. Where we differ from the table: Lawrence's 2NT strength (to
   17) and Bergen's six-card 2M before a four-card side suit are our
   decisions; BBA and Brill evidence in that section.
+- Brill daily 2026-10-20, board 7 (field and DD table); the answers
+  to 4m and 3M after the jump rebid: standard practice, not yet cited;
+  the bare-suit hedge: our judgment (2026-10-20).
