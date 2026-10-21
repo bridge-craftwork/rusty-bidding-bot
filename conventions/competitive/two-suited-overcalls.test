@@ -176,3 +176,21 @@ S AQJ85.7.KQT84.93          | 1H 2H P 2N P    | 3D  | the 2NT ask: names the min
 card    21GF-DEFAULT competitive.michaels.minor_advance=ask_2nt
 N 864.73.QT92.J942          | 1S 2S P         | 2N  | ask_2nt: 2NT at any strength
 N 86.73.A4.KQJ9742          | 1H 2H P         | 3C  | ask_2nt: 3♣ natural, seven clubs
+
+# Over their raise (2026-10-20, Brill daily board 4: 1C P 2C, the field's
+# 3C showed the majors). North is the direct seat with dealer East.
+card    21GF-DEFAULT
+dealer  E
+vul     None
+N AKJ85.KQT74.9.32      | 1D P 2D            | 3D  | 13 HCP, five-five majors: the cue of their raised minor
+N 8.Q3.KQT94.AJ852      | 1S P 2S            | 2N  | 12 HCP, five-five minors: Unusual 2NT over their raise
+S Q73.K82.J9542.T3      | 1C P 2C 3C P       | 3S  | 3-3 in the majors: spades
+S K984.Q2.T852.643      | 1C P 2C 3C P       | 4S  | four spades: game, preemptive
+S 73.KJ82.Q954.T32      | 1C P 2C 2N P       | 4H  | four hearts: game, preemptive (2NT showed diamonds and hearts)
+S 73.K82.Q9542.T32      | 1C P 2C 2N P       | 3D  | three hearts, five diamonds: the preference
+N AKQJ85.QT8732.5.-     | 1C P 2C 3C P 3S P  | 4S  | six-six, three losers: game opposite the preference
+N AJ853.KQ974.Q4.3      | 1C P 2C 3C P 3S P  | P   | 12 HCP, six losers: partner has chosen
+card    Brill
+dealer  W
+vul     Both
+S AKQJ85.QT8732.5.-     | 1C P 2C            | 3C  | Brill daily 2026-10-20 board 4: Michaels for the majors, not a pass

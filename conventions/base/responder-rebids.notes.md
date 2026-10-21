@@ -707,6 +707,83 @@ Cases at the end of responder-rebids.test. Still open: the pass after
 partner's answer to our negative double with 11+ unbalanced, read as
 10 or less (13 misdescribed at --limit 50).
 
+## After the negative double: the fit from opener's rebid, notrump with a stopper (Rick, 2026-10-16)
+
+Brill daily, Rick 2026-10-16, board 8: P 1♠ (3♥) X (P) 3♠ (P) 3NT on
+93.875.AK42.AKQ8; par 4♠. Rick: "the spade fit indicates a 4S bid" and
+"the lack of a stopper prohibits the 3NT bid". In `1x (*) X (*) 1z/2z/3z`:
+
+- the raise (11-12) and the game in a major count the fit from what
+  opener showed: `z>=8-partner.z.min` (four opposite a four-card answer,
+  two opposite his six-card major rebid, three opposite a five-card
+  minor rebid), in place of `z>=4`.
+- 2NT and 3NT need their suit stopped when their last bid was a suit
+  (`stop(they.strain)`); 3NT also with an unbalanced 13+ hand that has
+  no fit and their suit stopped (new, priority -2: it covers a
+  three-level overcall, where the cue-bid block does not run). Opener's
+  3NT over a raise of his minor in competition (rebids.bid) likewise.
+- Gap: over a three-level overcall a 13+ hand with no fit and no stopper
+  still passes opener's rebid (the cue bid is only played over one- and
+  two-level overcalls).
+
+Measured with the major-rebid change: rebids.notes.md, "A major rebid
+is six or more".
+
+## After 1M-2x-2M: no fit counted from opener's shown length (Rick, 2026-10-16)
+
+*Written for what is now the Lawrence style; the next section has all
+three.*
+
+Rick: "For 2-over-1 sequences, 1M - 2x - 2M is the default response,
+not promising 6+" in the pure 2/1 game force (rebids.notes.md, "1M-2x-2M
+in a 2/1 game force"). After `1y (P) 2x (P) 2z (P)` the no-fit game
+bids (3NT when not game forcing; the fast-arrival 3NT and the 16+ 2NT
+in the game force) read `y+partner.y.min<=7` instead of `y<=2`:
+
+- 2/1 game force: opener's 2M is five or more, so a doubleton is no fit
+  and 13-15 bids 3NT, 16+ 2NT (the same as `y<=2`); the 4M/3M rules'
+  `M>=2, partner.M>=6` branch does not apply. Three cards: 4M or 3M.
+- Forcing one round: 2M is six or more, so a doubleton is the
+  eight-card fit and 13+ bids 4M (the 4M rule), no longer tied with
+  3NT. Two Basic-Bridge cases moved 3NT -> 4S.
+- The 11-12 2NT invitation keeps `y<=2`: with a doubleton opposite six
+  there is no three-level major invitation to give way to (a gap).
+
+Cases at the end of responder-rebids.test (21GF-DEFAULT, Brill, SAYC,
+21GF-DEFAULT without the game force).
+
+## Opener's 2M and 2NT by the 2/1 rebid style (Rick, 2026-10-16)
+
+The 2/1 game force now has three rebid styles (rebids.notes.md, "Three
+2/1 rebid styles"; Quiros, ACBL Bridge Bulletin, September 2026; Rick:
+Bergen the default). The section above, written for the Lawrence style,
+holds for each through `partner.y.min`, which the style sets:
+
+| opener's rebid | Bergen | Lawrence | Schuler |
+|---|---|---|---|
+| 2M | six or more: a doubleton is the fit, 4M (3M with slam interest) | five or more: a doubleton is no fit, 3NT 13-15 / 2NT 16+ | exactly five: as Lawrence |
+| 2NT | the default, read as exactly five (negative inference): three cards 4M (fit.bid), else 3NT | balanced, stoppers: three cards 4M, else 3NT | six or more: a doubleton is the fit, 4M; slam-entry's count may agree or ask keycard |
+
+No new responder rule was needed: over 2NT fit.bid ("Game in the spade
+fit: my length and partner's make eight") and slam-entry make the fit
+calls, and "Game: the two-over-one was 11+" bids 3NT without one. Gap:
+over Bergen's 2NT responder's 16+ without a fit also bids 3NT (question
+in rebids.notes.md). Cases at the end of responder-rebids.test.
+
+## After a minor's jump rebid: 4m, 3M, 4M (2026-10-20)
+
+Brill daily 2026-10-20, board 7 (IMP, all vul, dealer S): 1D P 1S P 3D
+P 4D P, and our opener (83.Q5.AKQ972.AQ6) had no rule for the raise.
+Brill /explain reads the raise as "D >= 3, HCP 7-9". After 1m-1y-3m
+responder had only Pass (up to 8) and 3NT (9+). Added, standard
+practice not yet cited: 4m invites with three-card support and 8
+points (7 passes: BBA's pass on the Basic-Bridge corpus hand
+A853.82.QJ86.T76, responder-rebids.test; 9+ bids 3NT); over 1m-1M-3m,
+3M with exactly five (forcing: opener raises with three, else 3NT) and
+4M with six or more and 9+. Opener's answers are in rebids.bid. A new
+suit at the three level (a stopper probe) is not written. On the tripwire these rules and opener's answers changed 29
+boards: +8 contract errors, +1 doubling, +7 against par.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -735,3 +812,14 @@ partner's answer to our negative double with 11+ unbalanced, read as
   knowledge change; the count is Rick's ruling of 2026-10-01.
 - **Responder after a reverse** (2026-10-09): the forced 2NT as the
   minimum, game with 11+ opposite 17+: standard practice, not yet cited.
+- **Rick, 2026-10-16** (Brill daily board 8): no stopper, no 3NT; a
+  known eight-card major fit bids game in it.
+- **Rick, 2026-10-16** (refinement): 1M-2x-2M is the default rebid,
+  five or more, in a 2/1 game force; six or more otherwise. Sources as
+  in rebids.notes.md.
+- **Vic Quiros**, "Vic's Views: Building a new partnership – part 1",
+  ACBL Bridge Bulletin, September 2026, p. 70; **Rick, 2026-10-16**:
+  the Bergen (default), Lawrence and Schuler rebid styles; responder
+  reads opener's length as each shows it.
+- Brill daily 2026-10-20, board 7 and Brill /explain of 4D ("D >= 3,
+  HCP 7-9"); the 3M/4M continuations: standard practice, not yet cited.

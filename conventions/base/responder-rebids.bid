@@ -192,6 +192,20 @@ after 1x (P) 1y (P) 3y (P) when !tw(x)
       when  y is not H, y is not S         # with a major fit, 4M
 after 1x (P) 1M (P) 3M (P) when !tw(x)
   4M  "Game: 9+"                           shows points>=9
+# After a minor's jump rebid (2026-10-20, Brill daily board 7: 1D 1S 3D
+# 4D, and opener had no rule for the raise). Standard practice, not yet
+# cited; Brill /explain reads the 4m raise as "D >= 3, HCP 7-9". The
+# raise invites five of the minor with three-card support and 8 points
+# (7 passes, as BBA on the Basic-Bridge corpus: responder-rebids.test; 9+
+# bids 3NT above, or the major); five of a responder's major goes back
+# to opener as 3M, forcing, so that a 5-3 fit is found before 3NT; six
+# or more bids the game in it.
+after 1m (P) 1y (P) 3m (P) when !tw(m)
+  4{m} "Invitational raise: 3+ {m}, 8"   shows m>=3, points=8
+after 1m (P) 1M (P) 3m (P) when !tw(m)
+  3{M} "Five {M}, forcing: choose 3NT or 4{M}"   shows M=5, points>=9
+      sets  forcing=round
+  4{M} "Game: six or more {M}, 9+"          shows M>=6, points>=9
 
 # ── Opener's 2NT (18-19) ─────────────────────────────────────────────
 after 1x (P) 1y (P) 2N (P) when !tw(x)
@@ -270,19 +284,28 @@ after 1x (P) 1N (P) 2N (P)
 # The 2/1 itself is measured in suit points (a 5-4-3-1 ten-count bids
 # it), so the calls that choose a suit are measured the same way, and
 # only the notrump bids count notrump points.
+#
+# "No fit" in the game bids counts opener's length as he showed it
+# (Rick, 2026-10-16). Outside a 2/1 game force his 2M is six or more; in
+# one it follows the card's rebid style (rebids.bid,
+# `major_openings.two_over_one.rebid_style`): Bergen (the default) 2M
+# six and 2NT the five-card default; Lawrence 2M five or more and 2NT
+# balanced; Schuler 2M exactly five and 2NT six or more. Two cards
+# opposite six is the fit and plays 4M (the rules after this block, and
+# fit.bid over opener's 2NT); two opposite five is not, and bids 3NT.
 after 1y (P) 2x (P) 2z (P) when x is not y, !(weak_js, two_level_jump(x, y))
   2N  "Invitational, no fit: 11-12"        shows points=11..12, y<=2 | y is C | y is D
       when  !we.gf
       sets  ask=nt_invite
-  3N  "Game, no fit"                       shows points>=13, y<=2 | y is C | y is D
+  3N  "Game, no fit"                       shows points>=13, y+partner.y.min<=7 | y is C | y is D
       when  !we.gf
   # In a game force (2/1 cards) 3NT is the minimum, fast arrival; with
   # more, 2NT keeps the auction low for opener to count slam (2026-09-30,
   # random deals: responder's 3NT with the stronger hand, 482 boards short
   # of slam in 100,000).
-  3N  "Game, no fit: 13-15 (fast arrival)"  shows points=13..15, y<=2 | y is C | y is D
+  3N  "Game, no fit: 13-15 (fast arrival)"  shows points=13..15, y+partner.y.min<=7 | y is C | y is D
       when  we.gf
-  2N  "Game forcing, no fit: 16+"          shows points>=16, y<=2 | y is C | y is D, z<=3
+  2N  "Game forcing, no fit: 16+"          shows points>=16, y+partner.y.min<=7 | y is C | y is D, z<=3
       when  we.gf
   3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, suit_points=11..12, y<=2 | y is C | y is D
       when  !we.gf
@@ -377,8 +400,10 @@ after 1M (P) 2x (P) 3z (P) when x is not M, z is not M, z is not x, !(weak_js, t
   4M  "Game with support: a minimum"       shows tp(M)>=11, points<=12, M>=3
   3x  "Six or more {x}: forcing"           shows x>=6, M<=2   sets forcing=game
       when  cheapest_rank(x) < 19            # still at the three level
-# Opener's 2NT (15-17 balanced) or jump rebid over a two-over-one: the
-# 2/1 was 11+, so game is there.
+# Opener's 2NT or jump rebid over a two-over-one: the 2/1 was 11+, so
+# game is there. The 2NT is 15-17 balanced where the 2/1 forces one
+# round; in a game force it is the style's (above): with a major fit
+# fit.bid plays 4M or agrees it below game first, and otherwise 3NT.
 after 1y (P) 2x (P) 2N (P) when x is not y, !(weak_js, two_level_jump(x, y))
   3N  "Game: the two-over-one was 11+"     shows points>=11
   P   "Nothing: a minimum two-over-one"    priority -5
@@ -441,28 +466,52 @@ after 1x (*) X (*) 1z (*) | 1x (*) X (*) 2z (*) | 1x (*) X (*) 3z (*) when they.
   P   "Minimum for the double: nothing more to say"
       shows hcp+length_points<=10
       priority -5
-  cheapest(z) "Raise: four or more {z}, 11-12"
-      shows z>=4, hcp+length_points=11..12
+  # The fit is eight cards between us, counted from what opener showed:
+  # four with his four-card major, two with his own major rebid, which is
+  # six or more (Rick, 2026-10-16, Brill daily board 8: 1S (3H) X (P) 3S
+  # on 93.875.AK42.AKQ8 bid 3NT with no heart stopper; 4S is par).
+  cheapest(z) "Raise: an eight-card fit in {z}, 11-12"
+      shows z>=8-partner.z.min, hcp+length_points=11..12
       when  partner.z>=3          # opener's answer may be a three-card major
       sets  trump=z, ask=invite(z)
-  4{z} "Game in {z}: 13+ with the fit"
-      shows z>=4, hcp+length_points>=13
+  4{z} "Game in {z}: 13+ with an eight-card fit"
+      shows z>=8-partner.z.min, hcp+length_points>=13
       when  partner.z>=3, z is H | z is S
       sets  trump=z
   # Opener jumped (16-18 support points): game with 8+ (2026-09-25; we
   # stopped in 2M/3M on hands that reached game uncontested).
-  4{z} "Game opposite opener's jump: 8+ with the fit"
-      shows z>=4, hcp+length_points>=8
+  4{z} "Game opposite opener's jump: 8+ with an eight-card fit"
+      shows z>=8-partner.z.min, hcp+length_points>=8
       when  partner.z>=3, z is H | z is S, partner.jumped
       sets  trump=z
       priority 1
-  cheapest(N) "Invitational: 11-12 balanced"
-      shows balanced, hcp+length_points=11..12
+  # Notrump needs their suit stopped (Rick, 2026-10-16, same board): no
+  # stopper and no fit is the cue bid below or a pass.
+  cheapest(N) "Invitational: 11-12 balanced, their suit stopped"
+      shows balanced, hcp+length_points=11..12, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
       sets  ask=nt_invite
       priority -1                 # the fit first
-  3N  "Game: 13+ balanced"            # was jump(N): 4NT over a three-level answer
-      shows balanced, hcp+length_points>=13
+  cheapest(N) "Invitational: 11-12 balanced"
+      shows balanced, hcp+length_points=11..12
+      when  they.strain is none | they.strain is N
+      sets  ask=nt_invite
+      priority -1                 # the fit first
+  3N  "Game: 13+ balanced, their suit stopped"   # was jump(N): 4NT over a three-level answer
+      shows balanced, hcp+length_points>=13, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
       priority -1
+  3N  "Game: 13+ balanced"
+      shows balanced, hcp+length_points>=13
+      when  they.strain is none | they.strain is N
+      priority -1
+  # Game values, no fit and not balanced, their suit stopped: 3NT
+  # (over a three-level overcall too, where the cue bid below is not
+  # played).
+  3N  "Game: 13+, no fit, their suit stopped"
+      shows hcp+length_points>=13, z<=7-partner.z.min, stop(they.strain)
+      when  they.strain is not none, they.strain is not N
+      priority -2
   P   "Nothing more to say"  priority -10
 
 # Game values that are not balanced (2026-09-25: A762.T9.6.AKQ863 passed

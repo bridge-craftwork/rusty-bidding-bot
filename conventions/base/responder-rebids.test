@@ -58,7 +58,7 @@ N 3.85.QT97.AQ9642      | 1S P 1NT P 3S P  | 3NT    | eight HCP and six clubs: 1
 # ── After a 2/1 and opener's rebid
 N 9743.J5.KQ8.AJT2      | 1S P 2C P 2S P   | 4S     | support: game
 N A.K983.Q873.K754      | 1S P 2C P 2S P   | 2NT    | no fit, 12
-N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 3NT    | 12, two spades: 3NT
+N JT.QT62.QT.AK876      | 1S P 2C P 2S P   | 4S     | 12, two spades opposite six (Rick, 2026-10-16): game in the fit
 N AT2.8753.K2.A742      | 1H P 2C P 2D P   | 4H     | four hearts: game
 
 # ── Opener reversed: forcing, so responder always has a call.
@@ -73,7 +73,7 @@ N 43.K86.9542.K986      | 1S P 1NT P 2H P  | 2S     | not a reverse: a simple pr
 N A854.Q7.K7.QT984      | 1D P 2C P 2D P      | 2NT    | 11: invitational, no fit
 N K42.Q43.974.AKJ4      | 1D P 2C P 2D P      | 3NT    | 13: game
 N J8.AQ72.T32.A762      | 1S P 2C P 2NT P     | 3NT    | the two-over-one was 11+: game
-N T4.AT943.K5.KJ76      | 1S P 2H P 2S P      | 3NT    | 11 HCP, two tens, five hearts: 13 total, game (BBA 2NT)
+N T4.AT943.K5.KJ76      | 1S P 2H P 2S P      | 4S     | 11 HCP, two tens, five hearts: 13 total, game; two spades opposite six is the fit (Rick, 2026-10-16; BBA 2NT)
 # The two-over-one is measured in suit points, so its follow-ups are too:
 # this 10-count bid 2♣ on shape and has a spade fit.
 N KJ74.Q95.9.KJ762      | 1S P 2C P 2D P      | 4S     | four spades and a singleton: game
@@ -144,7 +144,7 @@ N AK653.J53.AT7.86      | 1H P 1S P 2H P  | 4H  | 12 HCP and three hearts: 13 to
 N A86.T93.T6432.K2      | 1D P 2D P 3D P  | P   | 7: declines the invitation (BBA passes)
 N Q8.QJT4.JT8754.Q      | 1C P 1D P 2NT P | 3NT | 8 with six diamonds: game
 N K852.Q5.Q965.J62      | 1D 1H X P 2S P   | 4S | opener jumped: game with 8
-N A762.T9.6.AKQ863      | 1H 1S X P 2H P   | 2S  | 13 unbalanced: cue bid, forcing to game
+N A762.T9.6.AKQ863      | 1H 1S X P 2H P   | 4H  | 13 and two hearts opposite six (Rick, 2026-10-16): game in the fit
 N A762.T9.K6.KQJ86      | 1D 1S X P 2D P   | 3NT | 13 with a spade stopper: game
 N J93.A76.T954.A63      | 1D 1S P P 1NT P  | 3NT | 9 opposite a reopening 18-19: game
 N J93.876.T954.J63      | 1D 1S P P 1NT P  | P   | 2: no game
@@ -293,3 +293,53 @@ card    Basic-Bridge
 dealer  S
 N KQ54.32.432.KJ32      | 1D P 1S P 2H P      | 2NT    | 9, no fit: the forced 2NT, a minimum
 N KQ54.Q32.43.KJ32      | 1D P 1S P 2H P      | 3NT    | 11, no fit, opposite the reverse's 17+: game
+
+# Brill daily, Rick 2026-10-16, board 8: opener's 3S over the negative
+# double is six or more; two spades is the fit, and 3NT needs a heart stopper.
+card    Brill
+dealer  E
+N 93.875.AK42.AKQ8      | P 1S 3H X P 3S P | 4S  | 15 and two spades opposite six: game in the fit, not 3NT
+N 93.AQ5.K942.AQ82      | P 1S 3H X P 3S P | 4S  | the fit before notrump, even with the stopper
+N 9.AQ5.KJ942.AQ82      | P 1S 3H X P 3S P | 3NT | a singleton spade and the hearts stopped: 3NT
+N 9.875.AKQ42.AKJ8      | P 1S 3H X P 3S P | !3NT | no heart stopper: never 3NT
+
+# 1M-2x and opener's rebid in a 2/1 game force, by the card's style
+# (rebids.bid; Quiros, ACBL Bridge Bulletin, September 2026; Rick,
+# 2026-10-16: Bergen the default). Responder counts opener's length as
+# the style shows it: Bergen 2M six and 2NT five; Lawrence 2M five or
+# more and 2NT balanced; Schuler 2M exactly five and 2NT six or more.
+card    21GF-DEFAULT
+dealer  S
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | Bergen: 2S is six, two spades the fit
+N K93.Q8.65.AKJ752      | 1S P 2C P 2S P      | 4S     | three spades: the fit
+N K3.Q84.65.AKJ752      | 1S P 2C P 2NT P     | 3NT    | Bergen: the default 2NT is five spades: two is no fit, 3NT
+N K93.Q8.65.AKJ752      | 1S P 2C P 2NT P     | 4S     | Bergen: three spades opposite the default 2NT: game in the fit
+N K93.AQ8.A5.AKJ75      | 1S P 2C P 2NT P     | 3S     | Bergen: three spades and slam interest: agree below game
+N Q84.KQ.65.KJT752      | 1H P 2C P 2NT P     | 3NT    | the same in hearts
+card    Brill
+N K3.Q84.65.AKJ752      | 1S P 2C P 2NT P     | 3NT    | Brill (Bergen): the balanced 2NT, two spades: 3NT
+card    21GF-DEFAULT major_openings.two_over_one.rebid_style=lawrence
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 3NT    | Lawrence: two spades opposite five, no fit: fast-arrival 3NT
+N K93.Q8.65.AKJ752      | 1S P 2C P 2S P      | 4S     | three spades: the fit is known
+N K3.AQ4.Q5.AKJ752      | 1S P 2C P 2S P      | 2NT    | two spades and 16+: no fit, room for slam
+N Q84.KQ.65.KJT752      | 1H P 2C P 2H P      | 3NT    | the same in hearts
+N K3.AQ4.Q85.KQJ75      | 1S P 2C P 2S P 2N P 3S P | 4S  | two spades opposite the sixth: the fit, game
+N K3.Q84.65.AKJ752      | 1S P 2C P 2NT P     | 3NT    | Lawrence: 2NT balanced, stoppers: 3NT
+N K93.Q8.65.AKJ752      | 1S P 2C P 2NT P     | 4S     | Lawrence: three spades opposite five: 4S
+card    21GF-DEFAULT major_openings.two_over_one.rebid_style=schuler
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 3NT    | Schuler: 2S is exactly five: two is no fit
+N K3.Q84.65.AKJ752      | 1S P 2C P 2NT P     | 4S     | Schuler: 2NT is six spades: the doubleton is the fit
+N K3.AQ8.65.AKJ752      | 1S P 2C P 2NT P     | 4S     | Schuler: 17 and the doubleton fit, short of the slam count: game
+N K3.AQ8.A5.AKJ752      | 1S P 2C P 2NT P     | 4NT    | Schuler: 21 opposite six spades: keycard, spades agreed
+# Outside the game force 2M is six or more (d24a9f6).
+card    SAYC
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | forcing one round: 2S is six, two cards is the fit: game
+card    21GF-DEFAULT major_openings.two_over_one.game_force=false
+N K3.Q84.65.AKJ752      | 1S P 2C P 2S P      | 4S     | the 2/1 card without the game force: six, the fit
+# After a minor's jump rebid (2026-10-20, Brill daily board 7).
+card    Basic-Bridge
+dealer  S
+N A942.942.J65.K94      | 1D P 1S P 3D P      | 4D     | 8 HCP, three diamonds: the invitational raise (board 7)
+N KJ43.Q94.65.Q932      | 1D P 1S P 3D P      | P      | 8 HCP, two diamonds: no game
+N AQ842.94.J65.K94      | 1D P 1S P 3D P      | 3S     | 10 HCP, five spades: 3S forcing, find the 5-3 fit
+N AQJ842.94.J5.K94      | 1D P 1S P 3D P      | 4S     | 11 HCP, six spades: game in spades

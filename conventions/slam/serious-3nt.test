@@ -3,14 +3,29 @@ dealer  N
 
 # seat hand             | auction                              | expect | why
 # The first hand after 3M: 3NT (mild), a control bid (serious), 4M (none).
+# On this card's default 2/1 rebid style (Bergen; rebids.bid) opener's
+# 2S is six or more, so these hands hold six; responder's 3S on 2-3
+# spades then shows more (slam-entry.bid's count as the short hand), and
+# his continuations over 3NT need 17-18+.
+N AJ8742.K5.K83.92      | 1S P 2C P 2S P 3S P                  | 3NT    | 11 HCP and six spades, short of serious: non-serious 3NT
+N AJ8742.K5.83.Q92      | 1S P 2C P 2S P 3S P                  | 3NT    | 11, no ace outside: non-serious
+N QJ8742.Q5.Q83.Q9      | 1S P 2C P 2S P 3S P                  | 4S     | a minimum, no ace or king: no interest
+N AJ8742.K5.Q83.K9      | 1S P 2C P 2S P 3S P                  | 4C     | slam values, a side suit uncontrolled: serious control bid
+# Partner over the 3NT.
+S K52.Q74.A2.AKQ87      | 1S P 2C P 2S P 3S P 3NT P            | 4C     | extras: start the control bids
+S K52.A74.A2.AKQ87      | 1S P 2C P 2S P 3S P 3NT P            | 4NT    | slam values, every suit controlled: keycard
+S K52.Q74.A2.KJ874      | 1S P 2C P 2S P 3S P 3NT P            | 4S     | nothing extra: game
+# In the Lawrence style 2S is the default rebid, five or more (Rick,
+# 2026-10-16), so the same questions come with five.
+card    21GF-DEFAULT slam.non_serious_3nt.play=true major_openings.two_over_one.rebid_style=lawrence
 N AJ874.K5.K83.K92      | 1S P 2C P 2S P 3S P                  | 3NT    | 13 HCP, two short of serious: non-serious 3NT
 N AKJ74.K5.Q83.Q92      | 1S P 2C P 2S P 3S P                  | 3NT    | 14, no ace outside: non-serious
 N AJ874.K5.Q83.Q92      | 1S P 2C P 2S P 3S P                  | 4S     | a minimum: no interest
 N AKJ74.K5.Q83.K92      | 1S P 2C P 2S P 3S P                  | 4C     | slam values, a side suit uncontrolled: serious control bid
-# Partner over the 3NT.
 S K52.Q74.A2.AK874      | 1S P 2C P 2S P 3S P 3NT P            | 4C     | extras: start the control bids
 S K52.A74.A2.KQ874      | 1S P 2C P 2S P 3S P 3NT P            | 4NT    | slam values, every suit controlled: keycard
 S K52.Q74.A2.KJ874      | 1S P 2C P 2S P 3S P 3NT P            | 4S     | nothing extra: game
+card    21GF-DEFAULT slam.non_serious_3nt.play=true
 # The control dialogue goes on as control-bids.bid has it.
 N AKJ74.K5.A83.Q92      | 1S P 2C P 2S P 3S P 3NT P 4C P       | 4D     | the cheapest control
 N AKJ74.Q5.Q83.Q92      | 1S P 2C P 2S P 3S P 3NT P 4C P       | 4S     | no further control: game

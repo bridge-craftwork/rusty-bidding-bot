@@ -154,3 +154,12 @@ S 92.KQT874.93.854          | 1S 1N   | P      | not over their notrump
 N KJ3.A5.K962.Q932          | 1C 1D 2H P | P   | opener passes the weak jump
 card    21GF-DEFAULT competitive.jump_shift_after_overcall=strong
 S 82.KQT874.93.854          | 1C 1D   | 1H     | strong jump shifts: the weak hand bids 1H
+
+# Opener's major rebid over the negative double is six or more (Rick,
+# 2026-10-16, Brill daily board 8); a five-card hand with nothing else
+# still bids it, the least lie, and partner reads six.
+card    Brill
+dealer  N
+N AKJT85.Q9.J9.T32          | 1S 3H X P | 3S  | six spades, minimum (the board)
+N AKJ98.Q9.J96.T32          | 1S 3H X P | 3S  | five spades and nothing else: the least lie
+N AKJ98.Q9.K96.Q32          | 1S 2H X P | 2S  | the same at the two level

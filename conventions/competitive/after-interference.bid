@@ -352,12 +352,16 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
       when  stop(y)
-  # Read as five or more (2026-10-09): the five-card rebid below with
-  # nothing better to say bids the same call, so partner must not count
-  # on six. Only six-card hands bid it here; five-card ones only when no
-  # other call fits.
+  # A major rebid is read as six or more (Rick, 2026-10-16, Brill daily
+  # board 8): the five-card rebid below with nothing better to say is the
+  # least lie and is read by this rule (a read-as call by design). A
+  # minor's rebid stays five or more (2026-10-09, read as the hand holds).
+  cheapest(x) "Rebids {x}: six or more, minimum"
+      shows x>=6, hcp<=15
+      when  x is H | x is S
   cheapest(x) "Rebids {x}: five or more (usually six), minimum"
       shows x>=5, hcp<=15
+      when  x is C | x is D
       when  x>=6
   jump(x) "Six cards in {x}, 16-18"
       shows x>=6, hcp=16..18

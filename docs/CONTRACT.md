@@ -14,7 +14,7 @@ second is what a good convention file does.
 
 The grammar and the model are in [LANGUAGE.md](LANGUAGE.md). This engine
 reads **rule language 1**: `rbb --version` prints it
-(`rbb 0.9.0 (rule language 1)`), and so does the last line of
+(`rbb 0.10.0 (rule language 1)`), and so does the last line of
 `rbb bid check`. In the code it is `rbb_engine::LANGUAGE_VERSION`.
 
 A rules directory says which language it is written in with a manifest at
