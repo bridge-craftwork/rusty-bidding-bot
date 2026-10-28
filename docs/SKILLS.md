@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 217 card fields carry one.
+131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 218 card fields carry one.
 
 ### The map
 
@@ -92,7 +92,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/reverse_bids` (Reverse Bids) | taxonomy | `other_conventions.reverse_bids.forcing` | `rebids` |
 | `bidding_conventions/reverse_drury` (Reverse Drury) | taxonomy | `major_openings.drury.reverse` | `drury` |
 | `bidding_conventions/reverse_flannery` (Reverse Flannery) | proposed | `two_level.two_diamonds.reverse_flannery`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s` | `reverse-flannery` |
-| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.blackwood.rkcb_1430`, `slam.blackwood.rkcb_0314`, `slam.blackwood.minor_0314`, `slam.blackwood.queen_ask`, `slam.king_ask.five_nt`, `slam.king_ask.next_step` | `rkcb-1430` |
+| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.blackwood.rkcb_1430`, `slam.blackwood.rkcb_0314`, `slam.blackwood.minor_0314`, `slam.blackwood.queen_ask`, `slam.king_ask.five_nt`, `slam.king_ask.next_step`, `slam.king_ask.specific` | `rkcb-1430` |
 | `bidding_conventions/roudi` (Roudi) | proposed | `other_conventions.roudi.play` | `roudi` |
 | `bidding_conventions/semi_forcing_1nt` (Semi-forcing 1NT) | proposed | `major_openings.one_nt_response.semi_forcing` | `responses` |
 | `bidding_conventions/serious_3nt` (Serious 3NT) | proposed | `slam.non_serious_3nt.play` | `serious-3nt` |
