@@ -160,6 +160,23 @@ pub fn call(c: &mut Cursor, pos: CallPos) -> Result<CallSpec, PError> {
                     arg: Some(arg),
                 }
             }
+            // `step(n)`: the n-th cheapest bid, any strain (relay answers
+            // once they have bid: pass is the first step, step(1) the next).
+            "step" if pos == CallPos::Rule => {
+                let func = w.clone();
+                c.bump();
+                c.expect(&Tok::LParen, "`(` after `step`")?;
+                let n = match c.peek() {
+                    Some(Tok::Int(n)) if *n >= 1 => *n,
+                    _ => return c.err("expected a step number, 1 or more".to_string()),
+                };
+                c.bump();
+                c.expect(&Tok::RParen, "`)`")?;
+                CallSpec::Relative {
+                    func,
+                    arg: Some(n.to_string()),
+                }
+            }
             "raise" | "new_suit" if pos == CallPos::Rule => {
                 let func = w.clone();
                 c.bump();
@@ -274,7 +291,7 @@ pub fn define_head(c: &mut Cursor) -> Result<(String, Vec<String>), PError> {
 /// Words that cannot name an auction pattern: the keywords that may
 /// follow one, and the relative calls.
 const NOT_AUCTION_NAMES: &[&str] = &[
-    "when", "after", "auction", "systems", "cheapest", "jump", "raise", "new_suit",
+    "when", "after", "auction", "systems", "cheapest", "jump", "step", "raise", "new_suit",
 ];
 
 /// `systems 2N` at the start of an `after` alternative: the level of our
@@ -662,6 +679,17 @@ mod tests {
         assert!(matches!(
             call(&mut c, CallPos::Rule).unwrap(),
             CallSpec::Relative { .. }
+        ));
+        assert!(call(&mut c, CallPos::Rule).is_err());
+    }
+
+    #[test]
+    fn step_calls() {
+        let toks = lex("step(2) step(0)").unwrap();
+        let mut c = Cursor::new(&toks, "");
+        assert!(matches!(
+            call(&mut c, CallPos::Rule).unwrap(),
+            CallSpec::Relative { func, arg: Some(a) } if func == "step" && a == "2"
         ));
         assert!(call(&mut c, CallPos::Rule).is_err());
     }

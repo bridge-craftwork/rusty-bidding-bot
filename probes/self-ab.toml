@@ -169,3 +169,15 @@ name      = "ingberman"
 scenarios = ["Reverse_By_Opener", "Reverse_After_Two_Over_One"]
 base      = ["other_conventions.ingberman_2nt.play=false"]
 variant   = ["other_conventions.ingberman_2nt.play=true"]
+
+[[ab]]
+name      = "modified-jacoby-2nt"
+scenarios = ["Jacoby_2N", "Jacoby_2N_Leveled", "Jacoby_2N_4x_void", "Jacoby_2N_4x_void_Leveled"]
+base      = ["major_openings.jacoby_2nt.modified=false"]
+variant   = ["major_openings.jacoby_2nt.modified=true"]
+
+[[ab]]
+name      = "mixed-raise"
+scenarios = ["Mixed_Raise_In_Comp", "We_Overcall", "Basic_Overcall", "After_Partner_Overcalls"]
+base      = ["overcalls.responses.jump_cuebid_mixed=false"]
+variant   = ["overcalls.responses.jump_cuebid_mixed=true"]

@@ -1,0 +1,340 @@
+# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
+#
+# Modified Jacoby 2NT (Larry Cohen, "Modified Jacoby 2NT", larryco.com):
+# responder's 2NT is the same game-forcing raise (jacoby-2nt.bid), but
+# opener's rebids sort the hand by strength first and shape second, and
+# responder relays for more:
+#
+#   4M   the worst minimum: 5-3-3-2, nothing extra
+#   3♣   any other minimum              3♦ asks: 3♥ short, 3♠ 5-4-2-2,
+#                                       3NT 6+ trumps, 4M 5-3-3-2, 4x a side suit
+#   3♦   non-minimum, a singleton or void      3♥ asks which
+#   3♥   non-minimum, 5-4-2-2                  3♠ asks for the four-card suit
+#   3♠   non-minimum, 6+ trumps, no shortness
+#   3NT  non-minimum, 5-3-3-2
+#   4x   a good five-card side suit
+#
+# The suits are fixed: over 1♥ too, 3♥ is the 5-4-2-2 and 3♠ the six
+# trumps (Cohen writes one schedule for both majors). Minimum is 14 HCP or
+# fewer, the standard module's line. See modified-jacoby-2nt.notes.md.
+
+module modified-jacoby-2nt "Modified Jacoby 2NT"
+  card   major_openings.jacoby_2nt.modified
+  needs  jacoby-2nt
+  skill  bidding_conventions/modified_jacoby_2nt
+
+# ── Opener's rebid ───────────────────────────────────────────────────
+after 1M (P) 2N (P)
+  4M  "Minimum, 5-3-3-2, nothing extra"
+      shows hcp<=12, shape 5-3-3-2, M=5
+      priority 1                       # ahead of 3♣, which these hands also fit
+  3C  "Minimum (14 or less): responder may ask with 3♦"  alert
+      shows hcp<=14
+      artificial
+  3D  "15+, a singleton or void: 3♥ asks where"  alert
+      shows hcp>=15, shortest<=1
+      artificial
+  3H  "15+, 5-4-2-2: 3♠ asks for the four-card suit"  alert
+      shows hcp>=15, shape 5-4-2-2, M=5
+      artificial
+  3S  "15+, six or more trumps, no singleton or void"  alert
+      shows hcp>=15, M>=6, shortest>=2
+      artificial
+  3N  "15+, 5-3-3-2"
+      shows hcp>=15, shape 5-3-3-2, M=5
+  4x  "15+, a good five-card side suit"
+      shows hcp>=15, x>=5, quality(x)>=good
+      when  x is not M, M is S | x is not S
+
+# ── They bid over the 2NT ────────────────────────────────────────────
+# Cohen: double shows shortness in their suit, a new suit is natural or
+# a control, 3NT a balanced maximum with the ace or king of their suit,
+# the jump to 4M a dead minimum with 6-3-2-2, and pass a flat hand. The pass is forcing (Rick, 2026-10-28): we are in a game
+# force, so responder must act, by doubling them for penalty or bidding
+# on. It is marked artificial because the engine otherwise drops a pass
+# below game in a game force.
+after 1M (P) 2N (2x) | 1M (P) 2N (3x) when x is not M
+  X   "Short in {x}: a singleton or void"  alert
+      shows x<=1
+      artificial
+      priority 16                      # ahead of everything else here, as the shortness is the news
+  3N  "15+, balanced, the ace or king of {x}"
+      shows hcp>=15, balanced, has(A,x) | has(K,x)
+      priority 15
+  4M  "Dead minimum, 6-3-2-2"
+      shows hcp<=12, shape 6-3-2-2, M=6
+      priority 15
+  3y  "Natural or a control in {y}"
+      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)
+      when  y is not M, y is not x
+      priority 15
+  4y  "Natural or a control in {y}"
+      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)
+      when  y is not M, y is not x, M is S | y is not S
+      priority 15
+  P   "Forcing pass: a flat hand, nothing special (can be an awful 5-3-3-2)"  alert
+      artificial
+      priority 14                      # below the descriptions, above the generic competitive calls
+
+# Responder after the forcing pass (Cohen: "after which, responder's
+# X = penalty"; Rick, 2026-10-28): opener is flat, perhaps an awful
+# 5-3-3-2, so with their suit held responder doubles them, whatever his
+# strength. Else game; with slam interest the slam modules act.
+after 1M (P) 2N (2x) P (P) | 1M (P) 2N (3x) P (P) when x is not M
+  X   "Penalty: {x} held"
+      shows x>=4 | (x>=3, has(A,x) | has(K,x))
+      priority 15
+  4M  "Game: no slam interest"
+      shows !slam_interest(M)
+      priority 14
+
+# ── They double or bid over an ask ───────────────────────────────────
+# Cohen: "If they double Asks or re-asks: XX = business, Pass = S1, etc.
+# If they bid after Ask or re-ask: X = Penalty, Pass = S1, etc." Pass is
+# the first step and the bids follow in order from the cheapest
+# (`step(1)` the second step). The pass is artificial, so the game force
+# keeps it legal and makes responder bid again. 2NT is the first ask:
+# over their double of it the steps hold; over their bid, the schedule
+# above (X short there, as Cohen says).
+
+define mj_business(a) = a>=4, has(A,a) | has(K,a)
+
+after 1M (P) 2N (X)
+  XX  "Business: 15+, balanced, to play 2NT redoubled"
+      shows hcp>=15, balanced
+      priority 16
+  P   "Step 1: a minimum (14 or less)"  alert
+      shows hcp<=14
+      artificial
+      priority 15
+  step(1)  "Step 2: 15+, a singleton or void"  alert
+      shows hcp>=15, shortest<=1
+      artificial
+      priority 15
+  step(2)  "Step 3: 15+, 5-4-2-2"  alert
+      shows hcp>=15, shape 5-4-2-2, M=5
+      artificial
+      priority 15
+  step(3)  "Step 4: 15+, six or more trumps, no singleton or void"  alert
+      shows hcp>=15, M>=6, shortest>=2
+      artificial
+      priority 15
+  step(4)  "Step 5: 15+, 5-3-3-2"  alert
+      shows hcp>=15, shape 5-3-3-2, M=5
+      artificial
+      priority 15
+
+# The 3♦ ask after a minimum.
+after 1M (P) 2N (P) 3C (P) 3D (X)
+  XX  "Business: good diamonds"
+      shows mj_business(D)
+      priority 16
+after 1M (P) 2N (P) 3C (P) 3D (3z) | 1M (P) 2N (P) 3C (P) 3D (4z)
+  X   "Penalty: good {z}"
+      shows mj_business(z)
+      priority 16
+after 1M (P) 2N (P) 3C (P) 3D (*) when !rho.last=P
+  P   "Step 1: a singleton or void"  alert
+      shows shortest<=1
+      artificial
+      priority 15
+  step(1)  "Step 2: 5-4-2-2"  alert
+      shows shape 5-4-2-2, M=5
+      artificial
+      priority 15
+  step(2)  "Step 3: six or more trumps, no singleton or void"  alert
+      shows M>=6, shortest>=2
+      artificial
+      priority 15
+  step(3)  "Step 4: 5-3-3-2"  alert
+      shows shape 5-3-3-2, M=5
+      artificial
+      priority 15
+
+# The 3♥ ask after shortness.
+after 1M (P) 2N (P) 3D (P) 3H (X)
+  XX  "Business: good hearts"
+      shows mj_business(H)
+      when  M is S
+      priority 16
+after 1M (P) 2N (P) 3D (P) 3H (3z) | 1M (P) 2N (P) 3D (P) 3H (4z)
+  X   "Penalty: good {z}"
+      shows mj_business(z)
+      priority 16
+after 1S (P) 2N (P) 3D (P) 3H (*) when !rho.last=P
+  P   "Step 1: a void"  alert
+      shows C=0 | D=0 | H=0
+      artificial
+      priority 15
+  step(1)  "Step 2: a singleton club"  alert
+      shows C=1, D>=1, H>=1
+      artificial
+      priority 15
+  step(2)  "Step 3: a singleton diamond"  alert
+      shows D=1, C>=2, H>=1
+      artificial
+      priority 15
+  step(3)  "Step 4: a singleton heart"  alert
+      shows H=1, C>=2, D>=2
+      artificial
+      priority 15
+after 1H (P) 2N (P) 3D (P) 3H (*) when !rho.last=P
+  P   "Step 1: a void"  alert
+      shows C=0 | D=0 | S=0
+      artificial
+      priority 15
+  step(1)  "Step 2: a singleton club"  alert
+      shows C=1, D>=1, S>=1
+      artificial
+      priority 15
+  step(2)  "Step 3: a singleton diamond"  alert
+      shows D=1, C>=2, S>=1
+      artificial
+      priority 15
+  step(3)  "Step 4: a singleton spade"  alert
+      shows S=1, C>=2, D>=2
+      artificial
+      priority 15
+
+# The 3♠ ask after 5-4-2-2.
+after 1M (P) 2N (P) 3H (P) 3S (X)
+  XX  "Business: good spades"
+      shows mj_business(S)
+      when  M is H
+      priority 16
+after 1M (P) 2N (P) 3H (P) 3S (3z) | 1M (P) 2N (P) 3H (P) 3S (4z)
+  X   "Penalty: good {z}"
+      shows mj_business(z)
+      priority 16
+after 1S (P) 2N (P) 3H (P) 3S (*) when !rho.last=P
+  P        "Step 1: four clubs"     alert  shows C=4  artificial  priority 15
+  step(1)  "Step 2: four diamonds"  alert  shows D=4  artificial  priority 15
+  step(2)  "Step 3: four hearts"    alert  shows H=4  artificial  priority 15
+after 1H (P) 2N (P) 3H (P) 3S (*) when !rho.last=P
+  P        "Step 1: four clubs"     alert  shows C=4  artificial  priority 15
+  step(1)  "Step 2: four diamonds"  alert  shows D=4  artificial  priority 15
+  step(2)  "Step 3: four spades"    alert  shows S=4  artificial  priority 15
+
+# The 3NT re-ask: where is the void?
+after 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (4z)
+  X   "Penalty: good {z}"
+      shows mj_business(z)
+      priority 16
+after 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P
+  P        "Step 1: club void"     alert  shows C=0  artificial  priority 15
+  step(1)  "Step 2: diamond void"  alert  shows D=0  artificial  priority 15
+  step(2)  "Step 3: heart void"    alert  shows H=0  artificial  priority 15
+after 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P
+  P        "Step 1: club void"     alert  shows C=0  artificial  priority 15
+  step(1)  "Step 2: diamond void"  alert  shows D=0  artificial  priority 15
+  step(2)  "Step 3: spade void"    alert  shows S=0  artificial  priority 15
+
+# ── Responder: the relays ────────────────────────────────────────────
+# The relays are for slam interest. Without it the slam modules decide,
+# as after standard Jacoby: game, or keycard straight away. An explicit
+# 4M sign-off here cost 141 slams in the self A/B (notes, "Self A/B").
+after 1M (P) 2N (P) 3C (P)
+  3D  "Asks opener to describe the minimum"  alert
+      shows slam_interest(M)
+      sets  ask=relay
+      artificial
+      priority 15                      # the relay, ahead of the control bids (12-14)
+
+after 1M (P) 2N (P) 3D (P)
+  3H  "Asks where the singleton or void is"  alert
+      shows slam_interest(M)
+      sets  ask=relay
+      artificial
+      priority 15
+
+after 1M (P) 2N (P) 3H (P)
+  3S  "Asks for opener's four-card side suit"  alert
+      shows slam_interest(M)
+      sets  ask=relay
+      artificial
+      priority 15
+
+# ── Opener answers the 3♦ ask (a minimum) ────────────────────────────
+after 1M (P) 2N (P) 3C (P) 3D (P)
+  3H  "Minimum, a singleton or void"  alert
+      shows shortest<=1
+      artificial
+      priority 15
+  3S  "Minimum, 5-4-2-2"  alert
+      shows shape 5-4-2-2, M=5
+      artificial
+      priority 15
+  3N  "Minimum, six or more trumps, no singleton or void"  alert
+      shows M>=6, shortest>=2
+      artificial
+      priority 15
+  4M  "Minimum, 5-3-3-2"
+      shows shape 5-3-3-2, M=5
+      priority 15
+  4x  "Minimum, a good five-card side suit"
+      shows x>=5, quality(x)>=good
+      when  x is not M, M is S | x is not S
+      priority 16                      # ahead of the shortness most such hands also hold
+
+# ── Opener answers the 3♥ ask (non-minimum, short somewhere) ─────────
+# Steps: a void (3♠), then a singleton in clubs, diamonds, the other
+# major. After the void, 3NT asks where: clubs, diamonds, the other major.
+after 1S (P) 2N (P) 3D (P) 3H (P)
+  3S  "A void (3NT asks where)"  alert
+      shows C=0 | D=0 | H=0
+      artificial
+      priority 15
+  3N  "A singleton club"  alert
+      shows C=1, D>=1, H>=1
+      artificial
+      priority 15
+  4C  "A singleton diamond"  alert
+      shows D=1, C>=2, H>=1
+      artificial
+      priority 15
+  4D  "A singleton heart"  alert
+      shows H=1, C>=2, D>=2
+      artificial
+      priority 15
+after 1H (P) 2N (P) 3D (P) 3H (P)
+  3S  "A void (3NT asks where)"  alert
+      shows C=0 | D=0 | S=0
+      artificial
+      priority 15
+  3N  "A singleton club"  alert
+      shows C=1, D>=1, S>=1
+      artificial
+      priority 15
+  4C  "A singleton diamond"  alert
+      shows D=1, C>=2, S>=1
+      artificial
+      priority 15
+  4D  "A singleton spade"  alert
+      shows S=1, C>=2, D>=2
+      artificial
+      priority 15
+
+after 1M (P) 2N (P) 3D (P) 3H (P) 3S (P)
+  3N  "Asks where the void is"  alert
+      shows slam_interest(M)
+      sets  ask=relay
+      artificial
+      priority 15
+after 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)
+  4C  "Club void"  alert       shows C=0  artificial  priority 15
+  4D  "Diamond void"  alert    shows D=0  artificial  priority 15
+  4H  "Heart void"  alert      shows H=0  artificial  priority 15
+after 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)
+  4C  "Club void"  alert       shows C=0  artificial  priority 15
+  4D  "Diamond void"  alert    shows D=0  artificial  priority 15
+  4H  "Spade void"  alert      shows S=0  artificial  priority 15
+
+# ── Opener answers the 3♠ ask (non-minimum, 5-4-2-2) ─────────────────
+after 1S (P) 2N (P) 3H (P) 3S (P)
+  3N  "Four clubs"  alert      shows C=4  artificial  priority 15
+  4C  "Four diamonds"  alert   shows D=4  artificial  priority 15
+  4D  "Four hearts"  alert     shows H=4  artificial  priority 15
+after 1H (P) 2N (P) 3H (P) 3S (P)
+  3N  "Four clubs"  alert      shows C=4  artificial  priority 15
+  4C  "Four diamonds"  alert   shows D=4  artificial  priority 15
+  4D  "Four spades"  alert     shows S=4  artificial  priority 15

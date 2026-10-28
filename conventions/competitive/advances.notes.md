@@ -286,6 +286,53 @@ where our auction changed):
 - The tripwire: no change outside the guard's own positions and the
   Michaels scenarios.
 
+## Mixed raise: the jump cuebid (2026-10-28)
+
+Switched on by `overcalls.responses.jump_cuebid_mixed` (Rick asked for
+it, 2026-10-28: "a jump cue bid of opener's suit, showing 4+ card
+support for partner's overcall, and 7-9 support points"). Over a
+one-level overcall, advancer's `3{x}` shows four or more trumps and
+7-9 support points (`tp(y)`), ahead of the raise to two and the
+preemptive raise (priority 2). The plain cue bid stays the limit raise
+or better. The overcaller bids game with 16+ total points (25 opposite
+9), 3NT over a minor with 16+ balanced and their suit stopped, else three
+of his suit. Cases: `advances.test`, "Mixed raise".
+
+**Where:** over RHO's pass, double or one-level bid, in the direct
+seat. Not over a two-level overcall: there their suit outranks ours
+(`(1♠) 2♥ (P) 3♠`), so the jump cuebid would force four of ours. Not
+after a balancing overcall, whose ranges are two points higher.
+
+**BBA plays it in competition only** (probe 2026-10-28, `rbb probe
+--ns-card 21GF-SPECIALS --set "Mixed raise=1|0" --dealer W`, four
+hands with four spades and 7-9 support points over 1♣–1♠):
+
+| prefix | `Mixed raise = 1` | `Mixed raise = 0` |
+|---|---|---|
+| 1♣ 1♠ X | 3♣ 3♣ 3♣ (the 6-count passes) | 2♠ 2♠ 2♠ |
+| 1♣ 1♠ P | P P 2♠ P | the same |
+
+The corpus agrees: in Mixed_Raise_In_Comp BBA's advancer jump-cuebids
+43 times over a double and 16 times over a one-level bid, never over a
+pass. So BBA's `Mixed raise` key (mapped today to
+`major_openings.jump_raise.mixed` only, convention-card
+`bbsa-map.toml`) switches this convention too. **For Rick:** map the key
+to both fields in the next convention-card PR, so PBS cards with it on
+(21GF-SPECIALS, 21GF-GIB) play it here and `conv_ab.py` can measure it.
+Until then it is judged against ourselves. Over a pass we play it as
+Rick defined it; BBA there raises or passes.
+
+**Self A/B** (`probes/self-ab.toml`, `mixed-raise`: Mixed_Raise_In_Comp,
+We_Overcall, Basic_Overcall, After_Partner_Overcalls; 500 boards each,
+both sides): 304 boards changed. Contract errors −100 for the side that
+used it, doubling errors +25, distance from par **+61**; halves −73/−2,
+z −1.4, **leans loss**. By context: `1H 1S X : 2S -> 3H` −61 (21
+boards), `1C 1S X : 2S -> 3C` −27 (41), `1D 1S X : 2S -> 3D` +10 (48).
+The losses are three-level contracts going down undoubled opposite a
+light overcall, which the errors yardstick takes as doubled (board 34:
+3♠−2); the gains are their game shut out (19 boards went from their
+4♥ to our 3♠). Within noise of neutral; kept as defined, no tuning.
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,
@@ -311,3 +358,8 @@ where our auction changed):
   in that section; the Law of Total Tricks (Cohen, *To Bid or Not to
   Bid*, 1992) hedged a trump for a weak hand, which is BBA's practice,
   not the book's.
+- **Mixed raise** (2026-10-28): Rick's definition (above); the BBA probe
+  and corpus count in that section. The usual statements of the
+  convention (Bridge World Standard and others) are not yet cited; the
+  convention-card summary (`spec/conventions/competitive_bidding/mixed_raise.toml`)
+  matches.
