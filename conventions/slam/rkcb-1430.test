@@ -85,3 +85,25 @@ N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 6H     | no kin
 card    21GF-DEFAULT
 dealer  S
 S KJ3.KQ964.K.KT94      | 1H P 2C P 3C P 3NT P 4NT P 5D P      | 6C     | "0 or 3" facing my one, past 5♣: six, never a pass of the answer
+
+# Specific kings (`slam.king_ask.specific`, Rick 2026-10-28): the cheapest
+# side king below six of trumps; a new suit below trumps asks for that one.
+card    21GF-DEFAULT slam.king_ask.specific=true
+dealer  S
+
+# seat hand             | auction                                       | expect | why
+S AQJ52.K73.8.AK43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P               | 6C     | the club king is the cheapest
+S AQJ52.K73.8.AJ43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P               | 6H     | no club or diamond king: the heart king
+S AQJ52.Q73.8.AJ43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P               | 6S     | no side king below spades
+S KQ5.KQ4.Q82.A932      | 1NT P 4D P 4H P 4NT P 5S P 5NT P               | 6H     | hearts trumps: the spade king is not shown (the asker can ask for it)
+N K874.AK42.AK2.75      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P          | 7S     | the club king was the only one missing: grand
+N K874.A642.AK2.Q5      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P          | 6H     | the heart king is the only one missing: ask for it
+N K874.AK42.AK2.75      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6S P          | P      | the club king is missing: small slam
+S AQJ52.K73.8.AK43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P 6H P     | 7S     | asked for the heart king and holds it
+S AQJ52.Q73.8.AK43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P 6H P     | 6S     | no heart king
+S AQJ52.K73.8.AK43      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P 6D P     | 6H     | asked for the diamond king: the heart king instead
+N K874.A642.AQ2.K5      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P 6D P 6H P | 6S    | the diamond king is missing: small slam
+N K874.A642.AQ2.Q5      | 1S P 2NT P 3D P 4NT P 5S P 5NT P 6C P          | 6S     | the diamond and heart kings both unaccounted, no margin: six
+N A8.AQ952.A4.AK43      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P          | 6S     | hearts trumps, the spade king the only one unknown: ask for it above six
+S KQ74.KJ3.KJ7.Q52      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P 6S P     | 7H     | asked for the spade king and holds it
+S Q974.KJ3.KJ7.Q52      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P 6S P     | 6N     | no spade king: 6NT
