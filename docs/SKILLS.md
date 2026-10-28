@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-130 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 87 proposed, 0 unknown. 100 modules declare a skill; 216 card fields carry one.
+131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 217 card fields carry one.
 
 ### The map
 
@@ -159,6 +159,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `defense/opening_leads` (Opening Leads) | taxonomy | `leads.vs_suits.length.fourth_best`, `leads.vs_nt.length.fourth_best`, `leads.vs_suits.length.third_fifth`, `leads.vs_suits.length.third_low`, `leads.vs_suits.length.attitude`, `leads.vs_suits.length.small_from_xx`, `leads.vs_nt.length.third_fifth`, `leads.vs_nt.length.third_low`, `leads.vs_nt.length.second_from_4plus`, `leads.vs_nt.length.attitude` | — |
 | `defense/reverse_smith_echo` (Reverse Smith echo) | proposed | `carding.smith_echo_reverse` | — |
 | `defense/smith_echo` (Smith echo) | proposed | `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt` | — |
+| `defense/trump_suit_preference` (Trump suit preference) | proposed | `carding.trump_suit_preference` | — |
 | `defense/upside_down_signals` (Upside-down signals) | proposed | `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count` | — |
 | `partnership_bidding/basic_bidding` (Basic Bidding (Partnership)) | taxonomy | — | `base`, `responses` |
 | `partnership_bidding/basic_major` (Basic Major (Partnership)) | taxonomy | — | `responses` |
@@ -188,6 +189,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `defense/opening_leads`: `leads.vs_suits.length.fourth_best`, `leads.vs_nt.length.fourth_best`, `leads.vs_suits.length.third_fifth`, `leads.vs_suits.length.third_low`, `leads.vs_suits.length.attitude`, `leads.vs_suits.length.small_from_xx`, `leads.vs_nt.length.third_fifth`, `leads.vs_nt.length.third_low`, `leads.vs_nt.length.second_from_4plus`, `leads.vs_nt.length.attitude`
 - `defense/reverse_smith_echo`: `carding.smith_echo_reverse`
 - `defense/smith_echo`: `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt`
+- `defense/trump_suit_preference`: `carding.trump_suit_preference`
 - `defense/upside_down_signals`: `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count`
 
 **Conventions a module declares but no card field carries** (always on, or switched by a field not yet tagged; `bidding_conventions` and `competitive_bidding` only, since the course-level skills have no field):
@@ -295,6 +297,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `defense/odd_even_discards` (proposed): `carding.first_discard.odd_even`, `carding.first_discard.odd_even_suits`, `carding.first_discard.odd_even_nt`
 - `defense/reverse_smith_echo` (proposed): `carding.smith_echo_reverse`
 - `defense/smith_echo` (proposed): `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt`
+- `defense/trump_suit_preference` (proposed): `carding.trump_suit_preference`
 - `defense/upside_down_signals` (proposed): `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count`
 
 **Bidding skills of the taxonomy that nothing here names:**
