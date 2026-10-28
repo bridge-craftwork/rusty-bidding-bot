@@ -181,3 +181,9 @@ name      = "mixed-raise"
 scenarios = ["Mixed_Raise_In_Comp", "We_Overcall", "Basic_Overcall", "After_Partner_Overcalls"]
 base      = ["overcalls.responses.jump_cuebid_mixed=false"]
 variant   = ["overcalls.responses.jump_cuebid_mixed=true"]
+
+[[ab]]
+name      = "specific-kings"
+scenarios = ["Slam_After_Major_Fit", "Slam_after_Transfer", "Slam_after_Stayman", "Jacoby_2N", "Jacoby_2N_Leveled", "Grand_Slam_Invite", "Slam_after_Stayman_or_Jacoby_w31plus"]
+base      = ["slam.king_ask.specific=false"]
+variant   = ["slam.king_ask.specific=true"]
