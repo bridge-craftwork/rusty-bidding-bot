@@ -70,7 +70,7 @@ after (1x) 1y (P)
   3{x} "Mixed raise: 4+ {y}, 7-9 support points"
       alert  artificial
       shows  y>=4, tp(y)=7..9
-      when   mixed
+      when   mixed, !vul
       sets   ask=mixed_raise(y)
       priority 2                        # ahead of the raise to two and the preemptive raise, which these hands also fit
   P   "Not enough to advance"  priority -10
@@ -145,12 +145,14 @@ after (1x) 1y (1z) | (1x) P (P) 1y (1z)
 # The mixed raise holds over RHO's double or one-level bid too (BBA's
 # `Mixed raise` switch plays it there and only there: advances.notes.md,
 # "Mixed raise"). The direct seat only: a balancing
-# overcall's ranges are two points higher.
+# overcall's ranges are two points higher. Not vulnerable only, in both
+# places: BBA's limit, and the jump to three vulnerable drew the
+# penalty doubles (contract errors -100 -> +4 in the self A/B).
 after (1x) 1y (X) | (1x) 1y (1z)
   3{x} "Mixed raise: 4+ {y}, 7-9 support points"
       alert  artificial
       shows  y>=4, tp(y)=7..9
-      when   mixed
+      when   mixed, !vul
       sets   ask=mixed_raise(y)
       priority 2                        # ahead of the raise to two and the preemptive raise, which these hands also fit
 

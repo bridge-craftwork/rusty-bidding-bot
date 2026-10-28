@@ -314,24 +314,43 @@ hands with four spades and 7-9 support points over 1♣–1♠):
 
 The corpus agrees: in Mixed_Raise_In_Comp BBA's advancer jump-cuebids
 43 times over a double and 16 times over a one-level bid, never over a
-pass. So BBA's `Mixed raise` key (mapped today to
-`major_openings.jump_raise.mixed` only, convention-card
-`bbsa-map.toml`) switches this convention too. **For Rick:** map the key
-to both fields in the next convention-card PR, so PBS cards with it on
-(21GF-SPECIALS, 21GF-GIB) play it here and `conv_ab.py` can measure it.
-Until then it is judged against ourselves. Over a pass we play it as
-Rick defined it; BBA there raises or passes.
+pass. And the key does not touch 1M–3M: over `1♠ P` on 21GF-DEFAULT
+(no Bergen) BBA bids the same five hands either way. So BBA's `Mixed
+raise` key is this convention; convention-card mapped it to
+`major_openings.jump_raise.mixed`, which made our responder play 1M–3M
+as a mixed raise on the cards with it on (21GF-GIB, 21GF-SPECIALS) and
+our advancer not play this. Remapped to
+`overcalls.responses.jump_cuebid_mixed` (convention-card v0.22.1,
+Rick, 2026-10-28). Over a pass we play it as Rick defined it; BBA there
+raises or passes.
+
+**Not vulnerable only.** In Mixed_Raise_In_Comp BBA's jump cuebid after
+their double is almost all non-vulnerable (none vul 24, EW vul 14, both
+4, NS vul 1); vulnerable it passes or raises. Measured on that scenario
+(500 boards, vs BBA, errors):
+
+| | errors | contract | doubling | par distance |
+|---|---|---|---|---|
+| old mapping (convention off) | −129 | −160 | +31 | −151 |
+| remapped, any vulnerability | −217 | −156 | −61 | −98 |
+| remapped, not vulnerable | **−78** | **−80** | **+2** | **−85** |
+
+So `!vul`, over the pass too. BBA's choice between pass, raise and the
+jump cuebid at equal vulnerability does not follow length or HCP (the
+same 4-card 6-9 hands do all three); not modelled. Not played either:
+over a 1♥ overcall and their double (spades shown), BBA cuebids 2♠ as
+the raise (22 boards); the cue of the doubler's suit is a separate
+treatment.
 
 **Self A/B** (`probes/self-ab.toml`, `mixed-raise`: Mixed_Raise_In_Comp,
 We_Overcall, Basic_Overcall, After_Partner_Overcalls; 500 boards each,
-both sides): 304 boards changed. Contract errors −100 for the side that
-used it, doubling errors +25, distance from par **+61**; halves −73/−2,
-z −1.4, **leans loss**. By context: `1H 1S X : 2S -> 3H` −61 (21
-boards), `1C 1S X : 2S -> 3C` −27 (41), `1D 1S X : 2S -> 3D` +10 (48).
-The losses are three-level contracts going down undoubled opposite a
-light overcall, which the errors yardstick takes as doubled (board 34:
-3♠−2); the gains are their game shut out (19 boards went from their
-4♥ to our 3♠). Within noise of neutral; kept as defined, no tuning.
+both sides). First version, any vulnerability: 304 boards changed,
+contract errors −100, doubling +25, distance from par +61, z −1.4,
+**leans loss**: three-level contracts going down vulnerable opposite a
+light overcall (board 34: 3♠−2), against their game shut out (19 boards
+from their 4♥ to our 3♠). Not vulnerable: 147 boards changed, contract
+errors **+4**, doubling −10, distance from par +51, halves differ,
+z −0.2, **neutral**.
 
 ## Sources
 

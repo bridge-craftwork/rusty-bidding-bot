@@ -112,6 +112,13 @@ S KQJ74.85.K93.Q84          | 1C 1S X 3C P  | 3S     | after their double: 11, n
 S AKJ74.A5.K93.Q84          | 1C 1S P 3C P  | 4S     | 17: game opposite 7-9
 S KQJ74.85.K93.Q84          | 1C 1S P 3C P  | 3S     | 11: no game
 
+# Vulnerable, the raise to two: BBA's own limit, and it measured better.
+card    Basic-Bridge overcalls.responses.jump_cuebid_mixed=true
+dealer  E
+vul     NS
+
+N Q852.K63.Q752.J4          | 1C 1S X       | 2S     | vulnerable: no mixed raise
+
 # The same hand with the card's field off: the jump cuebid is not played.
 card    Basic-Bridge
 dealer  E
