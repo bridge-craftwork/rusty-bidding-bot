@@ -1,21 +1,22 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module jacoby-2nt "Jacoby 2NT"
-  card   major_openings.jacoby_2nt.play
   needs  base
   skill  bidding_conventions/jacoby_2nt_splinters
   skill  bidding_conventions/jacoby_2nt
   skill  partnership_bidding/jacoby_2nt
+  param  jacoby   = major_openings.jacoby_2nt.play default false
+  param  modified = major_openings.jacoby_2nt.modified default false
 
-after 1M (P) when !passed_hand
+after 1M (P) when !passed_hand, jacoby | modified
   2N  "Jacoby 2NT: 4+ {M}, game forcing"  alert
       shows M>=4, tp(M)>=13
       sets  trump=M, forcing=game, ask=jacoby   # trump agreed from here on
       artificial
       priority 1                       # ahead of a natural new suit (responses.bid)
 
-# Opener's answers.
-after 1M (P) 2N (P)
+# Opener's answers. Modified Jacoby 2NT has its own (modified-jacoby-2nt.bid).
+after 1M (P) 2N (P) when jacoby, !modified
   3x  "Singleton or void in {x}"      shows x<=1                when x is not M  artificial
   4x  "Good 5-card side suit"         shows x>=5, quality(x)>=good  when x is not M
   3M  "18+, no shortness"             shows hcp>=18, shortest>=2

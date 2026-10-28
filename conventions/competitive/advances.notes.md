@@ -286,6 +286,72 @@ where our auction changed):
 - The tripwire: no change outside the guard's own positions and the
   Michaels scenarios.
 
+## Mixed raise: the jump cuebid (2026-10-28)
+
+Switched on by `overcalls.responses.jump_cuebid_mixed` (Rick asked for
+it, 2026-10-28: "a jump cue bid of opener's suit, showing 4+ card
+support for partner's overcall, and 7-9 support points"). Over a
+one-level overcall, advancer's `3{x}` shows four or more trumps and
+7-9 support points (`tp(y)`), ahead of the raise to two and the
+preemptive raise (priority 2). The plain cue bid stays the limit raise
+or better. The overcaller bids game with 16+ total points (25 opposite
+9), 3NT over a minor with 16+ balanced and their suit stopped, else three
+of his suit. Cases: `advances.test`, "Mixed raise".
+
+**Where:** over RHO's pass, double or one-level bid, in the direct
+seat. Not over a two-level overcall: there their suit outranks ours
+(`(1♠) 2♥ (P) 3♠`), so the jump cuebid would force four of ours. Not
+after a balancing overcall, whose ranges are two points higher.
+
+**BBA plays it in competition only** (probe 2026-10-28, `rbb probe
+--ns-card 21GF-SPECIALS --set "Mixed raise=1|0" --dealer W`, four
+hands with four spades and 7-9 support points over 1♣–1♠):
+
+| prefix | `Mixed raise = 1` | `Mixed raise = 0` |
+|---|---|---|
+| 1♣ 1♠ X | 3♣ 3♣ 3♣ (the 6-count passes) | 2♠ 2♠ 2♠ |
+| 1♣ 1♠ P | P P 2♠ P | the same |
+
+The corpus agrees: in Mixed_Raise_In_Comp BBA's advancer jump-cuebids
+43 times over a double and 16 times over a one-level bid, never over a
+pass. And the key does not touch 1M–3M: over `1♠ P` on 21GF-DEFAULT
+(no Bergen) BBA bids the same five hands either way. So BBA's `Mixed
+raise` key is this convention; convention-card mapped it to
+`major_openings.jump_raise.mixed`, which made our responder play 1M–3M
+as a mixed raise on the cards with it on (21GF-GIB, 21GF-SPECIALS) and
+our advancer not play this. Remapped to
+`overcalls.responses.jump_cuebid_mixed` (convention-card v0.22.1,
+Rick, 2026-10-28). Over a pass we play it as Rick defined it; BBA there
+raises or passes.
+
+**Not vulnerable only.** In Mixed_Raise_In_Comp BBA's jump cuebid after
+their double is almost all non-vulnerable (none vul 24, EW vul 14, both
+4, NS vul 1); vulnerable it passes or raises. Measured on that scenario
+(500 boards, vs BBA, errors):
+
+| | errors | contract | doubling | par distance |
+|---|---|---|---|---|
+| old mapping (convention off) | −129 | −160 | +31 | −151 |
+| remapped, any vulnerability | −217 | −156 | −61 | −98 |
+| remapped, not vulnerable | **−78** | **−80** | **+2** | **−85** |
+
+So `!vul`, over the pass too. BBA's choice between pass, raise and the
+jump cuebid at equal vulnerability does not follow length or HCP (the
+same 4-card 6-9 hands do all three); not modelled. Not played either:
+over a 1♥ overcall and their double (spades shown), BBA cuebids 2♠ as
+the raise (22 boards); the cue of the doubler's suit is a separate
+treatment.
+
+**Self A/B** (`probes/self-ab.toml`, `mixed-raise`: Mixed_Raise_In_Comp,
+We_Overcall, Basic_Overcall, After_Partner_Overcalls; 500 boards each,
+both sides). First version, any vulnerability: 304 boards changed,
+contract errors −100, doubling +25, distance from par +61, z −1.4,
+**leans loss**: three-level contracts going down vulnerable opposite a
+light overcall (board 34: 3♠−2), against their game shut out (19 boards
+from their 4♥ to our 3♠). Not vulnerable: 147 boards changed, contract
+errors **+4**, doubling −10, distance from par +51, halves differ,
+z −0.2, **neutral**.
+
 ## Sources
 
 - **The ranges:** BBA's Basic-Bridge meanings, which are the usual ones,
@@ -311,3 +377,8 @@ where our auction changed):
   in that section; the Law of Total Tricks (Cohen, *To Bid or Not to
   Bid*, 1992) hedged a trump for a weak hand, which is BBA's practice,
   not the book's.
+- **Mixed raise** (2026-10-28): Rick's definition (above); the BBA probe
+  and corpus count in that section. The usual statements of the
+  convention (Bridge World Standard and others) are not yet cited; the
+  convention-card summary (`spec/conventions/competitive_bidding/mixed_raise.toml`)
+  matches.

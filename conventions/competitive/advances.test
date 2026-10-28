@@ -91,3 +91,37 @@ W Q7432.52.T87.942      | 1D P 1H 1S P           | 3S     | five spades, weak: p
 W Q74.J52.T873.K94      | 1H P 1S X P            | 2D     | the longer unbid suit
 W Q742.J52.K873.94      | 1D P 1H X P            | 1S     | four spades
 W K742.J52.AQ73.94      | 1D P 1H X P            | 2S     | four spades and 9: jump
+
+# ── Mixed raise: the jump cuebid (switched on below; no stock card
+# plays it). Four trumps and 7-9 support points.
+card    Basic-Bridge overcalls.responses.jump_cuebid_mixed=true
+dealer  E
+vul     None
+
+# seat hand                 | auction       | expect | why
+N K852.Q63.9752.J4          | 1C 1S P       | 3C     | four spades, 6 HCP and a doubleton: 7 support points
+N Q852.K63.Q752.J4          | 1C 1S P       | 3C     | four spades, 9 support points
+N 852.KJ63.Q752.84          | 1D 1H P       | 3D     | four hearts, 8 support points: over 1♦ too
+N K852.Q63.K752.J4          | 1C 1S P       | 2S     | four spades, 10 support points: the raise
+N K85.Q63.K752.J43          | 1C 1S P       | 2S     | three spades: the raise, not the mixed raise
+N K852.AQ3.K752.J4          | 1C 1S P       | 2C     | four spades, 13: the cue bid, limit raise or better
+N Q852.K63.Q752.J4          | 1C 1S X       | 3C     | over RHO's double too (BBA's own mixed raise)
+N 852.KJ63.Q752.84          | 1D 1H 1S      | 3D     | over RHO's one-level bid too
+S KQJ74.85.K93.Q84          | 1C 1S X 3C P  | 3S     | after their double: 11, no game
+# The overcaller over the mixed raise.
+S AKJ74.A5.K93.Q84          | 1C 1S P 3C P  | 4S     | 17: game opposite 7-9
+S KQJ74.85.K93.Q84          | 1C 1S P 3C P  | 3S     | 11: no game
+
+# Vulnerable, the raise to two: BBA's own limit, and it measured better.
+card    Basic-Bridge overcalls.responses.jump_cuebid_mixed=true
+dealer  E
+vul     NS
+
+N Q852.K63.Q752.J4          | 1C 1S X       | 2S     | vulnerable: no mixed raise
+
+# The same hand with the card's field off: the jump cuebid is not played.
+card    Basic-Bridge
+dealer  E
+vul     None
+
+N K852.Q63.9752.J4          | 1C 1S P       | 2S     | four spades: the raise

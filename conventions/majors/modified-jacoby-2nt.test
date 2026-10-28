@@ -1,0 +1,55 @@
+# Modified Jacoby 2NT (switched on below; no stock card plays it).
+# Larry Cohen's schedule; modified-jacoby-2nt.notes.md.
+card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true
+dealer  S
+
+# seat hand             | auction                   | expect | why
+# ── Opener's rebid ───────────────────────────────────────────────────
+S AK852.K73.Q94.82      | 1S P 2NT P                | 4S     | 12, 5-3-3-2: the worst minimum
+S AKJ52.K73.Q94.82      | 1S P 2NT P                | 3C     | 13, 5-3-3-2: a minimum with something extra
+S AKJ52.K73.Q943.8      | 1S P 2NT P                | 3C     | 13 with a singleton: a minimum first
+S AKJ52.K73.AQ43.8      | 1S P 2NT P                | 3D     | 17, singleton club
+S AKJ52.K7.AQ43.82      | 1S P 2NT P                | 3H     | 17, 5-4-2-2
+S AKJ952.K7.AQ4.82      | 1S P 2NT P                | 3S     | 17, six spades, no shortness
+S AKJ52.KQ3.Q94.82      | 1S P 2NT P                | 3N     | 16, 5-3-3-2
+S 82.AKJ52.K7.AQ43      | 1H P 2NT P                | 3H     | over 1♥ too: 17, 5-4-2-2
+S 82.AKJ952.K7.AQ4      | 1H P 2NT P                | 3S     | over 1♥ too: 17, six hearts
+# ── The 3♦ ask after a minimum ───────────────────────────────────────
+S AKJ52.K73.Q943.8      | 1S P 2NT P 3C P 3D P      | 3H     | minimum with a singleton
+S AQ852.K7.Q943.82      | 1S P 2NT P 3C P 3D P      | 3S     | minimum 5-4-2-2
+S AQJ852.K7.Q94.82      | 1S P 2NT P 3C P 3D P      | 3N     | minimum, six spades, no shortness
+S AKJ52.K73.Q94.82      | 1S P 2NT P 3C P 3D P      | 4S     | minimum 5-3-3-2
+# ── The 3♥ ask after shortness ───────────────────────────────────────
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 3H P      | 3N     | singleton club
+S AKJ52.8.AQ43.K73      | 1S P 2NT P 3D P 3H P      | 4D     | singleton heart (the other major)
+S AKJ52.K73.AQ432.      | 1S P 2NT P 3D P 3H P      | 3S     | a void
+S AKJ52.K73.AQ432.      | 1S P 2NT P 3D P 3H P 3S P 3N P | 4C | the void is in clubs
+# ── The 3♠ ask after 5-4-2-2 ─────────────────────────────────────────
+S AKJ52.K7.AQ43.82      | 1S P 2NT P 3H P 3S P      | 4C     | four diamonds
+S 82.AKJ52.K7.AQ43      | 1H P 2NT P 3H P 3S P      | 3N     | four clubs
+# ── Responder ────────────────────────────────────────────────────────
+N KQ74.A85.K872.Q3      | 1S P 2NT P 3C P           | 4S     | 14 facing a minimum: no slam interest
+N KQ74.AQ5.AK72.J3      | 1S P 2NT P 3C P           | 3D     | 19 facing a minimum: ask
+N KQ74.A85.K872.Q3      | 1S P 2NT P 3D P           | 3H     | 14 facing 15+: ask where the shortness is
+# ── They bid over the 2NT ────────────────────────────────────────────
+S AKJ52.K73.AQ43.8      | 1S P 2NT 3C               | X      | singleton in their suit
+S AKJ52.KQ3.Q94.A2      | 1S P 2NT 3C               | 3N     | 18, balanced, clubs stopped
+S AKJ52.K73.QJ4.82      | 1S P 2NT 3C               | 3H     | no shortness in clubs: the heart control
+S QJ952.Q73.QJ4.Q2      | 1S P 2NT 3C               | P      | flat, nothing to show: forcing pass
+N KQ74.A85.K872.53      | 1S P 2NT 3C P P           | 4S     | the pass forces: game
+N KQ74.A8.K87.QJ93      | 1S P 2NT 3C P P           | X      | four good clubs: penalty
+S 2.AKJ52.KQ3.Q943      | 1H P 2NT 2S               | X      | over 1♥ and a two-level overcall: short in spades
+S AQ9852.K73.Q4.82      | 1S P 2NT 3C               | 4S     | dead minimum, 6-3-2-2
+# ── They double or bid over an ask: pass is step 1 ───────────────────
+S AKJ52.K73.Q94.82      | 1S P 2NT X                | P      | doubled 2NT: step 1, a minimum
+S AKJ52.K73.AQ43.8      | 1S P 2NT X                | 3C     | doubled 2NT: step 2, 15+ with a singleton
+S AKJ52.KQ3.A94.82      | 1S P 2NT X                | XX     | doubled 2NT: business, 18 balanced
+S AKJ52.K73.Q943.8      | 1S P 2NT P 3C P 3D X      | P      | doubled ask: step 1, a singleton
+S AQ852.K7.Q943.82      | 1S P 2NT P 3C P 3D X      | 3H     | doubled ask: step 2, 5-4-2-2
+S AQJ52.7.KQ43.832      | 1S P 2NT P 3C P 3D X      | XX     | doubled ask: business, KQxx in diamonds
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 3H 4C     | 4D     | ask overcalled: step 2 (pass, then 4♦), a singleton club
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 3H 4D     | X      | ask overcalled: penalty, AQxx in diamonds
+S AKJ52.K7.AQ43.82      | 1S P 2NT P 3H P 3S X      | 3N     | doubled re-ask: step 2, four diamonds
+S AKJ52.K73.AQ432.      | 1S P 2NT P 3D P 3H P 3S P 3N 4C | P | re-ask overcalled: step 1, club void
+N KQ74.A85.K87.K93      | 1S P 2NT 3C P P           | X      | flat opener: penalty with Kxx of clubs
+N KQ74.AQ8.K72.AJ9      | 1S P 2NT 3C P P           | X      | penalty even with 19: opener may be an awful 5-3-3-2

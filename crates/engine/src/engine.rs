@@ -1493,6 +1493,25 @@ fn expand(
                 )
             })
             .collect(),
+        // `step(n)`: the n-th cheapest legal bid, clubs to notrump at each level.
+        CallSpec::Relative {
+            func,
+            arg: Some(arg),
+        } if func == "step" => {
+            use bridge_types::Strain;
+            let Ok(n) = arg.parse::<usize>() else {
+                return vec![];
+            };
+            (1..=7u8)
+                .flat_map(|level| {
+                    [Strain::Clubs, Strain::Diamonds, Strain::Hearts, Strain::Spades, Strain::NoTrump]
+                        .map(|strain| Call::Bid { level, strain })
+                })
+                .filter(|c| auction.is_legal(c))
+                .nth(n.saturating_sub(1))
+                .map(|c| vec![(c, b)])
+                .unwrap_or_default()
+        }
         // `cheapest(w)` with `w` not yet bound: one candidate per suit, as
         // `2x` expands (before, no call at all, so the rule never applied).
         CallSpec::Relative {

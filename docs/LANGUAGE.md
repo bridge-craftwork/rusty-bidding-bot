@@ -300,7 +300,10 @@ after 1N (P)
 - Literal calls: `1N`, `2D`, `P`, `X`, `XX`.
 - Variables: `2M`, `3x`.
 - State interpolation: `6{trump}`, `5{trump}`.
-- Relative calls: `cheapest(x)`, `jump(x)`, `raise`, `new_suit`.
+- Relative calls: `cheapest(x)`, `jump(x)`, `raise`, `new_suit`, and
+  `step(n)`, the n-th cheapest legal bid in any strain (`step(1)` is the
+  cheapest). Relay answers once the opponents have doubled or bid use it:
+  pass is the first step, `step(1)` the second (modified-jacoby-2nt.bid).
 
 The explanation string interpolates the same way: `"Keycard ask in {trump}"`.
 
@@ -679,8 +682,10 @@ How `rbb-engine` implements the model, and its current limits:
 
 ## 13. Open questions
 
-1. **Relative call notation.** Are `cheapest(x)` / `jump(x)` enough, or do we
-   need step notation (`step 1`, `step 2`) for relay systems and Kickback?
+1. **Relative call notation.** `step(n)` now covers step answers after
+   interference (2026-10-28). Relays without interference still name
+   their calls; Kickback and relay systems may want steps counted from
+   the ask instead of the last bid.
 2. **Measuring descriptiveness.** Exact fractions from hand-distribution
    tables, or estimates from a fixed sample of dealt hands? Either way,
    they can be precomputed per rule and context. Today: the fixed sample

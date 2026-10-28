@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-130 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 87 proposed, 0 unknown. 99 modules declare a skill; 216 card fields carry one.
+131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 217 card fields carry one.
 
 ### The map
 
@@ -78,7 +78,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/minor_suit_stayman` (Minor Suit Stayman) | proposed | `notrump.minor_suit_stayman.play`, `notrump.two_nt.minor_stayman` | `minor-suit-stayman`, `two-nt-minors` |
 | `bidding_conventions/minor_suit_transfers` (Minor-Suit Transfers over 1NT) | proposed | `notrump.minor_transfers`, `notrump.transfers.spades_relay`, `notrump.transfers.two_s_clubs`, `notrump.transfers.two_nt`, `notrump.transfers.two_nt_clubs`, `notrump.transfers.two_nt_diamonds`, `notrump.transfers.three_c_diamonds`, `notrump.two_nt.transfer_3s_clubs`, `notrump.two_nt.transfer_4c_diamonds`, `notrump.two_nt.minor_transfers` | `minor-transfers`, `two-nt-minors` |
 | `bidding_conventions/minorwood` (Minorwood) | proposed | `slam.minorwood.play` | `minorwood` |
-| `bidding_conventions/modified_jacoby_2nt` (Modified Jacoby 2NT) | proposed | `major_openings.jacoby_2nt.modified` | — |
+| `bidding_conventions/modified_jacoby_2nt` (Modified Jacoby 2NT) | proposed | `major_openings.jacoby_2nt.modified` | `modified-jacoby-2nt` |
 | `bidding_conventions/multi_2d` (Multi 2♦) | proposed | `two_level.two_diamonds.multi`, `two_level.two_diamonds.multi_strong` | `multi`, `vs-multi` |
 | `bidding_conventions/namyats` (Namyats) | proposed | `preempts.transfer_4_minor`, `preempts.namyats.play` | `namyats` |
 | `bidding_conventions/new_minor_forcing` (New Minor Forcing) | taxonomy | `other_conventions.new_minor_forcing.play`, `other_conventions.new_minor_forcing.after_2nt_rebid`, `other_conventions.new_minor_forcing.by_passed_hand` | `new-minor-forcing`, `nmf-after-2nt` |
@@ -135,7 +135,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `competitive_bidding/maximal_doubles` (Maximal doubles) | proposed | `doubles.maximal` | `maximal-doubles` |
 | `competitive_bidding/meckwell` (Meckwell over 1NT) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `meckwell` |
 | `competitive_bidding/michaels_unusual` (Michaels & Unusual 2NT) | taxonomy | `nt_overcalls.jump_2nt_lowest_unbid`, `competitive.michaels.play`, `competitive.michaels.minor_advance`, `competitive.unusual_1nt.play`, `competitive.unusual_2nt.play`, `competitive.unusual_3nt.play`, `competitive.unusual_4nt.play`, `direct_cuebids.art_michaels`, `direct_cuebids.quasi_michaels`, `direct_cuebids.nat_minors_michaels`, `direct_cuebids.nat_majors_michaels` | `two-suited-overcalls` |
-| `competitive_bidding/mixed_raise` (Mixed raise) | proposed | `overcalls.responses.jump_cuebid_mixed` | — |
+| `competitive_bidding/mixed_raise` (Mixed raise) | proposed | `overcalls.responses.jump_cuebid_mixed` | `advances` |
 | `competitive_bidding/modified_cappelletti` (Modified Cappelletti) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `cappelletti` |
 | `competitive_bidding/multi_landy` (Landy and Multi-Landy over 1NT) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `multi-landy` |
 | `competitive_bidding/negative_doubles` (Negative Doubles) | taxonomy | `doubles.negative.play`, `doubles.negative.through` | `after-interference` |
@@ -159,6 +159,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `defense/opening_leads` (Opening Leads) | taxonomy | `leads.vs_suits.length.fourth_best`, `leads.vs_nt.length.fourth_best`, `leads.vs_suits.length.third_fifth`, `leads.vs_suits.length.third_low`, `leads.vs_suits.length.attitude`, `leads.vs_suits.length.small_from_xx`, `leads.vs_nt.length.third_fifth`, `leads.vs_nt.length.third_low`, `leads.vs_nt.length.second_from_4plus`, `leads.vs_nt.length.attitude` | — |
 | `defense/reverse_smith_echo` (Reverse Smith echo) | proposed | `carding.smith_echo_reverse` | — |
 | `defense/smith_echo` (Smith echo) | proposed | `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt` | — |
+| `defense/trump_suit_preference` (Trump suit preference) | proposed | `carding.trump_suit_preference` | — |
 | `defense/upside_down_signals` (Upside-down signals) | proposed | `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count` | — |
 | `partnership_bidding/basic_bidding` (Basic Bidding (Partnership)) | taxonomy | — | `base`, `responses` |
 | `partnership_bidding/basic_major` (Basic Major (Partnership)) | taxonomy | — | `responses` |
@@ -181,15 +182,14 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 - `bidding_conventions/depo`: `slam.depo`
 - `bidding_conventions/lars_multi`: `two_level.two_diamonds.multi_strong`
-- `bidding_conventions/modified_jacoby_2nt`: `major_openings.jacoby_2nt.modified`
 - `bidding_conventions/two_heart_bust`: `two_level.two_clubs.parrish_bust`
-- `competitive_bidding/mixed_raise`: `overcalls.responses.jump_cuebid_mixed`
 - `defense/defensive_signals`: `carding.declarer_lead.attitude`, `carding.declarer_lead.count`, `carding.declarer_lead.suit_preference`, `carding.first_discard.standard`, `carding.suits.standard_attitude`, `carding.suits.standard_count`, `carding.nt.standard_attitude`, `carding.nt.standard_count`, `carding.partner_lead.attitude`, `carding.partner_lead.count`, `carding.partner_lead.suit_preference`
 - `defense/lavinthal`: `carding.lavinthal.from_void`, `carding.lavinthal.on_ace`, `carding.lavinthal.on_trump`, `carding.lavinthal.to_void`, `carding.first_discard.lavinthal`, `carding.first_discard.lavinthal_suits`, `carding.first_discard.lavinthal_nt`
 - `defense/odd_even_discards`: `carding.first_discard.odd_even`, `carding.first_discard.odd_even_suits`, `carding.first_discard.odd_even_nt`
 - `defense/opening_leads`: `leads.vs_suits.length.fourth_best`, `leads.vs_nt.length.fourth_best`, `leads.vs_suits.length.third_fifth`, `leads.vs_suits.length.third_low`, `leads.vs_suits.length.attitude`, `leads.vs_suits.length.small_from_xx`, `leads.vs_nt.length.third_fifth`, `leads.vs_nt.length.third_low`, `leads.vs_nt.length.second_from_4plus`, `leads.vs_nt.length.attitude`
 - `defense/reverse_smith_echo`: `carding.smith_echo_reverse`
 - `defense/smith_echo`: `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt`
+- `defense/trump_suit_preference`: `carding.trump_suit_preference`
 - `defense/upside_down_signals`: `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count`
 
 **Conventions a module declares but no card field carries** (always on, or switched by a field not yet tagged; `bidding_conventions` and `competitive_bidding` only, since the course-level skills have no field):
@@ -297,6 +297,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `defense/odd_even_discards` (proposed): `carding.first_discard.odd_even`, `carding.first_discard.odd_even_suits`, `carding.first_discard.odd_even_nt`
 - `defense/reverse_smith_echo` (proposed): `carding.smith_echo_reverse`
 - `defense/smith_echo` (proposed): `carding.smith_echo`, `carding.smith_echo_suits`, `carding.smith_echo_nt`
+- `defense/trump_suit_preference` (proposed): `carding.trump_suit_preference`
 - `defense/upside_down_signals` (proposed): `carding.inverted_count`, `carding.first_discard.upside_down`, `carding.suits.upside_down_attitude`, `carding.suits.upside_down_count`, `carding.nt.upside_down_attitude`, `carding.nt.upside_down_count`
 
 **Bidding skills of the taxonomy that nothing here names:**

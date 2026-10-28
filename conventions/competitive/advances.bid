@@ -7,7 +7,8 @@
 # support, a new suit 8+ with four cards at the one level and 9+ with
 # five at the two, 1NT 8-11 balanced with a stopper in their suit, and
 # the cue bid of their suit a limit raise or better (12+ with three).
-# The jump raise is weak.
+# The jump raise is weak. With `overcalls.responses.jump_cuebid_mixed`
+# the jump cue bid is a mixed raise: four trumps, 7-9 support points.
 #
 # An overcall is not forcing, so advancer passes with less; there is no
 # forced bid here as there is after a takeout double.
@@ -30,7 +31,9 @@ module advances "Advancing partner's overcall"
   needs  overcalls
   skill  competitive_bidding/advancing_overcalls
   skill  competitive_bidding/support_cuebids
+  skill  competitive_bidding/mixed_raise
   param  jump_raise = overcalls.responses.jump_raise default weak
+  param  mixed      = overcalls.responses.jump_cuebid_mixed default false
 
 after (1x) 1y (P)
   2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
@@ -64,6 +67,12 @@ after (1x) 1y (P)
   2N  "12-15 total points, balanced, a stopper in {x}"
       shows balanced, hcp+length_points>=12, hcp+length_points<=15
       when  stop(x), y<=2
+  3{x} "Mixed raise: 4+ {y}, 7-9 support points"
+      alert  artificial
+      shows  y>=4, tp(y)=7..9
+      when   mixed, !vul
+      sets   ask=mixed_raise(y)
+      priority 2                        # ahead of the raise to two and the preemptive raise, which these hands also fit
   P   "Not enough to advance"  priority -10
 
 # ── Advancing a balancing overcall ───────────────────────────────────
@@ -132,6 +141,20 @@ after (1x) 1y (1z) | (1x) P (P) 1y (1z)
       shows H>=5, S<=4, hcp+length_points>=9
       when  x is not H, y is not H, z is not H
   P   "Nothing to say over their bid"  priority -10
+
+# The mixed raise holds over RHO's double or one-level bid too (BBA's
+# `Mixed raise` switch plays it there and only there: advances.notes.md,
+# "Mixed raise"). The direct seat only: a balancing
+# overcall's ranges are two points higher. Not vulnerable only, in both
+# places: BBA's limit, and the jump to three vulnerable drew the
+# penalty doubles (contract errors -100 -> +4 in the self A/B).
+after (1x) 1y (X) | (1x) 1y (1z)
+  3{x} "Mixed raise: 4+ {y}, 7-9 support points"
+      alert  artificial
+      shows  y>=4, tp(y)=7..9
+      when   mixed, !vul
+      sets   ask=mixed_raise(y)
+      priority 2                        # ahead of the raise to two and the preemptive raise, which these hands also fit
 
 after (1x) 1y (2z) | (1x) P (P) 1y (2z)
   2{y} "Raise: 7-11 total points, three-card support"
@@ -229,6 +252,20 @@ when asked cue_raise(t)
       shows balanced, hcp+length_points>=13
       when  t is C | t is D
   cheapest(t) "Minimum overcall: no game opposite a limit raise"
+      priority -1
+
+# Over the mixed raise (7-9 support points, four trumps): game wants
+# about 25, so 16 or more bids it; else three of the suit, which the jump
+# cuebid always leaves room for over a one-level overcall.
+after (1x) 1y (P) 3x (P) | (1x) 1y (X) 3x (P) | (1x) 1y (1z) 3x (P)
+  4{y} "Accepts: game in {y}"
+      shows hcp+length_points>=16
+      when  mixed, y is H | y is S
+  3N  "Accepts: 16+ balanced, game in notrump"
+      shows balanced, hcp+length_points>=16, stop(x)
+      when  mixed, y is C | y is D
+  3{y} "No game opposite a mixed raise"
+      when  mixed
       priority -1
 
 # ── The overcaller's rebid after a new suit (2026-09-25) ──────────────
