@@ -8,5 +8,6 @@ language = 1
 # 0.2.0 is the first that reads the modules' `skill` header lines, 0.3.0
 # the first with `define` and the judgment layer's Phase 0 terms, 0.4.0
 # the first with `force game`, 0.5.0 the first with `define auction` and
-# `systems on`, 0.7.0 (unreleased) the first with `artificial_contract`.
-engine = "0.7.0"
+# `systems on`, 0.7.0 (unreleased) the first with `artificial_contract`,
+# 0.11.0 the first with the `step(n)` call (modified-jacoby-2nt.bid).
+engine = "0.11.0"
