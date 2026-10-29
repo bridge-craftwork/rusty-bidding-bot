@@ -53,7 +53,7 @@ after 4D (P) | 4D (X)
 
 # Opener after the sign-off: pass.
 after 4C (P) 4H (P) | 4D (P) 4S (P)
-  P   "Partner signed off"
+  P   "No further bid"
 
 # ── Opener after the relay ───────────────────────────────────────────
 when asked namyats(t)

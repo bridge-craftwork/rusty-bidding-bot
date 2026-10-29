@@ -74,10 +74,10 @@ after 1H (P) 1S (P) 3x (P) when x is C | x is D
       priority 1
 
 after 1M (P) 1N (P) 3x (P) 3M (P) | 1M (P) 1N (P) 3x (P) 3N (P) when x is not M
-  P   "The 5-5 jump was 13-15: no more"
+  P   "No further bid"
       priority 2
 after 1H (P) 1S (P) 3x (P) 3H (P) | 1H (P) 1S (P) 3x (P) 3N (P) when x is C | x is D
-  P   "The 5-5 jump was 13-15: no more"
+  P   "No further bid"
       priority 2
 
 # ── Responder after 2♣ ───────────────────────────────────────────────

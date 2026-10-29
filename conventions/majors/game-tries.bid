@@ -115,7 +115,7 @@ when asked where_short(M), rho.last=P
       when  x is not M, M is S | x is not S, M is H | x is not C
       artificial
       priority 3
-  3M  "Shortness in a step suit (spades over 1♥, clubs over 1♠)"  alert
+  3M  "Shortness: ♠ over 1♥, ♣ over 1♠"  alert
       shows S<=1 | M is S
       shows C<=1 | M is H
       artificial
@@ -140,7 +140,8 @@ when answered where_short(M), rho.last=P
 
 # ── Responder after a long-suit (help-suit) try ──────────────────────
 when asked help_try(x), rho.last=P
-  4{trump} "Accepts the help-suit try: help in {x}, or the top of the raise"
+  # Help in the try suit, or the top of the raise.
+  4{trump} "Accepts the help-suit try"
       shows helps(x) | tp(trump)>=10 | (tp(trump)>=8, has(A,x) | has(K,x) | x=2)
       priority 3
   3{trump} "Declines the help-suit try"
@@ -150,14 +151,14 @@ when asked help_try(x), rho.last=P
 # the control bids (12), which would otherwise read a limited hand's
 # slam values into it.
 when answered help_try(x), rho.last=P, partner.last=3{trump}
-  P   "Partner declined the try"
+  P   "No further bid"
       priority 13
 when answered short_try(M), rho.last=P, partner.last=3{M}
-  P   "Partner declined the try"
+  P   "No further bid"
       priority 13
 after 1H (P) 2H (P) 2S (P) 2N (P) 3x (P) 3H (P) when two_way, x is not H
-  P   "Partner declined after hearing the shortness"
+  P   "No further bid"
       priority 13
 after 1S (P) 2S (P) 2N (P) 3C (P) 3x (P) 3S (P) when two_way, x is not S
-  P   "Partner declined after hearing the shortness"
+  P   "No further bid"
       priority 13

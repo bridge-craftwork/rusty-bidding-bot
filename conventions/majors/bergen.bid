@@ -24,28 +24,28 @@ module bergen "Bergen raises: four-card raises at the three level"
 
 # ── Responder ────────────────────────────────────────────────────────
 after 1M (P) when bergen | reverse
-  3C  "Bergen: constructive raise, four {M}, 7-10 support points"  alert
+  3C  "Bergen: constructive raise, 4 {M}, 7-10 support points"  alert
       shows M>=4, tp(M)=7..10, hcp>=5
       when  !reverse
       when  M=4 | hcp>=8               # five trumps and 5-7 HCP: the jump to game
       sets  trump=M
       artificial
       priority 1                       # the four-card raise, ahead of 2M or a new suit
-  3D  "Bergen: limit raise, four {M}, 11-12 support points"  alert
+  3D  "Bergen: limit raise, 4 {M}, 11-12 support points"  alert
       shows M>=4, tp(M)=11..12, hcp<=12
       when  !reverse
       when  !passed_hand | (!drury, !drury_r)   # a passed hand's limit raise is Drury's 2♣
       sets  trump=M
       artificial
       priority 1
-  3D  "Reverse Bergen: constructive raise, four {M}, 7-10 support points"  alert
+  3D  "Reverse Bergen: constructive raise, 4 {M}, 7-10 support points"  alert
       shows M>=4, tp(M)=7..10, hcp>=5
       when  reverse
       when  M=4 | hcp>=8
       sets  trump=M
       artificial
       priority 1
-  3C  "Reverse Bergen: limit raise, four {M}, 11-12 support points"  alert
+  3C  "Reverse Bergen: limit raise, 4 {M}, 11-12 support points"  alert
       shows M>=4, tp(M)=11..12, hcp<=12
       when  reverse
       when  !passed_hand | (!drury, !drury_r)
@@ -133,14 +133,14 @@ after 1S (P) 3D (P) 3H (P) when reverse
 # Opener after responder declines: the try was 15-16, so pass. A bigger
 # hand that got here through a control bid (read as the try) bids game.
 after 1M (P) 3C (P) 3D (P) 3M (P) when bergen, !reverse
-  P   "Responder declined the game try"
+  P   "No further bid"
       shows tp(M)<=16
       priority 2
   4M  "Game after the declined try: extra values"
       shows tp(M)>=17
       priority 2
 after 1S (P) 3D (P) 3H (P) 3S (P) when reverse
-  P   "Responder declined the game try"
+  P   "No further bid"
       shows tp(S)<=16
       priority 2
   4S  "Game after the declined try: extra values"
@@ -149,7 +149,7 @@ after 1S (P) 3D (P) 3H (P) 3S (P) when reverse
 
 # Responder after opener's sign-off.
 after 1M (P) 3x (P) 3M (P) when x is C | x is D, bergen | reverse
-  P   "Opener signed off"
+  P   "No further bid"
       priority 2
 
 # Opener after the preemptive 3M: jump-raises.bid (`asked preemptive_raise`).

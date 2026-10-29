@@ -117,5 +117,5 @@ when answered drury(M), partner.last=2{M}, !reverse
 
 # Opener, after responder signs off.
 after 1M (P) 2C (P) 2D (P) 2M (P)
-  P   "Responder signs off"
+  P   "No further bid"
       priority 2
