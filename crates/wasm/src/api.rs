@@ -996,6 +996,7 @@ fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
         "seat": seat_str(s.caller),
         "call": s.call.to_pbn(),
         "explanation": s.explanation,
+        "announcement": s.announcement,
         "alert": alert(&s.alert),
         "rule": rule(&s.rule),
         "artificial": s.artificial,
@@ -2317,7 +2318,14 @@ mod tests {
         let i = parse(&interpret(
             r#"{"cards": {"ns": "21GF-DEFAULT"}, "dealer": "N", "auction": "1NT Pass 2C Pass"}"#,
         ));
-        for k in ["explanation", "alert", "rule", "knowledge", "artificial"] {
+        for k in [
+            "explanation",
+            "announcement",
+            "alert",
+            "rule",
+            "knowledge",
+            "artificial",
+        ] {
             assert_eq!(r["step"][k], i["steps"][2][k], "{k}");
         }
         // The last call by default; a call outside the system is unknown.

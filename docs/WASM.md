@@ -384,6 +384,7 @@ A **step**:
 ```json
 {"seat": "N", "call": "1NT",
  "explanation": "15-17 HCP, balanced",
+ "announcement": "15-17 HCP, balanced",
  "alert": {"kind": "announce", "text": "15 to 17"},
  "rule": {"module": "notrump-base", "file": "conventions/notrump/one-nt.bid", "line": 19},
  "artificial": false,
@@ -398,6 +399,18 @@ A **step**:
 - `explanation`, `alert`, `rule`: the rule that gives the call its meaning
   as the table reads it; all `null` when no rule does (a call outside the
   system).
+- `announcement` (added in 0.11.2): what the table is told, the text to
+  show a person or send an opponent's robot. The description every rule
+  that reads the call agrees on (their shared name, or nothing, when they
+  differ), then what the call newly showed and is worth stating, suits
+  spelled out: `"5+ spades; 10-21 HCP"`, `"Stayman: asks for a 4-card
+  major; artificial, forcing"`, `"Splinter: ...; 0-1 spades, artificial,
+  game forcing"`. A range is left out when it says nothing (`0-6 hearts`
+  beside `5+ spades`, the deck's own caps, low floors). Words, not
+  symbols: Brill reads lengths, HCP and *artificial*, *forcing*, *game
+  forcing*, *transfer* out of it (rusty-seat-service, the same function,
+  `rbb_engine::explain`). A UI may swap the suit names for symbols. `""`
+  for a call no rule reads that showed nothing.
 - `artificial`: the call does not name a place to play (a transfer, an ask).
 - `knowledge`: what the caller's hand is known to hold **after** this call,
   from all their calls so far. `balanced` is `true`, `false` or `null`
