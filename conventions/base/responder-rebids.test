@@ -208,7 +208,7 @@ dealer  S
 vul     All
 # Since 2026-10-05 2C P 2D P 2NT P is the 2NT system (two-nt-responses.bid,
 # `nt2`): the six hearts transfer, and game follows in the fit.
-N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 3D     | 4 HCP, six hearts opposite two or more: transfer, not 3NT
+N 32.KJ9876.T953.4      | 2C P 2D P 2NT P                      | 4D     | 4 HCP, six hearts: Texas, game only (2026-10-29: Texas after 2C-2D-2NT)
 N 32.KJ9876.T953.4      | 2C P 2D P 2NT P 3D P 3H P            | 4H     | then game in the fit
 # (2C P 2S P 2NT P itself now has its own rules: strong-openings.test.)
 

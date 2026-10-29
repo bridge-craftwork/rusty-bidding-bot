@@ -4,8 +4,6 @@ module texas-transfers "Texas Transfers"
   card   notrump.transfers.texas
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers
-  param  systems_on = nt_overcalls.direct.systems_on default true
-  param  vs_2c = notrump.transfers.vs_2c default false
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
@@ -13,75 +11,76 @@ module texas-transfers "Texas Transfers"
 # in suit points or in support points (HCP + shortness, the fit being
 # certain with six trumps). With
 # mild slam interest responder transfers at the two level and jumps to game
-# instead (jacoby-transfers.bid), which lets opener bid on.
-after nt1 when !they.bid | systems_on
+# instead (jacoby-transfers.bid), which lets opener bid on. Game values
+# count HCP and length points (8 + 2 for six cards = 10 opposite 15-17:
+# Rick, 2026-10-29); the top of game-only and the slam band are in suit
+# points.
+#
+# Where (Rick, 2026-10-29): every notrump of ours where the system is on
+# (`systems`, one-nt.bid): the 1NT and 2NT openings, our notrump overcall
+# and balancing notrump as the card says, 2♣–2♦–2NT, Kokish's
+# 2♣–2♦–2♥–2♠–2NT, 2♣ and a positive then 2NT. The strength bands are
+# measured against opener's range, so the same rules serve every one.
+# Over interference Texas stays on as long as it is a jump: a double, or
+# any bid that leaves three of the transfer suit available (4♦ over
+# 2-level bids and 3♣, 4♥ also over 3♦), and never into their suit.
+# `notrump.transfers.vs_2c` is a different question (2♦/2♥ transfers over
+# their 2♣, nt-interference.bid) and does not switch Texas.
+define texas_room_d = !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H) | (they.level=3, they.strain is C)
+define texas_room_h = !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C | they.strain is D)
+
+after systems 1N (*) | systems 2N (*)
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
-      shows H>=6, suit_strength=game, suit_points<=30-partner.points.max
+      shows H>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
+      when  texas_room_d
       sets  ask=texas(H)
       artificial
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, suit_points>=33-partner.points.min
+      when  texas_room_d
+      sets  ask=texas(H)
+      artificial
+  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, tp(H)>=33-partner.points.min
+      when  texas_room_d
       sets  ask=texas(H)
       artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
-      shows S>=6, suit_strength=game, suit_points<=30-partner.points.max
+      shows S>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
+      when  texas_room_h
       sets  ask=texas(S)
       artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
       shows S>=6, suit_points>=33-partner.points.min
+      when  texas_room_h
       sets  ask=texas(S)
-      artificial
-
-  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
-      shows H>=6, tp(H)>=33-partner.points.min
-      sets  ask=texas(H)
       artificial
   4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
       shows S>=6, tp(S)>=33-partner.points.min
+      when  texas_room_h
+      sets  ask=texas(S)
+      artificial
+  # Over interference Texas doubles as a preempt: with seven cards and
+  # no values BBA transfers straight to game rather than to the two
+  # level, and takes the auction away from them.
+  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=7, hcp>=4, suit_strength=signoff
+      when  !(rho.last=P | rho.last=X), texas_room_d
+      sets  ask=texas(H)
+      artificial
+  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=7, hcp>=4, suit_strength=signoff
+      when  !(rho.last=P | rho.last=X), texas_room_h
       sets  ask=texas(S)
       artificial
 
-after nt1 4D (P)
+# Opener completes, whatever came in between, when it is still legal.
+when asked texas(H)
   4H  "Completes the transfer"
-after nt1 4H (P)
+when asked texas(S)
   4S  "Completes the transfer"
 
 when answered texas(M)
   4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
   4N  "Keycard ask in {M}"   shows tp(M)>=33-partner.points.min   sets ask=keycards(M)  artificial
   P   "No slam interest"
-
-# Texas over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`).
-after 1N (2C) when vs_2c
-  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
-      shows H>=6, suit_strength=game, suit_points<=30-partner.points.max
-      sets  ask=texas(H)
-      artificial
-  4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
-      shows H>=6, suit_points>=33-partner.points.min
-      sets  ask=texas(H)
-      artificial
-  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
-      shows S>=6, suit_strength=game, suit_points<=30-partner.points.max
-      sets  ask=texas(S)
-      artificial
-  4H  "Texas: 6+ ♠, game only or slam values"  announce "Transfer"
-      shows S>=6, suit_points>=33-partner.points.min
-      sets  ask=texas(S)
-      artificial
-  # Over interference Texas doubles as a preempt: with seven cards and
-  # no values BBA transfers straight to game rather than to the two
-  # level, and takes the auction away from them.
-  4D  "Preemptive: seven or more hearts, no values"  announce "Transfer"
-      shows H>=7, hcp>=4, suit_strength=signoff
-      sets  ask=texas(H)
-      artificial
-  4H  "Preemptive: seven or more spades, no values"  announce "Transfer"
-      shows S>=7, hcp>=4, suit_strength=signoff
-      sets  ask=texas(S)
-      artificial
-
-after 1N (2C) 4D (P) when vs_2c
-  4H  "Completes the transfer"
-after 1N (2C) 4H (P) when vs_2c
-  4S  "Completes the transfer"

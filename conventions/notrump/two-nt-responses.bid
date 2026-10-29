@@ -36,6 +36,7 @@ module two-nt-responses "Responses to a 2NT opening"
   param  jacoby  = notrump.transfers.jacoby default true
   param  puppet  = notrump.two_nt.puppet default false
   param  gerber  = slam.gerber.play default false
+  param  texas   = notrump.transfers.texas default false
   param  style   = general.style
 
 # The 2NT system's way in: our 2NT where the system came on (`systems on`
@@ -118,10 +119,11 @@ after nt2 when style is not bba
       when  !gerber
   4D  "Slam try: six or more diamonds, or five and unbalanced"
       shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
-after nt2 4x (P) when (x is C, !gerber) | x is D, style is not bba
+      when  !texas                                # 4♦ is Texas (texas-transfers.bid)
+after nt2 4x (P) when (x is C, !gerber) | (x is D, !texas), style is not bba
   6{x}  "A fit: slam"                       shows x>=3
   4N    "No fit"                            shows x<=2
-after nt2 4x (P) 4N (P) when (x is C, !gerber) | x is D, style is not bba
+after nt2 4x (P) 4N (P) when (x is C, !gerber) | (x is D, !texas), style is not bba
   6N  "No fit, but slam values"                  shows strength>=slam
   P   "No fit: 4NT"
       priority -5
