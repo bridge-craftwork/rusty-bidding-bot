@@ -86,6 +86,15 @@ when game_reached
       when  !passes_out_artificial
       priority -50
 
+# Partner bid at game or above, in a suit other than our agreed one, and
+# our system gives the call no meaning (a 5NT king ask the card does not
+# play, a convention we do not know): passing may leave us in a contract
+# nobody chose. Bid the agreed suit at the cheapest level, five, six or
+# seven (Rick, 2026-10-29).
+when game_reached, we.trump is suit, partner.unread, rho.last=P, !(partner.last=P | partner.last=X | partner.last=XX | partner.last=4{trump} | partner.last=5{trump} | partner.last=6{trump} | partner.last=7{trump})
+  cheapest(trump) "Partner's call is not in our system: back to our suit"
+      priority -40
+
 # ── Never pass out our own artificial bid ────────────────────────────
 # Brill round robin 2026-10-09, board 90000102: 1S 2S X 3S X P P P, a
 # doubled Michaels cue bid passed out for -1,700. The catch-all passes

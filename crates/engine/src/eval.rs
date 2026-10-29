@@ -1097,6 +1097,8 @@ impl<'a> Ctx<'a> {
             "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(seat))),
             // `partner.jumped`: their last bid skipped a level in its strain.
             "jumped" => Val::Bool(Tri::from_bool(self.pos.jumped(seat))),
+            // `partner.unread`: no rule read their last call.
+            "unread" => Val::Bool(Tri::from_bool(self.pos.unread(seat))),
             // `partner.bypassed(x)`: their last bid skipped a bid in x that
             // was available (Position::bypassed). Public, like `last`.
             // The control-bid dialogue: `denied(x)`, a suit this seat skipped;
@@ -2102,6 +2104,10 @@ const SEAT_ATTRS: &[Term] = &[
     t(
         "jumped",
         "that seat's last bid was at least a level above the cheapest in its strain",
+    ),
+    t(
+        "unread",
+        "no rule read that seat's last call: our system gives it no meaning",
     ),
     f(
         "denied",

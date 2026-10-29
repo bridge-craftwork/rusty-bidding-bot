@@ -10,7 +10,7 @@ module minorwood "Minorwood: four of the agreed minor asks for keycards"
   needs  base
   skill  bidding_conventions/minorwood
   param  mwplay = slam.minorwood.play default false
-  param  kask5n = slam.king_ask.five_nt default false
+  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
 
 # Four of the minor is still available (`cheapest_rank`: 4♣ 20, 4♦ 21).
 define mw_room(t) = (t is C, cheapest_rank(C) <= 20) | (t is D, cheapest_rank(D) <= 21)
