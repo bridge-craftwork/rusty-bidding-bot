@@ -4,6 +4,7 @@ module texas-transfers "Texas Transfers"
   card   notrump.transfers.texas
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers
+  param  tu = notrump.transfers.texas_2_under default false
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
@@ -26,10 +27,16 @@ module texas-transfers "Texas Transfers"
 # 2-level bids and 3♣, 4♥ also over 3♦), and never into their suit.
 # `notrump.transfers.vs_2c` is a different question (2♦/2♥ transfers over
 # their 2♣, nt-interference.bid) and does not switch Texas.
-define texas_room_d = !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H) | (they.level=3, they.strain is C)
-define texas_room_h = !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C | they.strain is D)
+define texas_room_d = !tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H) | (they.level=3, they.strain is C)
+# 2-under Texas (`notrump.transfers.texas_2_under`, Rick 2026-10-29): one
+# step lower, 4♣ for hearts and 4♦ for spades, with the same hands; opener
+# bids the suit in between to super-accept (four trumps, the top of his
+# range) or four of the major. 4♥ is then not a transfer.
+define texas2_room_c = tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H)
+define texas2_room_d = tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C)
+define texas_room_h = !tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C | they.strain is D)
 
-after systems 1N (*) | systems 2N (*)
+after systems 1N (*) | systems 2N (*) | 2C (*) 2D (*) 3N (P)
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
       when  texas_room_d
@@ -74,6 +81,48 @@ after systems 1N (*) | systems 2N (*)
       sets  ask=texas(S)
       artificial
 
+  # 2-under Texas: the same hands, one step lower.
+  4C  "2-under Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
+      when  texas2_room_c
+      sets  ask=texas2(H)
+      artificial
+  4C  "2-under Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, suit_points>=33-partner.points.min
+      when  texas2_room_c
+      sets  ask=texas2(H)
+      artificial
+  4C  "2-under Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=6, tp(H)>=33-partner.points.min
+      when  texas2_room_c
+      sets  ask=texas2(H)
+      artificial
+  4D  "2-under Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
+      when  texas2_room_d
+      sets  ask=texas2(S)
+      artificial
+  4D  "2-under Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, suit_points>=33-partner.points.min
+      when  texas2_room_d
+      sets  ask=texas2(S)
+      artificial
+  4D  "2-under Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=6, tp(S)>=33-partner.points.min
+      when  texas2_room_d
+      sets  ask=texas2(S)
+      artificial
+  4C  "2-under Texas: 6+ ♥, game only or slam values"  announce "Transfer"
+      shows H>=7, hcp>=4, suit_strength=signoff
+      when  !(rho.last=P | rho.last=X), texas2_room_c
+      sets  ask=texas2(H)
+      artificial
+  4D  "2-under Texas: 6+ ♠, game only or slam values"  announce "Transfer"
+      shows S>=7, hcp>=4, suit_strength=signoff
+      when  !(rho.last=P | rho.last=X), texas2_room_d
+      sets  ask=texas2(S)
+      artificial
+
 # Opener completes, whatever came in between, when it is still legal.
 when asked texas(H)
   4H  "Completes the transfer"
@@ -84,3 +133,24 @@ when answered texas(M)
   4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
   4N  "Keycard ask in {M}"   shows tp(M)>=33-partner.points.min   sets ask=keycards(M)  artificial
   P   "No slam interest"
+
+# 2-under Texas: opener super-accepts with the suit in between, else
+# completes; responder signs off over the super-accept or asks for keycards.
+when asked texas2(H)
+  4D  "Super-accept: four hearts, a maximum"   shows H>=4, hcp>=shown.hcp.max-1
+      artificial
+      priority 1
+  4H  "Completes the transfer"
+when asked texas2(S)
+  4H  "Super-accept: four spades, a maximum"   shows S>=4, hcp>=shown.hcp.max-1
+      artificial
+      priority 1
+  4S  "Completes the transfer"
+
+when answered texas2(M)
+  4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
+  4N  "Keycard ask in {M}"   shows tp(M)>=33-partner.points.min   sets ask=keycards(M)  artificial
+  4{M} "Signoff"
+      when  !(partner.last=4{M})
+  P   "No slam interest"
+      when  partner.last=4{M}

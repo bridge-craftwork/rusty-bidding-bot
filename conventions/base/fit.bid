@@ -9,6 +9,8 @@
 
 module fit "A major-suit fit: agreed, or seen by one hand"
   needs  base
+  param  texas = notrump.transfers.texas default false
+  param  tu    = notrump.transfers.texas_2_under default false
 
 # ── The two concepts ──────────────────────────────────────────────────
 #
@@ -76,7 +78,8 @@ define partner_named(x) = partner.last=1{x} | partner.last=2{x} | partner.last=3
 # 4M (a jump raise's range: slam-entry.test), and an invitation at the
 # three level would claim their forcing three-level bids, so neither is
 # written. Not when partner's last bid was the suit (raising it is the
-# sequence modules' job), not over the strong 2NT (transfers may be on),
+# sequence modules' job), not over the strong 2NT (transfers may be on) nor the 24+ 3NT rebid
+# when the card plays Texas (texas-transfers.bid),
 # not when a slam call or slam exploration applies (`slam_route`,
 # `fit_slam_room`), and not with four cards in the other major that
 # partner may share (`other_major_open`).
@@ -85,7 +88,7 @@ define partner_named(x) = partner.last=1{x} | partner.last=2{x} | partner.last=3
 # `shows`, so that partner reads my length from it, the public part in
 # `when`. `partner.x.min >= 2` keeps the rule from claiming partner's
 # reading of a call it never made (1S-1NT-3H, a jump shift).
-when !asked, we.trump is none, !game_reached | partner.last=3N, !they.bid | rho.last=P, me.has_bid, !(partner.last=2N, partner.hcp.min>=20), partner.last=1N | partner.last=2N | partner.last=3N | answered nmf | answered majors
+when !asked, we.trump is none, !game_reached | partner.last=3N, !they.bid | rho.last=P, me.has_bid, !(partner.last=2N, partner.hcp.min>=20), !(partner.last=3N, partner.hcp.min>=24, texas | tu), partner.last=1N | partner.last=2N | partner.last=3N | answered nmf | answered majors
   4S  "Game in the spade fit"
       shows S + partner.S.min >= 8, fit_game_values(S)
       when  shown.S.min + partner.S.min <= 7 | partner.last=3N, partner.S.min >= 2, !partner_named(S), !slam_route, !fit_slam_room(S), !other_major_open(H)

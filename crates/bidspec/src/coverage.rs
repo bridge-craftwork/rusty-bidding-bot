@@ -138,6 +138,7 @@ fn is_on(v: &Value) -> bool {
         Value::Bool(b) => *b,
         Value::Text(s) => !s.is_empty() && s != "none",
         Value::Int(_) => true,
+        Value::Ints(v) => !v.is_empty(),
     }
 }
 
