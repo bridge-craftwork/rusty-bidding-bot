@@ -44,7 +44,7 @@ after 1H (P) when by_resp
       sets  trump=H, forcing=game
       artificial
       priority 2                       # ahead of Jacoby 2NT
-  3S  "Splinter by a passed hand: 4+ hearts, 10-11, at most one spade"  alert
+  3S  "Splinter: 4+ hearts, 10-11, at most one spade"  alert
       shows H>=4, S<=1, !has(A,S), !has(K,S), !has(Q,S), !has(J,S), hcp=10..11, tp(H)>=13
       when  passed_hand
       sets  trump=H, forcing=game
@@ -59,7 +59,7 @@ after 1M (P) when by_resp
       sets  trump=M, forcing=game
       artificial
       priority 2
-  4x  "Splinter by a passed hand: 4+ {M}, 10-11, at most one {x}"  alert
+  4x  "Splinter: 4+ {M}, 10-11, at most one {x}"  alert
       shows M>=4, x<=1, !has(A,x), !has(K,x), !has(Q,x), !has(J,x), hcp=10..11, tp(M)>=13
       when  x is not M, M is S | x is not S, passed_hand
       sets  trump=M, forcing=game

@@ -64,7 +64,7 @@ after 2S (P) 3C (P) | 2S (X) 3C (P)
   P   "My minor is clubs"            shows C>=5
   3D  "My minor is diamonds"         shows D>=5
 after 2H (P) 3H (P) | 2S (P) 3S (P) | 2H (P) 4H (P) | 2S (P) 4S (P)
-  P   "Partner placed the contract"
+  P   "No further bid"
 
 # Responder after the correction to a minor: pass.
 after 2H (P) 2S (P) 3x (P) | 2S (P) 3C (P) 3D (P)

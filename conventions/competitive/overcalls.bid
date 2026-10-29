@@ -120,7 +120,7 @@ after (1x) 1N (2x)
   3C  "To play: six or more clubs"            shows C>=6, hcp<=8, H<=3 | x is H, S<=3 | x is S
   3D  "To play: six or more diamonds"         shows D>=6, D>C, hcp<=8, H<=3 | x is H, S<=3 | x is S
   3N  "Game: 9+, {x} held"                    shows hcp>=9, stop(x)
-  P   "Nothing to say"                        shows hcp>=0
+  P   "Not enough to advance"                        shows hcp>=0
       priority -5
 
 # ── Over their 1NT, natural (2026-09-25, probes/vs-1N.toml) ───────────
@@ -320,17 +320,17 @@ after (1x) P (2x)
       shows hcp+length_points>=10, hcp<=one_max
       when  x is C
       when  D>=6 | quality(D)>=good | top5(D)>=3
-  3H  "Overcall over their raise: five or more hearts, three level"
+  3H  "Overcall over their raise: five or more hearts"
       shows H>=5, H>=D, H>=C
       shows (H>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
       when  x is S
       when  H>=6 | quality(H)>=good | top5(H)>=4
-  3D  "Overcall over their raise: five or more diamonds, three level"
+  3D  "Overcall over their raise: five or more diamonds"
       shows D>=5, D>S | x is S, D>H | x is H, D>=C
       shows (D>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
       when  x is H | x is S
       when  D>=6 | quality(D)>=good | top5(D)>=4
-  3C  "Overcall over their raise: five or more clubs, three level"
+  3C  "Overcall over their raise: five or more clubs"
       shows C>=5, C>S | x is S, C>H | x is H, C>D | x is D
       shows (C>=6, hcp>=two_min-2) | (hcp>=14, !balanced), hcp<=one_max
       when  x is not C

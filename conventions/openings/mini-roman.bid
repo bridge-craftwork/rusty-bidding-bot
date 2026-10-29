@@ -27,7 +27,7 @@ define three_suiter = (longest=4, shortest=1) | (longest=5, second_longest=4, sh
 # ── The opening ──────────────────────────────────────────────────────
 # Priority 1: it takes these hands from the one-level openings.
 when opening
-  2D  "Mini-Roman: 11-15, three-suited (4-4-4-1 or 5-4-4-0)"   alert
+  2D  "Mini-Roman: 11-15, 4-4-4-1 or 5-4-4-0"   alert
       shows hcp=11..15, three_suiter
       artificial
       priority 1
@@ -147,5 +147,5 @@ after 2D (2y) X (P) 2z (P) | 2D (2y) X (P) 3z (P) | 2D (3y) X (P) 3z (P) | 2D (3
 
 # They come in over the weak response: opener passes (responder may act).
 after 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)
-  P   "They came in: nothing more to say"
+  P   "No further bid"
       priority -5

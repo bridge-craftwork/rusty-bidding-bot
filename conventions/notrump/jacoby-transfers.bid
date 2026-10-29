@@ -37,10 +37,10 @@ after nt1 2H (P)
 # `spades < 4 or (not max and ExplicitShape == '4=3=3=3')`). The other
 # four-trump hands super-accept: super-accept.bid, superaccept-doubleton.bid.
 after nt1 2D (P) when system is brill
-  2H  "Completes transfer: two or three hearts, or a minimum 3=4=3=3"
+  2H  "Completes transfer: 2-3 ♥, or a minimum 3=4=3=3"
       shows H<=3 | (H=4, shortest=3, hcp<=15)
 after nt1 2H (P) when system is brill
-  2S  "Completes transfer: two or three spades, or a minimum 4=3=3=3"
+  2S  "Completes transfer: 2-3 ♠, or a minimum 4=3=3=3"
       shows S<=3 | (S=4, shortest=3, hcp<=15)
 
 # Responder's second call, once opener has answered. There is no auction
@@ -56,9 +56,9 @@ after nt1 2H (P) when system is brill
 when answered transfer(M)
   3M  "Sign off in the known fit"              shows suit_strength=signoff
       when partner.M>=4                        # after a 2S or 2NT super-accept
-  4M  "Game in the known fit, opposite a maximum"  shows suit_strength=invite
+  4M  "Game: in the fit, opposite a super-accept"  shows suit_strength=invite
       when partner.M>=4                        # the super-accept is for thin games
-  P   "Weak: play here ({signoff} total points)"  shows strength=signoff
+  P   "Weak: to play, {signoff} total points"  shows strength=signoff
       when maybe partner.M<=3 | partner.last=3{M}   # never pass an artificial super-accept (2S, 2NT)
       when !passes_out_artificial                   # nor my own transfer, doubled and passed back (base.bid)
   2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced | shortest>=2, strength=invite
@@ -78,19 +78,19 @@ when answered transfer(M)
   P   "Weak in HCP: play here"                 shows M>=6, strength>=invite, suit_strength=signoff, hcp<=24-partner.hcp.max
       when partner.last=2{M}
       priority -1
-  3N  "Game: {game} total points, 5 {M}: choose the game"  shows M=5, balanced, strength=game
+  3N  "Choice of games: 5 {M}, {game} total points"  shows M=5, balanced, strength=game
       when maybe partner.M<=2                  # only while the fit is unknown
       sets ask=choice                          # opener corrects with 3+ {M}
   4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
       when !texas                              # with Texas, game-only hands use it
-  4M  "Mild slam interest, 6+ {M}"             shows M>=6, suit_points>=31-partner.points.max, suit_points<=32-partner.points.min
+  4M  "Game: 6+ {M}, mild slam interest"             shows M>=6, suit_points>=31-partner.points.max, suit_points<=32-partner.points.min
       when texas                               # 14-17 opposite 15-17: slam if opener has
                                                # the right hand; Texas is for 18+
       sets ask=slam_try(M)
   4M  "Game: {game} total points, 6+ {M}"      shows M>=6, suit_strength=game
       when texas                               # game-only hands normally use Texas
       priority -1                              # a fallback: 4M still reads as the slam try
-  4M  "Game in the known fit"                  shows suit_strength=game
+  4M  "Game: in the known fit"                  shows suit_strength=game
       when partner.M>=3                        # known, e.g. after a super-accept
   # Without Texas the slam hands with six come through the transfer too
   # (convention score, 2026-10-07: 39 had no rule). Five of the major
@@ -130,13 +130,13 @@ when answered transfer(M)
 # four trumps, or three below a maximum; 6NT otherwise and at matchpoints.
 # 5M (to play, a minimum) never beat the better of pass and slam.
 when asked quant_major(M)
-  6M  "Accepts, in the fit: four trumps and a doubleton"
+  6M  "Accepts in {M}: four trumps, a doubleton"
       shows M>=4, shortest=2, points>=32-partner.points.min
       when  imps
-  6M  "Accepts, in the fit: three trumps, a doubleton, not a maximum"
+  6M  "Accepts in {M}: three trumps, a doubleton, not a maximum"
       shows M=3, shortest=2, points>=32-partner.points.min, hcp<=shown.hcp.max-1
       when  imps
-  6M  "Accepts on the ruff: a fit and a doubleton"
+  6M  "Accepts in {M}: a fit and a doubleton"
       shows M>=3, shortest=2, points<=31-partner.points.min, tp(M)>=32-partner.points.min
   6N  "Accepts the slam invitation"     shows points>=32-partner.points.min
   P   "Declines"                        shows points<=31-partner.points.min

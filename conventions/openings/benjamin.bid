@@ -24,7 +24,8 @@ module benjamin "Benjamin 2♣ and 2♦"
   skill  bidding_conventions/benjamin_2d
 
 when opening
-  2C  "Benjamin 2♣: 22-23, or a strong two (about nine tricks)"   alert
+# The strong two: about nine tricks.
+  2C  "Benjamin 2♣: 22-23, or a strong two"   alert
       shows hcp=22..23 | (!balanced, hcp=20..23, losers<=4, (S>=6, quality(S)>=good) | (H>=6, quality(H)>=good) | (D>=6, quality(D)>=good) | (C>=6, quality(C)>=good) | shape 5-5-x-x | shape 6-5-x-x)
       sets  forcing=game, ask=strong_2c
       artificial
@@ -62,8 +63,8 @@ after 2C (P) 2D (P) 2M (P)
 # six-card minor bids it from 1 HCP; without either 2NT up to 6 and 3NT
 # from 7.
 when asked benjamin
-  2S  "Five or more spades (any strength)"         shows S>=5, S>=H
-  2H  "Five or more hearts (any strength)"         shows H>=5, H>S
+  2S  "Five or more spades, any strength"         shows S>=5, S>=H
+  2H  "Five or more hearts, any strength"         shows H>=5, H>S
   3C  "Six or more clubs, no five-card major"      shows C>=6, C>=D, H<=4, S<=4
   3D  "Six or more diamonds, no five-card major"   shows D>=6, D>C, H<=4, S<=4
   3N  "Positive: 7+ HCP, no five-card major or six-card minor"   shows hcp>=7, H<=4, S<=4, D<=5, C<=5
@@ -99,7 +100,7 @@ after 2D (P) 2M (P) 3M (P)
 # three or more, Benjamin_2D). With fewer the generic keycard ask
 # (rkcb-1430.bid, 18 of my own) asks anyway.
 after 2D (P) 2M (P) 3M (P) 4M (P) | 2D (P) 2N (P) 3M (P) 4M (P)
-  P   "Game: partner is weak and I have three losers or more"   shows losers>=3
+  P   "No slam interest"   shows losers>=3
       priority 1
 
 # Responder after opener's suit: raise with three (agreeing it), rebid a
@@ -120,7 +121,8 @@ after 2D (P) 2y (P) 2z (P) | 2D (P) 2y (P) 3z (P) | 2D (P) 3y (P) 3z (P) when y 
 # on every one: mostly 5NT, which responder answers 6NT, or 7NT with a
 # maximum; 6NT or 7NT directly with more.
 after 2D (P) 3N (P)
-  7N  "Grand slam: 37 or more between us"   shows hcp + partner.hcp.min >= 37
+  # 37 or more between us.
+  7N  "Grand slam"   shows hcp + partner.hcp.min >= 37
       priority 3
   5N  "Slam: 6NT, or 7NT with a maximum"    shows hcp>=23
       sets  forcing=game

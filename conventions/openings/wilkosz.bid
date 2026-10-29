@@ -27,7 +27,7 @@ define wilkosz_shape = (H>=5, S>=5) | (H>=5, C>=5) | (H>=5, D>=5) | (S>=5, C>=5)
 
 # ── The opening ──────────────────────────────────────────────────────
 when opening, seat<=3
-  2D  "Wilkosz: 5-5 or more in two suits, at least one a major, 5-10"   alert
+  2D  "Wilkosz: 5-5 in two suits, one a major, 5-10"   alert
       shows hcp=5..10, wilkosz_shape
       artificial
       priority 1
@@ -87,7 +87,7 @@ after 2D (P) 2S (P) 3C (P) | 2D (P) 2S (P) 3D (P) | 2D (P) 2H (P) 2S (P) 3C (P) 
 
 # They come in over the pass-or-correct response: opener passes.
 after 2D (P) 2H (*) | 2D (P) 2S (*)
-  P   "They came in: nothing more to say"
+  P   "No further bid"
       priority -5
 
 # ── Opener answers 2NT ───────────────────────────────────────────────

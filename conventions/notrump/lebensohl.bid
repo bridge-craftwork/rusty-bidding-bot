@@ -25,19 +25,19 @@ module lebensohl "Lebensohl after they overcall our 1NT"
 after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3), !rub
   # Game values with four of an unbid major: Stayman, fast without a
   # stopper, slow (through 2NT) with one. Ahead of the negative double.
-  3y  "Stayman, forcing to game: four of an unbid major, no stopper in {y}"  alert
+  3y  "Stayman, no stopper in {y}: a four-card major"  alert
       shows hcp>=10, !stop(y), H=4 | S=4, H<=4, S<=4
       when  y is D
       sets  forcing=game
       artificial
       priority 2
-  3y  "Stayman, forcing to game: four spades, no stopper in {y}"  alert
+  3y  "Stayman, no stopper in {y}: four spades"  alert
       shows hcp>=10, !stop(y), S=4
       when  y is H
       sets  forcing=game
       artificial
       priority 2
-  3y  "Stayman, forcing to game: four hearts, no stopper in {y}"  alert
+  3y  "Stayman, no stopper in {y}: four hearts"  alert
       shows hcp>=10, !stop(y), H=4
       when  y is S
       sets  forcing=game
@@ -126,19 +126,19 @@ after 1N (2y) 2N (P) 3C (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe
   3S  "Invitational: five or more spades"        shows S>=5, hcp=8..9
       when  y is D | y is H
       sets  ask=leb_invite(S)
-  3y  "Stayman with a stopper in {y}: four of an unbid major, forcing to game"  alert
+  3y  "Stayman, a stopper in {y}: a four-card major"  alert
       shows hcp>=10, stop(y), H=4 | S=4, H<=4, S<=4
       when  y is D
       sets  forcing=game
       artificial
       priority 1                                 # ahead of 3NT with the major
-  3y  "Stayman with a stopper in {y}: four spades, forcing to game"  alert
+  3y  "Stayman, a stopper in {y}: four spades"  alert
       shows hcp>=10, stop(y), S=4
       when  y is H
       sets  forcing=game
       artificial
       priority 1
-  3y  "Stayman with a stopper in {y}: four hearts, forcing to game"  alert
+  3y  "Stayman, a stopper in {y}: four hearts"  alert
       shows hcp>=10, stop(y), H=4
       when  y is S
       sets  forcing=game
@@ -173,4 +173,5 @@ after 1N (2y) 3y (P) when y is not C, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<
       when  y is not D
       priority -2
 after 1N (2y) 3y (P) 4m (P) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3), !rub
-  5m  "No stopper between us: game in {m}"
+  # Neither hand stops their suit: game in the minor, not 3NT.
+  5m  "Game in {m}"

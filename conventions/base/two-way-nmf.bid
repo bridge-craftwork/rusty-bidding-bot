@@ -15,7 +15,7 @@ module two-way-nmf "Two-way New Minor Forcing (xyNT)"
   param  xyz    = other_conventions.xyz default false
 
 after 1x (P) 1y (P) 1N (P) when twoway | xyz, !tw(x)
-  2C  "xyNT: relay to 2♦ (invitational, or weak with diamonds)"   alert
+  2C  "xyNT: relay to 2♦, invitational or a diamond sign-off"   alert
       shows points=11..12 | (D>=6, points<=10, y is not D, x is not D)
       sets  forcing=round, ask=xy_relay
       artificial
@@ -25,7 +25,7 @@ after 1x (P) 1y (P) 1N (P) when twoway | xyz, !tw(x)
       sets  forcing=game, ask=xy_gf
       artificial
       priority 1
-  2N  "xyNT: relay to 3♣ (weak with clubs)"   alert
+  2N  "xyNT: relay to 3♣, a club sign-off"   alert
       shows C>=6, points<=10
       when  x is not C, y is not C
       sets  forcing=round, ask=xy_clubs

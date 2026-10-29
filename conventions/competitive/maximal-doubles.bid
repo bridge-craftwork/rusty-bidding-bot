@@ -32,11 +32,11 @@ after 1M (*) 2M (3x) | (1y) 1M (*) 2M (3x) when (M is H, x is D) | (M is S, x is
       shows M>=6 | (M>=5, !balanced), tp(M)<=16
       sets  trump=M
       priority 1
-  4{M} "Game: 19+ with the fit"
+  4{M} "Game: 19+"
       shows tp(M)>=19
       sets  trump=M
       priority 1
-  P   "Nothing more to say"  priority -5
+  P   "No further bid"  priority -5
 
 # ── Partner answers the game try ─────────────────────────────────────
 # The raise was 6-10: the top of it (9+ support points) accepts.
@@ -49,4 +49,4 @@ when asked maximal(t)
 
 # ── Partner after the competitive 3M ─────────────────────────────────
 after 1M (*) 2M (3x) 3M (P) | (1y) 1M (*) 2M (3x) 3M (P) when (M is H, x is D) | (M is S, x is H)
-  P   "Partner's 3{M} was only competitive"  priority 1
+  P   "No further bid"  priority 1

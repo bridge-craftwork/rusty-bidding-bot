@@ -37,25 +37,25 @@ define ex_room(v) = keycards(trump) >= 3 | (keycards(trump) >= 2, ex_zero_room(v
 define ex_values = slam_values | slam_values_limited
 
 when we.trump is suit, !minor_given_way, !asked
-  5C  "Exclusion: a club void, how many keycards outside clubs?"  alert
+  5C  "Exclusion: ♣ void, how many keycards outside ♣?"  alert
       shows C=0, ex_values
       when  trump is not C, ex_level(C), ex_room(C)
       sets  ask=exclusion(C)
       artificial
       priority 12
-  5D  "Exclusion: a diamond void, how many keycards outside diamonds?"  alert
+  5D  "Exclusion: ♦ void, how many keycards outside ♦?"  alert
       shows D=0, ex_values
       when  trump is not D, ex_level(D), ex_room(D)
       sets  ask=exclusion(D)
       artificial
       priority 12
-  5H  "Exclusion: a heart void, how many keycards outside hearts?"  alert
+  5H  "Exclusion: ♥ void, how many keycards outside ♥?"  alert
       shows H=0, ex_values
       when  trump is not H, ex_level(H), ex_room(H)
       sets  ask=exclusion(H)
       artificial
       priority 12
-  5S  "Exclusion: a spade void, how many keycards outside spades?"  alert
+  5S  "Exclusion: ♠ void, how many keycards outside ♠?"  alert
       shows S=0, ex_values
       when  trump is not S, ex_level(S), ex_room(S)
       sets  ask=exclusion(S)
@@ -117,7 +117,7 @@ when asked exclusion(v), ropi, rho.last = X
   XX  "ROPI: no keycard"   shows ex_keys(v) = 0      artificial   when gstyle is bba       priority 5
   P   "ROPI: one keycard"  shows ex_keys(v) = 1      artificial   when gstyle is bba       priority 5
 when asked exclusion(v), !rho.last = P
-  6{trump}  "Slam: two keycards outside the void, with partner's"
+  6{trump}  "Small slam: two keycards outside the void"
       shows ex_keys(v) = 2
       priority 4
 
@@ -142,17 +142,17 @@ define ex_total(v) = keycards(trump) + ex_partner(v)
 define ex_queen(v) = has(Q,trump) | (gstyle is not bba, ex_s4(v))
 
 when answered exclusion(v)
-  7{trump}  "Grand slam: all four keycards outside the void and the {trump} queen"
+  7{trump}  "Grand slam"
             when  ex_total(v) >= 4, ex_queen(v)
-  6{trump}  "Small slam: at most one keycard missing"
+  6{trump}  "Small slam"
             when  ex_total(v) >= 3
   P         "Defend doubled: two keycards missing"
             when  ex_d1, partner.last = X, ex_total(v) <= 2
   X         "Penalty: two keycards missing"
             when  ex_d2, rho.last = P, lho_bid, lho.last >= 5C, lho.last <= 6S, ex_total(v) <= 2
-  P         "Sign off: partner's answer is in our suit"
+  P         "To play"
             when  partner.last = 5{trump}, ex_total(v) <= 2
-  5{trump}  "Sign off: two keycards missing"
+  5{trump}  "Signoff"
             when  ex_total(v) <= 2
-  6{trump}  "Small slam: the answer has passed five of our suit"
+  6{trump}  "Small slam"
             priority -1

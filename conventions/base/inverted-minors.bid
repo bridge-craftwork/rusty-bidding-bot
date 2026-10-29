@@ -57,9 +57,9 @@ after 1C (P) 2C (P)
 after 1C (P) 2C (P) 2N (P)
   3N  "Game values"                           shows hcp>=12 | (hcp>=11, C>=5)
   3C  "Minimum, to play"                      shows hcp<=11, hcp<=10 | C<=4, !balanced
-  P   "Minimum, balanced: 2NT is enough"      shows hcp<=11, hcp<=10 | C<=4, balanced
+  P   "Minimum, balanced"      shows hcp<=11, hcp<=10 | C<=4, balanced
 after 1C (P) 2C (P) 2N (P) 3C (P)
-  P   "Responder signed off"
+  P   "No further bid"
       priority -1
 after 1C (P) 2C (P) 3C (P)
   3N  "Game values, the majors held"          shows hcp>=12, stop(S), stop(H)
@@ -82,13 +82,13 @@ after 1C (P) 2C (P) 2D (P) 2N (P) | 1C (P) 2C (P) 2H (P) 2N (P) | 1C (P) 2C (P) 
   3C  "Minimum, unbalanced"                   shows hcp<=14
       priority -1
 after 1C (P) 2C (P) 3H (P)
-  3N  "Hearts held"                           shows hcp>=10, stop(H)
+  3N  "A heart stopper"                           shows hcp>=10, stop(H)
   5C  "Game in clubs"                        shows hcp>=12
       priority -1
   4C  "Minimum"                               shows hcp<=11
       priority -1
 after 1C (P) 2C (P) 3S (P)
-  3N  "Spades held"                           shows hcp>=10, stop(S)
+  3N  "A spade stopper"                           shows hcp>=10, stop(S)
   5C  "Game in clubs"                        shows hcp>=12
       priority -1
   4C  "Minimum"                               shows hcp<=11
@@ -113,9 +113,9 @@ after 1D (P) 2D (P)
 after 1D (P) 2D (P) 2N (P)
   3N  "Game values"                           shows hcp>=12 | (hcp>=11, D>=5)
   3D  "Minimum, to play"                      shows hcp<=11, hcp<=10 | D<=4, !balanced
-  P   "Minimum, balanced: 2NT is enough"      shows hcp<=11, hcp<=10 | D<=4, balanced
+  P   "Minimum, balanced"      shows hcp<=11, hcp<=10 | D<=4, balanced
 after 1D (P) 2D (P) 2N (P) 3D (P)
-  P   "Responder signed off"
+  P   "No further bid"
       priority -1
 after 1D (P) 2D (P) 3D (P)
   3N  "Game values, the majors held"          shows hcp>=12, stop(S), stop(H)
@@ -138,13 +138,13 @@ after 1D (P) 2D (P) 2H (P) 2N (P) | 1D (P) 2D (P) 2S (P) 2N (P)
   3D  "Minimum, unbalanced"                   shows hcp<=14
       priority -1
 after 1D (P) 2D (P) 3H (P)
-  3N  "Hearts held"                           shows hcp>=10, stop(H)
+  3N  "A heart stopper"                           shows hcp>=10, stop(H)
   5D  "Game in diamonds"                        shows hcp>=12
       priority -1
   4D  "Minimum"                               shows hcp<=11
       priority -1
 after 1D (P) 2D (P) 3S (P)
-  3N  "Spades held"                           shows hcp>=10, stop(S)
+  3N  "A spade stopper"                           shows hcp>=10, stop(S)
   5D  "Game in diamonds"                        shows hcp>=12
       priority -1
   4D  "Minimum"                               shows hcp<=11
@@ -153,8 +153,8 @@ after 1D (P) 2D (P) 3S (P)
 
 # Opener after responder's minimum over the splinter.
 after 1C (P) 2C (P) 3x (P) 4C (P) when x is H | x is S
-  P   "Responder signed off"
+  P   "No further bid"
       priority -1
 after 1D (P) 2D (P) 3x (P) 4D (P) when x is H | x is S
-  P   "Responder signed off"
+  P   "No further bid"
       priority -1

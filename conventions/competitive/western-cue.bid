@@ -72,7 +72,7 @@ when western, asked western(y)
   cheapest(S)  "No stopper in {y}: spades"
       when  y is not S, S>=5 | we.fit(S).min>=7
       prefer S + partner.S.min
-  3N  "No stopper and nothing to show: 3NT anyway"
+  3N  "3NT: no stopper, no suit to show"
       priority -5
 
 # ── The asker places the contract ─────────────────────────────────────
@@ -81,19 +81,19 @@ when western, asked western(y)
 # minor fit; 3NT once more if partner's suit is a minor and no fit.
 
 when western, answered western(y)
-  P   "Partner has the stopper: 3NT"
+  P   "Plays 3NT"
       when  partner.last = 3N
       priority 2
   4H  "Game in the heart fit"
       when  we.fit(H).min >= 8
   4S  "Game in the spade fit"
       when  we.fit(S).min >= 8
-  5C  "Game in clubs: their suit is not stopped"
+  5C  "Game in clubs: no stopper"
       when  we.fit(C).min >= 8
       prefer we.fit(C).min
-  5D  "Game in diamonds: their suit is not stopped"
+  5D  "Game in diamonds: no stopper"
       when  we.fit(D).min >= 8
       prefer we.fit(D).min
-  P   "Partner's game"
+  P   "Plays partner's game"
       when  partner.last = 4H | partner.last = 4S | partner.last = 5C | partner.last = 5D
       priority 1

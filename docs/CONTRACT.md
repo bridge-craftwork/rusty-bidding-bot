@@ -336,6 +336,34 @@ These are the habits the rule set in this repository follows
     ("Stayman: asks for a 4-card major"), `alert` when it is alertable, and
     a `shows` for what the hand promises; `when` only for what is not
     promised to partner.
+  - **The explanation is what the table is told** (Rick, 2026-10-29). The
+    engine adds what the call newly showed (`Step::announcement`: "5+
+    spades; 10-21 HCP"), and the classroom, the auction explorer and the
+    Brill seat's opponents read the result. So the text says what the
+    call *shows or asks*, not why this hand chose it:
+    - The convention's name first when there is one, then what it
+      shows: "Splinter: 4+ ♥, at most one ♠", "Keycard ask in {t}",
+      "Mixed raise: 4+ {y}, 7-9 support points".
+    - No reasons or judgment: not "the last suit we bid", "the major fit
+      replaces the minor", "34 or more between us", "ten+ trumps between
+      us: the four level". Keep the reason as a `#` comment above the rule.
+    - No notes about the card or the rule set in the text: not "(6-12
+      when no limit raise is played)"; the rule's `card` or `when` says
+      that. No parentheses unless they belong to what a player would say.
+    - A catch-all pass says what it shows, not that the engine ran out
+      of rules: "No further bid", "No overcall", not "Defending: nothing
+      more to say" or "Game reached: nothing more to say".
+    - Rules that read the same call share their name before a colon
+      ("Notrump opening: 15-17 HCP, balanced" and "Notrump opening:
+      15-17 HCP, 5-4-2-2"): when several rules read a call, the table is
+      told the text they share, else only the name, else only the facts.
+    - Short: about 50 characters, one clause after the name. HCP and
+      lengths are worth stating when they are the point of the call; the
+      engine adds the rest.
+    - Suits by symbol or `{x}`; the engine spells them out for robots
+      ("spades", which Brill parses). Keep the convention names Brill
+      knows (Stayman, Jacoby, transfer, splinter, Blackwood).
+    `probes/tools/desc_lint.py` lists the texts that break these rules.
   - Write later rounds against state (`asked`, `answered`, `we.trump`,
     `strength` bands), not against listed auctions (LANGUAGE.md §10).
   - Use `priority` sparingly, and say why in a trailing comment.

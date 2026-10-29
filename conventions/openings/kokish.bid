@@ -29,7 +29,7 @@ after 2C (P) 2D (P)
 
 # ── Responder completes the relay ────────────────────────────────────
 when asked kokish
-  2S  "Completes the relay (forced)"   alert
+  2S  "Completes the relay"   alert
       artificial
       priority 2
 

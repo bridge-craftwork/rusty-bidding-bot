@@ -98,12 +98,12 @@ when we.trump is none, !asked, !they.bid   # uncontested for now: in competition
 # (1H-1S-2H-4NT asks for aces with hearts agreed). The ask sets it as
 # trump. As in rkcb-1430.bid.
 when we.trump is none, !asked, !they.bid
-  4N  "Blackwood, agreeing ♠ (the last suit we bid): how many aces?"
+  4N  "Blackwood, agreeing ♠: how many aces?"
       when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=aces
       artificial
       priority -1
-  4N  "Blackwood, agreeing ♥ (the last suit we bid): how many aces?"
+  4N  "Blackwood, agreeing ♥: how many aces?"
       when  kc_open(H), !shown_fit(S), !shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=aces
       artificial
@@ -124,12 +124,12 @@ when we.trump is none, !asked, !they.bid
 # A minor set as trump, and a major agreed since (Rick, 2026-10-03): the
 # major is trump.
 when minor_given_way, !asked
-  4N  "Blackwood, ♠ agreed (the major fit replaces the minor): how many aces?"
+  4N  "Blackwood, agreeing ♠: how many aces?"
       when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=aces
       artificial
       priority 1
-  4N  "Blackwood, ♥ agreed (the major fit replaces the minor): how many aces?"
+  4N  "Blackwood, agreeing ♥: how many aces?"
       when  major_over_minor(H), !major_over_minor(S), fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=aces
       artificial
@@ -171,18 +171,19 @@ when asked aces
 when answered aces
   # The king ask (`slam.king_ask.five_nt`, 2026-10-05): all four aces
   # are ours and the grand turns on the kings.
-  5N        "King ask: all the aces are ours, how many kings?"
+  5N        "King ask: all the aces held"
             when kask5n, we.keycards(N)=4
             sets ask=kings(N)
             artificial
             priority 1
-  6{trump}  "Small slam: at most one ace missing"
+  6{trump}  "Small slam"
             when we.keycards(N)>=3
-  P         "Sign off: the answer is in our suit"
+  P         "To play"
             when partner.last=5{trump}, we.keycards(N).max<=2
-  5{trump}  "Sign off: two aces missing"
+  5{trump}  "Signoff"
             when we.keycards(N).max<=2
-  6{trump}  "Small slam: \"0 or 4\" with no aces of my own is 4"
+  # "0 or 4" facing no ace of my own is four.
+  6{trump}  "Small slam"
             when maybe we.keycards(N)>=3
             priority -1
 
@@ -203,11 +204,11 @@ when kask5n, asked kings(N)
 define partner_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N)
 
 when kask5n, answered kings(N)
-  7{trump}  "Grand slam: every king is ours"
+  7{trump}  "Grand slam"
             when bw_kings + partner_kings >= 4
-  7{trump}  "Grand slam: three kings and 33 HCP between us"
+  7{trump}  "Grand slam"
             when bw_kings + partner_kings >= 3, hcp + partner.hcp.min >= 33
-  P         "Small slam: partner's answer is our suit"
+  P         "To play"
             when partner.last = 6{trump}
-  6{trump}  "Small slam: a king missing"
-  6N        "Small slam: the answer has passed six of our suit"
+  6{trump}  "Small slam"
+  6N        "Small slam"

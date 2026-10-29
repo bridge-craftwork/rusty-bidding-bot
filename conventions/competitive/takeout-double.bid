@@ -26,7 +26,7 @@ module takeout-double "Takeout doubles"
 
 # ── The double ───────────────────────────────────────────────────────
 after (1x)
-  X   "Takeout: 12+ total points and the unbid suits, or 18+ with any shape"
+  X   "Takeout: the unbid suits and 12+, or any 18+"
       shows hcp+length_points>=12
       shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C)) | hcp>=oc_max+1
       # A queen or jack, alone, in a doubleton of their suit is marked
@@ -92,7 +92,7 @@ after (1x) X (P) | (1x) P (P) X (P)
 
 # The cue bid is the only game force: 12+ with no clear suit to jump in.
 after (1x) X (P) | (1x) P (P) X (P)
-  2{x} "Cue bid: 12+ total points, asking partner to describe his hand"
+  2{x} "Cue bid: 12+ total points, asks for a description"
       alert  artificial
       shows  hcp+length_points>=12
       sets   forcing=game
@@ -104,7 +104,7 @@ after (1x) X (P) | (1x) P (P) X (P)
 # bids its own suit, raises with support, or bids notrump with a
 # stopper. This is the second half of "double first, then bid the suit".
 after (1x) X (P) 1y (P) | (1x) P (P) X (P) 1y (P)
-  P   "Minimum takeout double: partner has chosen"
+  P   "Minimum takeout double"
       shows hcp<=16
       priority -5
   2{y} "18-19 total points, four-card support"
@@ -131,12 +131,12 @@ after (1x) X (P) 1y (P) | (1x) P (P) X (P) 1y (P)
       when  x is not C, y is not C
 
 after (1x) X (P) 2y (P) | (1x) P (P) X (P) 2y (P)
-  P   "Minimum takeout double: partner has chosen"
+  P   "Minimum takeout double"
       shows hcp<=16
       priority -5
-  3{y} "18+ total points, four-card support"
+  3{y} "Strong raise: four-card support, 18+"
       shows y>=4, hcp+length_points>=18 | hcp>=17
-  3{y} "20+ and three-card support"
+  3{y} "Strong raise: three-card support, 20+"
       shows y=3, hcp>=20
   cheapest(S) "18+ total points and a five-card spade suit"
       shows S>=5, hcp+length_points>=18 | hcp>=17
@@ -169,7 +169,7 @@ after (1x) X (2x) P (P)
       when  x is not H
       priority 1
   X   "Takeout again: short in {x}"                 shows x<=1, hcp>=12
-  P   "Nothing more"                                priority -5
+  P   "No further bid"                                priority -5
 
 # Advancer after the second double: it is still for takeout. Bid the
 # longest unbid suit, a major first; pass only with a trump stack.
@@ -198,7 +198,7 @@ after (1x) X (P) 1y (2x) | (1x) X (P) 2y (2x)
   # Raptor self A/B: 1♣ X P 1♥ 2♣ passed with 18 HCP; BBA bids 2NT).
   2N  "18-19 balanced with a stopper in {x}"       shows balanced, hcp=17..19
       when  stop(x)
-  P   "Nothing more"                                priority -5
+  P   "No further bid"                                priority -5
 
 # The doubler when their responder bid over the double, partner passed
 # and opener bid again (2026-09-25: 1H (X) 1S (P) 1NT, where 18+ with a
@@ -368,11 +368,11 @@ after (1x) P (2x) X (P)
   cheapest(C) "Four or more clubs"      shows C>=4, C>=D, S<=3 | x is S, H<=3 | x is H
       when  x is not C
   # No four-card suit: the longest unbid suit, cheapest first.
-  cheapest(C) "Our best suit: clubs"    when x is not C, C>=D | x is D
+  cheapest(C) "No four-card suit: clubs"    when x is not C, C>=D | x is D
       priority -5
-  cheapest(D) "Our best suit: diamonds" when x is not D, D>C | x is C
+  cheapest(D) "No four-card suit: diamonds" when x is not D, D>C | x is C
       priority -5
-  cheapest(H) "Our best suit: hearts"   when x is not H
+  cheapest(H) "No four-card suit: hearts"   when x is not H
       priority -6
-  cheapest(S) "Our best suit: spades"   when x is not S
+  cheapest(S) "No four-card suit: spades"   when x is not S
       priority -7

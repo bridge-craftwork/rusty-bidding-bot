@@ -82,15 +82,15 @@ after (1x) 1y (3x) | (1x) 2y (4x)
 # cheapest level. Written against the question, so it is the same rule
 # after a double of their raise at any level.
 when asked responsive
-  cheapest(S) "Spades, partner's choice taken"
+  cheapest(S) "Preference: spades"
       shows S>=3, S>=H
       when  partner.S>=4
-  cheapest(H) "Hearts, partner's choice taken"
+  cheapest(H) "Preference: hearts"
       shows H>=3, H>S
       when  partner.H>=4
-  cheapest(D) "Diamonds, partner's choice taken"
+  cheapest(D) "Preference: diamonds"
       shows D>=3, D>=C
       when  partner.D>=4
-  cheapest(C) "Clubs, partner's choice taken"
+  cheapest(C) "Preference: clubs"
       shows C>=3, C>D
       when  partner.C>=4

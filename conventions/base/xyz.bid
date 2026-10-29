@@ -16,7 +16,7 @@ module xyz "XYZ: 2♣ relay and 2♦ game force after three one-level bids"
   skill  bidding_conventions/xyz
 
 after 1x (P) 1y (P) 1z (P) when !tw(x)
-  2C  "XYZ: relay to 2♦ (invitational, or weak with diamonds)"   alert
+  2C  "XYZ: relay to 2♦, invitational or a diamond sign-off"   alert
       shows points=11..12 | (points<=10, D>=6 | (x is D, D>=4, z<=2))
       sets  forcing=round, ask=xy_relay
       artificial
@@ -26,7 +26,7 @@ after 1x (P) 1y (P) 1z (P) when !tw(x)
       sets  forcing=game, ask=xy_gf
       artificial
       priority 2
-  2N  "XYZ: relay to 3♣ (weak with clubs)"   alert
+  2N  "XYZ: relay to 3♣, a club sign-off"   alert
       shows points<=10, C>=6 | (x is C, C>=5, z<=2)
       sets  forcing=round, ask=xy_clubs
       artificial

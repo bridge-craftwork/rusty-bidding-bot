@@ -49,7 +49,7 @@ after nt1 4H (P)
 when answered texas(M)
   4N  "Keycard ask in {M}"   shows suit_points>=33-partner.points.min   sets ask=keycards(M)  artificial
   4N  "Keycard ask in {M}"   shows tp(M)>=33-partner.points.min   sets ask=keycards(M)  artificial
-  P   "Game reached"
+  P   "No slam interest"
 
 # Texas over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`).
 after 1N (2C) when vs_2c

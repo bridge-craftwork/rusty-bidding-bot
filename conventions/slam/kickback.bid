@@ -131,32 +131,32 @@ when kickback_on, asked kickback(t), rho.last = P
 # suit: pass it with two keycards missing.
 
 when kickback_on, answered kickback(t)
-  7{t}  "Grand slam: every keycard and the {t} queen"
+  7{t}  "Grand slam"
         when  we.keycards(t)=5, has(Q,t) | partner.last = 5{t}, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
   # The king ask, as after 4NT (rkcb-1430.bid answers it); the self A/B
   # (2026-10-05) lost the grands that 4NT-5NT found.
-  5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
+  5N    "King ask: all keycards and the {t} queen held"
         when  kask5n, we.keycards(t)=5, has(Q,t) | partner.last = 5{t}
         sets  ask=kings(t)
         artificial
-  6{t}  "Small slam: at most one keycard missing"
+  6{t}  "Small slam"
         when  we.keycards(t)>=4
   # The count that fits (rkcb-1430.bid, `kc_high`): with 30 HCP between
   # us the low count of an open answer is impossible.
-  7{t}  "Grand slam: the high count is the one that fits, all five and the {t} queen"
+  7{t}  "Grand slam"
         when  kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5{t}, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
-  5N    "King ask: the high count fits, all the keycards and the {t} queen are ours"
+  5N    "King ask: all keycards and the {t} queen held"
         when  kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5{t}
         sets  ask=kings(t)
         artificial
-  6{t}  "Small slam: the high count is the one that fits"
+  6{t}  "Small slam"
         when  kc_high(t)
-  P     "Sign off: partner's answer is five of our suit"
+  P     "To play"
         when  partner.last=5{t}, we.keycards(t).max<=3
-  5{t}  "Sign off: two keycards missing"
+  5{t}  "Signoff"
         when  we.keycards(t).max<=3
         sets  ask=kb_correct(t)
-  5{t}  "Sign off: partner corrects to six with the higher count"
+  5{t}  "Signoff"
         when  maybe we.keycards(t)>=4
         sets  ask=kb_correct(t)
 

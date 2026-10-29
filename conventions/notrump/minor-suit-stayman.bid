@@ -19,7 +19,7 @@ module minor-suit-stayman "Minor Suit Stayman over 1NT"
   param  k0314 = slam.blackwood.rkcb_0314 default false
 
 after nt1_undoubled when !they.bid | systems_on
-  2S  "Minor Suit Stayman: five-four or better in the minors, game values"  alert
+  2S  "Minor Suit Stayman: 5-4+ in the minors, game values"  alert
       shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=game
       sets  forcing=game
       artificial

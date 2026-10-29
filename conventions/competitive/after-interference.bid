@@ -34,7 +34,7 @@ module after-interference "Our side once the opponents come in"
 
 # ── They overcalled at the one level ─────────────────────────────────
 after 1x (1y) when neg
-  X   "Negative double: 6+ total points, four or more in each unbid major"
+  X   "Negative double: 6+ total points, the unbid suits"
       alert  artificial
       shows  hcp+length_points>=6
       shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
@@ -52,9 +52,11 @@ after 1x (1y) when neg
 # (responder-rebids.bid). The holding: four or more with two of the top
 # three or three of the top five (Rick's penalty-double standard,
 # 2026-09-23), and 8+ HCP. The condition is `when`, not `shows`: a pass
-# still says nothing, so opener does not read every pass as a trap.
+# still says nothing, so opener does not read every pass as a trap. Not
+# disclosed as a possible trap either: it is the same "No suitable bid" as
+# every other pass here, and usually is one (Rick, 2026-10-29).
 after 1x (1y) | 1x (2y) when y is not x, neg
-  P   "Trap pass: length and strength in {y}"
+  P   "No suitable bid"
       when  y>=4, quality(y)>=good | top5(y)>=3, hcp>=8, x<=2
       priority 2
 
@@ -77,7 +79,7 @@ after 1x (1y)
       when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
   # BBA's 1C (1S) 3C (2026-09-27, ticket b469): the jump raise over an
   # overcall is preemptive, as over the double.
-  jump(x) "Preemptive raise: five-card support (six in a minor), less than 8"
+  jump(x) "Preemptive raise: five-card support, six in a minor, under 8"
       shows x>=5, hcp+length_points<=7
       shows minor_preempt(x)              # nine trumps: six over a minor (total-tricks.bid)
   cheapest(C) "8+ total points, five or more clubs"
@@ -136,12 +138,12 @@ after 1x (1y)
       shows balanced, hcp+length_points>=13
       when  stop(y)
       when  (S<=3 | x is S | y is S), (H<=3 | x is H | y is H)
-  P   "Nothing to say over the overcall"  priority -10
+  P   "No suitable bid"  priority -10
 
 # Opener when they raise over the one-level cue bid: game in a major
 # with 16+, else let it go (the cue bid is no longer forcing).
 after 1x (1y) 2y (3y) when y is not x
-  4{x} "Game: 16+ opposite the limit raise"   shows hcp>=16
+  4{x} "Game: 16+"   shows hcp>=16
        when  x is H | x is S
   3N   "Game: 16+ with a stopper in {y}"       shows hcp>=16, stop(y)
        when  x is C | x is D
@@ -151,29 +153,29 @@ after 1x (1y) 2y (3y) when y is not x
   # The minor cue bid promised four, so a fifth card is nine trumps:
   # compete at the four level (2026-09-27: these hands passed once the
   # round force ended with their raise, -159 IMPs by side on 57 boards).
-  4{x} "Competes: five or more {x}, nine trumps"
+  4{x} "Competes: five or more {x}"
        shows x>=5
        when  x is C | x is D
        priority -4
-  P    "They competed: no game"
+  P    "No game"
        priority -5
 
 # Responder once opener has passed their raise, or competed in his
 # minor: the cue bid was 11+ with no upper limit, so with 13+ responder
 # bids the game himself.
 after 1x (1y) 2y (3y) P (P) when y is not x
-  4{x} "Game: 13+ opposite opener's minimum"   shows hcp+length_points>=13
+  4{x} "Game: 13+"   shows hcp+length_points>=13
        when  x is H | x is S
   3N   "Game: 13+ with a stopper in {y}"       shows hcp+length_points>=13, stop(y)
        when  x is C | x is D
   5{x} "Game in the minor: 14+"                shows hcp+length_points>=14
        when  x is C | x is D
        priority -1
-  P    "The limit raise: they have bought it"
+  P    "Limit raise only"
        priority -5
 after 1x (1y) 2y (3y) 4x (P) when x is C | x is D, y is not x
-  5{x} "Game in the minor: 13+ opposite the fifth trump"  shows hcp+length_points>=13
-  P    "The limit raise: no game"
+  5{x} "Game in the minor: 13+"  shows hcp+length_points>=13
+  P    "Limit raise only"
        priority -5
 
 # ── Weak jump shifts over their one-level overcall ───────────────────
@@ -198,14 +200,14 @@ after 1x (1y) when y is not x, js is weak, !passed_hand | !fsj
       priority 2
 # Opener passes the weak jump unless something else fits better.
 after 1x (1y) 2z (P) when partner.jumped, js is weak, z is not x, z is not y
-  P   "Partner's jump was weak"             priority -5
+  P   "No further bid"             priority -5
 
 # ── They overcalled at the two level or jumped ───────────────────────
 # Rick: over a two-level overcall a new suit is 10+ total points with five
 # cards and forcing, and the negative double is 8+ with four. At the three
 # level the free bid needs another point.
 after 1x (2y) | 1x (3y) when y is not x
-  X   "Negative double: 8+ total points, four or more in each unbid major"
+  X   "Negative double: 8+ total points, the unbid suits"
       alert  artificial
       shows  hcp+length_points>=8
       shows  (S>=4 | x is S | y is S), (H>=4 | x is H | y is H)
@@ -219,7 +221,7 @@ after 1x (2y) | 1x (3y) when y is not x
       when   cue_raise
       sets   forcing=round
       priority 1
-  cheapest(x) "Raise: 7-10 total points, three-card support (five in a minor)"
+  cheapest(x) "Raise: 7-10, three-card support, five in a minor"
       shows x>=3, hcp+length_points>=7, hcp+length_points<=10
       shows minor_raise(x)                # eight trumps: five over a minor (total-tricks.bid)
   cheapest(S) "10+ total points, five or more spades"
@@ -290,22 +292,22 @@ after 1x (2y) | 1x (3y) when y is not x
   3N  "13+ total points, balanced, a stopper in {y}"
       shows balanced, hcp+length_points>=13
       when  stop(y)
-  P   "Nothing to say over their overcall"  priority -10
+  P   "No suitable bid"  priority -10
 
 # ── They doubled for takeout ─────────────────────────────────────────
 # Redouble shows the balance of the strength; everything else is what it
 # would have been, a level lower in ambition.
 after 1x (X)
-  XX  "Redouble: 10+ total points, we own the hand"
+  XX  "Redouble: 10+ total points"
       alert  artificial
       shows hcp+length_points>=10
       when  S<=4 | x is S | hcp>=12        # BBA: a five-card spade suit with 10-11 bids 1S
       when  H<=4 | x is H | x is S | hcp>=12   # and five hearts over a minor bid 1H
       priority 1
-  cheapest(S) "6-9 total points, four or more spades (10-11 with five)"
+  cheapest(S) "6-9 total points, four or more spades, or 10-11 with five"
       shows S>=4, S>H, hcp+length_points>=6, hcp+length_points<=9 | (S>=5, hcp<=11)
       when  x is not S
-  cheapest(H) "6-9 total points, four or more hearts (10-11 with five)"
+  cheapest(H) "6-9 total points, four or more hearts, or 10-11 with five"
       shows H>=4, H>=S, hcp+length_points>=6, hcp+length_points<=9 | (H>=5, hcp<=11)
       when  x is not H, x is not S
   cheapest(D) "6-9 total points, four or more diamonds"
@@ -323,7 +325,7 @@ after 1x (X)
       when  (S<=3 | x is S), (H<=3 | x is H)
       when  x<=2 | x is C | x is D
       when  !tfr | x is C | x is D          # a transfer to clubs (transfers-after-double.bid)
-  P   "Nothing to say over the double"  priority -10
+  P   "No suitable bid"  priority -10
 
 # ── Opener answers a negative double ─────────────────────────────────
 # Partner has shown four or more cards in each unbid major and 6+ total
@@ -333,10 +335,10 @@ after 1x (X)
 # double is forcing: opener always bids something, and jumps with 16-18.
 # Relative calls keep one set of rules right at every level.
 after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
-  cheapest(S) "Four spades for partner's double, minimum"
+  cheapest(S) "Four spades, minimum"
       shows S>=4, tp(S)<=15
       when  x is not S, y is not S
-  cheapest(H) "Four hearts for partner's double, minimum"
+  cheapest(H) "Four hearts, minimum"
       shows H>=4, tp(H)<=15
       when  x is not H, y is not H
   jump(S) "Four spades, 16-18"
@@ -359,7 +361,7 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
   cheapest(x) "Rebids {x}: six or more, minimum"
       shows x>=6, hcp<=15
       when  x is H | x is S
-  cheapest(x) "Rebids {x}: five or more (usually six), minimum"
+  cheapest(x) "Rebids {x}: five or more, minimum"
       shows x>=5, hcp<=15
       when  x is C | x is D
       when  x>=6
@@ -368,10 +370,10 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
   # Partner promised four, so three is an eight-card fit and BBA bids it:
   # `1D (1S) X (P) 2H` on KQ6.832.KT84.A64. Below the four-card bids and
   # the notrump rebid, above naming a minor.
-  4S  "Four spades, 19+: game in the fit partner promised"
+  4S  "Game: four spades, 19+"
       shows S>=4, tp(S)>=19
       when  x is not S, y is not S
-  4H  "Four hearts, 19+: game in the fit partner promised"
+  4H  "Game: four hearts, 19+"
       shows H>=4, tp(H)>=19
       when  x is not H, y is not H
   # Where both majors are bid the double showed the minors, and where
@@ -390,15 +392,15 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       priority -1
   # Partner promised four, so three is an eight-card fit and BBA bids it
   # once it has nothing else: `1D (1S) X (P) 2H` on KQ6.832.KT84.A64.
-  cheapest(S) "Three spades for partner's four, minimum"
+  cheapest(S) "Three spades, minimum"
       shows S>=3, hcp<=15
       when  x is not S, y is not S, partner.S>=4
       priority -2
-  cheapest(H) "Three hearts for partner's four, minimum"
+  cheapest(H) "Three hearts, minimum"
       shows H>=3, hcp<=15
       when  x is not H, y is not H, partner.H>=4
       priority -2
-  cheapest(x) "Five cards in {x}, minimum, nothing better to say"
+  cheapest(x) "Rebids {x}: five cards, minimum"
       shows x>=5, hcp<=15
       priority -2
   # Strong hands with no fit and no balanced notrump (2026-09-25: 19-20
@@ -415,7 +417,7 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       when  lho.last=1{y} | lho.last=2{y}
       sets  forcing=game
       priority -2
-  cheapest(x) "Nothing better to say over partner's double"
+  cheapest(x) "Rebids {x}: no better bid"
       priority -5
 
 # ── Opener answers the cue-bid raise ─────────────────────────────────
@@ -437,7 +439,7 @@ after 1x (1y) 2y (P) | 1x (2y) 3y (P) | 1x (3y) 4y (P) when y is not x   # their
       shows hcp>=16
       when  x is C | x is D
       priority -1
-  cheapest(x) "No game opposite a limit raise"
+  cheapest(x) "Minimum: signs off"
       priority -2
 
 # Responder after opener's sign-off: the cue bid was 11+ with no upper
@@ -446,13 +448,13 @@ after 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) | 1x (2y) 3y (P) 4x (P) when
   3N  "Game: 13+ with a stopper in {y}"   shows hcp+length_points>=13, stop(y)
   5{x} "Game in the minor: 14+"          shows hcp+length_points>=14
       priority -1
-  P   "The limit raise: no game"
+  P   "Limit raise only"
       priority -5
 after 1x (2y) 3y (P) 4x (P) when x is H | x is S, y is not x
   P   "Game reached"
 after 1x (1y) 2y (P) 2x (P) | 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) when x is H | x is S, y is not x
-  4{x} "Game: 13+ opposite the sign-off"  shows hcp+length_points>=13
-  P   "The limit raise: no game"
+  4{x} "Game: 13+"  shows hcp+length_points>=13
+  P   "Limit raise only"
       priority -5
 
 # ── Opener when they compete over the negative double ────────────────
@@ -464,10 +466,10 @@ after 1x (1y) 2y (P) 2x (P) | 1x (1y) 2y (P) 3x (P) | 1x (2y) 3y (P) 3x (P) when
 # the next level: over a jump by them BBA passes almost always, and we
 # leave that to the pass below.
 after 1x (1y) X (2z) | 1x (2y) X (3z) when y is not x
-  cheapest(S) "Four spades, competing over their bid"
+  cheapest(S) "Four spades, minimum"
       shows S>=4, tp(S)<=15
       when  x is not S, y is not S
-  cheapest(H) "Four hearts, competing over their bid"
+  cheapest(H) "Four hearts, minimum"
       shows H>=4, tp(H)<=15
       when  x is not H, y is not H
   jump(S) "Four spades, 16-18"
@@ -483,24 +485,24 @@ after 1x (1y) X (2z) | 1x (2y) X (3z) when y is not x
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19
       when  stop(y)
-  cheapest(x) "Six cards in {x} and the values to bid again"
+  cheapest(x) "Six or more {x}, 13+"
       shows x>=6, hcp>=13
-  P   "Minimum: they have bought it"  priority -10
+  P   "No further bid"  priority -10
 
 # They jumped over the double. Most of these hands pass in the corpus,
 # so opener only bids on with real extras: a four-card major for the one
 # partner promised, or a stopper, and 13+ HCP to go with it.
 after 1x (1y) X (3z) | 1x (1y) X (4z) | 1x (2y) X (4z) | 1x (3y) X (4z) when y is not x
-  cheapest(S) "Four spades and 13+: worth competing over their jump"
+  cheapest(S) "Four spades, 13+"
       shows S>=4, hcp>=13
       when  x is not S, y is not S
-  cheapest(H) "Four hearts and 13+: worth competing over their jump"
+  cheapest(H) "Four hearts, 13+"
       shows H>=4, hcp>=13
       when  x is not H, y is not H
   cheapest(N) "13+ balanced with a stopper in {y}"
       shows balanced, hcp>=13
       when  stop(y)
-  P   "They jumped over the double: no room to describe the hand"  priority -10
+  P   "No further bid"  priority -10
 
 # ── Fallback: a player on the opening side who passed last time ──────
 # They have come in, and I passed at my last turn: with nothing new to
@@ -508,13 +510,13 @@ after 1x (1y) X (3z) | 1x (1y) X (4z) | 1x (2y) X (4z) | 1x (3y) X (4z) when y i
 # positions in Basic_* N/S boards, e.g. 1C P P X P 2N and
 # 1D (2C) P (2S) 3D (P), where responder had passed with 0-5 or 8).
 when they.bid, !lho.opened, !rho.opened, me.last=P   # our side opened
-  P   "Passed last time, nothing new to say"
+  P   "No further bid"
       when  !passes_out_artificial   # never pass out our own artificial bid (base.bid)
       priority -20
 # And when partner passed at his last turn: he has nothing more, and I
 # have described my hand (2026-09-25: 1S (X) 2S (3C) P (P), the raiser).
 when they.bid, !lho.opened, !rho.opened, partner.last=P
-  P   "Partner passed: nothing new to say"
+  P   "No further bid"
       when  !passes_out_artificial   # never pass out our own artificial bid (base.bid)
       priority -20
 
@@ -522,5 +524,5 @@ when they.bid, !lho.opened, !rho.opened, partner.last=P
 # Partner was forced to bid; opener goes on only with game values.
 after 1x (1y) P (P) X (P) 2z (P) | 1x (1y) P (P) X (P) 3z (P) | 1x (2y) P (P) X (P) 2z (P) | 1x (2y) P (P) X (P) 3z (P) | 1x (3y) P (P) X (P) 3z (P) | 1x (3y) P (P) X (P) 4z (P) when y is not x, z is not y
   3N  "Game: 18+ with a stopper in {y}"    shows hcp>=18, stop(y)
-  P   "Partner's forced answer: no game"
+  P   "No game"
       priority -10

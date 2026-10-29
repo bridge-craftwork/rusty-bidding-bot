@@ -40,7 +40,7 @@ after (2D) when maybe rho.H>=6, maybe rho.S>=6, maybe rho.D<=3
       priority 3
   3S  "Natural: six or more spades, a good overcall"   shows S>=6, hcp=13..16
       priority 3
-  P   "Nothing to say over their Multi"
+  P   "No overcall"
       priority 1
 
 # ── Fourth seat, after their pass-or-correct response ────────────────
@@ -55,7 +55,7 @@ after (2D) P (2H) when maybe lho.H>=6, maybe lho.S>=6, maybe lho.D<=3
       priority 2
   3D  "Natural: six or more diamonds"                shows D>=6, hcp=10..15
       priority 2
-  P   "Nothing to say over their Multi"
+  P   "No overcall"
       priority 1
 after (2D) P (2S) when maybe lho.H>=6, maybe lho.S>=6, maybe lho.D<=3
   X   "Takeout of spades: 13+"                       shows S<=2, H>=3, hcp>=13
@@ -68,5 +68,5 @@ after (2D) P (2S) when maybe lho.H>=6, maybe lho.S>=6, maybe lho.D<=3
       priority 2
   3H  "Natural: five or more hearts"                 shows H>=5, hcp=11..15
       priority 2
-  P   "Nothing to say over their Multi"
+  P   "No overcall"
       priority 1

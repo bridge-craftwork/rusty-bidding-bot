@@ -20,7 +20,7 @@ define two_level_jump(x, y) = y is C | (y is D, x is H | x is S) | (y is H, x is
 
 # ── Opener after a weak jump shift at the two level ────────────────────
 after 1x (P) 2y (P) when weak2, y is not x, partner.jumped
-  P   "Nothing to add: play two of {y}"          priority -5
+  P   "To play: two of {y}"          priority -5
   4y  "Game: 18+ with two or more {y}"           shows y>=2, hcp>=18
       when  y is H | y is S
   3y  "Raise: 3+ {y}, 16-17, invitational"       shows y>=3, hcp=16..17
@@ -44,24 +44,24 @@ after 1x (P) 2y (P) when weak2, y is not x, partner.jumped
 # 3NT with a maximum and two of the top three honours, else a feature
 # (an ace or king) with a maximum.
 after 1x (P) 2y (P) 2N (P) when weak2, y is not x
-  3N  "Maximum (4-5) with two of the top three honours"   shows hcp>=4, quality(y)>=good
-  3z  "Maximum (4-5): a feature (ace or king) in {z}"
+  3N  "Maximum: 4-5, two of the top three honours"   shows hcp>=4, quality(y)>=good
+  3z  "Maximum: 4-5, a feature in {z}"
       shows hcp>=4, has(A,z) | has(K,z)
       when  z is not y
       prefer 0 - z
-  3y  "Minimum (2-3), or a maximum without a feature"
+  3y  "Minimum: 2-3, or no feature"
       priority -1
 
 after 1x (P) 2y (P) 2N (P) 3y (P) when weak2, y is not x
-  P   "Minimum opposite: play three"             priority -5
-  4y  "Game anyway"                              shows hcp>=17, y>=3
+  P   "Minimum: to play"             priority -5
+  4y  "Game"                              shows hcp>=17, y>=3
       when  y is H | y is S
 after 1x (P) 2y (P) 2N (P) 3z (P) when weak2, y is not x, z is not y
   4y  "Game in {y}"                              shows y>=2
       when  y is H | y is S
   3N  "Game in notrump"                          when  y is C | y is D
 after 1x (P) 2y (P) 2N (P) 3N (P) when weak2, y is not x
-  P   "Game reached"                             priority -5
+  P   "No further bid"                             priority -5
 
 # Responder after opener rebids his suit (not forcing): pass.
 after 1x (P) 2y (P) 3x (P) when weak2, y is not x
@@ -70,7 +70,7 @@ after 1x (P) 2y (P) 3x (P) when weak2, y is not x
 # Responder after opener's invitational raise: game with a maximum.
 after 1x (P) 2y (P) 3y (P) when weak2, y is not x
   P   "Minimum: play three"                      priority -5
-  4y  "Maximum (4-5): game"                      shows hcp>=4
+  4y  "Maximum: 4-5, game"                      shows hcp>=4
       when  y is H | y is S
 # After opener's new suit (forcing): raise with four, else back to a
 # known suit as cheaply as possible.
@@ -92,10 +92,10 @@ after 1x (P) 2y (P) 2z (P) * (P) | 1x (P) 2y (P) 3z (P) * (P) when weak2, y is n
 
 # ── Opener after a weak jump shift at the three level ──────────────────
 after 1x (P) 3y (P) when weak3, y is not x, partner.jumped
-  P   "Nothing to add"                           priority -5
+  P   "No further bid"                           priority -5
   4y  "Game: 17+ with two or more {y}"           shows y>=2, hcp>=17
       when  y is H | y is S
-  3N  "To play: 18+ with a fit for {y} and the other suits stopped"
+  3N  "To play: 18+, a fit for {y}, side suits stopped"
       shows y>=2, hcp>=18
       when  y is C | y is D
   4x  "Game in my own major: seven, or six good ones, 16+"
