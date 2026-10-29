@@ -161,8 +161,8 @@ same hands as Texas; opener bids the suit in between (4♦, 4♥) to
 super-accept with four trumps and the top of his range
 (`hcp>=shown.hcp.max-1`), else four of the major. Over the super-accept
 responder signs off in four of the major or asks for keycards. 4♥ is then
-not a transfer (our reading of Rick's card, which also ticks 4♣/4♦/4♥ as
-transfers: to confirm). Gerber (gerber.bid) and the 2NT club slam try
+natural (Rick, 2026-10-29), though his card also ticks 4♥ as a
+transfer. Gerber (gerber.bid) and the 2NT club slam try
 (two-nt-responses.bid) give way.
 
 **After 2♣–2♦–3NT** (24-25; 26-27 with a Gambling 3NT): Texas too. The

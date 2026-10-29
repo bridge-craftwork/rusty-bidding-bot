@@ -31,7 +31,7 @@ define texas_room_d = !tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=
 # 2-under Texas (`notrump.transfers.texas_2_under`, Rick 2026-10-29): one
 # step lower, 4♣ for hearts and 4♦ for spades, with the same hands; opener
 # bids the suit in between to super-accept (four trumps, the top of his
-# range) or four of the major. 4♥ is then not a transfer.
+# range) or four of the major. 4♥ is then natural (Rick, 2026-10-29).
 define texas2_room_c = tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H)
 define texas2_room_d = tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C)
 define texas_room_h = !tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C | they.strain is D)
