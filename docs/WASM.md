@@ -54,7 +54,7 @@ from `file://`.)
     engine, hand: "AK52.KJ7.Q94.K83", dealer: "N", vul: "None",
     scoring: "IMP", auction: "",
   })));
-  if (res.ok) console.log(res.call, res.explanation);   // "1NT", "15-17 HCP, balanced"
+  if (res.ok) console.log(res.call, res.explanation);   // "1NT", "Notrump opening: 15-17 HCP, balanced"
   else console.log(res.diagnostics);
 </script>
 ```
@@ -302,11 +302,11 @@ Response:
 {"ok": true,
  "seat": "S",
  "call": "1NT",
- "explanation": "15-17 HCP, balanced",
+ "explanation": "Notrump opening: 15-17 HCP, balanced",
  "alert": {"kind": "announce", "text": "15 to 17"},
  "rule": {"module": "notrump-base", "file": "conventions/notrump/one-nt.bid", "line": 19},
  "candidates": [
-   {"call": "1NT", "rule": {...}, "explanation": "15-17 HCP, balanced",
+   {"call": "1NT", "rule": {...}, "explanation": "Notrump opening: 15-17 HCP, balanced",
     "priority": 0, "descriptiveness": 0.93, "prefer": null, "outcome": "chosen"},
    {"call": "1C", "rule": {...}, "explanation": "...", "priority": 0,
     "descriptiveness": 0.41, "prefer": null, "outcome": "outranked"},
@@ -383,8 +383,8 @@ A **step**:
 
 ```json
 {"seat": "N", "call": "1NT",
- "explanation": "15-17 HCP, balanced",
- "announcement": "15-17 HCP, balanced",
+ "explanation": "Notrump opening: 15-17 HCP, balanced",
+ "announcement": "Notrump opening: 15-17 HCP, balanced",
  "alert": {"kind": "announce", "text": "15 to 17"},
  "rule": {"module": "notrump-base", "file": "conventions/notrump/one-nt.bid", "line": 19},
  "artificial": false,
@@ -441,7 +441,7 @@ Response:
 {"ok": true,
  "calls": [
    {"seat": "N", "call": "1NT", "forced": false,
-    "explanation": "15-17 HCP, balanced", "meaning": "15-17 HCP, balanced",
+    "explanation": "Notrump opening: 15-17 HCP, balanced", "meaning": "Notrump opening: 15-17 HCP, balanced",
     "alert": {...}, "rule": {...}, "artificial": false, "knowledge": {...}},
    ...],
  "complete": true,
