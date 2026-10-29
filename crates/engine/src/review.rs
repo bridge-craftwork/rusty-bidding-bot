@@ -486,6 +486,9 @@ pub fn review_text(rows: &[ReviewRow]) -> String {
         if let Some(a) = &r.flags.announce {
             let _ = writeln!(out, "      announced: {a}");
         }
+        if !s.announcement.is_empty() {
+            let _ = writeln!(out, "      table: {}", s.announcement);
+        }
         for (i, seat) in SEATS.iter().enumerate() {
             // The caller always, the others when this call moved them.
             if *seat != s.caller && !r.narrowed[i].any() {

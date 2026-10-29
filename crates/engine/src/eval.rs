@@ -894,9 +894,9 @@ impl<'a> Ctx<'a> {
             )),
             // Our side's last bid is the contract so far and a rule marked
             // it artificial: passing it out plays a contract nobody chose.
-            "artificial_contract" => Val::Bool(Tri::from_bool(
-                self.pos.artificial_contract(self.actor),
-            )),
+            "artificial_contract" => {
+                Val::Bool(Tri::from_bool(self.pos.artificial_contract(self.actor)))
+            }
             "imps" => Val::Bool(Tri::from_bool(self.pos.is_imps())),
             "matchpoints" => Val::Bool(Tri::from_bool(!self.pos.is_imps())),
             "favourable" | "unfavourable" => {

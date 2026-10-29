@@ -48,6 +48,11 @@ pub struct Step {
     pub artificial: bool,
     /// What the caller's hand is known to hold after this call.
     pub knowledge: SeatKnowledge,
+    /// What the table is told: the rule's description and what the call
+    /// newly showed, suits spelled out (`explain::explanation`): "5+
+    /// spades; 10-21 HCP". Empty for a call no rule reads that showed
+    /// nothing.
+    pub announcement: String,
     /// Problems met while interpreting (unknown terms, contradictions).
     pub warnings: Vec<String>,
 }
@@ -548,6 +553,8 @@ impl Engine {
     ) -> Step {
         let caller = pos.next_caller();
         let sys = &self.systems[side(caller)];
+        let before = pos.knowledge(caller).clone();
+        let was = pos.side_state(caller).clone();
         // Rules that could have produced this call. A `when` known to be
         // false for this caller rules the rule out.
         let matching: Vec<&Cand> = cands
@@ -580,9 +587,24 @@ impl Engine {
             alert: None,
             artificial: false,
             knowledge: k.clone(),
+            announcement: String::new(),
             warnings: Vec::new(),
         };
         let best = matching.first().copied();
+        // What the table is told the call is: every rule that reads it
+        // agrees (`common_description`), not the first one's text.
+        let mut told = String::new();
+        if best.is_some() {
+            let texts: Vec<String> = matching
+                .iter()
+                .map(|c| {
+                    let e = &sys.rules[c.entry];
+                    self.ctx(pos, caller, None, e)
+                        .interpolate(&e.rule.explanation, &mut c.b.clone())
+                })
+                .collect();
+            told = common_description(&texts);
+        }
         if let Some(best) = best {
             let entry = &sys.rules[best.entry];
             let ctx = self.ctx(pos, caller, None, entry);
@@ -746,6 +768,7 @@ impl Engine {
         pos.unread.resize(pos.calls.len(), false);
         pos.unread.push(step.rule.is_none());
         pos.calls.push(call.clone());
+        step.announcement = announce(pos, caller, &before, &was, &step, &told);
         step
     }
 
@@ -1286,6 +1309,59 @@ pub fn check_sets(modules: &[bidspec::Module]) -> Vec<bidspec::Diagnostic> {
     out
 }
 
+/// The description of a call several rules read: their text when they
+/// agree, else the name they share before a colon ("Splinter: ..."), else
+/// nothing (the announcement then states only what the call showed).
+fn common_description(texts: &[String]) -> String {
+    let Some(first) = texts.first() else {
+        return String::new();
+    };
+    if texts.iter().all(|t| t == first) {
+        return first.clone();
+    }
+    let name = |t: &str| t.split_once(':').map(|(n, _)| n.trim().to_string());
+    match name(first) {
+        Some(n) if texts.iter().all(|t| name(t).as_deref() == Some(n.as_str())) => n,
+        _ => String::new(),
+    }
+}
+
+/// `Step::announcement` for `step`, just applied to `pos`. A force counts
+/// when this call set it, not when it only kept partner's. A pass no rule
+/// reads is announced as "Pass" and what it shows.
+fn announce(
+    pos: &Position,
+    caller: Direction,
+    before: &SeatKnowledge,
+    was: &crate::SideState,
+    step: &Step,
+    told: &str,
+) -> String {
+    let now = pos.side_state(caller);
+    let forcing = if now.forcing_by == Some(caller)
+        && (was.forcing_by != Some(caller) || was.forcing != now.forcing)
+    {
+        now.forcing
+    } else {
+        Forcing::None
+    };
+    let description = match &step.explanation {
+        Some(_) => told,
+        None if step.call.is_pass() => "Pass",
+        None => "",
+    };
+    let seat = caller.to_index();
+    crate::explain::explanation(&crate::explain::Shown {
+        description,
+        before,
+        after: &pos.knowledge[seat],
+        others: [1, 2, 3].map(|k| &pos.knowledge[(seat + k) % 4]),
+        artificial: step.artificial,
+        forcing,
+        trump: now.trump.and_then(crate::eval::suit_of_strain),
+    })
+}
+
 fn apply_sets(
     st: &mut SideState,
     sets: &[bidspec::ast::Assign],
@@ -1506,8 +1582,14 @@ fn expand(
             };
             (1..=7u8)
                 .flat_map(|level| {
-                    [Strain::Clubs, Strain::Diamonds, Strain::Hearts, Strain::Spades, Strain::NoTrump]
-                        .map(|strain| Call::Bid { level, strain })
+                    [
+                        Strain::Clubs,
+                        Strain::Diamonds,
+                        Strain::Hearts,
+                        Strain::Spades,
+                        Strain::NoTrump,
+                    ]
+                    .map(|strain| Call::Bid { level, strain })
                 })
                 .filter(|c| auction.is_legal(c))
                 .nth(n.saturating_sub(1))

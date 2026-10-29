@@ -10,6 +10,7 @@ pub mod cases;
 mod contract;
 mod engine;
 mod eval;
+pub mod explain;
 mod facts;
 mod knowledge;
 mod macros;
