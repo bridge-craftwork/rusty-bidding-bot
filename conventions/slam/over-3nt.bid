@@ -15,6 +15,13 @@ module over-3nt "Slam after partner's 3NT"
   needs  base
   skill  partnership_bidding/slam_bidding
   param  q4n   = slam.quantitative_4nt.play default true
+  param  texas = notrump.transfers.texas default false
+  param  tu    = notrump.transfers.texas_2_under default false
+
+# After 2♣–2♦–3NT (24+ shown, opener's second bid) Texas uses 4♦/4♥, or
+# 4♣/4♦ for 2-under (texas-transfers.bid): the tries and natural bids
+# below give way there, or partner would read them as transfers.
+define texas_3n = partner.hcp.min>=24, partner.bids>=2
 
 when partner.last=3N, !they.bid, we.trump is none
   6N  "Small slam"
@@ -27,10 +34,12 @@ when partner.last=3N, !they.bid, we.trump is none
       priority -10
   4C  "Slam try: six or more clubs"
       shows C>=6, hcp + partner.hcp.min >= 31
+      when  !(texas_3n, tu)
       sets  ask=slam_try(C)
       priority -10
   4D  "Slam try: six or more diamonds"
       shows D>=6, hcp + partner.hcp.min >= 31
+      when  !(texas_3n, texas | tu)
       sets  ask=slam_try(D)
       priority -10
 
@@ -45,6 +54,7 @@ when partner.last=3N, !they.bid, we.trump is none
   4H  "To play: a self-sufficient ♥ suit"
       shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
       shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      when  !(texas_3n, texas, !tu)
       priority -10
 
 when asked slam_try(m), partner.last=4{m}, we.trump is none

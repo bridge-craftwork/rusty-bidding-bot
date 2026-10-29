@@ -24,6 +24,7 @@ module gerber "Gerber: 4♣ asks for aces over partner's notrump"
   skill  bidding_conventions/gerber
   param  only_openings = slam.gerber.only_over_nt_openings default false
   param  texas_4c = notrump.transfers.texas_4c default false
+  param  tu = notrump.transfers.texas_2_under default false   # 2-under Texas: 4C transfers
   param  style = general.style
   param  system = general.system   # `brill`: the Brill card's treatments (over 3NT)
 
@@ -34,7 +35,7 @@ module gerber "Gerber: 4♣ asks for aces over partner's notrump"
 # gerber-resp-2N.toml), and then bids 6NT only with three aces between
 # the hands: that is the bba treatment. Our default keeps Rick's 4NT
 # invitation with 16 opposite 15-17 (one-nt.bid).
-after 1N (P) when !texas_4c
+after 1N (P) when !texas_4c, !tu
   4C  "Gerber: how many aces?"  alert
       shows balanced, points>=32-partner.hcp.min, H<=4, S<=4   # a major goes through Stayman or a transfer
       when  style is not bba
@@ -50,7 +51,7 @@ after 1N (P) when !texas_4c
 
 # Over 2NT a long club suit asks too, and plays in 6♣ (BBA from 9 HCP
 # with six clubs; our threshold is the old 4♣ slam try's).
-after nt2
+after nt2 when !tu
   4C  "Gerber: how many aces?"  alert
       shows H<=4, S<=4, (balanced, strength>=slam) | (C>=6 | (C>=5, !balanced), strength>=slam_invite)
       when  style is not bba

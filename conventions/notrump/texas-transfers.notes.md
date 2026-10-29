@@ -119,6 +119,64 @@ now Texases and asks for keycards; without the singleton
 (`82.AQ9732.K94.AQ`, 17 support points) it is still mild slam interest
 via Jacoby. Corpus par **+985 IMPs**, Basic_* 0.
 
+## Everywhere the system is on, and over interference (Rick, 2026-10-29)
+
+Texas was on only over the 1NT opening and its doubled overcall (`nt1`),
+plus over their 2♣ when `notrump.transfers.vs_2c` was set. That field is
+BBA's "Transfers if RHO bids clubs": 2♦/2♥ transfers over their 2♣, not
+Texas. Rick: Texas is on after every notrump of ours where the system is
+on: 2NT, 2♣–2♦–2NT, Kokish's 2NT (2♣–2♦–2♥–2♠–2NT), 2♣ and a positive
+then 2NT, our notrump overcall as the card says. Over interference it
+stays on whenever it is a jump: a double, or any bid that leaves three of
+the transfer suit available. It never transfers into their suit, nor
+into a major responder has already bid. The seven-card preempt applies only
+over a bid, not over a double. Opposite 2NT, 4♦ is Texas, so the diamond
+slam try (two-nt-responses.bid) gives way when the card plays Texas, and the
+natural 4♥/4♠ over interference (nt-interference.bid) give way where Texas
+uses the call.
+
+Game values count HCP and length points (Rick: "8 HCP + 2 length points
+= 10"): KQJ974 and 8 HCP is a Texas game opposite 15-17. Before, the
+count used suit points (9).
+
+Compare --limit 50 against main: 97 boards change, errors contract +100,
+doubling −35 IMPs to us (2N_and_Transfers 16, We_Overcall_NT_then_Texas 10,
+2N 9). Tests: texas-transfers.test (2NT, 2♣–2♦–2NT, Kokish, over 2♦, X,
+3♣); two old expectations changed from a 3-level transfer to Texas.
+
+Compared with Brill's Texas (Thorvald's Texas.json, 2026-10-29): Brill
+plays it over 1NT and 2NT openings, our notrump overcalls and balancing
+notrumps, over 1NT (2♣) only among interference, after 2♣–2♦–2NT and
+2♣ (2M) P P 2NT, and also after 3NT (opening, 2♣–2♦–3NT, 2♣ (2M) P P
+3NT), which we do not. Its game values are 10+ total points over 1NT;
+after Texas it bids 4NT (RKCB 0314) with "slammish" hands or combined
+values, controls and losers, or 6M/7M directly.
+
+## 2-under Texas, and Texas after 2♣–2♦–3NT (Rick, 2026-10-29)
+
+**2-under Texas** (`notrump.transfers.texas_2_under`, new in
+convention-card 0.26.0; Rick's card has it as BBO's notrump "more" text
+"2-under Texas"): one step lower, 4♣ for hearts and 4♦ for spades, the
+same hands as Texas; opener bids the suit in between (4♦, 4♥) to
+super-accept with four trumps and the top of his range
+(`hcp>=shown.hcp.max-1`), else four of the major. Over the super-accept
+responder signs off in four of the major or asks for keycards. 4♥ is then
+natural (Rick, 2026-10-29), though his card also ticks 4♥ as a
+transfer. Gerber (gerber.bid) and the 2NT club slam try
+(two-nt-responses.bid) give way.
+
+**After 2♣–2♦–3NT** (24-25; 26-27 with a Gambling 3NT): Texas too. The
+over-3NT tries and natural bids (over-3nt.bid) and fit.bid's 4M over a
+3NT rebid give way there (partner's 3NT showed 24+ as a second bid),
+or partner reads them as transfers: Kokish_Relay 20 played 4H in a 4-2 fit
+after a diamond slam try, and Kokish_Relay 4 passed a Texas 4H. Cost: a
+six-card diamond suit has no slam try there any more (Kokish_Relay 20 now
+passes 3NT where 6D was reached before).
+
+Compare --limit 50, the whole branch against main: 103 boards, errors
+contract +119, doubling −35 IMPs to us; the 2♣–2♦–3NT part alone 6 boards,
+contract +19.
+
 ## Sources
 
 - **The convention:** Texas transfers (4♦/4♥ over 1NT). Standard

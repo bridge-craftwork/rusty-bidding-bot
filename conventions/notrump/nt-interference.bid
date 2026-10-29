@@ -14,6 +14,7 @@ module nt-interference "Our 1NT when RHO acts"
   needs  notrump-base
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c     = notrump.transfers.vs_2c default false
+  param  texas     = notrump.transfers.texas default false   # Texas is on over their bid when it jumps (texas-transfers.bid)
   param  leb       = notrump.lebensohl.over_interference default false
   param  rub       = notrump.rubensohl.over_interference default false
 
@@ -112,10 +113,10 @@ after 1N (2y) when y is not C, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)
       when  y is S
       sets  forcing=game
   4H  "Game: six or more hearts"   shows H>=6, hcp>=10
-      when  y is not H
+      when  y is not H, !texas
       priority 1
   4S  "Game: six or more spades"   shows S>=6, hcp>=10
-      when  y is not S
+      when  y is not S, !texas
       priority 1
   2N  "Invitational: 8-9 HCP, a stopper in {y}"   shows hcp=8..9, stop(y)
       when  !leb, !rub                  # 2NT is a relay or a transfer
@@ -207,8 +208,10 @@ after 1N (2C) when !vs_2c, rho.C>=5
       sets  forcing=game
       priority 2
   4H  "Game: six or more hearts"   shows H>=6, H>S, points>=9
+      when  !texas
       priority 3
   4S  "Game: six or more spades"   shows S>=6, S>=H, points>=9
+      when  !texas
       priority 3
   P   "No bid over their 2♣: weak, or length in clubs"
       priority -10
@@ -364,8 +367,10 @@ after 1N (2N)
   3S  "Natural, forcing to game: five or more spades"     shows S>=5, points>=10
       sets  forcing=game
   4H  "Game: six or more hearts"                     shows H>=6, hcp>=10
+      when  !texas
       priority 1
   4S  "Game: six or more spades"                     shows S>=6, hcp>=10
+      when  !texas
       priority 1
   3N  "Game: 10+ HCP"                                shows hcp>=10
   P   "No bid over their 2NT"
@@ -387,7 +392,7 @@ after 1N (2y) P (P)
 after 1N (3y) when y is not N
   3N  "Game: 9+, a stopper in {y}"         shows hcp>=9, stop(y)
   4H  "Game: five or more hearts, 9+"      shows H>=5, hcp>=9
-      when  y is not H
+      when  y is not H, !texas | y is S   # over 3♣/3♦ 4♥ is Texas
   4S  "Game: five or more spades, 9+"      shows S>=5, hcp>=9
       when  y is not S
   X   "Takeout: 9+, no stopper in {y}"     shows hcp>=9, y<=2

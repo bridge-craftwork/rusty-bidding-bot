@@ -13,3 +13,31 @@ N 82.AQ9732.K94.AQ      | 1NT P            | 2D     | 16 suit points, 17 support
 N 82.AQ9732.K94.AQ      | 1NT P 2D P 2H P  | 4H     | then jump to game; opener may bid on
 N 8.AQ9732.K94.AQ8      | 1NT P            | 4D     | 15 HCP + 3 for the singleton = 18 support points: slam values
 N 8.AQ9732.K94.AQ8      | 1NT P 4D P 4H P  | 4NT    | then keycard
+
+# Everywhere the notrump system is on (Rick, 2026-10-29): the 2NT opening,
+# 2♣–2♦–2NT, and over interference when it is a jump, never into their suit.
+card    21GF-DEFAULT
+dealer  N
+S 82.KQJ974.Q92.53      | 2N P                  | 4D | 2NT opening: Texas
+S 82.KJ9743.92.853      | 2C P 2D P 2N P        | 4D | 2♣–2♦–2NT: Texas
+S 82.KQJ974.KQ2.53      | 1N 2D                 | 4D | a jump over their 2♦
+S 82.KQJ974.KQ2.53      | 1N X                  | 4D | over their double
+S KQJ974.82.AQ2.53      | 1N 3C                 | 4H | a jump over their 3♣: Texas to spades
+S 82.KQJ974.Q92.53      | 2N P 4D P 4H P        | P  | game only: pass the completion
+card    21GF-DEFAULT two_level.two_clubs.kokish=true
+S 82.KJ9743.92.853      | 2C P 2D P 2H P 2S P 2N P | 4D | Kokish 2NT: Texas
+
+# 2-under Texas (notrump.transfers.texas_2_under, Rick 2026-10-29): 4C for hearts,
+# 4D for spades; opener's suit in between super-accepts. And Texas after 2C-2D-3NT.
+card    21GF-DEFAULT notrump.transfers.texas_2_under=true
+dealer  N
+S 8.KQ9732.K94.Q83      | 1N P            | 4C | 2-under: hearts
+S KQ9732.8.K94.Q83      | 1N P            | 4D | 2-under: spades
+N AQ4.KJ65.K92.A53      | 1N P 4C P       | 4D | four hearts and 17: super-accept
+N AQ4.K65.KJ92.Q53      | 1N P 4C P       | 4H | three hearts: complete
+S 8.KQ9732.K94.Q83      | 1N P 4C P 4D P  | 4H | game only: sign off over the super-accept
+S 8.KQ9732.K94.Q83      | 1N P 4C P 4H P  | P  | game only: pass the completion
+S 8.AQ9732.K94.AKJ      | 1N P 4C P 4D P  | 4NT | slam values: keycard
+S 82.KQJ974.Q92.53      | 2N P            | 4C | 2NT: 2-under
+card    21GF-DEFAULT
+S 8.KQ9732.K94.Q83      | 2C P 2D P 3N P  | 4D | 2C-2D-3NT: Texas
