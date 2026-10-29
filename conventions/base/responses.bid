@@ -80,7 +80,7 @@ after 1D (P)
   2C  "Two over one, game forcing: 4+ clubs"           shows C>=4, (style is not bba, hcp>=12, points>=13) | (style is bba, hcp>=13), H<=3 | C>H, S<=3 | C>S
       when  gf21, !passed_hand
       sets forcing=game
-  3C  "Invitational jump shift: 10-12, 6+ clubs"  shows C>=6, points=10..12, H<=3, S<=3  when inv_js, !weak_js3
+  3C  "Invitational jump shift: 10-12 points, 6+ clubs"  shows C>=6, points=10..12, H<=3, S<=3  when inv_js, !weak_js3
 
 after 1m (P)
   2m  "Raise: 6-9, 5+ {m}, no 4-card major"     shows m>=5, hcp>=6, points<=9, H<=3, S<=3
@@ -127,7 +127,7 @@ after 1D (P) when !inverted
   3D  "Limit raise: 10-12 HCP, four diamonds, no 4-card major"  shows D=4, hcp=10..12, H<=3, S<=3, !balanced
       priority -2
 after 1D (P) when gf21
-  3C  "Invitational jump shift: 10-12, 6+ clubs"   shows C>=6, hcp>=10, hcp<=11 | points<=12, H<=3, S<=3
+  3C  "Invitational jump shift: 10-12 points, 6+ clubs"   shows C>=6, hcp>=10, hcp<=11 | points<=12, H<=3, S<=3
       when  !weak_js3                  # with weak jump shifts 3C is weak (weak-jump-shifts.bid)
       priority -1
 
@@ -189,8 +189,8 @@ after 1H (P)
       when  !passed_hand | (!drury, !drury_rev)
       when inv_jump_raise, system is brill
       sets trump=H
-  3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js, !weak_js3
-  3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js, !weak_js3
+  3C  "Invitational jump shift: 10-12 points, 6+ clubs"     shows C>=6, points=10..12, H<=2  when inv_js, !weak_js3
+  3D  "Invitational jump shift: 10-12 points, 6+ diamonds"  shows D>=6, points=10..12, H<=2  when inv_js, !weak_js3
 
 after 1S (P)
   1N  "6-10 HCP, no spade fit"             shows hcp=6..10, S<=2
@@ -242,9 +242,9 @@ after 1S (P)
   2H  "11+ points, 5+ hearts"       shows H>=5, hcp>=10, S<=2 | hcp>=13 | (hcp>=12, shortest<=2) | (hcp>=11, S>=4)
       when  style is bba, !gf21          # BBA: ten HCP and five hearts are enough (not a 2/1 game force)
       sets forcing=round
-  3C  "Invitational jump shift: 10-12, 6+ clubs"     shows C>=6, points=10..12, S<=2  when inv_js, !weak_js3
-  3D  "Invitational jump shift: 10-12, 6+ diamonds"  shows D>=6, points=10..12, S<=2  when inv_js, !weak_js3
-  3H  "Invitational jump shift: 10-12, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js, !weak_js3
+  3C  "Invitational jump shift: 10-12 points, 6+ clubs"     shows C>=6, points=10..12, S<=2  when inv_js, !weak_js3
+  3D  "Invitational jump shift: 10-12 points, 6+ diamonds"  shows D>=6, points=10..12, S<=2  when inv_js, !weak_js3
+  3H  "Invitational jump shift: 10-12 points, 6+ hearts"    shows H>=6, points=10..12, S<=2  when inv_js, !weak_js3
 
 after 1M (P)
   # Without the limit raise (a card with no "1M-3M inviting") 2M is the

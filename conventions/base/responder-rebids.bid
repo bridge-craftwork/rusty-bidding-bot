@@ -22,6 +22,7 @@ module responder-rebids "Responder's second call"
   param  fsf = other_conventions.fourth_suit_forcing.play default false
   param  style = general.style
   param  weak_js = general.jump_shifts.weak_2 default false   # a weak jump shift is not a 2/1
+  param  inverted = minor_openings.inverted_minors.play default false
   # Artificial calls after opener's 1NT rebid (checkback.bid, roudi.bid,
   # two-way-nmf.bid) switch off the natural calls they take.
   param  checkback = other_conventions.checkback.play default false
@@ -665,11 +666,22 @@ after 1x (*) 1z (*) P (P) | 1x (*) 2z (*) P (P) when they.bid, z is not x
 after 1x (*) X (*) 1N (*) | 1x (*) X (*) 2N (*) when they.bid
   P   "Minimum: no game"
       shows points<=10
+      when  !partner.jumped
       priority -5
+  # Opposite the jump (18-19), game from six.
+  P   "Minimum: no game"
+      shows points<=5
+      when  partner.jumped
+      priority -5
+  3N  "Game"
+      shows points>=6
+      when  partner.jumped
   cheapest(S) "Weak: six or more spades"    shows S>=6, points<=10   sets ask=signoff
   cheapest(H) "Weak: six or more hearts"    shows H>=6, S<=5, points<=10   sets ask=signoff
   cheapest(N) "Invitational: 11-12"         shows points=11..12   sets ask=nt_invite
+      when  partner.last=1N                 # over 2NT it is 3NT, the game below
   3N      "Game: 13+"                       shows points>=13   # was jump(N): 4NT over the 2NT answer
+      when  !partner.jumped
   P   "No further bid"  priority -10
 
 # ── Our double was left to them ──────────────────────────────────────
@@ -732,7 +744,7 @@ when asked stoppers, (trump is C | trump is D)
       priority -3
 
 # ── Opener's invitational raise of a minor (1m-2m-3m, 17-18) ────────
-after 1m (P) 2m (P) 3m (P)
+after 1m (P) 2m (P) 3m (P) when !inverted
   3N  "Accepts: the top of the raise"      shows hcp>=9
   P   "Declines: 6-8"                      shows hcp<=8
       priority -5

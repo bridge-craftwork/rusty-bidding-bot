@@ -20,6 +20,7 @@ module rebids "Opener's rebid"
   param  support_x = doubles.support.play default false
   param  support_through = doubles.support.through
   param  walsh = minor_openings.walsh.play default true
+  param  inverted = minor_openings.inverted_minors.play default false
   param  weak_js = general.jump_shifts.weak_2 default false
   param  weak_js3 = general.jump_shifts.weak_3 default false
   param  gf21 = major_openings.two_over_one.game_force default false
@@ -333,7 +334,8 @@ after 1M (P) 1N (P)
 # simple raise with 16-18 and a singleton, but passes 14-15 with doubletons.
 # A raise that can hold 11-12 (a card without the limit raise:
 # responses.bid) is invited from 15 (responses.notes.md, 2026-09-30).
-after 1x (P) 2x (P)
+# Not over an inverted raise: inverted-minors.bid has opener's rebids.
+after 1x (P) 2x (P) when !inverted | x is H | x is S
   P   "Minimum: no game"                   shows tp(x)<=16, tp(x)<=14 | x is C | x is D | partner.tp(x).max<=10
       when  style is not bba | x is C | x is D
       priority -5
@@ -355,7 +357,7 @@ after 1M (P) 2M (P)
   4M  "Game: 17+, or 16 with shape"
       shows hcp>=17 | (hcp=16, M>=6 | tp(M)>=19)
       when  style is bba
-after 1m (P) 2m (P)
+after 1m (P) 2m (P) when !inverted
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
   3N  "20-21 HCP, balanced"                shows balanced, hcp>=20
   # Counting tricks (Rick, 2026-09-27, ticket b469: K2.A9.AT.AKJ9742

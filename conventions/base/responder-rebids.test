@@ -343,3 +343,11 @@ N A942.942.J65.K94      | 1D P 1S P 3D P      | 4D     | 8 HCP, three diamonds: 
 N KJ43.Q94.65.Q932      | 1D P 1S P 3D P      | P      | 8 HCP, two diamonds: no game
 N AQ842.94.J65.K94      | 1D P 1S P 3D P      | 3S     | 10 HCP, five spades: 3S forcing, find the 5-3 fit
 N AQJ842.94.J5.K94      | 1D P 1S P 3D P      | 4S     | 11 HCP, six spades: game in spades
+
+# Over opener's jump to 2NT (18-19) after our negative double: game from 6,
+# no 3NT "invitation" (2026-10-29).
+card    21GF-DEFAULT
+dealer  N
+S 8743.KJ5.82.Q943      | 1D 1S X P 2N P | 3NT | 7 opposite 18-19: game
+S 8743.K52.82.9643      | 1D 1S X P 2N P | P   | 3 points: pass
+S 8743.KJ5.82.Q943      | 1D 1S X P 1N P | P   | 7 opposite 12-14: no game
