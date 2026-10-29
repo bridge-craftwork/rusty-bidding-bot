@@ -86,6 +86,9 @@ pub struct Position {
     /// (`sets ask=...`): a relay completion, a keycard answer. Missing
     /// entries count as no.
     pub answers: Vec<bool>,
+    /// Beside `calls`: whether no rule read the call (a call the system
+    /// gives no meaning). Missing entries count as read.
+    pub unread: Vec<bool>,
     /// By `Direction::to_index`.
     pub knowledge: [SeatKnowledge; 4],
     /// By `side`.
@@ -101,6 +104,7 @@ impl Position {
             calls: Vec::new(),
             artificial: Vec::new(),
             answers: Vec::new(),
+            unread: Vec::new(),
             knowledge: Default::default(),
             sides: Default::default(),
         }
@@ -201,6 +205,14 @@ impl Position {
                     && self.artificial.get(i).copied().unwrap_or(false)
                     && !self.answers.get(i).copied().unwrap_or(false)
             })
+    }
+
+    /// `d`'s last call was read by no rule.
+    pub fn unread(&self, d: Direction) -> bool {
+        (0..self.calls.len())
+            .rev()
+            .find(|&i| self.caller(i) == d)
+            .is_some_and(|i| self.unread.get(i).copied().unwrap_or(false))
     }
 
     pub fn side_acted(&self, d: Direction) -> bool {

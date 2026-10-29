@@ -489,6 +489,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `partner.bids` | how many bids that seat has made |
 | `partner.has_bid` | that seat has made a bid, not only passes or doubles |
 | `partner.jumped` | that seat's last bid was at least a level above the cheapest in its strain |
+| `partner.unread` | no rule read that seat's last call: our system gives it no meaning |
 | `partner.denied(x)` | in the control-bid dialogue that seat skipped x |
 | `partner.cued(x)` | in the control-bid dialogue that seat has shown a control in x |
 | `partner.bypassed(x[, call])` | that seat's last bid went past an available bid in x (above `call` when given) |

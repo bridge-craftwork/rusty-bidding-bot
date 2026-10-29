@@ -743,6 +743,8 @@ impl Engine {
         pos.artificial.push(step.artificial);
         pos.answers.resize(pos.calls.len(), false);
         pos.answers.push(answers_partner);
+        pos.unread.resize(pos.calls.len(), false);
+        pos.unread.push(step.rule.is_none());
         pos.calls.push(call.clone());
         step
     }
