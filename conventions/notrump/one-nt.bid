@@ -60,9 +60,9 @@ define auction nt1 = nt1_undoubled
 # BBA opens 1NT with one only with "1NT opening shape 5 major"; its bare
 # SAYC card (probe 2026-09-30) opens the major.
 when opening
-  1N  "{nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
+  1N  "Notrump opening: {nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min..nt_max, balanced, five_major is not never | (H<=4, S<=4)
-  1N  "{nt_min}-{nt_max} HCP, balanced (1 HCP light with extras)"  announce "{nt_min} to {nt_max}"
+  1N  "Notrump opening: {nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min-1, points>=nt_min, balanced, five_major is not never | (H<=4, S<=4)
       when one_less
   # The card's shape options (one-nt.notes.md, "5-4-2-2 and 4-4-4-1").
@@ -70,10 +70,10 @@ when opening
   # minor, both doubletons headed by the ace or king (BBA: never with
   # four spades, always with both doubletons stopped). 4-4-4-1 only with
   # a singleton ace or king.
-  1N  "{nt_min}-{nt_max} HCP, 5-4-2-2 with a five-card minor"  announce "{nt_min} to {nt_max}"
+  1N  "Notrump opening: {nt_min}-{nt_max} HCP, 5-4-2-2"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min..nt_max, shape 5-4-2-2, C=5 | D=5, S=2, H>=2, D>=2, C>=2, has(A,S) | has(K,S), H>=3 | has(A,H) | has(K,H), D>=3 | has(A,D) | has(K,D), C>=3 | has(A,C) | has(K,C)
       when allow_5422
-  1N  "{nt_min}-{nt_max} HCP, 4-4-4-1 with a singleton honour"  announce "{nt_min} to {nt_max}"
+  1N  "Notrump opening: {nt_min}-{nt_max} HCP, 4-4-4-1"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min..nt_max, shape 4-4-4-1, S>=2 | has(A,S) | has(K,S), H>=2 | has(A,H) | has(K,H), D>=2 | has(A,D) | has(K,D), C>=2 | has(A,C) | has(K,C)
       when allow_4441
 
@@ -140,7 +140,7 @@ after nt1 when !they.bid | systems_on
   # Opposite a 1NT that is not 15-17 (Precision, our 1NT overcall), the
   # earlier rules, measured against partner's range: the counts below were
   # fitted opposite 15-17.
-  3N  "To play: {game} total points (1NT not 15-17)"
+  3N  "To play: {game} total points"
       shows H<=4, S<=4, (strength=game, C<=3 | D<=3 | C>=5 | D>=5) | (C=4, D=4, hcp>=25-partner.hcp.min, hcp<=32-partner.hcp.max)
       when  matchpoints
       when  style is bba, partner.hcp.min<=14 | partner.hcp.max>=18
@@ -239,7 +239,8 @@ when answered choose_game(M), partner.last=3N
   P   "No fit: play 3NT"                     shows M<=5, strength<=slam_invite
 when answered choose_game(M), partner.last=4{M}
   6M  "Slam in the fit"                      shows strength>=slam
-  6M  "Slam in the fit, counting shortness"  shows tp(M)>=33-partner.points.min
+  # The same slam, counting shortness (support points).
+  6M  "Slam in the fit"  shows tp(M)>=33-partner.points.min
   P   "Game in the fit"                      shows strength<=slam_invite
       priority -1
 
@@ -316,5 +317,5 @@ after 1N (2C) when vs_2c
   3N  "No better call: {game} total points or more"
       shows strength>=game
       priority -5
-  P   "Nothing to say over their 2♣"
+  P   "No bid over their 2♣"
       priority -10

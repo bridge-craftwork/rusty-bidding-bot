@@ -107,18 +107,18 @@ when answered majors
       sets  trump=S
   3S  "Invitational raise in spades"              shows S>=4, strength=invite when partner.S>=4, style is not bba
       sets ask=invite(S), trump=S
-  6H  "Slam in the heart fit, counting shortness"  shows H>=4, tp(H)>=33-partner.points.min
+  6H  "Slam in the heart fit"  shows H>=4, tp(H)>=33-partner.points.min
       when  partner.H>=4
       sets  trump=H
-  6S  "Slam in the spade fit, counting shortness"  shows S>=4, tp(S)>=33-partner.points.min
+  6S  "Slam in the spade fit"  shows S>=4, tp(S)>=33-partner.points.min
       when  partner.S>=4
       sets  trump=S
-  4H  "Game in the heart fit, counting shortness"  shows H>=4, tp(H)>=25-partner.points.min
+  4H  "Game in the heart fit"  shows H>=4, tp(H)>=25-partner.points.min
       when  partner.H>=4, strength<=invite
       when  style is not bba
       sets  trump=H
       priority 1                                  # support points raise an invitation to game
-  4S  "Game in the spade fit, counting shortness"  shows S>=4, tp(S)>=25-partner.points.min
+  4S  "Game in the spade fit"  shows S>=4, tp(S)>=25-partner.points.min
       when  partner.S>=4, strength<=invite
       when  style is not bba
       sets  trump=S
@@ -193,7 +193,7 @@ when answered majors
       when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  trump=H
-  3H  "Invitational raise in heart"  shows H>=4, bba_stay_raise_points>=8, bba_stay_game_points<=9
+  3H  "Invitational raise in hearts"  shows H>=4, bba_stay_raise_points>=8, bba_stay_game_points<=9
       when  partner.H>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  ask=fit_invite(H), trump=H
@@ -204,7 +204,7 @@ when answered majors
       when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  trump=H
-  3H  "Invitational raise in heart"  shows H>=4, bba_stay_raise_imp_points>=8, bba_stay_game_imp_points<=9
+  3H  "Invitational raise in hearts"  shows H>=4, bba_stay_raise_imp_points>=8, bba_stay_game_imp_points<=9
       when  partner.H>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  ask=fit_invite(H), trump=H
@@ -215,7 +215,7 @@ when answered majors
       when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  trump=S
-  3S  "Invitational raise in spade"  shows S>=4, bba_stay_sraise_points>=8, bba_stay_sgame_points<=9
+  3S  "Invitational raise in spades"  shows S>=4, bba_stay_sraise_points>=8, bba_stay_sgame_points<=9
       when  partner.S>=4, matchpoints, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  ask=fit_invite(S), trump=S
@@ -226,7 +226,7 @@ when answered majors
       when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  trump=S
-  3S  "Invitational raise in spade"  shows S>=4, bba_stay_sraise_imp_points>=8, bba_stay_sgame_imp_points<=9
+  3S  "Invitational raise in spades"  shows S>=4, bba_stay_sraise_imp_points>=8, bba_stay_sgame_imp_points<=9
       when  partner.S>=4, imps, partner.hcp.min>=15, partner.hcp.max<=17
       when  style is bba
       sets  ask=fit_invite(S), trump=S
