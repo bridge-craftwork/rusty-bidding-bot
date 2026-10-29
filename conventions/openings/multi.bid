@@ -45,7 +45,7 @@ after 2D (P) | 2D (X)
       shows H>=3, S<=2, hcp=6..14
   3H  "Pass or correct, preemptive: three or more in both majors"   alert
       shows H>=3, S>=3, H+S>=8, hcp<=10
-  4H  "Pass or correct to game, preemptive: four or more in both majors"   alert
+  4H  "Pass or correct to game: 4+ in both majors"   alert
       shows H>=4, S>=4, hcp<=12
   4D  "Game: bid your major"   alert
       shows hcp>=15, H>=3, S>=3
@@ -79,7 +79,7 @@ after 2D (P) 3C (P) | 2D (X) 3C (P)
 # They come in over the pass-or-correct response: opener passes (the
 # auction is theirs; responder may still act).
 after 2D (P) 2H (*) | 2D (P) 2S (*)
-  P   "They came in: nothing more to say"
+  P   "No further bid"
       priority -5
 
 # Responder after the correction: the contract is placed.
@@ -88,12 +88,12 @@ after 2D (P) 2H (P) 2S (P) | 2D (P) 2S (P) 3H (P) | 2D (P) 3H (P) 3S (P) | 2D (P
 
 # Opener after the asker's sign-off: pass.
 after 2D (P) 2N (P) 3C (P) 3H (P) | 2D (P) 2N (P) 3D (P) 3S (P)
-  P   "Partner signed off"
+  P   "No further bid"
 
 # ── Opener answers 2NT ───────────────────────────────────────────────
 when asked multi
-  3C  "Maximum (8-10) with hearts"   shows H=6, hcp>=8   artificial
-  3D  "Maximum (8-10) with spades"   shows S=6, hcp>=8   artificial
+  3C  "Maximum with hearts: 8-10"   shows H=6, hcp>=8   artificial
+  3D  "Maximum with spades: 8-10"   shows S=6, hcp>=8   artificial
   3H  "Minimum with hearts"          shows H=6, hcp<=7
   3S  "Minimum with spades"          shows S=6, hcp<=7
 

@@ -30,7 +30,7 @@ define prec_2d_shape = (S=4, H=4, D=1, C=4) | (S=4, H=4, D=0, C=5) | (S=4, H=3, 
 # ── The opening ──────────────────────────────────────────────────────
 # Priority 1: it takes these hands from the one-level openings.
 when opening
-  2D  "Precision 2♦: 11-15, short diamonds (4-4-1-4, 4-4-0-5)"   alert
+  2D  "Precision 2♦: 11-15, short diamonds"   alert
       shows hcp=11..15, prec_2d_shape
       artificial
       priority 1
@@ -50,12 +50,13 @@ after 2D (P) | 2D (X)
   2S  "Sign-off"                          shows S>=3, S>H, hcp<=10
   2H  "Sign-off"                          shows H>=3, hcp<=10
   3C  "Sign-off"                          shows C>=4, hcp<=10, S<=2, H<=2
-  2H  "Sign-off: the best of a bad lot"   shows hcp<=10
+  # The best of a bad lot.
+  2H  "Sign-off"   shows hcp<=10
       priority -2
 
 # Opener passes the sign-offs.
 after 2D (P) 2H (P) | 2D (P) 2S (P) | 2D (P) 3C (P) | 2D (P) 3H (P) | 2D (P) 3S (P) | 2D (X) 2H (P) | 2D (X) 2S (P) | 2D (X) 3C (P)
-  P   "Partner signed off"
+  P   "No further bid"
 # The invitation: 3NT with a maximum and the diamond singleton an honour.
 after 2D (P) 3D (P)
   3N  "Accepts: 14-15"     shows hcp>=14
@@ -94,5 +95,5 @@ after 2D (P) 2N (P) 3x (P) | 2D (P) 2N (P) 4x (P) | 2D (P) 2N (P) 3N (P)
 
 # They come in over the sign-off: opener passes (responder may act).
 after 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)
-  P   "They came in: nothing more to say"
+  P   "No further bid"
       priority -5

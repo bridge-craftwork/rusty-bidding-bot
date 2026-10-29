@@ -28,7 +28,7 @@ after 1M (P) 2N (P)
   4M  "Minimum, 5-3-3-2, nothing extra"
       shows hcp<=12, shape 5-3-3-2, M=5
       priority 1                       # ahead of 3♣, which these hands also fit
-  3C  "Minimum (14 or less): responder may ask with 3♦"  alert
+  3C  "Minimum, 14 HCP or less: 3♦ asks"  alert
       shows hcp<=14
       artificial
   3D  "15+, a singleton or void: 3♥ asks where"  alert
@@ -72,7 +72,7 @@ after 1M (P) 2N (2x) | 1M (P) 2N (3x) when x is not M
       shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)
       when  y is not M, y is not x, M is S | y is not S
       priority 15
-  P   "Forcing pass: a flat hand, nothing special (can be an awful 5-3-3-2)"  alert
+  P   "Forcing pass: a flat hand"  alert
       artificial
       priority 14                      # below the descriptions, above the generic competitive calls
 
@@ -103,7 +103,7 @@ after 1M (P) 2N (X)
   XX  "Business: 15+, balanced, to play 2NT redoubled"
       shows hcp>=15, balanced
       priority 16
-  P   "Step 1: a minimum (14 or less)"  alert
+  P   "Step 1: a minimum, 14 or less"  alert
       shows hcp<=14
       artificial
       priority 15
@@ -280,7 +280,7 @@ after 1M (P) 2N (P) 3C (P) 3D (P)
 # Steps: a void (3♠), then a singleton in clubs, diamonds, the other
 # major. After the void, 3NT asks where: clubs, diamonds, the other major.
 after 1S (P) 2N (P) 3D (P) 3H (P)
-  3S  "A void (3NT asks where)"  alert
+  3S  "A void: 3NT asks where"  alert
       shows C=0 | D=0 | H=0
       artificial
       priority 15
@@ -297,7 +297,7 @@ after 1S (P) 2N (P) 3D (P) 3H (P)
       artificial
       priority 15
 after 1H (P) 2N (P) 3D (P) 3H (P)
-  3S  "A void (3NT asks where)"  alert
+  3S  "A void: 3NT asks where"  alert
       shows C=0 | D=0 | S=0
       artificial
       priority 15

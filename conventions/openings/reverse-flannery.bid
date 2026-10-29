@@ -99,13 +99,14 @@ after 1m (P) 2S (P) 3S (P) when rf_2s
 
 # Responder after opener's sign-offs: pass.
 after 1m (P) 2S (P) 3x (P) when rf_2s, x is not S
-  P   "Partner signed off"
+  P   "No further bid"
       priority 1
 after 1m (P) 2S (P) 2N (P) when rf_2s
-  P   "Partner's minimum without a fit: 2NT is high enough"   shows hcp<=9
+  # Partner is minimum without a fit: 2NT is high enough.
+  P   "No game: play 2NT"   shows hcp<=9
       priority 1
   3N  "10 HCP: game"
       priority 1
 after 1m (P) 2H (P) 3m (P) | 1m (P) 2H (P) 2S (P) when rf_2h
-  P   "Partner signed off"
+  P   "No further bid"
       priority 1
