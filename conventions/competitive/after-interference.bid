@@ -52,9 +52,11 @@ after 1x (1y) when neg
 # (responder-rebids.bid). The holding: four or more with two of the top
 # three or three of the top five (Rick's penalty-double standard,
 # 2026-09-23), and 8+ HCP. The condition is `when`, not `shows`: a pass
-# still says nothing, so opener does not read every pass as a trap.
+# still says nothing, so opener does not read every pass as a trap. Not
+# disclosed as a possible trap either: it is the same "No suitable bid" as
+# every other pass here, and usually is one (Rick, 2026-10-29).
 after 1x (1y) | 1x (2y) when y is not x, neg
-  P   "No bid; may be a trap pass in {y}"
+  P   "No suitable bid"
       when  y>=4, quality(y)>=good | top5(y)>=3, hcp>=8, x<=2
       priority 2
 
