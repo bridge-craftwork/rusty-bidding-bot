@@ -178,7 +178,7 @@ define quant_4nt = q4n
 # Ranked below every pass, so it is for reading: our own 4NT stays with
 # the modules that judge it (a higher rank took over their 3NT and pass).
 when we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight
-  4N  "Quantitative: 31-32 between us, invites 6NT"
+  4N  "Quantitative: invites 6NT"
       when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.min <= 32
       sets  ask=quant
@@ -268,19 +268,19 @@ define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + contro
 define direct_slam_values = direct_count(trump)
 
 when we.trump is suit, !minor_given_way, !they.bid, !asked, no_ask
-  6{trump}  "Slam: our count on partner's floor plus my controls make 35"
+  6{trump}  "Small slam"
       shows direct_slam_values
       priority 1
 
 # A minor set as trump and a major agreed since: the slam is in the major
 # (Rick, 2026-10-03: "normally a major fit will replace a minor fit").
 when minor_given_way, !they.bid, !asked, no_ask
-  6S  "Slam in the spade fit, which replaces the minor: our count on partner's floor plus my controls make 35"
+  6S  "Small slam"
       shows direct_count(S)
       when  major_over_minor(S)
       sets  trump=S
       priority 1
-  6H  "Slam in the heart fit, which replaces the minor: our count on partner's floor plus my controls make 35"
+  6H  "Small slam"
       shows direct_count(H)
       when  major_over_minor(H), !major_over_minor(S)
       sets  trump=H
@@ -302,15 +302,15 @@ when minor_given_way, !they.bid, !asked, no_ask
 # own range is four points or less (1NT, 2NT, a jump rebid): partner is
 # then the captain (+54). Vanilla calibration (slam-entry.notes.md).
 when we.trump is none, !they.bid, !asked, no_ask, !(shown.hcp.max - shown.hcp.min <= 4)
-  6S  "Slam in the spade fit: our count on partner's floor plus my controls make 35"
+  6S  "Small slam"
       shows we.fit(S).min >= 8, direct_count(S)
       priority 1
-  6H  "Slam in the heart fit: our count on partner's floor plus my controls make 35"
+  6H  "Small slam"
       shows we.fit(H).min >= 8, direct_count(H)
       priority 1
-  6D  "Slam in the diamond fit: our count on partner's floor plus my controls make 35"
+  6D  "Small slam"
       shows we.fit(D).min >= 8, direct_count(D)
       priority 1
-  6C  "Slam in the club fit: our count on partner's floor plus my controls make 35"
+  6C  "Small slam"
       shows we.fit(C).min >= 8, direct_count(C)
       priority 1

@@ -24,6 +24,6 @@ module slam-catch "Game or slam once a trump suit is agreed"
 # agreed a trump suit never dies below game for want of a rule.
 
 when we.trump is suit, we.forcing = game, !asked
-  4{trump}  "Game in {trump}: nothing more to show"
+  4{trump}  "Signoff"
             when trump is H | trump is S
             priority -20

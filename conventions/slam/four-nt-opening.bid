@@ -38,7 +38,7 @@ when asked specific_aces
   5H  "The heart ace"             shows keycards(N)=1, has(A,H)       artificial   priority 5
   5S  "The spade ace"             shows keycards(N)=1, has(A,S)       artificial   priority 5
   6C  "The club ace"              shows keycards(N)=1, has(A,C)       artificial   priority 5
-  5N  "Two aces (three: rare)"    shows keycards(N) in 2|3            artificial   priority 5
+  5N  "Two aces"    shows keycards(N) in 2|3            artificial   priority 5
 
 # ── The opener places the contract ────────────────────────────────────
 #
@@ -48,63 +48,63 @@ when asked specific_aces
 define fna_left = losers - (we.keycards(N).min - keycards(N))
 
 when answered specific_aces
-  7S  "Grand slam in spades: partner's aces cover every loser"
+  7S  "Grand slam"
         when fna_suit(S), fna_left <= 0
         priority 5
-  6S  "Small slam in spades: one ace missing"
+  6S  "Small slam"
         when fna_suit(S), fna_left <= 1
         priority 5
-  P   "Two aces missing: partner's answer is our suit"
+  P   "To play"
         when fna_suit(S), partner.last = 5S
         priority 5
-  5S  "Two aces missing: sign off in spades"
+  5S  "Signoff"
         when fna_suit(S)
         priority 5
-  6S  "Six spades: the answer has passed five of our suit"
+  6S  "Small slam"
         when fna_suit(S)
         priority 4
-  7H  "Grand slam in hearts: partner's aces cover every loser"
+  7H  "Grand slam"
         when fna_suit(H), fna_left <= 0
         priority 5
-  6H  "Small slam in hearts: one ace missing"
+  6H  "Small slam"
         when fna_suit(H), fna_left <= 1
         priority 5
-  P   "Two aces missing: partner's answer is our suit"
+  P   "To play"
         when fna_suit(H), partner.last = 5H
         priority 5
-  5H  "Two aces missing: sign off in hearts"
+  5H  "Signoff"
         when fna_suit(H)
         priority 5
-  6H  "Six hearts: the answer has passed five of our suit"
+  6H  "Small slam"
         when fna_suit(H)
         priority 4
-  7D  "Grand slam in diamonds: partner's aces cover every loser"
+  7D  "Grand slam"
         when fna_suit(D), fna_left <= 0
         priority 5
-  6D  "Small slam in diamonds: one ace missing"
+  6D  "Small slam"
         when fna_suit(D), fna_left <= 1
         priority 5
-  P   "Two aces missing: partner's answer is our suit"
+  P   "To play"
         when fna_suit(D), partner.last = 5D
         priority 5
-  5D  "Two aces missing: sign off in diamonds"
+  5D  "Signoff"
         when fna_suit(D)
         priority 5
-  6D  "Six diamonds: the answer has passed five of our suit"
+  6D  "Small slam"
         when fna_suit(D)
         priority 4
-  7C  "Grand slam in clubs: partner's aces cover every loser"
+  7C  "Grand slam"
         when fna_suit(C), fna_left <= 0
         priority 5
-  6C  "Small slam in clubs: one ace missing"
+  6C  "Small slam"
         when fna_suit(C), fna_left <= 1
         priority 5
-  P   "Two aces missing: partner's answer is our suit"
+  P   "To play"
         when fna_suit(C), partner.last = 5C
         priority 5
-  5C  "Two aces missing: sign off in clubs"
+  5C  "Signoff"
         when fna_suit(C)
         priority 5
-  6C  "Six clubs: the answer has passed five of our suit"
+  6C  "Small slam"
         when fna_suit(C)
         priority 4

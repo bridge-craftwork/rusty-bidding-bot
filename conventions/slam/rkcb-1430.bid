@@ -85,12 +85,12 @@ when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = g
 # Majors only for now: the sign-offs after an answer are awkward in a
 # minor.
 when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
-  4N  "Keycard ask, agreeing ♠"
+  4N  "Keycard ask in ♠"
       when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
       artificial
       priority 1
-  4N  "Keycard ask, agreeing ♥"
+  4N  "Keycard ask in ♥"
       when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=keycards(H)
       artificial
@@ -103,12 +103,12 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for no
 # agreed publicly, and partner's own six-card major, are the rules above.
 # The ask needs the fit and the values, as above.
 when (k1430 | k0314), we.trump is none, !asked, !they.bid
-  4N  "Keycard ask in ♠: the last suit we bid"
+  4N  "Keycard ask in ♠"
       when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
       artificial
       priority -1
-  4N  "Keycard ask in ♥: the last suit we bid"
+  4N  "Keycard ask in ♥"
       when  kc_open(H), !shown_fit(S), !shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=keycards(H)
       artificial
@@ -175,12 +175,12 @@ when (k1430 | k0314), we.trump is suit, they.bid, asked signoff
 # "normally a major fit will replace a minor fit"; 1S-2C-3C-4S-4NT): the
 # ask is in the major, and makes it trump.
 when (k1430 | k0314), minor_given_way, !asked
-  4N  "Keycard ask in ♠: the major fit replaces the minor"
+  4N  "Keycard ask in ♠"
       when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
       artificial
       priority 1
-  4N  "Keycard ask in ♥: the major fit replaces the minor"
+  4N  "Keycard ask in ♥"
       when  major_over_minor(H), !major_over_minor(S), fit_slam_values(H), !two_bare_beside(H)
       sets  trump=H, ask=keycards(H)
       artificial
@@ -207,7 +207,7 @@ when (k1430 | k0314), we.trump is suit, asked control(t), !kb_asks(trump)
   # game, as over a non-serious 3NT, serious-3nt.bid): with every suit
   # covered and the values, bid the slam rather than go on cueing and
   # stop in five (2026-10-05, Serious boards 17 and 47).
-  6{trump}  "Slam: every suit covered, the keycard ask is gone"
+  6{trump}  "Small slam"
       when  all_covered, slam_values, partner.last >= 5C
       priority 11
 
@@ -252,49 +252,53 @@ when (k1430 | k0314), answered keycards(t)
         when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
   # The king ask (`slam.king_ask.five_nt`, 2026-10-05): every keycard
   # and the queen are ours, and the grand turns on the side kings.
-  5N    "King ask: all the keycards and the {t} queen are ours, how many side kings?"
+  5N    "King ask: all keycards and the {t} queen held"
         when kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S
         sets ask=kings(t)
         artificial
-  6{t}  "Small slam: at most one keycard missing"
+  6{t}  "Small slam"
         when we.keycards(t)>=4
   # The count that fits (2026-10-07): with 30 HCP between us the low
   # count of an open answer is impossible (`kc_high`, slam-entry.bid),
   # so no sign-off: on with all five and the queen, else six.
-  7{t}  "Grand slam: the high count is the one that fits, all five and the {t} queen"
+  7{t}  "Grand slam"
         when kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
-  5N    "King ask: the high count fits, all the keycards and the {t} queen are ours"
+  5N    "King ask: all keycards and the {t} queen held"
         when kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S
         sets ask=kings(t)
         artificial
-  6{t}  "Small slam: the high count is the one that fits"
+  6{t}  "Small slam"
         when kc_high(t)
-  P     "Sign off: partner's answer is in our suit"
+  P     "To play"
         when partner.last=5{t}, we.keycards(t).max<=3
-  5{t}  "Sign off: two keycards missing"
+  5{t}  "Signoff"
         when we.keycards(t).max<=3     # filtered out as illegal when the answer
                                        # is already 5{t}; P above covers that
         sets ask=keycard_correct(t)    # partner corrects only with 3-4
-  5{t}  "Sign off: partner corrects to 6 with the higher count"
+  5{t}  "Signoff"
         when maybe we.keycards(t)>=4   # 0 or 3 / 1 or 4 still open
         sets ask=keycard_correct(t)
   # With clubs as trumps every answer but 5♣ passes the sign-off
   # (2026-10-05: we passed partner's artificial 5♦ on ~30 boards). Six
   # then: the answer is never a place to play, and an open count ("0 or
   # 3") is far more often the higher one opposite slam values.
-  6{t}  "No sign-off below six: the answer has passed five of our suit"
+  6{t}  "Small slam"
         priority -1
 
 # The king ask by 5NT: the number of kings outside the trump suit (its
 # king is a keycard), by steps from 6♣. As ACBL's SAYC booklet and BBA
 # (6♣ 0, 6♦ 1, 6♥ 2, 6♠ 3). Kings are controls less two for each ace.
+# The text says "One king", as blackwood.bid's answers do: the trump
+# king was counted as a keycard, and these rules also read the answers
+# to Blackwood's 5NT (kings(N)), where differing texts left the table
+# told only "artificial".
 define side_kings(t) = controls - keycards(N) - keycards(N) - has(K,t)
 
 when kask5n, asked kings(t), !kspec | t is C | t is D
-  6C  "No side king"     shows side_kings(t) = 0   artificial
-  6D  "One side king"    shows side_kings(t) = 1   artificial
-  6H  "Two side kings"   shows side_kings(t) = 2   artificial
-  6S  "Three side kings" shows side_kings(t) = 3   artificial
+  6C  "No king"     shows side_kings(t) = 0   artificial
+  6D  "One king"    shows side_kings(t) = 1   artificial
+  6H  "Two kings"   shows side_kings(t) = 2   artificial
+  6S  "Three kings" shows side_kings(t) = 3   artificial
 
 # The asker: the grand with every side king between us, or with two, 33
 # HCP on partner's floor and a hand that can take care of the missing
@@ -306,14 +310,14 @@ define partner_side_kings = (partner.last = 6D) + (partner.last = 6H) + (partner
 define our_side_kings(t) = side_kings(t) + partner_side_kings
 
 when kask5n, answered kings(t), !kspec | t is C | t is D
-  7{t}  "Grand slam: every side king is ours"
+  7{t}  "Grand slam"
         when our_side_kings(t) >= 3
-  7{t}  "Grand slam: two side kings, 33 HCP between us, and shortness or six trumps"
+  7{t}  "Grand slam"
         when our_side_kings(t) >= 2, hcp + partner.hcp.min >= 33, C<=1 | D<=1 | H<=1 | S<=1 | t>=6 | partner.t.min>=6
-  P     "Small slam: partner's answer is our suit"
+  P     "To play"
         when partner.last = 6{t}
-  6{t}  "Small slam: a side king missing"
-  6N    "Small slam: the answer has passed six of our suit"
+  6{t}  "Small slam"
+  6N    "Small slam"
 
 # ── Specific kings (`slam.king_ask.specific`, Rick, 2026-10-28) ──────
 # 5NT is answered by the cheapest side king below six of trumps, six of
@@ -368,13 +372,13 @@ when kask5n, kspec, answered kings(t), t is H | t is S
         sets ask=king_in(S)
         artificial
         priority 2
-  7{t}  "Grand slam: every side king accounted for, or one unknown with 33 HCP and shortness or six trumps"
+  7{t}  "Grand slam"
         when kings_unheld(t) = 0 | (kings_unheld(t) = 1, king_margin(t))
         priority 1
-  P     "Small slam: partner's answer is our suit"
+  P     "To play"
         when partner.last = 6{t}
-  6{t}  "Small slam: a side king missing"
-  6N    "Small slam: the answer has passed six of our suit"
+  6{t}  "Small slam"
+  6N    "Small slam"
 
 when kspec, asked king_in(z)
   7{trump}  "The {z} king"
@@ -391,9 +395,9 @@ when kspec, asked king_in(z)
             artificial
 
 when kspec, answered king_in(z)
-  P         "Partner's answer is our slam"
+  P         "To play"
             when partner.last = 7{trump} | partner.last = 6{trump} | partner.last = 6N
-  6{trump}  "Small slam: the {z} king is missing"
+  6{trump}  "Small slam"
 
 # When the answer was ambiguous the asker signs off in five, and the answerer
 # corrects to six holding the higher count (3 or 4 keycards).

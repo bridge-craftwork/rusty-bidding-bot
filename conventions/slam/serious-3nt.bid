@@ -27,11 +27,11 @@ define ns_position = partner.last = 3{trump}, !our_notrump
 # equal, on partner's floor), but short of them. The source puts the
 # non-serious 3NT about 14-15 opposite a 2/1, the serious control bid
 # 16+. Priority 12, level with the control bids: the two never hold on
-# the same hand.
+# the same hand. Partner control-bids over it with a good hand.
 define ns_count(t) = (longer(t), count_long(t) >= 28) | (longer(t), count_long_p(t) >= 28) | (shorter(t), count_short(t) >= 29) | (shorter(t), count_short_l(t) >= 29) | (!longer(t), !shorter(t), count_equal(t) >= 30) | (!longer(t), !shorter(t), count_equal_p(t) >= 30)
 
 when nsplay, cue, we.trump is suit, trump is H | trump is S, we.forcing = game, !asked, !answered control
-  3N  "Non-serious 3NT: mild slam interest, control-bid with a good hand"  alert
+  3N  "Non-serious 3NT: mild slam interest"  alert
       shows ns_count(trump)
       when  ns_position
       when  !slam_values
@@ -46,19 +46,19 @@ when nsplay, cue, we.trump is suit, trump is H | trump is S, we.forcing = game, 
 # ask with slam values and every side suit controlled. Otherwise game.
 
 when nsplay, cue, asked ns3nt(t)
-  cheapest(C)  "Control bid in ♣ over the non-serious 3NT"  alert
+  cheapest(C)  "Control bid in ♣"  alert
       when  t is not C, under_game(C), slam_interest(t), controlled(C)
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 12
-  cheapest(D)  "Control bid in ♦ over the non-serious 3NT"  alert
+  cheapest(D)  "Control bid in ♦"  alert
       when  t is not D, under_game(D), slam_interest(t), controlled(D)
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 12
-  cheapest(H)  "Control bid in ♥ over the non-serious 3NT"  alert
+  cheapest(H)  "Control bid in ♥"  alert
       when  t is not H, under_game(H), slam_interest(t), controlled(H)
       sets  ask=control(H), ladder=control
       artificial
@@ -70,4 +70,4 @@ when nsplay, cue, asked ns3nt(t)
       sets  ask=keycards(t)
       artificial
       priority 13
-  4{t}  "No interest opposite a non-serious 3NT: game"
+  4{t}  "Signoff: no slam interest"

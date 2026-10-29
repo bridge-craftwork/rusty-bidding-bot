@@ -158,38 +158,38 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
       artificial
       prefer 0 - cheapest_rank(S)
       priority 12
-  cheapest(C)  "Control bid in ♣ past game: first-round control"  alert
+  cheapest(C)  "Control bid in ♣: first-round control"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), !under_game(C), (trump is H, cheapest_rank(C) < 27) | (trump is S, cheapest_rank(C) < 28)
       when  first_round(C), denials_promised_first
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 10
-  cheapest(D)  "Control bid in ♦ past game: first-round control"  alert
+  cheapest(D)  "Control bid in ♦: first-round control"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), !under_game(D), (trump is H, cheapest_rank(D) < 27) | (trump is S, cheapest_rank(D) < 28)
       when  first_round(D), denials_promised_first
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 10
-  cheapest(H)  "Control bid in ♥ past game: first-round control"  alert
+  cheapest(H)  "Control bid in ♥: first-round control"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), !under_game(H), (trump is H, cheapest_rank(H) < 27) | (trump is S, cheapest_rank(H) < 28)
       when  first_round(H), denials_promised_first
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 10
-  cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
+  cheapest(S)  "Control bid in ♠: first-round control"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), !under_game(S), !kb_spade_ask, (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
       when  first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)
       priority 10
-  4{trump}  "No further control: game in {trump}"
+  4{trump}  "Signoff: no further control"
       sets  ladder=control
       priority -5
-  5{trump}  "No further control, and the dialogue is past game"
+  5{trump}  "Signoff: no further control"
       priority -6
 
 # ── Partner signed off in game ────────────────────────────────────────
@@ -202,33 +202,33 @@ when we.trump is suit, asked control(t), (trump is H | trump is S)
 # cover it, and no control of mine past game can (2026-09-30; the case
 # surfaced when slam_values moved to 32).
 when we.trump is suit, answered control(t), partner.last = 4{trump}, (trump is H | trump is S), !me.denied(C), !me.denied(D), !me.denied(H), !me.denied(S)
-  cheapest(C)  "Control bid in ♣ past game: first-round control"  alert
+  cheapest(C)  "Control bid in ♣: first-round control"  alert
       when  trump is not C, !partner.cued(C), !me.cued(C), (trump is H, cheapest_rank(C) < 27) | (trump is S, cheapest_rank(C) < 28)
       when  slam_values, first_round(C), denials_promised_first
       sets  ask=control(C), ladder=control
       artificial
       prefer 0 - cheapest_rank(C)
       priority 10
-  cheapest(D)  "Control bid in ♦ past game: first-round control"  alert
+  cheapest(D)  "Control bid in ♦: first-round control"  alert
       when  trump is not D, !partner.cued(D), !me.cued(D), (trump is H, cheapest_rank(D) < 27) | (trump is S, cheapest_rank(D) < 28)
       when  slam_values, first_round(D), denials_promised_first
       sets  ask=control(D), ladder=control
       artificial
       prefer 0 - cheapest_rank(D)
       priority 10
-  cheapest(H)  "Control bid in ♥ past game: first-round control"  alert
+  cheapest(H)  "Control bid in ♥: first-round control"  alert
       when  trump is not H, !partner.cued(H), !me.cued(H), (trump is H, cheapest_rank(H) < 27) | (trump is S, cheapest_rank(H) < 28)
       when  slam_values, first_round(H), denials_promised_first
       sets  ask=control(H), ladder=control
       artificial
       prefer 0 - cheapest_rank(H)
       priority 10
-  cheapest(S)  "Control bid in ♠ past game: first-round control"  alert
+  cheapest(S)  "Control bid in ♠: first-round control"  alert
       when  trump is not S, !partner.cued(S), !me.cued(S), !kb_spade_ask, (trump is H, cheapest_rank(S) < 27) | (trump is S, cheapest_rank(S) < 28)
       when  slam_values, first_round(S), denials_promised_first
       sets  ask=control(S), ladder=control
       artificial
       prefer 0 - cheapest_rank(S)
       priority 10
-  P   "Partner stopped in game over my control bid"
+  P   "No further bid"
       priority 2
