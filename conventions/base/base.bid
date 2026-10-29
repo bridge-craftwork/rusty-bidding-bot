@@ -34,10 +34,10 @@ module base "Natural opening bids"
 # then, with the side major, only with two aces or kings among its honours
 # (controls 3+, or two kings). Six clubs and ten HCP pass.
 when opening
-  1S  "5+ spades"
+  1S  "Major opening: 5+ spades"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21 | (!forcing_2c, !forcing_1c), S>=5, S>=H, (S>=D, S>=C) | !may5
       when  style is standard
-  1H  "5+ hearts"
+  1H  "Major opening: 5+ hearts"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21 | (!forcing_2c, !forcing_1c), H>=5, H>S, (H>=D, H>=C) | !may5
       when  style is standard
   1D  "3+ diamonds"
@@ -46,10 +46,10 @@ when opening
   1C  "3+ clubs"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21 | (!forcing_2c, !forcing_1c), C>D | (C=3, D=3), H<=4 | (H<C, may5), S<=4 | (S<C, may5)
       when  style is standard
-  1S  "5+ spades"
+  1S  "Major opening: 5+ spades"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21 | (!forcing_2c, !forcing_1c), S>=5, S>=H, (S>=D, S>=C) | !may5, hcp>=11 | S<=5 | H<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
       when  style is not standard
-  1H  "5+ hearts"
+  1H  "Major opening: 5+ hearts"
       shows hcp>=10, hcp+length_points>=min_open, hcp<=21 | (!forcing_2c, !forcing_1c), H>=5, H>S, (H>=D, H>=C) | !may5, hcp>=11 | H<=5 | S<=3 | controls>=3 | (controls=2, !has(A,S), !has(A,H), !has(A,D), !has(A,C))
       when  style is not standard
   1D  "3+ diamonds"
@@ -61,7 +61,7 @@ when opening
   P   "No opening bid"
       shows hcp<=min_open-1, hcp+length_points<=min_open-1 | hcp<=9
       priority -10
-  P   "No opening bid: ten HCP and a six-card suit that does not open"
+  P   "No opening bid"
       shows hcp=10, longest=6
       when  style is not standard
       priority -10
@@ -69,12 +69,12 @@ when opening
 # Third seat may open light with a good four-card major; fourth seat opens
 # by the rule of 15 (HCP plus spade length), and passes otherwise.
 when opening, seat=3
-  1S  "Third seat: 10-11 with a good four-card spade suit"
+  1S  "Major opening: 4+ good spades, 10-11 HCP"
       shows S>=4, hcp=10..11, quality(S)>=good
-  1H  "Third seat: 10-11 with a good four-card heart suit"
+  1H  "Major opening: 4+ good hearts, 10-11 HCP"
       shows H>=4, hcp=10..11, quality(H)>=good, S<=3
 when opening, seat=4
-  P   "Fourth seat: the rule of 15 says pass"
+  P   "No opening bid: HCP and spades under 15"
       shows hcp<=14
       when  hcp + S <= 14
       priority 1
@@ -82,7 +82,7 @@ when opening, seat=4
 # Once our side has bid game, a player with nothing more to add passes.
 # Slam tries and corrections are separate rules that outrank this.
 when game_reached
-  P   "Game reached: nothing more to say"
+  P   "No further bid"
       when  !passes_out_artificial
       priority -50
 
@@ -92,7 +92,7 @@ when game_reached
 # nobody chose. Bid the agreed suit at the cheapest level, five, six or
 # seven (Rick, 2026-10-29).
 when game_reached, we.trump is suit, partner.unread, rho.last=P, !(partner.last=P | partner.last=X | partner.last=XX | partner.last=4{trump} | partner.last=5{trump} | partner.last=6{trump} | partner.last=7{trump})
-  cheapest(trump) "Partner's call is not in our system: back to our suit"
+  cheapest(trump) "Back to the agreed suit"
       priority -40
 
 # ── Never pass out our own artificial bid ────────────────────────────
@@ -116,19 +116,19 @@ when game_reached, we.trump is suit, partner.unread, rho.last=P, !(partner.last=
 # real rule.
 define passes_out_artificial = artificial_contract, rho.last=P
 when passes_out_artificial
-  cheapest(S) "Runout: our last bid is artificial; the best fit we know"
+  cheapest(S) "Runout: our best known fit"
       prefer we.fit(S).min
       when  !lho.named(S), !rho.named(S)
       priority -60
-  cheapest(H) "Runout: our last bid is artificial; the best fit we know"
+  cheapest(H) "Runout: our best known fit"
       prefer we.fit(H).min
       when  !lho.named(H), !rho.named(H)
       priority -60
-  cheapest(D) "Runout: our last bid is artificial; the best fit we know"
+  cheapest(D) "Runout: our best known fit"
       prefer we.fit(D).min
       when  !lho.named(D), !rho.named(D)
       priority -60
-  cheapest(C) "Runout: our last bid is artificial; the best fit we know"
+  cheapest(C) "Runout: our best known fit"
       prefer we.fit(C).min
       when  !lho.named(C), !rho.named(C)
       priority -60

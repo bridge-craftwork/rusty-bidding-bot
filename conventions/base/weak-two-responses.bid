@@ -55,8 +55,8 @@ after 2x (P) when weak_two_suit(x), x is not N, x is not C | two_c is natural, s
       artificial
   # Probed 2026-09-24 (notes): flat 0-4 with four trumps raises only at
   # love all; with a singleton and four trumps, game unless vulnerable.
-  3x  "Preemptive raise: four-card support, up to 11"    shows x>=4, hcp<=11, hcp>=5 | shortest<=1
-  3x  "Preemptive raise: four-card support, weak (love all)"   shows x>=4, hcp<=4
+  3x  "Preemptive raise: four-card support"    shows x>=4, hcp<=11, hcp>=5 | shortest<=1
+  3x  "Preemptive raise: four-card support"   shows x>=4, hcp<=4
       when  !vul, !they.vul
   4x  "Preemptive game raise: four trumps and a singleton"   shows x>=4, shortest<=1, hcp<=9
       when  !vul
@@ -76,13 +76,13 @@ after 2x (P) when weak_two_suit(x), x is not N, x is not C | two_c is natural, s
       priority 1
   5x  "Game in diamonds: three-card support, 18-20"   shows x>=3, hcp=18..20
       when  x is D
-  2H  "Natural and forcing: six hearts from 13, five from 14"   shows H>=5, hcp>=13
+  2H  "Natural, forcing: 5+ hearts, 13+"   shows H>=5, hcp>=13
       when  x is D, H>=6 | hcp=14
       sets  forcing=round
-  2S  "Natural and forcing: six spades from 13, five from 14"   shows S>=5, hcp>=13
+  2S  "Natural, forcing: 5+ spades, 13+"   shows S>=5, hcp>=13
       when  x is D, S>=6 | hcp=14
       sets  forcing=round
-  2S  "Natural and forcing: five spades, 13+, at most one heart"   shows S>=5, hcp>=13, H<=1
+  2S  "Natural, forcing: 5+ spades, 13+"   shows S>=5, hcp>=13, H<=1
       when  x is H
       sets  forcing=round
   P   "No interest"                            shows hcp<=19
@@ -90,7 +90,7 @@ after 2x (P) when weak_two_suit(x), x is not N, x is not C | two_c is natural, s
 
 # Opener after a new suit (default and bba). Raise with three, else rebid the suit.
 after 2x (P) 2y (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard
-  4y  "Three-card support: game (BBA, any strength)"   shows y>=3
+  4y  "Three-card support: game"   shows y>=3
       when  y is H | y is S
   3y  "Three-card support"                 shows y>=3
   3x  "No fit: rebid the suit"             shows y<=2
@@ -101,15 +101,15 @@ after 2x (P) 2y (P) when weak_two_suit(x), x is not C | two_c is natural, style 
 # three of the major with six and 19+, and 3NT or four of opener's major
 # from 20.
 after 2x (P) 2y (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard, y is H | y is S
-  4y  "Seven-card suit: game facing a doubleton"   shows y>=7
-  4y  "Six-card suit, four top honours: game"      shows y>=6, top5(y)>=4, hcp>=16
+  4y  "To play: 7+ {y}"   shows y>=7
+  4y  "To play: 6+ {y}, four top honours"      shows y>=6, top5(y)>=4, hcp>=16
   3y  "Six-card suit, 19+: forcing, asks for a doubleton"   shows y>=6, hcp>=19
       sets  forcing=round
-  4x  "Game in opener's major: 20+, no fit for mine"   shows hcp>=20
+  4x  "Game in partner's suit: 20+"   shows hcp>=20
       when  x is H | x is S
   3N  "Game in notrump: 20+, no fit"               shows hcp>=20
       when  x is D
-  P   "No game facing a minimum weak two"          shows hcp<=19
+  P   "No game"          shows hcp<=19
 
 after 2x (P) 2y (P) 3x (P) 3y (P) when weak_two_suit(x), x is not C | two_c is natural, style is not standard, y is H | y is S
   4y  "A doubleton: game in partner's suit"        shows y>=2
@@ -149,11 +149,11 @@ when asked weak_two(t), ask2nt is feature, style is not bba
 # bba: a maximum is 8-10; it shows a side ace, king (not singleton) or
 # queen third, and bids 3NT without one. A minimum (5-7) rebids the suit.
 when asked weak_two(t), ask2nt is feature, style is bba
-  3C  "Maximum, 8-10, with a club honour (A, Kx, Qxx)"      shows hcp>=8, has(A,C) | (has(K,C), C>=2) | (has(Q,C), C>=3)   when t is not C
-  3D  "Maximum, 8-10, with a diamond honour (A, Kx, Qxx)"   shows hcp>=8, has(A,D) | (has(K,D), D>=2) | (has(Q,D), D>=3)   when t is not D
-  3H  "Maximum, 8-10, with a heart honour (A, Kx, Qxx)"     shows hcp>=8, has(A,H) | (has(K,H), H>=2) | (has(Q,H), H>=3)   when t is not H
-  3S  "Maximum, 8-10, with a spade honour (A, Kx, Qxx)"     shows hcp>=8, has(A,S) | (has(K,S), S>=2) | (has(Q,S), S>=3)   when t is not S
-  3N  "Maximum, 8-10, no side honour to show"               shows hcp>=8
+  3C  "Feature: 8-10, A, Kx or Qxx in clubs"      shows hcp>=8, has(A,C) | (has(K,C), C>=2) | (has(Q,C), C>=3)   when t is not C
+  3D  "Feature: 8-10, A, Kx or Qxx in diamonds"   shows hcp>=8, has(A,D) | (has(K,D), D>=2) | (has(Q,D), D>=3)   when t is not D
+  3H  "Feature: 8-10, A, Kx or Qxx in hearts"     shows hcp>=8, has(A,H) | (has(K,H), H>=2) | (has(Q,H), H>=3)   when t is not H
+  3S  "Feature: 8-10, A, Kx or Qxx in spades"     shows hcp>=8, has(A,S) | (has(K,S), S>=2) | (has(Q,S), S>=3)   when t is not S
+  3N  "Maximum: 8-10, no side feature"               shows hcp>=8
   3{t}  "Minimum, 5-7"                                      shows hcp<=7
 
 # Ogust (bridgebum.com/ogust.php): a minimum is 5-7, a maximum 8-10
@@ -162,10 +162,10 @@ when asked weak_two(t), ask2nt is feature, style is bba
 # every 7-count to the maximum answers (BBA: 7 is a minimum on all 77
 # corpus boards) and game opposite it (notes).
 when asked weak_two(t), ask2nt is ogust
-  3C  "Ogust: minimum (5-7), poor suit"   shows hcp<=7, quality(t)<=1   artificial
-  3D  "Ogust: minimum (5-7), good suit"   shows hcp<=7, quality(t)>=2   artificial
-  3H  "Ogust: maximum (8-10), poor suit"  shows hcp>=8, quality(t)<=1   artificial
-  3S  "Ogust: maximum (8-10), good suit"  shows hcp>=8, quality(t)>=2   artificial
+  3C  "Ogust: minimum, poor suit"   shows hcp<=7, quality(t)<=1   artificial
+  3D  "Ogust: minimum, good suit"   shows hcp<=7, quality(t)>=2   artificial
+  3H  "Ogust: maximum, poor suit"  shows hcp>=8, quality(t)<=1   artificial
+  3S  "Ogust: maximum, good suit"  shows hcp>=8, quality(t)>=2   artificial
   3N  "Ogust: the top three honours"      shows quality(t)=3
       priority 1
 
@@ -180,13 +180,13 @@ after 2x (P) 2N (P) 3N (P) 4x (P) when weak_two_suit(x), x is C | x is D, style 
 # answer to 2D it passes with 17+ and bids 4D with 15-16; opener then
 # bids 5D with a singleton or void, and passes without.
 when answered weak_two(t), style is bba, !partner.last=3{t}
-  4{t}  "Game: partner has a maximum"   shows hcp>=13
+  4{t}  "Game: to play"   shows hcp>=13
         when  t is H | t is S
         priority 1
-  3N    "Game: partner has a maximum"   shows hcp>=13
+  3N    "Game: to play"   shows hcp>=13
         when  t is C | t is D, !partner.last=3N
         priority 1
-  P     "Partner's 3NT is game"          shows hcp>=17
+  P     "To play: 3NT"          shows hcp>=17
         when  t is C | t is D, partner.last=3N
         priority 1
   4{t}  "Doubt about 3NT: 15-16"         shows hcp<=16
@@ -255,20 +255,20 @@ when answered weak_two(t)
   # a feature or an Ogust maximum (both 8-10); facing a minimum (4)
   # the 17 above still rules. 21 beat 22 and 23 on both
   # yardsticks (notes).
-  4{t}  "Game: partner showed a maximum"   shows hcp + partner.hcp.min >= 21
+  4{t}  "Game: to play"   shows hcp + partner.hcp.min >= 21
         when  t is H | t is S
         priority 1
-  3N    "Game in notrump: partner showed a maximum"   shows hcp + partner.hcp.min >= 21
+  3N    "Game: to play"   shows hcp + partner.hcp.min >= 21
         when  t is C | t is D
         priority 1
-  P     "Sign off: the answer is our suit"
+  P     "To play"
         when  partner.last=3{t}
-  4{t}  "Corrects 3NT to our suit"    shows hcp<=16
+  4{t}  "Sign off in {t}"    shows hcp<=16
         when  partner.last=3N, t is H | t is S
   3{t}  "Sign off in {t}"             shows hcp<=16
-  3N    "To play: the answer was higher than our suit"   shows hcp<=16
+  3N    "To play in 3NT"   shows hcp<=16
         priority -1
-  4{t}  "Sign off in our major"       shows hcp<=16
+  4{t}  "Sign off in {t}"       shows hcp<=16
         when  t is H | t is S
         priority -2
   P     "No game"                     shows hcp<=16
@@ -279,7 +279,7 @@ when answered weak_two(t)
 # boards (3NT twice, 4♦, 5♦); passing was closer to par in three of them
 # (notes, 2026-09-25).
 after 2x (P) 2N (P) 3y (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural, y is not x
-  P   "Partner signed off in our suit"
+  P   "No further bid"
 
 # Opener after responder's own major over the answer (2026-10-09): raise
 # with three, which agrees it; else 3NT.
@@ -291,10 +291,10 @@ after 2x (P) 2N (P) 3y (P) 3z (P) when weak_two_suit(x), x is not C | two_c is n
 # Responder after opener's 3NT, no support for my major: slam in
 # notrump on 33 between us, game in my suit with six, else pass.
 after 2x (P) 2N (P) 3y (P) 3z (P) 3N (P) when weak_two_suit(x), x is not C | two_c is natural, z is H | z is S, z is not x, y is not z
-  6N  "Slam in notrump: 33 between us"   shows hcp + partner.hcp.min >= 33
+  6N  "Slam in notrump"   shows hcp + partner.hcp.min >= 33
   4z  "Six-card suit: game in it"        shows z>=6
-  P   "3NT is game"
+  P   "To play"
 
 # Opener after the preemptive raise: pass.
 after 2x (P) 3x (P) when weak_two_suit(x), x is not C | two_c is natural
-  P   "Partner's raise is preemptive"
+  P   "No further bid"

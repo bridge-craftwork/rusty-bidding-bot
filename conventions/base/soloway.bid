@@ -25,7 +25,7 @@ after 1x (P) 2y (P) when soloway, !weak2, y is not x, two_level_jump(y, x)
       shows z>=4, quality(z)>=good, y<=3, quality(y)<=poor | y<=2
       when  z is not x, z is not y
       prefer 0 - cheapest_rank(z)
-  2N  "No support, nothing else to show"        shows y<=3, quality(y)<=poor | y<=2
+  2N  "No support, no strong side suit"        shows y<=3, quality(y)<=poor | y<=2
       priority -1
 
 # ── Responder's second call (no fit agreed yet) ───────────────────────

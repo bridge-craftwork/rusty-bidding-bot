@@ -95,11 +95,11 @@ when opening, seat<=2
 
 # ── Third seat: five cards will do, and no quality requirement ───────
 when opening, seat=3
-  2D  "Weak two, third seat: a good five-card suit will do"  shows D>=5, D<=6, hcp=4..9, H<=3, S<=3
+  2D  "Weak two: five or six diamonds, 4-9"  shows D>=5, D<=6, hcp=4..9, H<=3, S<=3
       when two_d is weak, weak_2d_open, D>=6 | quality(D)>=good
-  2H  "Weak two, third seat: a good five-card suit will do"  shows H>=5, H<=6, hcp=4..9, S<=3
+  2H  "Weak two: five or six hearts, 4-9"  shows H>=5, H<=6, hcp=4..9, S<=3
       when two_h is weak, weak_2h_open, H>=6 | quality(H)>=good
-  2S  "Weak two, third seat: a good five-card suit will do"  shows S>=5, S<=6, hcp=4..9
+  2S  "Weak two: five or six spades, 4-9"  shows S>=5, S<=6, hcp=4..9
       when two_s is weak, weak_2s_open, S>=6 | quality(S)>=good
 
 # ── Fourth seat: no weak two; 2 of a suit is a sound opening ─────────
@@ -184,7 +184,7 @@ after 3H (P)
 after 3S (P)
   4S  "Raise to game"  shows S>=4 | (S=3, tp(S)>=9) | (S=2, hcp>=15)
 after 3C (P)
-  3N  "To play: 16+, the ace or king of clubs, the side suits stopped"
+  3N  "To play: 16+, A or K of clubs, side suits stopped"
       shows hcp>=16, has(A,C) | has(K,C), stop(S), stop(H), stop(D)
       priority 2
   4H  "To play: seven hearts"    shows H>=7, hcp>=12
@@ -204,7 +204,7 @@ after 3C (P)
   4C  "Invitational raise"  shows C>=2, hcp=9..14
       when  vul
 after 3D (P)
-  3N  "To play: 16+, the ace or king of diamonds, the side suits stopped"
+  3N  "To play: 16+, A or K of diamonds, side suits stopped"
       shows hcp>=16, has(A,D) | has(K,D), stop(S), stop(H), stop(C)
       priority 2
   4H  "To play: seven hearts"    shows H>=7, hcp>=12
@@ -234,5 +234,5 @@ after 3x (P) when x is not N
 # The preempter after partner's raise to four of the minor: pass. BBA
 # passed all 45 times on the vanilla SAYC set, 6-10 HCP.
 after 3x (P) 4x (P) when x is C | x is D
-  P   "Partner's raise: nothing more to say"
+  P   "No further bid"
       priority -10

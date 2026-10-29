@@ -72,7 +72,7 @@ after 1x (P) 1y (P) 2z (P) 2y (P) when asked ing_suit
   3z  "Five or more {z}"                   shows z>=5, y<=2
       priority 1
   3N  "19+, no fit"                        shows hcp>=19, y<=2
-  2N  "No fit, nothing more to show"       shows y<=2
+  2N  "No fit for {y}"       shows y<=2
       priority -1
 after 1x (P) 1y (P) 2z (P) 2y (P) 2N (P) when answered ing_suit
   P   "Weak: no game"                      shows points<=8
