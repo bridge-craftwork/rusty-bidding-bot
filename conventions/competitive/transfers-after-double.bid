@@ -82,13 +82,13 @@ after 1M (X)
 
 # Opener completes; over the constructive raise he values his hand.
 after 1H (X) 2D (P)
-  4H  "Game opposite the constructive raise: 17+"   shows tp(H)>=17
+  4H  "Game: 17+"   shows tp(H)>=17
       priority 1
   3H  "Invites game: 15-16"                        shows tp(H)>=15, tp(H)<=16
       priority 1
   2H  "Minimum: completes the transfer"
 after 1S (X) 2H (P)
-  4S  "Game opposite the constructive raise: 17+"   shows tp(S)>=17
+  4S  "Game: 17+"   shows tp(S)>=17
       priority 1
   3S  "Invites game: 15-16"                        shows tp(S)>=15, tp(S)<=16
       priority 1
@@ -100,10 +100,10 @@ after 1M (X) 2C (P)
 after 1S (X) 2D (P)
   2H  "Completes the transfer"                      artificial
 after 1H (X) 3D (P)
-  4H  "Game opposite four trumps and 8-10: 15+"     shows tp(H)>=15
+  4H  "Game: 15+"     shows tp(H)>=15
   3H  "Minimum"                                    priority -1
 after 1S (X) 3H (P)
-  4S  "Game opposite four trumps and 8-10: 15+"     shows tp(S)>=15
+  4S  "Game: 15+"     shows tp(S)>=15
   3S  "Minimum"                                    priority -1
 
 # Responder after the completion of a transfer to a new suit: pass when
@@ -112,15 +112,15 @@ after 1M (X) 1N (P) 2C (P)
   P   "Weak: to play"                               shows hcp<=9
   3C  "Invites: 10-12, six or more clubs"           shows C>=6, hcp>=10, hcp<=12
   3N  "Game values: 13+"                            shows hcp>=13
-  P   "Nothing more"                                priority -5
+  P   "No further bid"                                priority -5
 after 1M (X) 2C (P) 2D (P)
   P   "Weak: to play"                               shows hcp<=9
   3D  "Invites: 10-12, six or more diamonds"        shows D>=6, hcp>=10, hcp<=12
   3N  "Game values: 13+"                            shows hcp>=13
-  P   "Nothing more"                                priority -5
+  P   "No further bid"                                priority -5
 after 1S (X) 2D (P) 2H (P)
   P   "Weak: to play"                               shows hcp<=9
   3H  "Invites: 10-12, six or more hearts"          shows H>=6, hcp>=10, hcp<=12
   4H  "Game: six or more hearts, 13+"               shows H>=6, hcp>=13
   3N  "Game values: 13+, five hearts"               shows hcp>=13
-  P   "Nothing more"                                priority -5
+  P   "No further bid"                                priority -5

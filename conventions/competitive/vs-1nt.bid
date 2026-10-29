@@ -48,7 +48,7 @@ after (1N) when !(def is other) | dont_play
   3C  "Preemptive: seven clubs"                   shows C>=7, hcp>=4, hcp+length_points<=11
       priority 1
 after (1N) | (1N) P (P)
-  P   "Nothing to say over their 1NT"             priority -10
+  P   "No overcall"             priority -10
 
 # ── Partner has both majors ──────────────────────────────────────────
 # Cappelletti 2♦, Landy and Multi-Landy 2♣, DONT 2♥, Meckwell X then 2♥.
@@ -117,7 +117,7 @@ when asked nt_pc(x), rho.last=P | rho.last=X
       shows x<=2
       when  x is C
       sets  ask=nt_other
-  2H  "Which is your other suit? (pass or correct)"   alert
+  2H  "Pass or correct: which is your other suit?"   alert
       shows x<=2
       when  x is D
       sets  ask=nt_other
@@ -139,13 +139,13 @@ when asked nt_one(x), rho.last=P | rho.last=X
        when  x is H | x is S
   4{x} "Game in {x}"                            shows x>=2, hcp>=13
        when  x is H | x is S
-  P    "Nothing more to say"                    priority -5
+  P    "No further bid"                    priority -5
 
 # ── Partner doubled for penalties ────────────────────────────────────
 # Cappelletti and Modified Cappelletti: 15+ HCP. Sit with five or more
 # HCP, or with nowhere to go; run to a five-card suit with less.
 when asked nt_penalty, rho.last=P | rho.last=XX
-  P   "Sitting for the penalty double"          priority -1
+  P   "Leaves the double in"          priority -1
   2C  "Weak: five or more clubs"                shows C>=5, hcp<=4
   2D  "Weak: five or more diamonds"             shows D>=5, hcp<=4
   2H  "Weak: five or more hearts"               shows H>=5, hcp<=4

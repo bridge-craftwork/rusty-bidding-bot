@@ -35,7 +35,7 @@ module dont "DONT over their 1NT"
 define dont_strength = hcp<=15 | (hcp<=19, longest+second_longest>=10 | longest>=7)
 
 after (1N) | (1N) P (P) when def is dont | (dont_play, def is other)
-  X   "DONT: one long suit (clubs, diamonds or hearts)"   alert
+  X   "DONT: one long suit, not spades"   alert
       shows (C>=6 | D>=6 | H>=6), second_longest<=3, hcp+length_points>=10, dont_strength
       sets  ask=dont_one
   2C  "DONT: clubs and a higher suit"            alert

@@ -53,7 +53,7 @@ after (1N) | (1N) P (P) when def is suction
 # ── Advancer ─────────────────────────────────────────────────────────
 # Assume the one-suiter: bid it, the overcaller passes or shows the rest.
 when asked suc_relay(x), rho.last=P | rho.last=X | rho.last=XX
-  cheapest(x)  "Suction: bid your one-suiter (pass or correct)"   alert
+  cheapest(x)  "Suction relay: pass or correct"   alert
       sets  ask=suc_correct(x)
 
 # A two-suiter shown directly: preference, the longer (the higher when equal).

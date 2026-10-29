@@ -56,22 +56,22 @@ define partner_nt = partner.opened, partner.bids=1, partner.hcp.min>=12, partner
 define pen_spot(x) = natural_theirs(x), settled(x), !partner_nt
 
 when they.bid, direct | passed_round, !asked, they.level>=2, !responder_first
-  X   "Penalty: they are too high in spades"
+  X   "Penalty double of their spades"
       shows pen_suit(S)
       when  pen_spot(S)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they are too high in hearts"
+  X   "Penalty double of their hearts"
       shows pen_suit(H)
       when  pen_spot(H)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they are too high in diamonds"
+  X   "Penalty double of their diamonds"
       shows pen_suit(D)
       when  pen_spot(D)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they are too high in clubs"
+  X   "Penalty double of their clubs"
       shows pen_suit(C)
       when  pen_spot(C)
       sets  ask=penalty
@@ -80,7 +80,7 @@ when they.bid, direct | passed_round, !asked, they.level>=2, !responder_first
 # Their notrump after they have both bid (not an opening 1NT or 2NT,
 # which vs-1nt.bid and the defences answer).
 when they.bid, passed_round | (direct, they.game_reached), !asked, !responder_first, they.strain is N, lho.bids + rho.bids >= 2
-  X   "Penalty: they are too high in notrump"
+  X   "Penalty double of their notrump"
       shows we.hcp.min>=21 | big_hand_vs_game
       sets  ask=penalty
       priority -6
@@ -94,22 +94,22 @@ define our_game_bid = me.last=3N | me.last=4H | me.last=4S | me.last=5C | me.las
 define over_our_game(x) = x>=2, hcp>=12 | we.hcp.min>=20
 
 when they.bid, direct | passed_round, !asked | asked signoff, our_game_bid, they.level>=4, they.strain is not N
-  X   "Penalty: they bid spades over our game"
+  X   "Penalty double of their spades"
       shows over_our_game(S)
       when  natural_theirs(S), !partner_nt
       sets  ask=penalty
       priority -5
-  X   "Penalty: they bid hearts over our game"
+  X   "Penalty double of their hearts"
       shows over_our_game(H)
       when  natural_theirs(H), !partner_nt
       sets  ask=penalty
       priority -5
-  X   "Penalty: they bid diamonds over our game"
+  X   "Penalty double of their diamonds"
       shows over_our_game(D)
       when  natural_theirs(D), !partner_nt
       sets  ask=penalty
       priority -5
-  X   "Penalty: they bid clubs over our game"
+  X   "Penalty double of their clubs"
       shows over_our_game(C)
       when  natural_theirs(C), !partner_nt
       sets  ask=penalty
@@ -138,22 +138,22 @@ define ran_to(x) = !(asked penalty) | (direct, !lho.named(x)) | (passed_round, !
 define ran_into(x) = x>=4
 
 when they.bid, direct | passed_round, they_ran
-  X   "Penalty: they ran into my spades"
+  X   "Penalty: four or more spades"
       shows ran_into(S)
       when  natural_theirs(S), ran_to(S)
       sets  ask=penalty
       priority 0
-  X   "Penalty: they ran into my hearts"
+  X   "Penalty: four or more hearts"
       shows ran_into(H)
       when  natural_theirs(H), ran_to(H)
       sets  ask=penalty
       priority 0
-  X   "Penalty: they ran into my diamonds"
+  X   "Penalty: four or more diamonds"
       shows ran_into(D)
       when  natural_theirs(D), ran_to(D)
       sets  ask=penalty
       priority 0
-  X   "Penalty: they ran into my clubs"
+  X   "Penalty: four or more clubs"
       shows ran_into(C)
       when  natural_theirs(C), ran_to(C)
       sets  ask=penalty
@@ -168,22 +168,22 @@ define partner_preempted = partner.opened, partner.bids=1, partner.hcp.max<=11
 define vs_overcall_of_preempt(x) = (x>=2, hcp>=15) | (x>=4, hcp>=12) | (x>=3, hcp>=12, quality(x)>=good | top5(x)>=3) | (x>=5, hcp>=9)
 
 when they.bid, direct | passed_round, !asked, partner_preempted, me.bids=0
-  X   "Penalty: they overcalled partner's preempt in spades"
+  X   "Penalty double of their spades"
       shows vs_overcall_of_preempt(S)
       when  natural_theirs(S)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they overcalled partner's preempt in hearts"
+  X   "Penalty double of their hearts"
       shows vs_overcall_of_preempt(H)
       when  natural_theirs(H)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they overcalled partner's preempt in diamonds"
+  X   "Penalty double of their diamonds"
       shows vs_overcall_of_preempt(D)
       when  natural_theirs(D)
       sets  ask=penalty
       priority -6
-  X   "Penalty: they overcalled partner's preempt in clubs"
+  X   "Penalty double of their clubs"
       shows vs_overcall_of_preempt(C)
       when  natural_theirs(C)
       sets  ask=penalty
@@ -196,17 +196,17 @@ when they.bid, direct | passed_round, !asked, partner_preempted, me.bids=0
 define one_level_pen(x) = (x>=3, we.hcp.min>=19) | (x>=2, we.hcp.min>=22)
 
 when they.bid, passed_round, !asked, they.level=1, me.has_bid, partner.has_bid
-  X   "Penalty: their one-level spades, we have both bid"
+  X   "Penalty double of their spades"
       shows one_level_pen(S)
       when  natural_theirs(S)
       sets  ask=penalty
       priority -6
-  X   "Penalty: their one-level hearts, we have both bid"
+  X   "Penalty double of their hearts"
       shows one_level_pen(H)
       when  natural_theirs(H)
       sets  ask=penalty
       priority -6
-  X   "Penalty: their one-level diamonds, we have both bid"
+  X   "Penalty double of their diamonds"
       shows one_level_pen(D)
       when  natural_theirs(D)
       sets  ask=penalty
@@ -215,4 +215,4 @@ when they.bid, passed_round, !asked, they.level=1, me.has_bid, partner.has_bid
 # Partner sits when RHO passed; when they run, the double of the
 # runout above answers it (2026-10-09).
 when asked penalty, rho.last=P
-  P   "Sitting for partner's penalty double"  priority -1
+  P   "Leaves the double in"  priority -1

@@ -95,11 +95,11 @@ after 1M (X) when bromad, !jordan, !tfr
 # opposite 2♣ (15+ opposite 3♣), an invitation with 15-16 opposite 2♣,
 # else the cheapest bid in the major.
 after 1M (X) 2C (P) | 1M (X) 2C (XX) when bromad
-  4{M} "Game opposite the constructive raise: 17+"     shows tp(M)>=17
+  4{M} "Game: 17+"     shows tp(M)>=17
   3{M} "Invites game: 15-16"                           shows tp(M)>=15, tp(M)<=16
   2{M} "Minimum: nothing more"                         priority -1
 after 1M (X) 3C (P) | 1M (X) 3C (XX) when bromad
-  4{M} "Game opposite the four-card constructive raise: 15+"   shows tp(M)>=15
+  4{M} "Game: 15+"   shows tp(M)>=15
   3{M} "Minimum: nothing more"                                  priority -1
 after 1M (X) 2C (P) 3M (P) when bromad
   4{M} "Accepts: the top of the constructive raise"    shows tp(M)>=9
@@ -109,4 +109,4 @@ after 1M (X) 2C (P) 3M (P) when bromad
 # an opening hand.
 after 1M (X) 2N (P) 3M (P) | 1M (X) 2D (P) 2M (P) | 1M (X) 3D (P) 3M (P) when jordan | bromad
   4{M} "Game: 13+ opposite opener's minimum"           shows tp(M)>=13
-  P    "Limit raise only: nothing more"                priority -1
+  P    "Limit raise only"                priority -1

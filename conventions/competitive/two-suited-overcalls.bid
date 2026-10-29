@@ -101,15 +101,15 @@ after (1m) when mich_minors | mich_quasi | mich_play, !ghestem
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
-  2{m} "Michaels, weak: five or more in each major"
+  2{m} "Michaels: five or more in each major, weak or 16+"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
-  2{m} "Michaels, weak: five or more in each major"
+  2{m} "Michaels: five or more in each major, weak or 16+"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
-  2{m} "Michaels, strong: five or more in each major, 16+"
+  2{m} "Michaels: five or more in each major, weak or 16+"
       alert  artificial
       shows H>=5, S>=5, hcp>=16
       when  strength is weak_or_strong
@@ -124,15 +124,15 @@ after (1H) when mich_majors | mich_play, !ghestem
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
-  2H  "Michaels, weak: five or more spades and a five-card minor"
+  2H  "Michaels: spades and a minor, five-five, weak or 16+"
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
-  2H  "Michaels, weak: five or more spades and a five-card minor"
+  2H  "Michaels: spades and a minor, five-five, weak or 16+"
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
-  2H  "Michaels, strong: five or more spades and a five-card minor, 16+"
+  2H  "Michaels: spades and a minor, five-five, weak or 16+"
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp>=16
       when  strength is weak_or_strong
@@ -146,15 +146,15 @@ after (1S) when mich_majors | mich_play, !ghestem
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=17
       when  strength is wide_range, vul
-  2S  "Michaels, weak: five or more hearts and a five-card minor"
+  2S  "Michaels: hearts and a minor, five-five, weak or 16+"
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=9, hcp<=11
       when  strength is weak_or_strong, !vul
-  2S  "Michaels, weak: five or more hearts and a five-card minor"
+  2S  "Michaels: hearts and a minor, five-five, weak or 16+"
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=11, hcp<=11
       when  strength is weak_or_strong, vul
-  2S  "Michaels, strong: five or more hearts and a five-card minor, 16+"
+  2S  "Michaels: hearts and a minor, five-five, weak or 16+"
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp>=16
       when  strength is weak_or_strong
@@ -184,24 +184,24 @@ after (1D) when u2n_play | u2n_jump | ghestem
 # card strength (weak_or_strong has no strong rebid this high). The cue
 # of a raised major (the other major and a minor) is not written.
 after (1m) P (2m) when mich_minors | mich_quasi | mich_play, !ghestem
-  3{m} "Michaels over their raise: five or more in each major"
+  3{m} "Michaels: five or more in each major"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=9, hcp<=17
       when  !vul
-  3{m} "Michaels over their raise: five or more in each major"
+  3{m} "Michaels: five or more in each major"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=11, hcp<=17
       when  vul
 after (1M) P (2M) when u2n_play | u2n_jump | ghestem
-  2N  "Unusual 2NT over their raise: five or more in each minor"
+  2N  "Unusual 2NT: five or more in each minor"
       alert  artificial
       shows C>=5, D>=5, hcp+length_points>=9
 after (1C) P (2C) when u2n_play | u2n_jump | ghestem
-  2N  "Unusual 2NT over their raise: five or more diamonds and hearts"
+  2N  "Unusual 2NT: five or more diamonds and hearts"
       alert  artificial
       shows D>=5, H>=5, hcp+length_points>=9
 after (1D) P (2D) when u2n_play | u2n_jump | ghestem
-  2N  "Unusual 2NT over their raise: five or more clubs and hearts"
+  2N  "Unusual 2NT: five or more clubs and hearts"
       alert  artificial
       shows C>=5, H>=5, hcp+length_points>=9
 
@@ -233,7 +233,7 @@ after (1m) P (2m) 3m (*) when partner.H>=5, partner.S>=5, !rho.last=P, !rho.last
 # The cue bidder: a minimum passes the preference; 16+ or a playing
 # hand (four losers or fewer: six-six, six-five) bids the game.
 after (1m) P (2m) 3m (*) 3y (*) when y is H | y is S
-  P    "Minimum: partner has chosen"                  priority -5
+  P    "Minimum: no further bid"                  priority -5
   4{y} "Game: 16+ or four losers or fewer"            shows hcp>=16 | losers<=4
 
 # After the Unusual 2NT over their raise: the preference at the three
@@ -266,7 +266,7 @@ after (1x) P (2x) 2N (*) when partner.longest>=5, partner.second_longest>=5, !rh
 # The 2NT bidder: a minimum passes; 16+ or four losers bids game in
 # hearts.
 after (1x) P (2x) 2N (*) 3y (*) when y is not x
-  P    "Minimum: partner has chosen"                  priority -5
+  P    "Minimum: no further bid"                  priority -5
   4{y} "Game in hearts: 16+ or four losers or fewer"  shows hcp>=16 | losers<=4
       when  y is H
 
@@ -286,13 +286,13 @@ after (1m) 2m (P) | (1m) 2m (X) when partner.H>=5, partner.S>=5
       shows H>S, H>=3, hcp>=10, hcp<=12
   3S  "Jump preference: invitational, 10-12 with three spades"
       shows S>=H, S>=3, hcp>=10, hcp<=12
-  4H  "Game in hearts: to play (a preempt with four, or 13-15)"
+  4H  "Game in hearts: weak with four, or 13-15"
       shows H>S
       shows (H>=4, hcp<=9) | (H>=3, hcp>=13, hcp<=15)
-  4S  "Game in spades: to play (a preempt with four, or 13-15)"
+  4S  "Game in spades: weak with four, or 13-15"
       shows S>=H
       shows (S>=4, hcp<=9) | (S>=3, hcp>=13, hcp<=15)
-  3{m} "Cue bid: 16+, game or slam interest; describe your hand"
+  3{m} "Cue bid: 16+, game or slam interest"
       alert  artificial
       shows hcp>=16
       sets  forcing=round
@@ -341,13 +341,13 @@ after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
   2S  "Preference: three or more spades"
       shows S>=3
       priority -1
-  2N  "Asks for your minor, to play in it: at most two spades"
+  2N  "Asks for your minor, to play: at most two spades"
       alert  artificial
       shows S<=2
       sets  forcing=round
       when  mich_adv is ask_2nt
       priority -1
-  3C  "Natural: six or more clubs of my own, no spade fit, to play"
+  3C  "Natural: six or more clubs, to play"
       shows C>=6, S<=2, hcp<=12
       when  mich_adv is ask_2nt
   2N  "Asks for your minor: 10+, at most two spades"
@@ -356,16 +356,16 @@ after (1H) 2H (P) | (1H) 2H (X) when partner.S>=5
       sets  forcing=round
       when  mich_adv is pass_or_correct
       priority -1
-  3C  "Pass or correct: to play in your minor, up to 9, at most two spades"
+  3C  "Pass or correct: your minor, up to 9"
       alert  artificial
       shows S<=2, hcp<=9
       when  mich_adv is pass_or_correct
       priority -1
-  3D  "Natural: six or more diamonds of my own, no spade fit, to play"
+  3D  "Natural: six or more diamonds, to play"
       shows D>=6, S<=2, hcp<=12
   3S  "Jump preference: invitational, 10-12 with three spades"
       shows S>=3, hcp>=10, hcp<=12
-  4S  "Game in spades: to play (a preempt with four, or 13-15)"
+  4S  "Game in spades: weak with four, or 13-15"
       shows (S>=4, hcp<=9) | (S>=3, hcp>=13, hcp<=15)
   3H  "Cue bid: a strong spade raise, 16+, game or slam interest"
       alert  artificial
@@ -382,13 +382,13 @@ after (1S) 2S (P) | (1S) 2S (X) when partner.H>=5
   3H  "Preference: three or more hearts"
       shows H>=3
       priority -1
-  2N  "Asks for your minor, to play in it: at most two hearts"
+  2N  "Asks for your minor, to play: at most two hearts"
       alert  artificial
       shows H<=2
       sets  forcing=round
       when  mich_adv is ask_2nt
       priority -1
-  3C  "Natural: six or more clubs of my own, no heart fit, to play"
+  3C  "Natural: six or more clubs, to play"
       shows C>=6, H<=2, hcp<=12
       when  mich_adv is ask_2nt
   2N  "Asks for your minor: 10+, at most two hearts"
@@ -397,14 +397,14 @@ after (1S) 2S (P) | (1S) 2S (X) when partner.H>=5
       sets  forcing=round
       when  mich_adv is pass_or_correct
       priority -1
-  3C  "Pass or correct: to play in your minor, up to 9, at most two hearts"
+  3C  "Pass or correct: your minor, up to 9"
       alert  artificial
       shows H<=2, hcp<=9
       when  mich_adv is pass_or_correct
       priority -1
-  3D  "Natural: six or more diamonds of my own, no heart fit, to play"
+  3D  "Natural: six or more diamonds, to play"
       shows D>=6, H<=2, hcp<=12
-  4H  "Game in hearts: to play (a preempt with four, or 13-15)"
+  4H  "Game in hearts: weak with four, or 13-15"
       shows (H>=4, hcp<=9) | (H>=3, hcp>=13, hcp<=15)
   3S  "Cue bid: a heart raise, 12+, game interest"
       alert  artificial
@@ -476,7 +476,7 @@ after (1M) 2M (*) 2N (*) 3m (*) | (1M) 2M (*) 2N (*) 4m (*)
       shows hcp>=10, hcp<=12, m>=3
       when  m<=3 | hcp<=11
   3N   "Game: 13+, {M} held"                               shows hcp>=13, stop(M)
-  5{m} "Game in partner's minor: 13+ (12 with four trumps)"
+  5{m} "Game in partner's minor: 13+, or 12 with four"
       shows (hcp>=13, m>=3) | (hcp>=12, m>=4)
       priority -1
   4{M} "Slam try in partner's minor: 17+, four-card support"
@@ -518,7 +518,7 @@ after (1C) 2N (P) | (1C) 2N (X) when partner.D>=5, partner.H>=5
   3H  "Preference: hearts, at least as many as diamonds"   shows H>=D
       priority -1
   4D  "Preemptive: four or more diamonds, up to 8"   shows D>=4, D>H, hcp<=8
-  4H  "Game in hearts: to play (a preempt with four, or 12-15)"
+  4H  "Game in hearts: weak with four, or 12-15"
       shows H>=D
       shows (H>=4, hcp<=8) | (H>=3, hcp>=12, hcp<=15)
   3N  "To play: 13+, clubs and spades held"   shows hcp>=13, stop(C), stop(S)
@@ -532,7 +532,7 @@ after (1D) 2N (P) | (1D) 2N (X) when partner.C>=5, partner.H>=5
   3H  "Preference: hearts, at least as many as clubs"   shows H>=C
       priority -1
   4C  "Preemptive: four or more clubs, up to 8"   shows C>=4, C>H, hcp<=8
-  4H  "Game in hearts: to play (a preempt with four, or 12-15)"
+  4H  "Game in hearts: weak with four, or 12-15"
       shows H>=C
       shows (H>=4, hcp<=8) | (H>=3, hcp>=12, hcp<=15)
   3N  "To play: 13+, diamonds and spades held"   shows hcp>=13, stop(D), stop(S)
@@ -550,7 +550,7 @@ after (1x) 2N (*) when partner.longest>=5, partner.second_longest>=5
 # 17+ bids the game (with weak_or_strong the strong variety is 16+, and
 # it bids again the same way).
 after (1x) 2x (P) 2y (P) | (1x) 2x (P) 3y (P) when y is not x, y is H | y is S, !partner.jumped
-  P    "Minimum: partner has chosen"       priority -5
+  P    "Minimum: no further bid"       priority -5
   3{y} "Strong two-suiter: invites game"   shows hcp>=15, hcp<=16
   4{y} "Strong two-suiter: game"           shows hcp>=17
 # After the jump preference (10-12): accept with 11+.
@@ -598,16 +598,16 @@ after (1M) 2M (*) 3M (*) 4m (P) | (1M) 2M (*) 3M (*) 4m (X)
 # After the minimum at the three level: the cue bidder (16+) bids the
 # game, in the major with three or more, else 3NT with their suit held.
 after (1x) 2x (*) 3x (*) 3y (*) when y is H | y is S, y is not x
-  4{y} "Game: three or more {y} opposite the minimum"   shows y>=3
+  4{y} "Game: three or more {y}"   shows y>=3
   3N   "Game: {x} held, no {y} fit"                     shows stop(x)
       priority -1
-  4{y} "Game: the best fit we have"
+  4{y} "Game in the best fit"
       priority -2
 
 # The Unusual 2NT after a preference: a minimum passes; 17+ bids the
 # game in hearts or 3NT with their suit held.
 after (1x) 2N (P) 3y (P) when y is not x
-  P    "Minimum: partner has chosen"       priority -5
+  P    "Minimum: no further bid"       priority -5
   4{y} "Strong: game in hearts"            shows hcp>=17
       when  y is H
   3N   "Strong: 17+, {x} held"             shows hcp>=17, stop(x)
@@ -761,11 +761,11 @@ after 1D (2N) when rho.C>=5, rho.H>=5
 # support points, else let it go.
 after 1m (2m) 3m (P) | 1M (2M) 3M (P) | 1M (2N) 3M (P) when they.bid
   4{M}  "Game: 17+ opposite the competitive raise"   shows tp(M)>=17
-  P     "The raise was competitive: no game"          priority -5
+  P     "No game"          priority -5
 # Opener after responder's natural notrump (11-12): 3NT with 14+.
 after 1x (2x) 2N (P) when they.bid
   3N  "Accepts: 14+"                     shows hcp>=14
-  P   "Minimum: 2NT is enough"           priority -5
+  P   "Minimum: no game"           priority -5
 
 # Opener once responder has raised or bid notrump and they have bid on:
 # responder described his hand, so opener passes, or doubles with 15+
@@ -773,13 +773,13 @@ after 1x (2x) 2N (P) when they.bid
 # positions in the Michaels scenarios, such as 1H (2H) 4H (4S) and
 # 1S (2S) 4S (5H)).
 after 1x (2x) 3x (*) | 1x (2x) 4x (*) | 1x (2N) 3x (*) | 1x (2N) 4x (*) | 1x (2x) 2N (*) | 1x (2x) 3N (*) | 1x (2N) 3N (*) when they.bid
-  X   "Penalty: 15+ HCP, they have bid over partner's raise"
+  X   "Penalty: 15+ HCP"
       shows hcp>=15
       priority -19
-  P   "Partner has raised: nothing more to say"  priority -20
+  P   "No further bid"  priority -20
 # Responder after opener's penalty double: leave it in.
 after 1x (2x) 3x (*) X (P) | 1x (2x) 4x (*) X (P) | 1x (2N) 3x (*) X (P) | 1x (2N) 4x (*) X (P) | 1x (2x) 2N (*) X (P) | 1x (2x) 3N (*) X (P) | 1x (2N) 3N (*) X (P) when they.bid
-  P   "Partner doubled for penalty: leave it in"  priority -20
+  P   "Leaves the double in"  priority -20
 
 # Opener answers the limit raise: game in a major with 14+ support
 # points; in a minor 3NT with 14+ (their suits are shown, so no stopper
@@ -792,7 +792,7 @@ when asked limit_raise(t)
   5{t} "Accepts: 16+, game in {t}"       shows hcp>=16, t>=5
       when  t is C | t is D
       priority -1
-  cheapest(t) "Minimum: no game opposite a limit raise"
+  cheapest(t) "Minimum: signs off"
       priority -2
 
 # ── The Unusual 1NT ──────────────────────────────────────────────────
@@ -803,17 +803,17 @@ when asked limit_raise(t)
 # passed hand in the sandwich seat, five-four, 10 HCP). Five-four or
 # better, a hand that did not open.
 after (1x) when u1n_play, passed_hand
-  1N  "Unusual 1NT (passed hand): diamonds and hearts, five-four or better"
+  1N  "Unusual 1NT: diamonds and hearts, five-four or better"
       alert  artificial
       shows D>=4, H>=4, D>=5 | H>=5, hcp>=6
       when  x is C
       priority 1
-  1N  "Unusual 1NT (passed hand): clubs and hearts, five-four or better"
+  1N  "Unusual 1NT: clubs and hearts, five-four or better"
       alert  artificial
       shows C>=4, H>=4, C>=5 | H>=5, hcp>=6
       when  x is D
       priority 1
-  1N  "Unusual 1NT (passed hand): both minors, five-four or better"
+  1N  "Unusual 1NT: both minors, five-four or better"
       alert  artificial
       shows C>=4, D>=4, C>=5 | D>=5, hcp>=6
       when  x is H | x is S
@@ -905,23 +905,23 @@ after (1x) | (1x) P (2x) | (1x) P (3x) | (1x) P (4x) when u4n_play
       when  x is D
       priority 1
 after (2x) | (3x) when u4n_play, x is not N, rho.hcp.max <= 12, rho.x>=5
-  4N  "Unusual 4NT: five-five or better in both minors, strong"
+  4N  "Unusual 4NT: both minors, five-five, strong"
       alert  artificial
       shows C>=5, D>=5, losers<=4
       when  x is H | x is S
       priority 1
-  4N  "Unusual 4NT: five-five or better in clubs and hearts, strong"
+  4N  "Unusual 4NT: clubs and hearts, five-five, strong"
       alert  artificial
       shows C>=5, H>=5, losers<=4
       when  x is D
       priority 1
-  4N  "Unusual 4NT: five-five or better in diamonds and hearts, strong"
+  4N  "Unusual 4NT: diamonds and hearts, five-five, strong"
       alert  artificial
       shows D>=5, H>=5, losers<=4
       when  x is C
       priority 1
 after (4M) when u4n_play, rho.hcp.max <= 12, rho.M>=5
-  4N  "Unusual 4NT: five-five or better in both minors"
+  4N  "Unusual 4NT: both minors, five-five"
       alert  artificial
       shows C>=5, D>=5, losers<=5
       priority 1
@@ -952,17 +952,17 @@ after (1x) 4N (P) | (2x) 4N (P) | (3x) 4N (P) | (4x) 4N (P) | (1x) P (2x) 4N (P)
 # the four level. With Leaping Michaels the direct cue of a weak two is
 # not Michaels (Rosen: it asks for a stopper; not written).
 after (2x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5, !leaping
-  3{x} "Michaels over their weak two: five or more in each major"
+  3{x} "Michaels: five or more in each major"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=13
       when  x is C | x is D
       priority 1
-  3{x} "Michaels over their weak two: five or more spades and a five-card minor"
+  3{x} "Michaels: five or more spades and a five-card minor"
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=13
       when  x is H
       priority 1
-  3{x} "Michaels over their weak two: five or more hearts and a five-card minor"
+  3{x} "Michaels: five or more hearts and a five-card minor"
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=13
       when  x is S
@@ -984,17 +984,17 @@ after (2x) P (P) | (2x) P (3x) when mich_play | mich_minors | mich_quasi | mich_
       when  x is S
       priority 1
 after (3x) when mich_play | mich_minors | mich_quasi | mich_majors | nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
-  4{x} "Michaels over their preempt: five or more in each major"
+  4{x} "Michaels: both majors, game values"
       alert  artificial
       shows H>=5, S>=5, hcp+length_points>=16
       when  x is C | x is D
       priority 1
-  4{x} "Michaels over their preempt: five or more spades and a five-card minor, game values"
+  4{x} "Michaels: spades and a five-card minor, game values"
       alert  artificial
       shows S>=5, C>=5 | D>=5, hcp+length_points>=16
       when  x is H
       priority 1
-  4{x} "Michaels over their preempt: five or more hearts and a five-card minor, game values"
+  4{x} "Michaels: hearts and a five-card minor, game values"
       alert  artificial
       shows H>=5, C>=5 | D>=5, hcp+length_points>=16
       when  x is S
@@ -1042,12 +1042,12 @@ after (2x) when leaping, x is not N, rho.hcp.max <= 12, rho.x>=5
 # forcing (Rosen: "not remotely close to being forcing"), so a little
 # lighter than the leap: five-five, five losers.
 after (3x) when nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
-  4D  "Non-Leaping Michaels: five or more diamonds and a five-card major"
+  4D  "Non-Leaping Michaels: diamonds and a major, five-five"
       alert
       shows D>=5, H>=5 | S>=5, losers<=5
       when  x is C
       priority 1
-  4C  "Non-Leaping Michaels: five or more clubs and a five-card major"
+  4C  "Non-Leaping Michaels: clubs and a major, five-five"
       alert
       shows C>=5, H>=5 | S>=5, losers<=5
       when  x is D
@@ -1080,12 +1080,12 @@ after (3x) when nlm, x is not N, rho.hcp.max <= 12, rho.x>=5
 # preference with three; an unknown suit is found by pass or correct;
 # 3NT with their suit held and no major fit.
 after (2x) 3x (P) | (2x) P (P) 3x (P) | (2x) P (3x) 4x (P) | (3x) 4x (P) when x is not N, mich_play | mich_minors | mich_quasi | mich_majors | nlm
-  4H  "Game in hearts: three or more, 8+ HCP (or four)"
+  4H  "Game in hearts: four or more, or three and 8+ HCP"
       shows H>=3, hcp>=8 | H>=4
       prefer H + 0
       when  partner.H>=5
       priority 3
-  4S  "Game in spades: three or more, 8+ HCP (or four)"
+  4S  "Game in spades: four or more, or three and 8+ HCP"
       shows S>=3, hcp>=8 | S>=4
       prefer S + 0
       when  partner.S>=5
@@ -1132,12 +1132,12 @@ after (2x) 3x (P) | (2x) P (P) 3x (P) | (2x) P (3x) 4x (P) | (3x) 4x (P) when x 
 
 # The same after Leaping Michaels.
 after (2x) 4y (P) when leaping, x is not N, y is C | y is D, y is not x
-  4H  "Game in hearts: three or more, 8+ HCP (or four)"
+  4H  "Game in hearts: four or more, or three and 8+ HCP"
       shows H>=3, hcp>=8 | H>=4
       prefer H + 0
       when  partner.H>=5
       priority 3
-  4S  "Game in spades: three or more, 8+ HCP (or four)"
+  4S  "Game in spades: four or more, or three and 8+ HCP"
       shows S>=3, hcp>=8 | S>=4
       prefer S + 0
       when  partner.S>=5
@@ -1184,12 +1184,12 @@ after (2x) 4y (P) when leaping, x is not N, y is C | y is D, y is not x
 
 # The same after Non-Leaping Michaels.
 after (3x) 4y (P) when nlm, x is not N, y is C | y is D, y is not x
-  4H  "Game in hearts: three or more, 8+ HCP (or four)"
+  4H  "Game in hearts: four or more, or three and 8+ HCP"
       shows H>=3, hcp>=8 | H>=4
       prefer H + 0
       when  partner.H>=5
       priority 3
-  4S  "Game in spades: three or more, 8+ HCP (or four)"
+  4S  "Game in spades: four or more, or three and 8+ HCP"
       shows S>=3, hcp>=8 | S>=4
       prefer S + 0
       when  partner.S>=5
@@ -1255,7 +1255,7 @@ when asked poc_minor
 # over a major is not written (its meaning is not defined: a question
 # for Rick).
 after (1M) when djc_major is gambling | djc_major is strong
-  3{M} "Jump cue bid: a solid suit of seven or more; bid 3NT with {M} stopped"
+  3{M} "Jump cue bid: a solid seven-card suit, asks for a {M} stopper"
       alert  artificial
       shows (C>=7, quality(C)>=excellent) | (D>=7, quality(D)>=excellent) | (M is H, S>=7, quality(S)>=excellent) | (M is S, H>=7, quality(H)>=excellent)
       sets  forcing=round, ask=jump_cue_stopper
@@ -1263,7 +1263,7 @@ after (1M) when djc_major is gambling | djc_major is strong
       when  djc_major is gambling | controls>=6
       priority 1
 after (1m) when djc_minor is gambling
-  3{m} "Jump cue bid: a solid suit of seven or more; bid 3NT with {m} stopped"
+  3{m} "Jump cue bid: a solid seven-card suit, asks for a {m} stopper"
       alert  artificial
       shows (C>=7, quality(C)>=excellent, m is D) | (D>=7, quality(D)>=excellent, m is C) | (H>=7, quality(H)>=excellent) | (S>=7, quality(S)>=excellent)
       sets  forcing=round, ask=jump_cue_stopper

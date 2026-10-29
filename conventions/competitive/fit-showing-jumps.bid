@@ -29,43 +29,43 @@ module fit-showing-jumps "Fit-showing jumps"
 # 10-12 support points (a passed hand), four of partner's suit, five of
 # the side suit with an ace, king or queen.
 after 1x (P) | 1x (X) | 1x (1N) when passed_hand
-  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10-12"  alert
+  jump(S) "Fit-showing jump: 4+ {x}, 5+ ♠ with an honour, 10-12"  alert
       shows x>=4, S>=5, quality(S)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not S
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10-12"  alert
+  jump(H) "Fit-showing jump: 4+ {x}, 5+ ♥ with an honour, 10-12"  alert
       shows x>=4, H>=5, quality(H)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not H
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10-12"  alert
+  jump(D) "Fit-showing jump: 4+ {x}, 5+ ♦ with an honour, 10-12"  alert
       shows x>=4, D>=5, quality(D)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not D
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10-12"  alert
+  jump(C) "Fit-showing jump: 4+ {x}, 5+ ♣ with an honour, 10-12"  alert
       shows x>=4, C>=5, quality(C)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not C
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
 after 1x (1y) | 1x (2y) when passed_hand, y is not x
-  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10-12"  alert
+  jump(S) "Fit-showing jump: 4+ {x}, 5+ ♠ with an honour, 10-12"  alert
       shows x>=4, S>=5, quality(S)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not S, y is not S
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10-12"  alert
+  jump(H) "Fit-showing jump: 4+ {x}, 5+ ♥ with an honour, 10-12"  alert
       shows x>=4, H>=5, quality(H)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not H, y is not H
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10-12"  alert
+  jump(D) "Fit-showing jump: 4+ {x}, 5+ ♦ with an honour, 10-12"  alert
       shows x>=4, D>=5, quality(D)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not D, y is not D
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10-12"  alert
+  jump(C) "Fit-showing jump: 4+ {x}, 5+ ♣ with an honour, 10-12"  alert
       shows x>=4, C>=5, quality(C)>=fair, hcp+length_points=10..12, hcp<=11
       when  x is not C, y is not C
       sets  trump=x, forcing=round, ask=fit_jump(x)
@@ -75,22 +75,22 @@ after 1x (1y) | 1x (2y) when passed_hand, y is not x
 # A limit raise or better with the side suit: it replaces the redouble
 # or the Jordan 2NT for this shape.
 after 1x (X) when !passed_hand
-  jump(S) "Fit-showing jump: 4+ {x}, five or more spades with an honour, 10+"  alert
+  jump(S) "Fit-showing jump: 4+ {x}, 5+ ♠ with an honour, 10+"  alert
       shows x>=4, S>=5, quality(S)>=fair, hcp+length_points>=10
       when  x is not S
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(H) "Fit-showing jump: 4+ {x}, five or more hearts with an honour, 10+"  alert
+  jump(H) "Fit-showing jump: 4+ {x}, 5+ ♥ with an honour, 10+"  alert
       shows x>=4, H>=5, quality(H)>=fair, hcp+length_points>=10
       when  x is not H
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(D) "Fit-showing jump: 4+ {x}, five or more diamonds with an honour, 10+"  alert
+  jump(D) "Fit-showing jump: 4+ {x}, 5+ ♦ with an honour, 10+"  alert
       shows x>=4, D>=5, quality(D)>=fair, hcp+length_points>=10
       when  x is not D
       sets  trump=x, forcing=round, ask=fit_jump(x)
       priority 2
-  jump(C) "Fit-showing jump: 4+ {x}, five or more clubs with an honour, 10+"  alert
+  jump(C) "Fit-showing jump: 4+ {x}, 5+ ♣ with an honour, 10+"  alert
       shows x>=4, C>=5, quality(C)>=fair, hcp+length_points>=10
       when  x is not C
       sets  trump=x, forcing=round, ask=fit_jump(x)
@@ -100,25 +100,25 @@ after 1x (X) when !passed_hand
 # Partner's overcall is five cards, so four-card support is nine trumps.
 # Forcing one round; a passed advancer is limited to 12.
 after (1x) 1y (P) | (1x) 1y (X) | (1x) P (P) 1y (P)
-  jump(S) "Fit-showing jump: 4+ {y}, five or more spades with an honour, 10+"  alert
+  jump(S) "Fit-showing jump: 4+ {y}, 5+ ♠ with an honour, 10+"  alert
       shows y>=4, S>=5, quality(S)>=fair, hcp+length_points>=10
       when  x is not S, y is not S
       when  !passed_hand | hcp<=11
       sets  trump=y, forcing=round, ask=fit_jump(y)
       priority 2
-  jump(H) "Fit-showing jump: 4+ {y}, five or more hearts with an honour, 10+"  alert
+  jump(H) "Fit-showing jump: 4+ {y}, 5+ ♥ with an honour, 10+"  alert
       shows y>=4, H>=5, quality(H)>=fair, hcp+length_points>=10
       when  x is not H, y is not H
       when  !passed_hand | hcp<=11
       sets  trump=y, forcing=round, ask=fit_jump(y)
       priority 2
-  jump(D) "Fit-showing jump: 4+ {y}, five or more diamonds with an honour, 10+"  alert
+  jump(D) "Fit-showing jump: 4+ {y}, 5+ ♦ with an honour, 10+"  alert
       shows y>=4, D>=5, quality(D)>=fair, hcp+length_points>=10
       when  x is not D, y is not D
       when  !passed_hand | hcp<=11
       sets  trump=y, forcing=round, ask=fit_jump(y)
       priority 2
-  jump(C) "Fit-showing jump: 4+ {y}, five or more clubs with an honour, 10+"  alert
+  jump(C) "Fit-showing jump: 4+ {y}, 5+ ♣ with an honour, 10+"  alert
       shows y>=4, C>=5, quality(C)>=fair, hcp+length_points>=10
       when  x is not C, y is not C
       when  !passed_hand | hcp<=11
@@ -142,7 +142,7 @@ after (1x) 1y (P) | (1x) 1y (X) | (1x) P (P) 1y (P)
 # 12-14 or 18-19, so in practice the strong notrump hand), or 18+ with
 # any shape (2026-10-09: 14 balanced bid 3NT opposite 8-11 HCP).
 after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z (P) | 1x (1y) 3z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | (1y) 1x (P) 2z (P) | (1y) 1x (P) 3z (P) | (1y) 1x (X) 2z (P) | (1y) 1x (X) 3z (P) | (1y) P (P) 1x (P) 2z (P) | (1y) P (P) 1x (P) 3z (P) when asked fit_jump(t), z is not t
-  4{t} "Game: 14+ total points, or 12+ with the side suit {z} fitting"
+  4{t} "Game: 14+ total points, or 12+ with a fit in {z}"
       shows tp(t)>=14 | (hcp>=12, z>=3 | quality(z)>=fair, z>=2)
       when  t is H | t is S
       priority 2
@@ -154,7 +154,7 @@ after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z
       shows (hcp>=16, z>=2, balanced) | hcp>=18
       when  t is C | t is D
       priority 2
-  5{t} "Game in {t}: 16+, the side suit {z} fits"
+  5{t} "Game in {t}: 16+, a fit in {z}"
       shows hcp>=16, z>=3 | quality(z)>=fair, !balanced
       when  t is C | t is D
       priority 2
@@ -168,7 +168,7 @@ after 1x (P) 2z (P) | 1x (P) 3z (P) | 1x (X) 2z (P) | 1x (X) 3z (P) | 1x (1y) 2z
 # one (2026-10-09: 1D-2H-3D read as a two-over-one, and the passed hand
 # bid 3NT over the sign-off).
 after 1x (P) 2z (P) 3x (P) | 1x (P) 3z (P) 3x (P) | 1x (P) 3z (P) 4x (P) | 1x (X) 2z (P) 3x (P) | 1x (X) 3z (P) 3x (P) | 1x (X) 3z (P) 4x (P) | 1x (1y) 2z (P) 3x (P) | 1x (1y) 3z (P) 3x (P) | 1x (1y) 3z (P) 4x (P) | 1x (2y) 3z (P) 3x (P) | 1x (2y) 3z (P) 4x (P) | (1y) 1x (P) 2z (P) 3x (P) | (1y) 1x (P) 3z (P) 3x (P) | (1y) 1x (P) 3z (P) 4x (P) when answered fit_jump(x), z is not x
-  4{x} "13+: game after all"                 shows hcp+length_points>=13
+  4{x} "Game: 13+"                 shows hcp+length_points>=13
       when  x is H | x is S, !passed_hand
       priority 4
-  P   "Partner has signed off"               priority 3
+  P   "No further bid"               priority 3

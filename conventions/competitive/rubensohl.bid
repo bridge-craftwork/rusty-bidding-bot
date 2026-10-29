@@ -50,23 +50,23 @@ define rub_nt_opener(y) = over_nt, lho.y>=4, (maybe lho.H<=3) | (maybe lho.S<=3)
 
 # ── Responder over 2♦ ───────────────────────────────────────────────
 after 1N (2D) when rub_nt(D)
-  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+  2N  "Rubensohl: transfer to clubs, weak or game values"
       alert  artificial
       shows C>=6, C>D, H<=3, S<=3
       priority 3
-  3C  "Rubensohl: transfer to diamonds = Stayman, game values, a four-card major"
+  3C  "Rubensohl: Stayman, game values, a four-card major"
       alert  artificial
       shows hcp>=10, H=4 | S=4, H<=4, S<=4
       priority 3
-  3D  "Rubensohl: transfer to hearts, five or more, invitational or better"
+  3D  "Rubensohl: transfer to hearts, invitational or better"
       alert  artificial
       shows H>=5, H>=S, hcp>=8
       priority 3
-  3H  "Rubensohl: transfer to spades, five or more, invitational or better"
+  3H  "Rubensohl: transfer to spades, invitational or better"
       alert  artificial
       shows S>=5, S>H, hcp>=8
       priority 3
-  3S  "Rubensohl: transfer to notrump, game values, no stopper in {y}"
+  3S  "Rubensohl: game values, no stopper in {y}"
       alert  artificial
       shows hcp>=10, !stop(D), H<=3, S<=3
       priority 3
@@ -76,23 +76,23 @@ after 1N (2D) when rub_nt(D)
 
 # ── Responder over 2♥ ───────────────────────────────────────────────
 after 1N (2H) when rub_nt(H)
-  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+  2N  "Rubensohl: transfer to clubs, weak or game values"
       alert  artificial
       shows C>=6, C>=D, S<=3
       priority 3
-  3C  "Rubensohl: transfer to diamonds (weak, or game values)"
+  3C  "Rubensohl: transfer to diamonds, weak or game values"
       alert  artificial
       shows D>=6, D>C, S<=3
       priority 3
-  3D  "Rubensohl: transfer to hearts = Stayman, game values, four spades"
+  3D  "Rubensohl: Stayman, game values, four spades"
       alert  artificial
       shows hcp>=10, S=4
       priority 3
-  3H  "Rubensohl: transfer to spades, five or more, invitational or better"
+  3H  "Rubensohl: transfer to spades, invitational or better"
       alert  artificial
       shows S>=5, hcp>=8
       priority 3
-  3S  "Rubensohl: transfer to notrump, game values, no stopper in hearts"
+  3S  "Rubensohl: game values, no stopper in hearts"
       alert  artificial
       shows hcp>=10, !stop(H), S<=3
       priority 3
@@ -102,19 +102,19 @@ after 1N (2H) when rub_nt(H)
 
 # ── Responder over 2♠ ───────────────────────────────────────────────
 after 1N (2S) when rub_nt(S)
-  2N  "Rubensohl: transfer to clubs (weak, or game values)"
+  2N  "Rubensohl: transfer to clubs, weak or game values"
       alert  artificial
       shows C>=6, C>=D, H<=3
       priority 3
-  3C  "Rubensohl: transfer to diamonds (weak, or game values)"
+  3C  "Rubensohl: transfer to diamonds, weak or game values"
       alert  artificial
       shows D>=6, D>C, H<=3
       priority 3
-  3D  "Rubensohl: transfer to hearts, five or more, invitational or better"
+  3D  "Rubensohl: transfer to hearts, invitational or better"
       alert  artificial
       shows H>=5, hcp>=8
       priority 3
-  3H  "Rubensohl: transfer to spades = Stayman, game values, four hearts"
+  3H  "Rubensohl: Stayman, game values, four hearts"
       alert  artificial
       shows hcp>=10, H=4
       priority 3
@@ -227,27 +227,27 @@ after 1N (2D) 3C (P) 3H (P) | 1N (2D) 3C (P) 3S (P) | 1N (2H) 3D (P) 3S (P) | 1N
   P   "Game reached"
       priority 1
 after 1N (2D) 3C (P) 3D (P) | 1N (2H) 3D (P) 3H (P) | 1N (2S) 3H (P) 3S (P) when over_nt
-  4C  "No stopper between us: clubs"              shows C>=4, C>=D
+  4C  "No stopper: clubs"              shows C>=4, C>=D
       priority 2
-  4D  "No stopper between us: diamonds"           shows D>=4, D>C
+  4D  "No stopper: diamonds"           shows D>=4, D>C
       priority 2
-  3N  "Notrump: nowhere better"
+  3N  "To play in 3NT"
       priority 1
 
 # ════ 2. After partner doubles their weak two ═══════════════════════
 # Advancer. Their suit x is 2♦, 2♥ or 2♠. Two of a suit is natural and
 # weak (vs-preempts.bid).
 after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
-  2N  "Rubensohl: transfer to clubs (to play or invite; game values with five)"
+  2N  "Rubensohl: transfer to clubs, to play or invite"
       alert  artificial
       shows C>=4, C>=D, hcp<=12 | C>=5, S<=3 | x is S, H<=3 | x is H
       priority 3
-  3C  "Rubensohl: transfer to diamonds (to play or invite; game values with five)"
+  3C  "Rubensohl: transfer to diamonds, to play or invite"
       alert  artificial
       shows D>=4, D>C, hcp<=12 | D>=5, S<=3 | x is S, H<=3 | x is H
       when  x is not D
       priority 3
-  3C  "Rubensohl: transfer to their diamonds = Stayman, game values, a four-card major"
+  3C  "Rubensohl: Stayman, game values, a four-card major"
       alert  artificial
       shows hcp>=13, H=4 | S=4, H<=4, S<=4
       when  x is D
@@ -262,7 +262,7 @@ after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
       shows H>=5, H>=S, hcp>=9, hcp<=12
       when  x is D
       priority 3
-  3D  "Rubensohl: transfer to their hearts = Stayman, game values, four spades"
+  3D  "Rubensohl: Stayman, game values, four spades"
       alert  artificial
       shows hcp>=13, S=4
       when  x is H
@@ -272,7 +272,7 @@ after (2x) X (P) | (2x) P (P) X (P) when after_x, x is not C
       shows S>=5, hcp>=9, hcp<=12
       when  x is D | x is H
       priority 3
-  3H  "Rubensohl: transfer to their spades = Stayman, game values, four hearts"
+  3H  "Rubensohl: Stayman, game values, four hearts"
       alert  artificial
       shows hcp>=13, H=4
       when  x is S
@@ -352,7 +352,7 @@ after (2x) X (P) 2N (P) 3C (P) | (2x) P (P) X (P) 2N (P) 3C (P) | (2x) X (P) 3C 
       priority 3
   3N  "9+ with {x} stopped"                       shows hcp>=9, stop(x)
       priority 3
-  P   "Nothing better"                            priority 1
+  P   "To play"                            priority 1
 after (2x) X (P) 3D (P) 3H (P) | (2x) P (P) X (P) 3D (P) 3H (P) when after_x, x is not C, x is not H
   4H  "Game: 11+ with five, or 12+"               shows hcp>=11, H>=5 | hcp>=12
       priority 3

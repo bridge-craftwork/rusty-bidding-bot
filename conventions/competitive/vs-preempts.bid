@@ -33,7 +33,7 @@ module vs-preempts "Defence against preempts"
 
 # ── Direct seat over their weak two ──────────────────────────────────
 after (2x) when x is not N, rho.hcp.max <= 12
-  X   "Takeout: 12+ total points and the unbid suits, or 17+ with any shape"
+  X   "Takeout: the unbid suits and 12+, or any 17+"
       shows hcp+length_points>=12
       shows ((S>=3 | x is S), (H>=3 | x is H), (D>=3 | x is D), (C>=3 | x is C), x<=2) | (hcp>=17, x<=3)
   cheapest(S) "Overcall: five or more spades, 12-16"
@@ -71,7 +71,7 @@ after (2x) when x is not N, rho.hcp.max <= 12
   4H  "Seven or more hearts: game"
       shows H>=7, H>S, hcp+length_points>=13
       when  x is not H
-  P   "Nothing to say over their weak two"
+  P   "No overcall"
       priority -10
 
 # ── Balancing over their weak two: (2x) P (P) ───────────────────────
@@ -148,7 +148,7 @@ after (3x) when x is not N, rho.hcp.max <= 12
   4H  "Seven or more hearts: game"
       shows H>=7, H>S, hcp+length_points>=13
       when  x is not H
-  P   "Nothing to say over their preempt"
+  P   "No overcall"
       priority -10
 
 # ── Balancing over their three-level preempt: (3x) P (P) ─────────────
@@ -194,7 +194,7 @@ after (4x) when x is H, rho.hcp.max <= 12
       shows S>=5, hcp+length_points>=14
   cheapest(D) "Five or more diamonds, 16+"   shows D>=5, D>=C, hcp+length_points>=16
   cheapest(C) "Five or more clubs, 16+"      shows C>=5, C>D, hcp+length_points>=16
-  P   "Nothing to say over their preempt"
+  P   "No overcall"
       priority -10
 after (4x) when x is S, rho.hcp.max <= 12
   X   "Values: 17+, for penalty"
@@ -202,7 +202,7 @@ after (4x) when x is S, rho.hcp.max <= 12
   cheapest(D) "Five or more diamonds, 16+"   shows D>=5, D>=C, hcp+length_points>=16
   cheapest(H) "Five or more hearts, 16+"     shows H>=5, H>=D, H>=C, hcp+length_points>=16
   cheapest(C) "Five or more clubs, 16+"      shows C>=5, C>D, hcp+length_points>=16
-  P   "Nothing to say over their preempt"
+  P   "No overcall"
       priority -10
 after (4x) P (P) when x is H, lho.hcp.max <= 12
   X   "Reopening double: 12+, no hearts"
@@ -240,7 +240,7 @@ after (4x) when x is C | x is D, rho.hcp.max <= 12 | rho.named(x)
       when  x is C
   cheapest(C) "Five or more clubs, 16+"      shows C>=5, S<=4, H<=4, hcp+length_points>=16
       when  x is D
-  P   "Nothing to say over their preempt"
+  P   "No overcall"
       priority -10
 after (4x) P (P) when x is C | x is D, lho.hcp.max <= 12 | lho.named(x)
   X   "Reopening double: 12+, short in {x}, or 16+"
@@ -348,24 +348,24 @@ after (2x) X (P) | (3x) X (P) | (2x) P (P) X (P) | (3x) P (P) X (P) when x is no
       shows C>=4, C>D | x is D, hcp+length_points<=10, S<=3 | x is S, H<=3 | x is H
       when  x is not C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(C) <= 13
   # Nothing fits: the longest suit that is not theirs, cheapest first.
-  cheapest(S) "Our best suit: spades"   when x is not S, S>=H, S>=D, S>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(S) <= 13
+  cheapest(S) "No four-card suit: spades"   when x is not S, S>=H, S>=D, S>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(S) <= 13
       priority -5
-  cheapest(H) "Our best suit: hearts"   when x is not H, H>=D, H>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(H) <= 13
+  cheapest(H) "No four-card suit: hearts"   when x is not H, H>=D, H>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(H) <= 13
       priority -5
-  cheapest(D) "Our best suit: diamonds" when x is not D, D>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(D) <= 13
+  cheapest(D) "No four-card suit: diamonds" when x is not D, D>=C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(D) <= 13
       priority -6
-  cheapest(C) "Our best suit: clubs"    when x is not C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(C) <= 13
+  cheapest(C) "No four-card suit: clubs"    when x is not C, !(leb | rub) | cheapest_rank(x) > 18 | cheapest_rank(C) <= 13
       priority -7
 
 # ── The doubler's rebid ──────────────────────────────────────────────
 # A pass denies the power double (17+ HCP); the strong hand raises,
 # shows its own suit, or bids notrump.
 after (2x) X (P) 2y (P) | (2x) X (P) 3y (P) | (3x) X (P) 3y (P) | (3x) X (P) 4y (P) | (2x) P (P) X (P) 2y (P) | (2x) P (P) X (P) 3y (P) when y is not x, x is not C
-  P   "Minimum double: partner has chosen"          shows hcp<=16
+  P   "Minimum double"          shows hcp<=16
       priority -5
-  4{y} "17+ with four: game in partner's major"      shows y>=4, hcp>=17
+  4{y} "Game: four-card support, 17+"      shows y>=4, hcp>=17
       when  y is H | y is S
-  cheapest(y) "17+ with four: raise"                 shows y>=4, hcp>=17
+  cheapest(y) "Raise: four-card support, 17+"                 shows y>=4, hcp>=17
       priority -1
   3N  "18+ with {x} stopped"                         shows hcp>=18, stop(x)
   cheapest(S) "17+ and five or more spades"          shows S>=5, hcp>=17
@@ -395,12 +395,12 @@ after (2x) X (P) 2N (P) when x is not C, !leb, !rub
 # Tried 2026-09-27 and reverted on par; built again from the card
 # 2026-10-05 (vs-preempts.notes.md).
 after (2x) X (P) | (2x) P (P) X (P) when x is not C, leb, !rub
-  2N  "Lebensohl: relay to 3C (weak, to play at three; or game values with {x} stopped)"
+  2N  "Lebensohl: relay to 3C, weak or game values"
       alert  artificial
       shows  (hcp<=8, C>=4 | (D>=4, x is H | x is S) | (H>=4, x is S), S<=3 | x is S | cheapest_rank(S) >= 15, H<=3 | x is H | cheapest_rank(H) >= 15) | (hcp>=13, stop(x), S<=4 | x is S, H<=4 | x is H)
       sets   ask=leb_relay
       priority 1
-  cheapest(x) "Cue bid: game values, four of an unbid major, no stopper in {x}"
+  cheapest(x) "Cue bid: game values, a four-card major, no {x} stopper"
       alert  artificial
       shows  hcp>=13, (S=4, x is not S) | (H=4, x is not H), S<=4 | x is S, H<=4 | x is H
       when   !stop(x)
@@ -436,7 +436,7 @@ after (2x) X (P) | (2x) P (P) X (P) when x is not C, leb, !rub
       when  x is not H
       priority 1
   # Five of their suit and a weak hand: nowhere to go, pass (BBA).
-  P   "Five or more {x}: nothing to say"
+  P   "Leaves the double in: five or more {x}"
       shows x>=5, hcp<=8
       priority 1
   # Nothing else fits: the relay, then the best of what is left.
@@ -447,7 +447,7 @@ after (2x) X (P) | (2x) P (P) X (P) when x is not C, leb, !rub
 
 # The doubler: 3C as asked; with 19+ and their suit stopped, 3NT.
 after (2x) X (P) 2N (P) | (2x) P (P) X (P) 2N (P) when x is not C, leb, !rub
-  3N  "19+ with {x} stopped: no clubs partscore"    shows hcp>=19, stop(x)
+  3N  "Game: 19+ with {x} stopped"    shows hcp>=19, stop(x)
       priority 2
   3C  "Lebensohl: as asked"
       alert  artificial
@@ -471,7 +471,7 @@ after (2x) X (P) 2N (P) 3C (P) | (2x) P (P) X (P) 2N (P) 3C (P) when x is not C,
   3N  "Slow 3NT: game values with {x} stopped, no four-card major"
       shows hcp>=13, stop(x)
       priority 1
-  P   "Weak: clubs will do"                          priority -10
+  P   "Weak: to play in clubs"                          priority -10
 
 # The doubler answers either cue bid: an unbid four-card major, else
 # 3NT, else his longer minor.
@@ -510,6 +510,6 @@ after (2x) 2N (P) when x is not C
 # overcall the responder competes with a fit (total-tricks.bid) or
 # passes; the opener has described his hand.
 after 2x (X) | 2x (2y) | 2x (3y) | 2x (2N) | 3x (X) | 3x (3y) | 3x (4y) | 3x (3N) | 4x (X) | 4x (4y) | 4x (5y) when x is not N
-  P   "They came in: nothing to add"                 priority -10
+  P   "No further bid"                 priority -10
 after 2x (X) P (*) | 2x (2y) P (*) | 2x (3y) P (*) | 2x (2N) P (*) | 3x (X) P (*) | 3x (3y) P (*) | 3x (4y) P (*) | 4x (X) P (*) | 4x (4y) P (*) | 4x (5y) P (*) when x is not N
-  P   "Partner passed: the preempt said it all"      priority -10
+  P   "No further bid"      priority -10
