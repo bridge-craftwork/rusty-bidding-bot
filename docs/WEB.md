@@ -46,6 +46,7 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 | `styles.css` | the bridge-craftwork design tokens, copied from Bridge-Classroom (not fetched) |
 | `cards/21_intermediate_card.json` | Bridge-Classroom's 2/1 Intermediate card (seed data), offered as `BC-21-Intermediate` |
 | `status.html`, `status/` | the status page (below): `status.js` draws, `legend.js` the status vocabulary, `status.css`, and `status.json`, its data (committed) |
+| `explorer.html`, `explorer/` | the auction explorer (below): `explorer.js`, `explorer.css` |
 | `_headers`, `404.html` | Pages headers; the real 404 |
 | `scripts/` | `emit-reference.mjs`, `check-reference.mjs` (drift), `test.mjs` |
 
@@ -190,6 +191,22 @@ in `.rbb-cache/conv-ab/results.json`, which `status_data.py --conv-ab`
 reads (the default path). `node web/scripts/test.mjs`
 checks that the shipped `status.json` parses and every tile has a known
 status.
+
+## Auction explorer
+
+`explorer.html` (Rick, 2026-10-29), after GIB's bidding definitions page
+(netbridge.dk/gib.html): a card for each side (stock names, a PBS card by
+name in the link, or an uploaded `.bbsa` / Bridge-Classroom JSON for
+North-South), dealer, vulnerability and scoring; the auction as a grid
+whose calls go back to that point; and for the seat to call every legal
+call with what it means: one WASM `meaning` per call, the step's
+`announcement` with suit names drawn as symbols, alerts and
+announcements flagged. "Calls with no meaning" lists the rest; "the
+rule's own text" adds `explanation` and its rule where it differs. State
+is in the fragment: `#ns=..&ew=..&dealer=..&vul=..&scoring=..&auction=1H-P-2N-P`
+(GIB's short calls; an uploaded card stays out). It is also where a call
+that reads oddly shows up first: 3NT over Jacoby 2NT "unbalanced" on
+2026-10-29.
 
 ## Later
 
