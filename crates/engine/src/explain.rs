@@ -67,7 +67,12 @@ pub fn explanation(s: &Shown) -> String {
     }
     let balanced = match (s.before.balanced, s.after.balanced) {
         (b, a) if a != b && a == Tri::True => Some("balanced"),
-        (b, a) if a != b && a == Tri::False => Some("unbalanced"),
+        // Two or more in every suit is not "unbalanced" to a reader, though
+        // it is outside the strict 4-3-3-3 / 4-4-3-2 / 5-3-3-2: a 5-4-2-2
+        // says no shape word at all, as a 4-5-2-2 says "balanced" below.
+        (b, a) if a != b && a == Tri::False && s.after.len.iter().any(|r| r.lo < 2) => {
+            Some("unbalanced")
+        }
         // A notrump range shows no shape flag, but 2-5 in every suit is
         // balanced as far as anyone reading the text is concerned.
         (_, Tri::Unknown) if flat(s.after) && !flat(s.before) => Some("balanced"),
@@ -243,6 +248,25 @@ mod tests {
         assert_eq!(
             explanation(&s),
             "Shortness; 12-21 HCP, 13+ support points, 5+ spades, 0-1 clubs"
+        );
+    }
+
+    #[test]
+    fn two_in_every_suit_is_not_unbalanced() {
+        // 1♥ P 2NT P 3NT on a card that opens 5-3-3-2 1NT: 5-4-2-2 or 6-3-2-2.
+        let before = know((10, 21), [(0, 8), (0, 8), (5, 13), (0, 8)]);
+        let mut after = know((15, 17), [(2, 4), (2, 4), (5, 6), (2, 4)]);
+        after.balanced = Tri::False;
+        let fresh = SeatKnowledge::default();
+        let s = shown(
+            "15-17, no shortness",
+            &before,
+            &after,
+            [&fresh, &fresh, &fresh],
+        );
+        assert_eq!(
+            explanation(&s),
+            "15-17, no shortness; 15-17 HCP, 5-6 hearts"
         );
     }
 
