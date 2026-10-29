@@ -9,7 +9,7 @@ module blackwood "Blackwood (standard)"
   skill  bidding_conventions/blackwood
   skill  partnership_bidding/blackwood
   param  style = slam.cue_bids.style default first_or_second_round
-  param  kask5n = slam.king_ask.five_nt default false
+  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
 
 # ── The ask ───────────────────────────────────────────────────────────
 #

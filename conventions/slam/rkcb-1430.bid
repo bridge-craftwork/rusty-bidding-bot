@@ -13,7 +13,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   param  m0314 = slam.blackwood.minor_0314 default false
   param  gstyle = general.style
   param  style = slam.cue_bids.style default first_or_second_round
-  param  kask5n = slam.king_ask.five_nt default false
+  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
   param  kspec  = slam.king_ask.specific default false
 
 # ── The ask ───────────────────────────────────────────────────────────

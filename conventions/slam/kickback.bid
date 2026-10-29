@@ -14,7 +14,7 @@ module kickback "Kickback: the step above four of the trump suit asks for keycar
   param  kbplay = slam.kickback.play default false
   param  kb1430 = slam.kickback.rkcb_1430 default false
   param  kb0314 = slam.kickback.rkcb_0314 default false
-  param  kask5n = slam.king_ask.five_nt default false
+  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
 
 # The card plays Kickback when any of its three fields is on.
 define kickback_on = kbplay | kb1430 | kb0314
