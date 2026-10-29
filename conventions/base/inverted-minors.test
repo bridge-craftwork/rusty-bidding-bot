@@ -19,3 +19,10 @@ N JT3.KQ.Q965.A642      | 1D P 2D P 4D P   | 5D     | 12 HCP opposite the slam t
 # Over the weak raise game needs about 18
 S AKT6.K986.KJ7.83      | 1D P 3D P        | P      | 14 opposite 5-9: no game
 S KQ32.AKQ4.K5.J53      | 1C P 3C P        | 3NT    | 18 balanced opposite 5-9: game
+
+# The plain-raise rebids (rebids.bid) stay out of the inverted raise
+# (2026-10-29): 2NT here is 12-14, never the plain raise's 18-19.
+card    21GF-DEFAULT minor_openings.inverted_minors.play=true
+dealer  N
+N K82.KQ5.Q92.J953      | 1C P 2C P | 2NT | 12-14 balanced
+N AK2.KQ5.Q92.KJ53      | 1C P 2C P | 3NT | 18-19 balanced
