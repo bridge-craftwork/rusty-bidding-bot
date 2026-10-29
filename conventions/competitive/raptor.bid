@@ -110,5 +110,5 @@ when asked raptor_minor
   3C  "Clubs"                                       shows C>=5
   3D  "Diamonds"                                    shows D>=5
 after (1M) 1N (P) 2C (P)
-  P   "Clubs: content"                              shows C>=5
+  P   "Clubs: to play"                              shows C>=5
   2D  "Diamonds"                                    shows D>=5

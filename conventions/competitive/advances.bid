@@ -36,9 +36,9 @@ module advances "Advancing partner's overcall"
   param  mixed      = overcalls.responses.jump_cuebid_mixed default false
 
 after (1x) 1y (P)
-  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+  2{y} "Raise: 8-11 with three {y}, up to 11 with four"
       shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
-  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
+  3{y} "Preemptive raise: five {y}, four at favourable; under 8 points"
       shows y>=4, hcp+length_points<=7
       shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
       priority 1                        # before the raise to two, which a weak four-card hand also fits
@@ -83,7 +83,7 @@ after (1x) 1y (P)
 after (1x) P (P) 1y (P)
   2{y} "Raise: 9-11 total points, three-card support"
       shows y>=3, hcp+length_points>=9, hcp+length_points<=11
-  3{y} "Preemptive raise: four-card support, less than 9 total points"
+  3{y} "Preemptive raise: four-card support, under 9 points"
       shows y>=4, hcp+length_points<=8
       when  jump_raise is weak
   1S  "7+ total points, four or more spades"
@@ -116,18 +116,18 @@ after (1x) P (P) 1y (P)
 # RHO has doubled or bid over the overcall. Support is still the first
 # thing to show, and raising at once takes bidding room from them.
 after (1x) 1y (X) | (1x) P (P) 1y (X)
-  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+  2{y} "Raise: 8-11 with three {y}, up to 11 with four"
       shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
-  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
+  3{y} "Preemptive raise: five {y}, four at favourable; under 8 points"
       shows y>=4, hcp+length_points<=7
       shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
       priority 1                        # before the raise to two, which a weak four-card hand also fits
-  P   "Nothing to say over their double"  priority -10
+  P   "Not enough to advance"  priority -10
 
 after (1x) 1y (1z) | (1x) P (P) 1y (1z)
-  2{y} "Raise: 8-11 total points with three-card support, up to 11 with four"
+  2{y} "Raise: 8-11 with three {y}, up to 11 with four"
       shows y>=3, hcp+length_points<=11, hcp+length_points>=8 | y>=4
-  3{y} "Preemptive raise: five-card support (four at favourable), less than 8 total points"
+  3{y} "Preemptive raise: five {y}, four at favourable; under 8 points"
       shows y>=4, hcp+length_points<=7
       shows weak_jump_raise(y)          # one trump more than the Law for a weak hand (total-tricks.bid)
       priority 1                        # before the raise to two, which a weak four-card hand also fits
@@ -140,7 +140,7 @@ after (1x) 1y (1z) | (1x) P (P) 1y (1z)
   cheapest(H) "Free bid: 9+ total points, five or more hearts"
       shows H>=5, S<=4, hcp+length_points>=9
       when  x is not H, y is not H, z is not H
-  P   "Nothing to say over their bid"  priority -10
+  P   "Not enough to advance"  priority -10
 
 # The mixed raise holds over RHO's double or one-level bid too (BBA's
 # `Mixed raise` switch plays it there and only there: advances.notes.md,
@@ -159,9 +159,9 @@ after (1x) 1y (X) | (1x) 1y (1z)
 after (1x) 1y (2z) | (1x) P (P) 1y (2z)
   2{y} "Raise: 7-11 total points, three-card support"
       shows y>=3, hcp+length_points>=7, hcp+length_points<=11
-  3{y} "Raise to the three level: four-card support, 8-11 total points"
+  3{y} "Raise: four-card support, 8-11 total points"
       shows y>=4, hcp+length_points>=8, hcp+length_points<=11
-  P   "Nothing to say over their bid"  priority -10
+  P   "Not enough to advance"  priority -10
 
 # ── Advancing a two-level overcall ───────────────────────────────────
 # `(*)` is any call by RHO, so this covers the seat however he has
@@ -183,13 +183,13 @@ after (1x) 2y (*) | (1x) P (P) 2y (*) when y is not x
 # do anything. The `when` is the complement of the simple-overcall one
 # below: "y could have been bid at the one level over x".
 after (1x) 2y (P) | (1x) 2y (X) | (1x) 2y (2x) when y is not x, x is C | (x is D, y is not C) | (x is H, y is S)
-  4{y} "Raise to game: four-card support and 11+, with no cue bid to make"
+  4{y} "Raise to game: four-card support, 11+"
       shows y>=4, hcp+length_points>=11
       when  y is H | y is S
-  3{y} "Preemptive raise: three-card support for a major, less than 11"
+  3{y} "Preemptive raise: three-card support, under 11 points"
       shows y>=3, hcp+length_points<=10
       when  y is H | y is S
-  3{y} "Preemptive raise: four-card support for a minor, less than 11"
+  3{y} "Preemptive raise: four-card support, under 11 points"
       shows y>=4, hcp+length_points<=10
       when  y is C | y is D
 
@@ -237,7 +237,7 @@ after (1x) 1y (1N) | (1x) P (P) 1y (1N)
       alert  artificial
       shows  y>=3, hcp+length_points>=12
       sets   forcing=round, ask=cue_raise(y)
-  P   "Nothing to say over their notrump"  priority -10
+  P   "Not enough to advance"  priority -10
 
 # ── The overcaller answers advancer's cue bid ────────────────────────
 # The cue showed three-card support and a limit raise or better, so the
@@ -251,7 +251,7 @@ when asked cue_raise(t)
   3N  "Accepts: 13+ balanced, game in notrump"
       shows balanced, hcp+length_points>=13
       when  t is C | t is D
-  cheapest(t) "Minimum overcall: no game opposite a limit raise"
+  cheapest(t) "Minimum: signs off"
       priority -1
 
 # Over the mixed raise (7-9 support points, four trumps): game wants
@@ -264,7 +264,7 @@ after (1x) 1y (P) 3x (P) | (1x) 1y (X) 3x (P) | (1x) 1y (1z) 3x (P)
   3N  "Accepts: 16+ balanced, game in notrump"
       shows balanced, hcp+length_points>=16, stop(x)
       when  mixed, y is C | y is D
-  3{y} "No game opposite a mixed raise"
+  3{y} "Minimum: signs off"
       when  mixed
       priority -1
 
@@ -277,13 +277,13 @@ after (1x) 1y (P) 1z (P)
   2{y} "Six or more {y}"                     shows y>=6, z<=3
       priority -1
   1N  "11-14 balanced, {x} held"             shows balanced, hcp>=11, hcp<=14, stop(x), z<=3
-  P   "Nothing more to say"                  priority -5
+  P   "No further bid"                  priority -5
 after (1x) 1y (P) 2z (P)
   3{z} "Four-card support"                   shows z>=4, hcp>=11
   2{y} "Six or more {y}"                     shows y>=6, z<=3
       when  y is not C
       priority -1
-  P   "Nothing more to say"                  priority -5
+  P   "No further bid"                  priority -5
 
 # The overcaller again after (1x) 1y (2x) P (P): BBA rebids a six-card
 # suit with 12+ (2026-09-25). It also doubles for takeout with a
@@ -292,8 +292,8 @@ after (1x) 1y (P) 2z (P)
 # suit, so 2{y} is always there, and 3{y} was a jump. On bare SAYC BBA
 # rebids 2{y} with six from 10 HCP (2026-10-02, 88 hands).
 after (1x) 1y (2x) P (P)
-  2{y} "Six or more {y}: competing"           shows y>=6, hcp>=10
-  P   "Nothing more"                          priority -5
+  2{y} "Competes: six or more {y}"           shows y>=6, hcp>=10
+  P   "No further bid"                          priority -5
 
 # ── Advancing from the sandwich seat ─────────────────────────────────
 # Partner came in after (1x) P (1y) (overcalls.bid, 2026-10-07). I have
@@ -376,7 +376,7 @@ after (1x) P (1y) X (*) when y is not x, !rho.last=P
   cheapest(C) "Free bid: five or more clubs"
       shows C>=5, hcp+length_points>=7
       when  x is not C, y is not C, cheapest_rank(C)<=13
-  P   "Nothing to say over their bid"  priority -10
+  P   "Not enough to advance"  priority -10
 
 # ── Advancer after partner's overcall of their 1NT ───────────────────
 # The overcall is five cards and 12+ total points (overcalls.bid); RHO
@@ -394,6 +394,6 @@ after (1N) 2y (*) | (1N) 3y (*)
 # 1S (2D) 2S (P) 4S and 1S (2D) X (3D) 3H). Positions where the
 # defending side has more to say need rules of their own above this.
 when lho.opened | rho.opened
-  P   "Defending: nothing more to say"
+  P   "No further bid"
       when  !passes_out_artificial   # never pass out our own artificial bid (base.bid)
       priority -20

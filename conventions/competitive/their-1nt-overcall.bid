@@ -63,7 +63,7 @@ after 1x (1N)
   # count, not a weak five-card raise, and jumping to game on a raise
   # this side of their 15-18 loses contracts.
 
-  P   "Nothing to say over their notrump"  priority -10
+  P   "No suitable bid"  priority -10
 
 # Opener after partner's penalty double of their 1NT (2026-09-27, ticket
 # b160: no rule). With 10+ opposite and an opening here, the double is
@@ -73,10 +73,10 @@ after 1x (1N)
 after 1x (1N) X (P)
   2{x} "Pulls: six or more {x}, a minimum with a singleton or void"
        shows x>=6, hcp<=13, shortest<=1
-  P    "Sits for partner's penalty double"
+  P    "Leaves the double in"
        priority -5
 after 1x (1N) X (*) when !rho.last=P
-  P    "Partner doubled: his move next"
+  P    "No further bid"
        priority -5
 
 # Opener after partner's preemptive jump over their 1NT (2026-09-27,
@@ -87,5 +87,5 @@ after 1x (1N) X (*) when !rho.last=P
 after 1x (1N) 3z (P) when z is C | z is D, z is not x
   5{z} "Game in partner's suit: 19+ and support"   shows z>=2, hcp>=19
        priority 3
-  P    "Partner preempted: his suit, and no game"
+  P    "No game"
        priority 2
