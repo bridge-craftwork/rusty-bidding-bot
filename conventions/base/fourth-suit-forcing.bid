@@ -31,12 +31,12 @@ define fsf_game = fsf_gf | (fsf_play, !fsf_round)
 
 
 after 1x (P) 1y (P) 1z (P) | 1x (P) 1y (P) 2z (P) when y is not x, z is not x, z is not y, !tw(x)
-  cheapest(w)  "Fourth suit forcing: game values, no clear call"  alert
+  cheapest(w)  "Fourth suit forcing: game values"  alert
       shows points>=13
       when  fsf_on, fsf_game, w is not x, w is not y, w is not z, cheapest_rank(w) <= 13, !passed_hand
       sets  ask=fsf(x, y, z, w), forcing=game
       artificial
-  cheapest(w)  "Fourth suit forcing: 12+, no clear call"  alert
+  cheapest(w)  "Fourth suit forcing: 12+"  alert
       shows points>=12
       when  fsf_on, !fsf_game, w is not x, w is not y, w is not z, cheapest_rank(w) <= 13, !passed_hand
       sets  ask=fsf(x, y, z, w), forcing=round
@@ -55,7 +55,7 @@ when asked fsf(x, y, z, w)
   cheapest(z)  "Five or more {z} as well"         shows z>=5, y<=2, !stop(w)
       priority 1
   cheapest(w)  "Four cards in {w}"                shows w>=4, y<=2, !stop(w)
-  cheapest(x)  "Nothing more to show"
+  cheapest(x)  "No support, no stopper in {w}"
       priority -5
 
 # Responder places the contract.
@@ -64,6 +64,6 @@ when answered fsf(x, y, z, w)
       when  y is H | y is S
   3N  "Game in notrump"                           shows points>=12
       priority -1
-  P   "Invitational only: partner's minimum answer"   shows points<=12
+  P   "No game: invitational values"   shows points<=12
       when  !we.gf
       priority -5

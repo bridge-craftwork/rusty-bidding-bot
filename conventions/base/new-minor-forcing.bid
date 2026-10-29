@@ -36,9 +36,9 @@ when asked nmf
   2H  "Three hearts"                       shows H=3        when partner.H>=4
   2S  "Three spades"                       shows S=3        when partner.S>=4
   2H  "Four hearts, not three spades"      shows H>=4, S<=2  when partner.S>=4
-  2N  "Minimum (12-13), no fit"            shows hcp<=13
+  2N  "No fit, minimum: 12-13 HCP"            shows hcp<=13
       priority -1
-  3N  "Maximum (14), no fit"               shows hcp>=14
+  3N  "No fit, maximum: 14 HCP"               shows hcp>=14
       priority -1
 
 # Responder places the contract: with a fit, invite (3M) or bid game (4M);

@@ -59,9 +59,9 @@ after 1x (P) 1y (P) when !tw(x)
   # BBA raises a major on HCP and length, not shortness: 2y up to 14,
   # 3y 15-17 (HCP + a point a card beyond four), game with 18 HCP or 17
   # and 19 support points (rebids.notes.md, "BBA treatment").
-  2y  "Raise (BBA): 4+ {y}, minimum"       shows y>=4, hcp+length_points<=14   sets trump=y
+  2y  "Raise: 4+ {y}, minimum"       shows y>=4, hcp+length_points<=14   sets trump=y
       when  style is bba
-  3y  "Jump raise (BBA): 4+ {y}, 15-17"    shows y>=4, hcp+length_points>=15, hcp<=17, hcp<=16 | tp(y)<=18   sets trump=y
+  3y  "Jump raise: 4+ {y}, 15-17"    shows y>=4, hcp+length_points>=15, hcp<=17, hcp<=16 | tp(y)<=18   sets trump=y
       when  y is H | y is S, style is bba
   3y  "Jump raise: 4+ {y}, 16+"             shows y>=4, tp(y)>=16   sets trump=y
       when  y is C | y is D                  # a minor: there is no four-level game
@@ -70,17 +70,17 @@ after 1x (P) 1y (P) when !tw(x)
       priority -1                          # a new suit first
   # A minor's rebid is read as five or more (2026-10-09): 5-4 too weak to
   # reverse rebids it too (below). Six-card hands bid it here.
-  2x  "Rebids {x}: five or more (usually six), minimum"   shows x>=5, suit_points<=15
+  2x  "Rebids {x}: 5+, minimum"   shows x>=5, suit_points<=15
       when  x is C | x is D
       when  x>=6
       priority -1                          # a new suit first
   3x  "Jump rebid: 6+ {x}, 16-18"          shows x>=6, suit_points=16..18
       when  style is not bba
       priority -1                          # a new suit first
-  3x  "Jump rebid (BBA): 6+ {x}, 15-18"    shows x>=6, hcp=15..18
+  3x  "Jump rebid: 6+ {x}, 15-18"    shows x>=6, hcp=15..18
       when  style is bba
       priority -1
-  2x  "Rebids {x}: five or more, too weak to reverse"
+  2x  "Rebids {x}: 5+"
       shows x>=5, suit_points<=18
       when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
       priority -4
@@ -88,18 +88,18 @@ after 1x (P) 1y (P) when !tw(x)
   2N  "18+ HCP, balanced"                  shows balanced | shape 5-4-2-2, hcp>=18, y<=3
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19, y<=3
       priority 1                           # ahead of a jump shift or reverse, as BBA
-  1N  "Minimum, no better rebid"           shows hcp<=14, y<=3
+  1N  "Minimum, no fit"           shows hcp<=14, y<=3
       priority -3                          # e.g. 5-4 with a singleton: no suit to rebid
-  3x  "Jump rebid: 6+ {x}, too good for a simple rebid"
+  3x  "Jump rebid: 6+ {x}, 16+"
       shows x>=6, suit_points>=16
       priority -4                          # a long suit with 19+ and no 3NT or 4M
-  2N  "15-17 balanced, no other rebid"     shows balanced, hcp=15..17, y<=3
+  2N  "15-17 HCP, balanced"     shows balanced, hcp=15..17, y<=3
       priority -4                          # 1NT would be a lie: the rebid is 12-14
 after 1x (P) 1M (P) when !tw(x)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
       when  style is not bba
       priority 1                           # support first, ahead of a jump shift (BBA)
-  4M  "Game raise (BBA): 4+ {M}, 18 HCP, or 17 and 19 support points"
+  4M  "Game raise: 4+ {M}"
       shows M>=4, hcp>=18 | (hcp>=17, tp(M)>=19)   sets trump=M
       when  style is bba
 
@@ -111,7 +111,7 @@ after 1C (P) 1D (P) when !tw(C)
   # 1NT even with one or both four-card majors. Standard, and any card
   # with the Walsh switch off (minor_openings.walsh.play, as BBA reads
   # it), bids a four-card major up the line, balanced or not.
-  1N  "12-14 HCP, balanced (Walsh: a major may be hidden)"   shows balanced | shape 5-4-2-2, hcp=12..14
+  1N  "12-14 HCP, balanced, may hold a 4-card major"   shows balanced | shape 5-4-2-2, hcp=12..14
       when  style is not bba, style is not standard, walsh
       priority 2
   1N  "12-14 HCP, balanced, no four-card major"   shows balanced | shape 5-4-2-2, hcp=12..14, H<=3, S<=3
@@ -128,13 +128,13 @@ after 1C (P) 1D (P) when !tw(C)
   # BBA (Walsh style: responder bypasses diamonds with a weak hand and a
   # major) rebids 1NT with 12-17 and one four-card major, even 5-4 with a
   # singleton; 1H only with both majors; a jump shift from 18.
-  1N  "BBA: 12-17, no six clubs, not both majors"
+  1N  "12-17 HCP, not both majors"
       shows hcp=12..17, H<=4, S<=4, H<=3 | S<=3, C<=5, D<=4, shortest>=2 | C=5
       when  style is bba, walsh               # Walsh off: up the line, as above
       priority 2
-  2H  "Jump shift (BBA): 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game
+  2H  "Jump shift: 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game
       when  style is bba
-  2S  "Jump shift (BBA): 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game
+  2S  "Jump shift: 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game
       when  style is bba
 after 1C (P) 1H (P) when !tw(C)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
@@ -158,7 +158,7 @@ after 1D (P) 1H (P)
   1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, H<=3
       when  style is not bba               # Rick: balanced rebids 1NT, not 2C
       priority 1
-  1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, H<=3, C=4
+  1N  "12-13 HCP, balanced"   shows balanced, hcp=12..13, H<=3, C=4
       when  style is bba
       priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
@@ -169,7 +169,7 @@ after 1D (P) 1S (P)
   1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, S<=3
       when  style is not bba               # Rick: balanced rebids 1NT, not 2C
       priority 1
-  1N  "12-13 HCP, balanced: four clubs too (BBA)"   shows balanced, hcp=12..13, S<=3, C=4
+  1N  "12-13 HCP, balanced"   shows balanced, hcp=12..13, S<=3, C=4
       when  style is bba
       priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
@@ -184,13 +184,13 @@ after 1H (P) 1S (P)
 
 # ── After 1NT (not forcing) ──────────────────────────────────────────
 after 1x (P) 1N (P)
-  P   "Minimum, nothing more to show"      shows suit_points<=15
+  P   "Minimum, to play"      shows suit_points<=15
       when  !semi_1nt(x)
       priority -5
-  P   "Balanced, no game opposite 6-10"    shows balanced, hcp<=17
+  P   "Balanced, no game"    shows balanced, hcp<=17
       when  !semi_1nt(x)
       priority -1                          # BBA passes 5-3-3-2 with 16-17 (major-rebid-1S-1N.toml)
-  2x  "Rebids {x}: five or more, too good to pass and no reverse"
+  2x  "Rebids {x}: 5+, 16-18"
       shows x>=5, suit_points=16..18
       priority -2                          # 5-4 with 16-18: a reverse needs 17
   2x  "Rebids {x}: 6+, minimum"            shows x>=6, suit_points<=15
@@ -201,9 +201,9 @@ after 1x (P) 1N (P)
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
   # 4-4-4-1 with 18+ and no suit to reverse into or jump in had no call
   # (Basic_Minor 78, AQJT.K765.AK72.Q: BBA 3NT).
-  3N  "18+: game, no better description"   shows hcp>=18
+  3N  "Game: 18+"   shows hcp>=18
       priority -3
-  3x  "Jump rebid (BBA): 6+ {x}, 15-18"    shows x>=6, hcp=15..18
+  3x  "Jump rebid: 6+ {x}, 15-18"    shows x>=6, hcp=15..18
       when  style is bba
       priority -1
 after 1S (P) 1N (P)
@@ -218,16 +218,16 @@ after 1S (P) 1N (P)
   3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
   # BBA jumps sooner: 17 suit points in hearts, 18 in a minor; 5-5 with
   # 16 bids game in hearts.
-  3H  "Jump shift (BBA): 4+ hearts, 17+"   shows H>=4, suit_points>=17   sets forcing=game
+  3H  "Jump shift: 4+ hearts, 17+"   shows H>=4, suit_points>=17   sets forcing=game
       when  style is bba
       priority 1
-  3C  "Jump shift (BBA): 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
+  3C  "Jump shift: 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
       when  style is bba
       priority 1
-  3D  "Jump shift (BBA): 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
+  3D  "Jump shift: 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
       when  style is bba
       priority 1
-  4H  "5-5 in the majors, 16+ (BBA)"       shows H>=5, hcp>=16   sets trump=H
+  4H  "5-5 in the majors, 16+"       shows H>=5, hcp>=16   sets trump=H
       when  style is bba
       priority 1
 after 1H (P) 1N (P)
@@ -239,10 +239,10 @@ after 1H (P) 1N (P)
       priority 1
   3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
   3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
-  3C  "Jump shift (BBA): 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
+  3C  "Jump shift: 4+ clubs, 18+"    shows C>=4, suit_points>=18   sets forcing=game
       when  style is bba
       priority 1
-  3D  "Jump shift (BBA): 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
+  3D  "Jump shift: 4+ diamonds, 18+"  shows D>=4, suit_points>=18   sets forcing=game
       when  style is bba
       priority 1
 after 1D (P) 1N (P)
@@ -280,7 +280,7 @@ after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
       when  y is not M, style is not bba, !we.gf
-  4M  "Game (BBA): seven {M} and 13+, or six and 19+"
+  4M  "Game: seven {M} and 13+, or six and 19+"
       shows M>=6, (M>=7, hcp>=13) | hcp>=19
       when  y is not M, style is bba, !we.gf
 # The same two rules after a 1NT response. They cannot share the context
@@ -317,14 +317,14 @@ after 1M (P) 1N (P) when we.forcing = round | semi_1nt(M)
   # is six or more in any context); the five-card one is the least lie.
   2M  "Rebids {M}: six or more, minimum"
       shows M>=6, suit_points<=15
-  2M  "Rebids {M}: five, no three-card minor to bid (read as six)"
+  2M  "Rebids {M}: six or more, minimum"
       shows M>=5, suit_points<=15, C<=2, D<=2
       priority -1
 after 1M (P) 1N (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
       when  style is not bba
-  4M  "Game (BBA): seven {M} and 13+, or six and 19+"
+  4M  "Game: seven {M} and 13+, or six and 19+"
       shows M>=6, (M>=7, hcp>=13) | hcp>=19
       when  style is bba
 
@@ -337,7 +337,7 @@ after 1x (P) 2x (P)
   P   "Minimum: no game"                   shows tp(x)<=16, tp(x)<=14 | x is C | x is D | partner.tp(x).max<=10
       when  style is not bba | x is C | x is D
       priority -5
-  3x  "Invitation: 17-18 with the fit (15-18 opposite a raise to 12)"
+  3x  "Invitation: game try in {x}"
       shows tp(x)=17..18 | (tp(x)=15..16, x is H | x is S, partner.tp(x).max>=11)
       when  style is not bba | x is C | x is D
 after 1M (P) 2M (P)
@@ -346,13 +346,13 @@ after 1M (P) 2M (P)
   # BBA opposite a raise: pass up to 15 HCP whatever the shape (13 with
   # six trumps), invite with 16 (14-15 with six), bid game with 17, or 16
   # and six trumps or a singleton.
-  P   "Minimum (BBA): up to 15 HCP"        shows hcp<=15, M<=5 | hcp<=13
+  P   "Minimum: no game"        shows hcp<=15, M<=5 | hcp<=13
       when  style is bba
       priority -5
-  3M  "Invitation (BBA): 16 HCP, or 14-15 with six trumps"
+  3M  "Invitation: game try in {M}"
       shows (hcp=16, M<=5, tp(M)<=18) | (hcp=14..15, M>=6)
       when  style is bba
-  4M  "Game (BBA): 17+, or 16 with six trumps or shortness"
+  4M  "Game: 17+, or 16 with shape"
       shows hcp>=17 | (hcp=16, M>=6 | tp(M)>=19)
       when  style is bba
 after 1m (P) 2m (P)
@@ -387,10 +387,10 @@ after 1m (P) 2N (P)
 # (16+, no fit: responder-rebids.bid): opener counts slam on it, with
 # over-3nt.bid's numbers for this shape (2026-09-30).
 after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
-  6N  "Slam: 33+ points between us (partner at his minimum)"
+  6N  "Slam in notrump"
       shows points + partner.points.min >= 33
       priority 1
-  4N  "Quantitative: 31-32 points between us"
+  4N  "Quantitative: invites 6NT"
       when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
       shows points + partner.points.min >= 31
       sets  ask=quant
@@ -404,7 +404,7 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
 # errors on 22 boards at --limit 50). Bergen's 2M was six already, and
 # Schuler's exactly five (six bid 2NT).
 after 1M (P) 2x (P) 2M (P) 2N (P) when x is not M, lawrence21
-  3M  "Six or more {M}, no extras: the sixth card (2M was five or more)"
+  3M  "Six or more {M}, no extras"
       shows M>=6, points + partner.points.min <= 30
       priority 2                           # the fit before 3NT
 
@@ -447,14 +447,14 @@ after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump 
   # Bergen: 2NT says nothing: any hand without a better call, a 5-3-3-2
   # of any strength below the 3NT rebid, no stopper promised. 2M is six
   # or more, any strength; a new suit is shape, not strength.
-  2N  "The default rebid (Bergen): nothing more to say"
+  2N  "Waiting: 5+ {M}"
       shows M>=5
       when  bergen21
       priority -1                          # a new suit, 2M with six, a raise, a jump first
   # The six-card suit comes before a four-card side suit (6-4: 2M, not
   # the new suit; BBA and Brill alike, probes/rebid-style-*.toml), and
   # the jump keeps its 16-18 above it.
-  2M  "Rebids {M}: 6+ (Bergen), any strength"
+  2M  "Rebids {M}: 6+, any strength"
       shows M>=6, x<=2 | x is C | x is D    # 1S-2H: a heart fit raises first
       when  bergen21
       priority 1
@@ -465,22 +465,22 @@ after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump 
   # strength (Rick, 2026-10-16: "for 2-over-1 sequences, 1M - 2x - 2M is
   # the default response, not promising 6+", 481e3ad). 2NT is balanced
   # with the unbid suits stopped and no fit for a major 2/1.
-  2M  "Rebids {M}: 5+, the default rebid (Lawrence)"
+  2M  "Rebids {M}: 5+, any strength"
       shows M>=5
       when  lawrence21
       priority -1                          # a new suit, a raise, a jump first
-  2N  "Balanced, the unbid suits stopped (Lawrence)"
+  2N  "Balanced, the unbid suits stopped"
       shows balanced, hcp<=17, x<=2 | x is C | x is D
       shows stop(C) | x is C, stop(D) | x is D, stop(H) | x is H | M is H, stop(S) | x is S | M is S
       when  lawrence21
   # Schuler shift: 2M is the default with exactly five, 2NT shows six or
   # more (any strength below the jump), so the six-card fit opposite a
   # doubleton is known at once.
-  2M  "Rebids {M}: exactly five, the default rebid (Schuler)"
+  2M  "Rebids {M}: exactly five"
       shows M=5
       when  schuler21
       priority -1
-  2N  "Six or more {M} (Schuler shift)"
+  2N  "Schuler shift: six or more {M}"
       shows M>=6
       when  schuler21
   # Otherwise (forcing one round, or "game forcing except" a suit rebid)
@@ -491,7 +491,7 @@ after 1M (P) 2x (P) when x is not M, !weak_js | !partner.jumped   # a weak jump 
   2M  "Rebids {M}: 6+, minimum"            shows M>=6, suit_points<=15
       when  !(gf21, we.gf)
       priority -1                          # the default minimum rebid
-  2M  "Rebids {M}: five, nothing better to say (read as six)"
+  2M  "Rebids {M}: 6+, minimum"
       shows M>=5, suit_points<=18
       when  !(gf21, we.gf)
       priority -2
@@ -512,7 +512,7 @@ after 1S (P) 2D (P)
   2H  "4+ hearts"                          shows H>=4
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
       when  !bergen21
-  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+  3C  "4+ clubs, no extras promised"   shows C>=4
       when  bergen21
 after 1S (P) 2H (P)
   3H  "Raise: 3+ hearts"                   shows H>=3
@@ -521,33 +521,33 @@ after 1S (P) 2H (P)
       when  !bergen21
   3D  "4+ diamonds, extras"                shows D>=4, suit_points>=16
       when  !bergen21
-  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+  3C  "4+ clubs, no extras promised"   shows C>=4
       when  bergen21
-  3D  "4+ diamonds (Bergen): no extras promised"   shows D>=4
+  3D  "4+ diamonds, no extras promised"   shows D>=4
       when  bergen21
 after 1H (P) 2C (P)
   2D  "4+ diamonds"                        shows D>=4
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
       when  !bergen21
       priority 1
-  2S  "4+ spades (Bergen): no extras promised"   shows S>=4
+  2S  "4+ spades, no extras promised"   shows S>=4
       when  bergen21
 after 1H (P) 2D (P)
   2S  "Reverse: 4+ spades, longer hearts, 17+"   shows S>=4, H>S, suit_points>=17  sets forcing=round
       when  !bergen21
       priority 1
-  2S  "4+ spades (Bergen): no extras promised"   shows S>=4
+  2S  "4+ spades, no extras promised"   shows S>=4
       when  bergen21
   3C  "4+ clubs, extras"                   shows C>=4, suit_points>=16
       when  !bergen21
-  3C  "4+ clubs (Bergen): no extras promised"   shows C>=4
+  3C  "4+ clubs, no extras promised"   shows C>=4
       when  bergen21
 after 1D (P) 2C (P)
   2D  "Rebids diamonds: minimum"           shows D>=5, suit_points<=15
       priority -1
   3D  "Jump rebid: 6+ diamonds, 16-18"     shows D>=6, suit_points=16..18
       priority -1
-  2D  "Rebids diamonds: five or more, no better rebid"
+  2D  "Rebids diamonds: 5+"
       shows D>=5, suit_points<=18
       priority -2
   3C  "Raise: 4+ clubs"                    shows C>=4
@@ -566,7 +566,7 @@ after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
       when  x is C | x is D
   3N  "Game in notrump: 19+"               shows hcp>=19
       when  x is C | x is D
-  P   "Minimum for the reverse: play three" shows suit_points<=19
+  P   "Minimum: to play" shows suit_points<=19
       priority -5
 
 # ── After a reverse and responder's forced 2NT ───────────────────────
@@ -576,7 +576,7 @@ after 1x (P) 1N (P) 2z (P) 3x (P) when z is not x
 # game: 23-27 between us, and the corpus (Reverse_By_Opener, 2026-10-09)
 # lost 96 IMPs by errors on 27 boards where opener passed it.
 after 1x (P) 1y (P) 2z (P) 2N (P) when z is not x, z is not y, partner.points <= 10, shown.suit_points >= 17
-  3N  "Game: the reverse opposite the forced 2NT"   shows hcp>=16
+  3N  "Game: 16+"   shows hcp>=16
 
 # ── After an invitational jump shift (10-12, six cards) ──────────────
 after 1x (P) 3y (P) when y is not x, we.trump is none, !weak_js3   # not a splinter (splinters.bid); weak ones: weak-jump-shifts.bid
@@ -587,7 +587,7 @@ after 1x (P) 3y (P) when y is not x, we.trump is none, !weak_js3   # not a splin
   3N  "Accepts: 14+, to play notrump"      shows hcp>=14, y<=2 | y is C | y is D
   4y  "Accepts in the fit: 14+"            shows y>=2, suit_points>=14
       when  y is H | y is S
-  4x  "Accepts in my own suit: seven, or six with four top honours"
+  4x  "Accepts in {x}: seven, or six strong"
       shows x>=7 | (x>=6, top5(x)>=4), hcp>=14, y<=1 | y is C | y is D
       when  x is H | x is S
 
@@ -612,15 +612,15 @@ after 1x (P) 1y (P) 1z (P) 1M (P) when !tw(x)
 # than as the dozen eight-call patterns it would otherwise take: pass
 # with a minimum, one more try with 16-18, game with 19+.
 when asked signoff, !partner.opened
-  P   "Nothing to add: partner is limited"
+  P   "No further bid"
       priority -5
-  2x  "Six or more {x}: a better spot"        shows x>=6, suit_points<=15
+  2x  "Six or more {x}: to play"        shows x>=6, suit_points<=15
       when  maybe partner.x<=2
       sets  ask=signoff
       priority -1
-  3x  "Six or more {x}, 16-18: one more try"  shows x>=6, suit_points=16..18
+  3x  "Invitation: six or more {x}, 16-18"  shows x>=6, suit_points=16..18
       sets  ask=invite(x)
-  3x  "Raise: 16-18 with the fit"             shows x>=3, suit_points=16..18
+  3x  "Invitation: 3+ {x}, 16-18"             shows x>=3, suit_points=16..18
       when  partner.x>=5
       sets  ask=invite(x)
   2y  "Preference: three or more {y}"         shows y>=3
@@ -628,7 +628,7 @@ when asked signoff, !partner.opened
       sets  ask=signoff
       priority -2
   4M  "Game: 6+ {M}, 19+"                     shows M>=6, suit_points>=19
-  4M  "Game in the fit: 19+"                  shows M>=3, suit_points>=19
+  4M  "Game: 3+ {M}, 19+"                  shows M>=3, suit_points>=19
       when  partner.M>=4
 
 # The same question put to responder, by opener's minimum rebid in a
@@ -637,7 +637,7 @@ when asked signoff, !partner.opened
 # and opener raised their suit (2026-09-25). Responder's own
 # continuations are in responder-rebids.bid; this is the pass under them.
 when asked signoff, partner.opened
-  P   "Nothing to add: partner's rebid was a minimum"
+  P   "No further bid"
       priority -5
 
 # ── Answering an invitation in a major ───────────────────────────────
@@ -662,14 +662,14 @@ when asked invite(M)
 # showing 10+ support points opener counts his own the same way: game
 # from 25 between them, 14 opposite 11-12, as BBA (rebids.notes.md).
 when asked invite(M), partner.tp(M).min>=10
-  4M  "Accepts: 25 support points between us"   shows M>=8-partner.M.min, tp(M)>=25-partner.tp(M).min
+  4M  "Accepts, in the fit"   shows M>=8-partner.M.min, tp(M)>=25-partner.tp(M).min
       priority 1
   P   "Declines: a minimum"                     shows M>=8-partner.M.min, tp(M)<=24-partner.tp(M).min
       priority 1
 
 # Responder after opener declines in three of the major: pass.
 when answered invite(M), partner.last=3{M}
-  P   "Partner declined: play three of the major"
+  P   "No further bid"
 
 # ── Answering an invitation in a minor ───────────────────────────────
 # Responder's invitational raise or jump sets `ask=invite(x)`. A minor
@@ -678,9 +678,9 @@ when answered invite(M), partner.last=3{M}
 # minor: 3NT with the values and a shape for it, 5 of the minor with
 # real extras, otherwise pass.
 when asked invite(m)
-  P   "Declines: no more than a minimum"
+  P   "Declines: minimum"
       priority -5
-  3N  "Accepts, in notrump: 14+ and a shape for it"
+  3N  "Accepts, in notrump: 14+"
       shows hcp>=14, balanced | semibalanced
   5m  "Accepts in {m}: 18+ with the fit"      shows hcp>=18, m>=5
 
@@ -744,7 +744,7 @@ after 1x (*) 1z (*) when they.bid, z is not x
       when  x is H | x is S
       sets  ask=signoff
       priority -1
-  cheapest(x) "Rebids {x}: five or more (usually six), minimum"
+  cheapest(x) "Rebids {x}: 5+, minimum"
       shows x>=5, suit_points<=15
       when  x is C | x is D
       when  x>=6
@@ -757,7 +757,7 @@ after 1x (*) 1z (*) when they.bid, z is not x
   4{x} "Game: six or more {x}, 19+"
       shows x>=6, suit_points>=19
       when  x is H | x is S
-  P   "Nothing to say: they have bid again"  priority -10
+  P   "No further bid"  priority -10
 # Their pass leaves partner's free bid unanswered, and it is not a call
 # opener may leave: with nothing else, he repeats his own suit.
 after 1x (*) 1z (P) when they.bid, z is not x
@@ -799,11 +799,11 @@ after 1x (*) 1z (P) when they.bid, z is not x
       when  x is C, z is not D
       when  maybe lho.D<=4, maybe rho.D<=4
       sets  forcing=round
-  cheapest(x) "Rebids {x}: five or more, nothing better to say"
+  cheapest(x) "Rebids {x}: 5+"
       shows x>=5, suit_points<=18
       sets  ask=signoff
       priority -4
-  cheapest(x) "Partner's free bid needs an answer"
+  cheapest(x) "Rebids {x}"
       priority -6
 
 # Notrump is the one rebid that has to know which suit they bid, so it
@@ -846,7 +846,7 @@ after 1x (X) 1z (P) when z is not x
 # major at any strength and never with 18+ otherwise
 # (probes/support-x-1C-X-1H-1S.toml).
 after 1x (X) 1z (1y) when z is not x, y is not x, y is not z
-  X   "18+: a strong hand, more to say"
+  X   "Strong hand: 18+"
       shows hcp>=18
       when  !support_x | z is C | z is D | !((support_through is none, rho.last <= 2{z}) | rho.last <= support_through)
       priority -2
@@ -858,7 +858,7 @@ after 1x (X) 1z (1y) X (P) * (P) when z is not x, y is not x, y is not z, !answe
   cheapest(x) "Six or more {x}, the strong hand"
       shows x>=6
       priority -1
-  P   "Partner's answer is as far as we go"
+  P   "No further bid"
       priority -5
 
 # ── Partner made a free bid in a new suit at the two level or higher ─
@@ -874,7 +874,7 @@ after 1x (X) 1z (1y) X (P) * (P) when z is not x, y is not x, y is not z, !answe
 # answered where it is defined; here opener's 3x read as "six or more"
 # where the cue-bid answer bids it on any minimum.
 after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x, partner.named(z)
-  cheapest(z) "Raise: three or more {z} for partner's five"
+  cheapest(z) "Raise: three or more {z}"
       shows z>=3, tp(z)<=17
       when  partner.z>=5
       sets  trump=z, ask=signoff
@@ -895,7 +895,7 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x, p
       when  x is H | x is S
       sets  ask=signoff
       priority -1
-  cheapest(x) "Rebids {x}: five or more (usually six), minimum"
+  cheapest(x) "Rebids {x}: 5+, minimum"
       shows x>=5, suit_points<=15
       when  x is C | x is D
       when  x>=6
@@ -908,10 +908,10 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x, p
   4{x} "Game: six or more {x}, 19+"
       shows x>=6, suit_points>=19
       when  x is H | x is S
-  P   "Minimum with no fit: partner's bid was limited"
+  P   "Minimum, no fit"
       shows suit_points<=15
       priority -4                          # BBA passes these ahead of 2NT
-  cheapest(x) "Rebids {x}: five or more, nothing better to say"
+  cheapest(x) "Rebids {x}: 5+"
       shows x>=5
       sets  ask=signoff
       priority -6
@@ -935,10 +935,10 @@ after 1x (*) 2z (*) | 1x (*) 3z (*) | 1x (*) 4z (*) when they.bid, z is not x, p
       sets  trump=z, forcing=game
       when  partner.z>=5, new_suit_forcing   # a forcing free bid, even if they bid over it
       priority -1
-  cheapest(x) "Forced to bid: nothing better to say"
+  cheapest(x) "Rebids {x}"
       when  we.forcing = round, partner.z>=5   # a free bid, not a cue bid of their suit
       priority -8
-  P   "Nothing to say"  priority -10
+  P   "No further bid"  priority -10
 after 1x (1y) 2z (P) | 1x (2y) 2z (P) | 1x (2y) 3z (P) | 1x (3y) 3z (P) when y is not x, z is not x, z is not y
   cheapest(N) "Balanced with a stopper in {y}, minimum"
       shows balanced | shape 5-4-2-2, hcp<=15, z<=3
@@ -981,27 +981,27 @@ after 1x (*) 2x (*) when they.bid
       when  x is H | x is S
       sets  trump=x
   # Their suit stopped (Rick, 2026-10-16: no stopper prohibits 3NT).
-  3N  "Game: 19+ balanced, nowhere else to play"
+  3N  "Game: 19+, balanced"
       shows balanced, hcp>=19, stop(they.strain)
       when  x is C | x is D
       when  they.strain is not none, they.strain is not N
-  3N  "Game: 19+ balanced, nowhere else to play"
+  3N  "Game: 19+, balanced"
       shows balanced, hcp>=19
       when  x is C | x is D
       when  they.strain is none | they.strain is N
-  P   "Nothing to say"  priority -10
+  P   "No further bid"  priority -10
 # A jump raise over their call is preemptive, so opener bids the game or
 # lets it alone.
 after 1x (*) 3x (*) when they.bid
-  4{x} "Game: 19+ opposite a preemptive raise"
+  4{x} "Game: 19+"
       shows tp(x)>=19
       when  x is H | x is S
       sets  trump=x
-  5{x} "Game: 19+ opposite a preemptive raise"
+  5{x} "Game: 19+"
       shows tp(x)>=19
       when  x is C | x is D
       sets  trump=x
-  P   "Nothing to add to a preemptive raise"  priority -10
+  P   "No further bid"  priority -10
 # Over a two-level overcall three of opener's suit is often the cheapest
 # raise, 7-10, not a jump; it was read as preemptive, so 16-21 passed
 # (2026-09-26: 51 corpus boards with 25+ HCP and game on).
@@ -1025,7 +1025,7 @@ after 1x (*) 4x (*) when they.bid, x is C | x is D
 # 1NT here is 6-10 with a stopper in their suit, so opener passes a
 # minimum, repeats a six-card suit, and jumps with 16-18.
 after 1x (*) 1N (*) when they.bid
-  P   "Minimum: partner is limited"
+  P   "Minimum"
       shows suit_points<=15
       priority -5
   cheapest(x) "Rebids {x}: six or more, minimum"
@@ -1050,12 +1050,12 @@ after 1x (*) 1N (*) when they.bid
       when  !lho.last=X                    # over an overcall: partner holds their suit
       sets  ask=nt_invite
       priority -2
-  jump(N) "18+: game opposite 6-10"
+  jump(N) "Game: 18+"
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows hcp>=18
       when  !lho.last=X                    # over an overcall: partner holds their suit
       priority -2
-  P   "Nothing to say"  priority -10
+  P   "No further bid"  priority -10
 
 # ── Partner redoubled ────────────────────────────────────────────────
 # The redouble is 10+ and says we own the hand, so opener has nothing to
@@ -1091,7 +1091,7 @@ after 1x (X) XX (*)
       when  maybe lho.C<=4, maybe rho.C<=4
       sets  ask=signoff
       priority -2
-  P   "Partner has the values: over to him"  priority -5
+  P   "No further bid"  priority -5
 
 # ── Partner passed and they kept bidding ─────────────────────────────
 # Partner has nothing (0-5 over a double, or nothing to say over an
@@ -1109,11 +1109,11 @@ after 1x (X) XX (*)
 # (full corpus, par / side): up to 18 -35 / +746, 13-18 +191 / +119,
 # 14-18 +529 / -1,504.
 after 1x (*) P (*) when they.bid, maybe lho.hcp<=14, maybe rho.hcp<=14
-  cheapest(x) "Rebids {x}: six or more, a free bid with extras"
+  cheapest(x) "Rebids {x}: six or more, extras"
       shows x>=6, suit_points=13..18
       priority -1
 after 1x (*) P (*) when they.bid
-  P   "Partner has nothing: let them have it"  priority -10
+  P   "No further bid"  priority -10
 
 # ── They bought it and partner passed: opener reopens ────────────────
 # `1x (1y) P (P)` and `1x (2y) P (P)` were 2,725 dead boards in the

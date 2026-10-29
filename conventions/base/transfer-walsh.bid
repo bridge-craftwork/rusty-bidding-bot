@@ -33,7 +33,7 @@ after 1C (P)
       shows S>=4, hcp>=6, S>H | S>=5, S>=H, hcp<=11 | S>=D
       sets  forcing=round, ask=tw_accept(S)
       artificial
-  1S  "No four-card major: 4+ diamonds, or game forcing with longer diamonds"   alert
+  1S  "Transfer Walsh: 4+ diamonds, no major unless 12+ HCP"   alert
       shows D>=4, hcp>=6, (H<=3, S<=3) | (hcp>=12, D>H, D>S)
       sets  forcing=round, ask=tw_nomajor
       artificial
@@ -65,9 +65,9 @@ when asked tw_accept(M)
         sets  forcing=round
   3N    "18-21 with six or more clubs, not three {M}"   shows C>=6, hcp=18..21, M<=2
         priority 1
-  1N    "Minimum, no better rebid"            shows hcp<=14, M<=2
+  1N    "Minimum, not three {M}"            shows hcp<=14, M<=2
         priority -3
-  2C    "Clubs, too strong for 1NT, no better rebid"   shows C>=5, M<=2
+  2C    "5+ clubs, not three {M}"   shows C>=5, M<=2
         priority -4
 
 # ── Opener after 1♠ (no major) ───────────────────────────────────────
@@ -81,9 +81,9 @@ when asked tw_nomajor
   2C  "6+ clubs, minimum"                    shows C>=6, suit_points<=15
   3C  "6+ clubs, 16-18"                      shows C>=6, suit_points=16..18
   3N  "18-21 with six or more clubs"         shows C>=6, hcp=18..21
-  1N  "Minimum, no better rebid"             shows hcp<=14
+  1N  "Minimum"             shows hcp<=14
       priority -3
-  2C  "Clubs, no better rebid"               shows C>=5
+  2C  "5+ clubs"               shows C>=5
       priority -4
 
 # ── Responder's second call ──────────────────────────────────────────
@@ -125,11 +125,11 @@ after 1C (P) 1x (P) 1N (P)
       priority -5
   2N  "Invitational: 11-12"                   shows points=11..12   sets ask=nt_invite
   3N  "Game: 13+"                             shows points>=13
-  4N  "Quantitative: 31-32 between us, invites 6NT"
+  4N  "Quantitative: invites 6NT"
       shows balanced, points + partner.points.min >= 31, points + partner.points.min <= 32
       when  q4n
       sets  ask=quant
-  6N  "Slam: 33+ between us"                  shows balanced, points + partner.points.min >= 33
+  6N  "Slam in notrump"                  shows balanced, points + partner.points.min >= 33
 after 1C (P) 1S (P) 1N (P) | 1C (P) 1S (P) 2C (P)
   2H  "Game force: four hearts, longer diamonds"   shows H>=4, D>=5, D>S, points>=13   sets forcing=game
       priority 1
@@ -174,11 +174,11 @@ after 1C (P) 1D (P) 1S (P)
   1N  "6-10, no spade fit"                    shows points<=10, S<=3   sets ask=signoff
   2N  "Invitational: 11-12, no spade fit"     shows points=11..12, S<=3   sets ask=nt_invite
   3N  "Game: 13+, no spade fit"               shows points>=13, S<=3
-  4N  "Quantitative: 31-32 between us, no spade fit"
+  4N  "Quantitative: invites 6NT, no spade fit"
       shows balanced, S<=3, points + partner.points.min >= 31, points + partner.points.min <= 32
       when  q4n
       sets  ask=quant
-  6N  "Slam: 33+ between us, no spade fit"    shows balanced, S<=3, points + partner.points.min >= 33
+  6N  "Slam in notrump, no spade fit"    shows balanced, S<=3, points + partner.points.min >= 33
 
 after 1C (P) 1x (P) 2C (P)
   P   "Weak: no game"                         shows points<=10
