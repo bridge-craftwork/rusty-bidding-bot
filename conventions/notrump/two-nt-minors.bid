@@ -47,7 +47,7 @@ after nt2 3S (P) 4C (P) 4D (P) when mst, !mss
 
 # ── Minor Suit Stayman: 3♠ asks for a four-card minor ────────────────
 after nt2 when mss
-  3S  "Minor Suit Stayman: five-four or better in the minors, slam interest"  alert
+  3S  "Minor Suit Stayman: 5-4+ in the minors, slam interest"  alert
       shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=slam_invite
       sets  forcing=game
       artificial

@@ -14,19 +14,19 @@ module nt-splinter "Splinters over 1NT"
   param  major_splinter = notrump.three_major_splinter default false
 
 after 1N (P)
-  3D  "Splinter: a singleton or void in diamonds, four or more in each other suit, game values"  alert
+  3D  "Splinter: 0-1 ♦, 4+ in each other suit, game values"  alert
       shows D<=1, !has(A,D), !has(K,D), !has(Q,D), H=4, S=4, C>=4, strength>=game
       when  three_d is splinter
       sets  forcing=game, ask=nt_splinter
       artificial
       priority 2                           # ahead of Stayman
-  3H  "Splinter: a singleton or void in hearts, four or more in each other suit, game values"  alert
+  3H  "Splinter: 0-1 ♥, 4+ in each other suit, game values"  alert
       shows H<=1, !has(A,H), !has(K,H), !has(Q,H), S=4, D>=4, C>=4, strength>=game
       when  major_splinter
       sets  forcing=game, ask=nt_splinter
       artificial
       priority 2
-  3S  "Splinter: a singleton or void in spades, four or more in each other suit, game values"  alert
+  3S  "Splinter: 0-1 ♠, 4+ in each other suit, game values"  alert
       shows S<=1, !has(A,S), !has(K,S), !has(Q,S), H=4, D>=4, C>=4, strength>=game
       when  major_splinter
       sets  forcing=game, ask=nt_splinter

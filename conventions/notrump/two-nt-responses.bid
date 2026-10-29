@@ -101,7 +101,7 @@ after nt2
       sets  ask=quant
   6N  "Slam"                               shows balanced, points>=32-partner.hcp.min, H<=4, S<=4
       when  style is bba
-  P   "Nothing: 4 HCP or less"             shows hcp<=24-partner.hcp.min
+  P   "No game: 4 HCP or less"             shows hcp<=24-partner.hcp.min
       when  style is bba
       priority -10
 
@@ -122,7 +122,7 @@ after nt2 4x (P) when (x is C, !gerber) | x is D, style is not bba
   6{x}  "A fit: slam"                       shows x>=3
   4N    "No fit"                            shows x<=2
 after nt2 4x (P) 4N (P) when (x is C, !gerber) | x is D, style is not bba
-  6N  "Slam values anyway"                  shows strength>=slam
+  6N  "No fit, but slam values"                  shows strength>=slam
   P   "No fit: 4NT"
       priority -5
 
@@ -146,7 +146,7 @@ after nt2 3H (P)
 after nt2 3D (P) 3H (P)
   P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
       priority -1
-  3N  "Game values, five hearts: choose the game"  shows H=5, hcp>=25-partner.hcp.max
+  3N  "Choice of games: five hearts, game values"  shows H=5, hcp>=25-partner.hcp.max
       sets  ask=choice
       priority -1
   4H  "Game, six or more hearts"                  shows H>=6, hcp>=25-partner.hcp.max
@@ -154,7 +154,7 @@ after nt2 3D (P) 3H (P)
 after nt2 3H (P) 3S (P)
   P   "Weak: play here"                        shows hcp<=24-partner.hcp.max
       priority -1
-  3N  "Game values, five spades: choose the game"  shows S=5, hcp>=25-partner.hcp.max
+  3N  "Choice of games: five spades, game values"  shows S=5, hcp>=25-partner.hcp.max
       sets  ask=choice
       priority -1
   4S  "Game, six or more spades"                  shows S>=6, hcp>=25-partner.hcp.max
