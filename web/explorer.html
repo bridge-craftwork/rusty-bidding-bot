@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rusty-bidding-bot: auction explorer</title>
+<meta name="description" content="Click through an auction with a convention card for each side and read what every possible next call means to rusty-bidding-bot.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="explorer/explorer.css">
+</head>
+<body>
+<header class="top">
+  <h1><a href="./" class="home">rusty-bidding-bot</a> <span class="sub">auction explorer</span></h1>
+  <p class="tagline">Choose a card for each side, then click through an auction: every call the next seat could make, and what it means.</p>
+  <nav>
+    <a href="./">Bid a deal</a>
+    <a href="status.html">Status</a>
+    <a href="reference.txt">Reference</a>
+    <a href="https://github.com/bridge-craftwork/rusty-bidding-bot">Source</a>
+  </nav>
+</header>
+
+<noscript>
+  <p class="panel">This page runs the engine in your browser and needs JavaScript.</p>
+</noscript>
+
+<main class="layout">
+  <section class="controls panel" aria-label="Cards and board">
+    <h2>Convention cards</h2>
+    <label>North-South <select id="card-ns"></select></label>
+    <label>East-West <select id="card-ew"></select></label>
+    <label class="upload">Upload a card (.bbsa or Bridge-Classroom .json)
+      <input type="file" id="card-file" accept=".bbsa,.json,application/json,text/plain">
+    </label>
+    <p class="hint">An uploaded card goes to North-South and stays out of the link.</p>
+    <h2>Board</h2>
+    <div class="row wrap">
+      <label class="narrow">Dealer <select id="dealer">
+        <option value="N">North</option><option value="E">East</option>
+        <option value="S">South</option><option value="W">West</option>
+      </select></label>
+      <label class="narrow">Vulnerable <select id="vul">
+        <option value="None">None</option><option value="NS">N-S</option>
+        <option value="EW">E-W</option><option value="All">Both</option>
+      </select></label>
+      <label class="narrow">Scoring <select id="scoring">
+        <option value="MP">MP</option><option value="IMP">IMP</option>
+      </select></label>
+    </div>
+    <h2>Show</h2>
+    <label class="check"><input type="checkbox" id="show-unknown"> calls with no meaning</label>
+    <label class="check"><input type="checkbox" id="show-reason"> the rule's own text</label>
+    <div id="diagnostics" class="hint"></div>
+  </section>
+
+  <section class="table-area">
+    <div class="panel">
+      <h2>Auction</h2>
+      <div class="row wrap">
+        <button id="back" type="button">Back one call</button>
+        <button id="restart" type="button">Start over</button>
+      </div>
+      <table class="xauction" id="auction" aria-label="The auction so far: click a call to go back to it"></table>
+      <p class="hint" id="position"></p>
+    </div>
+    <div class="panel">
+      <h2 id="next-title">Next call</h2>
+      <table class="xcalls" id="calls"></table>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>Every meaning is the engine's reading of the call under the cards above (WASM <code>meaning</code>,
+  the <code>announcement</code> text: what the table is told). The link carries the cards, board and auction.</p>
+</footer>
+
+<script type="module" src="explorer/explorer.js"></script>
+</body>
+</html>
