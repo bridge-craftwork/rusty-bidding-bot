@@ -98,7 +98,7 @@ when asked gerber
 # (gerber.notes.md, "Grand slam and the king ask"; the textbook 37 for
 # 7NT scored 400 IMPs worse).
 when answered gerber
-  7N  "Grand slam: all the aces and 35 between us"
+  7N  "Grand slam"
       when  we.keycards(N)=4, points + partner.hcp.min >= 35
       priority 3
   5C  "Gerber: how many kings?"  alert
@@ -107,14 +107,15 @@ when answered gerber
       sets  ask=gerber_kings
       artificial
       priority 2
-  6C  "Slam in clubs: at most one ace missing"
+  6C  "Small slam"
       when  we.keycards(N)>=3, C>=6, imps       # at matchpoints 6NT scored better (notes)
       priority 1
-  6N  "Small slam: at most one ace missing"
+  6N  "Small slam"
       when  we.keycards(N)>=3
-  4N  "Sign off: two aces missing"
+  4N  "Signoff"
       when  we.keycards(N).max<=2
-  6N  "Small slam: \"0 or 4\" with no aces of my own is 4"
+  # "0 or 4" facing no ace of my own is four.
+  6N  "Small slam"
       when  maybe we.keycards(N)>=3
       priority -1
 
@@ -127,7 +128,7 @@ when asked gerber_kings
 # All four aces are ours (the king ask needs them): seven with all four
 # kings as well, else six. Kings are controls less two for each ace.
 when answered gerber_kings
-  7N  "Grand slam: all the aces and kings"
+  7N  "Grand slam"
       when  (partner.last=5N, controls - keycards(N) - keycards(N) >= 1) | (partner.last=5S, controls - keycards(N) - keycards(N) >= 2) | (partner.last=5H, controls - keycards(N) - keycards(N) >= 3) | (partner.last=5D, controls - keycards(N) - keycards(N) >= 4)
       priority 1
-  6N  "Small slam: a king missing"
+  6N  "Small slam"

@@ -17,10 +17,10 @@ module over-3nt "Slam after partner's 3NT"
   param  q4n   = slam.quantitative_4nt.play default true
 
 when partner.last=3N, !they.bid, we.trump is none
-  6N  "Slam: 34 or more between us (partner at his minimum)"
+  6N  "Small slam"
       shows hcp + partner.hcp.min >= 34
       priority -10
-  4N  "Quantitative: 32-33 between us"
+  4N  "Quantitative: invites 6NT"
       when  q4n                            # the card plays a quantitative 4NT
       shows hcp + partner.hcp.min >= 32, hcp + partner.hcp.max <= 35
       sets  ask=quant
@@ -38,21 +38,21 @@ when partner.last=3N, !they.bid, we.trump is none
   # game without help from partner, and a short suit with no stopper is
   # a risk in notrump (Rick, 2026-09-27, ticket b194: 1S 2D 2S 3NT with
   # AKQJ63 and 32 in hearts; BBA bids 4S).
-  4S  "A standalone spade suit, and a short suit unguarded"
+  4S  "To play: a self-sufficient ♠ suit"
       shows (S>=6, quality(S)=3, top5(S)>=4) | (S>=7, quality(S)=3)
       shows (H<=2, !stop(H)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
       priority -10
-  4H  "A standalone heart suit, and a short suit unguarded"
+  4H  "To play: a self-sufficient ♥ suit"
       shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
       shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
       priority -10
 
 when asked slam_try(m), partner.last=4{m}, we.trump is none
-  6{m}  "A fit: slam"                       shows m>=3
+  6{m}  "Small slam: a fit"                       shows m>=3
   4N    "No fit"                            shows m<=2
 when answered slam_try(m), partner.last=4N
-  6N  "Slam values without the fit: 34+"    shows hcp + partner.hcp.min >= 34
-  P   "No fit: 4NT"
+  6N  "Small slam"    shows hcp + partner.hcp.min >= 34
+  P   "To play"
       priority -5
 
 # The same count for responder when opener's rebid is a new suit
@@ -62,30 +62,30 @@ when answered slam_try(m), partner.last=4N
 # points floor 18. The textbook 33/31 is kept although lower thresholds
 # score better on the slam-rich corpus (notes).
 after 1x (P) 1y (P) 2z (P) when z is not x, z is not y
-  6N  "Slam: 33+ points between us (partner at his minimum)"
+  6N  "Small slam"
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
-  4N  "Quantitative: 31-32 points between us"
+  4N  "Quantitative: invites 6NT"
       when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1
 after 1x (P) 1y (P) 1z (P)
-  6N  "Slam: 33+ points between us (partner at his minimum)"
+  6N  "Small slam"
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
-  4N  "Quantitative: 31-32 points between us"
+  4N  "Quantitative: invites 6NT"
       when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1
 after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
-  6N  "Slam: 33+ points between us (partner at his minimum)"
+  6N  "Small slam"
       shows points + partner.points.min >= 33, !shortest<=1
       priority 1
-  4N  "Quantitative: 31-32 points between us"
+  4N  "Quantitative: invites 6NT"
       when  q4n                            # the card plays a quantitative 4NT
       shows points + partner.points.min >= 31, points + partner.points.max <= 36, !shortest<=1
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
