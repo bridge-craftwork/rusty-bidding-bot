@@ -784,6 +784,17 @@ A853.82.QJ86.T76, responder-rebids.test; 9+ bids 3NT); over 1m-1M-3m,
 suit at the three level (a stopper probe) is not written. On the tripwire these rules and opener's answers changed 29
 boards: +8 contract errors, +1 doubling, +7 against par.
 
+## Over opener's 2NT answer to the negative double (2026-10-29)
+
+`after 1x (*) X (*) 1N (*) | 1x (*) X (*) 2N (*)` treated both answers as
+12-14: `cheapest(N)` "Invitational" became 3NT over 2NT and was chosen as
+an invitation, and "Game: 13+" stood opposite the jump to 2NT (18-19).
+Now: the invitation only over 1NT; over the jump (`partner.jumped`) game
+from 6 points, pass below. Over a non-jump 2NT (their 2-level suit) the
+12-14 reading stays. Compare --limit 50 (with the inverted-raise fix):
+Double_double and Negative_Double boards change both ways, net gain; 51
+boards, errors +74 IMPs to us.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and

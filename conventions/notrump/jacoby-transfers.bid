@@ -55,7 +55,7 @@ after nt1 2H (P) when system is brill
 # uses `suit_strength` (HCP + ½ per card beyond four).
 when answered transfer(M)
   3M  "Sign off in the known fit"              shows suit_strength=signoff
-      when partner.M>=4                        # after a 2S or 2NT super-accept
+      when partner.M>=4, !(partner.last=2{M})  # after a 2S or 2NT super-accept, not Brill's plain 4-card completion
   4M  "Game: in the fit, opposite a super-accept"  shows suit_strength=invite
       when partner.M>=4                        # the super-accept is for thin games
   P   "Weak: to play, {signoff} total points"  shows strength=signoff
@@ -64,6 +64,7 @@ when answered transfer(M)
   2N  "Invitational: {invite} total points, exactly 5 {M}"  shows M=5, balanced | shortest>=2, strength=invite
       sets ask=invite(M)
   3M  "Invitational: {invite} total points, 6+ {M}"  shows M>=6, suit_strength=invite
+      when partner.last=2{M}                   # after a super-accept 3M is the sign-off
       sets ask=invite(M)
   # Six cards and a count between the two measures: too much to pass in
   # total points (the sixth card counts two), too little to invite in

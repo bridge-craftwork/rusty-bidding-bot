@@ -351,6 +351,14 @@ and the doubleton with a maximum otherwise (superaccept-doubleton.bid).
 
 Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): the completions' lengths 0% -> 100% of 4,312 boards (still 2% with the artificial flag counted).
 
+## 3M after the transfer: invitation or sign-off (2026-10-29)
+
+The 3M invitation had no condition, so after a super-accept it read the
+same call as the 3M sign-off (the table heard "0-7 HCP"), and after
+Brill's plain completion (a four-card minimum possible) the sign-off read
+it too. Now the invitation is only over the plain completion
+(`partner.last=2{M}`) and the sign-off only after a super-accept.
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").

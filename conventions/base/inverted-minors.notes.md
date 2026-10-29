@@ -72,6 +72,17 @@ other inverted-minor scenarios (1m-2N 17 boards -28 errors,
 Vics_Bal_Resp_to_1m 7 boards -30): a coin flip on those deals. Kept,
 as par on the Inverted_Minors deals favours it; a question for Rick.
 
+## The plain raise blocks stay out (2026-10-29)
+
+rebids.bid's `after 1x (P) 2x (P)` and `after 1m (P) 2m (P)`, and
+responder-rebids.bid's `after 1m (P) 2m (P) 3m (P)`, were written for the
+plain raise and also read the inverted one: `1D P 2D P 2N` was read as
+12-14 here and 18-19 there (the table heard "11-19 HCP"), and `1D P 2D P
+3D` as a minimum and as a game try. They now need `!inverted`
+(`minor_openings.inverted_minors.play`). Found by the description pass
+(sibling rules telling the table nothing). Compare --limit 50 with the two
+other fixes of that day: 51 boards, errors +74 IMPs to us.
+
 ## Sources
 
 - **The convention:** inverted minor raises. The structure is modelled on
