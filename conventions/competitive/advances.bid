@@ -27,6 +27,7 @@
 # notrump modules carry the `(1x) 1N (P)` spelling of their patterns.
 
 module advances "Advancing partner's overcall"
+  kind   system
   needs  base
   needs  overcalls
   skill  competitive_bidding/advancing_overcalls

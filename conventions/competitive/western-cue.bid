@@ -9,6 +9,7 @@
 # western-cue.notes.md.
 
 module western-cue "Western cue bid: three of their suit asks for a stopper for 3NT"
+  kind   convention
   needs  base
   skill  bidding_conventions/western_cuebid
   param  western = slam.western_cuebid.play default false

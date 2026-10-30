@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module minor-transfers "Minor-suit responses to 1NT"
+  kind   convention
   needs  notrump-base
   skill  bidding_conventions/minor_suit_transfers
   param  style = notrump.minor_transfers default relay

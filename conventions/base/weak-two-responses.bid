@@ -6,6 +6,7 @@
 # minimum or maximum and the suit's quality.
 
 module weak-two-responses "Responses to a weak two"
+  kind   system
   needs  preempts
   skill  bidding_conventions/weak_2s
   skill  bidding_conventions/ogust

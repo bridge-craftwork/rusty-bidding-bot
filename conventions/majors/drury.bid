@@ -15,6 +15,7 @@
 # See drury.notes.md.
 
 module drury "Drury: a passed hand's 2♣ limit raise"
+  kind   convention
   needs  responses
   skill  bidding_conventions/drury
   skill  bidding_conventions/reverse_drury

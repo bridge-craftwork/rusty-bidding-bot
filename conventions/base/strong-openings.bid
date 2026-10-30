@@ -19,6 +19,7 @@
 # negative — a bust, less than a jack and a queen.
 
 module strong-openings "2♣ and 2NT openings"
+  kind   system
   needs  base
   skill  bidding_conventions/strong_2c
   skill  partnership_bidding/two_club

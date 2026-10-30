@@ -37,6 +37,7 @@
 # Notes: rubensohl.notes.md.
 
 module rubensohl "Rubensohl: transfers after interference over 1NT and after doubling a weak two"
+  kind   convention
   needs  nt-interference
   needs  vs-preempts
   skill  competitive_bidding/rubensohl

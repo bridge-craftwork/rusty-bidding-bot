@@ -21,6 +21,7 @@
 # Responder's rebids are natural. See precision-2d.notes.md.
 
 module precision-2d "Precision 2♦"
+  kind   convention
   card   two_level.precision_2d.play
   needs  preempts
   skill  bidding_conventions/precision_2d

@@ -16,6 +16,7 @@
 # two-suited overcalls: Lebensohl reads only a natural overcall.
 
 module lebensohl "Lebensohl after they overcall our 1NT"
+  kind   convention
   card   notrump.lebensohl.over_interference
   needs  nt-interference
   skill  competitive_bidding/lebensohl

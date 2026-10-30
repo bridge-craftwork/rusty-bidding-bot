@@ -21,6 +21,7 @@
 # convention field is unset.
 
 module dont "DONT over their 1NT"
+  kind   convention
   needs  vs-1nt
   skill  competitive_bidding/dont
   skill  competitive_bidding/defense_vs_1nt

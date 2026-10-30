@@ -15,6 +15,7 @@
 # interference, as BBA plays it. Notes: smolen.notes.md.
 
 module smolen "Smolen: 5-4 in the majors after Stayman's denial"
+  kind   convention
   card   notrump.smolen.play
   needs  stayman
   skill  bidding_conventions/smolen

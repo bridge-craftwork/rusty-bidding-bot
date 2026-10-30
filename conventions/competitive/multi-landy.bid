@@ -14,6 +14,7 @@
 # Landy is 2♣ for the majors, everything else natural (overcalls.bid).
 
 module multi-landy "Landy and Multi-Landy over their 1NT"
+  kind   convention
   needs  vs-1nt
   skill  competitive_bidding/multi_landy
   skill  competitive_bidding/landy

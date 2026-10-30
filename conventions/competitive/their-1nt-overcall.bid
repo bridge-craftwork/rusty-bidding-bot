@@ -19,6 +19,7 @@
 # See their-1nt-overcall.notes.md for the BBA meanings this is built from.
 
 module their-1nt-overcall "Responder over their 1NT overcall"
+  kind   system
   needs  base
 
 after 1x (1N)

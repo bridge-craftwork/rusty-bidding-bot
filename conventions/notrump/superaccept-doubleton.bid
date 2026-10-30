@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module superaccept-doubleton "Superaccept doubleton"
+  kind   convention
   card   notrump.transfers.super_accept_doubleton
   needs  super-accept
   skill  bidding_conventions/super_accept

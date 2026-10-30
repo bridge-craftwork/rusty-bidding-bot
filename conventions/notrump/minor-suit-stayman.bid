@@ -11,6 +11,7 @@
 # in minor-transfers.bid.
 
 module minor-suit-stayman "Minor Suit Stayman over 1NT"
+  kind   convention
   card   notrump.minor_suit_stayman.play
   needs  notrump-base
   skill  bidding_conventions/minor_suit_stayman

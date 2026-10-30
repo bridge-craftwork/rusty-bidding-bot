@@ -15,6 +15,7 @@
 # `(1x) P (P) 1N (P)` spelling of their patterns.
 
 module balancing "The balancing seat"
+  kind   system
   needs  base
   needs  overcalls
   skill  competitive_bidding/balancing

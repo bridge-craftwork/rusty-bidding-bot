@@ -19,6 +19,7 @@
 # See wilkosz.notes.md.
 
 module wilkosz "Wilkosz 2♦"
+  kind   convention
   card   two_level.wilkosz.play
   needs  preempts
   skill  bidding_conventions/wilkosz

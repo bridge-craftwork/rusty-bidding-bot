@@ -11,6 +11,7 @@
 # See nt-interference.notes.md for the BBA meanings behind the ranges.
 
 module nt-interference "Our 1NT when RHO acts"
+  kind   system
   needs  notrump-base
   param  vs_double = notrump.transfers.vs_double default false
   param  vs_2c     = notrump.transfers.vs_2c default false

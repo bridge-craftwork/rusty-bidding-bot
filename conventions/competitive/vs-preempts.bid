@@ -24,6 +24,7 @@
 # most 12 HCP.
 
 module vs-preempts "Defence against preempts"
+  kind   system
   needs  base
   skill  competitive_bidding/defense_vs_preempts
   skill  competitive_bidding/takeout_doubles

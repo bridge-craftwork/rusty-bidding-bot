@@ -9,6 +9,7 @@
 # major he shares, else 3NT.
 
 module nt-splinter "Splinters over 1NT"
+  kind   convention
   needs  notrump-base
   param  three_d  = notrump.three_d_response default natural
   param  major_splinter = notrump.three_major_splinter default false

@@ -12,6 +12,7 @@
 # See namyats.notes.md.
 
 module namyats "Namyats: 4♣/4♦ strong major preempts"
+  kind   convention
   card   preempts.namyats.play
   needs  preempts
   skill  bidding_conventions/namyats

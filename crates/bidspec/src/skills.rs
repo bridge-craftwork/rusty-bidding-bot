@@ -105,7 +105,8 @@ pub fn map(modules: &[Module], registry: &Registry, known: &Skills) -> SkillMap 
 /// Where the standard conventions and skills live, for messages.
 const KNOWN_SKILLS: &str = "convention-card's spec/conventions/";
 
-/// Warnings for `rbb bid check`: skill paths that the standard list
+/// Warnings for `rbb bid check`: a module without a `kind` line, and
+/// skill paths that the standard list
 /// (convention-card's `spec/conventions/`) does not have, on a module's
 /// `skill` line or a field's `skill` attribute (`fields_file` names the
 /// fields file in the message).
@@ -117,6 +118,17 @@ pub fn check(
 ) -> Vec<Diagnostic> {
     let mut out = Vec::new();
     for m in modules {
+        if m.kind.is_none() {
+            out.push(Diagnostic {
+                file: m.file.clone(),
+                line: 1,
+                col: 0,
+                message: format!(
+                    "module `{}` has no `kind` line (convention, defence, system or judgement)",
+                    m.name
+                ),
+            });
+        }
         for s in &m.skills {
             if known.get(&s.path).is_none() {
                 out.push(Diagnostic {
@@ -279,6 +291,9 @@ pub struct ModuleInfo {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub title: Option<String>,
     pub file: String,
+    /// Its `kind` line: convention, defence, system or judgement.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<crate::ast::ModuleKind>,
     /// Skill paths from its `skill` lines.
     pub skills: Vec<String>,
     /// Card fields it reads (`card` conditions and `param`s), canonical paths.
@@ -318,6 +333,7 @@ pub fn inventory(modules: &[Module], vocab: &Vocabulary) -> Inventory {
                 name: m.name.clone(),
                 title: m.title.clone(),
                 file: m.file.clone(),
+                kind: m.kind,
                 skills: m.skills.iter().map(|s| s.path.clone()).collect(),
                 reads: reads.into_iter().collect(),
                 rules: count_rules(&m.contexts),
@@ -368,7 +384,7 @@ mod tests {
         ]);
         let parse = |src: &str| crate::parse(src, "t.bid").unwrap();
         let modules = [
-            parse("module stayman \"S\"\n  skill bidding_conventions/stayman\n"),
+            parse("module stayman \"S\"\n  kind convention\n  skill bidding_conventions/stayman\n"),
             parse("module base \"B\"\n"),
         ];
         let m = map(&modules, &registry, &known);
@@ -391,8 +407,12 @@ mod tests {
             "{md}"
         );
         let warnings = check(&modules, &registry, &known, "fields.toml");
-        assert_eq!(warnings.len(), 1);
-        assert!(warnings[0].message.contains("bidding_conventions/xyz"));
+        assert_eq!(warnings.len(), 2);
+        assert!(warnings[0]
+            .message
+            .contains("module `base` has no `kind` line"));
+        assert!(warnings[1].message.contains("bidding_conventions/xyz"));
+        assert_eq!(modules[0].kind, Some(crate::ast::ModuleKind::Convention));
     }
 
     #[test]

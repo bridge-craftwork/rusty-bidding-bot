@@ -12,6 +12,7 @@
 # runs first and this sign-off is what the dialogue falls back to.
 
 module slam-catch "Game or slam once a trump suit is agreed"
+  kind   judgement
   needs  base
   skill  partnership_bidding/slam_bidding
 

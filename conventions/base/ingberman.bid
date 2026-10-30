@@ -10,6 +10,7 @@
 # Not played over interference. See ingberman.notes.md.
 
 module ingberman "Ingberman 2NT after opener's reverse"
+  kind   convention
   card   other_conventions.ingberman_2nt.play
   needs  responder-rebids
   skill  bidding_conventions/ingberman

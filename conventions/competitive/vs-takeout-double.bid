@@ -22,6 +22,7 @@
 # Notes: vs-takeout-double.notes.md.
 
 module vs-takeout-double "Raises over their takeout double: Jordan 2NT and BROMAD"
+  kind   system
   needs  base
   needs  after-interference
   skill  competitive_bidding/jordan_2nt

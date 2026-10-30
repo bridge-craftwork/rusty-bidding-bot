@@ -19,6 +19,7 @@
 # RHO's bid, and doubles of anything but a one-level suit opening.
 
 module takeout-double "Takeout doubles"
+  kind   system
   needs  base
   needs  overcalls
   skill  competitive_bidding/takeout_doubles

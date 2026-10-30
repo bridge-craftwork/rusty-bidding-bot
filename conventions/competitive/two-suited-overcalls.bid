@@ -59,6 +59,7 @@
 # two-suited-overcalls.notes.md.
 
 module two-suited-overcalls "Michaels cue bids and the Unusual 2NT"
+  kind   convention
   needs  base
   needs  overcalls
   skill  competitive_bidding/michaels_unusual

@@ -16,6 +16,7 @@
 # polish-two-suiters.notes.md.
 
 module polish-two-suiters "Polish two-suiters: 2♥ and 2♠"
+  kind   convention
   card   two_level.polish_two_suiters.play
   needs  preempts
   skill  bidding_conventions/polish_two_suiters

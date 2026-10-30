@@ -19,6 +19,7 @@
 # Meckwell scenario.
 
 module meckwell "Meckwell over their 1NT"
+  kind   convention
   needs  vs-1nt
   skill  competitive_bidding/meckwell
   skill  competitive_bidding/defense_vs_1nt

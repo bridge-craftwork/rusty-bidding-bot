@@ -23,6 +23,12 @@ pub struct Module {
     /// not change what the module does.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skills: Vec<SkillRef>,
+    /// What the module is (`kind convention|defence|system|judgement`):
+    /// whether it belongs to the shared standard (a convention, or a
+    /// defence to theirs, named by the card) or to this robot's own
+    /// natural system and judgement. Documentation only.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub kind: Option<ModuleKind>,
     /// Named conditions (`define name(x) = <condition>`), usable in any
     /// module of the rule set.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
@@ -38,6 +44,44 @@ pub struct Module {
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub systems: Vec<SystemsOn>,
     pub contexts: Vec<Context>,
+}
+
+/// The `kind` header line.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ModuleKind {
+    /// A convention the card switches or chooses: its meanings are the
+    /// shared standard's (convention-card's field and convention IDs).
+    Convention,
+    /// Our answer to an opponents' convention (a defence to Multi).
+    Defence,
+    /// The natural system: openings, responses, rebids, game-forcing
+    /// sequences; card treatments tune it, but every robot has its own.
+    System,
+    /// Judgement: fits, competing, penalty doubles, slam entry.
+    Judgement,
+}
+
+impl ModuleKind {
+    pub const ALL: [ModuleKind; 4] = [
+        ModuleKind::Convention,
+        ModuleKind::Defence,
+        ModuleKind::System,
+        ModuleKind::Judgement,
+    ];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            ModuleKind::Convention => "convention",
+            ModuleKind::Defence => "defence",
+            ModuleKind::System => "system",
+            ModuleKind::Judgement => "judgement",
+        }
+    }
+
+    pub fn parse(s: &str) -> Option<ModuleKind> {
+        Self::ALL.into_iter().find(|k| k.as_str() == s)
+    }
 }
 
 /// `systems on when <condition>`: a natural notrump bid made where the

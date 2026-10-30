@@ -15,6 +15,7 @@
 # The 4♣/4♦ natural slam tries of two-nt-responses.bid stay.
 
 module two-nt-minors "Minor-suit transfers and Minor Suit Stayman over 2NT"
+  kind   convention
   needs  two-nt-responses
   skill  bidding_conventions/minor_suit_transfers
   skill  bidding_conventions/minor_suit_stayman

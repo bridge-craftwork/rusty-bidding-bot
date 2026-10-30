@@ -25,6 +25,7 @@
 # partner's shown major). Notes: ghestem.notes.md.
 
 module ghestem "Ghestem two-suited overcalls"
+  kind   convention
   needs  base
   needs  two-suited-overcalls
   skill  competitive_bidding/ghestem

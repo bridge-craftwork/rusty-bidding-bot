@@ -15,6 +15,7 @@
 # The direct raises and pass are unchanged. See mccabe.notes.md.
 
 module mccabe "McCabe adjunct"
+  kind   convention
   card   two_level.mccabe.play
   needs  weak-two-responses
   skill  bidding_conventions/mccabe

@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module jacoby-transfers "Jacoby Transfers"
+  kind   convention
   card   notrump.transfers.jacoby
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers

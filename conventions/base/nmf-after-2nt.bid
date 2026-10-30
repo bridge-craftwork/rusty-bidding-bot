@@ -8,6 +8,7 @@
 # one). With Wolff on, 3C after 1D-1M-2NT stays Wolff's.
 
 module nmf-after-2nt "New Minor Forcing after a 2NT rebid"
+  kind   convention
   card   other_conventions.new_minor_forcing.after_2nt_rebid
   needs  responder-rebids
   skill  bidding_conventions/new_minor_forcing

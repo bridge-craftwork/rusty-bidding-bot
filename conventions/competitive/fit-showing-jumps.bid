@@ -20,6 +20,7 @@
 # overcall`, after-interference.bid).
 
 module fit-showing-jumps "Fit-showing jumps"
+  kind   convention
   card   competitive.fit_showing_jumps.play
   needs  base
   needs  overcalls

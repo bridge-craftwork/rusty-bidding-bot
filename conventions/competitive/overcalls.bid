@@ -21,6 +21,7 @@
 # and longer than the suits below it, so only one of them can fire.
 
 module overcalls "Suit and notrump overcalls"
+  kind   system
   needs  base
   skill  competitive_bidding/overcalls
   skill  partnership_bidding/overcalls

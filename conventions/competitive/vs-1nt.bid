@@ -26,6 +26,7 @@
 # support points and bid game from 13.
 
 module vs-1nt "Over their 1NT: what every defence shares"
+  kind   system
   needs  base
   skill  competitive_bidding/defense_vs_1nt
   param  def       = competitive.vs_1nt_strong.system default other

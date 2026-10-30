@@ -12,6 +12,7 @@
 # light openings (rule of 20) must still answer a forcing response.
 
 module rebids "Opener's rebid"
+  kind   system
   needs  responses
   skill  partnership_bidding/rebids
   skill  bidding_conventions/reverse_bids

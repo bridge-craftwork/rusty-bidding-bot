@@ -13,6 +13,7 @@
 # jump). Notes: scrambling-2nt.notes.md.
 
 module scrambling-2nt "Scrambling 2NT"
+  kind   convention
   needs  base
   needs  takeout-double
   skill  competitive_bidding/scrambling_2nt

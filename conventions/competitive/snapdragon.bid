@@ -12,6 +12,7 @@
 # stopped, or else returns to his own suit. Notes: snapdragon.notes.md.
 
 module snapdragon "Snapdragon doubles"
+  kind   convention
   needs  base
   needs  advances
   skill  competitive_bidding/snapdragon

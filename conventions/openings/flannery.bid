@@ -15,6 +15,7 @@
 # 4-5-0-4, 4♦ 4-5-4-0. See flannery.notes.md.
 
 module flannery "Flannery 2♦"
+  kind   convention
   card   two_level.flannery.play
   needs  preempts
   skill  bidding_conventions/flannery

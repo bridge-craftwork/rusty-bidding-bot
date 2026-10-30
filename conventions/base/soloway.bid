@@ -10,6 +10,7 @@
 # agreed suit (slam/). See soloway.notes.md.
 
 module soloway "Soloway jump shifts"
+  kind   convention
   needs  responses
   skill  bidding_conventions/soloway
   param  soloway = general.jump_shifts.soloway default false

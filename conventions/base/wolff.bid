@@ -6,6 +6,7 @@
 # his major. Every other call but pass forces to game (game-force.bid).
 
 module wolff "Wolff sign-off after opener's 2NT rebid"
+  kind   convention
   card   other_conventions.wolff_signoff.play
   needs  base
   skill  bidding_conventions/wolff_signoff

@@ -8,6 +8,7 @@
 # in responder's suit. See weak-jump-shifts.notes.md.
 
 module weak-jump-shifts "Weak jump shifts"
+  kind   convention
   needs  responses
   skill  bidding_conventions/weak_jump_shifts
   param  weak2 = general.jump_shifts.weak_2 default false

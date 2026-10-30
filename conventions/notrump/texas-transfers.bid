@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module texas-transfers "Texas Transfers"
+  kind   convention
   card   notrump.transfers.texas
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers

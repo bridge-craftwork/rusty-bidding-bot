@@ -21,6 +21,7 @@
 # auction has been contested.
 
 module after-interference "Our side once the opponents come in"
+  kind   system
   needs  base
   skill  competitive_bidding/negative_doubles
   skill  partnership_bidding/negative_doubles

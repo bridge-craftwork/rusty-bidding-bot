@@ -16,6 +16,7 @@
 # card (`tw(x)` in rebids.bid). See transfer-walsh.notes.md.
 
 module transfer-walsh "Transfer Walsh responses to 1♣"
+  kind   convention
   card   minor_openings.one_club.transfer_resp
   needs  responder-rebids
   skill  bidding_conventions/transfer_walsh
