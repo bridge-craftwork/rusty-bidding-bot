@@ -28,12 +28,44 @@ async function oursRules() {
 const files = new Map([['mine/convention.bid', '']])
 let selected = 'mine/convention.bid'
 
+// Line numbers, the lines a diagnostic names marked.
+let marked = new Map()
+let lastDiags = []
+function renderGutter() {
+  const n = $('source').value.split('\n').length
+  let nums = ''
+  let rows = ''
+  for (let i = 1; i <= n; i++) {
+    const sev = marked.get(i)
+    nums += (sev ? `<span class="hit ${sev}">${i}</span>` : i) + '\n'
+    rows += `<div${sev ? ` class="${sev}"` : ''}></div>`
+  }
+  $('gutter').innerHTML = nums
+  $('backdrop').innerHTML = rows
+  syncScroll()
+}
+function syncScroll() {
+  $('gutter').scrollTop = $('source').scrollTop
+  $('backdrop').scrollTop = $('source').scrollTop
+}
+// The worst severity on each line of the selected file.
+function markLines() {
+  marked = new Map()
+  for (const d of lastDiags) {
+    if (d.file !== selected || !d.line) continue
+    if (d.severity === 'error' || !marked.has(d.line)) marked.set(d.line, d.severity === 'error' ? 'error' : 'warning')
+  }
+}
+$('source').addEventListener('scroll', syncScroll)
+
 function renderTabs() {
   $('tabs').innerHTML = [...files.keys()]
     .map((n) => `<button type="button" role="tab" class="tab${n === selected ? ' on' : ''}" aria-selected="${n === selected}" data-name="${esc(n)}">${esc(n)}</button>`)
     .join('')
   $('name').value = selected
   $('source').value = files.get(selected) ?? ''
+  markLines()
+  renderGutter()
 }
 
 $('tabs').addEventListener('click', (e) => {
@@ -45,6 +77,7 @@ $('tabs').addEventListener('click', (e) => {
 
 $('source').addEventListener('input', () => {
   files.set(selected, $('source').value)
+  renderGutter()
   schedule()
 })
 
@@ -128,6 +161,9 @@ async function check() {
   if (!Object.keys(mine).length) {
     $('summary').innerHTML = '<p class="hint">Open, choose or type a <code>.bid</code> file.</p>'
     $('diagnostics').innerHTML = ''
+    lastDiags = []
+    marked = new Map()
+    renderGutter()
     return
   }
   const req = {}
@@ -165,6 +201,9 @@ function render(res, mine, mode) {
     : ''
   const more = hidden ? `<p class="hint">${hidden} more in Rusty's own files, not shown.</p>` : ''
   $('summary').innerHTML = verdict + counts + more
+  lastDiags = shown
+  markLines()
+  renderGutter()
   $('diagnostics').innerHTML = shown
     .map((d) => {
       const where = d.file ? `${d.file}${d.line ? ':' + d.line : ''}${d.col ? ':' + d.col : ''}` : ''
