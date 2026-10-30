@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rusty-bidding-bot: rule checker</title>
+<meta name="description" content="Check .bid rule files in your browser: grammar, terms, card fields and skills, as rbb bid check does, against the current rule language and convention-card vocabulary.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="validate/validate.css">
+</head>
+<body>
+<header class="top">
+  <h1><a href="./" class="home">rusty-bidding-bot</a> <span class="sub">rule checker</span></h1>
+  <p class="tagline">Check <code>.bid</code> rule files as <code>rbb bid check</code> does: grammar, terms, card fields, skills and module headers. Nothing leaves your browser.</p>
+  <nav>
+    <a href="./">Bid a deal</a>
+    <a href="explorer.html">Auction explorer</a>
+    <a href="status.html">Status</a>
+    <a href="https://github.com/bridge-craftwork/rusty-bidding-bot/blob/main/docs/LANGUAGE.md">Language</a>
+    <a href="https://github.com/bridge-craftwork/rusty-bidding-bot">Source</a>
+  </nav>
+</header>
+
+<noscript>
+  <p class="panel">This page runs the engine in your browser and needs JavaScript.</p>
+</noscript>
+
+<main class="vlayout">
+  <section class="panel" aria-label="Rule files">
+    <h2>Rule files</h2>
+    <div class="row wrap">
+      <label class="upload">Open <code>.bid</code> files
+        <input type="file" id="files" multiple accept=".bid,.toml,text/plain">
+      </label>
+      <label class="upload">or a folder
+        <input type="file" id="folder" webkitdirectory>
+      </label>
+      <label class="narrow">Example <select id="example"><option value="">Choose one of ours…</option></select></label>
+    </div>
+    <div id="tabs" class="tabs" role="tablist"></div>
+    <label class="name">File name <input type="text" id="name" value="mine/convention.bid" spellcheck="false"></label>
+    <textarea id="source" spellcheck="false" aria-label="The selected file's text" placeholder="module my-convention &quot;My convention&quot;
+  kind   convention
+  card   notrump.stayman.play
+  needs  notrump-base
+
+after 1N (P)
+  2C  &quot;Stayman: asks for a four-card major&quot;
+      shows hcp>=8, H>=4 | S>=4
+      artificial"></textarea>
+    <div class="row wrap">
+      <button id="add" type="button">New file</button>
+      <button id="remove" type="button">Remove this file</button>
+    </div>
+  </section>
+
+  <section class="panel" aria-label="Result">
+    <h2>Check</h2>
+    <fieldset class="mode">
+      <legend>Check the files</legend>
+      <label class="check"><input type="radio" name="mode" value="with" checked> with Rusty's rule set (a file with the same name replaces ours; <code>needs</code>, <code>define</code>s and patterns such as <code>nt1</code> resolve)</label>
+      <label class="check"><input type="radio" name="mode" value="alone"> on their own</label>
+    </fieldset>
+    <p class="hint" id="language"></p>
+    <div id="summary"></div>
+    <ul id="diagnostics" class="diags"></ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <p>The checks are the engine's own (WASM <code>validate</code>, the same as <code>rbb bid check</code>), against
+  the rule language this engine reads and convention-card's card vocabulary. Rusty's rules are
+  <a href="https://github.com/bridge-craftwork/rusty-bidding-bot/tree/main/conventions">on GitHub</a>, and published with this page (<code>rules/index.json</code>). A file you open stays in this page.</p>
+</footer>
+
+<script type="module" src="validate/validate.js"></script>
+</body>
+</html>

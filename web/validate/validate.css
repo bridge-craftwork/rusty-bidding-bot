@@ -1,0 +1,33 @@
+/* The rule checker, on app.css and the tokens in styles.css. */
+
+.top h1 .home { color: inherit; text-decoration: none; }
+.top h1 .sub { color: var(--color-text-secondary); font-weight: 400; }
+
+.vlayout { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 1rem; padding: 0 1rem; max-width: 90rem; margin: 0 auto; }
+@media (max-width: 860px) { .vlayout { grid-template-columns: minmax(0, 1fr); } }
+
+.tabs { display: flex; flex-wrap: wrap; gap: .25rem; margin: .5rem 0; }
+.tab { font: inherit; font-size: .8rem; padding: .15rem .5rem; border: 1px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: none; cursor: pointer; }
+.tab.on { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; }
+
+label.name { display: flex; gap: .5rem; align-items: center; font-size: .85rem; margin: .25rem 0; }
+label.name input { flex: 1; font-family: var(--font-mono, ui-monospace, monospace); font-size: .85rem; }
+
+textarea#source { width: 100%; box-sizing: border-box; min-height: 28rem; font-family: var(--font-mono, ui-monospace, monospace); font-size: .85rem; line-height: 1.4; tab-size: 2; white-space: pre; overflow: auto; }
+
+fieldset.mode { border: none; padding: 0; margin: 0 0 .5rem; }
+fieldset.mode legend { font-size: .85rem; font-weight: 600; margin-bottom: .25rem; }
+
+.verdict { font-weight: 600; margin: .25rem 0; }
+.verdict.ok { color: var(--color-text-success, #15803d); }
+.verdict.bad { color: var(--color-text-danger); }
+
+ul.diags { list-style: none; padding: 0; margin: .5rem 0; }
+.diag { padding: .3rem .4rem; border-bottom: 1px solid var(--color-border-tertiary); font-size: .88rem; overflow-wrap: anywhere; }
+.diag[data-file] { cursor: pointer; }
+.diag[data-file]:hover { background: var(--color-background-secondary); }
+.diag .sev { display: inline-block; font-size: .7rem; padding: 0 .35rem; border-radius: 4px; text-transform: uppercase; }
+.diag.error .sev { background: var(--color-background-danger, #fee2e2); color: var(--color-text-danger); }
+.diag.warning .sev { background: var(--color-background-warning); color: var(--color-text-warning); }
+.diag.info .sev { background: var(--color-background-info); color: var(--color-text-info); }
+fieldset.mode label.check { display: block; margin: .15rem 0; }
