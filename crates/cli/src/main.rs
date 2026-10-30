@@ -271,10 +271,12 @@ enum Command {
         #[arg(long, default_value = ".rbb-cache/dd.jsonl")]
         dd_cache: PathBuf,
     },
-    /// Choose a call for a hand and show why.
+    /// Choose a call for a hand and show why. With --batch, many
+    /// positions with one engine: JSON lines in, JSON lines out.
     Call {
         /// The hand in PBN order S.H.D.C, e.g. AK52.KJ7.Q94.K83
-        hand: String,
+        #[arg(required_unless_present = "batch")]
+        hand: Option<String>,
         /// Calls so far, e.g. "1NT Pass"
         #[arg(short, long, default_value = "")]
         auction: String,
@@ -304,6 +306,16 @@ enum Command {
         /// view (as `explain-auction`; with --json, a `knowledge` array).
         #[arg(long)]
         knowledge: bool,
+        /// Read positions from stdin, one JSON object a line:
+        /// `{"hand": "S.H.D.C", "auction": "1NT Pass", "dealer": "N",
+        /// "vul": "None", "scoring": "MP", "id": ...}` (all but `hand`
+        /// optional; missing ones take the command line's values). Prints
+        /// one line each, in order: the decision as --json prints it (with
+        /// --knowledge, `{"decision", "knowledge"}`), plus `id` when given,
+        /// or `{"id", "error"}` for a position that cannot be read. The
+        /// rules and cards load once.
+        #[arg(long)]
+        batch: bool,
     },
     /// Review an auction call by call: what each call shows, what is known
     /// about every seat after it (`*` marks what the call changed), the
@@ -854,8 +866,9 @@ fn run(cli: Cli) -> Result<()> {
             rules,
             json,
             knowledge,
+            batch,
         } => call(
-            &hand,
+            hand.as_deref(),
             &auction,
             dealer,
             &vul,
@@ -865,6 +878,7 @@ fn run(cli: Cli) -> Result<()> {
             &rules,
             json,
             knowledge,
+            batch,
         ),
         Command::ExplainAuction {
             auction,
@@ -1316,9 +1330,104 @@ fn card_or_stock(vocab: &Vocabulary, spec: &str) -> Result<Card> {
     }
 }
 
+/// One position for `call`: the hand, the calls so far and the table.
+struct Position {
+    hand: bridge_types::Hand,
+    calls: Vec<bridge_types::Call>,
+    dealer: bridge_types::Direction,
+    vul: bridge_types::Vulnerability,
+    scoring: bridge_types::ScoringMethod,
+}
+
+fn position(
+    hand: &str,
+    auction: &str,
+    dealer: &str,
+    vul: &str,
+    scoring: &str,
+) -> std::result::Result<Position, String> {
+    use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
+    Ok(Position {
+        hand: Hand::from_pbn(hand).ok_or("hand must be PBN S.H.D.C, e.g. AK52.KJ7.Q94.K83")?,
+        calls: auction
+            .split_whitespace()
+            .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
+            .collect::<std::result::Result<Vec<_>, _>>()?,
+        dealer: dealer
+            .chars()
+            .next()
+            .and_then(|c| Direction::from_char(c.to_ascii_uppercase()))
+            .filter(|_| dealer.len() == 1)
+            .ok_or("dealer must be N, E, S or W")?,
+        vul: Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?,
+        scoring: ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?,
+    })
+}
+
+/// The decision for one position, with the review of the auction so far
+/// when asked (this hand's own view at its seat).
+fn decide(
+    engine: &rbb_engine::Engine,
+    p: &Position,
+    knowledge: bool,
+) -> (rbb_engine::Decision, Option<Vec<rbb_engine::ReviewRow>>) {
+    let d = engine.bid(&p.hand, p.dealer, p.vul, p.scoring, &p.calls);
+    let rows = knowledge.then(|| {
+        let mut hands: [Option<bridge_types::Hand>; 4] = Default::default();
+        hands[d.auction.position.next_caller().to_index()] = Some(p.hand.clone());
+        engine.review(p.dealer, p.vul, p.scoring, &p.calls, &hands)
+    });
+    (d, rows)
+}
+
+/// `call --batch`: positions from stdin as JSON lines, one decision a line.
+fn call_batch(engine: &rbb_engine::Engine, defaults: [&str; 3], knowledge: bool) -> Result<()> {
+    use std::io::{BufRead, Write};
+    let [dealer, vul, scoring] = defaults;
+    let stdout = std::io::stdout();
+    let mut out = std::io::BufWriter::new(stdout.lock());
+    for line in std::io::stdin().lock().lines() {
+        let line = line?;
+        if line.trim().is_empty() {
+            continue;
+        }
+        let (id, result) = match serde_json::from_str::<serde_json::Value>(&line) {
+            Err(e) => (serde_json::Value::Null, Err(format!("not JSON: {e}"))),
+            Ok(v) => {
+                let s =
+                    |k: &str, d: &str| v.get(k).and_then(|x| x.as_str()).unwrap_or(d).to_string();
+                let p = match v.get("hand").and_then(|x| x.as_str()) {
+                    None => Err("no \"hand\"".to_string()),
+                    Some(h) => position(
+                        h,
+                        &s("auction", ""),
+                        &s("dealer", dealer),
+                        &s("vul", vul),
+                        &s("scoring", scoring),
+                    ),
+                };
+                (v.get("id").cloned().unwrap_or(serde_json::Value::Null), p)
+            }
+        };
+        let mut row = match result {
+            Err(e) => serde_json::json!({ "error": e }),
+            Ok(p) => match decide(engine, &p, knowledge) {
+                (d, Some(rows)) => serde_json::json!({ "decision": d, "knowledge": rows }),
+                (d, None) => serde_json::to_value(&d)?,
+            },
+        };
+        if !id.is_null() {
+            row["id"] = id;
+        }
+        writeln!(out, "{}", serde_json::to_string(&row)?)?;
+    }
+    out.flush()?;
+    Ok(())
+}
+
 #[allow(clippy::too_many_arguments)]
 fn call(
-    hand: &str,
+    hand: Option<&str>,
     auction: &str,
     dealer: char,
     vul: &str,
@@ -1328,17 +1437,8 @@ fn call(
     rules: &Path,
     json: bool,
     knowledge: bool,
+    batch: bool,
 ) -> Result<()> {
-    use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
-    let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
-    let hand = Hand::from_pbn(hand).ok_or("hand must be PBN S.H.D.C, e.g. AK52.KJ7.Q94.K83")?;
-    let calls = auction
-        .split_whitespace()
-        .map(|c| Call::from_pbn(c).ok_or_else(|| format!("bad call {c:?}")))
-        .collect::<std::result::Result<Vec<_>, _>>()?;
-    let dealer =
-        Direction::from_char(dealer.to_ascii_uppercase()).ok_or("dealer must be N, E, S or W")?;
-    let vul = Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?;
     let rules = rules_from(Some(rules))?;
     let ns = load_card(&rules.vocab, card)?;
     let ew = match ew_card {
@@ -1346,13 +1446,12 @@ fn call(
         None => ns.clone(),
     };
     let engine = rbb_engine::Engine::new(&ns, &ew, &rules);
-    let d = engine.bid(&hand, dealer, vul, scoring, &calls);
-    // The review, with this hand's own view at its seat.
-    let rows = knowledge.then(|| {
-        let mut hands: [Option<Hand>; 4] = Default::default();
-        hands[d.auction.position.next_caller().to_index()] = Some(hand.clone());
-        engine.review(dealer, vul, scoring, &calls, &hands)
-    });
+    let dealer = dealer.to_string();
+    if batch {
+        return call_batch(&engine, [&dealer, vul, scoring], knowledge);
+    }
+    let p = position(hand.unwrap_or_default(), auction, &dealer, vul, scoring)?;
+    let (d, rows) = decide(&engine, &p, knowledge);
     if json {
         match rows {
             Some(rows) => println!(
