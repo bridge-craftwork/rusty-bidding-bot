@@ -13,6 +13,7 @@
 # below ours) the double stays what it was.
 
 module maximal-doubles "Maximal doubles"
+  kind   convention
   card   doubles.maximal
   needs  base
   needs  overcalls

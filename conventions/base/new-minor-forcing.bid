@@ -6,6 +6,7 @@
 # and not forcing (responder-rebids.bid).
 
 module new-minor-forcing "New Minor Forcing"
+  kind   convention
   card   other_conventions.new_minor_forcing.play
   needs  responder-rebids
   skill  bidding_conventions/new_minor_forcing

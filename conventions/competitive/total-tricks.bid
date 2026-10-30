@@ -23,6 +23,7 @@
 # that only say "nothing more to say".
 
 module total-tricks "The Law of Total Tricks"
+  kind   judgement
   needs  base
   skill  competitive_bidding/law_of_total_tricks
 

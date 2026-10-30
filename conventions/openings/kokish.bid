@@ -13,6 +13,7 @@
 # relay (24-25). See kokish.notes.md.
 
 module kokish "Kokish relay after 2♣–2♦"
+  kind   convention
   card   two_level.two_clubs.kokish
   needs  strong-openings
   skill  bidding_conventions/kokish

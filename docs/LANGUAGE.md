@@ -81,6 +81,7 @@ it depends on.
 
 ```
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
+  kind   convention
   card   slam.blackwood.rkcb_1430          # active when the card says so
   needs  base
   skill  bidding_conventions/roman_keycard
@@ -98,6 +99,17 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
   Repeatable, and a line may name several. It records what the module
   teaches and changes nothing about how it loads or bids; `rbb bid skills`
   maps skills to card fields and modules (docs/SKILLS.md).
+- `kind convention|defence|system|judgement`: what the module is, once.
+  `convention`: a convention the card switches or chooses, whose meanings
+  are the shared standard's (convention-card's field and convention IDs).
+  `defence`: our answer to an opponents' convention (vs-multi.bid).
+  `system`: the natural system (openings, responses, rebids, game-forcing
+  sequences), tuned by card treatments but every robot's own.
+  `judgement`: fits, competing, penalty doubles, slam entry. Like `skill`
+  it changes nothing about loading or bidding; `rbb bid check` warns about
+  a module without one, and `rbb bid skills --json` lists it, so an export
+  or a comparison with another robot can tell the standard's part from
+  ours (engine 0.13.0).
 
 **Treatments.** When players agree on a convention but not on its details,
 the card holds one enum field for the choice (`notrump.minor_transfers`:

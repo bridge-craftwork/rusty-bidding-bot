@@ -14,6 +14,7 @@
 # other suit, the cheapest of equals. Notes: sos-redouble.notes.md.
 
 module sos-redouble "SOS redouble"
+  kind   convention
   needs  base
   skill  competitive_bidding/sos_redouble
   card   other_conventions.sos_redouble.play

@@ -18,6 +18,7 @@
 # `we.trump`, `we.forcing` and the control-bid dialogue itself.
 
 module control-bids "Control bids before the keycard ask"
+  kind   convention
   card   slam.cue_bids.play
   needs  base
   skill  bidding_conventions/control_bids

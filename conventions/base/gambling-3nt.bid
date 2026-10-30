@@ -11,6 +11,7 @@
 # values. See gambling-3nt.notes.md.
 
 module gambling-3nt "Gambling 3NT: a solid minor"
+  kind   convention
   card   notrump.three_nt.one_suit
   needs  preempts
   skill  bidding_conventions/gambling_3nt

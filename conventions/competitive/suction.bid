@@ -19,6 +19,7 @@
 # advancer passes or corrects. See suction.notes.md.
 
 module suction "Suction over their 1NT"
+  kind   convention
   needs  vs-1nt
   skill  competitive_bidding/suction
   skill  competitive_bidding/defense_vs_1nt

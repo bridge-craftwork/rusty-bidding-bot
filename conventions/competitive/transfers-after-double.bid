@@ -27,6 +27,7 @@
 # 1m (X) (Todd 599) are not written.
 
 module transfers-after-double "Transfer responses after their takeout double"
+  kind   convention
   needs  base
   needs  after-interference
   needs  vs-takeout-double

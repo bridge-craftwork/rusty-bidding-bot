@@ -22,6 +22,7 @@
 # Notes: lead-directing-doubles.notes.md.
 
 module lead-directing-doubles "Lead-directing doubles of artificial bids"
+  kind   convention
   needs  base
   skill  competitive_bidding/lead_directing_doubles
   card   competitive.lead_directing_double.play

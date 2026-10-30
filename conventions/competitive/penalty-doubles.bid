@@ -3,6 +3,7 @@
 # Draft: see penalty-doubles.notes.md.
 
 module penalty-doubles "Penalty doubles: they are too high"
+  kind   judgement
   needs  base
 
 # The contract is theirs and undoubled: RHO has just bid (direct), or LHO

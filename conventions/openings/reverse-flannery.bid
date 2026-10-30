@@ -13,6 +13,7 @@
 # jump shift of either kind. See reverse-flannery.notes.md.
 
 module reverse-flannery "Reverse Flannery"
+  kind   convention
   needs  responses
   skill  bidding_conventions/reverse_flannery
   param  rf_2h = two_level.reverse_flannery.two_h default false

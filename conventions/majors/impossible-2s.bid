@@ -11,6 +11,7 @@
 # raise) has no hand here. See impossible-2s.notes.md.
 
 module impossible-2s "Impossible 2♠"
+  kind   convention
   card   major_openings.impossible_2s.play
   needs  responder-rebids
   skill  bidding_conventions/impossible_2s

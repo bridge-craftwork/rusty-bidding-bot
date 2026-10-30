@@ -18,6 +18,7 @@
 # -79 on random deals and -686 on the corpus against this (notes).
 
 module fourth-suit-forcing "Fourth suit forcing"
+  kind   convention
   needs  base
   skill  bidding_conventions/fourth_suit_forcing
   param  fsf_play  = other_conventions.fourth_suit_forcing.play default false

@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module notrump-base "1NT opening and natural responses"
+  kind   system
   needs  base
   skill  basic_bidding/notrump_openings
   skill  partnership_bidding/basic_notrump

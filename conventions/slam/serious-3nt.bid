@@ -10,6 +10,7 @@
 # serious-3nt.notes.md.
 
 module serious-3nt "Non-serious 3NT before control bids in a major-fit game force"
+  kind   convention
   needs  base
   skill  bidding_conventions/serious_3nt
   param  nsplay = slam.non_serious_3nt.play default false

@@ -11,6 +11,7 @@
 # (`xy_relay`, `xy_clubs`, `xy_gf`). See xyz.notes.md.
 
 module xyz "XYZ: 2♣ relay and 2♦ game force after three one-level bids"
+  kind   convention
   card   other_conventions.xyz
   needs  two-way-nmf
   skill  bidding_conventions/xyz

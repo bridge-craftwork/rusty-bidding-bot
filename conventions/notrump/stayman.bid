@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module stayman "Stayman"
+  kind   convention
   card   notrump.stayman.play
   needs  notrump-base
   skill  bidding_conventions/stayman

@@ -28,6 +28,7 @@
 # 4,345 boards across the corpus, 123 of them in the Basic_* scenarios.
 
 module two-nt-responses "Responses to a 2NT opening"
+  kind   system
   needs  notrump-base
   skill  partnership_bidding/basic_notrump
   skill  bidding_conventions/stayman

@@ -9,6 +9,7 @@
 # a jump (BBA's own treatment). Notes: exclusion.notes.md.
 
 module exclusion "Exclusion Blackwood: a jump to five in a void asks for keycards outside it"
+  kind   convention
   card   slam.exclusion_blackwood.play
   needs  base
   skill  bidding_conventions/exclusion_blackwood

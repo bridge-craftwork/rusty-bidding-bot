@@ -19,6 +19,7 @@
 # aces and bid 6♣ (gerber.notes.md, "Decisions").
 
 module gerber "Gerber: 4♣ asks for aces over partner's notrump"
+  kind   convention
   card   slam.gerber.play
   needs  notrump-base
   skill  bidding_conventions/gerber

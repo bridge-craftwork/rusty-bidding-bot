@@ -15,6 +15,7 @@
 # first cut that keeps the auction going to the right level.
 
 module inverted-minors "Inverted minor raises"
+  kind   convention
   card   minor_openings.inverted_minors.play
   needs  responses
   skill  bidding_conventions/inverted_minors

@@ -19,6 +19,7 @@
 # fewer, the standard module's line. See modified-jacoby-2nt.notes.md.
 
 module modified-jacoby-2nt "Modified Jacoby 2NT"
+  kind   convention
   card   major_openings.jacoby_2nt.modified
   needs  jacoby-2nt
   skill  bidding_conventions/modified_jacoby_2nt

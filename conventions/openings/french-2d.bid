@@ -18,6 +18,7 @@
 # Opener then bids naturally. See french-2d.notes.md.
 
 module french-2d "French 2♦ (game forcing)"
+  kind   convention
   card   two_level.french_2d.play
   needs  strong-openings
   skill  bidding_conventions/french_2d

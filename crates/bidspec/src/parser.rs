@@ -19,7 +19,7 @@ const CLAUSES: &[&str] = &[
     "announce",
     "artificial",
 ];
-const HEADERS: &[&str] = &["card", "needs", "param", "skill"];
+const HEADERS: &[&str] = &["card", "kind", "needs", "param", "skill"];
 
 struct Line<'a> {
     no: usize,
@@ -149,6 +149,7 @@ impl<'a> Parser<'a> {
             needs: Vec::new(),
             params: Vec::new(),
             skills: Vec::new(),
+            kind: None,
             defines: Vec::new(),
             auctions: Vec::new(),
             forces: Vec::new(),
@@ -313,10 +314,31 @@ impl<'a> Parser<'a> {
                     }
                 }
             }
+            Some("kind") => match words.as_slice() {
+                [w] => match ModuleKind::parse(w) {
+                    Some(_) if module.kind.is_some() => {
+                        self.error(line, None, "a module has one `kind` line")
+                    }
+                    Some(k) => module.kind = Some(k),
+                    None => self.error(
+                        line,
+                        None,
+                        format!(
+                            "{w:?} is not a module kind: `convention`, `defence`, `system` \
+                             or `judgement`"
+                        ),
+                    ),
+                },
+                _ => self.error(
+                    line,
+                    None,
+                    "expected `kind convention|defence|system|judgement`",
+                ),
+            },
             _ => self.error(
                 line,
                 Some(0),
-                "expected `card`, `needs`, `param` or `skill` under `module`",
+                "expected `card`, `kind`, `needs`, `param` or `skill` under `module`",
             ),
         }
     }

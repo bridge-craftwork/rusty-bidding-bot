@@ -8,6 +8,7 @@
 # of the minor. Played instead of NMF. See roudi.notes.md.
 
 module roudi "Roudi"
+  kind   convention
   card   other_conventions.roudi.play
   needs  responder-rebids
   skill  bidding_conventions/roudi

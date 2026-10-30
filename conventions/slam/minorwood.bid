@@ -7,6 +7,7 @@
 # plays it, is the ask instead (kickback.bid). Notes: minorwood.notes.md.
 
 module minorwood "Minorwood: four of the agreed minor asks for keycards"
+  kind   convention
   needs  base
   skill  bidding_conventions/minorwood
   param  mwplay = slam.minorwood.play default false

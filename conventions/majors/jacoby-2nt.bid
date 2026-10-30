@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module jacoby-2nt "Jacoby 2NT"
+  kind   convention
   needs  base
   skill  bidding_conventions/jacoby_2nt_splinters
   skill  bidding_conventions/jacoby_2nt

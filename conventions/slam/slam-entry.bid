@@ -11,6 +11,7 @@
 # own facing a game force; the control rulings are control-bids.bid's.
 
 module slam-entry "Slam entry: the conditions the slam modules share"
+  kind   judgement
   skill  partnership_bidding/slam_bidding
   param  style = slam.cue_bids.style default first_or_second_round
   param  bw    = slam.blackwood.standard default false

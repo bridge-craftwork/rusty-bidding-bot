@@ -12,6 +12,7 @@
 # textbook 33/31 measured best (notes).
 
 module over-3nt "Slam after partner's 3NT"
+  kind   judgement
   needs  base
   skill  partnership_bidding/slam_bidding
   param  q4n   = slam.quantitative_4nt.play default true

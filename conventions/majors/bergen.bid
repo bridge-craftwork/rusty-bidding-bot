@@ -14,6 +14,7 @@
 # bergen.notes.md.
 
 module bergen "Bergen raises: four-card raises at the three level"
+  kind   convention
   needs  responses
   skill  bidding_conventions/bergen_raises
   skill  bidding_conventions/reverse_bergen_raises

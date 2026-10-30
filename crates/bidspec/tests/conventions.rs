@@ -211,6 +211,12 @@ fn modules_name_their_teaching_skills() {
     assert!(e[0].contains("not a skill path"), "{e:?}");
     let e = errors("module demo \"Demo\"\n  skill\n");
     assert!(e[0].contains("expected `skill"), "{e:?}");
+    let e = errors("module demo \"Demo\"\n  kind gadget\n");
+    assert!(e[0].contains("not a module kind"), "{e:?}");
+    let e = errors("module demo \"Demo\"\n  kind system\n  kind judgement\n");
+    assert!(e[0].contains("one `kind` line"), "{e:?}");
+    let k = bidspec::parse("module demo \"Demo\"\n  kind defence\n", "t.bid").unwrap();
+    assert!(bidspec::to_json(&k).contains("\"kind\": \"defence\""));
     let e = errors("module demo \"Demo\"\nskill bidding_conventions/stayman\n");
     assert!(e[0].contains("must be indented under `module`"), "{e:?}");
     // A `/` is only for skill paths.

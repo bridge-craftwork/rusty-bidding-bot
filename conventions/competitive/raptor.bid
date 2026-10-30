@@ -17,6 +17,7 @@
 # with 11+ asks for the unknown suit. Notes: raptor.notes.md.
 
 module raptor "Raptor 1NT: a four-card major and a longer minor"
+  kind   convention
   needs  base
   needs  overcalls
   skill  competitive_bidding/raptor

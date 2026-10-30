@@ -10,6 +10,7 @@
 # slam interest. 2♣ Stayman stays for invitational hands.
 
 module puppet-1nt "Puppet Stayman over 1NT"
+  kind   convention
   card   notrump.stayman.puppet_1nt
   needs  two-nt-responses
   skill  bidding_conventions/puppet_stayman

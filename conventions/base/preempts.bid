@@ -14,6 +14,7 @@
 #   not written yet).
 
 module preempts "Weak two-bids and preempts"
+  kind   system
   needs  base
   skill  bidding_conventions/weak_2s
   skill  bidding_conventions/preemptive_bids

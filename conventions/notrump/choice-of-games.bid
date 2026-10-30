@@ -1,6 +1,7 @@
 # Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.
 
 module choice-of-games "Choosing between 3NT and a major-suit game"
+  kind   system
   needs  notrump-base
   skill  partnership_bidding/basic_notrump
 

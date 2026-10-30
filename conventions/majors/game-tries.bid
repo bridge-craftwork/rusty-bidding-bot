@@ -18,6 +18,7 @@
 # See game-tries.notes.md.
 
 module game-tries "Help-suit and two-way game tries after 1M-2M"
+  kind   convention
   needs  rebids
   skill  bidding_conventions/help_suit_game_try
   skill  bidding_conventions/two_way_game_tries

@@ -13,6 +13,7 @@
 # with three. Notes: spiral.notes.md.
 
 module spiral "Spiral 2NT: how many trumps, minimum or maximum, after 1X-1M-2M"
+  kind   convention
   needs  base
   skill  bidding_conventions/spiral
   param  spiral = slam.spiral_cuebids.play default false

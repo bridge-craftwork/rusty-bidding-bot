@@ -15,6 +15,7 @@
 # against the auction that asked it (LANGUAGE.md §10).
 
 module responder-rebids "Responder's second call"
+  kind   system
   needs  rebids
   skill  partnership_bidding/responders_rebid
   skill  bidding_conventions/fourth_suit_forcing

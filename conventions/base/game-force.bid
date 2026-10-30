@@ -9,6 +9,7 @@
 # and apply whichever rule made or explains the call.
 
 module game-force "When the auction forces to game"
+  kind   system
   needs  base
   skill  bidding_conventions/two_over_one
   param  wolff = other_conventions.wolff_signoff.play default false

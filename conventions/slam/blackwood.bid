@@ -4,6 +4,7 @@
 # answers count aces only; keycards(N) is aces without a trump king.
 
 module blackwood "Blackwood (standard)"
+  kind   convention
   card   slam.blackwood.standard
   needs  base
   skill  bidding_conventions/blackwood

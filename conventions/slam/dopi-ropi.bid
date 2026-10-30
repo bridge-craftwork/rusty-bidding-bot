@@ -16,6 +16,7 @@
 # partner's pass. Notes: dopi-ropi.notes.md.
 
 module dopi-ropi "DOPI and ROPI: answering an ace or keycard ask over interference"
+  kind   convention
   needs  base
   skill  bidding_conventions/dopi_ropi
   param  dopi   = slam.dopi default false

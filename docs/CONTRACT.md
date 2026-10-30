@@ -242,6 +242,10 @@ new language version, and this repository's manifest names `engine =
 rules load; `rbb bid check` warns about one that is not a standard
 convention or skill (convention-card's `spec/conventions/`). The same goes for the `skill` attribute of a card field.
 
+The `kind` header line (LANGUAGE.md §3, engine 0.13.0) is another:
+documentation of what a module is (convention, defence, system or
+judgement), refused by an older parser like `skill` was.
+
 Engine 0.3.0 adds, the same way: named conditions (`define`, LANGUAGE.md
 §3), conditions counted as 1 or 0 in arithmetic, and the terms of the
 judgment layer's Phase 0 (`we.fit(x)`, `we.points`, the opponents'

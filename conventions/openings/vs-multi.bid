@@ -18,6 +18,7 @@
 # See vs-multi.notes.md.
 
 module vs-multi "Defence to a Multi 2♦"
+  kind   defence
   needs  base
   skill  bidding_conventions/multi_2d
 

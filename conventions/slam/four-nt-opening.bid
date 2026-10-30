@@ -7,6 +7,7 @@
 # places the contract in his long suit. Notes: four-nt-opening.notes.md.
 
 module four-nt-opening "4NT opening: asks for specific aces"
+  kind   convention
   card   slam.four_nt_opening.play
   needs  base
 

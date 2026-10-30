@@ -15,6 +15,7 @@
 # jump-raises.notes.md.
 
 module jump-raises "Weak and mixed jump raises of a major"
+  kind   convention
   needs  responses
   param  weak    = major_openings.jump_raise.weak default false
   param  mixed   = major_openings.jump_raise.mixed default false

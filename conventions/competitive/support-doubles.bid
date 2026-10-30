@@ -16,6 +16,7 @@
 # Notes: support-doubles.notes.md.
 
 module support-doubles "Support doubles and redoubles"
+  kind   convention
   card   doubles.support.play
   needs  rebids
   skill  competitive_bidding/support_doubles

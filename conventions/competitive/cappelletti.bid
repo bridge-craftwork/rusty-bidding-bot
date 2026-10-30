@@ -21,6 +21,7 @@
 # the double comes first whatever the shape.
 
 module cappelletti "Cappelletti and Modified Cappelletti over their 1NT"
+  kind   convention
   needs  vs-1nt
   skill  competitive_bidding/cappelletti
   skill  competitive_bidding/modified_cappelletti
