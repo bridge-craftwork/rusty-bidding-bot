@@ -129,7 +129,11 @@ local checkouts").
   is the truth (docs/CONTRACT.md, Part 2).
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
-  `--knowledge` reviews the auction so far first).
+  `--knowledge` reviews the auction so far first). `call --batch -c <card>`
+  answers many positions with one engine: JSON lines on stdin
+  (`{"hand", "auction", "dealer", "vul", "scoring", "id"}`, all but `hand`
+  optional), one `--json` decision a line out, ~5 ms a position instead
+  of ~200 ms a process.
 - `./dev-build.sh run -q -p rbb-cli -- explain-auction -a "1NT Pass 2C Pass 2H" -d N -c <card> --deal "N:..."`:
   the auction call by call: what is known about every seat after each
   call (`*` marks what the call changed), the flags (F1, GF, inv, ask,
