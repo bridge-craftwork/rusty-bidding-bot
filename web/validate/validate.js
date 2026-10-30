@@ -146,6 +146,9 @@ $('example').addEventListener('change', async () => {
 
 document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', schedule))
 
+/** The module a file defines (`module <name> ...`), if any. */
+const moduleName = (text) => /^module\s+(\S+)/m.exec(text)?.[1]
+
 // ── Checking ──────────────────────────────────────────────────────────
 
 let timer = 0
@@ -169,7 +172,11 @@ async function check() {
   const req = {}
   if (mode === 'with') {
     const base = await oursRules()
-    req.rules = { ...base.files, ...mine }
+    // A file of yours replaces ours with the same path, or with the same
+    // module name wherever you keep it (flannery.bid for openings/flannery.bid).
+    const names = new Set(Object.values(mine).map(moduleName).filter(Boolean))
+    const kept = Object.fromEntries(Object.entries(base.files).filter(([, text]) => !names.has(moduleName(text))))
+    req.rules = { ...kept, ...mine }
     req.manifest = manifest ?? base.manifest
   } else {
     req.rules = mine
