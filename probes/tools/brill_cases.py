@@ -24,7 +24,9 @@ marks one of Brill's judgement lessons; the report keeps those apart from
 the plain convention cases.
 
 Files live in .rbb-cache/brill-cases/ (results keyed by the rules' git
-state, so a rerun after a rule change asks again).
+state, so a rerun after a rule change asks again). `run` uses
+`rbb call --batch`, one process per job: all 25,000 positions in about a
+minute.
 """
 import argparse, collections, concurrent.futures as cf, fnmatch, glob, hashlib
 import json, os, re, subprocess, sys
@@ -190,18 +192,28 @@ def rules_state():
     return rev + ('-' + hashlib.sha1(diff.encode()).hexdigest()[:8] if diff else '')
 
 
-def ask(c, card):
-    cmd = [RBB, 'call', '-c', card, '-d', c['dealer'], '-v', c['vul'], '-s', 'IMP',
-           '-a', to_rbb(c['auction']), '--json', c['hand']]
-    p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
-    if p.returncode:
-        return {'error': p.stderr.strip()[:300]}
-    d = json.loads(p.stdout)
+def summary(d):
+    """What the report needs from one `rbb call --json` decision."""
     pos = d['auction']['position']
     return {'call': from_rbb(d['call']), 'explanation': d['explanation'],
             'rule': f"{d['rule']['module']}:{d['rule']['line']}" if d['rule'] else None,
             'unread': [i for i, u in enumerate(pos.get('unread', [])) if u],
             'context_rules': [s['rule']['module'] if s.get('rule') else None for s in d['auction']['steps']]}
+
+
+def ask_batch(chunk, card):
+    """One `rbb call --batch` process for a list of cases, answers in order."""
+    lines = ''.join(json.dumps({'hand': c['hand'], 'auction': to_rbb(c['auction']), 'dealer': c['dealer'],
+                                'vul': c['vul'], 'scoring': 'IMP'}) + '\n' for c in chunk)
+    p = subprocess.run([RBB, 'call', '--batch', '-c', card], cwd=ROOT, input=lines,
+                       capture_output=True, text=True)
+    if p.returncode:
+        return [{'error': p.stderr.strip()[:300]}] * len(chunk)
+    out = []
+    for l in p.stdout.splitlines():
+        d = json.loads(l)
+        out.append({'error': d['error']} if 'error' in d else summary(d))
+    return out
 
 
 def run(args):
@@ -215,12 +227,14 @@ def run(args):
     key = lambda c: f"{c['dealer']}|{c['vul']}|{' '.join(c['auction'])}|{c['hand']}"
     todo = list({key(c): c for c in cases if key(c) not in done}.values())
     print(f'{len(cases)} cases, {len(todo)} positions to ask ({out})', flush=True)
-    with open(out, 'a') as f, cf.ThreadPoolExecutor(args.jobs) as ex:
-        for i, (c, r) in enumerate(zip(todo, ex.map(lambda c: ask(c, args.card), todo))):
-            r['key'] = key(c)
-            f.write(json.dumps(r) + '\n')
-            if i % 500 == 499:
-                print(f'  {i + 1}/{len(todo)}', flush=True)
+    # One batch process per job, each with an equal share.
+    n = max(1, min(args.jobs, len(todo)))
+    chunks = [todo[i::n] for i in range(n)]
+    with open(out, 'a') as f, cf.ThreadPoolExecutor(n) as ex:
+        for chunk, answers in zip(chunks, ex.map(lambda ch: ask_batch(ch, args.card), chunks)):
+            for c, r in zip(chunk, answers):
+                r['key'] = key(c)
+                f.write(json.dumps(r) + '\n')
     print('done')
 
 
