@@ -14,7 +14,7 @@
 
 module kokish "Kokish relay after 2♣–2♦"
   kind   convention
-  card   two_level.two_clubs.kokish
+  card   two_level.kokish.play
   needs  strong-openings
   skill  bidding_conventions/kokish
 

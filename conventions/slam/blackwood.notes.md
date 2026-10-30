@@ -1,6 +1,6 @@
 # blackwood (`blackwood.bid`): notes
 
-Standard Blackwood (card `slam.blackwood.standard`, the Basic-Bridge card):
+Standard Blackwood (card `slam.blackwood.play`, the Basic-Bridge card):
 4NT asks for aces once a trump suit is agreed; 5♣ 0 or 4, 5♦ 1, 5♥ 2, 5♠ 3.
 The asker bids six with at most one ace missing, else signs off in five
 (passing an answer in the trump suit). Cases: `blackwood.test`.
@@ -37,7 +37,7 @@ plays standard Blackwood *and* control bids; no corpus card does.
   with the next step (5D, alerted "spades queen ask"), and the answer
   names a king as well ("!S queen and !C king"); it then places the
   contract. We bid six directly on the ace count. 55 boards, -30 IMPs
-  against par. `slam.blackwood.queen_ask` exists in the field registry but
+  against par. `slam.rkcb.queen_ask` exists in the field registry but
   no `.bbsa` key is mapped to it, so it cannot be switched on from a
   corpus card yet.
 

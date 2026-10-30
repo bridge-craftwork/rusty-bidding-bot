@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 219 card fields carry one.
+131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 221 card fields carry one.
 
 ### The map
 
@@ -49,7 +49,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `basic_bidding/notrump_openings` (Notrump Openings) | taxonomy | — | `notrump-base` |
 | `bidding_conventions/benjamin_2d` (Benjamin 2♦) | proposed | `two_level.benjamin.play` | `benjamin` |
 | `bidding_conventions/bergen_raises` (Bergen raises) | proposed | `major_openings.bergen_raises.play` | `bergen` |
-| `bidding_conventions/blackwood` (Blackwood) | taxonomy | `slam.blackwood.standard` | `blackwood` |
+| `bidding_conventions/blackwood` (Blackwood) | taxonomy | `slam.blackwood.play` | `blackwood` |
 | `bidding_conventions/checkback` (Checkback) | proposed | `other_conventions.checkback.play` | `checkback` |
 | `bidding_conventions/control_bids` (Control (Cue) Bids) | proposed | `slam.cue_bids.play` | `control-bids` |
 | `bidding_conventions/depo` (DEPO) | proposed | `slam.depo` | — |
@@ -60,7 +60,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/forcing_1nt` (Forcing 1NT) | proposed | `major_openings.one_nt_response.forcing` | `responses` |
 | `bidding_conventions/fourth_suit_forcing` (Fourth Suit Forcing) | taxonomy | `other_conventions.fourth_suit_forcing.play`, `other_conventions.fourth_suit_forcing.one_round`, `other_conventions.fourth_suit_forcing.game_force` | `fourth-suit-forcing`, `responder-rebids` |
 | `bidding_conventions/french_2d` (French 2♦) | proposed | `two_level.french_2d.play` | `french-2d` |
-| `bidding_conventions/gambling_3nt` (Gambling 3NT) | proposed | `notrump.three_nt.one_suit` | `gambling-3nt` |
+| `bidding_conventions/gambling_3nt` (Gambling 3NT) | proposed | `notrump.gambling_3nt.play` | `gambling-3nt` |
 | `bidding_conventions/gazzilli` (Gazzilli) | proposed | `major_openings.gazzilli.play` | `gazzilli` |
 | `bidding_conventions/gerber` (Gerber) | proposed | `slam.gerber.play` | `gerber` |
 | `bidding_conventions/help_suit_game_try` (Help Suit Game Try) | taxonomy | `other_conventions.help_suit_game_tries.play` | `game-tries` |
@@ -69,17 +69,17 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/inverted_minors` (Inverted Minor Raises) | proposed | `minor_openings.one_club.single_raise.inv`, `minor_openings.one_club.single_raise.gf`, `minor_openings.inverted_minors.play`, `minor_openings.one_diamond.single_raise.inv`, `minor_openings.one_diamond.single_raise.gf` | `inverted-minors` |
 | `bidding_conventions/jacoby_2nt` (Jacoby 2NT) | proposed | `major_openings.jacoby_2nt.play` | `jacoby-2nt` |
 | `bidding_conventions/jacoby_2nt_splinters` (Jacoby 2NT & Splinters) | taxonomy | `major_openings.jacoby_2nt.play`, `major_openings.jacoby_2nt.modified`, `major_openings.splinters.play`, `major_openings.splinters.by_responder`, `major_openings.splinters.by_opener` | `jacoby-2nt`, `splinters` |
-| `bidding_conventions/jacoby_transfers` (Jacoby Transfers) | taxonomy | `notrump.transfers.jacoby`, `notrump.transfers.texas`, `notrump.transfers.texas_4c`, `notrump.transfers.texas_4d`, `notrump.transfers.texas_4h`, `notrump.transfers.texas_4s`, `notrump.transfers.texas_2_under`, `notrump.transfers.vs_double`, `notrump.transfers.vs_2c`, `notrump.two_nt.transfers_3level`, `notrump.two_nt.transfers_4level` | `jacoby-transfers`, `texas-transfers`, `two-nt-responses` |
+| `bidding_conventions/jacoby_transfers` (Jacoby Transfers) | taxonomy | `notrump.jacoby_transfers.play`, `notrump.jacoby_transfers.vs_double`, `notrump.jacoby_transfers.vs_2c`, `notrump.jacoby_transfers.over_2nt`, `notrump.texas.play`, `notrump.texas.bid_4c`, `notrump.texas.bid_4d`, `notrump.texas.bid_4h`, `notrump.texas.bid_4s`, `notrump.texas.two_under`, `notrump.texas.over_2nt` | `jacoby-transfers`, `texas-transfers`, `two-nt-responses` |
 | `bidding_conventions/kickback` (Kickback) | proposed | `slam.kickback.play`, `slam.kickback.rkcb_1430`, `slam.kickback.rkcb_0314` | `kickback` |
-| `bidding_conventions/kokish` (Kokish relay) | proposed | `two_level.two_clubs.kokish` | `kokish` |
-| `bidding_conventions/lars_multi` (Lars Multi 2♦) | proposed | `two_level.two_diamonds.multi_strong` | — |
+| `bidding_conventions/kokish` (Kokish relay) | proposed | `two_level.kokish.play` | `kokish` |
+| `bidding_conventions/lars_multi` (Lars Multi 2♦) | proposed | `two_level.multi.strong_option` | — |
 | `bidding_conventions/mccabe` (McCabe adjunct) | proposed | `two_level.mccabe.play` | `mccabe` |
-| `bidding_conventions/mini_roman_2d` (Mini-Roman 2♦) | proposed | `two_level.two_diamonds.mini_roman`, `two_level.two_diamonds.mini_roman_maxi` | `mini-roman` |
-| `bidding_conventions/minor_suit_stayman` (Minor Suit Stayman) | proposed | `notrump.minor_suit_stayman.play`, `notrump.two_nt.minor_stayman` | `minor-suit-stayman`, `two-nt-minors` |
-| `bidding_conventions/minor_suit_transfers` (Minor-Suit Transfers over 1NT) | proposed | `notrump.minor_transfers`, `notrump.transfers.spades_relay`, `notrump.transfers.two_s_clubs`, `notrump.transfers.two_nt`, `notrump.transfers.two_nt_clubs`, `notrump.transfers.two_nt_diamonds`, `notrump.transfers.three_c_diamonds`, `notrump.two_nt.transfer_3s_clubs`, `notrump.two_nt.transfer_4c_diamonds`, `notrump.two_nt.minor_transfers` | `minor-transfers`, `two-nt-minors` |
+| `bidding_conventions/mini_roman_2d` (Mini-Roman 2♦) | proposed | `two_level.mini_roman.play`, `two_level.mini_roman.maxi` | `mini-roman` |
+| `bidding_conventions/minor_suit_stayman` (Minor Suit Stayman) | proposed | `notrump.minor_suit_stayman.play`, `notrump.minor_suit_stayman.over_2nt` | `minor-suit-stayman`, `two-nt-minors` |
+| `bidding_conventions/minor_suit_transfers` (Minor-Suit Transfers over 1NT) | proposed | `notrump.minor_transfers.play`, `notrump.minor_transfers.style`, `notrump.minor_transfers.two_s`, `notrump.minor_transfers.two_s_clubs`, `notrump.minor_transfers.two_nt`, `notrump.minor_transfers.two_nt_clubs`, `notrump.minor_transfers.two_nt_diamonds`, `notrump.minor_transfers.three_c_diamonds`, `notrump.minor_transfers.over_2nt`, `notrump.minor_transfers.over_2nt_3s_clubs`, `notrump.minor_transfers.over_2nt_4c_diamonds` | `minor-transfers`, `two-nt-minors` |
 | `bidding_conventions/minorwood` (Minorwood) | proposed | `slam.minorwood.play` | `minorwood` |
 | `bidding_conventions/modified_jacoby_2nt` (Modified Jacoby 2NT) | proposed | `major_openings.jacoby_2nt.modified` | `modified-jacoby-2nt` |
-| `bidding_conventions/multi_2d` (Multi 2♦) | proposed | `two_level.two_diamonds.multi`, `two_level.two_diamonds.multi_strong` | `multi`, `vs-multi` |
+| `bidding_conventions/multi_2d` (Multi 2♦) | proposed | `two_level.multi.play`, `two_level.multi.strong_option` | `multi`, `vs-multi` |
 | `bidding_conventions/namyats` (Namyats) | proposed | `preempts.transfer_4_minor`, `preempts.namyats.play` | `namyats` |
 | `bidding_conventions/new_minor_forcing` (New Minor Forcing) | taxonomy | `other_conventions.new_minor_forcing.play`, `other_conventions.new_minor_forcing.after_2nt_rebid`, `other_conventions.new_minor_forcing.by_passed_hand` | `new-minor-forcing`, `nmf-after-2nt` |
 | `bidding_conventions/ogust` (Ogust) | taxonomy | `two_level.ogust.play`, `two_level.weak_two_2nt_response` | `weak-two-responses` |
@@ -87,26 +87,26 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/polish_two_suiters` (Polish two-suiters) | proposed | `two_level.polish_two_suiters.play` | `polish-two-suiters` |
 | `bidding_conventions/precision_2d` (Precision 2♦) | proposed | `two_level.precision_2d.play` | `precision-2d` |
 | `bidding_conventions/preemptive_bids` (Preemptive Bids) | taxonomy | — | `preempts` |
-| `bidding_conventions/puppet_stayman` (Puppet Stayman) | proposed | `notrump.stayman.puppet_1nt`, `notrump.two_nt.puppet` | `puppet-1nt` |
+| `bidding_conventions/puppet_stayman` (Puppet Stayman) | proposed | `notrump.stayman.puppet_1nt`, `notrump.stayman.puppet_2nt` | `puppet-1nt` |
 | `bidding_conventions/reverse_bergen_raises` (Reverse Bergen raises) | proposed | `major_openings.bergen_raises.reverse` | `bergen` |
 | `bidding_conventions/reverse_bids` (Reverse Bids) | taxonomy | `other_conventions.reverse_bids.forcing` | `rebids` |
 | `bidding_conventions/reverse_drury` (Reverse Drury) | taxonomy | `major_openings.drury.reverse` | `drury` |
-| `bidding_conventions/reverse_flannery` (Reverse Flannery) | proposed | `two_level.two_diamonds.reverse_flannery`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s` | `reverse-flannery` |
-| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.blackwood.rkcb_1430`, `slam.blackwood.rkcb_0314`, `slam.blackwood.minor_0314`, `slam.blackwood.queen_ask`, `slam.king_ask.five_nt`, `slam.king_ask.next_step`, `slam.king_ask.specific` | `rkcb-1430` |
+| `bidding_conventions/reverse_flannery` (Reverse Flannery) | proposed | `two_level.reverse_flannery.play`, `two_level.reverse_flannery.two_d`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s` | `reverse-flannery` |
+| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.rkcb.play`, `slam.rkcb.style`, `slam.rkcb.minor_0314`, `slam.rkcb.queen_ask`, `slam.king_ask.five_nt`, `slam.king_ask.next_step`, `slam.king_ask.specific` | `rkcb-1430` |
 | `bidding_conventions/roudi` (Roudi) | proposed | `other_conventions.roudi.play` | `roudi` |
 | `bidding_conventions/semi_forcing_1nt` (Semi-forcing 1NT) | proposed | `major_openings.one_nt_response.semi_forcing` | `responses` |
 | `bidding_conventions/serious_3nt` (Serious 3NT) | proposed | `slam.non_serious_3nt.play` | `serious-3nt` |
 | `bidding_conventions/smolen` (Smolen) | proposed | `notrump.smolen.play` | `smolen` |
-| `bidding_conventions/soloway` (Soloway jump shifts) | proposed | `general.jump_shifts.soloway`, `general.jump_shifts.soloway_extended` | `soloway` |
+| `bidding_conventions/soloway` (Soloway jump shifts) | proposed | `general.soloway.play`, `general.soloway.extended` | `soloway` |
 | `bidding_conventions/spiral` (Spiral) | proposed | `slam.spiral_cuebids.play` | `spiral` |
 | `bidding_conventions/splinters` (Splinters) | proposed | `major_openings.splinters.play`, `major_openings.splinters.by_responder`, `major_openings.splinters.by_opener`, `major_openings.mini_splinters.play` | `splinters` |
-| `bidding_conventions/stayman` (Stayman) | taxonomy | `notrump.stayman.play`, `notrump.stayman.forcing`, `notrump.stayman.garbage`, `notrump.two_nt.three_c_3nt_both_majors` | `stayman`, `two-nt-responses` |
+| `bidding_conventions/stayman` (Stayman) | taxonomy | `notrump.stayman.play`, `notrump.stayman.forcing`, `notrump.stayman.garbage`, `notrump.stayman.over_2nt_both_majors` | `stayman`, `two-nt-responses` |
 | `bidding_conventions/strong_2c` (Strong 2♣) | taxonomy | `two_level.two_clubs.meaning` | `strong-openings` |
-| `bidding_conventions/super_accept` (Super-Accepting a Transfer) | proposed | `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton` | `super-accept`, `superaccept-doubleton` |
+| `bidding_conventions/super_accept` (Super-Accepting a Transfer) | proposed | `notrump.jacoby_transfers.super_accept`, `notrump.jacoby_transfers.super_accept_doubleton` | `super-accept`, `superaccept-doubleton` |
 | `bidding_conventions/transfer_walsh` (Transfer Walsh) | proposed | `minor_openings.one_club.transfer_resp` | `transfer-walsh` |
 | `bidding_conventions/transfers_after_double` (Transfers after a takeout double) | proposed | `vs_to_double.new_suit_forcing_tfr` | `transfers-after-double` |
-| `bidding_conventions/two_heart_bust` (2♥ bust over 2♣) | proposed | `two_level.two_clubs.parrish_bust` | — |
-| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.game_force`, `major_openings.two_over_one.rebid_style`, `major_openings.two_over_one.game_forcing_except` | `game-force` |
+| `bidding_conventions/two_heart_bust` (2♥ bust over 2♣) | proposed | `two_level.parrish_bust.play` | — |
+| `bidding_conventions/two_over_one` (2/1 Game Force) | taxonomy | `major_openings.two_over_one.play`, `major_openings.two_over_one.rebid_style`, `major_openings.two_over_one.game_forcing_except` | `game-force` |
 | `bidding_conventions/two_way_drury` (Two-way Drury) | proposed | `major_openings.drury.two_d` | `drury` |
 | `bidding_conventions/two_way_game_tries` (Two-way game tries) | proposed | `other_conventions.two_way_game_tries.play` | `game-tries` |
 | `bidding_conventions/two_way_nmf` (Two-way new minor forcing) | proposed | `other_conventions.two_way_nmf`, `other_conventions.two_way_nmf_by_passed_hand` | `two-way-nmf` |
@@ -131,7 +131,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `competitive_bidding/law_of_total_tricks` (The Law of Total Tricks) | proposed | — | `total-tricks` |
 | `competitive_bidding/lead_directing_doubles` (Lead-directing doubles) | proposed | `competitive.lead_directing_double.play` | `lead-directing-doubles` |
 | `competitive_bidding/leaping_michaels` (Leaping Michaels) | proposed | `competitive.leaping_michaels.play` | `two-suited-overcalls` |
-| `competitive_bidding/lebensohl` (Lebensohl) | taxonomy | `notrump.lebensohl.over_interference`, `competitive.lebensohl_weak_twos.play` | `lebensohl`, `vs-preempts` |
+| `competitive_bidding/lebensohl` (Lebensohl) | taxonomy | `notrump.lebensohl.play`, `competitive.lebensohl_weak_twos.play` | `lebensohl`, `vs-preempts` |
 | `competitive_bidding/maximal_doubles` (Maximal doubles) | proposed | `doubles.maximal` | `maximal-doubles` |
 | `competitive_bidding/meckwell` (Meckwell over 1NT) | proposed | `competitive.vs_1nt_strong.system`, `competitive.vs_1nt_weak.system` | `meckwell` |
 | `competitive_bidding/michaels_unusual` (Michaels & Unusual 2NT) | taxonomy | `nt_overcalls.jump_2nt_lowest_unbid`, `competitive.michaels.play`, `competitive.michaels.minor_advance`, `competitive.unusual_1nt.play`, `competitive.unusual_2nt.play`, `competitive.unusual_3nt.play`, `competitive.unusual_4nt.play`, `direct_cuebids.art_michaels`, `direct_cuebids.quasi_michaels`, `direct_cuebids.nat_minors_michaels`, `direct_cuebids.nat_majors_michaels` | `two-suited-overcalls` |
@@ -143,7 +143,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `competitive_bidding/overcalls` (Overcalls) | taxonomy | — | `overcalls` |
 | `competitive_bidding/raptor` (Raptor 1NT) | proposed | `competitive.raptor_1nt.play` | `raptor` |
 | `competitive_bidding/responsive_doubles` (Responsive Doubles) | proposed | `doubles.responsive.play` | `responsive-doubles` |
-| `competitive_bidding/rubensohl` (Rubensohl) | proposed | `notrump.rubensohl.over_interference`, `competitive.rubensohl_after_double.play` | `rubensohl` |
+| `competitive_bidding/rubensohl` (Rubensohl) | proposed | `notrump.rubensohl.play`, `competitive.rubensohl_after_double.play` | `rubensohl` |
 | `competitive_bidding/sandwich_nt` (Sandwich 1NT) | proposed | `competitive.sandwich_nt.play` | `sandwich-nt` |
 | `competitive_bidding/scrambling_2nt` (Scrambling 2NT) | proposed | `competitive.scrambling_2nt.play` | `scrambling-2nt` |
 | `competitive_bidding/snapdragon` (Snapdragon doubles) | proposed | `competitive.snapdragon.play` | `snapdragon` |
@@ -181,8 +181,8 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 **Skills with a card field but no module** (the card can say we play it; no rules bid it):
 
 - `bidding_conventions/depo`: `slam.depo`
-- `bidding_conventions/lars_multi`: `two_level.two_diamonds.multi_strong`
-- `bidding_conventions/two_heart_bust`: `two_level.two_clubs.parrish_bust`
+- `bidding_conventions/lars_multi`: `two_level.multi.strong_option`
+- `bidding_conventions/two_heart_bust`: `two_level.parrish_bust.play`
 - `defense/defensive_signals`: `carding.declarer_lead.attitude`, `carding.declarer_lead.count`, `carding.declarer_lead.suit_preference`, `carding.first_discard.standard`, `carding.suits.standard_attitude`, `carding.suits.standard_count`, `carding.nt.standard_attitude`, `carding.nt.standard_count`, `carding.partner_lead.attitude`, `carding.partner_lead.count`, `carding.partner_lead.suit_preference`
 - `defense/lavinthal`: `carding.lavinthal.from_void`, `carding.lavinthal.on_ace`, `carding.lavinthal.on_trump`, `carding.lavinthal.to_void`, `carding.first_discard.lavinthal`, `carding.first_discard.lavinthal_suits`, `carding.first_discard.lavinthal_nt`
 - `defense/odd_even_discards`: `carding.first_discard.odd_even`, `carding.first_discard.odd_even_suits`, `carding.first_discard.odd_even_nt`
@@ -224,7 +224,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `bidding_conventions/flannery` (proposed): `two_level.flannery.play`
 - `bidding_conventions/forcing_1nt` (proposed): `major_openings.one_nt_response.forcing`
 - `bidding_conventions/french_2d` (proposed): `two_level.french_2d.play`
-- `bidding_conventions/gambling_3nt` (proposed): `notrump.three_nt.one_suit`
+- `bidding_conventions/gambling_3nt` (proposed): `notrump.gambling_3nt.play`
 - `bidding_conventions/gazzilli` (proposed): `major_openings.gazzilli.play`
 - `bidding_conventions/gerber` (proposed): `slam.gerber.play`
 - `bidding_conventions/impossible_2s` (proposed): `major_openings.impossible_2s.play`
@@ -232,33 +232,33 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `bidding_conventions/inverted_minors` (proposed): `minor_openings.one_club.single_raise.inv`, `minor_openings.one_club.single_raise.gf`, `minor_openings.inverted_minors.play`, `minor_openings.one_diamond.single_raise.inv`, `minor_openings.one_diamond.single_raise.gf`
 - `bidding_conventions/jacoby_2nt` (proposed): `major_openings.jacoby_2nt.play`
 - `bidding_conventions/kickback` (proposed): `slam.kickback.play`, `slam.kickback.rkcb_1430`, `slam.kickback.rkcb_0314`
-- `bidding_conventions/kokish` (proposed): `two_level.two_clubs.kokish`
-- `bidding_conventions/lars_multi` (proposed): `two_level.two_diamonds.multi_strong`
+- `bidding_conventions/kokish` (proposed): `two_level.kokish.play`
+- `bidding_conventions/lars_multi` (proposed): `two_level.multi.strong_option`
 - `bidding_conventions/mccabe` (proposed): `two_level.mccabe.play`
-- `bidding_conventions/mini_roman_2d` (proposed): `two_level.two_diamonds.mini_roman`, `two_level.two_diamonds.mini_roman_maxi`
-- `bidding_conventions/minor_suit_stayman` (proposed): `notrump.minor_suit_stayman.play`, `notrump.two_nt.minor_stayman`
-- `bidding_conventions/minor_suit_transfers` (proposed): `notrump.minor_transfers`, `notrump.transfers.spades_relay`, `notrump.transfers.two_s_clubs`, `notrump.transfers.two_nt`, `notrump.transfers.two_nt_clubs`, `notrump.transfers.two_nt_diamonds`, `notrump.transfers.three_c_diamonds`, `notrump.two_nt.transfer_3s_clubs`, `notrump.two_nt.transfer_4c_diamonds`, `notrump.two_nt.minor_transfers`
+- `bidding_conventions/mini_roman_2d` (proposed): `two_level.mini_roman.play`, `two_level.mini_roman.maxi`
+- `bidding_conventions/minor_suit_stayman` (proposed): `notrump.minor_suit_stayman.play`, `notrump.minor_suit_stayman.over_2nt`
+- `bidding_conventions/minor_suit_transfers` (proposed): `notrump.minor_transfers.play`, `notrump.minor_transfers.style`, `notrump.minor_transfers.two_s`, `notrump.minor_transfers.two_s_clubs`, `notrump.minor_transfers.two_nt`, `notrump.minor_transfers.two_nt_clubs`, `notrump.minor_transfers.two_nt_diamonds`, `notrump.minor_transfers.three_c_diamonds`, `notrump.minor_transfers.over_2nt`, `notrump.minor_transfers.over_2nt_3s_clubs`, `notrump.minor_transfers.over_2nt_4c_diamonds`
 - `bidding_conventions/minorwood` (proposed): `slam.minorwood.play`
 - `bidding_conventions/modified_jacoby_2nt` (proposed): `major_openings.jacoby_2nt.modified`
-- `bidding_conventions/multi_2d` (proposed): `two_level.two_diamonds.multi`, `two_level.two_diamonds.multi_strong`
+- `bidding_conventions/multi_2d` (proposed): `two_level.multi.play`, `two_level.multi.strong_option`
 - `bidding_conventions/namyats` (proposed): `preempts.transfer_4_minor`, `preempts.namyats.play`
 - `bidding_conventions/pick_a_slam_5nt` (proposed): `slam.pick_a_slam_5nt.play`
 - `bidding_conventions/polish_two_suiters` (proposed): `two_level.polish_two_suiters.play`
 - `bidding_conventions/precision_2d` (proposed): `two_level.precision_2d.play`
-- `bidding_conventions/puppet_stayman` (proposed): `notrump.stayman.puppet_1nt`, `notrump.two_nt.puppet`
+- `bidding_conventions/puppet_stayman` (proposed): `notrump.stayman.puppet_1nt`, `notrump.stayman.puppet_2nt`
 - `bidding_conventions/reverse_bergen_raises` (proposed): `major_openings.bergen_raises.reverse`
-- `bidding_conventions/reverse_flannery` (proposed): `two_level.two_diamonds.reverse_flannery`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s`
+- `bidding_conventions/reverse_flannery` (proposed): `two_level.reverse_flannery.play`, `two_level.reverse_flannery.two_d`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s`
 - `bidding_conventions/roudi` (proposed): `other_conventions.roudi.play`
 - `bidding_conventions/semi_forcing_1nt` (proposed): `major_openings.one_nt_response.semi_forcing`
 - `bidding_conventions/serious_3nt` (proposed): `slam.non_serious_3nt.play`
 - `bidding_conventions/smolen` (proposed): `notrump.smolen.play`
-- `bidding_conventions/soloway` (proposed): `general.jump_shifts.soloway`, `general.jump_shifts.soloway_extended`
+- `bidding_conventions/soloway` (proposed): `general.soloway.play`, `general.soloway.extended`
 - `bidding_conventions/spiral` (proposed): `slam.spiral_cuebids.play`
 - `bidding_conventions/splinters` (proposed): `major_openings.splinters.play`, `major_openings.splinters.by_responder`, `major_openings.splinters.by_opener`, `major_openings.mini_splinters.play`
-- `bidding_conventions/super_accept` (proposed): `notrump.transfers.super_accept`, `notrump.transfers.super_accept_doubleton`
+- `bidding_conventions/super_accept` (proposed): `notrump.jacoby_transfers.super_accept`, `notrump.jacoby_transfers.super_accept_doubleton`
 - `bidding_conventions/transfer_walsh` (proposed): `minor_openings.one_club.transfer_resp`
 - `bidding_conventions/transfers_after_double` (proposed): `vs_to_double.new_suit_forcing_tfr`
-- `bidding_conventions/two_heart_bust` (proposed): `two_level.two_clubs.parrish_bust`
+- `bidding_conventions/two_heart_bust` (proposed): `two_level.parrish_bust.play`
 - `bidding_conventions/two_way_drury` (proposed): `major_openings.drury.two_d`
 - `bidding_conventions/two_way_game_tries` (proposed): `other_conventions.two_way_game_tries.play`
 - `bidding_conventions/two_way_nmf` (proposed): `other_conventions.two_way_nmf`, `other_conventions.two_way_nmf_by_passed_hand`
@@ -285,7 +285,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `competitive_bidding/non_leaping_michaels` (proposed): `competitive.non_leaping_michaels.play`
 - `competitive_bidding/raptor` (proposed): `competitive.raptor_1nt.play`
 - `competitive_bidding/responsive_doubles` (proposed): `doubles.responsive.play`
-- `competitive_bidding/rubensohl` (proposed): `notrump.rubensohl.over_interference`, `competitive.rubensohl_after_double.play`
+- `competitive_bidding/rubensohl` (proposed): `notrump.rubensohl.play`, `competitive.rubensohl_after_double.play`
 - `competitive_bidding/sandwich_nt` (proposed): `competitive.sandwich_nt.play`
 - `competitive_bidding/scrambling_2nt` (proposed): `competitive.scrambling_2nt.play`
 - `competitive_bidding/snapdragon` (proposed): `competitive.snapdragon.play`

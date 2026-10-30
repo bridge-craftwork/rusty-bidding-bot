@@ -5,7 +5,7 @@
 - 11-15 HCP, 4-4-4-1 (any singleton) or 5-4-4-0 with the five in a
   minor; seats 1-4. A five-card major opens 1M. The Maxi half (19+,
   PBS `Mini-Maxi_Roman_2D`) is not written: the card has only
-  `two_level.two_diamonds.mini_roman`, and Maxi changes every response
+  `two_level.mini_roman.play`, and Maxi changes every response
   (responder may not pass 2♦).
 - Spades are not guaranteed (the source lists that as a partnership
   choice; the PBS scenario deals only hands with four spades).

@@ -16,8 +16,8 @@ module over-3nt "Slam after partner's 3NT"
   needs  base
   skill  partnership_bidding/slam_bidding
   param  q4n   = slam.quantitative_4nt.play default true
-  param  texas = notrump.transfers.texas default false
-  param  tu    = notrump.transfers.texas_2_under default false
+  param  texas = notrump.texas.play default false
+  param  tu    = notrump.texas.two_under default false
 
 # After 2♣–2♦–3NT (24+ shown, opener's second bid) Texas uses 4♦/4♥, or
 # 4♣/4♦ for 2-under (texas-transfers.bid): the tries and natural bids

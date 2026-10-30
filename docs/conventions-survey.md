@@ -138,7 +138,7 @@ The chat text in each `.btn` names the convention, so each gap below is named af
 | Gerber_By_Opener | 500 | **Gerber by opener** after 1m–2NT or 2♣…2NT | chat; BBA's notes show no Gerber here | partly: `slam.gerber.over` (text), `gerber.over_nt_seq` | `gerber` |
 | Good_Bad_2N | 500 | **Good-bad 2NT** | chat | none | none |
 | Lars_Multi_2D | none | **Multi 2♦ with a 20-21 NT option** ("Lars Multi") | chat | none (`two_diamonds.multi` is plain Multi) | `multi_2d` (a variant of it) |
-| Mini-Maxi_Roman_2D | 500 | **Mini-Roman / Maxi-Roman 2♦** (4-4-4-1 or 5-4-4-0, 11-15 or 19+) | chat | yes: `two_level.two_diamonds.mini_roman` | `mini_roman_2d` |
+| Mini-Maxi_Roman_2D | 500 | **Mini-Roman / Maxi-Roman 2♦** (4-4-4-1 or 5-4-4-0, 11-15 or 19+) | chat | yes: `two_level.mini_roman.play` | `mini_roman_2d` |
 | Mitchell_Stayman | 500 | **Mitchell Stayman**: after 1m (1NT), 2♣ shows 5-4 in the majors and 6-9 | chat | none | none |
 | Preempt_Keycard | 500 (BBA: RKCB 0314 by 4NT, 314 notes) | **4♣ keycard ask over preempts** (4♦ over 3♣) | chat | none | none (sits under `roman_keycard`) |
 | Reversed_Splinters_By_Opener | none | **Reversed splinters by opener** (Maas) | chat | none (`splinters.by_opener` is the normal kind) | none |
@@ -200,7 +200,7 @@ States:
 | Minor-suit responses: 2♠→♣, 3♣→♦ | 15 | rules (the `bba` combination is derived) | minor-transfers | 380 / 101 / -198; 749 / 500 / -532 | none |
 | Minor Suit Stayman; 1NT–2NT→♣ | 2; 1 | partly (the other combinations fall to `none`) | minor-transfers | 1,065 / 1,046 / -1,118; 413 / 238 / -786 | none |
 | Puppet Stayman over 1NT (3♣) | 1 | field only | | 977 / 970 / -333 | none |
-| Puppet Stayman over 2NT (**in progress**) | 1 | field only. The key maps to `notrump.stayman.puppet`, but two-nt-responses reads `notrump.two_nt.puppet` | two-nt-responses (Stayman and transfers) | 495 / 170 / -113 | `puppet_stayman` (on `stayman.puppet`) |
+| Puppet Stayman over 2NT (**in progress**) | 1 | field only. The key maps to `notrump.stayman.puppet`, but two-nt-responses reads `notrump.stayman.puppet_2nt` | two-nt-responses (Stayman and transfers) | 495 / 170 / -113 | `puppet_stayman` (on `stayman.puppet`) |
 | 2NT: minor transfers, MSS, minor slam try | 15, 2, 0 | field only | | 79 / 48 / -28; 200 / 193 / -97 | 2NT options (structured) |
 | 1NT–3♦ meaning; 1NT–3M splinters | 17; 2 | rules; field only | notrump-base | 163 / 151 / -17; 347 / 339 / -135 | responses (text fields) |
 | Transfers on over X or 2♣ | 3; 18 | rules | jacoby-transfers, stayman, nt-interference | | `sys_on_vs` (text) |
@@ -322,7 +322,7 @@ States:
 - Missing: **michaels_unusual, dont, lebensohl, fourth_suit_forcing, help_suit_game_try** and reverse_drury.
 - Catalog paths that disagree with the engine:
   - Stayman: the catalog keys it on `notrump.stayman.forcing`; the engine gates on `notrump.stayman.play`.
-  - Puppet over 2NT: the `.bbsa` import writes `notrump.stayman.puppet`, while two-nt-responses reads `notrump.two_nt.puppet`.
+  - Puppet over 2NT: the `.bbsa` import writes `notrump.stayman.puppet`, while two-nt-responses reads `notrump.stayman.puppet_2nt`.
   - Walsh: `walsh.play` sits beside the engine's own `one_club_responses`.
   - Blackwood and Gerber: the catalog uses the `other_conventions.*` paths, which `fields.toml` loads through aliases, so these are fine.
 - BBA keys with no catalog entry include: Soloway, Jordan 2NT, fit-showing jumps, Cappelletti and Multi-Landy (only the VsNtDefense text panel), super-accept, Flannery, Namyats, Benjamin, Polish two-suiters, two-way game tries and Gazzilli. Adding catalog rows for the high-priority ones below would keep the editor and the engine in step.
@@ -493,41 +493,41 @@ The appendices below are its output, lightly trimmed.
 | .bbsa key | cards on (of 18) | scenarios, NS / EW | engine | card field | modules reading it |
 |---|---:|---:|---|---|---|
 | 1N-2S Minor Suit Stayman | 2 | 9 / 0 | rules | `notrump.minor_suit_stayman.play` | minor-transfers, notrump-base, stayman |
-| 1N-2S transfer to clubs | 15 | 317 / 326 | rules | `notrump.transfers.two_s_clubs` | minor-transfers, notrump-base, stayman |
-| 1N-2N transfer to clubs | 1 | 7 / 0 | rules | `notrump.transfers.two_nt_clubs` | minor-transfers, notrump-base, stayman |
-| 1N-2N transfer to diamonds | 0 | 0 / 0 | rules | `notrump.transfers.two_nt_diamonds` | minor-transfers, notrump-base, stayman |
-| 1N-3C transfer to diamonds | 15 | 322 / 326 | rules | `notrump.transfers.three_c_diamonds` | minor-transfers, notrump-base, stayman |
+| 1N-2S transfer to clubs | 15 | 317 / 326 | rules | `notrump.minor_transfers.two_s_clubs` | minor-transfers, notrump-base, stayman |
+| 1N-2N transfer to clubs | 1 | 7 / 0 | rules | `notrump.minor_transfers.two_nt_clubs` | minor-transfers, notrump-base, stayman |
+| 1N-2N transfer to diamonds | 0 | 0 / 0 | rules | `notrump.minor_transfers.two_nt_diamonds` | minor-transfers, notrump-base, stayman |
+| 1N-3C transfer to diamonds | 15 | 322 / 326 | rules | `notrump.minor_transfers.three_c_diamonds` | minor-transfers, notrump-base, stayman |
 | 1N-3C Puppet Stayman | 1 | 2 / 0 | field only | `notrump.stayman.puppet_1nt` |  |
 | 1N-3D majors | 0 | 0 / 0 | rules | `notrump.three_d_response` | notrump-base |
 | 1N-3D minors | 0 | 0 / 0 | rules | `notrump.three_d_response` | notrump-base |
 | 1N-3D natural | 14 | 284 / 32 | rules | `notrump.three_d_response` | notrump-base |
 | 1N-3D splinter | 3 | 65 / 318 | rules | `notrump.three_d_response` | notrump-base |
 | 1N-3M splinter | 2 | 36 / 316 | field only | `notrump.three_major_splinter` |  |
-| 2N-3C-3N both majors | 0 | 0 / 0 | field only | `notrump.two_nt.three_c_3nt_both_majors` |  |
+| 2N-3C-3N both majors | 0 | 0 / 0 | field only | `notrump.stayman.over_2nt_both_majors` |  |
 | 2N-3C Puppet Stayman | 1 | 7 / 0 | field only | `notrump.stayman.puppet` |  |
-| 2N-3S transfer to clubs | 0 | 0 / 0 | field only | `notrump.two_nt.transfer_3s_clubs` |  |
-| 2N-4C transfer to diamonds | 0 | 0 / 0 | field only | `notrump.two_nt.transfer_4c_diamonds` |  |
-| Extended acceptance after NT | 10 | 243 / 7 | rules | `notrump.transfers.super_accept_doubleton` | superaccept-doubleton |
-| Gambling | 13 | 274 / 9 | rules | `notrump.three_nt.one_suit` | strong-openings |
+| 2N-3S transfer to clubs | 0 | 0 / 0 | field only | `notrump.minor_transfers.over_2nt_3s_clubs` |  |
+| 2N-4C transfer to diamonds | 0 | 0 / 0 | field only | `notrump.minor_transfers.over_2nt_4c_diamonds` |  |
+| Extended acceptance after NT | 10 | 243 / 7 | rules | `notrump.jacoby_transfers.super_accept_doubleton` | superaccept-doubleton |
+| Gambling | 13 | 274 / 9 | rules | `notrump.gambling_3nt.play` | strong-openings |
 | Garbage Stayman | 0 | 0 / 0 | field only | `notrump.stayman.garbage` |  |
-| Lebensohl after 1NT | 15 | 296 / 324 | field only | `notrump.lebensohl.over_interference` |  |
+| Lebensohl after 1NT | 15 | 296 / 324 | field only | `notrump.lebensohl.play` |  |
 | Minor Suit Slam Try after 2NT | 0 | 0 / 0 | field only | `notrump.two_nt.minor_slam_try` |  |
-| Minor Suit Stayman after 2NT | 2 | 3 / 0 | field only | `notrump.two_nt.minor_stayman` |  |
-| Minor Suit Transfers after 2NT | 15 | 323 / 326 | field only | `notrump.two_nt.minor_transfers` |  |
-| Rubensohl after 1NT | 2 | 30 / 2 | field only | `notrump.rubensohl.over_interference` |  |
+| Minor Suit Stayman after 2NT | 2 | 3 / 0 | field only | `notrump.minor_suit_stayman.over_2nt` |  |
+| Minor Suit Transfers after 2NT | 15 | 323 / 326 | field only | `notrump.minor_transfers.over_2nt` |  |
+| Rubensohl after 1NT | 2 | 30 / 2 | field only | `notrump.rubensohl.play` |  |
 | SMOLEN | 17 | 326 / 326 | rules | `notrump.smolen.play` |  |
-| Super acceptance after NT | 17 | 326 / 326 | rules | `notrump.transfers.super_accept` | super-accept |
-| Texas | 17 | 326 / 326 | rules | `notrump.transfers.texas` | jacoby-transfers, texas-transfers |
-| Transfers if RHO doubles | 3 | 60 / 340 | rules | `notrump.transfers.vs_double` | jacoby-transfers, nt-interference, stayman |
-| Transfers if RHO bids clubs | 18 | 350 / 350 | rules | `notrump.transfers.vs_2c` | jacoby-transfers, minor-transfers, notrump-base, stayman, texas-transfers |
+| Super acceptance after NT | 17 | 326 / 326 | rules | `notrump.jacoby_transfers.super_accept` | super-accept |
+| Texas | 17 | 326 / 326 | rules | `notrump.texas.play` | jacoby-transfers, texas-transfers |
+| Transfers if RHO doubles | 3 | 60 / 340 | rules | `notrump.jacoby_transfers.vs_double` | jacoby-transfers, nt-interference, stayman |
+| Transfers if RHO bids clubs | 18 | 350 / 350 | rules | `notrump.jacoby_transfers.vs_2c` | jacoby-transfers, minor-transfers, notrump-base, stayman, texas-transfers |
 
 #### General / jump shifts
 
 | .bbsa key | cards on (of 18) | scenarios, NS / EW | engine | card field | modules reading it |
 |---|---:|---:|---|---|---|
 | Inviting Jump Shifts | 8 | 280 / 346 | rules | `general.jump_shifts.invitational` | responses |
-| Soloway Jump Shifts | 1 | 14 / 1 | field only | `general.jump_shifts.soloway` |  |
-| Soloway Jump Shifts Extended | 0 | 0 / 0 | field only | `general.jump_shifts.soloway_extended` |  |
+| Soloway Jump Shifts | 1 | 14 / 1 | field only | `general.soloway.play` |  |
+| Soloway Jump Shifts Extended | 0 | 0 / 0 | field only | `general.soloway.extended` |  |
 | Strong jump shifts 2 | 16 | 323 / 348 | rules | `general.jump_shifts.strong_2` | responses |
 | Strong jump shifts 3 | 0 | 0 / 0 | field only | `general.jump_shifts.strong_3` |  |
 | Weak Jump Shifts 2 | 5 | 24 / 2 | field only | `general.jump_shifts.weak_2` |  |
@@ -568,8 +568,8 @@ The appendices below are its output, lightly trimmed.
 | Benjamin 2D | 1 | 2 / 0 | field only | `two_level.benjamin.play` |  |
 | Flannery | 1 | 1 / 0 | field only | `two_level.flannery.play` |  |
 | French 2D | 0 | 0 / 0 | field only | `two_level.french_2d.play` |  |
-| Kokish Relay | 2 | 42 / 3 | field only | `two_level.two_clubs.kokish` |  |
-| Multi | 1 | 2 / 1 | field only | `two_level.two_diamonds.multi` |  |
+| Kokish Relay | 2 | 42 / 3 | field only | `two_level.kokish.play` |  |
+| Multi | 1 | 2 / 1 | field only | `two_level.multi.play` |  |
 | Ogust | 1 | 1 / 0 | rules | `two_level.ogust.play` | weak-two-responses |
 | Polish two suiters | 1 | 2 / 0 | field only | `two_level.polish_two_suiters.play` |  |
 | Precision 2D | 2 | 30 / 2 | field only | `two_level.precision_2d.play` |  |
@@ -593,7 +593,7 @@ The appendices below are its output, lightly trimmed.
 |---|---:|---:|---|---|---|
 | 4NT opening | 16 | 297 / 324 | field only | `slam.four_nt_opening.play` |  |
 | 5NT pick a slam | 7 | 83 / 319 | field only | `slam.pick_a_slam_5nt.play` |  |
-| Blackwood 0123 | 1 | 24 / 24 | rules | `slam.blackwood.standard` | blackwood, weak-two-responses |
+| Blackwood 0123 | 1 | 24 / 24 | rules | `slam.blackwood.play` | blackwood, weak-two-responses |
 | Blackwood 0314 | 3 | 65 / 318 | rules | `slam.blackwood.rkcb_0314` | rkcb-1430, weak-two-responses |
 | Blackwood 1430 | 14 | 261 / 8 | rules | `slam.blackwood.rkcb_1430` | rkcb-1430, weak-two-responses |
 | Cue bid | 17 | 326 / 326 | rules | `slam.cue_bids.play` | control-bids |

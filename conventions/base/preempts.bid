@@ -25,10 +25,10 @@ module preempts "Weak two-bids and preempts"
   param  style = general.style
   param  system = general.system   # `brill`: the Brill card's treatments (below)
   param  flannery = two_level.flannery.play default false
-  param  multi    = two_level.two_diamonds.multi default false
+  param  multi    = two_level.multi.play default false
   param  benjamin = two_level.benjamin.play default false
   param  polish   = two_level.polish_two_suiters.play default false
-  param  mini_roman = two_level.two_diamonds.mini_roman default false
+  param  mini_roman = two_level.mini_roman.play default false
   param  french   = two_level.french_2d.play default false
   param  wilkosz  = two_level.wilkosz.play default false
   param  prec_2d  = two_level.precision_2d.play default false

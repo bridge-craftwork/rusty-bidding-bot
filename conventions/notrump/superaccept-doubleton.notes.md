@@ -1,7 +1,7 @@
 # superaccept-doubleton (`superaccept-doubleton.bid`): notes
 
 BBA's "Extended acceptance after NT" (card field
-`notrump.transfers.super_accept_doubleton`). Opener super-accepts with
+`notrump.jacoby_transfers.super_accept_doubleton`). Opener super-accepts with
 four trumps, a maximum and a doubleton. Cases: in `jacoby-transfers.test`
 (responder's side).
 

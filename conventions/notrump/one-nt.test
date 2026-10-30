@@ -68,7 +68,7 @@ S A2.KQJ63.K82.Q93      |                                      | 1NT    | Basic-
 
 # Natural majors without transfers (2026-09-30; probes/nt-van-*.toml,
 # BBA's bare SAYC card).
-card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never
+card    Basic-Bridge notrump.jacoby_transfers.play=false notrump.one_nt.five_card_major=never
 dealer  N
 S KQJ54.K32.Q54.32      | 1NT P            | 3S     | five spades and game values: forcing
 S 54.AQJ54.K32.Q54      | 1NT P            | 3H     | five hearts and game values: forcing
@@ -88,7 +88,7 @@ N KQ2.J32.AK54.Q32      | 1NT P 2H P       | P      | partner signed off
 S 2.AQJ752.K42.432      | 1NT P 3H P 3NT P | 4H     | six hearts: back to the major
 S 2.AQ752.KJ4.K432      | 1NT P 3H P 3NT P | P      | five: 3NT
 # Without Blackwood (bare SAYC); with it the slam-entry layer asks.
-card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never slam.blackwood.standard=false
+card    Basic-Bridge notrump.jacoby_transfers.play=false notrump.one_nt.five_card_major=never slam.blackwood.play=false
 S AQJ65.K42.8.AQ82      | 1NT P 3S P 4S P  | 6S     | 16 and a singleton in the fit: slam
 S AT643.AT3.KT52.K      | 1NT P 3S P 4S P  | 6S     | 14 and six controls: slam-entry's direct slam (count 30 + 6), par's choice on the vanilla set (2026-10-01)
 S QT643.QJ3.KT52.K      | 1NT P 3S P 4S P  | P      | 11, two controls: game

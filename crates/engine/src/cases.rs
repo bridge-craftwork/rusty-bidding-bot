@@ -21,7 +21,7 @@
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
-use bridge_card::{bbsa, Card, Value, Vocabulary};
+use bridge_card::{bbsa, Card, Vocabulary};
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
 use serde::Serialize;
 
@@ -276,19 +276,7 @@ fn load_card(
     let spec = words.next().ok_or("card: expected a card name or path")?;
     let mut card = load_card_file(vocab, spec, test_dir, cards_dir)?;
     for w in words {
-        let (path, value) = w
-            .split_once('=')
-            .ok_or_else(|| format!("card change {w:?}: expected path=value"))?;
-        let value = match value {
-            "true" => Value::Bool(true),
-            "false" => Value::Bool(false),
-            v => v
-                .parse::<i64>()
-                .map(Value::Int)
-                .unwrap_or_else(|_| Value::Text(v.to_string())),
-        };
-        card.set(path, value)
-            .map_err(|e| format!("card change {w:?}: {e}"))?;
+        card.apply_change(w).map_err(|e| e.to_string())?;
     }
     Ok(card)
 }

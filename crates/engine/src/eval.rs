@@ -2910,7 +2910,7 @@ mod term_tests {
                 .collect::<Vec<_>>()
         };
         let defs = module(
-            "module d \"d\"\n  param kokish = two_level.two_clubs.kokish\n\
+            "module d \"d\"\n  param kokish = two_level.kokish.play\n\
              define auction nt2 = 2N (P)\n  2C (P) 2D (P) 2N (P) when kokish\n",
         );
         let ok = module("module u \"u\"\nafter nt2 3C (P)\n  P \"x\"\nforce game after nt2\n");

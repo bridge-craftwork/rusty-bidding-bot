@@ -200,7 +200,7 @@ their suits.
   - :239, 243, 245: the 3♣-cue sequence.
   - :142, 406: "Nothing better" fallbacks.
   - lebensohl.bid:152 (opener accepts the invitation).
-  - one-nt.bid:310, 312, 316: 1N (2C) with `notrump.transfers.vs_2c`.
+  - one-nt.bid:310, 312, 316: 1N (2C) with `notrump.jacoby_transfers.vs_2c`.
   - rubensohl.bid:139, 146, 188, 193, 200, 207, 225, 234.
 - By design: lebensohl.bid:65 (fast 3N denies), vs-preempts.bid:409 (fast
   3N), western-cue.bid:75 ("3NT anyway", priority -5).

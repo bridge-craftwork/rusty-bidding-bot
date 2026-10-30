@@ -4,9 +4,10 @@ module minor-transfers "Minor-suit responses to 1NT"
   kind   convention
   needs  notrump-base
   skill  bidding_conventions/minor_suit_transfers
-  param  style = notrump.minor_transfers default relay
+  param  mtp   = notrump.minor_transfers.play default true    # a silent card plays relay, as before the switch (2026-10-30)
+  param  style = notrump.minor_transfers.style default relay
   param  systems_on = nt_overcalls.direct.systems_on default true
-  param  vs_2c = notrump.transfers.vs_2c default false
+  param  vs_2c = notrump.jacoby_transfers.vs_2c default false
 
 # One card field chooses the treatment (see notes). Only the calls that
 # start the sequence and opener's answer differ; responder's next call is
@@ -16,12 +17,12 @@ module minor-transfers "Minor-suit responses to 1NT"
 # (with one, transfer to the major first). With game values, bid 3NT.
 
 # ── relay (the default): 2S relays to 3C; pass with clubs, 3D with diamonds.
-after nt1 when (!they.bid | systems_on), style is relay
+after nt1 when (!they.bid | systems_on), mtp, style is relay
   2S  "Relay to 3♣: a weak hand with a long minor"  alert
       shows C>=6 | D>=6, H<=4, S<=4, strength=signoff
       sets forcing=round, ask=relay
       artificial
-after nt1 2S (P) when style is relay
+after nt1 2S (P) when mtp, style is relay
   3C  "Completes the relay"  artificial
 when answered relay
   P   "Clubs: play here"       shows C>=6
@@ -30,37 +31,37 @@ when answered relay
 # ── four-way: 2S transfers to clubs, 2NT to diamonds. Opener shows good
 # support (Kxx or better) by bidding the step below the suit (four_way) or the
 # suit itself (four_way_reversed); the other call denies it.
-after nt1 when (!they.bid | systems_on), style is four_way | style is four_way_reversed
+after nt1 when (!they.bid | systems_on), mtp, style is four_way | style is four_way_reversed
   2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
   2N  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
 
-after nt1 2S (P) when style is four_way
+after nt1 2S (P) when mtp, style is four_way
   2N  "Good club support: Kxx or better"   alert  shows C>=3, has(A,C) | has(K,C)  artificial
   3C  "No good club support"
-after nt1 2N (P) when style is four_way
+after nt1 2N (P) when mtp, style is four_way
   3C  "Good diamond support: Kxx or better"   alert  shows D>=3, has(A,D) | has(K,D)  artificial
   3D  "No good diamond support"
 
-after nt1 2S (P) when style is four_way_reversed
+after nt1 2S (P) when mtp, style is four_way_reversed
   3C  "Good club support: Kxx or better"   shows C>=3, has(A,C) | has(K,C)
   2N  "No good club support"                alert  artificial
-after nt1 2N (P) when style is four_way_reversed
+after nt1 2N (P) when mtp, style is four_way_reversed
   3D  "Good diamond support: Kxx or better"   shows D>=3, has(A,D) | has(K,D)
   3C  "No good diamond support"                alert  artificial
 
 # ── bba: 2S transfers to clubs, 3C to diamonds; opener always completes.
-after nt1 when (!they.bid | systems_on), style is bba
+after nt1 when (!they.bid | systems_on), mtp, style is bba
   2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
   3C  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
-after nt1 2S (P) when style is bba
+after nt1 2S (P) when mtp, style is bba
   3C  "Completes the transfer"
-after nt1 3C (P) when style is bba
+after nt1 3C (P) when mtp, style is bba
   3D  "Completes the transfer"
 
 # ── two_nt_three_c: 2NT transfers to clubs, 3C to diamonds; opener always
 # completes. 2S stays free for Minor Suit Stayman (21GF-MSTandMSS). Any
 # strength: with game values responder goes on after the completion.
-after nt1_undoubled when (!they.bid | systems_on), style is two_nt_three_c
+after nt1_undoubled when (!they.bid | systems_on), mtp, style is two_nt_three_c
   2N  "Transfer to clubs: six or more clubs"  alert
       shows C>=6, D<=3, H<=3, S<=3
       sets  forcing=round, ask=transfer(C)
@@ -71,9 +72,9 @@ after nt1_undoubled when (!they.bid | systems_on), style is two_nt_three_c
       sets  forcing=round, ask=transfer(D)
       artificial
       priority 1                         # ahead of the natural 3♦ slam try
-after nt1_undoubled 2N (P) when style is two_nt_three_c
+after nt1_undoubled 2N (P) when mtp, style is two_nt_three_c
   3C  "Completes the transfer"
-after nt1_undoubled 3C (P) when style is two_nt_three_c
+after nt1_undoubled 3C (P) when mtp, style is two_nt_three_c
   3D  "Completes the transfer"
 
 # ── Responder after any minor transfer. Game values: 3NT. Opposite good
@@ -85,26 +86,26 @@ when answered transfer(m)
   3N  "To play: {game} total points"       shows strength>=game
   3N  "To play: invitational values, a long {m}"   shows strength=invite    when partner.m>=3
 
-# ── Over a 2♣ overcall of our 1NT (`notrump.transfers.vs_2c`). Every
+# ── Over a 2♣ overcall of our 1NT (`notrump.jacoby_transfers.vs_2c`). Every
 # treatment keeps its own calls: 2♣ was not one of them, so nothing
 # moves. The minor transfer picks up the same five-HCP floor as the
 # major ones: below that BBA leaves their 2♣ alone.
-after 1N (2C) when vs_2c, style is relay
+after 1N (2C) when vs_2c, mtp, style is relay
   2S  "Relay to 3♣: a weak hand with a long minor"  alert
       shows C>=6 | D>=6, H<=4, S<=4, hcp>=5, strength=signoff
       sets forcing=round, ask=relay
       artificial
-after 1N (2C) 2S (P) when vs_2c, style is relay
+after 1N (2C) 2S (P) when vs_2c, mtp, style is relay
   3C  "Completes the relay"  artificial
 
-after 1N (2C) when vs_2c, style is four_way | style is four_way_reversed
+after 1N (2C) when vs_2c, mtp, style is four_way | style is four_way_reversed
   2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
   2N  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
 
-after 1N (2C) when vs_2c, style is bba
+after 1N (2C) when vs_2c, mtp, style is bba
   2S  "Transfer to clubs"      alert  shows C>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(C)  artificial
   3C  "Transfer to diamonds"   alert  shows D>=6, H<=4, S<=4, hcp>=5, strength<=invite  sets forcing=round, ask=transfer(D)  artificial
-after 1N (2C) 2S (P) when vs_2c, style is bba
+after 1N (2C) 2S (P) when vs_2c, mtp, style is bba
   3C  "Completes the transfer"
-after 1N (2C) 3C (P) when vs_2c, style is bba
+after 1N (2C) 3C (P) when vs_2c, mtp, style is bba
   3D  "Completes the transfer"

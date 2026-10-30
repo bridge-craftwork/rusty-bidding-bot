@@ -551,19 +551,8 @@ pub fn run(opts: &ProbeOptions) -> Result<ProbeReport, String> {
     let (mut ew_card, _) =
         bbsa::import(&rules.vocab, &ew_text, Some("ew")).map_err(|e| e.to_string())?;
     for change in &opts.our_changes {
-        let (path, value) = change
-            .split_once('=')
-            .ok_or_else(|| format!("{change:?}: expected path=value"))?;
-        let value = match value {
-            "true" => Value::Bool(true),
-            "false" => Value::Bool(false),
-            v => v
-                .parse::<i64>()
-                .map(Value::Int)
-                .unwrap_or_else(|_| Value::Text(v.to_string())),
-        };
         for card in [&mut ns_card, &mut ew_card] {
-            card.set(path, value.clone()).map_err(|e| e.to_string())?;
+            card.apply_change(change).map_err(|e| e.to_string())?;
         }
     }
     let engine = Engine::new(&ns_card, &ew_card, &rules);

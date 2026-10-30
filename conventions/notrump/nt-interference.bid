@@ -4,7 +4,7 @@
 #
 # Stayman and the transfers keep their own calls in `stayman.bid` and
 # `jacoby-transfers.bid`, gated by the two card switches
-# `notrump.transfers.vs_double` and `notrump.transfers.vs_2c`. What is
+# `notrump.jacoby_transfers.vs_double` and `notrump.jacoby_transfers.vs_2c`. What is
 # left, and lives here, is what only exists because they bid: the
 # redouble, the weak escapes when the transfers are off, and the pass.
 #
@@ -13,11 +13,11 @@
 module nt-interference "Our 1NT when RHO acts"
   kind   system
   needs  notrump-base
-  param  vs_double = notrump.transfers.vs_double default false
-  param  vs_2c     = notrump.transfers.vs_2c default false
-  param  texas     = notrump.transfers.texas default false   # Texas is on over their bid when it jumps (texas-transfers.bid)
-  param  leb       = notrump.lebensohl.over_interference default false
-  param  rub       = notrump.rubensohl.over_interference default false
+  param  vs_double = notrump.jacoby_transfers.vs_double default false
+  param  vs_2c     = notrump.jacoby_transfers.vs_2c default false
+  param  texas     = notrump.texas.play default false   # Texas is on over their bid when it jumps (texas-transfers.bid)
+  param  leb       = notrump.lebensohl.play default false
+  param  rub       = notrump.rubensohl.play default false
 
 # ── They doubled, transfers on ───────────────────────────────────────
 # 2♣ is Stayman and 2♦/2♥ are the transfers (see the other modules).

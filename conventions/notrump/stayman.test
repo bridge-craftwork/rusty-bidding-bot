@@ -104,7 +104,7 @@ N KQ93.J65.A.QT652      | 1NT P 2C P 2D P 3C P 3D P | 3NT | bba: 3NT over the mi
 
 # Without transfers (2026-09-30): an invitation with five in a major goes
 # through Stayman, and 5-4 game hands bid the five-card major over 2♦.
-card    Basic-Bridge notrump.transfers.jacoby=false notrump.one_nt.five_card_major=never
+card    Basic-Bridge notrump.jacoby_transfers.play=false notrump.one_nt.five_card_major=never
 dealer  N
 S KQJ53.73.J95.T96      | 1NT P 2C P 2D P  | 2S     | five spades, invitational
 S Q74.KQJ75.942.74      | 1NT P 2C P 2D P  | 2H     | five hearts, invitational

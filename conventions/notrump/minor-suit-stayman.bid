@@ -7,7 +7,7 @@
 # diamonds and not four clubs, 2NT with neither.
 #
 # The minor-suit transfers that go with it on 21GF-MSTandMSS (2NT to
-# clubs, 3♣ to diamonds) are `notrump.minor_transfers = two_nt_three_c`,
+# clubs, 3♣ to diamonds) are `notrump.minor_transfers.style = two_nt_three_c`,
 # in minor-transfers.bid.
 
 module minor-suit-stayman "Minor Suit Stayman over 1NT"
@@ -16,8 +16,7 @@ module minor-suit-stayman "Minor Suit Stayman over 1NT"
   needs  notrump-base
   skill  bidding_conventions/minor_suit_stayman
   param  systems_on = nt_overcalls.direct.systems_on default true
-  param  k1430 = slam.blackwood.rkcb_1430 default false
-  param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  rkcb   = slam.rkcb.play default false
 
 after nt1_undoubled when !they.bid | systems_on
   2S  "Minor Suit Stayman: 5-4+ in the minors, game values"  alert
@@ -57,7 +56,7 @@ after nt1_undoubled 2S (P)
 # the long minors' length points sent 13-counts to 6NT).
 after nt1_undoubled 2S (P) 3m (P) | nt1_undoubled 2S (P) 4m (P)
   4N  "Keycard ask in {m}"                   alert
-      when  k1430 | k0314
+      when  rkcb
       shows tp(m)>=33-partner.hcp.min
       sets  trump=m, ask=keycards(m)
       artificial

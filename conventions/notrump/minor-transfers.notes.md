@@ -102,9 +102,9 @@ through the `none` cards, where every option was within 10 IMPs.
 The conv-ab run reported the convention unmeasured: only 9 of our
 auctions changed with it "off". The rules were not at fault; the off
 switch was. `probes/conv-ab.toml` set `notrump.minor_transfers=none`
-and `notrump.two_nt.minor_transfers=false`, but `minor_transfers` is
+and `notrump.minor_transfers.over_2nt=false`, but `minor_transfers` is
 derived on import from BBA's `1N-2S/2N/3C transfer` keys
-(`notrump.transfers.two_s_clubs`, `two_nt_clubs`, `two_nt_diamonds`,
+(`notrump.minor_transfers.two_s_clubs`, `two_nt_clubs`, `two_nt_diamonds`,
 `three_c_diamonds`) and already reads `none` on 21GF-MSTandMSS
 (Minor_Suit_Transfer's card), whose 2NT/3♣ transfers
 minor-suit-stayman.bid reads from those keys. Setting it to `none`
@@ -117,6 +117,14 @@ engines. (Since 2026-10-13 21GF-MSTandMSS reads `two_nt_three_c`, and
 Measured (Minor_Suit_Transfer, 2N_and_1_Minor): **+0.60 IMPs per
 changed board** (Rusty's gain +378, BBA's +59; 528 changed boards, 499
 of ours; halves +54/+265, agree): good.
+
+## Card schema 2.0
+
+- (2026-10-30) Card schema 2.0 (convention-card ADR-0002): the enum became
+  `notrump.minor_transfers.play` and `.style` (no `none`; off is `play =
+  false`). The modules read `mtp` with default **true**, so a card silent on
+  minor-suit transfers still plays relay, as before. 0 calls changed on
+  `compare --limit 50`.
 
 ## Sources
 

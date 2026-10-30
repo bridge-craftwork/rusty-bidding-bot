@@ -13,7 +13,7 @@ module soloway "Soloway jump shifts"
   kind   convention
   needs  responses
   skill  bidding_conventions/soloway
-  param  soloway = general.jump_shifts.soloway default false
+  param  soloway = general.soloway.play default false
   param  weak2   = general.jump_shifts.weak_2 default false
 
 # ── Opener's rebid ────────────────────────────────────────────────────

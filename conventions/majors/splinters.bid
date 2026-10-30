@@ -26,8 +26,7 @@ module splinters "Splinters over 1♥ / 1♠"
   param  by_open = major_openings.splinters.by_opener default true
   param  cue     = slam.cue_bids.play default false
   param  style   = slam.cue_bids.style default first_or_second_round
-  param  k1430   = slam.blackwood.rkcb_1430 default false
-  param  k0314   = slam.blackwood.rkcb_0314 default false
+  param  rkcb   = slam.rkcb.play default false
   # Under Transfer Walsh 1C-1D/1H are transfers: opener's splinters
   # read them as natural and agreed the wrong major (self A/B, 2026-10-05).
   param  twalsh  = minor_openings.one_club.transfer_resp default false
@@ -139,7 +138,7 @@ after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
       priority 14
   4N  "Keycard ask in {trump}"
       shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
-      when  k1430 | k0314
+      when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
@@ -181,7 +180,7 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) when x is not M, M is S | x is not S
       priority 14
   4N  "Keycard ask in {trump}"
       shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
-      when  k1430 | k0314
+      when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
@@ -227,7 +226,7 @@ after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
       priority 14
   4N  "Keycard ask in {trump}"
       shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
-      when  k1430 | k0314
+      when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
@@ -269,7 +268,7 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
       priority 14
   4N  "Keycard ask in {trump}"
       shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
-      when  k1430 | k0314
+      when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12

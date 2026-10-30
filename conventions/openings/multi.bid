@@ -22,7 +22,7 @@
 
 module multi "Multi 2♦"
   kind   convention
-  card   two_level.two_diamonds.multi
+  card   two_level.multi.play
   needs  preempts
   skill  bidding_conventions/multi_2d
 

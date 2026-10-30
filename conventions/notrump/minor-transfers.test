@@ -3,7 +3,7 @@
 dealer  S
 
 # ── relay (the default): 2S relays to 3C; pass or correct to 3D.
-card    21GF-DEFAULT notrump.minor_transfers=relay
+card    21GF-DEFAULT notrump.minor_transfers.style=relay
 # seat hand             | auction          | expect | why
 N 5.J73.QJ9542.832      | 1NT P            | 2S     | weak with six diamonds (4 HCP + 2 length): relay
 S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 3C     | the relay is forced
@@ -13,12 +13,12 @@ N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | 7 HCP + 2 length = 9: invi
 N 5.K73.QJ9542.K83      | 1NT P            | 3NT    | 9 HCP + 2 length = 11: game
 
 # ── none: no minor-suit route, so a long minor invites with 2NT.
-card    21GF-DEFAULT notrump.minor_transfers=none
+card    21GF-DEFAULT notrump.minor_transfers.play=false
 N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | 7 HCP + 2 length = 9: invite
 N 5.J73.QJ9542.832      | 1NT P            | P      | 6: nothing to say
 
 # ── four_way: 2S clubs, 2NT diamonds; the step below the suit is good support.
-card    21GF-DEFAULT notrump.minor_transfers=four_way
+card    21GF-DEFAULT notrump.minor_transfers.style=four_way
 N 5.K73.J83.QJ9542      | 1NT P            | 2S     | six clubs
 N 5.K73.QJ9542.J83      | 1NT P            | 2NT    | six diamonds: 2NT is a transfer
 S AK5.KJ7.Q94.K832      | 1NT P 2S P       | 2NT    | Kxxx in clubs: good support
@@ -35,7 +35,7 @@ N Q82.K73.J83.K954      | 1NT P            | 2C     | invitational, no major: St
 N Q82.K73.J83.K954      | 1NT P 2C P 2D P  | 2NT    | the invitation
 
 # ── four_way_reversed: the suit itself shows good support.
-card    21GF-DEFAULT notrump.minor_transfers=four_way_reversed
+card    21GF-DEFAULT notrump.minor_transfers.style=four_way_reversed
 S AK5.KJ7.Q94.K832      | 1NT P 2S P       | 3C     | good club support
 S AK5.KJ72.Q94.QJ3      | 1NT P 2S P       | 2NT    | not good support
 S AK5.KJ72.A94.QJ3      | 1NT P 2NT P      | 3D     | good diamond support

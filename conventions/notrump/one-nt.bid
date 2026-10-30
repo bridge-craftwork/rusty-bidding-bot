@@ -8,14 +8,15 @@ module notrump-base "1NT opening and natural responses"
   param  nt_min   = notrump.one_nt.range_min default 15
   param  nt_max   = notrump.one_nt.range_max default 17
   param  one_less = notrump.one_nt.allow_one_less default false
-  param  minors   = notrump.minor_transfers default relay
-  param  three_c_transfer = notrump.transfers.three_c_diamonds default false
+  param  minors   = notrump.minor_transfers.style default relay
+  param  mtp      = notrump.minor_transfers.play default true
+  param  three_c_transfer = notrump.minor_transfers.three_c_diamonds default false
   param  three_d  = notrump.three_d_response default natural
   param  systems_on = nt_overcalls.direct.systems_on default true
-  param  vs_2c   = notrump.transfers.vs_2c default false
+  param  vs_2c   = notrump.jacoby_transfers.vs_2c default false
   param  style   = general.style
   param  five_major = notrump.one_nt.five_card_major default sometimes
-  param  jacoby  = notrump.transfers.jacoby default true
+  param  jacoby  = notrump.jacoby_transfers.play default true
   param  puppet_1nt = notrump.stayman.puppet_1nt default false
   param  allow_5422 = notrump.one_nt.allow_5422 default false
   param  allow_4441 = notrump.one_nt.allow_4441 default false
@@ -95,12 +96,12 @@ after nt1 when !they.bid | systems_on
       when  style is not bba
   2N  "Invitational: {invite} total points"
       shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
-      when  minors is not four_way, minors is not four_way_reversed, style is not bba   # 2NT is a transfer
-      when  minors is not two_nt_three_c                # 2NT is a transfer
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed), style is not bba   # 2NT is a transfer
+      when  !(mtp, minors is two_nt_three_c)                # 2NT is a transfer
       sets  ask=nt_invite
   2N  "Invitational: {invite} total points, a long minor"
       shows strength=invite, H<=4, S<=4, (C>=6 | D>=6)
-      when  minors is relay | minors is none         # no minor route for invitations
+      when  !mtp | minors is relay         # no minor route for invitations
       sets  ask=nt_invite
   # A slam try in the minor: six cards, or five in an unbalanced hand
   # (2026-09-27: 15-18 counts with a five-card minor bid 3NT opposite
@@ -108,7 +109,7 @@ after nt1 when !they.bid | systems_on
   # HCP between the hands, an eight-card fit 71% at 30).
   3C  "Slam try: six or more clubs, or five and unbalanced"
       shows C>=6 | (C>=5, !balanced), strength>=slam_invite, H<=4, S<=4
-      when  !three_c_transfer, minors is not bba, !puppet_1nt
+      when  !three_c_transfer, !(mtp, minors is bba), !puppet_1nt
   3D  "Slam try: six or more diamonds, or five and unbalanced"
       shows D>=6 | (D>=5, !balanced), strength>=slam_invite, H<=4, S<=4
       when  three_d is natural
@@ -151,12 +152,12 @@ after nt1 when !they.bid | systems_on
       when  style is bba, partner.hcp.min<=14 | partner.hcp.max>=18
   2N  "Invitational: {invite} total points"
       shows H<=4, S<=4, C<=5, D<=5, (strength=invite, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=24-partner.hcp.min)
-      when  minors is not four_way, minors is not four_way_reversed, matchpoints
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed), matchpoints
       when  style is bba, partner.hcp.min<=14 | partner.hcp.max>=18
       sets  ask=nt_invite
   2N  "Invitational"
       shows H<=4, S<=4, C<=5, D<=5, (points>=25-partner.hcp.max, points<=23-partner.hcp.min, C<=3 | D<=3 | C>=5 | D>=5, !shape 4333 | hcp<=24-partner.hcp.max | hcp>=26-partner.hcp.max | has(T,S) | has(T,H) | has(T,D) | has(T,C)) | (C=4, D=4, hcp>=25-partner.hcp.max, hcp<=23-partner.hcp.min)
-      when  minors is not four_way, minors is not four_way_reversed, imps
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed), imps
       when  style is bba, partner.hcp.min<=14 | partner.hcp.max>=18
       sets  ask=nt_invite
   P   "No game interest"
@@ -169,12 +170,12 @@ after nt1 when !they.bid | systems_on
   # without A or K charged. Calibrated opposite 15-17.
   2N  "Invitational: {invite} total points"
       shows H<=4, S<=4, C<=5, D<=5, bba_nt_points>=8, bba_nt_game_points<=9, points>=25-partner.hcp.max
-      when  minors is not four_way, minors is not four_way_reversed, matchpoints
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed), matchpoints
       when  style is bba, partner.hcp.min>=15, partner.hcp.max<=17
       sets  ask=nt_invite
   2N  "Invitational"
       shows H<=4, S<=4, C<=5, D<=5, bba_nt_imp_points>=8, bba_nt_imp_game_points<=9, points>=24-partner.hcp.max
-      when  minors is not four_way, minors is not four_way_reversed, imps
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed), imps
       when  style is bba, partner.hcp.min>=15, partner.hcp.max<=17
       sets  ask=nt_invite
   P   "No game interest"
@@ -187,7 +188,7 @@ after nt1 when !they.bid | systems_on
       priority -10
 
 # Natural major-suit responses when the card plays no transfers
-# (`notrump.transfers.jacoby` off; one-nt.notes.md, "Natural majors
+# (`notrump.jacoby_transfers.play` off; one-nt.notes.md, "Natural majors
 # without transfers", probes/nt-van-*.toml). 2M is to play with five or
 # more and no game interest; 3M is five or more and game values, forcing:
 # opener raises to 4M with three or more, else bids 3NT. With 5-5 the
@@ -248,7 +249,7 @@ when answered choose_game(M), partner.last=4{M}
 # Opener answers the natural 3m slam try (six of the minor, slam-invite
 # values): slam with a fit and a maximum, else 3NT (it had no rule;
 # Basic_What_To_Open 320).
-after 1N (P) 3C (P) when !three_c_transfer, minors is not bba, !puppet_1nt
+after 1N (P) 3C (P) when !three_c_transfer, !(mtp, minors is bba), !puppet_1nt
   6C  "Accepts: a club fit and a maximum"   shows C>=3, hcp>=17
   4C  "A club fit, not a maximum: responder decides"   shows C>=3, hcp<=16
       sets  trump=C, forcing=game
@@ -298,7 +299,7 @@ when asked quant
       when  style is bba, shown.hcp.max<=nt_max
 
 # Responder over a 2♣ overcall of our 1NT, when the card keeps the
-# structure on (`notrump.transfers.vs_2c`). The natural notrump calls
+# structure on (`notrump.jacoby_transfers.vs_2c`). The natural notrump calls
 # are unchanged — 2♣ takes nothing away from them — and the double
 # replaces the 2♣ Stayman call (stayman.bid). BBA plays it this way on
 # every card in the corpus that sets the switch.
@@ -313,7 +314,7 @@ after 1N (2C) when vs_2c
       shows strength=game, H<=4, S<=4                   # with five, transfer first
   2N  "Invitational: {invite} total points"
       shows strength=invite, H<=4, S<=4, C<=5, D<=5     # a long suit has its own route
-      when  minors is not four_way, minors is not four_way_reversed
+      when  !(mtp, minors is four_way), !(mtp, minors is four_way_reversed)
       sets  ask=nt_invite
   3N  "No better call: {game} total points or more"
       shows strength>=game

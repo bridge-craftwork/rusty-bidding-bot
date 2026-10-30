@@ -5,7 +5,7 @@
 - Weak options only: a six-card major, 5-10 HCP (vulnerable a good
   suit), seats 1-3. The strong options of Bridge Bum's Multi (4-4-4-1,
   or a 20-21 notrump in Lars Multi) are not written: the card has only
-  `two_level.two_diamonds.multi`, and BBA opens those hands naturally
+  `two_level.multi.play`, and BBA opens those hands naturally
   (probes/multi-openings.toml: 4-4-4-1 18 opens 1♦, 22 opens 2♣).
 - With Multi on, the natural weak 2♥/2♠ are off (preempts.bid): BBA
   opens every weak two in a major 2♦ even though 21GF-Multi keeps

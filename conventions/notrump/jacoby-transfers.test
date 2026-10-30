@@ -99,7 +99,7 @@ S AK52.QJ5.Q942.K8      | 1NT P 2D P 2H P 4NT P | 6H   | matchpoints: the 15 wit
 
 # Six cards between the measures: over signoff in total points, under
 # invite in suit points (2026-10-07: these had no rule). HCP decide.
-card    21GF-DEFAULT notrump.transfers.super_accept=false notrump.transfers.texas=false
+card    21GF-DEFAULT notrump.jacoby_transfers.super_accept=false notrump.texas.play=false
 N J85.KJ9754.6.J52      | 1NT P 2D P 2H P      | P      | 6 HCP and six hearts: pass
 N T43.KQ9632.T9.82      | 1NT P 2D P 2H P      | P      | 5 HCP: pass, though the length counts 8
 N QT7532.JT7.QJ7.T      | 1NT P 2H P 2S P      | P      | 6 HCP and six spades: pass

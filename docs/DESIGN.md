@@ -169,7 +169,7 @@ Commands: `rbb card import-bbsa`, `export-bbsa`, `check`, `schema`.
 
 module jacoby-transfers
   title  "Jacoby Transfers"
-  card   notrump.transfers.jacoby          # module is active when this is true
+  card   notrump.jacoby_transfers.play          # module is active when this is true
   needs  notrump-base
 
 # Responder, after partner opens 1NT and RHO passes.
@@ -482,7 +482,7 @@ agreed, one per line: `seat hand | auction | expect | why`. Header lines
 names a `.bbsa` in the cards directory (default
 `cards/bbsa`), or a path; both sides play it.
 Changes can follow, so one file can test each treatment:
-`card 21GF-DEFAULT notrump.minor_transfers=four_way`.
+`card 21GF-DEFAULT notrump.minor_transfers.style=four_way`.
 `expect` is a call, `!call` (anything but), or alternatives `a/b`.
 
 ```

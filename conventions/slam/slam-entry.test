@@ -17,7 +17,7 @@ dealer  N
 S KJT5.KT8.AKQ92.Q      | 1C P 1D P 1N P 2S P 4S P             | 4NT    | partner's 4S shows the fit (my 2S had four): ask with 19 facing 12-14
 
 # Slam without an ask: support points on partner's floor plus controls.
-card    Basic-Bridge slam.blackwood.standard=false
+card    Basic-Bridge slam.blackwood.play=false
 dealer  N
 S A8.AQ75.K93.QJ82      | 1D P 1H P 4H P                       | 6H     | 14 facing a jump to game, three controls in aces: slam
 S 98.QJ75.K93.QJ82      | 1D P 1H P 4H P                       | P      | 9: game is enough

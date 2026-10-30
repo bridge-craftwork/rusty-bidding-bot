@@ -156,17 +156,17 @@ mod tests {
             &modules(concat!(
                 "module t \"t\"\n",
                 "  card   notrump.stayman.play\n",
-                "  param  minors = notrump.minor_transfers default relay\n",
+                "  param  minors = notrump.minor_transfers.style default relay\n",
                 "\nafter 1N (P)\n  2C \"Stayman\" shows hcp>=8\n"
             )),
             crate::test_vocabulary(),
         );
         assert!(read.contains("notrump.stayman.play"));
-        assert!(read.contains("notrump.minor_transfers"));
+        assert!(read.contains("notrump.minor_transfers.style"));
         // `minor_transfers` is derived from BBA's four switches, so those
         // count as read even though no rule names them.
         assert!(
-            read.contains("notrump.transfers.two_s_clubs"),
+            read.contains("notrump.minor_transfers.two_s_clubs"),
             "derivation inputs count as read: {read:?}"
         );
         assert!(!read.contains("competitive.michaels.play"));

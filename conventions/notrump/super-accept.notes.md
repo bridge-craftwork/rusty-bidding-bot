@@ -1,7 +1,7 @@
 # super-accept (`super-accept.bid`): notes
 
 Opener jumps to 3M over a Jacoby transfer with four-card support (card
-field `notrump.transfers.super_accept`). Cases: `super-accept.test`.
+field `notrump.jacoby_transfers.super_accept`). Cases: `super-accept.test`.
 
 ## Guidance
 

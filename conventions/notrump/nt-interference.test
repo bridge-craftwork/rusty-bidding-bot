@@ -94,7 +94,7 @@ S AQ3.K984.AJ52.K9      | 1NT X 2S P      | P   | partner's escape: to play
 # vanilla SAYC corpus). Basic-Bridge plays a natural defence, so their
 # 2♣ shows five clubs; with `vs_2c` off nothing of the 1NT structure
 # survives and BBA (bare SAYC) plays no negative double.
-card    Basic-Bridge notrump.transfers.vs_2c=false
+card    Basic-Bridge notrump.jacoby_transfers.vs_2c=false
 dealer  S
 N J965.T62.K64.J76      | 1NT 2C       | P   | 5 HCP, four spades: pass, opener may reopen (BBA)
 N KJ65.K964.JT85.J      | 1NT 2C       | P   | 9 HCP, both majors, no club stopper: pass (BBA)
@@ -119,6 +119,6 @@ S AQ7.QJT.A654.KT4      | 1NT 2C 3C P  | 3NT | the cue-bid: no major, a club sto
 
 # A 2♣ that does not show clubs (Cappelletti on 21GF-DEFAULT) is not
 # read as natural: with `vs_2c` off nothing here applies.
-card    21GF-DEFAULT notrump.transfers.vs_2c=false
+card    21GF-DEFAULT notrump.jacoby_transfers.vs_2c=false
 dealer  S
 N T74.QT953.987.Q7      | 1NT 2C       | P   | Cappelletti 2♣: the natural rules stay out

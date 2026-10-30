@@ -5,7 +5,7 @@
 # Lebensohl. Every bid from 2NT up is a transfer to the next strain.
 #
 # 1. After a natural two-level overcall of our 1NT (2♦, 2♥, 2♠;
-#    `notrump.rubensohl.over_interference`, which switches Lebensohl off):
+#    `notrump.rubensohl.play`, which switches Lebensohl off):
 #
 #    - two of a suit: natural, to play; the double: as the card says
 #      (nt-interference.bid);
@@ -41,7 +41,7 @@ module rubensohl "Rubensohl: transfers after interference over 1NT and after dou
   needs  nt-interference
   needs  vs-preempts
   skill  competitive_bidding/rubensohl
-  param  over_nt  = notrump.rubensohl.over_interference default false
+  param  over_nt  = notrump.rubensohl.play default false
   param  after_x  = competitive.rubensohl_after_double.play default false
 
 define rub_nt(y) = over_nt, rho.y>=4, (maybe rho.H<=3) | (maybe rho.S<=3)

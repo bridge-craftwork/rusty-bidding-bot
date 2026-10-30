@@ -1,5 +1,5 @@
 # Mini-Roman 2♦ (the default card with Mini-Roman on).
-card    21GF-DEFAULT two_level.two_diamonds.mini_roman=true
+card    21GF-DEFAULT two_level.mini_roman.play=true
 dealer  S
 vul     None
 

@@ -318,7 +318,7 @@ the bidding side.
 
 ## 2/1 game force and the forcing 1NT (Rick, 2026-09-30: "definitely fix 2/1")
 
-On cards with `major_openings.two_over_one.game_force` (the 21GF cards;
+On cards with `major_openings.two_over_one.play` (the 21GF cards;
 derived from the system type) the two-over-one is **game forcing**
 (`sets forcing=game`) with opening values: 13+ total points with 12+ HCP
 by default (length counts, Rick 2026-09-23), 13+ HCP under

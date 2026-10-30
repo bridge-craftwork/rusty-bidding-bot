@@ -296,7 +296,7 @@ N AJ852.KQ84.Q3.Q2      | 1S P 2C P 2H P 2N P                  | 4NT    | 15 poi
 # ── The major invitation without transfers (2026-09-30) ──────────────
 # Vanilla SAYC random deals (BBA bare SAYC); the answer used to live in
 # jacoby-transfers.bid, so with transfers off opener had no rule.
-card    Basic-Bridge notrump.transfers.jacoby=false
+card    Basic-Bridge notrump.jacoby_transfers.play=false
 dealer  S
 S AJ2.KT94.Q543.Q2      | 1D P 1H P 2H P 3H P      | P      | 12 HCP: a minimum declines
 S KJ73.KQ75.A642.8      | 1D P 1H P 2H P 3H P      | 4H     | 13 HCP and a singleton: accepts
@@ -388,7 +388,7 @@ S K8.AQ9542.73.QJ2      | 1H P 2D P           | 2NT    | Schuler: six hearts
 # as the least lie (d24a9f6); the style does not apply.
 card    SAYC
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | forcing one round: five spades, the least lie (read as six)
-card    21GF-DEFAULT major_openings.two_over_one.game_force=false
+card    21GF-DEFAULT major_openings.two_over_one.play=false
 S AQ952.K84.Q73.J2      | 1S P 2C P           | 2S     | the 2/1 card without the game force: the least lie
 # After a minor's jump rebid (2026-10-20, Brill daily board 7).
 card    Basic-Bridge

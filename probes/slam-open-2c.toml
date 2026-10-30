@@ -9,7 +9,7 @@ prefix  = ""
 vuls    = ["None"]
 scoring = ["IMP", "MP"]
 partner = ["A4.KT963.54.9762"]
-our     = ["two_level.two_diamonds.meaning=strong", "two_level.two_hearts.meaning=strong", "two_level.two_spades.meaning=strong", "notrump.transfers.jacoby=false", "notrump.one_nt.five_card_major=never", "major_openings.jump_raise.inv=true"]
+our     = ["two_level.two_diamonds.meaning=strong", "two_level.two_hearts.meaning=strong", "two_level.two_spades.meaning=strong", "notrump.jacoby_transfers.play=false", "notrump.one_nt.five_card_major=never", "major_openings.jump_raise.inv=true"]
 hands = [
   "QJ2.K9.AQ2.AQJ32 | QJ2.K9.AQ2.AQJ32 | K7.Q3.T8763.KT54",
   "AT.A.KJ8732.AKJ4 | AT.A.KJ8732.AKJ4 | K6543.T5.QT64.53",

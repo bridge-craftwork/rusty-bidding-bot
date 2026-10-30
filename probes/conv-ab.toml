@@ -49,31 +49,31 @@ off       = ["notrump.stayman.play=false"]
 name      = "puppet-stayman"
 tile      = "bidding_conventions/puppet_stayman"
 scenarios = ["Puppet_Stayman_1N", "Puppet_Stayman_2N"]
-off       = ["notrump.stayman.puppet_1nt=false", "notrump.two_nt.puppet=false"]
+off       = ["notrump.stayman.puppet_1nt=false", "notrump.stayman.puppet_2nt=false"]
 
 [[conv]]
 name      = "minor-suit-stayman"
 tile      = "bidding_conventions/minor_suit_stayman"
 scenarios = ["Minor_Suit_Stayman", "2N_and_MSS"]
-off       = ["notrump.minor_suit_stayman.play=false", "notrump.two_nt.minor_stayman=false"]
+off       = ["notrump.minor_suit_stayman.play=false", "notrump.minor_suit_stayman.over_2nt=false"]
 
 [[conv]]
 name      = "jacoby-transfers"
 tile      = "bidding_conventions/jacoby_transfers"
 scenarios = ["Jacoby_Transfer", "2N_and_Transfers"]
-off       = ["notrump.transfers.jacoby=false"]
+off       = ["notrump.jacoby_transfers.play=false"]
 
 [[conv]]
 name      = "texas"
 tile      = "bidding_conventions/jacoby_transfers"
 scenarios = ["Texas_Transfer", "Texas_or_Jacoby"]
-off       = ["notrump.transfers.texas=false"]
+off       = ["notrump.texas.play=false"]
 
 [[conv]]
 name      = "super-accept"
 tile      = "bidding_conventions/super_accept"
 scenarios = ["Jacoby_Super-Accept"]
-off       = ["notrump.transfers.super_accept=false"]
+off       = ["notrump.jacoby_transfers.super_accept=false"]
 
 [[conv]]
 name      = "smolen"
@@ -89,7 +89,7 @@ scenarios = ["Minor_Suit_Transfer", "2N_and_1_Minor"]
 # (`notrump.transfers.*`); `minor_transfers` is derived from them on
 # import and already reads `none` on 21GF-MSTandMSS, so it alone left
 # both engines playing them.
-off       = ["notrump.minor_transfers=none", "notrump.transfers.two_s_clubs=false", "notrump.transfers.two_nt_clubs=false", "notrump.transfers.two_nt_diamonds=false", "notrump.transfers.three_c_diamonds=false", "notrump.two_nt.minor_transfers=false"]
+off       = ["notrump.minor_transfers.play=false", "notrump.minor_transfers.two_s_clubs=false", "notrump.minor_transfers.two_nt_clubs=false", "notrump.minor_transfers.two_nt_diamonds=false", "notrump.minor_transfers.three_c_diamonds=false", "notrump.minor_transfers.over_2nt=false"]
 
 [[conv]]
 name      = "inverted-minors"
@@ -143,13 +143,13 @@ off       = ["major_openings.one_nt_response.forcing=false"]
 name      = "two-over-one"
 tile      = "bidding_conventions/two_over_one"
 scenarios = ["Two_Over_One"]
-off       = ["major_openings.two_over_one.game_force=false"]
+off       = ["major_openings.two_over_one.play=false"]
 
 [[conv]]
 name      = "rkcb"
 tile      = "bidding_conventions/roman_keycard"
 scenarios = ["Slam_After_Major_Fit", "Slam_after_Transfer"]
-off       = ["slam.blackwood.rkcb_1430=false", "slam.blackwood.rkcb_0314=false", "slam.blackwood.minor_0314=false", "slam.blackwood.standard=true"]
+off       = ["slam.rkcb.play=false", "slam.rkcb.minor_0314=false", "slam.blackwood.play=true"]
 
 [[conv]]
 name      = "control-bids"
@@ -197,7 +197,7 @@ off       = ["general.jump_shifts.weak_2=false", "general.jump_shifts.weak_3=fal
 name      = "soloway"
 tile      = "bidding_conventions/soloway"
 scenarios = ["Soloway_Jump_Shift"]
-off       = ["general.jump_shifts.soloway=false", "general.jump_shifts.soloway_extended=false"]
+off       = ["general.soloway.play=false", "general.soloway.extended=false"]
 
 [[conv]]
 name      = "flannery"
@@ -209,13 +209,13 @@ off       = ["two_level.flannery.play=false"]
 name      = "reverse-flannery"
 tile      = "bidding_conventions/flannery"
 scenarios = ["Reverse_Flannery"]
-off       = ["two_level.reverse_flannery.two_h=false", "two_level.reverse_flannery.two_s=false", "two_level.two_diamonds.reverse_flannery=false"]
+off       = ["two_level.reverse_flannery.two_h=false", "two_level.reverse_flannery.two_s=false", "two_level.reverse_flannery.two_d=false"]
 
 [[conv]]
 name      = "gambling-3nt"
 tile      = "bidding_conventions/gambling_3nt"
 scenarios = ["Gambling_3N"]
-off       = ["notrump.three_nt.one_suit=false"]
+off       = ["notrump.gambling_3nt.play=false"]
 
 [[conv]]
 name      = "namyats"
@@ -227,13 +227,13 @@ off       = ["preempts.namyats.play=false", "preempts.transfer_4_minor=false"]
 name      = "multi-2d"
 tile      = "bidding_conventions/multi_2d"
 scenarios = ["Multi_2D"]
-off       = ["two_level.two_diamonds.multi=false"]
+off       = ["two_level.multi.play=false"]
 
 [[conv]]
 name      = "kokish"
 tile      = "bidding_conventions/kokish"
 scenarios = ["Kokish_Relay"]
-off       = ["two_level.two_clubs.kokish=false"]
+off       = ["two_level.kokish.play=false"]
 
 [[conv]]
 name      = "benjamin"
@@ -301,7 +301,7 @@ off       = ["competitive.jordan_2nt.play=false"]
 name      = "lebensohl-nt"
 tile      = "competitive_bidding/lebensohl"
 scenarios = ["Lebensohl", "Lebensohl2"]
-off       = ["notrump.lebensohl.over_interference=false"]
+off       = ["notrump.lebensohl.play=false"]
 
 [[conv]]
 name      = "lebensohl-weak-twos"

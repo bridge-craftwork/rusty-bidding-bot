@@ -2,10 +2,10 @@
 
 module texas-transfers "Texas Transfers"
   kind   convention
-  card   notrump.transfers.texas
+  card   notrump.texas.play
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers
-  param  tu = notrump.transfers.texas_2_under default false
+  param  tu = notrump.texas.two_under default false
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
@@ -26,10 +26,10 @@ module texas-transfers "Texas Transfers"
 # Over interference Texas stays on as long as it is a jump: a double, or
 # any bid that leaves three of the transfer suit available (4♦ over
 # 2-level bids and 3♣, 4♥ also over 3♦), and never into their suit.
-# `notrump.transfers.vs_2c` is a different question (2♦/2♥ transfers over
+# `notrump.jacoby_transfers.vs_2c` is a different question (2♦/2♥ transfers over
 # their 2♣, nt-interference.bid) and does not switch Texas.
 define texas_room_d = !tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=2, they.strain is not H) | (they.level=3, they.strain is C)
-# 2-under Texas (`notrump.transfers.texas_2_under`, Rick 2026-10-29): one
+# 2-under Texas (`notrump.texas.two_under`, Rick 2026-10-29): one
 # step lower, 4♣ for hearts and 4♦ for spades, with the same hands; opener
 # bids the suit in between to super-accept (four trumps, the top of his
 # range) or four of the major. 4♥ is then natural (Rick, 2026-10-29).

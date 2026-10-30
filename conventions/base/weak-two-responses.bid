@@ -14,9 +14,8 @@ module weak-two-responses "Responses to a weak two"
   param  ask2nt = two_level.weak_two_2nt_response default feature
   param  two_c  = two_level.two_clubs.meaning default strong
   param  style  = general.style
-  param  k1430  = slam.blackwood.rkcb_1430 default false
-  param  k0314  = slam.blackwood.rkcb_0314 default false
-  param  aces   = slam.blackwood.standard default false
+  param  rkcb   = slam.rkcb.play default false
+  param  aces   = slam.blackwood.play default false
 
 # Standard responder (the default until 2026-09-24): 2NT from 15, raises
 # with four. The default is now BBA's, below: par preferred it (+453 IMPs
@@ -222,12 +221,12 @@ when answered weak_two(t)
   # feature treatment) a singleton is fit enough, and 21 of mine with the
   # 9 of AKQ make the 30 a minor slam needs.
   4N    "Keycard ask in {t}"          shows w2_fit_slam(t)
-        when  k1430 | k0314
+        when  rkcb
         sets  trump=t, ask=keycards(t)
         artificial
         priority 2
   4N    "Blackwood: aces, {t} agreed"  shows w2_fit_slam(t)
-        when  aces, !k1430, !k0314
+        when  aces, !rkcb
         sets  trump=t, ask=aces
         artificial
         priority 2

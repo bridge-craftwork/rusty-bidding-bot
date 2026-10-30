@@ -12,7 +12,7 @@
 
 module gambling-3nt "Gambling 3NT: a solid minor"
   kind   convention
-  card   notrump.three_nt.one_suit
+  card   notrump.gambling_3nt.play
   needs  preempts
   skill  bidding_conventions/gambling_3nt
 
