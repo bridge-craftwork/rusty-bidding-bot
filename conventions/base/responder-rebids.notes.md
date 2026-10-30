@@ -321,7 +321,7 @@ game-going hand.
 Results: +157 by distance, +331 to the bidding side (290 boards).
 Every auction family gained.
 
-**For Rick:** the card field `major_openings.two_over_one.game_force` is
+**For Rick:** the card field `major_openings.two_over_one.play` is
 mapped from `.bbsa` but no rule reads it. Our 2/1 responses and
 continuations are the SAYC ones, one round forcing, even on the 21GF
 cards (e.g. "P: minimum for the two-over-one" after 1y-2x-3x). The

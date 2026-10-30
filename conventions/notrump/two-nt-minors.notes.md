@@ -3,7 +3,7 @@
 Two treatments of 2NT–3♠, each on its own card switch. Cases:
 `two-nt-minors.test`.
 
-## Minor-suit transfer (`notrump.two_nt.minor_transfers`)
+## Minor-suit transfer (`notrump.minor_transfers.over_2nt`)
 
 BBA's "Minor Suit Transfers after 2NT" (on for 21GF-DEFAULT and most
 21GF cards) is one relay for both minors: 2NT–3♠–4♣ (alerted "Minor
@@ -20,7 +20,7 @@ counts and then bids slam, but its choices between 3♠, 3NT and Gerber
 (2N_and_1_Minor), so game hands bid 3NT and slam hands keep the 4♣/4♦
 natural tries (or Gerber) of two-nt-responses.bid.
 
-## Minor Suit Stayman (`notrump.two_nt.minor_stayman`)
+## Minor Suit Stayman (`notrump.minor_suit_stayman.over_2nt`)
 
 3♠ asks for a four-card minor: five-four or better in the minors, no
 four-card major, slam interest (game hands bid 3NT, as BBA

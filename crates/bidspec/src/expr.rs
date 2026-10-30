@@ -73,6 +73,13 @@ impl<'a> Cursor<'a> {
         }
     }
 
+    /// The next token as written in the line, consumed.
+    fn source_text(&mut self) -> String {
+        let t = &self.toks[self.pos];
+        self.pos += 1;
+        self.text[t.start..t.end].to_string()
+    }
+
     fn word(&mut self, what: &str) -> Result<String, PError> {
         match self.peek() {
             Some(Tok::Word(w)) => {
@@ -459,7 +466,12 @@ fn comparison(c: &mut Cursor) -> Result<Expr, PError> {
             if not {
                 c.bump();
             }
-            let what = c.word("a suit, or suit, notrump or none, after `is`")?;
+            // A card option may be spelt with digits (`rstyle is 0314`): the
+            // text as written, leading zeros kept.
+            let what = match c.peek() {
+                Some(Tok::Int(_)) => c.source_text(),
+                _ => c.word("a suit, or suit, notrump or none, after `is`")?,
+            };
             return Ok(Expr::Is {
                 expr: Box::new(lhs),
                 what,

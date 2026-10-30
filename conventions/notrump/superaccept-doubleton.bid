@@ -2,7 +2,7 @@
 
 module superaccept-doubleton "Superaccept doubleton"
   kind   convention
-  card   notrump.transfers.super_accept_doubleton
+  card   notrump.jacoby_transfers.super_accept_doubleton
   needs  super-accept
   skill  bidding_conventions/super_accept
   param  system = general.system   # `brill`: the Brill card's treatments

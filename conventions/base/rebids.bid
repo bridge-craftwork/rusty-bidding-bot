@@ -24,7 +24,7 @@ module rebids "Opener's rebid"
   param  inverted = minor_openings.inverted_minors.play default false
   param  weak_js = general.jump_shifts.weak_2 default false
   param  weak_js3 = general.jump_shifts.weak_3 default false
-  param  gf21 = major_openings.two_over_one.game_force default false
+  param  gf21 = major_openings.two_over_one.play default false
   param  style21 = major_openings.two_over_one.rebid_style default bergen
   param  semi = major_openings.one_nt_response.semi_forcing default false
   param  twalsh = minor_openings.one_club.transfer_resp default false

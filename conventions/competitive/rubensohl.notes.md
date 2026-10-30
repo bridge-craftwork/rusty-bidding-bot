@@ -1,6 +1,6 @@
 # Rubensohl (`rubensohl.bid`)
 
-Two switches: `notrump.rubensohl.over_interference` (after they
+Two switches: `notrump.rubensohl.play` (after they
 overcall our 1NT) and `competitive.rubensohl_after_double.play` (after
 partner's takeout double of their weak two). Both are on in the
 Precision and Precision-14-16 cards, with Lebensohl off. Cases:
@@ -45,7 +45,7 @@ nt-interference.bid stay, outranked by the transfers (priority 3).
 
 ## Compare (2026-10-05)
 
-Lebensohl and Lebensohl2 with `--set notrump.rubensohl.over_interference=true`
+Lebensohl and Lebensohl2 with `--set notrump.rubensohl.play=true`
 (84.8% agreement), Lebensohl_vs_Opps_W2_* with
 `--set competitive.rubensohl_after_double.play=true` (85.2%): the
 divergences at our calls are the transfers against BBA's Lebensohl

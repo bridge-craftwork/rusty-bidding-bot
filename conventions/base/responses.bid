@@ -23,7 +23,7 @@ module responses "Responses to one-level suit openings"
   param  inv_js      = general.jump_shifts.invitational default false
   param  weak_js     = general.jump_shifts.weak_2 default false
   param  weak_js3    = general.jump_shifts.weak_3 default false
-  param  soloway     = general.jump_shifts.soloway default false
+  param  soloway     = general.soloway.play default false
   param  over_1c     = minor_openings.one_club_responses default up_the_line
   param  nt2         = minor_openings.two_nt_response default invitational
   param  style       = general.style
@@ -31,7 +31,7 @@ module responses "Responses to one-level suit openings"
   param  inverted    = minor_openings.inverted_minors.play default false
   param  drury       = major_openings.drury.play default false
   param  drury_rev   = major_openings.drury.reverse default false
-  param  gf21        = major_openings.two_over_one.game_force default false
+  param  gf21        = major_openings.two_over_one.play default false
   param  f1n         = major_openings.one_nt_response.forcing default false
   param  twalsh      = minor_openings.one_club.transfer_resp default false
   param  semi        = major_openings.one_nt_response.semi_forcing default false   # opener's pass: rebids.bid
@@ -334,7 +334,7 @@ after 1S (P) when weak_js3
   3D  "Weak jump shift: 7+ diamonds, 2-6 HCP"   alert   shows D>=7, hcp=2..6, S<=2
   3H  "Weak jump shift: 7+ hearts, 2-6 HCP"     alert   shows H>=7, hcp=2..6, S<=2
 
-# ── Soloway jump shifts (general.jump_shifts.soloway) ─────────────────
+# ── Soloway jump shifts (general.soloway.play) ─────────────────
 # GIB's system notes: a jump shift at the two level, game forcing, 4+
 # controls (A 2, K 1) and one of four types: (1) a strong rebiddable suit,
 # 17+ total points, no side four-card suit; (2) a solid suit, 17+; (3) a

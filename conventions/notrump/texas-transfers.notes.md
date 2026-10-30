@@ -77,7 +77,7 @@ The top four divergences in Texas_Transfer are this choice (234 boards).
 
 ## Convention score: the off switch (2026-10-07)
 
-With `notrump.transfers.texas=false` our off run had 51 no-rule
+With `notrump.texas.play=false` our off run had 51 no-rule
 positions (12 on): responder after the Jacoby completion, six-card
 hands between the strength bands, and the slam hands that would have
 used Texas then keycards. Both are now written in jacoby-transfers.bid
@@ -122,7 +122,7 @@ via Jacoby. Corpus par **+985 IMPs**, Basic_* 0.
 ## Everywhere the system is on, and over interference (Rick, 2026-10-29)
 
 Texas was on only over the 1NT opening and its doubled overcall (`nt1`),
-plus over their 2♣ when `notrump.transfers.vs_2c` was set. That field is
+plus over their 2♣ when `notrump.jacoby_transfers.vs_2c` was set. That field is
 BBA's "Transfers if RHO bids clubs": 2♦/2♥ transfers over their 2♣, not
 Texas. Rick: Texas is on after every notrump of ours where the system is
 on: 2NT, 2♣–2♦–2NT, Kokish's 2NT (2♣–2♦–2♥–2♠–2NT), 2♣ and a positive
@@ -154,7 +154,7 @@ values, controls and losers, or 6M/7M directly.
 
 ## 2-under Texas, and Texas after 2♣–2♦–3NT (Rick, 2026-10-29)
 
-**2-under Texas** (`notrump.transfers.texas_2_under`, new in
+**2-under Texas** (`notrump.texas.two_under`, new in
 convention-card 0.26.0; Rick's card has it as BBO's notrump "more" text
 "2-under Texas"): one step lower, 4♣ for hearts and 4♦ for spades, the
 same hands as Texas; opener bids the suit in between (4♦, 4♥) to

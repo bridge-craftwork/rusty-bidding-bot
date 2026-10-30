@@ -25,7 +25,7 @@ module strong-openings "2♣ and 2NT openings"
   skill  partnership_bidding/two_club
   param  two_c      = two_level.two_clubs.meaning default strong
   param  two_d_resp = two_level.two_clubs.2d_response default waiting
-  param  bust_2h    = two_level.two_clubs.parrish_bust default false
+  param  bust_2h    = two_level.parrish_bust.play default false
   # Off: no strong 2C, and strong hands open at the one level (base.bid
   # lifts its 21 HCP cap). A card whose forcing opening is 1C (Precision)
   # keeps 2C as the stand-in until a forcing 1C is built: without it the
@@ -36,9 +36,8 @@ module strong-openings "2♣ and 2NT openings"
   param  two_nt_max = notrump.two_nt.range_max default 21
   param  three_nt_min = notrump.three_nt.range_min default 26
   param  three_nt_max = notrump.three_nt.range_max default 27
-  param  gambling   = notrump.three_nt.one_suit default false
-  param  k1430      = slam.blackwood.rkcb_1430 default false
-  param  k0314      = slam.blackwood.rkcb_0314 default false
+  param  gambling   = notrump.gambling_3nt.play default false
+  param  rkcb   = slam.rkcb.play default false
   param  benjamin   = two_level.benjamin.play default false
   # French 2♦ (openings/french-2d.bid) takes every 24+ hand: 2♣ stops at 23.
   param  french     = two_level.french_2d.play default false
@@ -194,11 +193,11 @@ after 2C (P) 2y (P) 2N (P) when y is H | y is S, y is not H | !bust_2h, style is
 # Without 1430 or 0314 on the card, game in the fit.
 after 2C (P) 2y (P) 2N (P) 3z (P) when y is H | y is S, z is H | z is S, z is not y, y is not H | !bust_2h, style is bba
   4N  "Keycard ask in {z}: four-card support"  shows z>=4
-      when  k1430 | k0314
+      when  rkcb
       sets  trump=z, ask=keycards(z)
       artificial
   4z  "Four-card support: game in {z}"          shows z>=4
-      when  !k1430, !k0314
+      when  !rkcb
       sets  trump=z
 
 # After the balanced positive, opener shows a suit or raises the notrump.
@@ -226,7 +225,7 @@ after 2C (P) 2D (P) 2S (P)
 after 2C (P) 2D (P) 3C (P)
   3D  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
 
-# ── The 2♥ bust (`two_level.two_clubs.parrish_bust`) ─────────────────
+# ── The 2♥ bust (`two_level.parrish_bust.play`) ─────────────────
 # 2♣–2♥ shows fewer than 3 HCP (2♦ is then waiting with 3+, game
 # forcing). Opener describes naturally; a suit at the two level is
 # forcing one round, 2NT (22-23) and a three-level suit may be passed.

@@ -23,12 +23,13 @@ module dopi-ropi "DOPI and ROPI: answering an ace or keycard ask over interferen
   param  ropi   = slam.ropi default false
   param  depo   = slam.depo default false
   param  gstyle = general.style
-  param  k0314  = slam.blackwood.rkcb_0314 default false
-  param  m0314  = slam.blackwood.minor_0314 default false
+  param  rkcb   = slam.rkcb.play default false
+  param  rstyle = slam.rkcb.style default 1430
+  param  m0314  = slam.rkcb.minor_0314 default false
 
 # The first step of the keycard answers is "1 or 4" (1430) unless the
 # card's treatment makes it "0 or 3", as rkcb-1430.bid decides.
-define kc_first_14(t) = (gstyle is not bba, !m0314 | t is H | t is S) | (gstyle is bba, !k0314)
+define kc_first_14(t) = (gstyle is not bba, !m0314 | t is H | t is S) | (gstyle is bba, !(rkcb, rstyle is 0314))
 
 # They bid a suit over the ask, below six (DOPI); they doubled it (ROPI).
 # A bid, not a pass, double or redouble: checked first, as only bids can

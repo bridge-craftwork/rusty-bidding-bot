@@ -1,7 +1,7 @@
 # lebensohl (`lebensohl.bid`): notes
 
 Lebensohl after a natural 2♦/2♥/2♠ overcall of our 1NT, on with
-`notrump.lebensohl.over_interference` (BBA "Lebensohl after 1NT": on
+`notrump.lebensohl.play` (BBA "Lebensohl after 1NT": on
 for every 21GF card, off on Basic-Bridge). Cases: `lebensohl.test`.
 
 ## What is played (2026-10-05)

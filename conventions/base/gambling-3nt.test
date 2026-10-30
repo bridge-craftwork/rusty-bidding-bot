@@ -1,5 +1,5 @@
 # Gambling 3NT: 21GF-DEFAULT, which plays it (BBA's card).
-card    21GF-DEFAULT notrump.three_nt.one_suit=true
+card    21GF-DEFAULT notrump.gambling_3nt.play=true
 dealer  S
 vul     None
 
@@ -15,6 +15,6 @@ N KQJT987.43.J5.84      | 3NT P               | 4S     | long spades: to play
 # Opener corrects.
 S 4.Q32.AKQJ852.J2      | 3NT P 4C P          | 4D     | my minor is diamonds
 S 42.J3.Q2.AKQT862      | 3NT P 4C P          | P      | my minor is clubs
-card    21GF-DEFAULT notrump.three_nt.one_suit=false
+card    21GF-DEFAULT notrump.gambling_3nt.play=false
 S AKQ.KQ3.AQ4.KQJ2      |                     | 3NT    | Gambling off: 26-27 balanced
 S 4.Q32.AKQJ852.J2      |                     | !3NT   | Gambling off

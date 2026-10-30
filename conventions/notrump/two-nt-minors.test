@@ -28,7 +28,7 @@ N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 4C     | no fit, 32 between u
 N .KJ3.Q9743.AKQ65          | 2NT P 3S P 3NT P   | 4C     | no fit, slam values: Gerber first
 
 # Without keycard or Gerber on the card: six directly.
-card    21GF-MSS slam.blackwood.rkcb_1430=false slam.gerber.play=false
+card    21GF-MSS slam.rkcb.play=false slam.gerber.play=false
 dealer  S
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 4D P    | 6D     | 11 and a nine-card fit: slam
 N 54.A3.KJ75.QJ864          | 2NT P 3S P 3NT P   | 6NT    | no fit, 32 between us: 6NT

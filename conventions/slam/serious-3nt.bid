@@ -15,8 +15,7 @@ module serious-3nt "Non-serious 3NT before control bids in a major-fit game forc
   skill  bidding_conventions/serious_3nt
   param  nsplay = slam.non_serious_3nt.play default false
   param  cue    = slam.cue_bids.play default false
-  param  k1430  = slam.blackwood.rkcb_1430 default false
-  param  k0314  = slam.blackwood.rkcb_0314 default false
+  param  rkcb   = slam.rkcb.play default false
 
 # Partner has just agreed (or raised) our major at the three level.
 define ns_position = partner.last = 3{trump}, !our_notrump
@@ -66,7 +65,7 @@ when nsplay, cue, asked ns3nt(t)
       prefer 0 - cheapest_rank(H)
       priority 12
   4N  "Keycard ask in {t}"
-      when  k1430 | k0314
+      when  rkcb
       when  slam_values, !side_suit_uncontrolled
       sets  ask=keycards(t)
       artificial

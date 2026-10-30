@@ -1,6 +1,6 @@
 # gambling-3nt (`gambling-3nt.bid`): notes
 
-Gambling 3NT (`notrump.three_nt.one_suit`): a solid seven-card minor
+Gambling 3NT (`notrump.gambling_3nt.play`): a solid seven-card minor
 (AKQ at least, eight allowed) and no outside ace or king, first to third
 seat. strong-openings.bid already read the field (the balanced 26-27
 opens 2♣ when 3NT is Gambling) but nothing opened the Gambling 3NT. Every

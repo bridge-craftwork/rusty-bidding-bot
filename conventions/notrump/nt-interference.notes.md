@@ -12,8 +12,8 @@ uncontested ones (`stayman.bid`, `jacoby-transfers.bid`,
 
 ## The two card switches
 
-`notrump.transfers.vs_double` ("Transfers if RHO doubles") and
-`notrump.transfers.vs_2c` ("Transfers if RHO bids clubs") were both in
+`notrump.jacoby_transfers.vs_double` ("Transfers if RHO doubles") and
+`notrump.jacoby_transfers.vs_2c` ("Transfers if RHO bids clubs") were both in
 the coverage report's *ignored* list: every notrump pattern we had was
 `after 1N (P)` or a competitive spelling of it, so a double or a 2♣
 overcall switched the whole structure off and responder passed. On the
@@ -113,7 +113,7 @@ an action over 1NT.
 
 - **Opener after the interference.** `1N (X) XX (2y)` and the rest of
   the auctions where they bid again have no rules: opener passes.
-- **Lebensohl** (`notrump.lebensohl.over_interference`) is on for
+- **Lebensohl** (`notrump.lebensohl.play`) is on for
   21GF-DEFAULT and is not built. That is the structure over a 2♦ or
   higher overcall of our 1NT, which is untouched here: only 2♣ and the
   double are covered, because those are the two the card switches name.
@@ -228,7 +228,7 @@ opener's rebids when their advancer bids over our double (a pass).
 
 ## Their natural 2♣, transfers off (2026-09-30)
 
-With `notrump.transfers.vs_2c` off (the vanilla SAYC card; no stock
+With `notrump.jacoby_transfers.vs_2c` off (the vanilla SAYC card; no stock
 corpus card) nothing applied after a natural 2♣: the 2♦/2♥/2♠ rules are
 gated `y is not C` and the 2♣ systems-on rules need the switch. On the
 95,558 vanilla SAYC deals that was 156 no-rule boards at `1NT (2C)` and

@@ -69,9 +69,10 @@ fn rkcb_structure() {
     )
     .unwrap();
     assert_eq!(m.name, "rkcb-1430");
-    // It serves 1430 and 0314, so the card fields are params, not gates.
+    // It serves 1430 and 0314, so the card fields (switch and style) are
+    // params, not gates.
     assert!(m.card.is_empty());
-    assert!(m.params.iter().any(|p| p.name == "k0314"));
+    assert!(m.params.iter().any(|p| p.name == "rstyle"));
     // Every context is keyed on state, not on an auction: that is the
     // point of the module. The blocks themselves are found by what they
     // contain, so restructuring the file does not break this test.
@@ -143,8 +144,8 @@ fn diagnostics_have_locations() {
     assert_eq!(e.len(), 1);
     assert!(e[0].contains("unknown card field"), "{e:?}");
 
-    let e = errors("module demo \"Demo\"\n  card other_conventions.blackwood.rkcb_1430\n");
-    assert!(e[0].contains("use `slam.blackwood.rkcb_1430`"), "{e:?}");
+    let e = errors("module demo \"Demo\"\n  card other_conventions.blackwood.notes\n");
+    assert!(e[0].contains("use `slam.blackwood.notes`"), "{e:?}");
 
     let e = errors("after 1N (P)\n  2C \"x\"\n");
     assert!(e[0].contains("must start with `module"), "{e:?}");
@@ -228,7 +229,7 @@ fn modules_name_their_teaching_skills() {
 fn named_auction_patterns_parse() {
     let src = "\
 module demo \"Demo\"
-  param kokish = two_level.two_clubs.kokish default false
+  param kokish = two_level.kokish.play default false
 
 define auction nt2 = 2N (P) | 2C (P) 2D (P) 2N (P)
   2C (P) 2D (P) 2H (P) 2S (P) 2N (P)   when kokish

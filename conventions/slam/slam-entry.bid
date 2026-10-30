@@ -14,9 +14,8 @@ module slam-entry "Slam entry: the conditions the slam modules share"
   kind   judgement
   skill  partnership_bidding/slam_bidding
   param  style = slam.cue_bids.style default first_or_second_round
-  param  bw    = slam.blackwood.standard default false
-  param  k1430 = slam.blackwood.rkcb_1430 default false
-  param  k0314 = slam.blackwood.rkcb_0314 default false
+  param  bw    = slam.blackwood.play default false
+  param  rkcb   = slam.rkcb.play default false
   param  q4n   = slam.quantitative_4nt.play default true
 
 # ── The count: declarer points and support points (2026-10-01) ───────
@@ -262,7 +261,7 @@ when we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid, !we.
 # every descriptive call), both halves.
 
 # No ace or keycard ask on the card.
-define no_ask = !bw, !k1430, !k0314
+define no_ask = !bw, !rkcb
 
 # Slam values for a direct slam: the count 28, and 35 with my controls.
 define direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)

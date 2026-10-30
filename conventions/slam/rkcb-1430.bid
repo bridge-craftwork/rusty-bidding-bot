@@ -9,9 +9,9 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   needs  base
   skill  bidding_conventions/roman_keycard
   skill  partnership_bidding/roman_key_card
-  param  k1430 = slam.blackwood.rkcb_1430 default false
-  param  k0314 = slam.blackwood.rkcb_0314 default false
-  param  m0314 = slam.blackwood.minor_0314 default false
+  param  rkcb   = slam.rkcb.play default false
+  param  rstyle = slam.rkcb.style default 1430
+  param  m0314 = slam.rkcb.minor_0314 default false
   param  gstyle = general.style
   param  style = slam.cue_bids.style default first_or_second_round
   param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
@@ -66,7 +66,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
 # bare suit goes to `control-bids.bid` first and comes back here only
 # once partner has shown a control.
 
-when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round, !kb_asks(trump), !mw_asks(trump)   # Kickback, Minorwood: their own ask
+when rkcb, we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round, !kb_asks(trump), !mw_asks(trump)   # Kickback, Minorwood: their own ask
   4N  "Keycard ask in {trump}"
       when  slam_values_limited     # 33 facing partner's maximum
       when  !two_bare_suits  # and no two bare side suits
@@ -74,7 +74,7 @@ when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = n
       artificial
       priority 1
 
-when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control, !kb_asks(trump), !mw_asks(trump)   # after a control dialogue its own rules decide
+when rkcb, we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control, !kb_asks(trump), !mw_asks(trump)   # after a control dialogue its own rules decide
   4N  "Keycard ask in {trump}"
       when  slam_values  # 33 on partner's floor, or 18 of my own
       sets  ask=keycards(trump)
@@ -85,7 +85,7 @@ when (k1430 | k0314), we.trump is suit, !minor_given_way, !asked, we.forcing = g
 # the asks above never saw it. The ask agrees the major on the way.
 # Majors only for now: the sign-offs after an answer are awkward in a
 # minor.
-when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
+when rkcb, we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost
   4N  "Keycard ask in ♠"
       when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
@@ -103,7 +103,7 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid   # uncontested for no
 # (1H-1S-2H-4NT asks in hearts). The ask sets it as trump. The majors
 # agreed publicly, and partner's own six-card major, are the rules above.
 # The ask needs the fit and the values, as above.
-when (k1430 | k0314), we.trump is none, !asked, !they.bid
+when rkcb, we.trump is none, !asked, !they.bid
   4N  "Keycard ask in ♠"
       when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
@@ -136,7 +136,7 @@ when (k1430 | k0314), we.trump is none, !asked, !they.bid
 # Low priority as well, so any other meaning of 4NT comes first.
 define read_only = bare(C), !bare(C)
 
-when (k1430 | k0314), we.trump is none, !asked, they.bid
+when rkcb, we.trump is none, !asked, they.bid
   4N  "Keycard ask in ♠"
       when  kc_open(S) | shown_fit(S)
       sets  trump=S, ask=keycards(S)
@@ -165,7 +165,7 @@ when (k1430 | k0314), we.trump is none, !asked, they.bid
 # A trump suit agreed and partner's jump to game in competition
 # (total-tricks.bid's `ask=signoff`, 1H-2NT-(3C)-4H): 4NT over the
 # sign-off is still keycard. For reading, as above.
-when (k1430 | k0314), we.trump is suit, they.bid, asked signoff
+when rkcb, we.trump is suit, they.bid, asked signoff
   4N  "Keycard ask in {trump}"
       sets  ask=keycards(trump)
       artificial
@@ -175,7 +175,7 @@ when (k1430 | k0314), we.trump is suit, they.bid, asked signoff
 # A minor set as trump, and a major agreed since (Rick, 2026-10-03:
 # "normally a major fit will replace a minor fit"; 1S-2C-3C-4S-4NT): the
 # ask is in the major, and makes it trump.
-when (k1430 | k0314), minor_given_way, !asked
+when rkcb, minor_given_way, !asked
   4N  "Keycard ask in ♠"
       when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)
       sets  trump=S, ask=keycards(S)
@@ -198,7 +198,7 @@ when (k1430 | k0314), minor_given_way, !asked
 # is covered -- a control of mine, one partner has cued, or one I denied
 # that partner has promised by bidding on. A control bid below game still
 # comes first (priority 12), the ask before one past game (10).
-when (k1430 | k0314), we.trump is suit, asked control(t), !kb_asks(trump)
+when rkcb, we.trump is suit, asked control(t), !kb_asks(trump)
   4N  "Keycard ask in {trump}"
       when  all_covered
       sets  ask=keycards(trump)
@@ -212,14 +212,14 @@ when (k1430 | k0314), we.trump is suit, asked control(t), !kb_asks(trump)
       when  all_covered, slam_values, partner.last >= 5C
       priority 11
 
-when (k1430 | k0314), we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_asks(trump)
+when rkcb, we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_asks(trump)
   4N  "Keycard ask in {trump}"
       when  all_covered_by_us
       sets  ask=keycards(trump)
       artificial
       priority 15
 
-when (k1430 | k0314), asked keycards(t)
+when rkcb, asked keycards(t)
   # We play 1430 whatever the card says (Rick, 2026-09-27); the
   # `minor_0314` treatment swaps the first two answers when a minor is
   # trumps. BBA plays the card's 0314 (Precision, 21GF-GIB, 21GF-GIB-
@@ -233,13 +233,13 @@ when (k1430 | k0314), asked keycards(t)
   5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
       when  gstyle is not bba, m0314, t is C | t is D
   5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is bba, !k0314
+      when  gstyle is bba, !(rkcb, rstyle is 0314)
   5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is bba, !k0314
+      when  gstyle is bba, !(rkcb, rstyle is 0314)
   5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is bba, k0314
+      when  gstyle is bba, rkcb, rstyle is 0314
   5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is bba, k0314
+      when  gstyle is bba, rkcb, rstyle is 0314
   # Five keycards answer as two: the steps wrap (0/3, 1/4, 2/5), and the
   # asker, holding none, knows which (Benjamin_2D 222, 2026-10-07: we
   # passed the ask with five).
@@ -248,7 +248,7 @@ when (k1430 | k0314), asked keycards(t)
 
 # The asker places the contract. we.keycards(t) combines my exact count
 # with partner's answer; the deck limit of 5 keycards resolves "1 or 4".
-when (k1430 | k0314), answered keycards(t)
+when rkcb, answered keycards(t)
   7{t}  "Grand slam"
         when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
   # The king ask (`slam.king_ask.five_nt`, 2026-10-05): every keycard
@@ -402,7 +402,7 @@ when kspec, answered king_in(z)
 
 # When the answer was ambiguous the asker signs off in five, and the answerer
 # corrects to six holding the higher count (3 or 4 keycards).
-when (k1430 | k0314), asked keycard_correct(t)
+when rkcb, asked keycard_correct(t)
   6{t}  "Corrects to six: the higher count"   shows keycards(t) in 3|4|5
   P     "Accepts the sign-off"
 

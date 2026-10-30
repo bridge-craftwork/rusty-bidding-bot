@@ -7,7 +7,7 @@ prefix  = "1NT Pass"
 vuls    = ["None"]
 scoring = ["MP"]
 partner = ["A963.Q92.AK.KT75", "QJ62.KQ76.A82.K7", "Q92.K8.KQ732.KQ8", "A3.A972.J42.KQJ2", "Q6.AKQT.JT75.QJ3", "AQT7.KT8.KQ4.K92", "JT62.AK8.KQT.Q95", "KT54.A32.94.AKQJ", "K9.AQ3.KJ94.A985", "QJ92.A63.963.AKJ", "A5.J97.AT4.AKJ86", "AK8.65.AQT5.KT98", "AQ.752.AJ6.A9752", "KT5.AK43.QJT.K72", "KQ2.AK32.J4.Q973", "AJ5.J82.AKJT4.K4", "A54.AKQT.T64.Q92", "AK54.K92.J9.AJT6", "KQT7.K8.Q963.AKT", "A432.K76.QT94.AQ", "AJ43.KJ2.KJ9.AT6", "AKJ6.9864.J2.AQ4", "K53.KJ7.AKJT8.J9", "Q75.72.K973.AKQJ", "AT9.T43.AKT7.A74", "AK42.532.954.AKQ", "T76.Q84.AQJ7.AK2", "AKQ4.984.A72.KT7", "AQ42.AJ6.T52.KQ8", "AT2.J976.A6.AK95", "AKQJ.K65.QJ7.T97", "KT8.KQ83.JT6.AK8", "A4.J986.AJ53.AK3", "963.AK7.64.AKQT9", "AK53.K987.K94.K4", "KT82.AQ7.K32.AJ5", "K832.Q4.AJ72.AK7", "KQT8.QT2.K93.AJ7", "AKT5.A92.AQT.982", "QT.AK9.KJ7.A9643"]
-our     = ["notrump.transfers.jacoby=false", "notrump.one_nt.five_card_major=never", "two_level.two_hearts.meaning=strong", "two_level.two_spades.meaning=strong", "two_level.two_diamonds.meaning=strong"]
+our     = ["notrump.jacoby_transfers.play=false", "notrump.one_nt.five_card_major=never", "two_level.two_hearts.meaning=strong", "two_level.two_spades.meaning=strong", "two_level.two_diamonds.meaning=strong"]
 hands = [
   "6.AQ932.JT74.AK9 | 6.AQ932.JT74.AK9 | QJ7.K5.AK863.QT7",
   "T7.AJT983.K.Q532 | T7.AJT983.K.Q532 | KJ85.K6.AQ95.KJ7",

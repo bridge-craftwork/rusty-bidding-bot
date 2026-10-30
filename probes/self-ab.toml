@@ -101,8 +101,8 @@ variant   = ["vs_to_double.new_suit_forcing_tfr=true"]
 [[ab]]
 name      = "rubensohl-vs-lebensohl-nt"
 scenarios = ["Lebensohl", "Lebensohl2"]
-base      = ["notrump.lebensohl.over_interference=true", "notrump.rubensohl.over_interference=false"]
-variant   = ["notrump.lebensohl.over_interference=true", "notrump.rubensohl.over_interference=true"]
+base      = ["notrump.lebensohl.play=true", "notrump.rubensohl.play=false"]
+variant   = ["notrump.lebensohl.play=true", "notrump.rubensohl.play=true"]
 
 [[ab]]
 name      = "rubensohl-vs-lebensohl-x"
@@ -113,8 +113,8 @@ variant   = ["competitive.lebensohl_weak_twos.play=true", "competitive.rubensohl
 [[ab]]
 name      = "mini-roman-vs-weak-2d"
 scenarios = ["Mini-Maxi_Roman_2D"]
-base      = ["two_level.two_diamonds.mini_roman=false"]
-variant   = ["two_level.two_diamonds.mini_roman=true"]
+base      = ["two_level.mini_roman.play=false"]
+variant   = ["two_level.mini_roman.play=true"]
 
 [[ab]]
 name      = "mccabe"
@@ -161,8 +161,8 @@ variant   = ["competitive.vs_1nt_strong.system=meckwell"]
 [[ab]]
 name      = "2h-bust"
 scenarios = ["Bust_Over_Strong_2C", "Game_Forcing_2C", "Opps_Bid_Over_GF_2C"]
-base      = ["two_level.two_clubs.parrish_bust=false"]
-variant   = ["two_level.two_clubs.parrish_bust=true"]
+base      = ["two_level.parrish_bust.play=false"]
+variant   = ["two_level.parrish_bust.play=true"]
 
 [[ab]]
 name      = "ingberman"

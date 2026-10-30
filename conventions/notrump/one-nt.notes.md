@@ -76,7 +76,7 @@ same contract.
   `minor-transfers.bid`, `texas-transfers.bid` and the natural calls at
   the foot of this file). **Anything higher than 2♣ is still not
   covered**, and that is where Lebensohl belongs
-  (`notrump.lebensohl.over_interference`, on for 21GF-DEFAULT).
+  (`notrump.lebensohl.play`, on for 21GF-DEFAULT).
 
 ## Fixed (2026-09-21)
 
@@ -129,7 +129,7 @@ where BBA starts a minor-suit sequence with 2♠.
 
 ## Under interference (2026-09-23)
 
-`notrump.transfers.vs_double` and `notrump.transfers.vs_2c` were both on
+`notrump.jacoby_transfers.vs_double` and `notrump.jacoby_transfers.vs_2c` were both on
 for Basic-Bridge and read by no rule: every notrump pattern was
 `after 1N (P)` or a competitive spelling of it, so a double or a 2♣
 overcall turned Stayman and the transfers off and responder passed
@@ -512,7 +512,7 @@ side (481 boards).
 ## Natural majors without transfers (2026-09-30)
 
 On the vanilla SAYC random set (BBA's bare SAYC card, our side with
-`notrump.transfers.jacoby=false`; `.rbb-cache/random/README.md`) a hand
+`notrump.jacoby_transfers.play=false`; `.rbb-cache/random/README.md`) a hand
 with a five-card major had no call of its own over 1NT: game values bid
 3NT through the "no better call" fallback (which partner then read as
 the 3NT that denies a major, 1,436 calls), weak hands passed 1NT, and

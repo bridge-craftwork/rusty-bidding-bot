@@ -2,7 +2,7 @@
 #
 # Responses to a 2NT opening: the 1NT structure one level up, which is
 # what BBA plays on this card — 3♣ Stayman, 3♦ and 3♥ transfers, 3NT to
-# play, 4NT quantitative. With `notrump.two_nt.puppet` 3♣ is Puppet
+# play, 4NT quantitative. With `notrump.stayman.puppet_2nt` 3♣ is Puppet
 # Stayman instead (at the end of the file).
 #
 # The same system answers every natural, balanced 2NT (Rick, 2026-10-05:
@@ -34,11 +34,11 @@ module two-nt-responses "Responses to a 2NT opening"
   skill  bidding_conventions/stayman
   skill  bidding_conventions/jacoby_transfers
   param  stayman = notrump.stayman.play default true
-  param  jacoby  = notrump.transfers.jacoby default true
-  param  puppet  = notrump.two_nt.puppet default false
+  param  jacoby  = notrump.jacoby_transfers.play default true
+  param  puppet  = notrump.stayman.puppet_2nt default false
   param  gerber  = slam.gerber.play default false
-  param  texas   = notrump.transfers.texas default false
-  param  tu      = notrump.transfers.texas_2_under default false
+  param  texas   = notrump.texas.play default false
+  param  tu      = notrump.texas.two_under default false
   param  style   = general.style
 
 # The 2NT system's way in: our 2NT where the system came on (`systems on`
@@ -164,7 +164,7 @@ after nt2 3H (P) 3S (P)
   4S  "Game, six or more spades"                  shows S>=6, hcp>=25-partner.hcp.max
       priority -1
 
-# ── Puppet Stayman (`notrump.two_nt.puppet`, 2026-09-28) ──────────────
+# ── Puppet Stayman (`notrump.stayman.puppet_2nt`, 2026-09-28) ──────────────
 # 3♣ asks for a four- or five-card major. Responder bids it with game
 # values, a three- or four-card major and no five (a five-card major
 # transfers, 5-4 included); opener shows a five-card major (3♥/3♠), a

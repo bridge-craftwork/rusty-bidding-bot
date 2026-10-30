@@ -6,18 +6,19 @@ module stayman "Stayman"
   needs  notrump-base
   skill  bidding_conventions/stayman
   skill  partnership_bidding/stayman_transfers
-  param  minors = notrump.minor_transfers default relay
+  param  minors = notrump.minor_transfers.style default relay
+  param  mtp    = notrump.minor_transfers.play default true
   param  systems_on = nt_overcalls.direct.systems_on default true
-  param  vs_double = notrump.transfers.vs_double default false
-  param  vs_2c = notrump.transfers.vs_2c default false
+  param  vs_double = notrump.jacoby_transfers.vs_double default false
+  param  vs_2c = notrump.jacoby_transfers.vs_2c default false
   param  style = general.style
-  param  jacoby = notrump.transfers.jacoby default true
+  param  jacoby = notrump.jacoby_transfers.play default true
   param  smolen = notrump.smolen.play default false
 
 after nt1 when !they.bid | systems_on
   2C  "Stayman: asks for a 4-card major"  alert
-      shows strength>=invite, H=4 | S=4 | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5), H<=4 | S<=3 | strength>=game
-      when  !shape 4333 | ((minors is four_way | minors is four_way_reversed), strength=invite)
+      shows strength>=invite, H=4 | S=4 | ((mtp, minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5), H<=4 | S<=3 | strength>=game
+      when  !shape 4333 | ((mtp, minors is four_way | minors is four_way_reversed), strength=invite)
       when  style is not bba
       # 5 hearts and 4 spades below game transfers, then bids 2S
       # (jacoby-transfers.bid; BBA's treatment, Rick 2026-09-24).
@@ -30,7 +31,7 @@ after nt1 when !they.bid | systems_on
       artificial
       priority 1                           # ahead of transfers with 5-4 majors
   2C  "Stayman: asks for a 4-card major"  alert
-      shows hcp>=24-partner.hcp.max, (H=4 | S=4, H<=5, S<=5, H<=4 | hcp>=25-partner.hcp.min) | ((minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
+      shows hcp>=24-partner.hcp.max, (H=4 | S=4, H<=5, S<=5, H<=4 | hcp>=25-partner.hcp.min) | ((mtp, minors is four_way | minors is four_way_reversed), strength=invite, C<=5, D<=5)
       when  style is bba
       # BBA (probed 2026-09-24): a four-card major and 7 HCP, whatever the
       # shape (4-3-3-3 too) or the tens; 2NT next shows 7-9. A six-card

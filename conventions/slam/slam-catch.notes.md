@@ -18,7 +18,7 @@ Jacoby 2NT, a splinter, a two-over-one and a transfer.
 |---|---|
 | `slam-catch.bid` | the sign-off: game in the agreed major when nothing else applies |
 | `control-bids.bid` | the control-bid dialogue and the stop-in-game rule, card `slam.cue_bids.play` |
-| `blackwood.bid` | the ask (`sets ask=aces`) and the ace answers, card `slam.blackwood.standard` |
+| `blackwood.bid` | the ask (`sets ask=aces`) and the ace answers, card `slam.blackwood.play` |
 | `rkcb-1430.bid` | the ask (`sets ask=keycards(trump)`) and the keycard answers, card `slam.blackwood.rkcb_1430` |
 
 The **ask condition is the same text in both ask files**, which is
@@ -262,7 +262,7 @@ only on the 21GF cards.
    bid 4NT) is a band question, not a trump-fit question: BBA's 6NT starts
    at 17 total points opposite 15–17, ours at 18, because the `slam` band
    is defined at 33 combined and BBA plays 32. That is in the engine.
-8. **`slam.blackwood.queen_ask` has no `.bbsa` mapping.** BBA's key looks
+8. **`slam.rkcb.queen_ask` has no `.bbsa` mapping.** BBA's key looks
    like `Blackwood without K and Q` (0 on the Basic-Bridge card, i.e. the
    queen ask is on). Worth 55 boards and −30 IMPs.
 9. **`suit_strength` ignores shortness.** The bands use `suit_points`

@@ -19,7 +19,7 @@
 
 module mini-roman "Mini-Roman 2♦"
   kind   convention
-  card   two_level.two_diamonds.mini_roman
+  card   two_level.mini_roman.play
   needs  preempts
   skill  bidding_conventions/mini_roman_2d
 

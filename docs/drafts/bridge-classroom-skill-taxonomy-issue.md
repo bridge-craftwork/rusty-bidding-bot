@@ -126,7 +126,7 @@ belongs to in brackets):
 - `bidding_conventions/gerber` [`slam.gerber.play`, i.e. `other_conventions.gerber.play`]
 - `bidding_conventions/inverted_minors` [`minor_openings.inverted_minors.play`]
 - `bidding_conventions/impossible_2s` [`major_openings.impossible_2s.play`]
-- `bidding_conventions/super_accept` [`notrump.transfers.super_accept`]
+- `bidding_conventions/super_accept` [`notrump.jacoby_transfers.super_accept`]
 - `bidding_conventions/minor_suit_transfers` [the 1NT minor-suit responses: relay, four-way transfers]
 - `bidding_conventions/control_bids` [`slam.cue_bids.play`]
 - `competitive_bidding/support_doubles` [`doubles.support.play`, `doubles.support.rdbl`]

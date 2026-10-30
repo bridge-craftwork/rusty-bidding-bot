@@ -5,7 +5,7 @@
 
 module blackwood "Blackwood (standard)"
   kind   convention
-  card   slam.blackwood.standard
+  card   slam.blackwood.play
   needs  base
   skill  bidding_conventions/blackwood
   skill  partnership_bidding/blackwood

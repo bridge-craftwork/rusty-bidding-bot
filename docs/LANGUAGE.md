@@ -82,7 +82,7 @@ it depends on.
 ```
 module rkcb-1430 "Roman Keycard Blackwood (1430)"
   kind   convention
-  card   slam.blackwood.rkcb_1430          # active when the card says so
+  card   slam.rkcb.play                    # active when the card says so
   needs  base
   skill  bidding_conventions/roman_keycard
   param  nt_min = notrump.one_nt.range_min default 15
@@ -112,13 +112,15 @@ module rkcb-1430 "Roman Keycard Blackwood (1430)"
   ours (engine 0.13.0).
 
 **Treatments.** When players agree on a convention but not on its details,
-the card holds one enum field for the choice (`notrump.minor_transfers`:
-`relay`, `four_way`, `four_way_reversed`, `bba`, `none`). The module reads
-it as a param and tests it with `is`:
+the card holds one enum field for the choice beside the convention's
+`play` switch (convention-card ADR-0002: `notrump.minor_transfers.play`, and
+`notrump.minor_transfers.style`: `relay`, `four_way`, `four_way_reversed`,
+`bba`, `two_nt_three_c`). The module reads it as a param and tests it with
+`is`:
 
 ```
 module minor-transfers "Minor-suit responses to 1NT"
-  param  style = notrump.minor_transfers default relay
+  param  style = notrump.minor_transfers.style default relay
 
 after 1N (P) when style is relay
   2S  "Relay to 3♣"  ...

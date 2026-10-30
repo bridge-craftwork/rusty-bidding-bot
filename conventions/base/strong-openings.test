@@ -65,8 +65,8 @@ card    21GF-DEFAULT general.style=bba
 S AQ5.KQ7.AKJ4.K76      | 2C P 2NT P                 | 3NT  | 22 balanced
 S AQ5.KQ7.AKJ4.KJ6      | 2C P 2NT P                 | 4NT  | 23 balanced: quantitative
 N JT974.AQ2.K2.KT2      | 2C P 2NT P 3NT P           | 6NT  | 13 opposite 22+: slam
-# The 2H bust (`two_level.two_clubs.parrish_bust`): 2C-2H is the bust, 2D waits with 3+.
-card    21GF-DEFAULT two_level.two_clubs.parrish_bust=true
+# The 2H bust (`two_level.parrish_bust.play`): 2C-2H is the bust, 2D waits with 3+.
+card    21GF-DEFAULT two_level.parrish_bust.play=true
 N 8632.854.9732.65      | 2C P                       | 2H   | 0 HCP: the 2H bust
 N Q632.854.Q732.65      | 2C P                       | 2D   | 4 HCP: waiting, not a bust
 N Q632.854.Q732.65      | 2C P 2D P 2S P             | 4S   | no second negative: game in the fit

@@ -1,6 +1,6 @@
 # soloway (`soloway.bid`): notes
 
-Soloway jump shifts (`general.jump_shifts.soloway`): responder's jump to
+Soloway jump shifts (`general.soloway.play`): responder's jump to
 two of a higher suit over 1♣, 1♦ or 1♥ is game forcing and shows one of
 GIB's four hand types. The jumps are in `responses.bid` (`soloway_js`);
 the continuations here. Cases: `soloway.test`. Scenarios:

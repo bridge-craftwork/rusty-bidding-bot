@@ -57,8 +57,8 @@ Choice of games after `1NT P 2C P 2M P 3NT P`: 210 of 211 corpus boards agree.
 ## Under interference (2026-09-23)
 
 Two contexts at the foot of `stayman.bid` keep Stayman alive when RHO
-acts, gated by the card switches `notrump.transfers.vs_double` and
-`notrump.transfers.vs_2c`:
+acts, gated by the card switches `notrump.jacoby_transfers.vs_double` and
+`notrump.jacoby_transfers.vs_2c`:
 
 - over a **double** it is still 2♣, from a point below the invitational
   floor (`hcp>=24-partner.hcp.max`, so 7 opposite 15-17: finding the
@@ -501,7 +501,7 @@ the count, and its fit, pass.
 
 ## Without transfers (2026-09-30)
 
-With `notrump.transfers.jacoby` off (BBA's bare SAYC card) two hands
+With `notrump.jacoby_transfers.play` off (BBA's bare SAYC card) two hands
 that would transfer use Stayman instead (one-nt.notes.md, "Natural
 majors without transfers"):
 

@@ -1,7 +1,7 @@
 # Rubensohl (switched on below over 21GF-DEFAULT, whose Lebensohl it
 # replaces; the Precision cards play it).
 # Natural overcalls of 1NT (21GF-DEFAULT plays Cappelletti).
-card    21GF-DEFAULT notrump.rubensohl.over_interference=true competitive.rubensohl_after_double.play=true competitive.vs_1nt_strong.system=other
+card    21GF-DEFAULT notrump.rubensohl.play=true competitive.rubensohl_after_double.play=true competitive.vs_1nt_strong.system=other
 dealer  N
 vul     None
 

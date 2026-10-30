@@ -86,7 +86,7 @@ change the 2NT opening too)?
 
 ## Gaps and open questions
 
-- **Minor-suit transfers over 2NT** (`notrump.two_nt.minor_transfers`,
+- **Minor-suit transfers over 2NT** (`notrump.minor_transfers.over_2nt`,
   on for both 21GF cards) and minor-suit Stayman: not written, so a
   minor one-suiter bids 3NT.
 - **Puppet Stayman** (`two_nt.puppet`): played since 2026-09-28, see
@@ -196,7 +196,7 @@ when it is, the 4♦ diamond try will have to give way to it the same way.
 Rick: "we want Puppet over 2NT working."
 
 **The switch.** The `.bbsa` key "2N-3C Puppet Stayman" used to write
-`notrump.stayman.puppet` while this module read `notrump.two_nt.puppet`
+`notrump.stayman.puppet` while this module read `notrump.stayman.puppet_2nt`
 (the path Bridge-Classroom's card editor and PDFs use), so the switch
 never reached the rules. There is now one field, `two_nt.puppet`; the
 key maps to it. `notrump.stayman.puppet` (the catalog's other path) was

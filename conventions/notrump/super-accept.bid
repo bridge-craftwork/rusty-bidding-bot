@@ -2,7 +2,7 @@
 
 module super-accept "Super-accepting a Jacoby transfer"
   kind   convention
-  card   notrump.transfers.super_accept
+  card   notrump.jacoby_transfers.super_accept
   needs  jacoby-transfers
   skill  bidding_conventions/super_accept
   param  system = general.system   # `brill`: the Brill card's treatments

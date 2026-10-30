@@ -576,7 +576,7 @@ mod tests {
     /// ` ? `.
     fn resolved(defs: &str, uses: &str) -> (Vec<String>, Vec<String>) {
         let d = module(&format!(
-            "module d \"d\"\n  param kokish = two_level.two_clubs.kokish\ndefine strong = kokish\n{defs}\n"
+            "module d \"d\"\n  param kokish = two_level.kokish.play\ndefine strong = kokish\n{defs}\n"
         ));
         let u = module(&format!("module u \"u\"\nafter {uses}\n  P \"x\"\n"));
         let defines = Defines::new(std::slice::from_ref(&d));

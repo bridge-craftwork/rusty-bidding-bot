@@ -15,7 +15,7 @@ it and the `.bbsa` format has no key for it.
   ask whatever else could claim it.
 - **Answers:** four steps above the ask, 1430 or 0314 as the card's
   keycard ask has them in a minor (`kc_first_14`, dopi-ropi.bid: the
-  `slam.blackwood.minor_0314` treatment, or `general.style=bba` with
+  `slam.rkcb.minor_0314` treatment, or `general.style=bba` with
   0314). Over 4♣: 4♦ 4♥ 4♠ 4NT; over 4♦: 4♥ 4♠ 4NT 5♣.
 - **The asker:** grand, six, or five of the minor (partner corrects to
   six with the higher count of an open answer, `ask=mw_correct`).
