@@ -35,3 +35,13 @@
   Cache-Control: public, max-age=0, must-revalidate
 /explorer/*
   Cache-Control: public, max-age=0, must-revalidate
+/validate.html
+  Cache-Control: public, max-age=0, must-revalidate
+/validate/*
+  Cache-Control: public, max-age=0, must-revalidate
+# Rule files are text.
+/rules/*.bid
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=0, must-revalidate
+/rules/*
+  Cache-Control: public, max-age=0, must-revalidate

@@ -419,6 +419,14 @@ fn check_rule_set(rules: &Rules, d: &mut Diags) {
             }
         }
     }
+    // As `rbb bid check`: a module without a `kind` line, and skill paths
+    // that are not standard conventions or skills (warnings).
+    if let Ok(known) = bridge_card::standard::conventions() {
+        let fields = "fields";
+        for x in bidspec::skills::check(modules, rules.set.vocab.registry(), &known, fields) {
+            rule_diagnostic(&x, Severity::Warning, d);
+        }
+    }
     for w in rules.set.vocab.lint() {
         d.warning(w.replacen("bbsa-map.toml: ", "bbsa_map: ", 1));
     }

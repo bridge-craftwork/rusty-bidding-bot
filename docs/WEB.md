@@ -47,6 +47,8 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 | `cards/21_intermediate_card.json` | Bridge-Classroom's 2/1 Intermediate card (seed data), offered as `BC-21-Intermediate` |
 | `status.html`, `status/` | the status page (below): `status.js` draws, `legend.js` the status vocabulary, `status.css`, and `status.json`, its data (committed) |
 | `explorer.html`, `explorer/` | the auction explorer (below): `explorer.js`, `explorer.css` |
+| `validate.html`, `validate/` | the rule checker (below): `validate.js`, `validate.css` |
+| `rules/` (built) | the rule set as text: every `.bid` file, `conventions.toml` and `index.json` (`{"files": [...]}`), copied from `conventions/` by build.sh |
 | `_headers`, `404.html` | Pages headers; the real 404 |
 | `scripts/` | `emit-reference.mjs`, `check-reference.mjs` (drift), `test.mjs` |
 
@@ -207,6 +209,18 @@ is in the fragment: `#ns=..&ew=..&dealer=..&vul=..&scoring=..&auction=1H-P-2N-P`
 (GIB's short calls; an uploaded card stays out). It is also where a call
 that reads oddly shows up first: 3NT over Jacoby 2NT "unbalanced" on
 2026-10-29.
+
+## Rule checker
+
+`validate.html` (Rick, 2026-10-30), so that anyone writing `.bid` files
+(Thorvald's Brill exports, a new convention) can check them without
+installing `rbb`: open files or a folder, pick one of ours as an example,
+or type; the engine's `validate` checks them as `rbb bid check` does
+(grammar, terms, card paths, skills, `kind`), on their own or added to
+Rusty's rule set from `rules/` (a file with the same path replaces ours,
+so `needs`, `define`s and the named patterns resolve). With our rule set,
+only the diagnostics about the files on the page are listed, the rest
+counted. A diagnostic with a line jumps to it. Nothing is uploaded.
 
 ## Later
 
