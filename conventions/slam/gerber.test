@@ -29,14 +29,35 @@ S AQ3.K52.KQ84.AJ3      | 1NT P 4C P 4S P 5C P 5H P       | 6NT    | two kings a
 S A53.K52.KJ84.AK3      | 1NT P 4C P 4S P 5C P 5H P       | 7NT    | 18: three kings and one, all of them
 S AQ3.K52.KQ84.AK3      | 1NT P 4C P 4S P                 | 7NT    | 21 and all the aces: 36 between us, no need to ask for kings
 
+# Over interference to the 1NT opening: still Gerber, the same hands.
+S AQ3.K52.KQ84.AJ3      | 1NT 2C                          | 4C     | their 2C: the jump to 4C is still Gerber
+S AQ3.K52.KQ84.AJ3      | 1NT 2H                          | 4C     | their 2H: Gerber
+S AQ3.K52.KQ84.AJ3      | 1NT X                           | 4C     | their double: Gerber
+N K82.QJ4.AQ5.KQ63      | 1NT 2H 4C P                     | 4H     | the answers as without the overcall: one ace
+
+# After Stayman's 2D (no major): Gerber, ahead of the 6NT there.
+S AQ32.K52.KQ8.AJ3      | 1NT P 2C P 2D P                 | 4C     | 19, no fit found: ask for aces
+S AQ32.K52.KQ8.AJ3      | 1NT P 2C P 2D P 4C P 4H P       | 6NT    | one ace missing: slam
+
 # Over a 1NT or 2NT rebid, not only over the opening (the card's "Gerber
 # only for NT openings" is off).
 dealer  S
 N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4C     | 15 balanced opposite 18-19: slam values
 
+# Gerber by opener over responder's natural 2NT (PBS Gerber_By_Opener).
+dealer  N
+N AK2.K2.AKQJ84.32      | 1D P 2NT P                      | 4C     | 22 points opposite a natural 2NT: slam values, ask
+N AK2.K2.32.AKQJ84      | 1C P 2NT P                      | 4C     | after 1C too: clubs are not agreed
+S K83.Q52.KJ4.A932      | 1D P 2NT P 4C P                 | 4H     | the answer: one ace
+N AKQ2.AQ3.KQ4.AK3      | 2C P 2NT P                      | 4C     | 27 balanced opposite the positive: ask before 6NT
+
 # "Gerber only for NT openings" (21GF-MSS): no Gerber over the rebid.
 card    21GF-MSS
+dealer  S
 N KQ52.A83.K4.QJ62      | 1D P 1S P 2NT P                 | 4NT    | 4C is not Gerber here: 33 between us, the catch-all's quantitative 4NT (responder-rebids.bid)
+dealer  N
+N AK2.K2.AKQJ84.32      | 1D P 2NT P                      | !4C    | and not by opener over 1D-2NT either
+dealer  S
 
 # No Gerber on the card (Basic-Bridge): 6NT directly, as before.
 card    Basic-Bridge
@@ -49,5 +70,7 @@ vul     None
 card    Brill
 S Q32.K52.Q862.J52      | 3NT P      | 4C     | brill: Gerber over the 3NT opening
 N AKQ2.AKJ.KQ2.K32      | 3NT P 4C P | 4S     | brill: and its answer (two aces)
+S Q32.K52.Q862.J52      | 2C P 2D P 3NT P      | 4C  | brill: Gerber over opener's 3NT rebid too
+S Q32.K52.Q862.J52      | 2C 2H P P 3NT P      | 4C  | brill: and after their overcall
 card    21GF-GIB
 S Q32.K52.Q862.J52      | 3NT P      | 4NT    | default: quantitative
