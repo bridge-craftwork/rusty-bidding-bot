@@ -68,7 +68,7 @@ S Q2.J8743.5.Q9832      | 2C P 2D P 4NT P                      | !5D    | 2♦ i
 card    21GF-DEFAULT slam.rkcb.play=false slam.blackwood.play=false
 N Q2.AJ874.5.KQ932      | 1H P 1S P 2C P 4NT P                 | P      | quantitative: a minimum declines
 
-# The king ask by 5NT (`slam.king_ask.five_nt`): every keycard and the
+# The king ask by 5NT (`slam.king_ask.style = five_nt`): every keycard and the
 # queen ours; the answer counts the side kings, 6♣ none, 6♦ one, 6♥ two.
 card    21GF-DEFAULT
 dealer  S
@@ -78,7 +78,7 @@ N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 7H    | two si
 N A8.AJ97.A942.KQ3      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6D P | 6H    | the same flat: the missing king is a finesse for the grand (2026-10-07)
 N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6H P | 7H    | every side king is ours: the grand
 N A8.AJ9732.A94.QJ      | 1NT P 4D P 4H P 4NT P 5S P 5NT P 6C P | 6H    | a side king missing: six
-card    21GF-DEFAULT slam.king_ask.five_nt=false
+card    21GF-DEFAULT slam.king_ask.style=none
 N A8.AJ9732.A94.KQ      | 1NT P 4D P 4H P 4NT P 5S P           | 6H     | no king ask on the card: six
 
 # Clubs as trumps: an answer past 5♣ leaves no sign-off, so six (2026-10-05).
