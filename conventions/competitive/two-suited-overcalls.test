@@ -203,6 +203,8 @@ dealer  E
 vul     None
 N 7.93.AQJ85.KQT84      | 1H P 1S            | 2N  | 12 HCP, both minors: the two unbid suits
 N 7.93.AQJ85.KQT84      | 1H P 1N            | 2N  | after 1NT only hearts is bid: the minors
+N 7.93.QJ985.KJT84      | 1H P 1N            | P   | 7 HCP, 9 total points: under the 11 the corpus chose (2026-10-31)
+N 7.93.KQJ85.KJT84      | 1H P 1N            | 2N  | 9 HCP, 11 total points: enough
 N AQJ85.KQT84.93.7      | 1C P 1D            | 2N  | the majors over 1C P 1D
 N AQJ85.7.KQT84.93      | 1C P 1H            | 2N  | diamonds and spades over 1C P 1H
 N AQJ85.7.KQT84.93      | 1H P 2C            | 2N  | diamonds and spades over 1H P 2C, not a jump

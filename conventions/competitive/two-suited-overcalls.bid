@@ -283,9 +283,10 @@ after (1x) P (2x) 2N (*) 3y (*) when y is not x
 # minors, over 1C P 1D the majors, over 1C P 1H diamonds and spades,
 # over 1H P 2C diamonds and spades. After a 1NT response only one suit
 # is bid: the two lowest unbid, as over the opening (Wikipedia, "Unusual
-# notrump": the two lowest unbid suits). Five-five. Responder is
-# unlimited after a new suit, so a point more than over their raise (10
-# total points); 9 after 1NT, which limits him. A jump shift by
+# notrump": the two lowest unbid suits). Five-five, 12+ total points
+# after a new suit (responder is unlimited), 11+ after 1NT, which limits
+# him: two more than first written (10 and 9, by analogy with the direct
+# 2NT), measured on the whole corpus 2026-10-31 (notes). A jump shift by
 # responder (strong) is not covered. Above the takeout double with 15+
 # (overcalls.bid, priority 1): the five-five shape is the more exact
 # description. With the Sandwich 1NT on (sandwich-nt.bid, five-four or
@@ -300,29 +301,29 @@ after (1x) P (1y) when u2n_play | u2n_jump, y is not x, !sandwich, !passed_hand 
       alert  artificial
       shows C>=5 | x is C | y is C, D>=5 | x is D | y is D
       shows H>=5 | x is H | y is H, S>=5 | x is S | y is S
-      shows hcp+length_points>=10
+      shows hcp+length_points>=12
       priority 2
 after (1x) P (2y) when u2n_play | u2n_jump, y is not x, !rho.jumped
   2N  "Unusual 2NT: five-five in the two suits they have not bid"
       alert  artificial
       shows C>=5 | x is C | y is C, D>=5 | x is D | y is D
       shows H>=5 | x is H | y is H, S>=5 | x is S | y is S
-      shows hcp+length_points>=10
+      shows hcp+length_points>=12
       priority 2
 after (1x) P (1N) | (1x) P (2x) P (P) when u2n_play | u2n_jump, x is not N
   2N  "Unusual 2NT: five or more in each minor"
       alert  artificial
-      shows C>=5, D>=5, hcp+length_points>=9
+      shows C>=5, D>=5, hcp+length_points>=11
       when  x is H | x is S
       priority 2
   2N  "Unusual 2NT: five or more diamonds and hearts"
       alert  artificial
-      shows D>=5, H>=5, hcp+length_points>=9
+      shows D>=5, H>=5, hcp+length_points>=11
       when  x is C
       priority 2
   2N  "Unusual 2NT: five or more clubs and hearts"
       alert  artificial
-      shows C>=5, H>=5, hcp+length_points>=9
+      shows C>=5, H>=5, hcp+length_points>=11
       when  x is D
       priority 2
 

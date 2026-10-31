@@ -522,9 +522,16 @@ definitions were hints only: the rules follow the sources below.
   minors, 1C P 1D 2NT the majors, 1C P 1H 2NT diamonds and spades,
   1H P 2C 2NT diamonds and spades. Bridge Bum: the Unusual 2NT "is also
   in effect if both opponents have bid up to 2♠" (1H 2D 2NT = clubs and
-  spades), and after their two-over-one it promises extra; so 10+ total
-  points (a point more than over their raise). After a 1NT response,
-  (1x) P (1N) 2NT, only one suit is bid: the two lowest unbid, 9+.
+  spades), and after their two-over-one it promises extra; 12+ total
+  points. After a 1NT response, (1x) P (1N) 2NT, only one suit is bid:
+  the two lowest unbid, 11+. First written as 10 and 9 (the direct 2NT's
+  9 by analogy, which came from BBA's "9 to 29 total points" alert);
+  the whole corpus (all scenarios, 500 boards each, 2026-10-31) chose
+  two more. Judged by the 2NT bidder's contract errors (Rick,
+  2026-10-31: the side bidding the change, taken as doubled):
+  +2 everywhere +93 IMPs on 107 boards (halves +45/+48), +2 only
+  vulnerable +72 on 58 (halves +24/+48); the non-vulnerable step
+  between them +21 (halves +21/0). Distance from par +166 beside it.
   Balancing after their raise, (1x) P (2x) P (P) 2NT, the same as the
   direct 2NT over the raise (standard practice, not yet cited: Bridge
   Bum's "not Unusual" balancing 2NT is over a weak two, not over a
