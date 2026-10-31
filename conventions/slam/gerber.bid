@@ -8,10 +8,15 @@
 # Where it applies (card `slam.gerber.*`):
 # - directly over partner's 1NT or 2NT where systems are on (2NT opening,
 #   2♣–2♦–2NT, Kokish's 2NT ...: one-nt.bid, `systems on`);
-# - over partner's 1NT or 2NT rebid after 1x–1y, unless the card says
-#   `gerber.only_over_nt_openings` (BBA's "Gerber only for NT openings").
+# - over interference to our 1NT opening (a double, a two-level overcall);
+# - after 1NT–2♣–2♦ (Stayman, no major; not with the bba treatment);
+# - over partner's 1NT or 2NT rebid after 1x–1y, and by opener over a
+#   natural 2NT response (1m–2NT, 2♣–2NT), unless the card says
+#   `gerber.only_over_nt_openings` (BBA's "Gerber only for NT openings")
+#   or not `gerber.over_nt_seq`;
+# - brill: over a 3NT opening and opener's 3NT rebid after 2♣.
 # Never where clubs are natural or a suit is agreed: after a transfer, a
-# Stayman answer, or a minor raise, 4♣ keeps its other meanings.
+# major Stayman answer, or a minor raise, 4♣ keeps its other meanings.
 #
 # 4♣ over 1NT is a transfer to diamonds with `transfers.texas_4c`, and
 # then Gerber is off there. Over 2NT the 4♣ slam try in clubs
@@ -24,6 +29,7 @@ module gerber "Gerber: 4♣ asks for aces over partner's notrump"
   needs  notrump-base
   skill  bidding_conventions/gerber
   param  only_openings = slam.gerber.only_over_nt_openings default false
+  param  nt_seq = slam.gerber.over_nt_seq default true   # not in the .bbsa map: true unless a card JSON says no
   param  texas_4c = notrump.texas.bid_4c default false
   param  tu = notrump.texas.two_under default false   # 2-under Texas: 4C transfers
   param  style = general.style
@@ -77,9 +83,82 @@ after 3N (P) when system is brill
       artificial
       priority 1
 
-after 1x (P) 1y (P) 1N (P) | 1x (P) 1y (P) 2N (P) when !only_openings
+# Brill: also over opener's 3NT rebid after 2♣ (2♣–2♦–3NT, and after
+# their overcall, 2♣ (2♥) P (P) 3NT, 2♣ P 2♦ (2♥) 3NT). Our default reads
+# 4♣ after 2♣–2♦–3NT as the club slam try, as over the 3NT opening
+# (over-3nt.bid), and has no rule after interference (notes, "Gaps").
+after 2C (*) P (P) 3N (P) | 2C (P) 2D (*) 3N (P) when system is brill
+  4C  "Gerber: how many aces?"  alert
+      shows hcp>=31-partner.hcp.min
+      sets  ask=gerber
+      artificial
+      priority 1
+
+# Over interference to our 1NT opening (a double or a suit overcall at
+# the two level) the jump to 4♣ is still Gerber, the same hands as
+# without it: 4♣ is not a sensible cue-bid or natural call there.
+after 1N (X) when !texas_4c, !tu
   4C  "Gerber: how many aces?"  alert
       shows balanced, points>=32-partner.hcp.min
+      when  style is not bba
+      sets  ask=gerber
+      artificial
+      priority 1
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, hcp>=31-partner.hcp.min
+      when  style is bba
+      sets  ask=gerber
+      artificial
+      priority 1
+after 1N (2y) when y is not N, !texas_4c, !tu
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, points>=32-partner.hcp.min
+      when  style is not bba
+      sets  ask=gerber
+      artificial
+      priority 1
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, hcp>=31-partner.hcp.min
+      when  style is bba
+      sets  ask=gerber
+      artificial
+      priority 1
+
+# After Stayman's 2♦ (no major) the jump to 4♣ is Gerber: no suit is
+# agreed and clubs are not natural. The hands that bid 6NT there
+# (stayman.bid) check the aces first. The bba treatment keeps BBA's 4♣
+# minor slam try (stayman.bid).
+after 1N (P) 2C (P) 2D (P) when style is not bba
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, points>=32-partner.hcp.min
+      sets  ask=gerber
+      artificial
+      priority 1
+
+# Over a notrump rebid or response (the card's "over NT sequence";
+# BBA's "Gerber only for NT openings" turns it off).
+after 1x (P) 1y (P) 1N (P) | 1x (P) 1y (P) 2N (P) when !only_openings, nt_seq
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, points>=32-partner.hcp.min
+      sets  ask=gerber
+      artificial
+      priority 1
+
+# Gerber by opener over responder's natural 2NT: 1♣–2NT and 1♦–2NT
+# (Bridge Bum: 4♣ over any natural notrump; PBS Gerber_By_Opener), and
+# 2♣–2NT, the balanced positive. After 1♣ too: clubs are not agreed, and
+# opener with long clubs shows them at the three level first. Slam
+# values against responder's minimum; over 2♣–2NT the balanced hands
+# that bid 6NT (strong-openings.bid) ask first.
+after 1m (P) 2N (P) when !only_openings, nt_seq
+  4C  "Gerber: how many aces?"  alert
+      shows H<=4, S<=4, strength>=slam
+      sets  ask=gerber
+      artificial
+      priority 1
+after 2C (P) 2N (P) when !only_openings, nt_seq
+  4C  "Gerber: how many aces?"  alert
+      shows balanced, points>=33-partner.hcp.min
       sets  ask=gerber
       artificial
       priority 1
