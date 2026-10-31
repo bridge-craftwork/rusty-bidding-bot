@@ -188,7 +188,8 @@ BBA bids game from 12, and our 4m preempt after 2NT); the opening side
 
 - Michaels and the Unusual 2NT in the **balancing seat**
   (`(1x) P (P) 2x`), by a passed hand over a second-seat opening only
-  through the same rules; after two suits bid (`1x P 1y 2NT`).
+  through the same rules; after two suits bid (`1x P 1y 2NT`): written
+  2026-10-30 (below).
 - **Leaping Michaels** (Rick's card) and non-leaping Michaels over weak
   twos; Unusual 1NT and 4NT (BBA bids 4NT with six-six).
 - The opening side's **doubles** (above), and "unusual over unusual"
@@ -508,6 +509,77 @@ Standard practice, not yet cited; the cue of a raised major is not
 written. Tripwire: 9 boards changed by these rules, +14 contract
 errors, +2 doubling, +15 against par.
 
+## After both opponents have bid; 4NT balancing (2026-10-30)
+
+Found by comparing Brill's convention files with our rules (Brill's
+service reads these calls; Rusty had no rule for any of them). Brill's
+definitions were hints only: the rules follow the sources below.
+
+- **2NT after opener and responder have both bid** (card
+  `competitive.unusual_2nt.play` or `nt_overcalls.jump_2nt_lowest_unbid`):
+  (1x) P (1y) 2NT and (1x) P (2y) 2NT (a new suit, not a jump shift)
+  show five-five in the two suits they have not bid: 1H P 1S 2NT the
+  minors, 1C P 1D 2NT the majors, 1C P 1H 2NT diamonds and spades,
+  1H P 2C 2NT diamonds and spades. Bridge Bum: the Unusual 2NT "is also
+  in effect if both opponents have bid up to 2♠" (1H 2D 2NT = clubs and
+  spades), and after their two-over-one it promises extra; so 10+ total
+  points (a point more than over their raise). After a 1NT response,
+  (1x) P (1N) 2NT, only one suit is bid: the two lowest unbid, 9+.
+  Balancing after their raise, (1x) P (2x) P (P) 2NT, the same as the
+  direct 2NT over the raise (standard practice, not yet cited: Bridge
+  Bum's "not Unusual" balancing 2NT is over a weak two, not over a
+  raise). Above the takeout double with 15+ (overcalls.bid): the
+  five-five is the exact description, and the Unusual 2NT has no upper
+  limit (BBA).
+- **Sandwich seat with a 1NT two-suiter on**: with the Sandwich 1NT
+  (sandwich-nt.bid, five-four or five-five) or a passed hand's Unusual
+  1NT, the one-level sandwich seat stays theirs and 2NT is not bid
+  there. The first version took 30 of GIB_Sandwich_NT_BPH's 1NT boards
+  (21GF-GIB plays the passed-hand Unusual 1NT). BBA itself bids 2NT
+  there with some six-five hands (boards 4, 35, 37): open question.
+- **Advancer** after any of these 2NTs: the longer of partner's suits at
+  the cheapest level (the lower with equal length), game in a major with
+  four-card support and 10+ HCP, five of a minor with four and 13+ (when
+  partner has no major); over a double the same; when RHO bids, the
+  cheapest preference with four, else pass. The 2NT bidder passes a
+  three-level preference, or bids game in a major with 16+ or four
+  losers. One named pattern (`u2n_two_bid`) holds the four entries.
+- **The Unusual 4NT, balancing and over their raised preempt** (card
+  `competitive.unusual_4nt.play`, on the Brill card): 4NT over (3x) P (P)
+  and (2x) P (3x) as the direct jump over three (five-five, four losers);
+  over (4M) P (P), (3M) P (4M), (2M) P (4M) and the balancing seat after
+  their raise to game, (3M) P (4M) P (P), the minors, five-five with
+  five losers, as the direct 4NT over 4M; over (3m) P (4M) the two unbid
+  suits. Advancer: the longer suit at the five level (spades added for
+  the last case). Wikipedia: a 4NT overcall shows the same two suits as
+  2NT and is "an extreme two suiter", usually six-five; our five-five
+  with few losers over a preempt is the existing deviation (above).
+- **Kept: our 4NT over their 4♠ shows both minors.** Brill reads it as a
+  three-suited takeout; Wikipedia's 4NT overcall is the two-suiter, and
+  no source we have says otherwise. Recorded, not changed.
+- Opps_Preempt board 6 (3H P P, KQ.T.AK742.KQT87): 4NT, 5C made with
+  par 6C; BBA doubled and played 4C. 11 contract errors to BBA's 13.
+- **Tripwire** (all scenarios, `--limit 50`, against HEAD): 33 boards
+  changed, every one first at one of these calls (2NT 26, the rest
+  1NT-response 2NT and 4NT). The side that bid them: contract errors -2,
+  doubling -5 (fewer). The other side: contract +5, doubling +52, almost
+  all undoubled sacrifices and partscores of ours going down (our weak
+  doubling, as both sides are ours). Totals: errors -50 IMPs to us
+  (contract -3, doubling -47), par distance -10. Judged as a bidding
+  change on its contract errors: neutral to slightly better. The worst
+  boards are light two-suiters doubled or set (Gavin_Transfers_after_2N
+  board 33, 1D P 1N 2N on 9 HCP five-five: 3C doubled, 12 IMPs;
+  1m-1N 45; SCS16_1or2C 29 the best, -12).
+
+Open questions (not written):
+- Brill's **jump to 3NT and 4NT after (1x) P (1y)** as two-suiters
+  (1H P 1S 3NT, 1C P 1H 4NT, ...): exotic, no standard source.
+- **Unusual NT over a weak two after responder raises** (2M P 3M 3NT /
+  4NT, 2D P 3H 3NT): Brill reads them as two-suiters; not written.
+- (3M) X (4M) 4NT, after partner's takeout double: advancer's two-suiter
+  (Brill), a different module (advances), not written.
+- BBA's passed-hand 2NT in the sandwich seat with six-five (above).
+
 ## Sources
 
 - **Rick's rulings** (2026-09-28): the task above, and the jump
@@ -581,3 +653,15 @@ errors, +2 doubling, +15 against par.
   scenarios; "Unusual 1NT" and "Unusual 4NT" notes across the corpus.
 - Brill daily 2026-10-20, board 4: the cue of the raised minor; the
   rest of "Over their raise" is standard practice, not yet cited.
+- **Bridge Bum**, "Unusual 2NT" (<https://www.bridgebum.com/unusual_2nt.php>,
+  2026-10-30): "also in effect if both opponents have bid up to 2♠",
+  the unbid suits, extra values after their two-over-one: the 2NT after
+  both opponents have bid. The balancing 2NT after their raise and the
+  2NT after a 1NT response are standard practice, not yet cited.
+- **Wikipedia**, "Unusual notrump" (2026-10-30): the two lowest unbid
+  suits; a 4NT overcall shows the same two suits as 2NT, an extreme
+  two-suiter (usually six-five). The balancing 4NT and the 4NT over
+  their raised preempt are that reading in seats it does not name; our
+  five-five strength is ours.
+- **Brill's convention files** (2026-10-30 gap list): where Rusty had no
+  rule; hints, not copied.

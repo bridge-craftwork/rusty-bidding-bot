@@ -41,3 +41,33 @@ vul     None
 N J6543.A8.Q9.AQ98      | 1S P 4D X            | 4S     | 13 HCP, the diamond queen wasted: sign-off
 S AKT87.KQT62.3.64      | 1S P 4D X 4S P       | P      | partner signed off; 12 HCP is nothing extra
 N AKJ65.A8.865.AQ9      | 1S P 4D X            | 4NT    | 18 HCP, nothing wasted: the slam try stands
+
+# ── Splinter in their suit, over a two-level overcall ─────────────────
+dealer  N
+vul     None
+S A974.KJ85.AQ63.7      | 1H 2C                | 4C     | 14 HCP, four hearts, a small singleton in their clubs
+S KQ74.7.A852.K863      | 1S 2H                | 4H     | 12 HCP, four spades, singleton heart: 4H is the splinter, not to play
+S KQ74.A852.7.K863      | 1S 2D                | 4D     | the splinter in their diamonds
+S KQ74.A852.K863.K      | 1S 2C                | X      | the singleton is the king: no splinter (the negative double, as before)
+N KQ74.A852.K863.7      | P P 1S 2C            | 3C     | a passed hand does not splinter over the overcall
+N AQ975.KJ4.KQ3.J2      | 1S 2D 4D P           | 4S     | ♦KQ wasted: game
+N AQ975.KJ4.A32.J2      | 1S 2D 4D P           | 4H     | 15 HCP, nothing wasted, ♣J2 bare: a control bid
+# ── Opener's splinter over a two-over-one ─────────────────────────────
+N AQ742.KJ85.A63.7      | 1S P 2H P            | 4C     | 15 HCP, four hearts, singleton club: slam interest
+N AQ742.KJ85.7.A63      | 1S P 2H P            | 4D     | the diamond splinter
+N 7.KQJ85.A63.AQ74      | 1H P 2C P            | 3S     | 15 HCP, four clubs, singleton spade: 3S past the reverse
+N 7.KQJ85.Q63.KJ74      | 1H P 2C P            | 3C     | 12 HCP: the plain raise, no splinter
+S K4.AQ985.K84.J52      | 1S P 2H P 4C P       | 4H     | 13 HCP, nothing extra: game
+S K4.AQ985.AK84.52      | 1S P 2H P 4C P       | 4NT    | 16 HCP, nothing wasted in clubs: the keycard ask
+S KJ4.92.K8.AKJ852      | 1H P 2C P 3S P       | 3NT    | ♠KJ wasted, spades held: 3NT
+S 864.A92.K8.AKJ85      | 1H P 2C P 3S P       | 4H     | three hearts, no slam: 4H
+S A64.92.AK8.AKJ85      | 1H P 2C P 3S P       | 4NT    | 18 HCP, nothing wasted: keycard for clubs
+# ── Responder's splinter over opener's raise ──────────────────────────
+S 7.AQ85.KJ7.AK963      | 1C P 1H P 2H P       | 3S     | 17 HCP, four hearts, singleton spade: slam interest
+S AQ742.KJ85.7.AK9      | 1C P 1S P 2S P       | 4D     | 17 HCP, singleton diamond
+S AQ742.K985.7.Q92      | 1C P 1S P 2S P       | 4S     | 11 HCP: game, no splinter
+N K863.A72.Q4.KJ86      | 1C P 1S P 2S P 4D P  | 4S     | ♦Q wasted, a minimum: game
+N K863.A72.84.AQJ6      | 1C P 1S P 2S P 4D P  | 4NT    | 14 HCP, nothing wasted: the keycard ask
+# ── Responder's splinter over opener's second suit ────────────────────
+S AQ74.KJ85.7.Q963      | 1C P 1H P 1S P       | 4D     | 12 HCP, four spades, singleton diamond
+N AK63.A7.84.KJ862      | 1C P 1H P 1S P 4D P  | 4NT    | 15 HCP, nothing wasted: the keycard ask
