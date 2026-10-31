@@ -194,3 +194,38 @@ card    Brill
 dealer  W
 vul     Both
 S AKQJ85.QT8732.5.-     | 1C P 2C            | 3C  | Brill daily 2026-10-20 board 4: Michaels for the majors, not a pass
+
+# After opener and responder have both bid (2026-10-30, gaps found in
+# Brill's convention files): 2NT shows the two unbid suits, five-five.
+# North is the direct seat with dealer East.
+card    21GF-DEFAULT
+dealer  E
+vul     None
+N 7.93.AQJ85.KQT84      | 1H P 1S            | 2N  | 12 HCP, both minors: the two unbid suits
+N 7.93.AQJ85.KQT84      | 1H P 1N            | 2N  | after 1NT only hearts is bid: the minors
+N AQJ85.KQT84.93.7      | 1C P 1D            | 2N  | the majors over 1C P 1D
+N AQJ85.7.KQT84.93      | 1C P 1H            | 2N  | diamonds and spades over 1C P 1H
+N AQJ85.7.KQT84.93      | 1H P 2C            | 2N  | diamonds and spades over 1H P 2C, not a jump
+N 9.KQT85.93.AQJ84      | 1D P 1S            | 2N  | clubs and hearts over 1D P 1S
+N 7.KQT84.AQJ85.93      | 1C P 1N            | 2N  | diamonds and hearts after 1C P 1NT
+N 7.93.QJ985.JT984      | 1H P 1S            | P   | 4 HCP: too weak opposite two bidders
+S 7.93.AQJ85.KQT84      | 1H P 2H P P        | 2N  | balancing over their raise: the minors
+# Advancer.
+S K964.J82.Q.T9532      | 1H P 1S 2N P       | 3C  | five clubs, one diamond: preference
+S 973.KJ84.Q52.T93      | 1C P 1D 2N P       | 3H  | 6 HCP, four hearts: the preference
+S 97.KJ84.A52.KT93      | 1C P 1D 2N P       | 4H  | 11 HCP, four hearts: game
+S K964.J82.Q.T9532      | 1H P 1S 2N X       | 3C  | over their double the same
+S 864.J82.Q5.KT932      | 1H P 1S 2N 3S      | 4C  | they bid on: five clubs competes
+S 8642.J832.Q5.K93      | 1H P 1S 2N 3S      | P   | no four-card fit: pass
+N 7.93.AQJ85.KQT84      | 1H P 1S 2N P 3D P  | P   | a minimum passes the preference
+
+# The Unusual 4NT in the balancing seat and over their raised preempt
+# (21GF-DEFAULT plays it).
+N 8.7.AKJ85.KQJ984      | 4H P P             | 4N  | balancing over 4H: the minors
+N 8.7.AKJ85.KQJ984      | 3H P P             | 4N  | balancing over 3H: four losers
+N 8.7.AKJ85.KQJ984      | 3H P 4H            | 4N  | over their raise to game
+N 8.7.AKJ85.KQJ984      | 2S P 4S            | 4N  | over a weak two raised to game
+N AKJ85.7.KQJ842.8      | 3C P 4H            | 4N  | over 3C P 4H: diamonds and spades
+S 8.7.AKJ85.KQJ984      | 3H P 4H P P        | 4N  | balancing after their raise to game
+S QJ7.Q732.93.QJ63      | 4H P P 4N P        | 5C  | four clubs: the preference
+S Q743.Q732.93.Q63      | 3C P 4H 4N P       | 5S  | four spades, two diamonds: spades
