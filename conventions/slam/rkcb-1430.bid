@@ -14,7 +14,7 @@ module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
   param  m0314 = slam.rkcb.minor_0314 default false
   param  gstyle = general.style
   param  style = slam.cue_bids.style default first_or_second_round
-  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
+  param  kstyle = slam.king_ask.style default five_nt   # five_nt | next_step | none (convention-card 0.28); a card that is silent plays 5NT (2026-10-29)
   param  kspec  = slam.king_ask.specific default false
 
 # ── The ask ───────────────────────────────────────────────────────────
@@ -250,11 +250,11 @@ when rkcb, asked keycards(t)
 # with partner's answer; the deck limit of 5 keycards resolves "1 or 4".
 when rkcb, answered keycards(t)
   7{t}  "Grand slam"
-        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
-  # The king ask (`slam.king_ask.five_nt`, 2026-10-05): every keycard
+        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)
+  # The king ask (`slam.king_ask.style = five_nt`, 2026-10-05): every keycard
   # and the queen are ours, and the grand turns on the side kings.
   5N    "King ask: all keycards and the {t} queen held"
-        when kask5n, we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S
+        when kstyle is five_nt, we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S
         sets ask=kings(t)
         artificial
   6{t}  "Small slam"
@@ -263,9 +263,9 @@ when rkcb, answered keycards(t)
   # count of an open answer is impossible (`kc_high`, slam-entry.bid),
   # so no sign-off: on with all five and the queen, else six.
   7{t}  "Grand slam"
-        when kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S, grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
+        when kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S, grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)
   5N    "King ask: all keycards and the {t} queen held"
-        when kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S
+        when kstyle is five_nt, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S
         sets ask=kings(t)
         artificial
   6{t}  "Small slam"
@@ -295,7 +295,7 @@ when rkcb, answered keycards(t)
 # told only "artificial".
 define side_kings(t) = controls - keycards(N) - keycards(N) - has(K,t)
 
-when kask5n, asked kings(t), !kspec | t is C | t is D
+when kstyle is five_nt, asked kings(t), !kspec | t is C | t is D
   6C  "No king"     shows side_kings(t) = 0   artificial
   6D  "One king"    shows side_kings(t) = 1   artificial
   6H  "Two kings"   shows side_kings(t) = 2   artificial
@@ -310,7 +310,7 @@ when kask5n, asked kings(t), !kspec | t is C | t is D
 define partner_side_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S)
 define our_side_kings(t) = side_kings(t) + partner_side_kings
 
-when kask5n, answered kings(t), !kspec | t is C | t is D
+when kstyle is five_nt, answered kings(t), !kspec | t is C | t is D
   7{t}  "Grand slam"
         when our_side_kings(t) >= 3
   7{t}  "Grand slam"
@@ -331,7 +331,7 @@ when kask5n, answered kings(t), !kspec | t is C | t is D
 # places the grand: with every side king accounted for (in either hand,
 # or the asker short in the suit, at most one card), seven; with one
 # missing and askable, he asks; else six.
-when kask5n, kspec, asked kings(t), t is H | t is S
+when kstyle is five_nt, kspec, asked kings(t), t is H | t is S
   6C  "The club king"
       shows has(K,C)
       when  t is not C
@@ -353,7 +353,7 @@ define king_held(s) = has(K,s) | partner.last = 6{s}   # partner's answer names 
 define kings_unheld(t) = (!(t is C | king_held(C))) + (!(t is D | king_held(D))) + (!(t is H | king_held(H))) + (!(t is S | king_held(S)))
 define king_margin(t) = hcp + partner.hcp.min >= 33, C<=1 | D<=1 | H<=1 | S<=1 | t>=6 | partner.t.min>=6
 
-when kask5n, kspec, answered kings(t), t is H | t is S
+when kstyle is five_nt, kspec, answered kings(t), t is H | t is S
   # Ask when the king asked for is the only one missing, or one of two
   # with the margin for the other (the answer 7 can leave one unknown).
   6D    "Asks for the diamond king"  alert

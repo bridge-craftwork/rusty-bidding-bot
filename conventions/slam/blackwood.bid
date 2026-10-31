@@ -10,7 +10,7 @@ module blackwood "Blackwood (standard)"
   skill  bidding_conventions/blackwood
   skill  partnership_bidding/blackwood
   param  style = slam.cue_bids.style default first_or_second_round
-  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
+  param  kstyle = slam.king_ask.style default five_nt   # five_nt | next_step | none (convention-card 0.28); a card that is silent plays 5NT (2026-10-29)
 
 # ── The ask ───────────────────────────────────────────────────────────
 #
@@ -170,10 +170,10 @@ when asked aces
 # The asker places the contract: slam with at most one ace missing,
 # otherwise five of the trump suit (or pass when that is the answer).
 when answered aces
-  # The king ask (`slam.king_ask.five_nt`, 2026-10-05): all four aces
+  # The king ask (`slam.king_ask.style = five_nt`, 2026-10-05): all four aces
   # are ours and the grand turns on the kings.
   5N        "King ask: all the aces held"
-            when kask5n, we.keycards(N)=4
+            when kstyle is five_nt, we.keycards(N)=4
             sets ask=kings(N)
             artificial
             priority 1
@@ -192,7 +192,7 @@ when answered aces
 # as ACBL's SAYC booklet. Kings are controls less two for each ace.
 define bw_kings = controls - keycards(N) - keycards(N)
 
-when kask5n, asked kings(N)
+when kstyle is five_nt, asked kings(N)
   6C  "No king"       shows bw_kings = 0   artificial
   6D  "One king"      shows bw_kings = 1   artificial
   6H  "Two kings"     shows bw_kings = 2   artificial
@@ -204,7 +204,7 @@ when kask5n, asked kings(N)
 # of our suit.
 define partner_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N) + (partner.last = 6N)
 
-when kask5n, answered kings(N)
+when kstyle is five_nt, answered kings(N)
   7{trump}  "Grand slam"
             when bw_kings + partner_kings >= 4
   7{trump}  "Grand slam"
