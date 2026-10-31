@@ -12,6 +12,7 @@ with `rbb call` and reports where the two differ.
     brill_cases.py run [--jobs N]                      results (cached)
     brill_cases.py report [--top 15] [--out FILE.md]   per Brill file
     brill_cases.py live [-n 200] [--seed 1]            ask Brill's live /bid a sample
+    brill_cases.py auctions [--out FILE]               activation auctions for brill_probe.py --list
 
 Contexts: exact auctions as written; `PX` (pass or double) is read as
 Pass; `Ma`/`Mi`/`oMa`/`oMi` are expanded to both suit choices and marked
@@ -324,6 +325,36 @@ def report(args):
     print(text if not args.out else f"wrote {args.out}: {tot['plain']} plain cases, {tot['plain_same']} agree")
 
 
+def auctions(args):
+    """Brill's convention activations as an auction list for brill_probe.py
+    (--list): each activation rule's context and bid, wildcards expanded,
+    one row per distinct auction (the files that start a convention with
+    it in `files`). brill_probe fetches Brill's /explain of each and
+    compares every call with Rusty's reading."""
+    rows = {}
+    for path in sorted(glob.glob(os.path.join(args.data, 'Conventions', '*.json'))):
+        name = os.path.basename(path)[:-5]
+        if name == 'manifest':
+            continue
+        d = json.load(open(path))
+        for a in d.get('ActivationRules', []) or []:
+            fc, bid = a.get('forContext', ''), a.get('bid', '')
+            got, _ = expand((fc.split('-') if fc else []) + [bid])
+            for g in got:
+                if not legal(g):
+                    continue
+                auction = to_rbb(g)
+                r = rows.setdefault(auction, {'auction': auction, 'brill': ' '.join(g), 'boards': 1,
+                                              'gib_boards': 0, 'files': []})
+                if name not in r['files']:
+                    r['files'].append(name)
+    out = args.out or os.path.join(CACHE, 'auctions-conventions.json')
+    lst = sorted(rows.values(), key=lambda r: (len(r['brill'].split()), r['brill']))
+    json.dump({'source': 'Brill ActivationRules (../brill-data)', 'boards': len(lst), 'distinct': len(lst),
+               'top': len(lst), 'covered_boards': len(lst), 'auctions': lst}, open(out, 'w'), indent=1)
+    print(f'{len(lst)} auctions -> {out}')
+
+
 def live(args):
     """Ask Brill's live service a sample of the cases: does Brill's engine
     make the call its file names? The sample is fixed by --seed, half plain
@@ -391,10 +422,11 @@ def main():
     e = sub.add_parser('extract'); e.add_argument('--only')
     r = sub.add_parser('run'); r.add_argument('--jobs', type=int, default=int(os.environ.get('RBB_CPUS', max(1, (os.cpu_count() or 4) - 2))))
     p = sub.add_parser('report'); p.add_argument('--top', type=int, default=15); p.add_argument('--out')
+    au = sub.add_parser('auctions'); au.add_argument('--out')
     lv = sub.add_parser('live'); lv.add_argument('-n', type=int, default=200); lv.add_argument('--seed', type=int, default=1)
     lv.add_argument('--offline', action='store_true'); lv.add_argument('--top', type=int, default=40)
     args = ap.parse_args()
-    {'extract': extract, 'run': run, 'report': report, 'live': live}[args.cmd](args)
+    {'extract': extract, 'run': run, 'report': report, 'live': live, 'auctions': auctions}[args.cmd](args)
 
 
 if __name__ == '__main__':

@@ -142,7 +142,7 @@ def cmd_auctions(args):
 
 
 def load_list(args):
-    p = cache_dir(args) / f"auctions-top{args.top}.json"
+    p = Path(args.list) if args.list else cache_dir(args) / f"auctions-top{args.top}.json"
     if not p.exists():
         sys.exit(f"{p} missing: run `auctions` first")
     return json.load(open(p))
@@ -682,6 +682,9 @@ def main():
     ap.add_argument("--set", action="append", default=[], metavar="PATH=VALUE",
                     help="change a card field for our reading (repeatable)")
     ap.add_argument("--tag", help="suffix for the output files (report-top<N>-TAG.*)")
+    ap.add_argument("--list", help="auction list to fetch and report on, in the auctions file's "
+                    "format, instead of auctions-top<N>.json (e.g. brill_cases.py auctions); "
+                    "use with --tag")
     ap.add_argument("--hcp-tol", type=int, default=2)
     ap.add_argument("--jobs", type=int, default=4)
     ap.add_argument("--groups", type=int, default=60, help="groups in the markdown")
@@ -689,7 +692,7 @@ def main():
     args = ap.parse_args()
     args.interval = max(args.interval, 1.0)
     if args.cmd in ("auctions", "run"):
-        if args.cmd == "auctions" or not (cache_dir(args) / f"auctions-top{args.top}.json").exists():
+        if args.cmd == "auctions" or (not args.list and not (cache_dir(args) / f"auctions-top{args.top}.json").exists()):
             cmd_auctions(args)
     if args.cmd in ("fetch", "run"):
         cmd_fetch(args)
