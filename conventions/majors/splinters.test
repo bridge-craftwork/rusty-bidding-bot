@@ -55,13 +55,10 @@ N AQ975.KJ4.A32.J2      | 1S 2D 4D P           | 4H     | 15 HCP, nothing wasted
 # ── Opener's splinter over a two-over-one ─────────────────────────────
 N AQ742.KJ85.A63.7      | 1S P 2H P            | 4C     | 15 HCP, four hearts, singleton club: slam interest
 N AQ742.KJ85.7.A63      | 1S P 2H P            | 4D     | the diamond splinter
-N 7.KQJ85.A63.AQ74      | 1H P 2C P            | 3S     | 15 HCP, four clubs, singleton spade: 3S past the reverse
+N 7.KQJ85.A63.AQ74      | 1H P 2C P            | 3C     | 15 HCP, four clubs, singleton spade: no splinter raising a minor (natural for now, Rick 2026-10-31)
 N 7.KQJ85.Q63.KJ74      | 1H P 2C P            | 3C     | 12 HCP: the plain raise, no splinter
 S K4.AQ985.K84.J52      | 1S P 2H P 4C P       | 4H     | 13 HCP, nothing extra: game
 S K4.AQ985.AK84.52      | 1S P 2H P 4C P       | 4NT    | 16 HCP, nothing wasted in clubs: the keycard ask
-S KJ4.92.K8.AKJ852      | 1H P 2C P 3S P       | 3NT    | ♠KJ wasted, spades held: 3NT
-S 864.A92.K8.AKJ85      | 1H P 2C P 3S P       | 4H     | three hearts, no slam: 4H
-S A64.92.AK8.AKJ85      | 1H P 2C P 3S P       | 4NT    | 18 HCP, nothing wasted: keycard for clubs
 # ── Responder's splinter over opener's raise ──────────────────────────
 S 7.AQ85.KJ7.AK963      | 1C P 1H P 2H P       | 3S     | 17 HCP, four hearts, singleton spade: slam interest
 S AQ742.KJ85.7.AK9      | 1C P 1S P 2S P       | 4D     | 17 HCP, singleton diamond

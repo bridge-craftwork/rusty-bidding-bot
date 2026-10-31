@@ -51,8 +51,8 @@ Built 2026-09-28.
   Not over our 1NT overcall either: no corpus evidence
   (We_Overcall_1N_then_Gerber has no BBA file). Default (non-Brill):
   after 2♣–2♦–3NT 4♣ stays over-3nt.bid's club slam try (as over the 3NT
-  opening), and after 2♣ (overcall) … 3NT there is still no 4♣ rule
-  (over-3nt.bid stands aside once they bid); see "Open questions".
+  opening), and after 2♣ (overcall) … 3NT it is the club slam try too
+  (over-3nt.bid; Rick's rulings below).
 - The card's other Gerber fields: `gerber.over_nt_seq` is read (above);
   `gerber.over` is free text (Bridge-Classroom's seed card says
   `1nt_2nt_only`, which is what the opening context does);
@@ -195,15 +195,19 @@ Measured (fast lane, `--limit 50`, against the tree before):
   (+104, contract +109, doubling -5); calls agreeing 144,469 →
   144,447 (BBA bids 6NT directly where we ask first).
 
-## Open questions (for Rick)
+## Rick's rulings (2026-10-31)
 
-- 1♣–2NT–4♣: Gerber (our choice, as PBS Gerber_By_Opener and Brill) or a
-  natural club slam try?
-- Default card, 2♣–2♦–3NT–4♣: our club slam try (as over the 3NT
-  opening) or Gerber (Brill, and many partnerships)? And after their
-  overcall (2♣ (2♥) P P 3NT) the default has no 4♣ at all.
-- Gerber over interference: we kept it on over a double and any
-  two-level overcall; some play 4♣ as a cue-bid after (2♣). Fine?
+- **Gerber needs a jump**: where 4♣ is a jump it is Gerber, where it is
+  not it is a slam try. So 1♣–2NT–4♣ is Gerber (a jump over 2NT), and
+  on the default cards 2♣–2♦–3NT–4♣ stays the club slam try; after
+  their overcall (2♣ (2♥) P P 3NT) 4♣ is now the club slam try too
+  (over-3nt.bid).
+- Over interference to 1NT (a double or any two-level overcall,
+  including 2♣) 4♣ stays Gerber.
+- The Brill card keeps Gerber over 3NT (the 3NT opening and opener's
+  3NT rebid after 2♣): there Rusty's partner is a Brill robot, which
+  reads 4♣ as Gerber by its own rules. A partnership treatment, not
+  the general principle.
 
 ## Brill (general.system = brill, 2026-10-15)
 

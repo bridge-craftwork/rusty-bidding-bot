@@ -304,11 +304,13 @@ define spl_net16(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=16) | (!has(K,
 define spl_net17(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=17) | (!has(K,s), !has(Q,s), has(J,s), tp(t)>=18) | (!has(K,s), has(Q,s), !has(J,s), tp(t)>=19) | (!has(K,s), has(Q,s), has(J,s), tp(t)>=20) | (has(K,s), !has(Q,s), !has(J,s), tp(t)>=20) | (has(K,s), !has(Q,s), has(J,s), tp(t)>=21) | (has(K,s), has(Q,s), !has(J,s), tp(t)>=22) | (has(K,s), has(Q,s), has(J,s), tp(t)>=23)
 define spl_bare(t, s) = (t is not C, s is not C, C>=2, !has(A,C), !has(K,C)) | (t is not D, s is not D, D>=2, !has(A,D), !has(K,D)) | (t is not H, s is not H, H>=2, !has(A,H), !has(K,H)) | (t is not S, s is not S, S>=2, !has(A,S), !has(K,S))
 
-# Opener over a two-over-one: a jump in a new suit past the reverse
-# (1♥–2♣/2♦–3♠) or a double jump (1♠–2♥–4♣/4♦) agrees responder's suit
-# with four, a singleton or void and 14+ HCP: the fast 4♥ (1♠–2♥–4♥) is
+# Opener over a two-over-one: a double jump (1♠–2♥–4♣/4♦) agrees
+# responder's hearts with four, a singleton or void and 14+ HCP: the fast 4♥ (1♠–2♥–4♥) is
 # the minimum, so the splinter has slam interest. Seat 1 or 2: after a
-# passed hand 2♣ is Drury and 2♥ no two-over-one.
+# passed hand 2♣ is Drury and 2♥ no two-over-one. Opener's splinters
+# raising a two-over-one minor (1♥–2m–3♠, 1♠–2♣–4♦) and 1♠–2m–3♥ stay
+# natural for now (Rick, 2026-10-31: advanced splinters deserve research
+# as a whole).
 after 1S (P) 2H (P) when by_open, seat <= 2
   4y  "Splinter: 4+ hearts, 14+, at most one {y}"  alert
       shows H>=4, spl_short(y), hcp>=14
@@ -316,13 +318,6 @@ after 1S (P) 2H (P) when by_open, seat <= 2
       sets  trump=H, forcing=game
       artificial
       priority 2
-after 1H (P) 2m (P) when by_open, seat <= 2
-  3S  "Splinter: 4+ {m}, 14+, at most one spade"  alert
-      shows m>=4, spl_short(S), hcp>=14
-      sets  trump=m, forcing=game
-      artificial
-      priority 2                       # ahead of the raise to 3m
-
 # Responder over it: the two-over-one was 12+ (11+ forcing), opener
 # 14+ with shortness, so 16 support points less waste make the try.
 after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
@@ -367,32 +362,6 @@ after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
       sets  ask=keycards(trump)
       artificial
       priority 12
-
-# Over the spade splinter in a minor the games are 4♥ (three hearts
-# opposite opener's five, the ruffs in the short hand), 3NT with the
-# spades held, else five of the minor. A slam try, from 17 less waste
-# (a minor slam needs more than a major's), is the keycard ask; the
-# control-bid ladder would collide with 4♥ as a game.
-after 1H (P) 2m (P) 3S (P) when by_open
-  4H  "Game in hearts: three hearts, no slam interest"
-      shows H>=3, !spl_net17(m,S)
-      priority 13
-  3N  "Game in notrump: spades held, no slam interest"
-      shows stop(S), !spl_net17(m,S)
-      priority 12
-  5{m}  "Game in {m}: no slam interest"
-      shows !spl_net17(m,S)
-      priority 11
-  4N  "Keycard ask in {trump}"
-      shows spl_net17(m,S)
-      when  rkcb
-      sets  ask=keycards(trump)
-      artificial
-      priority 12
-  5{m}  "Game in {m}: slam values, no keycard ask"
-      shows spl_net17(m,S)
-      when  !rkcb
-      priority 10
 
 # Responder over opener's single raise: a jump in a new suit (1m–1♥–2♥–
 # 3♠) or a double jump below game (1x–1M–2M–4y) is a splinter with slam

@@ -22,3 +22,10 @@ dealer  S
 N AQ4.KJ5.J953.K75      | 1D P 2C P 3N P                       | 4NT    | 14 facing 18-21: 32-35, invite
 card    Basic-Bridge slam.quantitative_4nt.play=false
 N AQ4.KJ5.J953.K75      | 1D P 2C P 3N P                       | P      | no quantitative 4NT on the card: pass
+
+# After their overcall of our 2♣, 4♣ over opener's 3NT is not a jump: the
+# club slam try, not Gerber (Rick, 2026-10-31).
+card    Basic-Bridge
+dealer  N
+S 74.952.83.AKJ652      | 2C 2H P P 3N P                       | 4C     | six clubs and slam values: the club slam try
+S 74.952.83.KQJ652      | 2C 2H P P 3N P                       | P      | too little for a slam try

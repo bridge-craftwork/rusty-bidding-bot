@@ -146,17 +146,15 @@ spec; the ranges are ours.
   where we now bid it (After_Opp_Overcalls 176, Dealing_with_Overcalls_Weak
   240, Transfer_Advances 23) are BBA's own call.
 - **Opener over a two-over-one** (seat 1 or 2 only: a passed hand's 2♣ is
-  Drury): 1♠–2♥–4♣/4♦ and 1♥–2♣/2♦–3♠, four-card support, a small
-  singleton or void, 14+ HCP: the fast 4♥ (1♠–2♥–4♥, rebids.bid 14-17)
-  and the raise to 3m are the other hands, so the splinter carries slam
-  interest. BBA bids 1♥–2♣/2♦–3♠ the same (Two_Over_One 380, Serious 15,
-  Slam_After_Major_Fit 445). Responder counts support points less waste
-  from 16 over a heart splinter (4♥ or a control bid / keycard, as
-  above); over the spade splinter in a minor: 4♥ with three hearts, 3NT
-  with spades held, else five of the minor, and from 17 less waste the
-  keycard ask (no control-bid ladder there: 4♥ is a game). Not written:
-  1♠–2m–3♥ and the four-level splinters for a minor (1♠–2♣–4♦), which
-  some play as natural; open question below.
+  Drury): 1♠–2♥–4♣/4♦, four hearts, a small singleton or void, 14+ HCP:
+  the fast 4♥ (1♠–2♥–4♥, rebids.bid 14-17) is the other hand, so the
+  splinter carries slam interest. Responder counts support points less
+  waste from 16 (4♥ or a control bid / keycard, as above).
+- **Natural for now** (Rick, 2026-10-31: "advanced splinters deserve
+  research as a whole"): opener's splinters raising a two-over-one minor
+  (1♥–2♣/2♦–3♠, 1♠–2♣–4♦) and 1♠–2m–3♥. The 1♥–2m–3♠ splinter was
+  written and taken out again; BBA bids it (Two_Over_One 380, Serious
+  15, Slam_After_Major_Fit 445), so those boards go back to differing.
 - **Responder over opener's single raise**: 1m–1♥–2♥–3♠ and
   1x–1M–2M–4y (y a new suit below 4M): 4+ trumps, a small singleton or
   void, 18+ support points (slam interest: the raise is 12-15 and plain
@@ -192,8 +190,7 @@ it reached the grand that par wants.
   enough that 500 random boards would not show it. Our rules have no
   meaning for those jumps, so nothing conflicts (fit-showing jumps are
   in new suits; the mixed-raise jump cue is direct-seat `(1x) 1y (P)`).
-  Question for Rick: add it, and under which field (a new
-  `overcalls.responses.splinters` in convention-card)?
+  Rick, 2026-10-31: not now.
 - **After Stayman** (1NT–2♣–2♥–4♣/4♦): 4♣ there is Gerber on many cards;
   left to the notrump modules.
 - 1♥ 1♠ 2♠ (P) 4♣ (the task excluded it) and the splinters over 1NT
