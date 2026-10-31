@@ -98,9 +98,12 @@ Splinters_By_Opener −1,107 → −859.
   splinters there with less (1♦–3♠ and 1♦–3♥ are its two costliest
   divergences). Left for a separate change.
 - Mini-splinters (the field exists, no corpus card sets it).
-- Splinters after a 2/1 or a jump (1♠–2♣–2♦–4♥), and Rick's card's
-  `slam.control_bids` text is not read.
-- Splinters in competition: the patterns need the opponents to pass.
+- Splinters after a jump or a 2/1 rebid (1♠–2♣–2♦–4♥), and Rick's
+  card's `slam.control_bids` text is not read. Opener's splinter over the
+  2/1 itself and responder's over opener's raise or second suit are
+  written ("Later splinters", below).
+- Splinters in competition: only responder's in their suit over a
+  two-level overcall (below); the rest need the opponents to pass.
 - **Transfer Walsh** (2026-10-05): opener's splinters stand aside after
   1♣-1♦/1♥ when the card plays transfer responses
   (`minor_openings.one_club.transfer_resp`): they read the transfer as
@@ -127,6 +130,72 @@ opposite a sign-off is no slam try by any count here; the slam on the
 day was the misreading's luck. Opener's redouble or pass over the
 double (control-showing) is not written.
 
+## Later splinters (2026-10-30)
+
+Gaps found by comparing Brill's convention files with our rules (calls
+we had no rule for; brill_probe/brill_cases, the "Splinter" and
+"Overcall1HSplinter" groups). Brill's definitions were the hint, not the
+spec; the ranges are ours.
+
+- **In their suit over a two-level overcall**: 1♥ (2♣) 4♣, 1♥ (2♦) 4♦,
+  1♠ (2♣/2♦/2♥) 4 of their suit: the responder's splinter (4+ trumps,
+  12-15 HCP or 11 with a void, a small singleton or void in their suit),
+  not by a passed hand. The simple cue bid stays the limit raise or
+  better. Opener answers as over the uncontested splinter (the opener's
+  block takes `1M (2x) 4x (P)` too). BBA plays it: the corpus boards
+  where we now bid it (After_Opp_Overcalls 176, Dealing_with_Overcalls_Weak
+  240, Transfer_Advances 23) are BBA's own call.
+- **Opener over a two-over-one** (seat 1 or 2 only: a passed hand's 2♣ is
+  Drury): 1♠–2♥–4♣/4♦, four hearts, a small singleton or void, 14+ HCP:
+  the fast 4♥ (1♠–2♥–4♥, rebids.bid 14-17) is the other hand, so the
+  splinter carries slam interest. Responder counts support points less
+  waste from 16 (4♥ or a control bid / keycard, as above).
+- **Natural for now** (Rick, 2026-10-31: "advanced splinters deserve
+  research as a whole"): opener's splinters raising a two-over-one minor
+  (1♥–2♣/2♦–3♠, 1♠–2♣–4♦) and 1♠–2m–3♥. The 1♥–2m–3♠ splinter was
+  written and taken out again; BBA bids it (Two_Over_One 380, Serious
+  15, Slam_After_Major_Fit 445), so those boards go back to differing.
+- **Responder over opener's single raise**: 1m–1♥–2♥–3♠ and
+  1x–1M–2M–4y (y a new suit below 4M): 4+ trumps, a small singleton or
+  void, 18+ support points (slam interest: the raise is 12-15 and plain
+  game values bid 4M). Opener tries for slam from 15 less waste.
+- **Responder over opener's second suit**: 1♣–1♥–1♠–4♦ and
+  1♦–1♥–1♠–4♣ agree spades as a splinter over 1♠ would (12-15, 11 with
+  a void); opener counts from 14 as over the splinter of his opening.
+
+The counts are named once (`spl_netN(t, s)`, `spl_short(s)`,
+`spl_bare(t, s)`, defined in splinters.bid) for the new blocks; the
+older blocks still spell the eight branches out.
+
+Measured: `compare` on Splinters, Splinters_By_Opener, the Gavin
+splinters, Slam_After_Major_Fit, Two_Over_One, Reverse_After_Two_Over_One,
+After_Opp_Overcalls, Dealing_with_Overcalls_Strong/Weak and
+Mixed_Raise_In_Comp (500 boards each): 6 boards changed, every new
+splinter BBA's own call; errors +11 on one board (Slam_After_Major_Fit
+86, 7♥ for 6♥), 0 on the rest. The all-scenario tripwire (`--limit 50`,
+17,100 boards): 2 boards changed (Serious 15, Transfer_Advances 23), both
+to BBA's call; totals unchanged.
+
+Accepted difference: Dealing_with_Overcalls_Weak 203, 1♠ (2♥) with a
+heart void and 13 HCP: we splinter 4♥, BBA cue-bids 3♥; both reach 5♠.
+Slam_After_Major_Fit 86: opener with seven hearts and four clubs
+splinters 1♥–2♣–3♠ (void); showing the hearts first may be better, but
+it reached the grand that par wants.
+
+**Left out**:
+- **Advancer's splinter** (Brill's Overcall1HSplinter: (1♣) P (1♦) 1♥
+  (1NT/P/1♠/2♣/2♦) 3♣/3♦/3♠/4♣/4♦, a passed hand's jump in their suit
+  raising the overcall). No card field covers it, so it cannot be self
+  A/B'd, and the position (both opponents bid, advancer passed) is rare
+  enough that 500 random boards would not show it. Our rules have no
+  meaning for those jumps, so nothing conflicts (fit-showing jumps are
+  in new suits; the mixed-raise jump cue is direct-seat `(1x) 1y (P)`).
+  Rick, 2026-10-31: not now.
+- **After Stayman** (1NT–2♣–2♥–4♣/4♦): 4♣ there is Gerber on many cards;
+  left to the notrump modules.
+- 1♥ 1♠ 2♠ (P) 4♣ (the task excluded it) and the splinters over 1NT
+  interference.
+
 ## Sources
 
 - **Convention description**: Wikipedia, "Splinter bid" (double jump in
@@ -143,6 +212,14 @@ double (control-showing) is not written.
   `probes/splinter-by-opener-1D-1S.toml`.
 - **Corpus measurements** (2026-09-28): the slam line and the ranges,
   the tables above.
+- **Later splinters** (2026-10-30): the splinter in the overcaller's
+  suit, opener's over a two-over-one and responder's over a raise or
+  opener's second suit follow the Wikipedia definition (double jump, or
+  a jump past a reverse, in a side suit; four trumps; shortness) applied
+  one round later; the ranges are ours (above), standard practice, not
+  yet cited beyond that. BBA bids the same calls on the corpus boards
+  named above. Brill's convention files pointed at the gaps (no text
+  taken from them).
 - **Rick's rulings**: control bids before keycard when a suit is
   unprotected, and the 33-support-point slam count (control-bids.bid,
   rkcb-1430.bid, 2026-09-25/27); the wasted-honour count here is a

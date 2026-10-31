@@ -9,7 +9,15 @@ goes down undoubled and beats par that way taken as doubled
 On every board where our auction changed: the change in our errors
 (positive: the variant makes fewer), split by error type (contract,
 doubling) and by side, the side that made the first differing call
-("actor") against the other one. Beside it, the change in distance from
+("actor") against the other one.
+
+The verdict (Rick, 2026-10-31) is the actor's alone: "when looking at a
+specific change, we should just look at the side that is bidding that
+change", its result taken as doubled where it went down undoubled above
+par; the opponents' failure to double it says nothing about the call.
+A bidding change is judged on the actor's contract errors, a doubling
+change (`--judge doubling`) on the actor's doubling errors. Everything
+else is printed as context. Beside it, the change in distance from
 par and the double-dummy IMPs to the actor (sideimps.py), each with the
 even / odd board halves; then the first differing calls (base ->
 variant) that gained and lost most, and the whole-set doubling errors
@@ -63,12 +71,13 @@ def whole(boards):
     return c, d
 
 
-def diff(base, var):
+def diff(base, var, judge='contract'):
     """The board-by-board comparison of two runs' boards: (cells, n,
     skipped, by, cnt, changed). cells[name] = [even, odd] IMPs; n =
     [even, odd] boards changed; by/cnt: IMPs and boards per first
     differing call; changed: (scenario, board, errors gain, actor side)
-    per changed board."""
+    per changed board, the gain the actor's `judge` errors (contract or
+    doubling) only. byj: that gain per first differing call."""
     key = lambda x: (x['scenario'], x['board'])
     B = {key(x): x for x in base}
 
@@ -79,6 +88,7 @@ def diff(base, var):
     by = collections.Counter()
     cnt = collections.Counter()
     changed = []
+    byj = collections.Counter()
     for v in var:
         b = B.get(key(v))
         if not b:
@@ -121,8 +131,10 @@ def diff(base, var):
         k = f"{' '.join(pre[-3:])} : {ob[i] if i < len(ob) else '-'} -> {ov[i] if i < len(ov) else '-'}"
         by[k] += tot
         cnt[k] += 1
-        ga = sum(eb[kd][actor] - ev[kd][actor] for kd in ('contract', 'doubling'))
+        ga = eb[judge][actor] - ev[judge][actor]
+        byj[k] += ga
         changed.append((v['scenario'], v['board'], ga, 'NS' if actor == 0 else 'EW', k))
+    diff.byj = byj
     return cells, n, skipped, by, cnt, changed
 
 
@@ -131,13 +143,20 @@ def main():
     ap.add_argument('base')
     ap.add_argument('variant')
     ap.add_argument('--top', type=int, default=6)
+    ap.add_argument('--judge', choices=['contract', 'doubling'], default='contract',
+                    help='the actor errors that judge the change: contract (a bidding change, default) or doubling')
     a = ap.parse_args()
     base = json.load(open(a.base))['boards']
     var = json.load(open(a.variant))['boards']
-    cells, n, skipped, by, cnt, _ = diff(base, var)
+    cells, n, skipped, by, cnt, _ = diff(base, var, a.judge)
 
     N = n[0] + n[1]
     print(f'boards changed {N} (even {n[0]}, odd {n[1]}; skipped {skipped})')
+    e, o = cells[f'{a.judge} actor']
+    agree = 'agree' if (e > 0 and o > 0) or (e < 0 and o < 0) else 'differ'
+    print(f'VERDICT: the actor\'s {a.judge} errors {e + o:+} IMPs '
+          f'({(e + o) / N if N else 0:+.2f}/bd; halves {e:+} / {o:+}, {agree}; positive = fewer)')
+    print('context:')
     order = ['errors', 'contract actor', 'contract other', 'doubling actor',
              'doubling other', 'distance from par', 'side IMPs (actor)']
     for name in order:
@@ -151,11 +170,12 @@ def main():
     cv, dv = whole(var)
     print(f'whole set vs BBA: contract {cb:+} -> {cv:+}, doubling {db:+} -> {dv:+} '
           f'(net {cb + db:+} -> {cv + dv:+})')
-    print('first differing calls (context : base -> variant), IMPs by errors:')
-    for k, g in sorted(by.items(), key=lambda z: z[1])[:a.top]:
-        print(f'  {g:+6} {cnt[k]:5}  {k}')
-    for k, g in sorted(by.items(), key=lambda z: -z[1])[:a.top]:
-        print(f'  {g:+6} {cnt[k]:5}  {k}')
+    byj = diff.byj
+    print(f'first differing calls (context : base -> variant), the actor\'s {a.judge} errors (all errors):')
+    for k, g in sorted(byj.items(), key=lambda z: z[1])[:a.top]:
+        print(f'  {g:+6} ({by[k]:+6}) {cnt[k]:5}  {k}')
+    for k, g in sorted(byj.items(), key=lambda z: -z[1])[:a.top]:
+        print(f'  {g:+6} ({by[k]:+6}) {cnt[k]:5}  {k}')
 
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ module over-3nt "Slam after partner's 3NT"
   param  q4n   = slam.quantitative_4nt.play default true
   param  texas = notrump.texas.play default false
   param  tu    = notrump.texas.two_under default false
+  param  system = general.system   # `brill`: Gerber here instead (gerber.bid)
 
 # After 2♣–2♦–3NT (24+ shown, opener's second bid) Texas uses 4♦/4♥, or
 # 4♣/4♦ for 2-under (texas-transfers.bid): the tries and natural bids
@@ -56,6 +57,24 @@ when partner.last=3N, !they.bid, we.trump is none
       shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
       shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
       when  !(texas_3n, texas, !tu)
+      priority -10
+
+# The same after their overcall of our 2♣ (2♣ (2♥) P (P) 3NT, 2♣ P 2♦
+# (2♥) 3NT), where the block above stops at `!they.bid`. 4♣ is not a
+# jump over 3NT, so it is the club slam try, not Gerber (Rick,
+# 2026-10-31: Gerber needs a jump; without one 4♣ is a slam try).
+# Texas is off after interference, so the tries do not give way to it.
+after 2C (*) P (P) 3N (P) | 2C (P) 2D (*) 3N (P) when they.bid, system is not brill
+  6N  "Small slam"
+      shows hcp + partner.hcp.min >= 34
+      priority -10
+  4C  "Slam try: six or more clubs"
+      shows C>=6, hcp + partner.hcp.min >= 31
+      sets  ask=slam_try(C)
+      priority -10
+  4D  "Slam try: six or more diamonds"
+      shows D>=6, hcp + partner.hcp.min >= 31
+      sets  ask=slam_try(D)
       priority -10
 
 when asked slam_try(m), partner.last=4{m}, we.trump is none

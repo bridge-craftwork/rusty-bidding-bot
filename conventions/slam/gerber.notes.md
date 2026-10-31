@@ -14,16 +14,51 @@ Built 2026-09-28.
   `gerber.only_over_nt_openings` (BBA's "Gerber only for NT openings",
   set on 21GF-MSS, 21GF-Multi and 21GF-NoInvertedMinor). BBA uses it
   there (Gerber_By_Responder: 1♦–1♠–1NT–4♣, 1♣–1♥–2NT–4♣).
-- **Nowhere else.** Not after a transfer, a Stayman answer, over a
-  minor raise, or when clubs have been bid naturally: 1♣–2♣–2NT–4♣ is
+- **Over interference to our 1NT opening** (2026-10-30): after their
+  double or a suit overcall at the two level (1NT (2♣) 4♣, 1NT (2♥) 4♣,
+  1NT (X) 4♣) the jump to 4♣ is still Gerber, on the same hands as
+  without it (`bba` treatment: BBA's 31 HCP). 4♣ is neither a useful
+  cue-bid nor natural there. Off with a 4♣ Texas (`texas_4c`, 2-under).
+- **After Stayman's 2♦** (1NT–2♣–2♦–4♣, 2026-10-30): no suit agreed and
+  clubs not natural, so the jump is Gerber (Bridge Bum: "a jump to 4♣
+  after Stayman"). The hands that bid 6NT there (stayman.bid, 32 between
+  the hands) ask first. Not with `general.style = bba`: BBA's 4♣ there
+  is its minor slam try (stayman.bid, probed). Not after 2♥/2♠: a fit
+  may exist and 4♣ stays free for cue-bids/splinters.
+- **Gerber by opener over a natural 2NT response** (2026-10-30):
+  1♣–2NT–4♣, 1♦–2NT–4♣ (slam values against responder's range, no
+  five-card major) and 2♣–2NT–4♣ (balanced, 33 between the hands: the
+  hands that bid 6NT there ask first). PBS Gerber_By_Opener defines
+  exactly these sequences, citing Bridge Bum. **Decision: 1♣–2NT–4♣ is
+  Gerber, not a club slam try.** Opener's 1♣ is not agreement (it may be
+  three cards, or two on some cards), and opener with real clubs can
+  show them at the three level, still forcing over a natural 2NT.
+  Wikipedia's "not when a natural club suit has been bid" would make it
+  natural; we read that as "after clubs are bid and supported"
+  (1♣–2♣–2NT–4♣ stays off). These and the 1x–1y–NT contexts follow the
+  card's "over NT sequence" (`slam.gerber.over_nt_seq`, default true:
+  the field is not in the `.bbsa` map, so only a card JSON can switch it
+  off; SAYC.json sets it true) and BBA's "Gerber only for NT openings"
+  (`only_over_nt_openings`, which turns them off).
+- **Brill: over opener's 3NT rebid after 2♣** (2♣–2♦–3NT, 2♣ (2♥) P (P)
+  3NT, 2♣ P 2♦ (2♥) 3NT, any overcall), as over Brill's 3NT opening
+  (`general.system = brill`). The Brill card needs its JSON
+  (`-c Brill`); `cards/bbsa/Brill.bbsa` imports without
+  `general.system`, so with it these stay the default.
+- **Nowhere else.** Not after a transfer, a Stayman major answer, over a
+  minor raise, or when clubs have been bid and supported: 1♣–2♣–2NT–4♣ is
   whatever it was before (27 corpus boards, in minor-raise scenarios).
   Not over our 1NT overcall either: no corpus evidence
-  (We_Overcall_1N_then_Gerber has no BBA file).
-- The card's other Gerber fields are left alone: `gerber.over` is free
-  text (Bridge-Classroom's seed card says `1nt_2nt_only`, which is what
-  the opening context does), and `gerber.directly_over_nt`,
-  `over_nt_seq`, `non_nt_seq` (the ACBL card's three boxes) are read by
-  no rule yet. Rick's card sets only `other_conventions.gerber.play`.
+  (We_Overcall_1N_then_Gerber has no BBA file). Default (non-Brill):
+  after 2♣–2♦–3NT 4♣ stays over-3nt.bid's club slam try (as over the 3NT
+  opening), and after 2♣ (overcall) … 3NT it is the club slam try too
+  (over-3nt.bid; Rick's rulings below).
+- The card's other Gerber fields: `gerber.over_nt_seq` is read (above);
+  `gerber.over` is free text (Bridge-Classroom's seed card says
+  `1nt_2nt_only`, which is what the opening context does);
+  `gerber.directly_over_nt` (covered by `play`) and `non_nt_seq` (4♣
+  ace-ask in suit auctions: not played) are read by no rule. Rick's card
+  sets only `other_conventions.gerber.play`.
 
 ## Decisions
 
@@ -130,12 +165,49 @@ would be Stayman first; for Rick.
 
 ## Gaps
 
-- Gerber by opener (1m–2NT–4♣, 2♣–2NT–4♣: Gerber_By_Opener, which BBA
-  cannot bid) and over our 1NT overcall.
-- The card's `gerber.directly_over_nt` / `over_nt_seq` / `non_nt_seq`
-  boxes; `gerber.over` as an enum once its values are known.
+- Gerber over our 1NT overcall; over 2NT after Stayman (2NT–3♣–3♦–4♣:
+  3♣ is Puppet on some cards, so left alone).
+- Interference over our 1NT at the three level (1NT (3x) 4♣): no rule.
+- The card's `gerber.directly_over_nt` / `non_nt_seq` boxes;
+  `gerber.over` as an enum once its values are known; a `.bbsa` mapping
+  for `over_nt_seq` if BBA has one (none known: BBA's only switch is
+  "Gerber only for NT openings").
 - Interference over 4♣ (DOPI/ROPI) is not handled here: after a double
   the answers are as without it.
+
+## Gaps filled 2026-10-30 (Brill convention files)
+
+`brill_probe` / Brill's convention files listed 4♣ = Gerber where we had
+no rule: 1NT (2♣) 4♣; 1♣/1♦/2♣ P 2NT P 4♣; 1NT P 2♣ P 2♦ P 4♣;
+2♣ (2♥/2♠/3♥/3♠) P P 3NT P 4♣; 2♣ P 2♦ (2♥/2♠/3♥/3♠) 3NT P 4♣. All are
+Gerber now on the Brill card (the 3NT ones on Brill only, above), the
+first five on every card that plays Gerber. Brill's definitions were
+hints; the standard sources decide (Sources).
+
+Measured (fast lane, `--limit 50`, against the tree before):
+- Gerber, Gerber_By_Opener, Gerber_By_Responder: no board changed
+  (BBA's auctions never reach 1m–2NT, and our responders bid otherwise).
+- All scenarios (tripwire): only Gerber calls changed. 1NT–2♣–2♦: 6NT →
+  4♣ on 23 replayed boards (Slam_after_Stayman 13, Slam_after_NT 5,
+  ...), 2♣–2NT: 6NT/4NT → 4♣ on 20 boards of our own auctions (3N 9,
+  Grand_Slam_Invite 8, Kokish_Relay 2, NT_Ladder 1), and their
+  follow-ups. vs BBA, par: -6339 → -6230 (+109); errors: -7814 → -7710
+  (+104, contract +109, doubling -5); calls agreeing 144,469 →
+  144,447 (BBA bids 6NT directly where we ask first).
+
+## Rick's rulings (2026-10-31)
+
+- **Gerber needs a jump**: where 4♣ is a jump it is Gerber, where it is
+  not it is a slam try. So 1♣–2NT–4♣ is Gerber (a jump over 2NT), and
+  on the default cards 2♣–2♦–3NT–4♣ stays the club slam try; after
+  their overcall (2♣ (2♥) P P 3NT) 4♣ is now the club slam try too
+  (over-3nt.bid).
+- Over interference to 1NT (a double or any two-level overcall,
+  including 2♣) 4♣ stays Gerber.
+- The Brill card keeps Gerber over 3NT (the 3NT opening and opener's
+  3NT rebid after 2♣): there Rusty's partner is a Brill robot, which
+  reads 4♣ as Gerber by its own rules. A partnership treatment, not
+  the general principle.
 
 ## Brill (general.system = brill, 2026-10-15)
 
@@ -159,8 +231,14 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
   same steps. Wikipedia, "Gerber convention"
   (https://en.wikipedia.org/wiki/Gerber_convention), read 2026-09-28:
   the same answers, not "when a natural club suit bid has been made".
-  Where we differ: Bridge Bum also plays it as a jump after Stayman and
-  over NT overcalls; we do neither yet. Neither page gives the 4NT
+  Where we differ: Bridge Bum also plays it over NT overcalls; we do
+  not yet. The jump after Stayman's 2♦ we now play (2026-10-30); after
+  a major answer we do not.
+- **Gerber by opener:** PBS `btn/Gerber_By_Opener.btn` (1m–2NT–4♣ and
+  2♣–2NT–4♣, citing Bridge Bum). Interference over our 1NT: standard
+  practice, not yet cited (4♣ stays Gerber when it is a jump).
+- **Brill's convention files** (2026-10-30 gap list from brill_probe):
+  hints for where 4♣ is Gerber, not the spec. Neither page gives the 4NT
   sign-off or point counts: the sign-off is standard practice, not yet
   cited; the counts are ours (below).
 - **Rick's rulings:** 17 opposite 15-17 bids slam, 16 invites
@@ -171,4 +249,6 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
   king-ask thresholds (above).
 - **Card fields:** Bridge-Classroom `conventionCatalog.js` (4♣ Gerber:
   directly over NT / over NT sequence / non-NT sequence) and the seed
-  card's `slam.gerber.over = "1nt_2nt_only"`.
+  card's `slam.gerber.over = "1nt_2nt_only"`; convention-card
+  `spec/fields.toml` `slam.gerber.over_nt_seq` (read, default true; not
+  in `bbsa-map.toml`).

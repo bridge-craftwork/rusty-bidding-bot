@@ -91,6 +91,7 @@ name      = "lead-directing-doubles"
 scenarios = ["Lead_Directing_Double"]
 base      = ["competitive.lead_directing_double.play=false"]
 variant   = ["competitive.lead_directing_double.play=true"]
+judge     = "doubling"   # a double of their artificial call: judged by doubling errors (Rick, 2026-10-31)
 
 [[ab]]
 name      = "transfers-after-1M-X"

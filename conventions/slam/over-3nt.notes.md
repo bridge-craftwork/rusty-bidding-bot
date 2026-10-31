@@ -103,6 +103,14 @@ notrump/ (one-nt, stayman, jacoby-transfers, two-nt-responses) and
 base/ (rebids, responder-rebids, strong-openings) still ignore the
 field (they belong to other work in flight).
 
+## After their overcall of our 2♣ (Rick, 2026-10-31)
+
+2♣ (2♥) P (P) 3NT and 2♣ P 2♦ (2♥) 3NT: the 6NT count and the 4♣/4♦
+slam tries as without interference (the main block stops at
+`!they.bid`). 4♣ is not a jump over 3NT, so it is the slam try, not
+Gerber: Rick, "generally Gerber requires a jump". Not on the Brill card,
+where gerber.bid plays Gerber here for Brill partners.
+
 ## Sources
 
 - **The thresholds:** the textbook combined counts for 6NT and a
@@ -121,3 +129,4 @@ field (they belong to other work in flight).
   although lower ones score better on the slam-dealt scenarios.
 - **Rick's ruling, 2026-10-03:** 4NT with no notrump bid is keycard
   for the last suit on cards that play an ask.
+- Rick, 2026-10-31: Gerber needs a jump; 4♣ over 3NT is a slam try.

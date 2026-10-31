@@ -147,7 +147,10 @@ module's notes ("Brill"), with Brill's rule text:
 - Cappelletti: 10+ HCP, 2♦ five-five in the majors (cappelletti);
 - 3NT opening without a five-card major (strong-openings);
 - Jordan 2NT with three trumps (vs-takeout-double);
-- Gerber over a 3NT opening (gerber).
+- Gerber over 3NT, where 4♣ is no jump: over a 3NT opening, and over
+  opener's 3NT rebid after 2♣ (2♣–2♦–3NT, 2♣ (overcall) P P 3NT, 2♣ P 2♦
+  (overcall) 3NT). Our default needs a jump for Gerber (Rick, 2026-10-31)
+  and reads 4♣ over 3NT as a club slam try (gerber, over-3nt).
 
 Measured (`brill_probe.py report --card Brill`, the top 2000 corpus
 auctions, our reading against Brill's): see the commit messages and the
