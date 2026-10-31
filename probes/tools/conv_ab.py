@@ -15,6 +15,10 @@ that used the convention (North-South) with the other side beside it.
     BBA's gain       = errors(BBA, off)   - errors(BBA, on)
     convention score = Rusty's gain - BBA's gain
 
+Errors here are North-South's contract errors (Rick, 2026-10-31: judge a
+change by the side bidding it, its result taken as doubled), or its
+doubling errors for a convention with `judge = "doubling"`,
+
 summed over the changed boards: those where either engine's auction
 differs between on and off (a board where neither changed adds nothing
 to either gain). Positive: the convention does more for us than for BBA.
@@ -225,11 +229,18 @@ def calls(b, key):
     return [one(c) for c in b[key]]
 
 
-def side_err(e, side):
-    return e['contract'][side] + e['doubling'][side]
+def side_err(e, side, judge='contract'):
+    """The side's errors that judge a convention (Rick, 2026-10-31: only
+    the side bidding the change, its result taken as doubled; the
+    opponents' failure to double says nothing about it): contract errors
+    for a bidding convention, doubling errors for a doubling one, both
+    with `all`."""
+    if judge == 'all':
+        return e['contract'][side] + e['doubling'][side]
+    return e[judge][side]
 
 
-def score(on_json, off_json):
+def score(on_json, off_json, judge='contract'):
     """The four-way comparison of two compare runs on the same deals."""
     key = lambda b: (b['scenario'], b['board'])
     on = {key(b): b for b in json.load(open(on_json))['boards']}
@@ -260,9 +271,9 @@ def score(on_json, off_json):
         g = {}
         for who, fld in (('rusty', 'ours_errors'), ('bba', 'reference_errors')):
             eon, eoff = p_on[fld], p_off[fld]
-            g[who] = side_err(eoff, 0) - side_err(eon, 0)
+            g[who] = side_err(eoff, 0, judge) - side_err(eon, 0, judge)
             s[f'{who}_gain'] += g[who]
-            s[f'{who}_gain_other'] += side_err(eoff, 1) - side_err(eon, 1)
+            s[f'{who}_gain_other'] += side_err(eoff, 1, 'all') - side_err(eon, 1, 'all')
             s[f'{who}_contract'] += eoff['contract'][0] - eon['contract'][0]
             s[f'{who}_doubling'] += eoff['doubling'][0] - eon['doubling'][0]
         net = g['rusty'] - g['bba']
@@ -346,7 +357,8 @@ def one(spec, a):
     on_json, off_json = os.path.join(d, 'on.json'), os.path.join(d, 'off.json')
     compare_run(used, os.path.join(d, 'on'), spec.get('on', []), on_json, a)
     compare_run(used, os.path.join(d, 'off'), spec.get('on', []) + spec['off'], off_json, a)
-    s = score(on_json, off_json)
+    s = score(on_json, off_json, spec.get('judge', 'contract'))
+    s['judge'] = spec.get('judge', 'contract')
     res['score'] = s
     nr = (s['no_rule_off'] - s['no_rule_on']) / max(1, s['boards']) * 100
     if nr > a.max_no_rule:

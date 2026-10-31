@@ -23,6 +23,9 @@ where the TOML has one table per convention:
     scenarios = ["Minor_Game_Or_Slam", "Slam_After_Major_Fit"]
     base      = ["slam.kickback.play=false"]
     variant   = ["slam.kickback.play=true"]
+    judge     = "contract"  # optional: "doubling" for a doubling
+                          # convention; the verdict is the actor's errors
+                          # of that kind (Rick, 2026-10-31)
     side      = "ns"      # optional: "ns" or "ew" plays the variant alone
                           # (compare --ns-set / --ew-set); default both
 
@@ -88,10 +91,13 @@ def run_compare(scenarios, changes, side, out, a):
 def verdict(name, spec, base_path, var_path, a):
     base = json.load(open(base_path))['boards']
     var = json.load(open(var_path))['boards']
-    cells, n, skipped, by, cnt, changed = errors_diff.diff(base, var)
+    judge = spec.get('judge', 'contract')
+    cells, n, skipped, by, cnt, changed = errors_diff.diff(base, var, judge)
     N = n[0] + n[1]
     tot = lambda k: sum(cells[k])
-    act = [cells['contract actor'][h] + cells['doubling actor'][h] for h in (0, 1)]
+    # The actor's own errors of the judged kind (Rick, 2026-10-31):
+    # contract for a bidding convention, doubling for a doubling one.
+    act = list(cells[f'{judge} actor'])
     a_tot = act[0] + act[1]
     agree = (act[0] > 0 and act[1] > 0) or (act[0] < 0 and act[1] < 0)
     # z: the actor's total over its standard error (board swings taken
@@ -107,7 +113,7 @@ def verdict(name, spec, base_path, var_path, a):
         word = 'gains' if a_tot > 0 else 'loses'
     side = spec.get('side', 'both')
     line = (f"{name:24} {','.join(spec['scenarios'])[:60]:60} side={side:4} "
-            f"changed {N:4} (skip {skipped})  actor: contract {tot('contract actor'):+5} "
+            f"changed {N:4} (skip {skipped})  judge={judge}  actor: contract {tot('contract actor'):+5} "
             f"doubling {tot('doubling actor'):+5}  other: contract {tot('contract other'):+5} "
             f"doubling {tot('doubling other'):+5}  DD-to-actor {tot('side IMPs (actor)'):+5}  "
             f"halves {act[0]:+}/{act[1]:+} {'agree' if agree else 'differ'}  z {z:+.1f}  {word}")
@@ -127,7 +133,8 @@ def one(name, spec, a):
     print(f'== {name}: base {spec.get("base", [])} -> variant {spec.get("variant", [])} '
           f'side {side or "both"}', flush=True)
     sys.stdout.flush()
-    subprocess.run([sys.executable, os.path.join(HERE, 'errors_diff.py'), bp, vp, '--top', str(a.top)])
+    subprocess.run([sys.executable, os.path.join(HERE, 'errors_diff.py'), bp, vp, '--top', str(a.top),
+                    '--judge', spec.get('judge', 'contract')])
     line, worst = verdict(name, spec, bp, vp, a)
     if worst:
         print('worst boards for the actor (scenario board actor IMPs side : first difference):')
