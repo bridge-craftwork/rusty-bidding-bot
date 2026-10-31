@@ -11,6 +11,7 @@ with `rbb call` and reports where the two differ.
     brill_cases.py extract [--only Texas,Michaels*]   cases.jsonl
     brill_cases.py run [--jobs N]                      results (cached)
     brill_cases.py report [--top 15] [--out FILE.md]   per Brill file
+    brill_cases.py live [-n 200] [--seed 1]            ask Brill's live /bid a sample
 
 Contexts: exact auctions as written; `PX` (pass or double) is read as
 Pass; `Ma`/`Mi`/`oMa`/`oMi` are expanded to both suit choices and marked
@@ -78,25 +79,38 @@ def expand(toks):
     return uniq, wild
 
 
+def bid_matches(act, call):
+    """An activation's bid (maybe a wildcard: 2Ma, 3oMi) can be this call."""
+    if act == call:
+        return True
+    m = re.fullmatch(r'([1-7])o?a?(Ma|Mi)', act)
+    return bool(m) and call[:1] == m.group(1) and (
+        call[1:] in (('H', 'S') if m.group(2) == 'Ma' else ('C', 'D')) or call[1:] == act[1:])
+
+
 def prefixes(ctx, mode, activations):
-    """The calls before a context: none for an absolute one; for a relative
-    one (it starts with the convention's activating call), the context of
-    each activation rule making that call. A mixed file holds both: a
-    context that cannot open an auction (it starts with a double), or
-    starts with an activating call after which it would not be legal from
-    the dealer, is relative."""
+    """The calls before a context, each with the activating bid as written.
+    Brill writes a convention's contexts from its activating call
+    (`2N-4S-P-P` after 1M-P-2N, `2H-2S` after 1H-2H) whatever the file's
+    contextMode says, and absolute ones from the dealer. A context starting
+    with a call an activation rule with a context of its own makes is
+    relative: one prefix per such activation (the caller expands the
+    prefix, that bid and the context together and keeps the suit choices
+    where the bid is the context's first call). Otherwise it is absolute
+    (prefix None); one that starts with a double and matches no activation
+    cannot be placed."""
     first = ctx.split('-')[0] if ctx else ''
-    rel = mode == 'relative' or (mode != 'absolute' and first in ('X', 'XX')) \
-        or (mode == 'absolute' and first in ('X', 'XX'))
-    if not rel:
-        return [[]]
     out = []
     for fc, bid in activations:
-        if bid == first:
-            p = fc.split('-') if fc else []
+        if fc and bid_matches(bid, first):
+            p = (fc.split('-'), bid)
             if p not in out:
                 out.append(p)
-    return out
+    if out:
+        return out
+    if mode == 'relative' or first in ('X', 'XX'):
+        return []
+    return [None]
 
 
 def to_rbb(calls):
@@ -163,9 +177,22 @@ def extract(args):
                 tag = TAG.search(r['means'])
                 for ctx in rs.get('auctionContext', []):
                     full = []
-                    for prefix in prefixes(ctx, mode, activations):
-                        got, wild = expand(prefix + ctx.split('-') + [r['bid']])
-                        full += [(g[:-1], g[-1], wild or len(prefixes(ctx, mode, activations)) > 1) for g in got]
+                    pre = prefixes(ctx, mode, activations)
+                    for p in pre:
+                        if p is None:
+                            got, wild = expand(ctx.split('-') + [r['bid']])
+                            full += [(g[:-1], g[-1], wild) for g in got]
+                            continue
+                        fc, act = p
+                        got, wild = expand(fc + [act] + ctx.split('-') + [r['bid']])
+                        n = len(fc)
+                        full += [(g[:n] + g[n + 1:-1], g[-1], wild or len(pre) > 1)
+                                 for g in got if g[n] == g[n + 1]]
+                    uniq = []
+                    for x in full:
+                        if x not in uniq:
+                            uniq.append(x)
+                    full = uniq
                     if not full:
                         skipped['wildcard or unplaced context'] += 1
                         continue
@@ -297,6 +324,65 @@ def report(args):
     print(text if not args.out else f"wrote {args.out}: {tot['plain']} plain cases, {tot['plain_same']} agree")
 
 
+def live(args):
+    """Ask Brill's live service a sample of the cases: does Brill's engine
+    make the call its file names? The sample is fixed by --seed, half plain
+    exact cases and half lessons, through brill_replay's client (one
+    request a second, cached, stops after 5 failures in a row)."""
+    import random, types
+    import brill_replay as rp
+    cases = [json.loads(l) for l in open(os.path.join(CACHE, 'cases.jsonl'))]
+    res = {}
+    out = os.path.join(CACHE, f'results-{rules_state()}.jsonl')
+    if os.path.exists(out):
+        for l in open(out):
+            r = json.loads(l)
+            res[r['key']] = r
+    key = lambda c: f"{c['dealer']}|{c['vul']}|{' '.join(c['auction'])}|{c['hand']}"
+    rng = random.Random(args.seed)
+    pools = {'plain': [c for c in cases if not c['tag'] and not c['expanded']],
+             'lesson': [c for c in cases if c['tag'] and not c['expanded']]}
+    sample = []
+    for kind, pool in pools.items():
+        uniq = list({key(c): c for c in pool}.values())
+        rng.shuffle(uniq)
+        sample += [dict(c, kind=kind) for c in uniq[:args.n // 2]]
+    brill = rp.Brill(types.SimpleNamespace(offline=args.offline, interval=1.0))
+    rows, tally = [], collections.Counter()
+    print(f'{len(sample)} positions; cached answers are reused', flush=True)
+    for i, c in enumerate(sample):
+        calls = [{'P': 'Pass'}.get(x, x.replace('N', 'NT')) for x in c['auction']]
+        seat = SEATS[(SEATS.index(c['dealer']) + len(calls)) % 4]
+        try:
+            got = brill.bid(c['hand'], calls, c['dealer'], seat, c['vul'], 'IMP')
+        except LookupError as e:
+            tally[(c['kind'], 'unasked')] += 1
+            continue
+        got = 'P' if got == 'Pass' else got.replace('NT', 'N')
+        ours = res.get(key(c), {}).get('call')
+        tally[(c['kind'], 'n')] += 1
+        tally[(c['kind'], 'live=file')] += got == c['brill']
+        tally[(c['kind'], 'rusty=live')] += ours == got
+        tally[(c['kind'], 'rusty=file')] += ours == c['brill']
+        rows.append({**{k: c[k] for k in ('file', 'kind', 'context', 'auction', 'hand', 'dealer', 'vul', 'brill', 'tag')},
+                     'live': got, 'rusty': ours})
+        if i % 20 == 19:
+            print(f'  {i + 1}/{len(sample)} (fetched {brill.fetched}, cached {brill.hits})', flush=True)
+    with open(os.path.join(CACHE, 'live.jsonl'), 'w') as f:
+        for r in rows:
+            f.write(json.dumps(r) + '\n')
+    lines = ['| cases | asked | live Brill = file label | Rusty = live Brill | Rusty = file label |', '|---|---:|---:|---:|---:|']
+    for kind in ('plain', 'lesson'):
+        n = tally[(kind, 'n')]
+        pc = lambda k: f"{tally[(kind, k)]} ({100 * tally[(kind, k)] // n}%)" if n else '—'
+        lines.append(f"| {kind} | {n} | {pc('live=file')} | {pc('rusty=live')} | {pc('rusty=file')} |")
+    print('\n'.join(lines))
+    off = [r for r in rows if r['live'] != r['brill']]
+    print(f'\nlive Brill differs from its file on {len(off)}:')
+    for r in off[:args.top]:
+        print(f"  {r['kind']:6} {r['file']:22} {'-'.join(r['auction']):40} {r['hand']:20} file {r['brill']:3} live {r['live']:3} rusty {r['rusty']} {r['tag'] or ''}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--data', default=DATA)
@@ -305,8 +391,10 @@ def main():
     e = sub.add_parser('extract'); e.add_argument('--only')
     r = sub.add_parser('run'); r.add_argument('--jobs', type=int, default=int(os.environ.get('RBB_CPUS', max(1, (os.cpu_count() or 4) - 2))))
     p = sub.add_parser('report'); p.add_argument('--top', type=int, default=15); p.add_argument('--out')
+    lv = sub.add_parser('live'); lv.add_argument('-n', type=int, default=200); lv.add_argument('--seed', type=int, default=1)
+    lv.add_argument('--offline', action='store_true'); lv.add_argument('--top', type=int, default=40)
     args = ap.parse_args()
-    {'extract': extract, 'run': run, 'report': report}[args.cmd](args)
+    {'extract': extract, 'run': run, 'report': report, 'live': live}[args.cmd](args)
 
 
 if __name__ == '__main__':
