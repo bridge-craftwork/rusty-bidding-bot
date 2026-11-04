@@ -138,6 +138,12 @@ Reading it:
 Runs: local `rbb compare --json` outputs (`base.json`, `final.json`,
 `f-<defence>.json`, one per defence forced on with `--set`), not kept.
 
+## `natural` (2026-11-03)
+
+convention-card 0.43 added `natural` to the defence options; "Natural"
+used to load as `other`. Both play the natural defence in overcalls.bid,
+and `natural` also says no DONT, whatever `dont.play` says.
+
 ## Sources
 
 - Bridge Bum: "Cappelletti (Hamilton)", https://www.bridgebum.com/cappelletti.php
