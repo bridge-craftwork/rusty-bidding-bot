@@ -40,7 +40,7 @@ S AJ86.AKT962.AQ.Q      | 3S X P 4S P   | 5H  | the cue is no place to play: six
 # A call above game our system does not read (Rick, 2026-10-29): back to
 # the agreed suit at the cheapest level. Rick's "play my card" deal: his
 # card had no king ask, and 5NT was passed with 13 tricks in hearts.
-card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true slam.king_ask.five_nt=false
+card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true slam.king_ask.style=none
 dealer  N
 N KQ82.AK976.K973.-     | 1H P 2N P 3D P 3H P 3S P 3N P 4C P 4N P 5H P 5N P | 6H | 5NT means nothing here: six of the agreed suit, not a pass
 card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true

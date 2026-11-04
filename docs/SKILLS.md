@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-131 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 88 proposed, 0 unknown. 100 modules declare a skill; 221 card fields carry one.
+132 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 89 proposed, 0 unknown. 100 modules declare a skill; 221 card fields carry one.
 
 ### The map
 
@@ -83,6 +83,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/namyats` (Namyats) | proposed | `preempts.transfer_4_minor`, `preempts.namyats.play` | `namyats` |
 | `bidding_conventions/new_minor_forcing` (New Minor Forcing) | taxonomy | `other_conventions.new_minor_forcing.play`, `other_conventions.new_minor_forcing.after_2nt_rebid`, `other_conventions.new_minor_forcing.by_passed_hand` | `new-minor-forcing`, `nmf-after-2nt` |
 | `bidding_conventions/ogust` (Ogust) | taxonomy | `two_level.ogust.play`, `two_level.weak_two_2nt_response` | `weak-two-responses` |
+| `bidding_conventions/parrish_relay` (Parrish relay) | proposed | `two_level.parrish_bust.relay` | — |
 | `bidding_conventions/pick_a_slam_5nt` (Pick-a-slam 5NT) | proposed | `slam.pick_a_slam_5nt.play` | `pick-a-slam` |
 | `bidding_conventions/polish_two_suiters` (Polish two-suiters) | proposed | `two_level.polish_two_suiters.play` | `polish-two-suiters` |
 | `bidding_conventions/precision_2d` (Precision 2♦) | proposed | `two_level.precision_2d.play` | `precision-2d` |
@@ -92,7 +93,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/reverse_bids` (Reverse Bids) | taxonomy | `other_conventions.reverse_bids.forcing` | `rebids` |
 | `bidding_conventions/reverse_drury` (Reverse Drury) | taxonomy | `major_openings.drury.reverse` | `drury` |
 | `bidding_conventions/reverse_flannery` (Reverse Flannery) | proposed | `two_level.reverse_flannery.play`, `two_level.reverse_flannery.two_d`, `two_level.reverse_flannery.two_h`, `two_level.reverse_flannery.two_s` | `reverse-flannery` |
-| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.rkcb.play`, `slam.rkcb.style`, `slam.rkcb.minor_0314`, `slam.rkcb.queen_ask`, `slam.king_ask.five_nt`, `slam.king_ask.next_step`, `slam.king_ask.specific` | `rkcb-1430` |
+| `bidding_conventions/roman_keycard` (Roman Keycard) | taxonomy | `slam.rkcb.play`, `slam.rkcb.style`, `slam.rkcb.minor_0314`, `slam.rkcb.queen_ask`, `slam.king_ask.style`, `slam.king_ask.specific` | `rkcb-1430` |
 | `bidding_conventions/roudi` (Roudi) | proposed | `other_conventions.roudi.play` | `roudi` |
 | `bidding_conventions/semi_forcing_1nt` (Semi-forcing 1NT) | proposed | `major_openings.one_nt_response.semi_forcing` | `responses` |
 | `bidding_conventions/serious_3nt` (Serious 3NT) | proposed | `slam.non_serious_3nt.play` | `serious-3nt` |
@@ -182,6 +183,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 - `bidding_conventions/depo`: `slam.depo`
 - `bidding_conventions/lars_multi`: `two_level.multi.strong_option`
+- `bidding_conventions/parrish_relay`: `two_level.parrish_bust.relay`
 - `bidding_conventions/two_heart_bust`: `two_level.parrish_bust.play`
 - `defense/defensive_signals`: `carding.declarer_lead.attitude`, `carding.declarer_lead.count`, `carding.declarer_lead.suit_preference`, `carding.first_discard.standard`, `carding.suits.standard_attitude`, `carding.suits.standard_count`, `carding.nt.standard_attitude`, `carding.nt.standard_count`, `carding.partner_lead.attitude`, `carding.partner_lead.count`, `carding.partner_lead.suit_preference`
 - `defense/lavinthal`: `carding.lavinthal.from_void`, `carding.lavinthal.on_ace`, `carding.lavinthal.on_trump`, `carding.lavinthal.to_void`, `carding.first_discard.lavinthal`, `carding.first_discard.lavinthal_suits`, `carding.first_discard.lavinthal_nt`
@@ -242,6 +244,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 - `bidding_conventions/modified_jacoby_2nt` (proposed): `major_openings.jacoby_2nt.modified`
 - `bidding_conventions/multi_2d` (proposed): `two_level.multi.play`, `two_level.multi.strong_option`
 - `bidding_conventions/namyats` (proposed): `preempts.transfer_4_minor`, `preempts.namyats.play`
+- `bidding_conventions/parrish_relay` (proposed): `two_level.parrish_bust.relay`
 - `bidding_conventions/pick_a_slam_5nt` (proposed): `slam.pick_a_slam_5nt.play`
 - `bidding_conventions/polish_two_suiters` (proposed): `two_level.polish_two_suiters.play`
 - `bidding_conventions/precision_2d` (proposed): `two_level.precision_2d.play`

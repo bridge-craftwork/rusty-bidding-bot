@@ -335,7 +335,7 @@ on the corpus (about −14,100 IMPs; conventions-survey.md §4).
 What a grand decision needs, in order of value:
 - all five keycards and the trump queen (`we.keycards(t)=5`, the queen
   answer: tracked);
-- kings, via the 5NT king ask (card field `slam.king_ask.five_nt`,
+- kings, via the 5NT king ask (card field `slam.king_ask.style = five_nt`,
   field only today; 1,387 BBA boards);
 - a trick source: a long side suit or a crossruff, meaning shortness
   facing length (`partner.x.max <= 1` from a splinter);
@@ -536,7 +536,7 @@ cases, a `.notes.md` with Sources, and both yardsticks.
 | **1. Slam entry** | one slam-values / slam-interest definition (`slam/slam-entry.bid` or `judgment/`), read by rkcb-1430, blackwood, control-bids, gerber and the quantitative rules; fit known but not agreed; minor fits | random: "stopped short of slam" 678 bd / 8,717 IMPs toward BBA's 465 / 5,736 (gap 2,981 per 10k deals, about 0.30 a board); corpus: the 1,148 missing keycard asks (−6,932) | none beyond phase 0, unless `slam_try` itself becomes the definition (below) |
 | **2. The defending side's pass** | first a diagnosis: of the boards par_blame pins on "Defending: nothing more to say", how many went wrong earlier (no overcall, no balance) and how many at the pass; then the missing judgment: rebidding a six-card overcall, balancing when they stop low with a fit, the doubler with extras, the LoTT with their fit counted | random: "outbid, did not compete" 553 / 4,230 against BBA's 290 / 2,126; part of "let them play" 702 / 4,598 against 510 / 2,737. Guards: "L overcompeted" (331) and "W overbid" (818) must not rise | terms only |
 | **3. Penalty doubles** | the too-high double (misfit, trumps, balance of strength, low total trumps), partner's sit or pull as a Q&A pair, the "when is a double for penalty" hierarchy as a rule-writing guideline and a lint | random: the rest of "let them play" (gap 1,861 with phase 2). Guard: "W doubled, par was to bid on" stays near 25. Then re-run phase 2 and the open overcall questions (overcalls.notes.md), since side IMPs become fair | `quick_tricks`; terms only |
-| **4. Grand slams** | a real grand decision; the 5NT king ask (`slam.king_ask.five_nt`, field only); calibration from double-dummy tables | corpus grand-slam scenarios (about −14,100 IMPs); random 920+ band "at par" 3.3% toward BBA's 12.8% | `grand_try` changes meaning: a **language version bump** (it is read by rkcb-1430.bid:135), or a new term and the placeholder retired |
+| **4. Grand slams** | a real grand decision; the 5NT king ask (`slam.king_ask.style`, field only); calibration from double-dummy tables | corpus grand-slam scenarios (about −14,100 IMPs); random 920+ band "at par" 3.3% toward BBA's 12.8% | `grand_try` changes meaning: a **language version bump** (it is read by rkcb-1430.bid:135), or a new term and the placeholder retired |
 | **5. Placement consolidation** | `captain`; game/no-game after any limit bid; stoppers; 3NT vs 5m; fold base.bid's fallbacks and sequence copies into the layer | "stopped short (level)" 591 / 3,209 against 493 / 2,667; "wrong strain" 406 / 3,127. Game shortfall and overbidding are already at parity, so this phase is for coverage and simplicity more than IMPs | `captain`, stopper knowledge: new engine knowledge (terms only for the contract) |
 | **6. Sacrifice** | five over their four by total trumps, vulnerability, defence | small: we already beat BBA on both sacrifice lines | none |
 

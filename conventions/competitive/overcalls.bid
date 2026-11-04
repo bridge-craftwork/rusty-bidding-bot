@@ -135,11 +135,12 @@ after (1x) 1N (2x)
 # The pass is shared by every defence, and the conventional defences
 # preempt in a narrower range (vs-1nt.bid). Landy keeps the natural 2♦/2♥/2♠ and uses 2♣ for the majors
 # (multi-landy.bid).
-after (1N) when (nt_def is other, !dont_play) | nt_def is landy
+# `natural` is the card's explicit word for it (convention-card 0.43; it used to load as `other`).
+after (1N) when (nt_def is other, !dont_play) | nt_def is natural | nt_def is landy
   2S  "Natural: five spades, 12+ total points"    shows S>=5, S>=H, S>=D, S>=C, hcp+length_points>=12, hcp<=17
   2H  "Natural: five hearts, 12+ total points"    shows H>=5, H>S, H>=D, H>=C, hcp+length_points>=12, hcp<=17
   2D  "Natural: five diamonds, 12+ total points"  shows D>=5, D>S, D>H, D>=C, hcp+length_points>=12, hcp<=17
-after (1N) when nt_def is other, !dont_play
+after (1N) when (nt_def is other, !dont_play) | nt_def is natural
   2C  "Natural: five clubs, 12+ total points"     shows C>=5, C>S, C>H, C>D, hcp+length_points>=12, hcp<=17
   3S  "Preemptive: seven spades, 4-10"            shows S>=7, hcp=4..10
       priority 1

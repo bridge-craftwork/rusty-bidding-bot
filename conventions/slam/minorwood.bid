@@ -11,7 +11,7 @@ module minorwood "Minorwood: four of the agreed minor asks for keycards"
   needs  base
   skill  bidding_conventions/minorwood
   param  mwplay = slam.minorwood.play default false
-  param  kask5n = slam.king_ask.five_nt default true    # standard with keycard; a card that is silent plays it (2026-10-29)
+  param  kstyle = slam.king_ask.style default five_nt   # five_nt | next_step | none (convention-card 0.28); a card that is silent plays 5NT (2026-10-29)
 
 # Four of the minor is still available (`cheapest_rank`: 4♣ 20, 4♦ 21).
 define mw_room(t) = (t is C, cheapest_rank(C) <= 20) | (t is D, cheapest_rank(D) <= 21)
@@ -80,10 +80,10 @@ when mwplay, asked minorwood(t), rho.last = P
 
 when mwplay, answered minorwood(t)
   7{t}  "Grand slam"
-        when  we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
+        when  we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)
   # The king ask, as after 4NT (rkcb-1430.bid answers it; 2026-10-05).
   5N    "King ask: all keycards and the {t} queen held"
-        when  kask5n, we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
+        when  kstyle is five_nt, we.keycards(t)=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
         sets  ask=kings(t)
         artificial
   6{t}  "Small slam"
@@ -91,9 +91,9 @@ when mwplay, answered minorwood(t)
   # The count that fits (rkcb-1430.bid, `kc_high`): with 30 HCP between
   # us the low count of an open answer is impossible.
   7{t}  "Grand slam"
-        when  kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, !kask5n   # with the king ask, ask first (2026-10-07)
+        when  kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C), grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)
   5N    "King ask: all keycards and the {t} queen held"
-        when  kask5n, kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
+        when  kstyle is five_nt, kc_high(t), we.keycards(t).max=5, has(Q,t) | (t is C, partner.last = 4N) | (t is D, partner.last = 5C)
         sets  ask=kings(t)
         artificial
   6{t}  "Small slam"

@@ -26,3 +26,9 @@ N 954.K82.J54.Q873          | 1NT 2NT P            | 3C     | longer clubs
 # The penalty double
 N 954.K82.Q8743.J5          | 1NT X P              | P      | 6 HCP: sit
 N J8764.82.743.J54          | 1NT X P              | 2S     | 2 HCP and five spades: run
+
+# `natural`, the card's own word for the natural defence (convention-card 0.43).
+card    21GF-DEFAULT competitive.vs_1nt_strong.system=natural
+dealer  E
+S 7.AQJ852.K93.Q84      | 1N                   | 2H     | natural overcall: five or more hearts, 12+
+S 7.QJT9852.K93.84      | 1N                   | 3H     | natural defence: the preempt with seven

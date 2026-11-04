@@ -39,7 +39,7 @@ module vs-1nt "Over their 1NT: what every defence shares"
 # (probes/vs-1N-capp.toml). We preempt up to 11 counting a point a card
 # beyond four, one below the one-suiter's 12: 4-8 HCP with seven cards.
 # The natural defence keeps its own 4-10 (overcalls.bid).
-after (1N) when !(def is other) | dont_play
+after (1N) when !(def is other | def is natural) | (dont_play, !(def is natural))
   3S  "Preemptive: seven spades"                  shows S>=7, hcp>=4, hcp+length_points<=11
       priority 1
   3H  "Preemptive: seven hearts"                  shows H>=7, hcp>=4, hcp+length_points<=11
