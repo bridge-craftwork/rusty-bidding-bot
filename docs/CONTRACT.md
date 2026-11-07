@@ -424,6 +424,8 @@ Exact while I choose a call; what I have shown when my call is being read. Bare 
 |---|---|
 | `hcp` | high-card points (A 4, K 3, Q 2, J 1) |
 | `tens` | tens held |
+| `wasted_hcp` | HCP wasted opposite partner's shown shortness: K, Q, J of a suit he has shown at most one card in, the ace too opposite a shown void |
+| `working_hcp` | HCP that work opposite partner's shown shortness: `hcp - wasted_hcp` (all of them while he has shown none) |
 | `points` | total points: HCP + 1/2 a ten + 1 a card beyond four (whole part) |
 | `suit_points` | suit points: HCP + 1/2 a card beyond four (whole part) |
 | `balanced` | 4-3-3-3, 4-4-3-2 or 5-3-3-2 |
@@ -508,6 +510,8 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | Term | Meaning |
 |---|---|
 | `partner.hcp` | HCP shown |
+| `partner.working_hcp` | HCP shown, less what may be wasted opposite a shortness that seat's partner has shown |
+| `partner.wasted_hcp` | what of the HCP shown may be wasted opposite a shortness that seat's partner has shown |
 | `partner.tens` | tens (never tracked: 0..4) |
 | `partner.points` | total points shown (HCP when no call showed points) |
 | `partner.suit_points` | suit points shown |
@@ -551,6 +555,7 @@ With `partner.`, `lho.`, `rho.`, or `shown.` (what I have shown), besides a suit
 | `we.systems_on` | partner's last call is the notrump where our notrump system came on (`systems on`): I am answering it |
 | `we.hcp` | my HCP plus partner's range: `hcp + partner.hcp` (`.min`, `.max` are partner's ends) |
 | `we.points` | my points plus partner's range: `points + partner.points` |
+| `we.working_hcp` | my working HCP plus partner's: `working_hcp + partner.working_hcp` (his HCP shown while I have shown no shortness) |
 | `we.fit(x)` | my length in x plus partner's range: `x + partner.x`; `.min` is the known fit |
 | `we.tp(x)` | my support points with x as trump plus partner's: `tp(x) + partner.tp(x)` |
 | `we.keycards(x)` | my keycards plus partner's answer, within the deck's five |

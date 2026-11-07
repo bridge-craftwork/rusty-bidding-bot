@@ -233,6 +233,14 @@ const SELF_ATTRS: &[Term] = &[
     t("hcp", "high-card points (A 4, K 3, Q 2, J 1)"),
     t("tens", "tens held"),
     t(
+        "wasted_hcp",
+        "HCP wasted opposite partner's shown shortness: K, Q, J of a suit he has shown at most one card in, the ace too opposite a shown void",
+    ),
+    t(
+        "working_hcp",
+        "HCP that work opposite partner's shown shortness: `hcp - wasted_hcp` (all of them while he has shown none)",
+    ),
+    t(
         "points",
         "total points: HCP + 1/2 a ten + 1 a card beyond four (whole part)",
     ),
@@ -860,6 +868,14 @@ impl<'a> Ctx<'a> {
                 None => Range::new(0, 4),
             }));
         }
+        if let ("wasted_hcp" | "working_hcp", Some(f)) = (n, self.hand) {
+            let w = self.wasted_hcp(f);
+            return Ok(Val::Num(Range::point(if n == "wasted_hcp" {
+                w
+            } else {
+                f.hcp - w
+            })));
+        }
         if named(SELF_ATTRS, n) {
             return Ok(match self.hand {
                 Some(f) => exact_attr(f, n, self.valuation),
@@ -1038,6 +1054,27 @@ impl<'a> Ctx<'a> {
         })
     }
 
+    /// `wasted_hcp`: my honours opposite partner's shown shortness. K 3, Q 2,
+    /// J 1 in a suit he has shown at most one card in (`partner.x.max <=
+    /// 1`); opposite a void (`partner.x.max = 0`) the ace too, which
+    /// opposite a singleton still takes its trick.
+    fn wasted_hcp(&self, f: &Facts) -> i32 {
+        let short = &self.pos.knowledge(self.partner()).len;
+        (0..4)
+            .map(|s| {
+                if short[s].hi > 1 {
+                    return 0;
+                }
+                let mut w =
+                    3 * f.has(s, KING) as i32 + 2 * f.has(s, QUEEN) as i32 + f.has(s, JACK) as i32;
+                if short[s].hi == 0 {
+                    w += 4 * f.has(s, ACE) as i32;
+                }
+                w
+            })
+            .sum()
+    }
+
     fn knowledge_attr(
         &self,
         k: &SeatKnowledge,
@@ -1066,6 +1103,25 @@ impl<'a> Ctx<'a> {
         }
         Ok(match n {
             "hcp" => Val::Num(k.hcp),
+            // What this seat may waste opposite its partner's shown
+            // shortness: K, Q, J there (6), and the ace too opposite a
+            // void (10), as far as its HCP allow.
+            "wasted_hcp" | "working_hcp" => {
+                let short = &self.pos.knowledge(seat.partner()).len;
+                let cap: i32 = short
+                    .iter()
+                    .map(|r| match r.hi {
+                        0 => 10,
+                        1 => 6,
+                        _ => 0,
+                    })
+                    .sum();
+                if n == "wasted_hcp" {
+                    Val::Num(Range::new(0, cap.min(k.hcp.hi)))
+                } else {
+                    Val::Num(Range::new((k.hcp.lo - cap).max(0), k.hcp.hi))
+                }
+            }
             // Nobody tracks another hand's tens.
             "tens" => Val::Num(Range::new(0, 4)),
             "points" => Val::Num(k.whole_points(0)),
@@ -1660,7 +1716,7 @@ pub fn hand_dependent(e: &Expr, b: &Bindings) -> bool {
                 "we" => path.get(1).is_some_and(|s| {
                     matches!(
                         s.name.as_str(),
-                        "hcp" | "keycards" | "points" | "tp" | "fit"
+                        "hcp" | "keycards" | "points" | "tp" | "fit" | "working_hcp"
                     )
                 }),
                 "partner" | "lho" | "rho" | "shown" | "they" => false,
@@ -2077,6 +2133,14 @@ const POSITION_FUNCS: &[Term] = &[
 /// holds when it is known (`maybe` for "not ruled out").
 const SEAT_ATTRS: &[Term] = &[
     t("hcp", "HCP shown"),
+    t(
+        "working_hcp",
+        "HCP shown, less what may be wasted opposite a shortness that seat's partner has shown",
+    ),
+    t(
+        "wasted_hcp",
+        "what of the HCP shown may be wasted opposite a shortness that seat's partner has shown",
+    ),
     t("tens", "tens (never tracked: 0..4)"),
     t(
         "points",
@@ -2171,6 +2235,10 @@ const WE_ATTRS: &[Term] = &[
     t(
         "points",
         "my points plus partner's range: `points + partner.points`",
+    ),
+    t(
+        "working_hcp",
+        "my working HCP plus partner's: `working_hcp + partner.working_hcp` (his HCP shown while I have shown no shortness)",
     ),
     f(
         "fit",
@@ -2461,7 +2529,7 @@ fn hand_terms(e: &Expr, out: &mut Vec<String>) {
                 ("we", Some(seg))
                     if matches!(
                         seg.name.as_str(),
-                        "hcp" | "keycards" | "points" | "tp" | "fit"
+                        "hcp" | "keycards" | "points" | "tp" | "fit" | "working_hcp"
                     ) =>
                 {
                     out.push(format!("`we.{}`", seg.name))
@@ -3039,6 +3107,71 @@ mod term_tests {
             ..ctx(Direction::North, Some(&hand))
         };
         assert_eq!(holds(&north, "!bare(C), bare_suits = 1"), Ok(Tri::True));
+    }
+
+    /// `wasted_hcp` and `working_hcp`: honours opposite partner's shown
+    /// shortness (Rick, 2026-11-07).
+    #[test]
+    fn working_hcp_discounts_honours_opposite_shortness() {
+        use crate::facts::Facts;
+        use bridge_types::Hand;
+        let mut pos = Position::new(
+            Direction::South,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+        );
+        let s = Direction::South.to_index();
+        pos.knowledge[s].add(when_of("hcp=10..14"));
+        // AQ5 of spades, KQJ of diamonds, K of clubs: 4+2+6+3 = 15.
+        let hand = Facts::new(&Hand::from_pbn("AQ5.8765.KQJ.K32").unwrap());
+        let params = Params::default();
+        let holds = |pos: &Position, e: &str| {
+            let ctx = Ctx {
+                pos,
+                actor: Direction::North,
+                hand: Some(&hand),
+                params: &params,
+                valuation: Valuation::default(),
+                private: None,
+            };
+            let e = crate::macros::Defines::default().expand(&when_of(e), &mut Vec::new());
+            ctx.cond(&e, &mut Bindings::default())
+        };
+        // Nothing shown short: every HCP works.
+        assert_eq!(
+            holds(&pos, "wasted_hcp = 0, working_hcp = 15"),
+            Ok(Tri::True)
+        );
+        // A singleton spade: the queen is wasted, the ace works.
+        let mut single = pos.clone();
+        single.knowledge[s].add(when_of("S<=1"));
+        assert_eq!(
+            holds(&single, "wasted_hcp = 2, working_hcp = 13"),
+            Ok(Tri::True)
+        );
+        assert_eq!(holds(&single, "we.working_hcp.min = 23"), Ok(Tri::True));
+        // A spade void: the ace too.
+        let mut void = pos.clone();
+        void.knowledge[s].add(when_of("S=0"));
+        assert_eq!(
+            holds(&void, "wasted_hcp = 6, working_hcp = 9"),
+            Ok(Tri::True)
+        );
+        // And a singleton diamond besides: K, Q, J there.
+        void.knowledge[s].add(when_of("D<=1"));
+        assert_eq!(
+            holds(&void, "wasted_hcp = 12, working_hcp = 3"),
+            Ok(Tri::True)
+        );
+        // Partner's working HCP, seen from here: North has shown no
+        // shortness, so South's honours all work (his HCP shown).
+        assert_eq!(
+            holds(
+                &void,
+                "partner.working_hcp.min = 10, partner.wasted_hcp.max = 0"
+            ),
+            Ok(Tri::True)
+        );
     }
 
     /// Every name the checker accepts, the evaluator accepts too.

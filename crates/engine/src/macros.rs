@@ -400,7 +400,7 @@ pub fn sugar(path: &[Segment]) -> Option<Result<Expr, String>> {
             };
             add(name_path(&[x]), partner(plain(x)))
         }
-        "points" | "hcp" if seg.args.is_none() => {
+        "points" | "hcp" | "working_hcp" if seg.args.is_none() => {
             add(name_path(&[&seg.name]), partner(plain(&seg.name)))
         }
         "tp" => {

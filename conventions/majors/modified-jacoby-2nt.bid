@@ -237,13 +237,17 @@ after 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P
 # as after standard Jacoby: game, or keycard straight away. An explicit
 # 4M sign-off here cost 141 slams in the self A/B (notes, "Self A/B").
 #
-# Over the minimum the gate is wider than the slam count (Rick,
-# 2026-11-06, bridge-classroom #83/#84): 16 support points ask too,
-# because a minimum with the right shortness makes slam that no count
-# on its floor sees (16 opposite 14 with a void made 13 tricks). Cohen:
-# "If responder still has slam interest, he can ask further". 15 or
-# less (a flat 14 with a doubleton) signs off.
-define mj_try(t) = slam_interest(t) | tp(t) >= 16
+# The gate is wider than the slam count (Rick, 2026-11-06 and
+# 2026-11-07, bridge-classroom #83/#84): the relays are cheap, all below
+# game, and find the low-HCP slams where every high card works. So
+# responder relays whenever slam is possible with everything working:
+# his support points and opener's top HCP (`mj_relay_floor`, 27: 13
+# support points opposite a minimum's 14, which every Jacoby 2NT hand
+# has, so in practice he always relays; measured against 28 and 30,
+# notes). Cohen: "If responder still has slam interest, he can ask
+# further".
+define mj_relay_floor = 27
+define mj_try(t) = slam_interest(t) | tp(t) + partner.hcp.max >= mj_relay_floor
 
 after 1M (P) 2N (P) 3C (P)
   3D  "Asks opener to describe the minimum"  alert
@@ -254,7 +258,7 @@ after 1M (P) 2N (P) 3C (P)
 
 after 1M (P) 2N (P) 3D (P)
   3H  "Asks where the singleton or void is"  alert
-      shows slam_interest(M)
+      shows mj_try(M)
       sets  ask=mj_relay
       artificial
       priority 15
@@ -377,7 +381,7 @@ after 1H (P) 2N (P) 3D (P) 3H (P)
 
 after 1M (P) 2N (P) 3D (P) 3H (P) 3S (P)
   3N  "Asks where the void is"  alert
-      shows slam_interest(M)
+      shows mj_try(M)
       sets  ask=mj_relay
       artificial
       priority 15
@@ -402,24 +406,29 @@ after 1H (P) 2N (P) 3H (P) 3S (P)
 
 # ── Responder: keycard once the relays have placed opener's shape ────
 # (Rick, 2026-11-06, bridge-classroom #83/#84: "ask about south shape
-# and learn of spade void then try keycard".) Once a relay answer has
-# placed opener's singleton or void (`partner.x<=1` known), or his good
-# five-card side suit, responder judges the fit: high cards outside the
-# short suit work, a king or queen opposite it is wasted, and opposite
-# a void the ace too (opposite a singleton it still takes its trick).
-# 13 working HCP opposite the shortness, or 14 with an honour in
-# opener's five-card side suit, ask for keycards; less is left to the
-# slam modules (game, mostly). Not after the 5-4-2-2's four-card suit:
-# that branch lost 223 IMPs on 46 boards (notes). The keycard answers
-# and the placement are rkcb-1430.bid's (blackwood.bid's without RKCB).
-# The asks are `mj_relay`, not `relay`: minor-transfers.bid's `when
-# answered relay` (pass with clubs) read our relays and passed a 4♥
-# answer.
-define mj_working(x) = hcp - has(K,x) - has(K,x) - has(K,x) - has(Q,x) - has(Q,x)
-define mj_void_waste(x) = has(A,x) + has(A,x) + has(A,x) + has(A,x)
-define mj_short_fits(x) = (partner.x <= 1, partner.x >= 1, mj_working(x) >= 13) | (partner.x <= 0, mj_working(x) - mj_void_waste(x) >= 13)
-define mj_side_fits(x) = x is not trump, partner.x >= 5, has(A,x) | has(K,x) | has(Q,x), hcp >= 14
-define mj_fits = mj_short_fits(C) | mj_short_fits(D) | mj_short_fits(H) | mj_short_fits(S) | mj_side_fits(C) | mj_side_fits(D) | mj_side_fits(H) | mj_side_fits(S)
+# and learn of spade void then try keycard"; 2026-11-07: "keycard
+# should be the stronger hand. the idea of the relays is it will allow
+# us to find low HCP slams when there is a good fit.") Once a relay
+# answer has placed opener's singleton or void (`shown_short`),
+# responder counts his working values (slam-entry.bid, `working_count`:
+# support points less the honours wasted opposite the shortness, plus
+# opener's floor; `working_slam`, 26). With that, slam: the stronger hand
+# by what has been shown (`stronger_hand`: responder's HCP at least
+# opener's floor; always opposite a minimum) asks for keycards; the
+# weaker, opposite a non-minimum, bids the cheapest suit below game
+# ("my values work: you ask") and opener asks. Where there is no room
+# below game responder asks himself. Or 14 HCP with an honour in
+# opener's good five-card side suit (the 4x answer). Less is left to
+# the slam modules (game, mostly). Not after the 5-4-2-2's four-card
+# suit: that branch lost 223 IMPs on 46 boards (notes). The keycard
+# answers and the placement are rkcb-1430.bid's (blackwood.bid's
+# without RKCB). The asks are `mj_relay`, not `relay`: minor-
+# transfers.bid's `when answered relay` (pass with clubs) read our
+# relays and passed a 4♥ answer.
+define mj_slam(t) = working_slam(t)
+define mj_side_fits(x) = x is not trump, partner.x >= 5, has(A,x) | has(K,x) | has(Q,x), hcp >= 16
+define mj_room = (trump is not C, under_game(C)) | (trump is not D, under_game(D)) | (trump is not H, under_game(H)) | (trump is not S, under_game(S))
+define mj_fits = (mj_slam(trump), stronger_hand | !mj_room) | mj_side_fits(C) | mj_side_fits(D) | mj_side_fits(H) | mj_side_fits(S)
 
 when answered mj_relay, we.trump is H | we.trump is S, we.forcing = game
   4N  "Keycard ask in {trump}: opener's shape fits"
@@ -434,6 +443,47 @@ when answered mj_relay, we.trump is H | we.trump is S, we.forcing = game
       sets  ask=aces
       artificial
       priority 14
+  cheapest(C)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not C, under_game(C), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(C)
+      priority 14
+  cheapest(D)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not D, under_game(D), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(D)
+      priority 14
+  cheapest(H)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not H, under_game(H), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(H)
+      priority 14
+  cheapest(S)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not S, under_game(S), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(S)
+      priority 14
+
+# Opener, the stronger hand, asks over responder's "you ask".
+when asked mj_captain, we.trump is H | we.trump is S
+  4N  "Keycard ask in {trump}: the stronger hand asks"
+      when  rkcb
+      sets  ask=keycards(trump)
+      artificial
+      priority 15
+  4N  "Blackwood: the stronger hand asks"
+      when  bw, !rkcb
+      sets  ask=aces
+      artificial
+      priority 15
 
 # Over 1♥ the spade void is shown with 4♠, past game: without the
 # values for keycard, back to five hearts.

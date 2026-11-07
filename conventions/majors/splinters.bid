@@ -12,9 +12,10 @@
 # in the short suit as wasted (the ace is not) and bids game, or makes a
 # slam try that the slam machinery (slam/) carries on. Wikipedia,
 # "Splinter bid"; BBA probes probes/splinter-*.toml. See
-# splinters.notes.md. The slam-or-game sections spell out the eight
-# combinations of wasted honours (K, Q, J held or not in the short
-# suit); keep the branches in step when editing a threshold.
+# splinters.notes.md. The slam-or-game sections count support points
+# less the honours wasted opposite the shortness (`tp(M) - wasted_hcp`, the
+# engine's term since 2026-11-07: K 3, Q 2, J 1 opposite a singleton;
+# it was eight spelled-out combinations before).
 #
 # A double jump is never a jump shift here: strong jump shifts are single
 # jumps (1♥–2♠), invitational ones single jumps to the three level
@@ -108,7 +109,7 @@ after 1x (P) 1M (P) when by_open, !(twalsh, x is C)
 # ── Opener ───────────────────────────────────────────────────────────
 # Honours in partner's short suit other than the ace are wasted. Count
 # support points (tp: HCP and shortness) less the wasted honours (K 3,
-# Q 2, J 1). With 14 or more, a slam try: the cheapest control below
+# Q 2, J 1: `wasted_hcp`). With 14 or more, a slam try: the cheapest control below
 # game when a side suit is bare (two or more cards, neither ace nor
 # king), else the keycard ask; with fewer, game. Corpus (splinters.notes.md):
 # 14 on support points beat 13 and 15, and beat BBA's own line, which
@@ -119,10 +120,10 @@ after 1x (P) 1M (P) when by_open, !(twalsh, x is C)
 # 1S P 4D X 4S; 2026-10-15).
 after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
   4H  "Game: no slam interest"
-      shows !((!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20))
+      shows !(tp(H) - wasted_hcp >= 14)
       priority 13                      # ahead of the control bids (12) and any natural reading
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
+      shows tp(H) - wasted_hcp >= 14
       when  cue, H is not C, S is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(C), ladder=control
@@ -130,7 +131,7 @@ after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
+      shows tp(H) - wasted_hcp >= 14
       when  cue, H is not D, S is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(D), ladder=control
@@ -138,7 +139,7 @@ after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
+      shows tp(H) - wasted_hcp >= 14
       when  cue, H is not H, S is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(H), ladder=control
@@ -146,7 +147,7 @@ after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
+      shows tp(H) - wasted_hcp >= 14
       when  cue, H is not S, S is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(S), ladder=control
@@ -154,17 +155,17 @@ after 1H (P) 3S (P) | 1H (P) 3S (X) | 1H (P) 3S (X)
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=17) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=18) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=19) | (has(K,S), has(Q,S), has(J,S), tp(H)>=20)
+      shows tp(H) - wasted_hcp >= 14
       when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
 after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x is not S
   4M  "Game: no slam interest"
-      shows !((!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20))
+      shows !(tp(M) - wasted_hcp >= 14)
       priority 13                      # ahead of the control bids (12) and any natural reading
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
+      shows tp(M) - wasted_hcp >= 14
       when  cue, M is not C, x is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  (M is not C, x is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, x is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, x is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, x is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(C), ladder=control
@@ -172,7 +173,7 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
+      shows tp(M) - wasted_hcp >= 14
       when  cue, M is not D, x is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  (M is not C, x is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, x is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, x is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, x is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(D), ladder=control
@@ -180,7 +181,7 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
+      shows tp(M) - wasted_hcp >= 14
       when  cue, M is not H, x is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  (M is not C, x is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, x is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, x is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, x is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(H), ladder=control
@@ -188,7 +189,7 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
+      shows tp(M) - wasted_hcp >= 14
       when  cue, M is not S, x is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  (M is not C, x is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, x is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, x is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, x is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(S), ladder=control
@@ -196,7 +197,7 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows (!has(K,x), !has(Q,x), !has(J,x), tp(M)>=14) | (!has(K,x), !has(Q,x), has(J,x), tp(M)>=15) | (!has(K,x), has(Q,x), !has(J,x), tp(M)>=16) | (!has(K,x), has(Q,x), has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), !has(J,x), tp(M)>=17) | (has(K,x), !has(Q,x), has(J,x), tp(M)>=18) | (has(K,x), has(Q,x), !has(J,x), tp(M)>=19) | (has(K,x), has(Q,x), has(J,x), tp(M)>=20)
+      shows tp(M) - wasted_hcp >= 14
       when  rkcb
       sets  ask=keycards(trump)
       artificial
@@ -207,10 +208,10 @@ after 1M (P) 4x (P) | 1M (P) 4x (X) | 1M (2x) 4x (P) when x is not M, M is S | x
 # shortness, where the splinter by responder showed 12-15.
 after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
   4H  "Game: no slam interest"
-      shows !((!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17))
+      shows !(tp(H) - wasted_hcp >= 11)
       priority 13                      # ahead of the control bids (12) and any natural reading
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
+      shows tp(H) - wasted_hcp >= 11
       when  cue, H is not C, S is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(C), ladder=control
@@ -218,7 +219,7 @@ after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
+      shows tp(H) - wasted_hcp >= 11
       when  cue, H is not D, S is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(D), ladder=control
@@ -226,7 +227,7 @@ after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
+      shows tp(H) - wasted_hcp >= 11
       when  cue, H is not H, S is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(H), ladder=control
@@ -234,7 +235,7 @@ after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
+      shows tp(H) - wasted_hcp >= 11
       when  cue, H is not S, S is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  (H is not C, S is not C, C>=2, !has(A,C), !has(K,C)) | (H is not D, S is not D, D>=2, !has(A,D), !has(K,D)) | (H is not H, S is not H, H>=2, !has(A,H), !has(K,H)) | (H is not S, S is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(S), ladder=control
@@ -242,17 +243,17 @@ after 1m (P) 1H (P) 3S (P) when by_open, !(twalsh, m is C)
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows (!has(K,S), !has(Q,S), !has(J,S), tp(H)>=11) | (!has(K,S), !has(Q,S), has(J,S), tp(H)>=12) | (!has(K,S), has(Q,S), !has(J,S), tp(H)>=13) | (!has(K,S), has(Q,S), has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), !has(J,S), tp(H)>=14) | (has(K,S), !has(Q,S), has(J,S), tp(H)>=15) | (has(K,S), has(Q,S), !has(J,S), tp(H)>=16) | (has(K,S), has(Q,S), has(J,S), tp(H)>=17)
+      shows tp(H) - wasted_hcp >= 11
       when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
 after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is not S, !(twalsh, x is C)
   4M  "Game: no slam interest"
-      shows !((!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17))
+      shows !(tp(M) - wasted_hcp >= 11)
       priority 13                      # ahead of the control bids (12) and any natural reading
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
+      shows tp(M) - wasted_hcp >= 11
       when  cue, M is not C, y is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  (M is not C, y is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, y is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, y is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, y is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(C), ladder=control
@@ -260,7 +261,7 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
+      shows tp(M) - wasted_hcp >= 11
       when  cue, M is not D, y is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  (M is not C, y is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, y is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, y is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, y is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(D), ladder=control
@@ -268,7 +269,7 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
+      shows tp(M) - wasted_hcp >= 11
       when  cue, M is not H, y is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  (M is not C, y is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, y is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, y is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, y is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(H), ladder=control
@@ -276,7 +277,7 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
+      shows tp(M) - wasted_hcp >= 11
       when  cue, M is not S, y is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  (M is not C, y is not C, C>=2, !has(A,C), !has(K,C)) | (M is not D, y is not D, D>=2, !has(A,D), !has(K,D)) | (M is not H, y is not H, H>=2, !has(A,H), !has(K,H)) | (M is not S, y is not S, S>=2, !has(A,S), !has(K,S))
       sets  ask=control(S), ladder=control
@@ -284,7 +285,7 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows (!has(K,y), !has(Q,y), !has(J,y), tp(M)>=11) | (!has(K,y), !has(Q,y), has(J,y), tp(M)>=12) | (!has(K,y), has(Q,y), !has(J,y), tp(M)>=13) | (!has(K,y), has(Q,y), has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), !has(J,y), tp(M)>=14) | (has(K,y), !has(Q,y), has(J,y), tp(M)>=15) | (has(K,y), has(Q,y), !has(J,y), tp(M)>=16) | (has(K,y), has(Q,y), has(J,y), tp(M)>=17)
+      shows tp(M) - wasted_hcp >= 11
       when  rkcb
       sets  ask=keycards(trump)
       artificial
@@ -294,14 +295,9 @@ after 1x (P) 1M (P) 4y (P) when by_open, y is not M, y is not x, M is S | y is n
 # Where the splinter comes a round later: opener's over a two-over-one,
 # responder's over opener's raise or opener's second suit. The partner
 # counts as above (support points less the honours wasted in the short
-# suit) against a threshold set by what the splinter showed. The counts
-# are written once here; `spl_netN(t, s)`: N or more support points in
-# t less the wasted K (3), Q (2), J (1) in s.
+# suit, `tp(t) - wasted_hcp`) against a threshold set by what the splinter
+# showed.
 define spl_short(s) = s<=1, !has(A,s), !has(K,s), !has(Q,s), !has(J,s)
-define spl_net14(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=14) | (!has(K,s), !has(Q,s), has(J,s), tp(t)>=15) | (!has(K,s), has(Q,s), !has(J,s), tp(t)>=16) | (!has(K,s), has(Q,s), has(J,s), tp(t)>=17) | (has(K,s), !has(Q,s), !has(J,s), tp(t)>=17) | (has(K,s), !has(Q,s), has(J,s), tp(t)>=18) | (has(K,s), has(Q,s), !has(J,s), tp(t)>=19) | (has(K,s), has(Q,s), has(J,s), tp(t)>=20)
-define spl_net15(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=15) | (!has(K,s), !has(Q,s), has(J,s), tp(t)>=16) | (!has(K,s), has(Q,s), !has(J,s), tp(t)>=17) | (!has(K,s), has(Q,s), has(J,s), tp(t)>=18) | (has(K,s), !has(Q,s), !has(J,s), tp(t)>=18) | (has(K,s), !has(Q,s), has(J,s), tp(t)>=19) | (has(K,s), has(Q,s), !has(J,s), tp(t)>=20) | (has(K,s), has(Q,s), has(J,s), tp(t)>=21)
-define spl_net16(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=16) | (!has(K,s), !has(Q,s), has(J,s), tp(t)>=17) | (!has(K,s), has(Q,s), !has(J,s), tp(t)>=18) | (!has(K,s), has(Q,s), has(J,s), tp(t)>=19) | (has(K,s), !has(Q,s), !has(J,s), tp(t)>=19) | (has(K,s), !has(Q,s), has(J,s), tp(t)>=20) | (has(K,s), has(Q,s), !has(J,s), tp(t)>=21) | (has(K,s), has(Q,s), has(J,s), tp(t)>=22)
-define spl_net17(t, s) = (!has(K,s), !has(Q,s), !has(J,s), tp(t)>=17) | (!has(K,s), !has(Q,s), has(J,s), tp(t)>=18) | (!has(K,s), has(Q,s), !has(J,s), tp(t)>=19) | (!has(K,s), has(Q,s), has(J,s), tp(t)>=20) | (has(K,s), !has(Q,s), !has(J,s), tp(t)>=20) | (has(K,s), !has(Q,s), has(J,s), tp(t)>=21) | (has(K,s), has(Q,s), !has(J,s), tp(t)>=22) | (has(K,s), has(Q,s), has(J,s), tp(t)>=23)
 define spl_bare(t, s) = (t is not C, s is not C, C>=2, !has(A,C), !has(K,C)) | (t is not D, s is not D, D>=2, !has(A,D), !has(K,D)) | (t is not H, s is not H, H>=2, !has(A,H), !has(K,H)) | (t is not S, s is not S, S>=2, !has(A,S), !has(K,S))
 
 # Opener over a two-over-one: a double jump (1♠–2♥–4♣/4♦) agrees
@@ -322,10 +318,10 @@ after 1S (P) 2H (P) when by_open, seat <= 2
 # 14+ with shortness, so 16 support points less waste make the try.
 after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
   4H  "Game: no slam interest"
-      shows !spl_net16(H,y)
+      shows !tp(H) - wasted_hcp >= 16
       priority 13
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows spl_net16(H,y)
+      shows tp(H) - wasted_hcp >= 16
       when  cue, H is not C, y is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  spl_bare(H,y)
       sets  ask=control(C), ladder=control
@@ -333,7 +329,7 @@ after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows spl_net16(H,y)
+      shows tp(H) - wasted_hcp >= 16
       when  cue, H is not D, y is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  spl_bare(H,y)
       sets  ask=control(D), ladder=control
@@ -341,7 +337,7 @@ after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows spl_net16(H,y)
+      shows tp(H) - wasted_hcp >= 16
       when  cue, H is not H, y is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  spl_bare(H,y)
       sets  ask=control(H), ladder=control
@@ -349,7 +345,7 @@ after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows spl_net16(H,y)
+      shows tp(H) - wasted_hcp >= 16
       when  cue, H is not S, y is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  spl_bare(H,y)
       sets  ask=control(S), ladder=control
@@ -357,7 +353,7 @@ after 1S (P) 2H (P) 4y (P) when by_open, y is C | y is D
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows spl_net16(H,y)
+      shows tp(H) - wasted_hcp >= 16
       when  rkcb
       sets  ask=keycards(trump)
       artificial
@@ -383,10 +379,10 @@ after 1x (P) 1M (P) 2M (P) when by_resp, x is not M, !(twalsh, x is C)
       priority 2
 after 1x (P) 1H (P) 2H (P) 3S (P) when by_resp, x is not H, !(twalsh, x is C)
   4H  "Game: no slam interest"
-      shows !spl_net15(H,S)
+      shows !tp(H) - wasted_hcp >= 15
       priority 13
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows spl_net15(H,S)
+      shows tp(H) - wasted_hcp >= 15
       when  cue, H is not C, S is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  spl_bare(H,S)
       sets  ask=control(C), ladder=control
@@ -394,7 +390,7 @@ after 1x (P) 1H (P) 2H (P) 3S (P) when by_resp, x is not H, !(twalsh, x is C)
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows spl_net15(H,S)
+      shows tp(H) - wasted_hcp >= 15
       when  cue, H is not D, S is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  spl_bare(H,S)
       sets  ask=control(D), ladder=control
@@ -402,7 +398,7 @@ after 1x (P) 1H (P) 2H (P) 3S (P) when by_resp, x is not H, !(twalsh, x is C)
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows spl_net15(H,S)
+      shows tp(H) - wasted_hcp >= 15
       when  cue, H is not H, S is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  spl_bare(H,S)
       sets  ask=control(H), ladder=control
@@ -410,7 +406,7 @@ after 1x (P) 1H (P) 2H (P) 3S (P) when by_resp, x is not H, !(twalsh, x is C)
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows spl_net15(H,S)
+      shows tp(H) - wasted_hcp >= 15
       when  cue, H is not S, S is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  spl_bare(H,S)
       sets  ask=control(S), ladder=control
@@ -418,17 +414,17 @@ after 1x (P) 1H (P) 2H (P) 3S (P) when by_resp, x is not H, !(twalsh, x is C)
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows spl_net15(H,S)
+      shows tp(H) - wasted_hcp >= 15
       when  rkcb
       sets  ask=keycards(trump)
       artificial
       priority 12
 after 1x (P) 1M (P) 2M (P) 4y (P) when by_resp, x is not M, y is not M, y is not x, M is S | y is not S, !(twalsh, x is C)
   4M  "Game: no slam interest"
-      shows !spl_net15(M,y)
+      shows !tp(M) - wasted_hcp >= 15
       priority 13
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows spl_net15(M,y)
+      shows tp(M) - wasted_hcp >= 15
       when  cue, M is not C, y is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  spl_bare(M,y)
       sets  ask=control(C), ladder=control
@@ -436,7 +432,7 @@ after 1x (P) 1M (P) 2M (P) 4y (P) when by_resp, x is not M, y is not M, y is not
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows spl_net15(M,y)
+      shows tp(M) - wasted_hcp >= 15
       when  cue, M is not D, y is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  spl_bare(M,y)
       sets  ask=control(D), ladder=control
@@ -444,7 +440,7 @@ after 1x (P) 1M (P) 2M (P) 4y (P) when by_resp, x is not M, y is not M, y is not
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows spl_net15(M,y)
+      shows tp(M) - wasted_hcp >= 15
       when  cue, M is not H, y is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  spl_bare(M,y)
       sets  ask=control(H), ladder=control
@@ -452,7 +448,7 @@ after 1x (P) 1M (P) 2M (P) 4y (P) when by_resp, x is not M, y is not M, y is not
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows spl_net15(M,y)
+      shows tp(M) - wasted_hcp >= 15
       when  cue, M is not S, y is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  spl_bare(M,y)
       sets  ask=control(S), ladder=control
@@ -460,7 +456,7 @@ after 1x (P) 1M (P) 2M (P) 4y (P) when by_resp, x is not M, y is not M, y is not
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows spl_net15(M,y)
+      shows tp(M) - wasted_hcp >= 15
       when  rkcb
       sets  ask=keycards(trump)
       artificial
@@ -480,10 +476,10 @@ after 1m (P) 1H (P) 1S (P) when by_resp, !(twalsh, m is C)
       priority 2
 after 1m (P) 1H (P) 1S (P) 4y (P) when by_resp, y is C | y is D, y is not m, !(twalsh, m is C)
   4S  "Game: no slam interest"
-      shows !spl_net14(S,y)
+      shows !tp(S) - wasted_hcp >= 14
       priority 13
   cheapest(C)  "Slam try: control bid in ♣"  alert
-      shows spl_net14(S,y)
+      shows tp(S) - wasted_hcp >= 14
       when  cue, S is not C, y is not C, under_game(C), has(A,C) | C<=0 | (style is first_or_second_round, has(K,C) | C<=1)
       when  spl_bare(S,y)
       sets  ask=control(C), ladder=control
@@ -491,7 +487,7 @@ after 1m (P) 1H (P) 1S (P) 4y (P) when by_resp, y is C | y is D, y is not m, !(t
       prefer 0 - cheapest_rank(C)
       priority 14
   cheapest(D)  "Slam try: control bid in ♦"  alert
-      shows spl_net14(S,y)
+      shows tp(S) - wasted_hcp >= 14
       when  cue, S is not D, y is not D, under_game(D), has(A,D) | D<=0 | (style is first_or_second_round, has(K,D) | D<=1)
       when  spl_bare(S,y)
       sets  ask=control(D), ladder=control
@@ -499,7 +495,7 @@ after 1m (P) 1H (P) 1S (P) 4y (P) when by_resp, y is C | y is D, y is not m, !(t
       prefer 0 - cheapest_rank(D)
       priority 14
   cheapest(H)  "Slam try: control bid in ♥"  alert
-      shows spl_net14(S,y)
+      shows tp(S) - wasted_hcp >= 14
       when  cue, S is not H, y is not H, under_game(H), has(A,H) | H<=0 | (style is first_or_second_round, has(K,H) | H<=1)
       when  spl_bare(S,y)
       sets  ask=control(H), ladder=control
@@ -507,7 +503,7 @@ after 1m (P) 1H (P) 1S (P) 4y (P) when by_resp, y is C | y is D, y is not m, !(t
       prefer 0 - cheapest_rank(H)
       priority 14
   cheapest(S)  "Slam try: control bid in ♠"  alert
-      shows spl_net14(S,y)
+      shows tp(S) - wasted_hcp >= 14
       when  cue, S is not S, y is not S, under_game(S), has(A,S) | S<=0 | (style is first_or_second_round, has(K,S) | S<=1)
       when  spl_bare(S,y)
       sets  ask=control(S), ladder=control
@@ -515,7 +511,7 @@ after 1m (P) 1H (P) 1S (P) 4y (P) when by_resp, y is C | y is D, y is not m, !(t
       prefer 0 - cheapest_rank(S)
       priority 14
   4N  "Keycard ask in {trump}"
-      shows spl_net14(S,y)
+      shows tp(S) - wasted_hcp >= 14
       when  rkcb
       sets  ask=keycards(trump)
       artificial

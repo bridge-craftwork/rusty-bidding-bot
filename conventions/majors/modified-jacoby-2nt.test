@@ -28,7 +28,8 @@ S AKJ52.K73.AQ432.      | 1S P 2NT P 3D P 3H P 3S P 3N P | 4C | the void is in c
 S AKJ52.K7.AQ43.82      | 1S P 2NT P 3H P 3S P      | 4C     | four diamonds
 S 82.AKJ52.K7.AQ43      | 1H P 2NT P 3H P 3S P      | 3N     | four clubs
 # ── Responder ────────────────────────────────────────────────────────
-N KQ74.A85.K872.Q3      | 1S P 2NT P 3C P           | 4S     | 14 facing a minimum: no slam interest
+N KQ74.A85.K872.Q3      | 1S P 2NT P 3C P           | 3D     | 15 support points facing a minimum: slam possible if all works, relay (Rick, 2026-11-07)
+N KJ74.A85.Q872.Q3      | 1S P 2NT P 3C P           | 3D     | 13 support points facing a minimum's 14: slam possible if all works, relay
 N KQ74.AQ5.AK72.J3      | 1S P 2NT P 3C P           | 3D     | 19 facing a minimum: ask
 N KQ74.A85.K872.Q3      | 1S P 2NT P 3D P           | 3H     | 14 facing 15+: ask where the shortness is
 # ── They bid over the 2NT ────────────────────────────────────────────
@@ -65,7 +66,16 @@ N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P | 3S     | ask where the sho
 N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P | 4C | ask where the void is
 N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | #83: 14 working opposite the void: keycard
 N J8732.AT63.A.KJ5      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | #84: nothing wasted opposite the void: keycard
-N KQ54.KQJ7.K98.J2      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 5H | KQ opposite the void: 10 working, game (past 4♥ now)
+N KQ54.KQJ7.K98.J2      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | KQ wasted opposite the void, still 17-5+12 = 24 working: keycard (13 tricks DD opposite #83's South)
 N 9854.KQJ7.AK8.A2      | 1H P 2NT P 3C P 3D P 3H P 3S P 4D P | 4NT | singleton diamond opposite AK: still 13 working beside it
 N KQ74.AQ5.K872.J3      | 1S P 2NT P 3C P 3D P 3S P 3N P 4H P | 4S | the 5-4-2-2's four hearts: game, not a pass of the artificial 4♥
-N AT42.K432.J6.AK6      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 5H | the spade ace is wasted opposite the void: 11 working
+N AKQ4.QJ87.KJ8.Q2      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 5H | AKQ wasted opposite the void: 18-9+12 = 21 working, no slam (11 tricks DD opposite -.AT642.AQ763.963)
+# ── Working HCP (Rick, 2026-11-07): the low-HCP slam, the stronger hand asks ─
+N 8765.KJ87.KJ8.A2      | 1H P 2NT P 3C P           | 3D     | 12 HCP, 13 support points: relay, a perfect fit can make slam
+N 8765.KJ87.KJ8.A2      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | nothing wasted opposite the void: 13+12 = 25 working, keycard (13 tricks DD on 24 HCP opposite -.AQ642.AQ763.963)
+N 8765.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | 13 HCP, all working opposite the void: keycard
+N 9854.KQJ7.QJ8.A2      | 1H P 2NT P 3C P 3D P 3H P 3S P 4D P | 4H   | singleton diamond opposite QJx: 14-3+12 = 23 working, short of the singleton's 27: game
+N KQ74.A85.K872.53      | 1S P 2NT P 3D P 3H P 3N P | 4C     | 12 HCP opposite 15+, nothing wasted opposite the club singleton: the weaker hand says "you ask"
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 3H P 3N P 4C P | 4NT | the stronger hand asks for keycards
+N AQ74.AK5.K872.53      | 1S P 2NT P 3D P 3H P 3N P | 4NT    | 16 HCP, the stronger hand: keycard himself
+N KQ74.A85.872.KQ3      | 1S P 2NT P 3D P 3H P 3N P | 4S     | 14 HCP, KQ opposite the club singleton: 9 working, game

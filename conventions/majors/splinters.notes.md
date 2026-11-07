@@ -163,9 +163,9 @@ spec; the ranges are ours.
   1♦–1♥–1♠–4♣ agree spades as a splinter over 1♠ would (12-15, 11 with
   a void); opener counts from 14 as over the splinter of his opening.
 
-The counts are named once (`spl_netN(t, s)`, `spl_short(s)`,
-`spl_bare(t, s)`, defined in splinters.bid) for the new blocks; the
-older blocks still spell the eight branches out.
+The shared conditions are named once (`spl_short(s)`, `spl_bare(t, s)`,
+defined in splinters.bid). Every count is `tp(t) - wasted_hcp` since
+2026-11-07 ("Working HCP", below).
 
 Measured: `compare` on Splinters, Splinters_By_Opener, the Gavin
 splinters, Slam_After_Major_Fit, Two_Over_One, Reverse_After_Two_Over_One,
@@ -195,6 +195,24 @@ it reached the grand that par wants.
   left to the notrump modules.
 - 1♥ 1♠ 2♠ (P) 4♣ (the task excluded it) and the splinters over 1NT
   interference.
+
+## Working HCP (2026-11-07)
+
+Rick, 2026-11-07, of modified Jacoby, Jacoby 2NT and splinters alike:
+
+> "keycard should be the stronger hand. the idea of the relays is it
+> will allow us to find low HCP slams when there is a good fit. one of
+> the hands had 4-5 weak spades in responder's hand, and opener had a
+> spade void, i think, which means all the combined HCP are 'working',
+> which is the goal of this system (and the standard jacoby 2nt, and
+> splinter bids). this may be a concept we haven't introduced yet."
+
+The splinter rules already counted that way (support points less K 3,
+Q 2, J 1 in the short suit); the eight spelled-out combinations per
+call are now the engine's term, `tp(M) - wasted_hcp`
+(slam-entry.notes.md, "Working values"). Same thresholds, so a pure
+rewrite: compare on the matching set (5,000 boards, standard card)
+changed 0 boards from it.
 
 ## Sources
 
@@ -227,3 +245,5 @@ it reached the grand that par wants.
 - **The doubled splinter** (2026-10-15): opener's game bid stays the
   sign-off over a lead-directing double, standard practice, not yet
   cited; the Brill daily 2026-10-11 board 1 for the motive.
+- **Working HCP** (Rick, 2026-11-07, quoted above): the wasted-honour
+  count is the engine's `wasted_hcp` since then.
