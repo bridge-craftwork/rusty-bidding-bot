@@ -45,5 +45,5 @@ S A5.KJ3.AQ852.J52          | 1D P 1H 3D       | !X     | 3D is above it
 
 # Basic-Bridge does not play them.
 card    Basic-Bridge
-S AK3.Q84.J3.KJ652          | 1C P 1H 1S       | P      | three hearts: no support double on this card
+S AK3.Q84.J3.KJ652          | 1C P 1H 1S       | 1NT    | three hearts: no support double on this card, 1NT with the spades held (BBA 1NT, probe 2026-11-07)
 S AK3.Q8.AJ3.KJ652          | 1C X 1H 1S       | X      | the 18+ double where support doubles are off

@@ -811,8 +811,10 @@ after 1x (*) 1z (P) when they.bid, z is not x
 
 # Notrump is the one rebid that has to know which suit they bid, so it
 # is written with their call bound. Over a takeout double there is no
-# suit to stop and the range is the same.
-after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
+# suit to stop and the range is the same. The same ranges when they
+# overcall partner's response at the one level (1C P 1H (1S) 1NT, Rick
+# 2026-11-06, bridge-classroom-bug-artifacts #93; it had no rule).
+after 1x (1y) 1z (P) | 1x (2y) 1z (P) | 1x (P) 1z (1y) when y is not x, z is not x, z is not y
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
       when  stop(y)
@@ -1143,6 +1145,34 @@ after 1x (1y) P (P) | 1x (2y) P (P) | 1x (3y) P (P) when y is not x
   cheapest(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19
       when  stop(y)
+
+# ── Partner passed and they reopened: opener's notrump ───────────────
+# 1D P P (1H) 1NT is the same bid as 1D (1H) P (P) 1NT above: 18-19
+# balanced with their suit stopped (Rick, 2026-11-06, bridge-classroom-
+# bug-artifacts #90; it had no rule). 15-17 would have opened 1NT and a
+# balanced 12-14 passes. Only the notrump is here; the six-card rebid
+# and the pass are `1x (*) P (*)` above.
+after 1x (P) P (1y) | 1x (P) P (2y) when y is not x
+  cheapest(N) "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19
+      when  stop(y)
+
+# ── They overcalled partner's response at the two level ──────────────
+# 1D P 1H (2S) 2NT: 18-19 balanced with their suit stopped, not
+# forcing (controller's decision 2026-11-06, bridge-classroom-bug-
+# artifacts #93, for Rick to confirm). A minimum balanced opener passes
+# (or makes a support double where the card has one); the card has no
+# Good/Bad 2NT, so 2NT is natural and strong, the 1x-1y-2NT rebid
+# pushed up by their overcall.
+after 1x (P) 1z (2y) when y is not x, y is not z, z is not x
+  2N  "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19, z<=3
+      when  stop(y)
+# Responder bid five of his major over 2NT: choose the game.
+after 1x (P) 1z (2y) 2N (P) 3z (P) | 1x (P) 1z (1y) 2N (P) 3z (P) when y is not x, y is not z, z is not x, z is H | z is S
+  4{z} "Three-card support"                shows z>=3
+      sets  trump=z
+  3N  "Two {z}: notrump"                   shows z<=2
 
 # Opener answering responder's 2NT invitation with a six-card major
 # (2026-09-27, ticket b220: 1S 2C 2H 2NT, AQ6542.JT65.97.K passed): the

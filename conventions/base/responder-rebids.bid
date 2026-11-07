@@ -759,6 +759,41 @@ after 1x (1y) P (P) 1N (P) | 1x (2y) P (P) 2N (P) when y is not x
   P   "No game"                            shows hcp<=6
       priority -5
 
+# ── Opener's notrump after I passed and they reopened (18-19) ────────
+# My pass of the opening showed 0-5, so game is out of reach: pass, or
+# with a six-card suit and a 1NT to escape from, play two of it.
+# Natural, no Stayman or transfers: opener's notrump is a rebid, not an
+# opening (Rick 2026-11-06, bridge-classroom-bug-artifacts #90).
+after 1x (P) P (1y) 1N (P) | 1x (P) P (2y) 2N (P) when y is not x
+  P   "No game"                            priority -5
+  2S  "To play: six or more spades"        shows S>=6
+      when  y is not S, partner.last=1N
+      sets  ask=signoff
+  2H  "To play: six or more hearts"        shows H>=6
+      when  y is not H, partner.last=1N
+      sets  ask=signoff
+  2D  "To play: six or more diamonds"      shows D>=6
+      when  y is not D, partner.last=1N
+      sets  ask=signoff
+  2C  "To play: six or more clubs"         shows C>=6
+      when  y is not C, partner.last=1N
+      sets  ask=signoff
+
+# ── Opener's 2NT over their two-level overcall (18-19) ───────────────
+# 1D P 1H (2S) 2NT (P): my one-level response showed 6+, so the ladder
+# is the uncontested one after 1x-1y-2NT: game from 7, five of my major
+# offers a choice of games, six bids the game (Rick 2026-11-06,
+# bridge-classroom-bug-artifacts #93).
+after 1x (P) 1z (2y) 2N (P) | 1x (P) 1z (1y) 2N (P) when y is not x, y is not z, z is not x
+  P   "Weak: no game"                      shows points<=6
+      priority -5
+  3N  "Game: 7+"                           shows points>=7, z<=4 | z is C | z is D
+  3{z} "Five {z}, forcing: choose 3NT or 4{z}"   shows z=5, points>=7
+      when  z is H | z is S
+      sets  forcing=round
+  4{z} "Game: six or more {z}"             shows z>=6, points>=7
+      when  z is H | z is S
+
 # ── One-level response in a contested auction, opener's minimum rebid ─
 # Opener's contested minimum rebids ask for a sign-off, and responder
 # passed them whatever he held, where uncontested he invites with 11-12
@@ -788,7 +823,7 @@ after 1x (1z) 1y (P) 2y (P) when z is not x, z is not y, y is not x
       when  y is H | y is S
   3N  "Game: 13+, {z} stopped"             shows points>=13, stop(z)
       when  y is C | y is D
-after 1x (1z) 1y (P) 1N (P) when z is not x, z is not y, y is not x
+after 1x (1z) 1y (P) 1N (P) | 1x (P) 1y (1z) 1N (P) when z is not x, z is not y, y is not x
   2N  "Invitational: 11-12"                shows points=11..12, y<=5
       sets  ask=nt_invite
   3N  "Game: 13+"                          shows points>=13, y<=5 | y is C | y is D

@@ -795,6 +795,24 @@ from 6 points, pass below. Over a non-jump 2NT (their 2-level suit) the
 Double_double and Negative_Double boards change both ways, net gain; 51
 boards, errors +74 IMPs to us.
 
+## After opener's notrump in a contested auction (Rick, 2026-11-06)
+
+Partner of the new opener's rebids in rebids.notes.md ("Opener's
+notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
+
+- `1x (P) P (1y) 1NT (P)` / `... (2y) 2NT (P)`: my pass showed 0-5,
+  so there is no game. Pass, or over 1NT play two of a six-card suit.
+  Natural, no Stayman or transfers: it is opener's rebid, not a 1NT
+  opening, and the passed hand has nothing to invite with. (#90's
+  North, 8.53.Q852.QT8532, now bids 2C over 1NT; BBA 2C too.)
+- `1x (P) 1z (2y) 2NT (P)` and `1x (P) 1z (1y) 2NT (P)` (the jump):
+  the uncontested ladder after 1x-1y-2NT: pass to 6, 3NT from 7, three
+  of a five-card major forcing (opener: 4M with three, else 3NT), four
+  with six. The controller's brief suggested raising from 6; 7 is what
+  every other 18-19 2NT here uses, so it stays 7.
+- `1x (P) 1y (1z) 1NT (P)` (12-14): the block already written for
+  `1x (1z) 1y (P) 1NT (P)`: 2NT invites with 11-12, 3NT with 13+.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -834,3 +852,8 @@ boards, errors +74 IMPs to us.
   reads opener's length as each shows it.
 - Brill daily 2026-10-20, board 7 and Brill /explain of 4D ("D >= 3,
   HCP 7-9"); the 3M/4M continuations: standard practice, not yet cited.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #90, #93): the
+  notrump rebids answered here; responder's continuations (no systems
+  over opener's reopening notrump, the 1x-1y-2NT ladder over the
+  contested 2NT) are standard practice, not yet cited, and our
+  decision (2026-11-07).
