@@ -45,3 +45,10 @@ dealer  N
 N KQ82.AK976.K973.-     | 1H P 2N P 3D P 3H P 3S P 3N P 4C P 4N P 5H P 5N P | 6H | 5NT means nothing here: six of the agreed suit, not a pass
 card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true
 N KQ82.AK976.K973.-     | 1H P 2N P 3D P 3H P 3S P 3N P 4C P 4N P 5H P 5N P | 6H | with the king ask: two side kings
+
+# The asker never passes an unread five-level answer to his quantitative
+# 4NT (Bridge-Classroom #94, Rick 2026-11-06).
+card    21GF-DEFAULT
+dealer  N
+vul     None
+S K73.AQT43.J94.A2      | 1N P 2D P 2H P 4N P 5C P   | 6NT  | an unread 5C over quantitative 4NT: slam, not pass
