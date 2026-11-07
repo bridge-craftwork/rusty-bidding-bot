@@ -36,6 +36,22 @@ without it **+99 IMPs** (halves +46 / +53, agree; distance from par
 +99, 209 boards changed). "Short of slam" 1,021 → 981 boards
 (12,559 → 12,051 IMPs); "overbid" 433 → 461 (6,111 → 6,524).
 
+## Opener after responder's 4M: not the 19+ pass (2026-11-07)
+
+Rick's ruling of 2026-11-07 is about modified Jacoby (quoted in
+modified-jacoby-2nt.notes.md): "normally opener doesn't continue for
+slam exploration after responder chooses not to try, unless opener has
+19+ points". It is **not applied to standard Jacoby**: here opener's
+shortness answer (3x) is unlimited, 10-21, so responder's 4M is not a
+decline opposite a limited hand, and opener with extras still goes on
+through the slam modules (rkcb-1430's ask on `slam_values`) as before.
+Tried and reverted the same day: the 19+ pass here cost −887 IMPs on
+the 5,000 Jacoby/splinter boards (contract errors, halves −307 / −580;
+opener's 17-18 slams, `P 4H P : 4N -> P` −675 on 207 boards).
+
+Open question for Rick: should standard Jacoby have a line of its own
+(say 17+ to go on over 4M), or stay as it is?
+
 ## Sources
 
 - Jacoby 2NT: Oswald Jacoby's game-forcing raise; the answers as
@@ -45,3 +61,5 @@ without it **+99 IMPs** (halves +46 / +53, agree; distance from par
 - Working values after the shortness: Rick, 2026-11-07, quoted above;
   the threshold is our calibration (slam-entry.notes.md, "Working
   values").
+- Opener over 4M: Rick's 19+ ruling (2026-11-07) is modified Jacoby's
+  and not applied here (above).

@@ -233,28 +233,32 @@ after 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P
   step(2)  "Step 3: spade void"    alert  shows S=0  artificial  priority 15
 
 # ── Responder: the relays ────────────────────────────────────────────
-# The relays are for slam interest. Without it the slam modules decide,
-# as after standard Jacoby: game, or keycard straight away. An explicit
-# 4M sign-off here cost 141 slams in the self A/B (notes, "Self A/B").
+# Over the minimum (Rick, 2026-11-07): "modified jacoby 2nt is mostly
+# useful because responder can jump to game with no slam interest,
+# after a 3C rebid by opener. the main advantage is that it doesn't
+# give the defenders any clues to opener's distribution. so we don't
+# want to always ask. but with say 15+ HCP, responder should probably
+# ask." So 3♦ with 15+ HCP, else 4M at once. This overrides the
+# double-dummy measurement, which cannot see what the relays tell the
+# defenders (notes, "Ask over 3♣ only with 15+").
 #
-# The gate is wider than the slam count (Rick, 2026-11-06 and
-# 2026-11-07, bridge-classroom #83/#84): the relays are cheap, all below
-# game, and find the low-HCP slams where every high card works. So
-# responder relays whenever slam is possible with everything working:
-# his support points and opener's top HCP (`mj_relay_floor`, 27: 13
-# support points opposite a minimum's 14, which every Jacoby 2NT hand
-# has, so in practice he always relays; measured against 28 and 30,
-# notes). Cohen: "If responder still has slam interest, he can ask
-# further".
+# Over the non-minimum answers (3♦ short, the void) the relays stay
+# wide: responder relays whenever slam is possible with everything
+# working, his support points and opener's top HCP 27 or more
+# (`mj_relay_floor`). Cohen: "If responder still has slam interest, he
+# can ask further".
 define mj_relay_floor = 27
 define mj_try(t) = slam_interest(t) | tp(t) + partner.hcp.max >= mj_relay_floor
 
 after 1M (P) 2N (P) 3C (P)
   3D  "Asks opener to describe the minimum"  alert
-      shows mj_try(M)
+      shows hcp >= 15
       sets  ask=mj_relay
       artificial
       priority 15                      # the relay, ahead of the control bids (12-14)
+  4M  "Game: no slam interest opposite a minimum"
+      shows hcp <= 14
+      priority 15                      # Rick 2026-11-07: tell the defenders nothing
 
 after 1M (P) 2N (P) 3D (P)
   3H  "Asks where the singleton or void is"  alert
@@ -490,3 +494,14 @@ when asked mj_captain, we.trump is H | we.trump is S
 after 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4S (P)
   5H  "No slam: back to hearts"
       priority 13
+
+# ── Opener after responder declines (Rick, 2026-11-07) ───────────────
+# "normally opener doesn't continue for slam exploration after
+# responder chooses not to try, unless opener has 19+ points." When
+# responder bids 4M over any of opener's answers or relay answers,
+# opener passes with 18 points or fewer; with 19+ the slam modules
+# decide as before. Above the keycard ask and the control bids.
+after 1M (P) 2N (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3N (P) 4M (P) | 1M (P) 2N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P) 4x (P) 4M (P)
+  P   "Responder declined: no slam without 19+"
+      shows points <= 18
+      priority 16

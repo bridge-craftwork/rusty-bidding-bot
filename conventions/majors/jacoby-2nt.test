@@ -6,3 +6,6 @@ S AKJ52.K73.Q943.8      | 1S P 2NT P  | 3C     | 13 HCP, singleton club: show th
 # Working HCP after the shortness (Rick, 2026-11-07): honours opposite the singleton are wasted
 N K874.AQ5.AK72.83      | 1S P 2NT P 3C P | 4NT  | nothing wasted opposite the club singleton: keycard
 N K874.AQ5.Q72.KQ3      | 1S P 2NT P 3C P | 4S   | KQ opposite the singleton: game
+# Opener after responder's 4M: standard Jacoby's answer is unlimited, so
+# opener with extras still goes on (the 19+ pass is modified Jacoby's)
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3C P 4S P | 4NT | 17 HCP and a singleton: still asks

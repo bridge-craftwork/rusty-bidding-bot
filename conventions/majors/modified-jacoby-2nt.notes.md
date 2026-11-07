@@ -273,6 +273,44 @@ opposite -.AT642.AQ763.963). The low-HCP slam case: 8765.KJ87.KJ8.A2
 opposite -.AQ642.AQ763.963, 24 HCP between them, 13 tricks: relay,
 then keycard.
 
+## Ask over 3♣ only with 15+; opener passes 4M without 19+ (Rick, 2026-11-07)
+
+Rick, later the same day:
+
+> "modified jacoby 2nt is mostly useful because responder can jump to
+> game with no slam interest, after a 3C rebid by opener. the main
+> advantage is that it doesn't give the defenders any clues to opener's
+> distribution. so we don't want to always ask. but with say 15+ HCP,
+> responder should probably ask. normally opener doesn't continue for
+> slam exploration after responder chooses not to try, unless opener
+> has 19+ points"
+
+- **Over 3♣ responder relays 3♦ with 15+ HCP, else jumps to 4M**
+  (priority 15, so the slam modules do not ask straight from 3♣
+  either). This replaces the always-relay gate over 3♣ above
+  (`mj_relay_floor` now gates only the relays over the non-minimum 3♦
+  and the void re-ask). #84's North (13 HCP) now bids 1♥–2NT–3♣–4♥;
+  #83's North (16) still relays and reaches 6♥.
+- **Opener passes responder's 4M without 19+ points**, after any of
+  his answers or relay answers (the `after` block at the end of the
+  file, priority 16, above the keycard ask and the control bids). Not in
+  standard Jacoby, whose shortness answer is unlimited
+  (jacoby-2nt.notes.md; an open question for Rick).
+- **The ruling overrides the double-dummy measurement.** What the relays
+  tell the defenders (opener's shape, for the lead and the defence) is
+  invisible to DD par, which scores every contract as if the defenders
+  saw all four hands.
+
+Measured against the always-relay version (PR #81 branch at 265c925;
+compare `--par-all`, the same 5,000 boards, modified Jacoby on;
+errors_diff): 988 boards changed; the bidding side's contract errors
+**−267 IMPs** (halves −17 / −250, agree); distance from par −228.
+"Short of slam" 1,000 → 1,108 boards (12,323 → 13,607 IMPs), "overbid"
+449 → 386 (6,324 → 5,388). By first difference: `P 3C P : 3D -> 4H`
+−176 on 441 and `3D -> 4S` −104 on 434 (the relay kept for 15+);
+opener's pass `P 4H P : 4N -> P` −116 on 63, `P 4S P : 4N -> P` +129 on
+50. It is Rick's ruling either way.
+
 ## Sources
 
 - Larry Cohen, "Modified Jacoby 2NT",
@@ -290,3 +328,5 @@ then keycard.
   past game (quoted above). The reading of "stronger" (HCP against the
   shown floor), the "you ask" signal, the thresholds and the relay
   floor are ours.
+- Rick, 2026-11-07, later (quoted in "Ask over 3♣ only with 15+"): the
+  15+ HCP ask over 3♣, game otherwise, opener's pass without 19+.
