@@ -399,6 +399,9 @@ all scenarios): 26 of 17,105 boards changed, all this auction
 Replay of #85 (bid-pbn, 21GF-GIB, all four seats Rusty):
 1NT–2♥–2♠–3♣–3NT–4NT–6NT (was 3NT passed).
 
+**Rick, 2026-11-07:** asked whether "invite slam" meant the quantitative
+4NT as built: "with 4NT". Settled; the rule stands as above.
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
@@ -430,3 +433,5 @@ Replay of #85 (bid-pbn, 21GF-GIB, all four seats Rusty):
   slam after 5-4 shown and opener's 3NT. The total-point count and
   opener's accept-in-the-minor are ours ("standard practice, not yet
   cited").
+- **Rick, 2026-11-07** (#85 follow-up): the invitation is the
+  quantitative 4NT ("with 4NT").
