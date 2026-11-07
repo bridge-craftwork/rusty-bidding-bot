@@ -897,6 +897,105 @@ when asked x_cue(y)
       sets  ask=signoff
       priority -3
 
+# ── Opener's strong new suit over their overcall (forcing to game) ───
+# 1C P 1D (2H) 2S, 1C P 1D (1S) 2H, 1D P 1S (2C) 2H: a reverse, 19+;
+# 1C P 1H (1S) 3D, 1C P 1S (2H) 3D, 1D P 1H (1S) 3C: 18+ (rebids.bid,
+# Rick 2026-11-07: "5: yes"). BBA (probes/opns-r-1C-1D-2H-2S.toml,
+# -1C-1D-1S-2H, -1D-1S-2C-2H, -1C-1S-2H-3D): a major raised to game
+# with a minimum, one level with more; 3NT with their suit held; the
+# minor's preference (BBA's 4m "try", 3m); my own suit with five or
+# six; else the cue bid. BBA's 4NT keycard asks are not taken.
+when asked rev(w, m, y, z)
+  jump(w) "Four {w}, a minimum"              shows w>=4, hcp<=7
+      when  w is H | w is S
+      sets  trump=w
+      priority 1
+  cheapest(w) "Four {w}, 8+"                 shows w>=4, hcp>=8
+      when  w is H | w is S
+      sets  trump=w
+      priority 1
+  cheapest(w) "Four or more {w}"             shows w>=4
+      when  w is C | w is D
+      sets  trump=w
+  3N  "A stopper in {y}"                     shows stop(y), w<=3
+      priority 1
+  cheapest(z) "Six or more {z}"              shows z>=6
+      when  z is H | z is S
+  cheapest(z) "Five or more {z}"             shows z>=5, w<=3
+      when  z is C | z is D
+      priority -1
+  cheapest(m) "Three or more {m}"            shows m>=3
+      sets  trump=m
+      priority -1
+  cheapest(y) "No stopper in {y}, no fit"
+      alert  artificial
+      priority -4
+
+# 1D P 1M (2y) 3C (P): four or more clubs, five diamonds, 13-19, not
+# forcing (BBA, probes/opns-r-1D-1H-2S-3C.toml, -1D-1S-2H-3C): pass
+# with nothing, 3D with three diamonds to 10, 3NT 11+ with their suit
+# held, three of my major with six, the cue bid 12+ without a stopper,
+# game in a minor with a fit and 12+ (BBA's 4C / 4D invitations with
+# 10-11 not taken).
+after 1D (P) 1z (2y) 3C (P) when z is H | z is S, y is not z, y is not C, y is not D
+  3N  "Game: 11+ with a stopper in {y}"    shows hcp>=11, stop(y), z<=5
+      priority 1
+  cheapest(z) "Six or more {z}, 9+"        shows z>=6, hcp>=9
+      sets  ask=signoff
+      priority 1
+  3D  "Preference: three or more diamonds, up to 10"   shows D>=3, hcp<=10
+      sets  ask=signoff
+      priority 1
+  cheapest(y) "Cue bid: 12+, no stopper in {y}, forcing to game"
+      alert  artificial
+      shows hcp>=12
+      sets  forcing=game, ask=ns_cue(y)
+      priority 1
+  P   "No fit, no game"                     shows hcp<=10
+      priority 1
+
+# They competed over the 3C (compare 2026-11-07: GIB_1N5422 13, no
+# rule): raise clubs with four, 3NT with game values and a stopper,
+# else pass.
+after 1D (P) 1z (2y) 3C (*) when z is H | z is S, y is not z, y is not C, y is not D, rho.last!=P
+  4C  "Four or more clubs, competing"      shows C>=4, hcp<=10
+      priority 1
+  3N  "Game: 11+ with a stopper in {y}"    shows hcp>=11, stop(y)
+      priority 1
+  P   "Nothing more to say"
+      priority -5
+
+# 1D P 1H (1S) 2C (P): five-five in the minors, 13-17 (rebids.bid, Rick
+# 2026-11-07: "6: yes"). BBA (probes/opns-r-1D-1H-1S-2C.toml): 2D or
+# 3C, whichever minor is longer, 6-9; 2H with six hearts; 2NT 10-11 and
+# 3NT 12+ with spades held; 3D 10-11 with three diamonds, inviting; the
+# cue bid 2S with 12+ and no stopper. BBA's 4NT keycard ask not taken.
+after 1D (P) 1H (1S) 2C (P)
+  2D  "Preference: diamonds, up to 9"      shows D>=C, hcp<=9
+      sets  ask=signoff
+      priority 1
+  3C  "Three or more clubs, up to 9"       shows C>D, C>=3, hcp<=9
+      sets  ask=signoff
+      priority 1
+  2H  "Six or more hearts, up to 10"       shows H>=6, hcp<=10
+      sets  ask=signoff
+      priority 1
+  2N  "Invitational: 10-11 with a spade stopper"   shows hcp=10..11, stop(S)
+      sets  ask=nt_invite
+      priority 1
+  3N  "Game: 12+ with a spade stopper"     shows hcp>=12, stop(S)
+      priority 1
+  3D  "Invitational: three or more diamonds, 10-11"   shows D>=3, hcp=10..11
+      priority 1
+  2S  "Cue bid: 12+, no spade stopper, forcing to game"
+      alert  artificial
+      shows hcp>=12
+      sets  forcing=game, ask=ns_cue(S)
+      priority 1
+  2D  "No better bid: diamonds"
+      sets  ask=signoff
+      priority -3
+
 # ── Opener's natural spades after 1C P 1D (1H) ───────────────────────
 # 1C P 1D (1H) 1S (P): four spades, 11-15 (rebids.bid). BBA (Rick
 # 2026-11-07: "yes to 1 and 2"; probes/opns-r-1C-1D-1H-1S.toml), in HCP
@@ -939,7 +1038,7 @@ after 1C (P) 1D (1H) 1S (P)
   2H  "Cue bid: 13+, no heart stopper, forcing to game"
       alert  artificial
       shows hcp>=13, S<=3
-      sets  forcing=game, ask=spade_cue(H)
+      sets  forcing=game, ask=ns_cue(H)
       priority 1
   2D  "Five diamonds, no better bid"       shows D>=5, hcp<=12
       sets  ask=signoff
@@ -998,13 +1097,13 @@ after 1C (P) 1D (1H) 2S (P)
   3H  "Cue bid: 10+, no heart stopper, forcing to game"
       alert  artificial
       shows hcp>=10, S<=3
-      sets  forcing=game, ask=spade_cue(H)
+      sets  forcing=game, ask=ns_cue(H)
       priority 1
   3C  "Back to clubs: up to 9"             shows hcp<=9, S<=3
       priority 1
 # Opener answered my cue bid without a stopper: game in clubs with a
 # fit, else 3NT with something in hearts, else the best game we have.
-when answered spade_cue(y), partner.last!=3N
+when answered ns_cue(y), partner.last!=3N
   5C  "Game in clubs: three or more"       shows C>=3
       when  partner.last=3C | partner.last=4C
       priority 1
