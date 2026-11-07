@@ -370,3 +370,19 @@ S Q72.976.AT87.J32      | 1S P 1N P 2C P       | 2S     | three spades over thre
 S 72.Q76.A874.J432      | 1H P 1N P 2C P       | 2H     | the weak raise in hearts: the major before four clubs
 S Q7.976.AT87.J532      | 1S P 1N P 2C P       | P      | two spades and four clubs: pass
 N AKJT63.QJ86.K9.5      | 1S P 1N P 2H P 2S P  | P      | #87: 14 opposite 6-10 with two or three: no game
+
+# ── After opener's notrump in a contested auction (Rick, 2026-11-06,
+# bridge-classroom-bug-artifacts #90 and #93; Rick's card stood in by
+# 21GF-GIB with modified Jacoby 2NT and Kokish)
+card    21GF-GIB major_openings.jacoby_2nt.modified=true two_level.kokish.play=true
+dealer  S
+N 8532.53.Q852.Q32      | 1D P P 1H 1N P   | P   | 0-5 opposite 18-19: no game
+N 8.53.Q852.QT8532      | 1D P P 1H 1N P   | 2C  | #90 North: six clubs, to play
+N 8532.53.Q852.Q32      | 1D P P 2H 2N P   | P   | no game over the two-level reopening
+N QJ32.J8762.A3.J5      | 1D P 1H 2S 2N P  | 3H  | five hearts, 9: choose 3NT or 4H
+N J32.QJ8762.A3.J5      | 1D P 1H 2S 2N P  | 4H  | six hearts: game
+N J32.QJ86.832.J54      | 1D P 1H 2S 2N P  | P   | 4: no game
+N J32.QJ86.K32.J54      | 1D P 1H 2S 2N P  | 3NT | 7 opposite 18-19: game
+N J32.KQJ6.832.Q54      | 1C P 1H 1S 2N P  | 3NT | 9 opposite the jump to 2NT: game
+N J32.KQJ6.K32.Q54      | 1C P 1H 1S 1N P  | 2NT | 12 opposite 12-14: invites
+N J32.KQJ6.AK2.Q54      | 1C P 1H 1S 1N P  | 3NT | 15 opposite 12-14: game

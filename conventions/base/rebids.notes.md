@@ -1214,6 +1214,69 @@ is past. Over responder's forcing 3M (five cards): 4M with three, else
 3NT. Standard practice, not yet cited; the bare-suit test is our
 judgment, for Rick to check.
 
+## Opener's notrump once they come in (Rick, 2026-11-06)
+
+Bridge-Classroom bug reports (bridge-classroom-bug-artifacts #90 and
+#93, NT Ladder; Rick sat South, Rusty the other three seats, Rick's
+card stood in by 21GF-GIB with modified Jacoby 2NT and Kokish):
+
+- **#90**, `1D P P (1H) 1NT` with AKJ.AT.JT43.AJ97: no rule, so Rusty
+  had no meaning for it. Rick: "Shows 18-19 HCP and a stopper." It is
+  the same bid as `1D (1H) P (P) 1NT`, which already read 18-19 with a
+  stopper: in both, partner has passed, opener has the chance to bid
+  again with his hand alone, a balanced 15-17 would have opened 1NT and
+  a balanced 12-14 passes. Written as its own block (`1x (P) P (1y) |
+  1x (P) P (2y)`): 1NT, or 2NT over a two-level reopening, 18-19
+  balanced with their suit stopped. The rest of opener's options there
+  (rebid six, pass) stay with `1x (*) P (*)`. No reopening double was
+  added: partner's pass showed 0-5, so it would need more than the
+  `1x (1y) P (P) X` (12+) shows; left as a gap.
+- **#93**, `1D P 1H (2S) 2NT` with K6.AK4.Q985.AQ82: no rule. Rick: "I
+  think 2NT here still shows 18-19, but not sure." **Decision taken by
+  the controller session, for Rick to confirm**: after `1x P 1z` and a
+  two-level overcall (a jump overcall included), opener's 2NT is 18-19
+  balanced with their suit stopped, not forcing; a minimum balanced
+  opener passes, or doubles where the card plays support doubles that
+  high. The card has no Good/Bad 2NT field, so 2NT stays natural; it
+  is the 1x-1y-2NT rebid pushed up by their overcall. Opener answers
+  responder's 3M (five, forcing) with 4M on three, else 3NT.
+- **The one-level overcall** (`1C P 1H (1S)`) had no notrump rule
+  either (found while checking #93): it now shares the `1x (1y) 1z (P)`
+  block: 1NT 12-14 with their suit stopped, the jump to 2NT 18-19.
+  `support-doubles.test`'s Basic-Bridge case (no support doubles,
+  AK3.Q84.J3.KJ652, 1C P 1H 1S) now bids 1NT where it passed; BBA bids
+  1NT there too (probe 2026-11-07).
+
+BBA (probe, 21GF-GIB, 2026-11-07): #90's hand doubles 1H, #93's hand
+doubles 2S; with 19 balanced over `1C P 1H (1S)` and `1D P 1S (2H)`
+BBA jumps to 3NT where we bid 2NT; `1C P P (1S)` 1NT agrees. BBA
+style, not taken: the 2NT ladder is Rick's (18-19, partner raises with
+7+, as uncontested).
+
+Two small follow-ups found while measuring: over partner's 2-of-a-suit
+sign-off after the reopening 1NT (#90's own board: 1D P P 1H 1NT P 2C)
+opener passes; the generic sign-off answer bid 3C, "16-18 invitation",
+opposite 0-5. And when they compete over opener's 18-19 notrump and
+partner doubles, opener passes ("described: partner's double decides";
+six no-rule positions in the compare, such as 1C P 1H 2S 2N 3S X 4S).
+
+**Compare** (2026-11-07, `--par-all`, errors_diff verdict = the actor's
+contract errors):
+
+| run | boards changed | actor contract errors | all errors | distance from par | no rule |
+|---|---|---|---|---|---|
+| 15 matching scenarios, full (NT_Ladder, Notrump_18-19, Forcing_NT, Gavin_*_2N_Rebid_*, Balancing, After_Opp_Overcalls, Dealing_with_Overcalls_*, Opps_Weak_Jump_Overcall, Minor_Suit_Opener, 1m-1N, GIB_Sandwich_NT_BPH, Jump_Cuebid_Weak, Bergen_Raises; 7,500 boards) | 120 | +8 | +134 | +162 | 96 → 96 |
+| all scenarios `--limit 50` (tripwire) | 32 | -14 | +38 | +36 | 241 → 241 |
+
+Every changed board's first difference is one of the new calls (no
+call elsewhere moved). The one loser is the 12-14 1NT over the
+one-level overcall of the response (`1C P 1D (1S) 1NT`: -50 actor
+contract errors on 18 boards in the matching set, -25 on 7 in the
+tripwire); BBA bids the same 1NT on most of those boards (1m-1N 5 and
+7: both tables 1NT, down), so it is kept as standard and BBA's style;
+the two-level and reopening notrumps gain. Net vs BBA on the matching
+set: errors -2,789 → -2,655, par -2,654 → -2,492.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -1268,3 +1331,11 @@ judgment, for Rick to check.
   2NT after a 2/1 and opener's two-level rebid is 12-14 or 18+, and
   forcing. Opener's slam count over it uses responder's minimum
   (responder-rebids.notes.md).
+
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #90): opener's
+  1NT after partner passed and they reopened shows 18-19 and a stopper.
+  #93's 2NT over a two-level overcall of the response: the controller
+  session's decision (2026-11-06), Rick's own guess ("still shows
+  18-19, but not sure"); an open question for him. The 1NT 12-14 /
+  2NT 18-19 over a one-level overcall of the response: standard
+  practice, not yet cited; BBA agrees on the 1NT (probe 2026-11-07).
