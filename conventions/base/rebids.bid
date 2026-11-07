@@ -828,10 +828,9 @@ after 1x (*) 1z (P) when they.bid, z is not x
 
 # Notrump is the one rebid that has to know which suit they bid, so it
 # is written with their call bound. Over a takeout double there is no
-# suit to stop and the range is the same. The same ranges when they
-# overcall partner's response at the one level (1C P 1H (1S) 1NT, Rick
-# 2026-11-06, bridge-classroom-bug-artifacts #93; it had no rule).
-after 1x (1y) 1z (P) | 1x (2y) 1z (P) | 1x (P) 1z (1y) when y is not x, z is not x, z is not y
+# suit to stop and the range is the same. When they overcall partner's
+# response instead, the ranges are BBA's (below).
+after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
       when  stop(y)
@@ -846,6 +845,28 @@ after 1x (1y) 1z (P) | 1x (2y) 1z (P) | 1x (P) 1z (1y) when y is not x, z is not
   3N  "Game: 19+ with a stopper in {y}"
       shows hcp>=19, stop(y), z<=3
       priority -1
+  cheapest(y) "Cue bid: 19+, forcing to game"
+      alert  artificial
+      shows suit_points>=19
+      sets  forcing=game
+      priority -3
+
+# They overcalled partner's response at the one level (1C P 1H (1S);
+# it had no rule, bridge-classroom-bug-artifacts #93). BBA's ranges
+# (Rick 2026-11-07: "we can follow BBA's lead"; probes/opnt-1C-1H-1S.toml,
+# opnt-1C-1D-1S.toml): 1NT 13-16 (a balanced 12 passes), the jump to
+# 2NT 17-18, 3NT 19+. In practice 13-14, 18 and 19: a balanced 15-17
+# opened 1NT.
+after 1x (P) 1z (1y) when y is not x, z is not x, z is not y
+  cheapest(N) "13-16 balanced with a stopper in {y}"
+      shows balanced | shape 5-4-2-2, hcp=13..16, z<=3
+      when  stop(y)
+      sets  ask=signoff
+  jump(N) "17-18 balanced with a stopper in {y}"
+      shows balanced, hcp=17..18, z<=3
+      when  stop(y)
+  3N  "Game: 19+ with a stopper in {y}"
+      shows hcp>=19, stop(y), z<=3
   cheapest(y) "Cue bid: 19+, forcing to game"
       alert  artificial
       shows suit_points>=19
@@ -1181,22 +1202,47 @@ after 1x (P) P (1y) 1N (P) 2z (P) when y is not x, z is not y
       priority 1
 
 # ── They overcalled partner's response at the two level ──────────────
-# 1D P 1H (2S) 2NT: 18-19 balanced with their suit stopped, not
-# forcing (controller's decision 2026-11-06, bridge-classroom-bug-
-# artifacts #93, for Rick to confirm). A minimum balanced opener passes
-# (or makes a support double where the card has one); the card has no
-# Good/Bad 2NT, so 2NT is natural and strong, the 1x-1y-2NT rebid
-# pushed up by their overcall.
+# 1D P 1H (2S): BBA's style (Rick 2026-11-07, bridge-classroom-bug-
+# artifacts #93: "we can follow BBA's lead"; probes/opnt-*.toml on
+# 21GF-GIB). A minimum balanced opener passes, or makes a support double
+# where the card has one. 2NT is 17-18 balanced with their suit stopped,
+# not forcing, and 3NT 19-21 (in practice 18 and 19: 15-17 opened 1NT).
+# Where the double is not a support double (their call above the card's
+# `through`, two of partner's major when unset: 1H (2S)), opener's
+# double shows values: 15-18 balanced, at most three of partner's major
+# and of their suit; BBA doubles there with 15+ and three of partner's
+# major, 17+ with two, and bids 2NT with four of their suit (#93's
+# K6.AK4.Q985.AQ82 doubles). Responder's answers: responder-rebids.bid.
 after 1x (P) 1z (2y) when y is not x, y is not z, z is not x
-  2N  "18-19 balanced with a stopper in {y}"
-      shows balanced, hcp=18..19, z<=3
+  X   "Values: 15-18 balanced, at most three {z} and three {y}"
+      shows balanced, hcp=15..18, z<=3, y<=3
+      shows z=3 | hcp>=17
+      when  z is H | z is S
+      when  !support_x | (support_through is none, rho.last > 2{z}) | (support_through is not none, rho.last > support_through)
+      sets  ask=values(z, x, y)
+      priority 1
+  2N  "17-18 balanced with a stopper in {y}"
+      shows balanced, hcp=17..18, z<=3
       when  stop(y)
+  3N  "19-21 balanced with a stopper in {y}"
+      shows balanced, hcp=19..21, z<=3
+      when  stop(y)
+# Responder's cue bid over the values double: 10+, nothing in their
+# suit. Notrump with it held, else the major with three, else four of
+# the minor.
+when asked values_cue(M, x, y)
+  3N  "A stopper in {y}"                   shows stop(y)
+      priority 1                       # what the cue bid asked
+  4M  "Three {M}, no stopper in {y}"       shows M=3
+      sets  trump=M
+  4x  "No stopper, two {M}"                priority -2
+      when  x is C | x is D
 # Responder bid five of his major over 2NT: choose the game.
 after 1x (P) 1z (2y) 2N (P) 3z (P) | 1x (P) 1z (1y) 2N (P) 3z (P) when y is not x, y is not z, z is not x, z is H | z is S
   4{z} "Three-card support"                shows z>=3
       sets  trump=z
   3N  "Two {z}: notrump"                   shows z<=2
-# They competed over opener's 18-19 notrump and partner doubled: opener
+# They competed over opener's strong notrump and partner doubled: opener
 # has described his hand and leaves the decision with partner (compare
 # 2026-11-07: six no-rule positions such as 1C P 1H 2S 2N 3S X 4S).
 after 1x (P) 1z (2y) 2N (*) X (*) | 1x (P) 1z (1y) 2N (*) X (*) | 1x (P) P (1y) 1N (*) X (*) | 1x (P) P (2y) 2N (*) X (*) when y is not x

@@ -1240,6 +1240,8 @@ card stood in by 21GF-GIB with modified Jacoby 2NT and Kokish):
   high. The card has no Good/Bad 2NT field, so 2NT stays natural; it
   is the 1x-1y-2NT rebid pushed up by their overcall. Opener answers
   responder's 3M (five, forcing) with 4M on three, else 3NT.
+  **Superseded 2026-11-07** by Rick's "follow BBA's lead": 2NT 17-18,
+  3NT 19-21, and a values double above `through` (next section).
 - **The one-level overcall** (`1C P 1H (1S)`) had no notrump rule
   either (found while checking #93): it now shares the `1x (1y) 1z (P)`
   block: 1NT 12-14 with their suit stopped, the jump to 2NT 18-19.
@@ -1276,6 +1278,68 @@ tripwire); BBA bids the same 1NT on most of those boards (1m-1N 5 and
 7: both tables 1NT, down), so it is kept as standard and BBA's style;
 the two-level and reopening notrumps gain. Net vs BBA on the matching
 set: errors -2,789 → -2,655, par -2,654 → -2,492.
+
+## Opener's notrump and double over their overcall: BBA's style (Rick, 2026-11-07)
+
+Rick, asked whether #93's 2NT is 18-19 balanced with a stopper, not
+forcing, and whether a 19-count should jump to 3NT as BBA does: **"we
+can follow BBA's lead."** So the controller's 2026-11-06 decision above
+is replaced by what BBA does, found by grids of balanced openers 12-21
+(`probes/opener-nt-contested_gen.py`, specs `probes/opnt-*.toml`, 160
+hands each, 21GF-GIB, IMPs, none vulnerable; tally
+`probes/opnt_tally.py NAME [--meanings] [--z] [--rest CALL]`). BBA's
+meanings from `bba_alert`:
+
+| position | BBA | ours before | ours now |
+|---|---|---|---|
+| `1x P 1M (2y)`, support double applies (`1D P 1S (2H)`, `1C P 1H (2D)`, `1D P 1H (2C)`, `1D P 1S (2C)`) | X with three M at any strength; else pass to 16, 2NT 17-18 ("17 to 18 total points"), 3NT 19-21 | 2NT 18-19, 19 bid 2NT | 2NT 17-18, 3NT 19-21 (agree 158-160 of 160) |
+| `1x P 1H (2S)`, above `through` (#93) | X "15 to 21 total points, 0-3 hearts": 15+ with three hearts, 17+ with two; 2NT 17-18 mostly with four spades; 3NT 19-21; pass 12-14 and most 15-16 with two hearts | 2NT 18-19, else pass | X 15-18 balanced (three M, or 17+ with two), at most three of theirs; 2NT 17-18 with their suit stopped (in practice four of it); 3NT 19-21 (agree 145 and 137 of 160, was 113 and 115) |
+| `1x P 1z (1y)` (`1C P 1H (1S)`, `1C P 1D (1S)`) | 1NT "11 to 16 total points", but a balanced 12 passes; jump 2NT 17-18; 3NT with 19 (some 18) | 1NT 12-14, 2NT 18-19 | 1NT 13-16, 2NT 17-18, 3NT 19+ (agree 155 of 160 over 1H; 95 over 1D, BBA's double there not taken) |
+| `1C P 1D (2H)` (minor response, jump) | X 15+ with three-four spades, 2NT 17-18, 3NT 18-19 | 2NT 18-19 | 2NT 17-18, 3NT 19+ (no double: open question) |
+| `1D P P (1H)` reopening (#90) | X with 18 balanced (8 of 9), 1S with four spades, never 1NT but once | 1NT 18-19 | unchanged: Rick's #90 ruling |
+| `1C P P (2H)` | 2NT 18-21, X 14+ | 2NT 18-19 | unchanged |
+
+In practice the 17-18 2NT is 18 and the 19-21 3NT is 19: a balanced
+15-17 opened 1NT and 20-21 opened 2NT. #93's hand
+(K6.AK4.Q985.AQ82, `1D P 1H (2S)`) now doubles, as BBA, where it bid
+2NT.
+
+**Responder** (responder-rebids.notes.md, same date): over the values
+double BBA passes with four of their suit, bids three of a five-card
+major with 6-9, a minor with four, 2NT 8-9 and 3NT 10+ with a stopper,
+the cue bid with 10+ and none (`probes/opnt-r-1D-1H-2S-X.toml`,
+`opnt-r-1C-1H-2S-X.toml`: ours agree 62 and 73 of 120 hands, BBA's
+choice among the minors and the three-level major is loose). Over the
+cue bid opener bids 3NT with a stopper, else four of the major with
+three, else four of his minor. Over the 2NT and 1NT the continuations
+did not change (BBA raises 2NT from 7-8 and bids 3NT with a five-card
+major where we bid 3M, forcing: kept as the standard 1x-1y-2NT ladder;
+`opnt-r-1D-1H-2S-2N.toml`, `opnt-r-1D-1S-2H-2N.toml`).
+
+A side fix found by the test of 1D P 1H (2S) 2NT P: base/fit.bid's
+"game in the fit only I can see" placed 4S in their spade suit (opener
+now shows four spades by not doubling); it now needs the suit not shown
+by either opponent.
+
+**Compare** (2026-11-07, `--par-all`, base = the 2026-11-06 round;
+errors_diff verdict = the actor's contract errors; the double also by
+`--judge doubling`):
+
+| run | boards changed | actor contract errors | actor doubling errors | all errors | distance from par | no rule |
+|---|---|---|---|---|---|---|
+| 22 matching scenarios, full (the 15 above with all five Minor_Suit_Opener* and Gavin_* sets, plus Support_Double; 11,000 boards) | 24 | +9 (halves -8 / +17, differ) | -4 | +18 | -9 | 125 → 126 |
+| all scenarios `--limit 50` (tripwire) | 10 | +19 (halves +1 / +18, agree) | +17 (agree) | +40 | +16 | 241 → 241 |
+
+Every changed board's first difference is one of the changed calls.
+The sample is small (the positions are rare) and the matching-set
+halves disagree: no measurable loss, a small gain, kept on Rick's
+ruling. Gains: the 12-count's pass over `1C P 1D (1S)` (+25 on 7
+boards, the loser of the last round), the values double (penalty
+passes, +20 all errors in the tripwire). Losses: the 12-count's pass
+over `1C P 1D (1H)` (-7 on 4 boards). vs BBA on the matching set:
+errors -5,769 → -5,751, par -4,341 → -4,350. The one new no-rule
+position is a passed-hand sequence after the 12-count's pass (not
+traced).
 
 ## Sources
 
@@ -1339,3 +1403,7 @@ set: errors -2,789 → -2,655, par -2,654 → -2,492.
   18-19, but not sure"); an open question for him. The 1NT 12-14 /
   2NT 18-19 over a one-level overcall of the response: standard
   practice, not yet cited; BBA agrees on the 1NT (probe 2026-11-07).
+- **Rick, 2026-11-07** (on #93): "we can follow BBA's lead". The
+  ranges and the values double after `1x P 1z (overcall)` are BBA's, from
+  the grids `probes/opnt-*.toml` (21GF-GIB, 2026-11-07); where they
+  differ from BBA, the section says so. Not cited to a book.

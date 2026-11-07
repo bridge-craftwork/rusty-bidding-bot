@@ -815,11 +815,12 @@ after 1x (P) P (1y) 1N (P) | 1x (P) P (2y) 2N (P) when y is not x
       when  y is not C, partner.last=1N
       sets  ask=signoff
 
-# ── Opener's 2NT over their two-level overcall (18-19) ───────────────
-# 1D P 1H (2S) 2NT (P): my one-level response showed 6+, so the ladder
-# is the uncontested one after 1x-1y-2NT: game from 7, five of my major
-# offers a choice of games, six bids the game (Rick 2026-11-06,
-# bridge-classroom-bug-artifacts #93).
+# ── Opener's jump to 2NT over their overcall (17-18) ─────────────────
+# 1D P 1H (2S) 2NT (P), 1C P 1H (1S) 2NT (P): my one-level response
+# showed 6+, so the ladder is the uncontested one after 1x-1y-2NT: game
+# from 7, five of my major offers a choice of games, six bids the game
+# (bridge-classroom-bug-artifacts #93; 2NT is 17-18 since Rick's
+# 2026-11-07 ruling, and BBA raises from 7-8, probes/opnt-r-*-2N.toml).
 after 1x (P) 1z (2y) 2N (P) | 1x (P) 1z (1y) 2N (P) when y is not x, y is not z, z is not x
   P   "Weak: no game"                      shows points<=6
       priority -5
@@ -829,6 +830,44 @@ after 1x (P) 1z (2y) 2N (P) | 1x (P) 1z (1y) 2N (P) when y is not x, y is not z,
       sets  forcing=round
   4{z} "Game: six or more {z}"             shows z>=6, points>=7
       when  z is H | z is S
+
+# ── Opener's values double of their two-level overcall (15-18) ───────
+# 1D P 1H (2S) X (P): opener has 15-18 balanced with at most three of my
+# major and of their suit (rebids.bid). BBA (probes/opnt-r-1D-1H-2S-X,
+# opnt-r-1C-1H-2S-X): pass with four of their suit, a five-card major
+# at the three level with 6-9, a minor with four, 2NT 8-9 and 3NT 10+
+# with their suit held, a cue bid with 10+ and no stopper.
+when asked values(M, x, y), rho.last=P, partner.last=X
+  P   "Penalty: four or more {y}, up to 9" shows y>=4, hcp<=9
+      priority 1
+  4M  "Game: six or more {M}, 10+"         shows M>=6, hcp>=10
+      sets  trump=M
+  3N  "Game: 10+ with a stopper in {y}"    shows hcp>=10, stop(y), M<=4
+  cheapest(y) "Cue bid: 10+, no stopper in {y}, forcing to game"
+      alert  artificial
+      shows hcp>=10
+      sets  forcing=game, ask=values_cue(M, x, y)
+      priority -1
+  2N  "Invitational: 8-9 with a stopper in {y}"
+      shows hcp=8..9, stop(y), M<=4
+      sets  ask=nt_invite
+  cheapest(M) "Five or more {M}, 6-9"      shows M>=5, hcp<=9
+      sets  ask=signoff
+  cheapest(x) "Four or more {x}, up to 9"  shows x>=4, hcp<=9
+      when  x is C | x is D
+      sets  ask=signoff
+      priority -1
+  cheapest(C) "Four or more clubs, up to 9"     shows C>=4, hcp<=9
+      when  x is not C, y is not C
+      sets  ask=signoff
+      priority -1
+  cheapest(D) "Four or more diamonds, up to 9"  shows D>=4, hcp<=9
+      when  x is not D, y is not D
+      sets  ask=signoff
+      priority -1
+  cheapest(x) "No better bid: back to {x}"
+      sets  ask=signoff
+      priority -5
 
 # ── One-level response in a contested auction, opener's minimum rebid ─
 # Opener's contested minimum rebids ask for a sign-off, and responder
