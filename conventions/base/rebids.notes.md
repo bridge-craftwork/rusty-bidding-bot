@@ -1341,6 +1341,58 @@ errors -5,769 → -5,751, par -4,341 → -4,350. The one new no-rule
 position is a passed-hand sequence after the 12-count's pass (not
 traced).
 
+### Rick's answers (2026-11-07)
+
+- **Reopening 1NT** after `1D P P (1H)`: Rick: "yes i think this is
+  standard". The 18-19 1NT with a stopper (#90) stays, although BBA
+  doubles there with 18 balanced (8 of 9, `probes/opnt-1D-P-P-1H.toml`).
+- **The double over a minor response**: Rick: "yes". After `1C P 1D`
+  and their overcall in a major, opener's double shows the other major
+  (BBA's `bba_alert`: "14 to 21 total points ... 3 to 4" of it):
+
+  | overcall | BBA (`probes/opnt-1C-1D-*.toml`) | ours |
+  |---|---|---|
+  | (1S) | X 14+ with four hearts, 15+ with three (14 with three: 1NT) | X 14-16 balanced (17-18 without a spade stopper), H=4 or 15+ |
+  | (1H) | 1S with four spades (12-16), 2S jump 15+, X with three spades 14+ | X 14-16 with three or four spades |
+  | (2H) | X 15+ with three or four spades | X 15-16 (17-18 without a stopper), 3-4 spades |
+  | (2S) | X 15+ with four hearts, 17+ with three (most 15-16 with three pass) | X 15-16, H=4 (17-18 without a stopper) |
+
+  Two of BBA's calls were tried and not kept (measured on the matching
+  scenarios, 2026-11-07, first pass): the natural 1S over (1H) with four
+  spades and the jump to 2S lost -46 actor contract errors on 13 boards
+  (responder has no continuations after opener's 1S once they have
+  bid: 3NT on 9 counts, 4D), and the double with 17-18 and their suit
+  stopped lost -17 on 4 of 4 boards (responder's minimum answer, 2C or
+  2H, was passed out where the 2NT it replaced reached 3NT). So with
+  four spades over (1H) opener doubles, and 17-18 with a stopper bids
+  2NT as before. 19+ balanced bids 3NT (BBA reverses into 2H with four
+  hearts over 1S: not taken). No card field covers this double
+  (support doubles are for a major response), so it is the default for
+  every card. Responder: responder-rebids.notes.md. Questions 3 and 4
+  (responder's 3NT with a
+  five-card major over 2NT; the 13-16 1NT) stay open: Rick asked
+  whether BBA's 3NT with five is shape-dependent and noted people
+  "normally transfer then bid 3NT".
+
+Agreement with BBA (`probes/opnt-1C-1D-*.toml`, 160 hands each): over
+(1S) 95 → 116, (2H) 122 → 137, (2S) 132, (1H) 78 (BBA's 1S with four
+spades, which we double). Responder (responder-rebids.notes.md): 84
+and 85 of 120.
+
+**Compare** (2026-11-07, `--par-all`, base = 8ce8a5f, the PR branch
+with the first round merged):
+
+| run | boards changed | actor contract errors | actor doubling errors | all errors | distance from par | no rule |
+|---|---|---|---|---|---|---|
+| 22 matching scenarios, full (11,000 boards) | 8 | +7 (halves +9 / -2, differ) | +4 (agree) | +5 | +10 | 126 → 126 |
+| all scenarios `--limit 50` (tripwire) | 5 | -8 (halves -6 / -2, agree) | +2 | -7 | 0 | 241 → 241 |
+
+Small either way, as the positions are rare: kept on Rick's "yes".
+Every changed board's first difference is the new double. The
+tripwire's losses are a 14-count's double over (1S) (-2 on 2 boards)
+and 1m-1_2_or_3_NT 46, where the double and the cue bid reach BBA's own
+3NT, down, while the base had passed 1H out (-6).
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -1407,3 +1459,6 @@ traced).
   ranges and the values double after `1x P 1z (overcall)` are BBA's, from
   the grids `probes/opnt-*.toml` (21GF-GIB, 2026-11-07); where they
   differ from BBA, the section says so. Not cited to a book.
+- **Rick, 2026-11-07** (answers): the reopening 1NT "yes i think this
+  is standard"; the double after 1C P 1D (overcall) "yes" (BBA's, grids
+  `probes/opnt-1C-1D-*.toml`). Not cited to a book.

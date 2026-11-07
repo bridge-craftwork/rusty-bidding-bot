@@ -1233,10 +1233,57 @@ after 1x (P) 1z (2y) when y is not x, y is not z, z is not x
 when asked values_cue(M, x, y)
   3N  "A stopper in {y}"                   shows stop(y)
       priority 1                       # what the cue bid asked
-  4M  "Three {M}, no stopper in {y}"       shows M=3
+  4M  "Three or more {M}, no stopper in {y}"   shows M>=3
       sets  trump=M
   4x  "No stopper, two {M}"                priority -2
       when  x is C | x is D
+
+# Responder's cue bid over the double after 1C P 1D (overcall): 10+, no
+# stopper, and not four of my major (he would have bid it up to 11).
+when asked minor_x_cue(M, y)
+  3N  "A stopper in {y}"                   shows stop(y)
+      priority 1
+  cheapest(M) "No stopper in {y}"
+      sets  forcing=game
+
+# ── They overcalled partner's 1D response to 1C: the double ──────────
+# 1C P 1D (1S) X: three or four hearts, 14-18 balanced; over a two-
+# level overcall (2H, 2S) 15-18; over 1H three or four spades (BBA bids
+# 1S with four: the natural 1S here was tried and lost, rebids.notes.md).
+# BBA, 21GF-GIB (Rick 2026-11-07:
+# "yes" to playing it; probes/opnt-1C-1D-1S.toml, -1H, -2H, -2S; 26 to
+# 46 doubles per 160 hands, from 14 at the one level, 15 at the two).
+# BBA doubles with 17-18 too; with their suit stopped we bid 2NT, as
+# before (the double then lost on 4 of 4 boards: responder's minimum
+# answer was passed out, rebids.notes.md).
+# No card field speaks to this double. Responder: responder-rebids.bid.
+after 1C (P) 1D (1y) | 1C (P) 1D (2y) when y is H | y is S
+  X   "Three or four hearts, 14-18 balanced"
+      shows balanced, H=3..4, D<=3, hcp=14..18
+      shows H=4 | hcp>=15                    # BBA: 1NT with 14 and three
+      when  rho.last=1S
+      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
+      sets  ask=minor_x(H, C, S)
+      priority 1
+  X   "Three or four hearts, 15-18 balanced"
+      shows balanced, H=3..4, D<=3, hcp=15..18
+      shows H=4 | hcp>=17                    # BBA mostly passes 15-16 with three
+      when  rho.last=2S
+      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
+      sets  ask=minor_x(H, C, S)
+      priority 1
+  X   "Three or four spades, 14-18 balanced"
+      shows balanced, S=3..4, D<=3, hcp=14..18
+      when  rho.last=1H
+      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
+      sets  ask=minor_x(S, C, H)
+      priority 1
+  X   "Three or four spades, 15-18 balanced"
+      shows balanced, S=3..4, D<=3, hcp=15..18
+      when  rho.last=2H
+      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
+      sets  ask=minor_x(S, C, H)
+      priority 1
 # Responder bid five of his major over 2NT: choose the game.
 after 1x (P) 1z (2y) 2N (P) 3z (P) | 1x (P) 1z (1y) 2N (P) 3z (P) when y is not x, y is not z, z is not x, z is H | z is S
   4{z} "Three-card support"                shows z>=3

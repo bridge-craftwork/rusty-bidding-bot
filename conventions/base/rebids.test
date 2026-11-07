@@ -431,3 +431,16 @@ S K6.AK4.Q985.AQ82      | 1D P 1H 2S 2N P 3H P | 4H  | three hearts opposite fiv
 S K6.AK4.Q985.AQ82      | 1D P 1S 2H 2N P 3S P | 3NT | two spades: 3NT
 S AQ.K95.AJ52.KQ42      | 1D P 1S 2H 2N 3H X 4H | P | described: partner's double decides
 S AKJ.AT.JT43.AJ97      | 1D P P 1H 1N P 2C P | P | #90: partner's 2C is a sign-off opposite 18-19
+
+# ── The double after 1C P 1D (overcall): the other major (Rick 2026-11-07:
+# "yes"; BBA, probes/opnt-1C-1D-*.toml). Same card as above.
+S AJ5.KQ84.J4.KJ84      | 1C P 1D 1S   | X   | four hearts, 15 balanced
+S KJ5.Q84.A4.KJ842      | 1C P 1D 1S   | 1NT | 14 with three hearts: 1NT, as BBA
+S KJ5.Q84.A4.KQ842      | 1C P 1D 1H   | X   | three spades, 15
+S KJ85.Q84.A4.KJ84      | 1C P 1D 1H   | X   | four spades, 14: the double (BBA bids 1S)
+S AJ85.K84.A4.KQ84      | 1C P 1D 1H   | 2NT | 17 with a heart stopper: 2NT (BBA jumps to 2S)
+S AJ85.84.KQ4.AJ84      | 1C P 1D 2H   | X   | four spades, 15
+S 84.AJ85.KQ4.AJ84      | 1C P 1D 2S   | X   | four hearts, 15
+S 84.AJ8.KQ4.AJ842      | 1C P 1D 2S   | P   | three hearts, 15: pass, as BBA
+S AQ5.752.K5.AJ964      | 1C P 1D 1H X P 2H P | 2S | no heart stopper over the cue bid: the major, forcing
+S AQ5.K52.K5.AJ964      | 1C P 1D 1H X P 2H P | 3NT | hearts held

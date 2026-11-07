@@ -397,3 +397,17 @@ N 82.KT75.AJ3.KT87      | 1D P 1H 2S X P  | 3S  | 11, no spade stopper: cue bid
 N K82.QT75.J73.Q87      | 1D P 1H 2S X P  | 2NT | 8 with a spade stopper: invites
 N 82.QT75.J73.QT87      | 1D P 1H 2S X P  | 3C  | 5, four clubs: three clubs
 N 82.QJ752.K73.Q87      | 1D P 1H 2S X P  | 3H  | five hearts, 8
+
+# Over opener's double after 1C P 1D (1S) (Rick 2026-11-07: "yes";
+# probes/opnt-r-1C-1D-1S-X.toml)
+N 82.KJ74.AQ853.42      | 1C P 1D 1S X P  | 2H  | four hearts
+N K82.J74.AQ853.42      | 1C P 1D 1S X P  | 3NT | 10 with a spade stopper
+N 82.J74.KQ853.Q42      | 1C P 1D 1S X P  | 2D  | five diamonds, 7, no stopper
+N Q82.J74.KJ53.Q42      | 1C P 1D 1S X P  | 2NT | 8 with a stopper: invites
+N 82.J74.KJ53.Q842      | 1C P 1D 1S X P  | 2C  | 6, nothing else: back to clubs
+N 82.A74.AQ853.K42      | 1C P 1D 1S X P  | 2S  | 13, no stopper: cue bid
+N KJ7.J64.AT42.KQ7      | 1C P 1D 1H X P 2H P 2S P | 3NT | three spades, no fit: 3NT
+N KJ7.J6.AT42.KQ74      | 1C P 1D 1H X P 2H P 2S P | 3NT | three spades: 3NT
+N KJ74.J6.AT42.KQ7      | 1C P 1D 1H X P 2H P 2S P | 4S  | four spades: game in the fit
+N QT8.T7.AQ93.J986      | 1C P 1D 1H X 2H   | P   | they raised: nothing more to say
+N QT87.T7.AQ93.J98      | 1C P 1D 1H X 2H   | 2S  | four spades: compete
