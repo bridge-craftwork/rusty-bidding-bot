@@ -150,6 +150,35 @@ when asked new_suit(M)
   3M  "3+ {M}: support"             shows M>=3   sets trump=M
   3N  "No fit: 2 {M}"               shows M<=2
 
+# Responder over opener's 3NT, with the 5-4 shown (Rick, 2026-11-06,
+# bridge-classroom #85: AKT76.A95.9.AJ94 passed 3NT opposite 17 and
+# 6NT made; "Rusty should invite slam here"). over-3nt.bid counts HCP
+# for a balanced hand; this hand has shown its shape, and its fifth
+# major card is a trick in notrump too, so it counts total points:
+# 32 on opener's floor invites with a quantitative 4NT, 34 bids six.
+# This 4NT takes over over-3nt.bid's (which counts HCP) in this auction,
+# so opener reads one meaning. He accepts in points, one more than the
+# textbook 32 on responder's floor (17 shown: a 16-count with two tens
+# or a fifth card accepts, a flat 15 declines), in the minor with four
+# of it (a 4-4 fit takes a ruff), else 6NT.
+when answered new_suit(M), partner.last=3N, !they.bid
+  6N  "Small slam: 5-4 shown, {slam} total points"
+      shows points + partner.hcp.min >= 34
+  4N  "Quantitative: invites 6NT, 5-4 shown"
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
+      shows points + partner.hcp.min >= 32, points + partner.hcp.min <= 33
+      sets  ask=quant_two_suits
+
+when asked quant_two_suits
+  6C  "Accepts, in clubs: four clubs"     shows C>=4, points>=33-partner.points.min
+      when  partner.C>=4
+      priority 1
+  6D  "Accepts, in diamonds: four diamonds"  shows D>=4, points>=33-partner.points.min
+      when  partner.D>=4
+      priority 1
+  6N  "Accepts the slam invitation"       shows points>=33-partner.points.min
+  P   "Declines"                          shows points<=32-partner.points.min
+
 # Opener after the jump to game with mild slam interest: bid on with a good
 # fit and a maximum, even without having super-accepted.
 when asked slam_try(M)

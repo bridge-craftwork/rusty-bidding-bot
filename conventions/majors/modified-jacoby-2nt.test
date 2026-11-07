@@ -53,3 +53,19 @@ S AKJ52.K7.AQ43.82      | 1S P 2NT P 3H P 3S X      | 3N     | doubled re-ask: s
 S AKJ52.K73.AQ432.      | 1S P 2NT P 3D P 3H P 3S P 3N 4C | P | re-ask overcalled: step 1, club void
 N KQ74.A85.K87.K93      | 1S P 2NT 3C P P           | X      | flat opener: penalty with Kxx of clubs
 N KQ74.AQ8.K72.AJ9      | 1S P 2NT 3C P P           | X      | penalty even with 19: opener may be an awful 5-3-3-2
+# ── Relays after a minimum, then keycard (Rick, 2026-11-06, #83/#84) ─
+N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P           | 3D     | #83: 16, 17 support points: ask, a minimum with shortness may make slam
+N J8732.AT63.A.KJ5      | 1H P 2NT P 3C P           | 3D     | #84: 13 with a singleton, 16 support points: ask
+S .AT542.AQ764.A96      | 1H P 2NT P 3C P 3D P      | 3H     | a void goes ahead of the good side suit
+S .AT542.AQ764.A96      | 1H P 2NT P 3C P 3D P 3H P 3S P | 3N | a void: 4♣ asks where
+S .AT542.AQ764.A96      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P | 4S | the spade void
+S AT542.K7.AQ764.6      | 1S P 2NT P 3C P 3D P 3H P 3S P | 4C | a singleton club
+S AQ852.K7.Q943.82      | 1S P 2NT P 3C P 3D P 3S P 3N P | 4D | 5-4-2-2: the four diamonds
+N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P | 3S     | ask where the shortness is
+N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P | 4C | ask where the void is
+N QJ54.KQJ7.K98.KJ      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | #83: 14 working opposite the void: keycard
+N J8732.AT63.A.KJ5      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 4NT | #84: nothing wasted opposite the void: keycard
+N KQ54.KQJ7.K98.J2      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 5H | KQ opposite the void: 10 working, game (past 4♥ now)
+N 9854.KQJ7.AK8.A2      | 1H P 2NT P 3C P 3D P 3H P 3S P 4D P | 4NT | singleton diamond opposite AK: still 13 working beside it
+N KQ74.AQ5.K872.J3      | 1S P 2NT P 3C P 3D P 3S P 3N P 4H P | 4S | the 5-4-2-2's four hearts: game, not a pass of the artificial 4♥
+N AT42.K432.J6.AK6      | 1H P 2NT P 3C P 3D P 3H P 3S P 3N P 4C P 4S P | 5H | the spade ace is wasted opposite the void: 11 working
