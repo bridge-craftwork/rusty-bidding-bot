@@ -115,3 +115,21 @@ S AQ5.KQ7.AKJ4.K76      | 2C 2S P P                    | 2NT | 22 balanced, a sp
 N 82.QJ9732.K94.J8      | 2C 2S P P 2NT P              | 3D  | systems on: transfer
 # Not systems on: a notrump rebid after a natural suit (1♣–1♥–1NT).
 N 82.QJ9732.K94.J8      | 1C P 1H P 1NT P              | 2H  | natural rebid, not a transfer
+
+# ── Jacoby over every 2NT (Rick, 2026-11-07: "people playing jacoby
+# transfers normally play them over 1NT, 2NT, 2C/2NT, and kokish relay,
+# and sometimes 2C/3NT"). A five-card major transfers first, also when
+# the count is a slam invitation (opposite Kokish's 24-25 a 7-count is):
+# 4NT or 6NT follows the completion. Stand-in for Rick's card.
+card    21GF-GIB major_openings.jacoby_2nt.modified=true two_level.kokish.play=true
+dealer  S
+N 84.KJ863.Q72.J54      | 2C P 2D P 2H P 2S P 2N P          | 3D  | five hearts, 7 HCP: transfer, not 4NT
+N 84.KJ863.Q72.J54      | 2C P 2D P 2H P 2S P 2N P 3D P 3H P | 4NT | then quantitative with five hearts
+N KJ863.84.Q72.J54      | 2C P 2D P 2H P 2S P 2N P          | 3H  | five spades, 7 HCP: transfer
+N KJ863.84.Q72.J54      | 2C P 2D P 2H P 2S P 2N P 3H P 3S P | 4NT | then quantitative with five spades
+N 84.J8632.Q72.954      | 2C P 2D P 2H P 2S P 2N P          | 3D  | five hearts, 3 HCP: transfer
+N 84.J8632.Q72.954      | 2C P 2D P 2H P 2S P 2N P 3D P 3H P | 3NT | then choice of games (game forced)
+N KJ86.Q863.72.J54      | 2C P 2D P 2H P 2S P 2N P          | 3C  | 4-4 in the majors: Stayman
+N 84.KJ863.Q72.J54      | 2C P 2D P 2N P                    | 3D  | the same over 2♣–2♦–2NT
+N 84.KJ863.KQ2.Q54      | 2N P                              | 3D  | 12 opposite 20-21 with five hearts: transfer first
+N 84.KJ863.KQ2.Q54      | 2N P 3D P 3H P                    | 4NT | then quantitative

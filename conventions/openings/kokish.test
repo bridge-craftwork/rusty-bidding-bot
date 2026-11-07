@@ -29,3 +29,10 @@ N KQ42.72.K643.Q82      | 2C P 2D P 2H P              | 2S     | a balanced 11: 
 S A86.AQ6.AK4.AQJT      | 2C P 2D P 2H P 2S P         | 2N     | 24 balanced
 N K842.J7643.43.82      | 2C P 2D P 2H P 2S P 2N P    | 3C     | systems on: Stayman
 N 842.J7643.43.982      | 2C P 2D P 2H P 2S P 2N P    | 3D     | systems on: transfer
+# 2♣–2♦–3NT with Kokish on is the rung above the relay's 2NT: 26-27
+# (2026-11-07; BBA on Kokish_Relay rebids 3NT with 26-27). 7 opposite
+# 26-27 is 33-34: quantitative. With Kokish off it is 24-25 and 7 passes.
+N 84.K863.Q72.J543      | 2C P 2D P 3N P              | 4NT    | Kokish on: 3NT is 26-27, 33+ combined
+N 84.K863.Q72.9543      | 2C P 2D P 3N P              | P      | Kokish on: 5 opposite 26-27, no slam
+card    21GF-GIB major_openings.jacoby_2nt.modified=true
+N 84.K863.Q72.J543      | 2C P 2D P 3N P              | P      | Kokish off: 3NT is 24-25, 31-32 combined
