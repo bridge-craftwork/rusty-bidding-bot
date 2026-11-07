@@ -411,3 +411,30 @@ N KJ7.J6.AT42.KQ74      | 1C P 1D 1H X P 2H P 2S P | 3NT | three spades: 3NT
 N KJ74.J6.AT42.KQ7      | 1C P 1D 1H X P 2H P 2S P | 4S  | four spades: game in the fit
 N QT8.T7.AQ93.J986      | 1C P 1D 1H X 2H   | P   | they raised: nothing more to say
 N QT87.T7.AQ93.J98      | 1C P 1D 1H X 2H   | 2S  | four spades: compete
+
+# Over opener's natural 1S / 2S after 1C P 1D (1H) (Rick 2026-11-07: "yes
+# to 1 and 2"; BBA, probes/opns-r-1C-1D-1H-1S.toml, -2S.toml)
+N K842.73.AQ853.42      | 1C P 1D 1H 1S P | 2S  | four spades, 9: the raise
+N K842.73.AQ853.J2      | 1C P 1D 1H 1S P | 3S  | four spades, 10: invites
+N Q82.KJ3.QJ853.42      | 1C P 1D 1H 1S P | 1NT | 9 with a heart stopper
+N Q82.KJ3.AJ853.42      | 1C P 1D 1H 1S P | 2NT | 12 with a heart stopper: invites
+N Q82.KJ3.AJ853.K2      | 1C P 1D 1H 1S P | 3NT | 15 with a heart stopper
+N 82.743.AQ853.Q42      | 1C P 1D 1H 1S P | 2C  | no stopper: back to clubs
+N A82.743.AQ853.K2      | 1C P 1D 1H 1S P | 2H  | 13, no stopper: the cue bid
+N 82.J74.AJ853.Q42      | 1C P 1D 1H 2S P | 3C  | 8, no stopper: back to clubs
+N K842.7.Q8532.Q42      | 1C P 1D 1H 2S P | 4S  | four spades, 8+ support points: game
+N K842.73.Q8532.42      | 1C P 1D 1H 2S P | 3S  | four spades, a minimum
+N Q82.KJ3.QJ853.42      | 1C P 1D 1H 2S P | 3NT | 9 with a heart stopper
+N A82.743.AQ853.K2      | 1C P 1D 1H 2S P | 3H  | 13, no stopper: the cue bid
+
+# Over opener's cue bid after the double and my weak answer (17-18, no
+# stopper in their suit)
+N Q83.J4.QJ853.T42      | 1C P 1D 1S X P 2C P 2S P | 2NT | a spade stopper, 6
+N 83.J4.QJ853.KT42      | 1C P 1D 1H X P 2C P 2H P | 3D  | no stopper: five diamonds
+
+# They competed over opener's 1S (compare 2026-11-07: the generic block
+# bid 3NT over 3H on 9 points)
+N K87.Q73.A742.532      | 1C P 1D 1H 1S 3H | P   | 9, no fit: pass (was 3NT)
+N Q976.KT4.A8754.K      | 1C P 1D 1H 1S 2H | 3S  | four spades, 12: invites
+N K976.KT4.A8754.K      | 1C P 1D 1H 1S 2H | 4S  | four spades, 13: game
+N T3.AJ6.QJ9865.J6      | 1C P 1D 1H 1S 2H | 3D  | six diamonds: compete

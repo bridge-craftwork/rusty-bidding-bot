@@ -1248,42 +1248,96 @@ when asked minor_x_cue(M, y)
 
 # ── They overcalled partner's 1D response to 1C: the double ──────────
 # 1C P 1D (1S) X: three or four hearts, 14-18 balanced; over a two-
-# level overcall (2H, 2S) 15-18; over 1H three or four spades (BBA bids
-# 1S with four: the natural 1S here was tried and lost, rebids.notes.md).
-# BBA, 21GF-GIB (Rick 2026-11-07:
+# level overcall (2H, 2S) 15-18; over 1H three spades (with four opener
+# bids 1S, below). BBA, 21GF-GIB (Rick 2026-11-07:
 # "yes" to playing it; probes/opnt-1C-1D-1S.toml, -1H, -2H, -2S; 26 to
 # 46 doubles per 160 hands, from 14 at the one level, 15 at the two).
-# BBA doubles with 17-18 too; with their suit stopped we bid 2NT, as
-# before (the double then lost on 4 of 4 boards: responder's minimum
-# answer was passed out, rebids.notes.md).
+# 17-18 doubles with or without a stopper, as BBA (Rick 2026-11-07: "yes
+# to 1 and 2"), and bids on over a weak answer (below).
 # No card field speaks to this double. Responder: responder-rebids.bid.
 after 1C (P) 1D (1y) | 1C (P) 1D (2y) when y is H | y is S
   X   "Three or four hearts, 14-18 balanced"
       shows balanced, H=3..4, D<=3, hcp=14..18
       shows H=4 | hcp>=15                    # BBA: 1NT with 14 and three
       when  rho.last=1S
-      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
       sets  ask=minor_x(H, C, S)
       priority 1
   X   "Three or four hearts, 15-18 balanced"
       shows balanced, H=3..4, D<=3, hcp=15..18
       shows H=4 | hcp>=17                    # BBA mostly passes 15-16 with three
       when  rho.last=2S
-      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
       sets  ask=minor_x(H, C, S)
       priority 1
-  X   "Three or four spades, 14-18 balanced"
-      shows balanced, S=3..4, D<=3, hcp=14..18
+  X   "Three spades, 14-18 balanced"
+      shows balanced, S=3, D<=3, hcp=14..18
       when  rho.last=1H
-      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
       sets  ask=minor_x(S, C, H)
       priority 1
   X   "Three or four spades, 15-18 balanced"
       shows balanced, S=3..4, D<=3, hcp=15..18
       when  rho.last=2H
-      shows hcp<=16 | !stop(y)               # 17-18 with a stopper: 2NT
       sets  ask=minor_x(S, C, H)
       priority 1
+# Opener's third call after the double and responder's weak answer
+# (back to clubs, five diamonds, four of the major; all `ask=signoff`):
+# 14-16 passes, 17-18 bids on (Rick 2026-11-07: "yes to 1 and 2"). BBA
+# (probes/opnt-o-1C-1D-*.toml, 18 HCP): mostly the cue bid of their
+# suit, "17+, raise or better" in clubs; 3NT with three of the major
+# and their suit held. Ours, more natural: game in the major with four
+# opposite four; with their suit held 2NT inviting over 2C / 2D (0-9),
+# 3NT over the major (to 11, BBA's 3NT) or a three-level answer; else the
+# cue bid, forcing.
+after 1C (P) 1D (1y) X (P) * (P) | 1C (P) 1D (2y) X (P) * (P) when y is H | y is S, asked signoff
+  4S  "Game: four spades opposite four, 17-18"   shows S>=4, hcp>=17
+      when  y is H, partner.last=1S | partner.last=2S
+      priority 2
+  4H  "Game: four hearts opposite four, 17-18"   shows H>=4, hcp>=17
+      when  y is S, partner.last=2H | partner.last=3H
+      priority 2
+  2N  "17-18 with a stopper in {y}: invites"     shows hcp>=17, stop(y)
+      when  partner.last=2C | partner.last=2D
+      sets  ask=nt_invite
+      priority 1
+  3N  "17-18 with a stopper in {y}"              shows hcp>=17, stop(y)
+      when  partner.last!=2C, partner.last!=2D
+      priority 1
+  cheapest(y) "Cue bid: 17-18, no stopper in {y}, forcing"
+      alert  artificial
+      shows hcp>=17
+      sets  forcing=round, ask=x_cue(y)
+      priority 1
+# ── 1C P 1D (1H): opener's natural spades ────────────────────────────
+# BBA (Rick 2026-11-07: "yes to 1 and 2"; probes/opns-1C-1D-1H.toml,
+# 160 hands): 1S with four spades, 11-15 total points, before 1NT and
+# the double (which then shows three); the jump to 2S with four spades
+# and 15+ (five clubs) or 18 balanced, forcing one round (BBA's
+# responder passes it only with a misfit and 6-9). Responder:
+# responder-rebids.bid.
+after 1C (P) 1D (1H)
+  1S  "Four spades, 11-15"
+      shows S=4, points<=15
+      priority 1                             # four spades: 1S before 1NT, as BBA
+  2S  "Jump: four spades, 16+, forcing"
+      shows S=4, points>=16
+      sets  forcing=round
+      priority 1                             # ahead of 2NT and 3NT, as BBA
+# Responder's cue bid over 1S or 2S: game values, no heart stopper.
+# Notrump with one, else a fifth club, else three diamonds, else spades.
+when asked spade_cue(y)
+  3N  "A stopper in {y}"                   shows stop(y)
+      priority 1
+  cheapest(C) "Five or more clubs, no stopper in {y}"   shows C>=5
+  cheapest(D) "Three diamonds, no stopper in {y}"      shows D>=3
+      priority -1
+  cheapest(S) "No stopper in {y}"
+      priority -2
+# Responder's minimum preference over the forcing 2S: game only with
+# the top of the jump and their suit held.
+after 1C (P) 1D (1H) 2S (P) 3C (P)
+  3N  "18+ with a heart stopper"           shows points>=18, stop(H)
+  P   "No game opposite a minimum"
+      priority -5
+
 # Responder bid five of his major over 2NT: choose the game.
 after 1x (P) 1z (2y) 2N (P) 3z (P) | 1x (P) 1z (1y) 2N (P) 3z (P) when y is not x, y is not z, z is not x, z is H | z is S
   4{z} "Three-card support"                shows z>=3

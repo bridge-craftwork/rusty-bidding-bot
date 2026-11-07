@@ -859,6 +859,7 @@ when asked minor_x(M, x, y), rho.last=P, partner.last=X
 # diamonds, bid game in notrump with 10+ and their suit held, else pass.
 when asked minor_x(M, x, y), rho.last!=P, partner.last=X
   cheapest(M) "Four or more {M}, competing"    shows M>=4, hcp<=11
+      when  cheapest_rank(M)<=18             # the three level at most (4H over 3S on 7 HCP, 2026-11-07)
       sets  ask=signoff
   3N  "Game: 10+ with a stopper in {y}"        shows hcp>=10, stop(y)
   cheapest(D) "Five or more diamonds, competing"  shows D>=5, hcp<=9
@@ -873,6 +874,148 @@ when answered minor_x_cue(M, y), partner.last=2{M} | partner.last=3{M}
   4M  "Four {M}: game in the fit"          shows M>=4
       priority 1
   3N  "No fit: 3NT"
+
+# Opener cue-bid their suit over my weak answer to his double: 17-18
+# balanced, no stopper (rebids.bid). Notrump with their suit held, 3NT
+# from 7; the major with four; five diamonds; else back to clubs.
+when asked x_cue(y)
+  3N  "Game: 7+ with a stopper in {y}"     shows hcp>=7, stop(y)
+      priority 1
+  2N  "A stopper in {y}, a minimum"        shows hcp<=6, stop(y)
+      sets  ask=signoff
+      priority 1
+  cheapest(S) "Four spades"                shows S>=4
+      when  y is H
+      sets  ask=signoff
+  cheapest(H) "Four hearts"                shows H>=4
+      when  y is S
+      sets  ask=signoff
+  cheapest(D) "Five or more diamonds"      shows D>=5
+      sets  ask=signoff
+      priority -1
+  cheapest(C) "No stopper: clubs"
+      sets  ask=signoff
+      priority -3
+
+# ── Opener's natural spades after 1C P 1D (1H) ───────────────────────
+# 1C P 1D (1H) 1S (P): four spades, 11-15 (rebids.bid). BBA (Rick
+# 2026-11-07: "yes to 1 and 2"; probes/opns-r-1C-1D-1H-1S.toml), in HCP
+# as BBA's ranges fall: the raise with four spades up to 9, 3S 10-11,
+# 4S 12+; 1NT up to 10, 2NT 11-12 and 3NT 13+ with hearts held (BBA
+# bids 1NT without a stopper too: not taken, Rick 2026-10-16); 2C with
+# three clubs, 3C 11-12 with four, 2D / 3D with six diamonds, the cue
+# bid with 13+ and no stopper. Priority 1: ahead of the generic block
+# for opener's new suit over their call, which has no stopper.
+after 1C (P) 1D (1H) 1S (P)
+  2S  "Raise: four spades, up to 9"        shows S>=4, hcp<=9
+      sets  trump=S, ask=signoff
+      priority 1
+  3S  "Invitational raise: four spades, 10-11"   shows S>=4, hcp=10..11
+      sets  trump=S, ask=invite(S)
+      priority 1
+  4S  "Game: four spades, 12+"             shows S>=4, hcp>=12
+      sets  trump=S
+      priority 1
+  1N  "Up to 10 with a heart stopper"      shows hcp<=10, stop(H), S<=3
+      sets  ask=signoff
+      priority 1
+  2N  "Invitational: 11-12 with a heart stopper"   shows hcp=11..12, stop(H), S<=3
+      sets  ask=nt_invite
+      priority 1
+  3N  "Game: 13+ with a heart stopper"     shows hcp>=13, stop(H), S<=3
+      priority 1
+  2D  "Six or more diamonds, up to 10"     shows D>=6, hcp<=10, S<=3
+      sets  ask=signoff
+      priority 1
+  3D  "Invitational: six or more diamonds, 11-12"   shows D>=6, hcp=11..12, S<=3
+      sets  ask=invite(D)
+      priority 1
+  3C  "Invitational: four or more clubs, 11-12"     shows C>=4, hcp=11..12, S<=3
+      sets  ask=invite(C)
+      priority 1
+  2C  "Preference: three or more clubs, up to 12"   shows C>=3, hcp<=12, S<=3
+      sets  ask=signoff
+      priority 1
+  2H  "Cue bid: 13+, no heart stopper, forcing to game"
+      alert  artificial
+      shows hcp>=13, S<=3
+      sets  forcing=game, ask=spade_cue(H)
+      priority 1
+  2D  "Five diamonds, no better bid"       shows D>=5, hcp<=12
+      sets  ask=signoff
+      priority 1
+  P   "Nothing to add"                     shows hcp<=10
+      priority -5
+
+# They competed over opener's 1S (1C P 1D (1H) 1S (2H)): the generic
+# block for a new suit over their call bid its cheapest notrump, 3NT
+# over 3H on 9 points (compare 2026-11-07, 1m-1N 186). Raise with four
+# spades, 3NT with game values and hearts held, six diamonds compete at
+# the three level, otherwise pass.
+after 1C (P) 1D (1H) 1S (*) when rho.last!=P
+  2S  "Four spades, competing"             shows S>=4, hcp<=9
+      sets  trump=S, ask=signoff
+      priority 1
+  3S  "Invitational raise: four spades, 10-12"   shows S>=4, hcp=10..12
+      when  rho.last<=2H
+      sets  trump=S, ask=invite(S)
+      priority 1
+  3S  "Four spades, competing"             shows S>=4, hcp<=12
+      when  rho.last>2H
+      sets  trump=S, ask=signoff
+      priority 1
+  4S  "Game: four spades, 13+"             shows S>=4, hcp>=13
+      sets  trump=S
+      priority 1
+  3N  "Game: 13+ with a heart stopper"     shows hcp>=13, stop(H), S<=3
+      priority 1
+  cheapest(D) "Six or more diamonds, competing"  shows D>=6, hcp>=7, S<=3
+      when  cheapest_rank(D)<=16             # 3D at most
+      sets  ask=signoff
+      priority 1
+  P   "Nothing more to say"                shows hcp<=12
+      priority 1
+  P   "No fit, no stopper"
+      priority -5
+
+# 1C P 1D (1H) 2S (P): four spades, 16+, forcing one round (rebids.bid).
+# BBA (probes/opns-r-1C-1D-1H-2S.toml): 4S with four spades from 6-8
+# (we count support points, game from 8), 3S below; 3NT 9+ with
+# hearts held; the cue bid 3H 10+ without; 3D six diamonds up to 9; otherwise 3C back to clubs. BBA's 4C (11+, a club
+# fit, slam interest) is not built: we bid 3NT or the cue bid.
+after 1C (P) 1D (1H) 2S (P)
+  4S  "Game: four spades, 8+ support points"   shows S>=4, tp(S)>=8
+      sets  trump=S
+      priority 1
+  3S  "Four spades, a minimum"             shows S>=4, tp(S)<=7
+      sets  trump=S, ask=invite(S)
+      priority 1
+  3N  "Game: 9+ with a heart stopper"      shows hcp>=9, stop(H), S<=3
+      priority 1
+  3D  "Six or more diamonds, up to 9"      shows D>=6, hcp<=9, S<=3
+      sets  ask=invite(D)
+      priority 1
+  3H  "Cue bid: 10+, no heart stopper, forcing to game"
+      alert  artificial
+      shows hcp>=10, S<=3
+      sets  forcing=game, ask=spade_cue(H)
+      priority 1
+  3C  "Back to clubs: up to 9"             shows hcp<=9, S<=3
+      priority 1
+# Opener answered my cue bid without a stopper: game in clubs with a
+# fit, else 3NT with something in hearts, else the best game we have.
+when answered spade_cue(y), partner.last!=3N
+  5C  "Game in clubs: three or more"       shows C>=3
+      when  partner.last=3C | partner.last=4C
+      priority 1
+  3N  "A partial stopper in {y}: 3NT"      shows y>=3
+  5D  "Game in diamonds"                   shows D>=5
+      when  partner.last=3D | partner.last=4D
+      priority 1
+  4S  "Game in spades: three or more"      shows S>=3
+      priority -1
+  5C  "Game in clubs"
+      priority -3
 
 # ── Opener's values double of their two-level overcall (15-18) ───────
 # 1D P 1H (2S) X (P): opener has 15-18 balanced with at most three of my

@@ -437,10 +437,35 @@ S AKJ.AT.JT43.AJ97      | 1D P P 1H 1N P 2C P | P | #90: partner's 2C is a sign-
 S AJ5.KQ84.J4.KJ84      | 1C P 1D 1S   | X   | four hearts, 15 balanced
 S KJ5.Q84.A4.KJ842      | 1C P 1D 1S   | 1NT | 14 with three hearts: 1NT, as BBA
 S KJ5.Q84.A4.KQ842      | 1C P 1D 1H   | X   | three spades, 15
-S KJ85.Q84.A4.KJ84      | 1C P 1D 1H   | X   | four spades, 14: the double (BBA bids 1S)
-S AJ85.K84.A4.KQ84      | 1C P 1D 1H   | 2NT | 17 with a heart stopper: 2NT (BBA jumps to 2S)
+S KJ85.Q84.A4.KJ84      | 1C P 1D 1H   | 1S  | four spades, 14: 1S, as BBA (Rick 2026-11-07: "yes to 1 and 2")
+S AJ85.K84.A4.KQ84      | 1C P 1D 1H   | 2S  | 17, four spades: the jump to 2S, as BBA
 S AJ85.84.KQ4.AJ84      | 1C P 1D 2H   | X   | four spades, 15
 S 84.AJ85.KQ4.AJ84      | 1C P 1D 2S   | X   | four hearts, 15
 S 84.AJ8.KQ4.AJ842      | 1C P 1D 2S   | P   | three hearts, 15: pass, as BBA
 S AQ5.752.K5.AJ964      | 1C P 1D 1H X P 2H P | 2S | no heart stopper over the cue bid: the major, forcing
 S AQ5.K52.K5.AJ964      | 1C P 1D 1H X P 2H P | 3NT | hearts held
+
+# ── 1C P 1D (1H): opener's natural spades (Rick 2026-11-07: "yes to 1
+# and 2"; BBA, probes/opns-1C-1D-1H.toml). Same card as above.
+S QJ74.976.Q5.AQJ3      | 1C P 1D 1H   | 1S  | 12, four spades, no heart stopper: 1S
+S AQ94.K87.62.KJ76      | 1C P 1D 1H   | 1S  | 13 with a heart stopper: 1S before 1NT
+S KQ85.84.A4.AK984      | 1C P 1D 1H   | 2S  | 16, four spades and five clubs: the jump
+S KJ85.Q84.A4.KJ84      | 1C P 1D 1H 1S P 2N P | 3NT | 14 opposite the 11-12 invitation: accepts
+S KJ85.Q84.A4.KJ84      | 1C P 1D 1H 1S P 2H P | 3NT | the cue bid: hearts held
+S KJ85.84.A4.KQJ84      | 1C P 1D 1H 1S P 2H P | 3C  | no heart stopper, five clubs
+S KJ85.Q84.A4.KJ84      | 1C P 1D 1H 1S P 2S P | P   | the raise: to play
+S AJ85.84.A4.AKQ84      | 1C P 1D 1H 2S P 3S P | 4S  | 18 opposite a minimum raise: game
+S AJ85.84.A4.AKQ84      | 1C P 1D 1H 2S P 3C P | P   | no heart stopper: no game opposite 3C
+S AJ85.K84.A4.AQ84      | 1C P 1D 1H 2S P 3C P | 3NT | 18 with a heart stopper
+
+# ── Opener's third call after the double and a weak answer (Rick
+# 2026-11-07: "yes to 1 and 2"; BBA, probes/opnt-o-1C-1D-*.toml).
+S AQ5.K52.K5.AJ964      | 1C P 1D 1H X P 2C P | 2NT | 17 with a heart stopper: invites
+S AQ5.K52.K5.AJ964      | 1C P 1D 1H X P 1S P | 3NT | three spades opposite four, hearts held: 3NT (BBA)
+S AQ5.K52.K5.QJ964      | 1C P 1D 1H X P 2C P | P   | 15: a minimum passes
+S AJ5.KQ84.J4.AKJ8      | 1C P 1D 1S X P 2H P | 4H  | 18, four hearts opposite four: game
+S 85.AKQ4.KQ4.AJ84      | 1C P 1D 1S X P 2C P | 2S  | 18, no spade stopper: the cue bid
+S AJ85.K4.KQ4.AJ84      | 1C P 1D 2H X P 3C P | 3NT | the answer at the three level: 3NT with hearts held
+S AQ5.K52.K5.AJ964      | 1C P 1D 1H   | X   | 17 with a heart stopper, three spades: the double, as BBA
+S AQ5.K52.K5.AJ964      | 1C P 1D 1S   | X   | 17 with a spade stopper, three hearts: the double, as BBA
+S AQ5.K5.K54.AJ964      | 1C P 1D 1S   | 2NT | 17, two hearts: no double, 2NT
