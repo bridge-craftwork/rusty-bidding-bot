@@ -1023,6 +1023,39 @@ it often bids 2D/3D with four of the major and five diamonds, and over
 2H bids 2S with three spades and four diamonds; we bid the four-card
 major and go back to clubs.
 
+## After opener's natural spades over 1C P 1D (1H), and his cue bid after the double (Rick, 2026-11-07)
+
+Rick: **"yes to 1 and 2"** (rebids.notes.md, "Opener's natural spades
+and the strong double after 1C P 1D (overcall)"). Opener's 1S is four
+spades, 11-15; 2S four spades, 16+, forcing one round. BBA
+(`probes/opns-r-1C-1D-1H-1S.toml`, `-2S.toml`, 160 hands each; ranges in
+HCP, as BBA's fall):
+
+- over 1S: 2S with four spades up to 9, 3S 10-11, 4S 12+; 1NT up to 10,
+  2NT 11-12, 3NT 13+ with hearts held; 2C with three clubs, 3C 11-12
+  with four; 2D / 3D with six diamonds; the cue bid 2H with 13+ and no
+  stopper (opener: 3NT with a stopper, a fifth club, three diamonds,
+  else 2S; then I pick the game). BBA bids 1NT without a heart stopper
+  too: not taken (Rick 2026-10-16, notrump promises a stopper), so those
+  hands bid 2C or 2D. Agreement 58 → 111 of 160.
+- over 2S: 4S with four spades and 8+ support points, 3S below (BBA:
+  game from about 6); 3NT 9+ with hearts held; 3H cue 10+ without; 3D
+  six diamonds up to 9; otherwise 3C (opener: 3NT with 18+ and a
+  stopper, else pass). BBA's 4C (club fit, slam interest) is not built.
+  Agreement 54 → 90.
+- when they compete over 1S (2H / 3H): 2S with four up to 9, 3S 10-12
+  (over 3H: competing, to 12), 4S 13+, 3NT 13+ with a stopper, 3D with
+  six diamonds, else pass. No BBA grid: our decision, from the compare's
+  losers (the generic block's 3NT on 9 points).
+
+All at priority 1, ahead of the generic block for opener's new suit
+over their call (which reads notrump with no stopper). Over opener's
+cue bid after his double and my weak answer (17-18, no stopper; `ask=
+x_cue`): 3NT with their suit held and 7+, 2NT with it and less, the
+major with four, five diamonds, else clubs. When they raise over the
+double, the major with four competes at the three level at most (it bid
+4H over 3S on 7 HCP).
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -1086,3 +1119,8 @@ major and go back to clubs.
 - **Rick, 2026-11-07**: "yes" to opener's double after 1C P 1D
   (overcall); responder's answers are BBA's (grids
   `probes/opnt-r-1C-1D-*-X.toml`, 21GF-GIB, 2026-11-07).
+- **Rick, 2026-11-07**: "yes to 1 and 2". Responder's continuations
+  after opener's 1S / 2S over 1C P 1D (1H) are BBA's (grids
+  `probes/opns-r-*.toml`, 21GF-GIB, 2026-11-07), with a stopper for
+  notrump (Rick 2026-10-16); the competitive block and the answers to
+  opener's cue bid are our decision. Not cited to a book.
