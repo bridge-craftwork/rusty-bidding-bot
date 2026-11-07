@@ -502,6 +502,7 @@ Bare or with `me.`.
 | `cued(x)` | in the control-bid dialogue I have shown a control in x |
 | `under_game(x)` | the cheapest bid in x is below game in our agreed suit (3NT if none) |
 | `cheapest_rank(x)` | the cheapest bid in x as level x 5 + C0 D1 H2 S3 (`prefer 0 - cheapest_rank(x)`) |
+| `seat_vul(p)` | the card text in param p covers my seat and vulnerability: `NV` (`Not Vul`), `Vul`, `1st/2nd`, `3rd-4th`, both in one clause (`NV 1st/2nd`), clauses joined by `or` or `;`; unset or unreadable text covers nothing |
 
 ### Other seats
 
