@@ -443,7 +443,8 @@ Q72.97.AT8742.J2 (7 HCP) and wants the preference read as "2S or 3S
 with 5-7 support pts". On the 2/1 cards (`two_over_one.play`, where
 the 1NT is 6-12, forcing, semi-forcing or not):
 
-- The 1NT is now read as holding a three-card raise with 6-7 HCP.
+- The 1NT is now read as holding a three-card raise with 5-7 support
+  points (6-7 HCP until Rick's 2026-11-07 ruling).
 - Rusty's direct single raise with three trumps needs 8 support
   points (constructive), so a flat 6-7 bids 1NT. With four spades over
   1♥ there is no 1NT, so it still raises.
@@ -451,8 +452,17 @@ the 1NT is 6-12, forcing, semi-forcing or not):
 - A passed hand raises as before, since its 1NT is not forcing.
 - The Brill card and `style=bba` keep their own raises.
 
-The preference itself is in responder-rebids.bid (see its notes). The
-band is in HCP, not support points: see the question there.
+The preference itself is in responder-rebids.bid (see its notes).
+
+**Rick, 2026-11-07:** the band is support points: "support points.
+with 9 support points a direct, constructive raise is correct." The
+1NT now holds the three-card raise with `tp(M)<=7` (5-7 support
+points; 6-7 in practice, the 1NT's floor is 6 HCP), and the single
+raise is 8-10 support points. Hands with 8-9 support points that had
+bid 1NT over 1♥ (the descriptiveness tie) now raise. The 1NT also
+says `hcp<=11 | points<=12`, so a 12-count with a long suit bids its
+2/1 rather than winning that tie for 1NT. Measured in
+responder-rebids.notes.md ("Support points, not HCP").
 
 **Measured:** see responder-rebids.notes.md, the #87 section.
 
@@ -486,6 +496,7 @@ band is in HCP, not support points: see the question there.
   random set (the section above). No probe: BBA's bare card answers the
   four-trump hands with Bergen, so it cannot show a plain-SAYC choice.
 - **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #87): the weak
-  three-card raise goes through 1NT on 2/1 cards. The 6-7 HCP reading
-  and the 8-support-point constructive raise are our decisions (standard 2/1 practice,
-  not yet cited).
+  three-card raise goes through 1NT on 2/1 cards; **2026-11-07**: 5-7
+  support points, the direct raise constructive ("with 9 support points
+  a direct, constructive raise is correct"). Standard 2/1 practice,
+  not yet cited.

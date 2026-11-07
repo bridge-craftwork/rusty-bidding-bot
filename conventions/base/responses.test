@@ -134,14 +134,19 @@ card    21GF-GIB
 S 873.A92.KQ84.Q92      | 1S P       | 3S     | default: three trumps will do
 
 # The weak three-card raise goes through 1NT on the 2/1 cards: the
-# single raise is constructive, 8+ support points with three trumps
-# (Rick, 2026-11-06, bridge-classroom-bug-artifacts #87).
+# single raise is constructive, 8+ support points with three trumps,
+# the weak raise 5-7 support points (Rick, 2026-11-06 and 2026-11-07,
+# bridge-classroom-bug-artifacts #87: "support points. with 9 support
+# points a direct, constructive raise is correct").
 card    21GF-GIB
 dealer  N
 S Q72.976.A874.J32      | 1S P       | 1NT    | 7 HCP flat, three spades: 7 support points, 1NT, then preference
-S Q72.97.AT8742.J2      | 1S P       | 2S     | #87 (board 14): 7 HCP and two doubletons, 9 support points: Rusty raises (Rick's 1NT reads too)
+S Q72.97.AT8742.J2      | 1S P       | 2S     | #87 (board 14): 7 HCP and two doubletons, 9 support points: the direct raise (Rick, 2026-11-07)
 S Q72.976.A874.Q32      | 1S P       | 2S     | 8 HCP and three: the constructive raise
-S 72.Q76.A874.J432      | 1H P       | 1NT    | 6 HCP and three hearts: 7 support points
+S 732.Q76.A87.J432      | 1H P       | 1NT    | 7 HCP flat, three hearts: 7 support points
+S 72.Q76.A874.J432      | 1H P       | 2H     | 7 HCP and a doubleton: 8 support points, the constructive raise (Rick, 2026-11-07)
+S Q72.9765.A874.32      | 1S P       | 1NT    | 6 HCP and a doubleton: 7 support points, the weak raise via 1NT
+S A4.7.QT3.AQT7432      | 1H P       | 2C     | 12 HCP, 13 points: the 2/1, not the 1NT (2026-11-07)
 S Q842.Q82.9874.K9      | 1H P       | 2H     | four spades: no 1NT, so the raise (1S would deny three hearts)
 S Q872.76.A874.J32      | 1S P       | 2S     | four trumps raise at once
 dealer  S

@@ -29,3 +29,14 @@ card    Basic-Bridge
 dealer  N
 S 74.952.83.AKJ652      | 2C 2H P P 3N P                       | 4C     | six clubs and slam values: the club slam try
 S 74.952.83.KQJ652      | 2C 2H P P 3N P                       | P      | too little for a slam try
+
+# Opener over responder's 15-17 jump to 3NT after a 2/1 game force:
+# the textbook 33/31 on responder's minimum (Rick, 2026-11-07, #91
+# follow-up: more aggressive here).
+card    21GF-GIB
+dealer  N
+N AJ964.AK.K763.KT      | 1S P 2C P 2D P 3NT P                 | 6NT    | 18 opposite 15-17: 33 at least
+N AQ7.KQJ93.A873.9      | 1H P 2C P 2D P 3NT P                 | 4NT    | 16: quantitative (the general count wanted 17)
+N AQ765.K4.KQ32.95      | 1S P 2C P 2D P 3NT P                 | P      | 14: no slam
+S KQ4.AJ5.K94.KJ32      | 1S P 2C P 2D P 3NT P 4NT P           | 6NT    | responder's 17 accepts
+S KQ4.AJ5.Q94.QJ32      | 1S P 2C P 2D P 3NT P 4NT P           | P      | responder's 15 declines

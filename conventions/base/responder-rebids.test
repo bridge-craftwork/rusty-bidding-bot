@@ -252,7 +252,7 @@ N K7.93.KJ95.AJ987      | 1D P 2C P 2H P                       | 2NT    | #91 (b
 N K7.93.KJ95.AKJ87      | 1D P 2C P 2H P                       | 3NT    | 15: the jump
 S JT4.KQT4.AQ32.Q6      | 1D P 2C P 2H P 2N P                  | 3NT    | #91: opener may not pass 2NT; no extras
 S JT4.KQT4.AQ32.Q6      | 1D P 2C P 2H P 3N P                  | Pass   | 14 facing 15-17: 29-31, game
-S AT4.KQT4.AQ32.K6      | 1D P 2C P 2H P 3N P                  | 4NT    | 18 facing 15-17: quantitative
+S AT4.KQT4.AQ32.K6      | 1D P 2C P 2H P 3N P                  | 6NT    | 18 facing 15-17: 33 at least, slam (Rick 2026-11-07: more aggressive; over-3nt.bid)
 
 # Six hearts too weak to bid them over 1S (2026-09-30, random deals,
 # SAYC-bare; BBA bids 2H).
@@ -361,13 +361,15 @@ S 8743.KJ5.82.Q943      | 1D 1S X P 2N P | 3NT | 7 opposite 18-19: game
 S 8743.K52.82.9643      | 1D 1S X P 2N P | P   | 3 points: pass
 S 8743.KJ5.82.Q943      | 1D 1S X P 1N P | P   | 7 opposite 12-14: no game
 
-# The preference after a 2/1 card's 1NT: two, or three and a weak raise
-# (Rick, 2026-11-06, bridge-classroom-bug-artifacts #87).
+# The preference after a 2/1 card's 1NT: two, or three and a weak raise,
+# 5-7 support points (Rick, 2026-11-06 and 2026-11-07,
+# bridge-classroom-bug-artifacts #87).
 card    21GF-GIB
 dealer  N
-S Q72.97.AT8742.J2      | 1S P 1N P 2H P       | 2S     | #87 (board 14): three spades, 7 HCP
+S Q72.97.AT8742.J2      | 1S P 1N P 2H P       | 2S     | #87 (board 14): three spades, 9 support points (Rusty raises at once; this 1NT is Rick's)
+S Q72.976.A874.J32      | 1S P 1N P 2H P       | 2S     | the weak raise, 7 support points: preference
 S Q72.976.AT87.J32      | 1S P 1N P 2C P       | 2S     | three spades over three clubs: the major
-S 72.Q76.A874.J432      | 1H P 1N P 2C P       | 2H     | the weak raise in hearts: the major before four clubs
+S 732.Q76.A87.J432      | 1H P 1N P 2C P       | 2H     | the weak raise in hearts: the major before four clubs
 S Q7.976.AT87.J532      | 1S P 1N P 2C P       | P      | two spades and four clubs: pass
 N AKJT63.QJ86.K9.5      | 1S P 1N P 2H P 2S P  | P      | #87: 14 opposite 6-10 with two or three: no game
 

@@ -552,6 +552,15 @@ Whole set, both issues: actor contract errors +146 (halves +9 / +137),
 distance from par +75. Against BBA, errors went from -8142 to -7857
 and par from -6546 to -6471.
 
+**Rick, 2026-11-07:** asked whether opener should be more aggressive
+about slam opposite the 15-17 3NT (the -50 above): "yes". Opener now
+counts the textbook 33/31 HCP on responder's minimum there (18+ 6NT,
+16-17 a quantitative 4NT; over-3nt.bid and its notes): +18 IMPs on 8
+boards in actor contract errors. Over the 12-14 / 18+ 2NT opener's
+count is unchanged (points on the 12 floor, rebids.bid); once the
+strong branch shows itself with the quantitative 4NT, opener accepts
+with 14+ points (one-nt.bid), already past the textbook 33.
+
 ## 1M-1NT-2M-3M is the two-card raise (2026-09-30)
 
 `after 1x (P) 1N (P) 2x (P)` had two raises: "3+ {x}, maximum for the
@@ -900,6 +909,52 @@ through 1NT) and raises with four spades. Over all 343 scenarios:
 
 Net: +102 in actor contract errors.
 
+### Support points, not HCP (Rick, 2026-11-07)
+
+Rick answered the question above: "support points. with 9 support
+points a direct, constructive raise is correct." So:
+
+- the weak three-card raise through 1NT is **5-7 support points** with
+  the major as trump (`tp(M)<=7`; the 1NT's 6 HCP floor stays, so in
+  practice 6-7), and the 1NT and the preference are read that way;
+- the direct single raise with three trumps is **constructive, 8-10
+  support points** (responses.bid already bid it so; its reading
+  `tp(M)=6..10` with `tp(M)>=8` on the 2/1 cards is 8-10);
+- Rick's board-14 hand Q72.97.AT8742.J2 (7 HCP, two doubletons: 9
+  support points) raises 1♠-2♠ at once.
+
+The 6-7 HCP reading had let hands with 8-9 support points into the
+1NT, and over 1♥ the 1NT had won the tie with 2♥ on such hands
+(descriptiveness). Now they raise, as Rick rules. When a hand with 8+
+support points has bid 1NT anyway (Rick's own 1NT on board 14), a
+fallback "Preference: three {M}" (priority -3) still takes the major;
+partner reads the main rule.
+
+The narrower 1NT also became more descriptive than the 2/1 2♣ over
+1♥ with 12 HCP and a long minor and won that tie (descriptiveness),
+undoing last round's flip the other way: -53 IMPs on 28 boards in the
+tripwire. The 1NT on the 2/1 cards now also says `hcp<=11 |
+points<=12`: a 12-count with a long suit has 13 points and bids its
+2/1 (the 2/1 needs 13 points), as it did before.
+
+**Measured** (compare `--par-all`, errors_diff.py, the bidding side's
+contract errors; both issues of 2026-11-07 together, split by the
+first differing call):
+
+- 35 scenarios, 17,500 boards (2/1, forcing 1NT, major raises,
+  misfits, slam): `1♥ P: 1NT -> 2♥` (8-9 support points now raise)
+  -83 on 60 boards (-90 by all errors), mostly the Gavin raise
+  scenarios, where the opponents now compete over 2♥.
+- Tripwire, all 343 scenarios at `--limit 50`: 32 boards changed,
+  **+5** (halves -4 / +9), distance from par +23; `1♥ P: 1NT -> 2♥`
+  -12 on 20, `1♠ P: 1NT -> 2♠` +4 on 4. Against BBA errors -7731 ->
+  -7759 (the doubling half, -30, is the opponents'), par -6329 ->
+  -6306.
+
+The loss on the raise scenarios is the price of Rick's ruling (the
+raise is constructive from 8 support points), not a misread
+definition, so it stands.
+
 ## After opener's notrump in a contested auction (Rick, 2026-11-06)
 
 Partner of the new opener's rebids in rebids.notes.md ("Opener's
@@ -962,10 +1017,13 @@ notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
   3NT is 15-17. Robert Todd, Advancing in Bridge #425, "Using NT
   Rebids in 2/1 Auctions" (2022): responder's jump to 3NT shows
   extras, with no ranges given. No book cited for the ranges yet.
+  **Rick, 2026-11-07:** opener more aggressive about slam opposite the
+  15-17 3NT ("yes"); built in over-3nt.bid.
 - **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #87): the
   preference after 1M-1NT shows two, or three with a weak raise ("5-7
-  support pts", taken as 6-7 HCP: our decision). The weak raise
-  through a forcing 1NT is standard 2/1 practice, not yet cited.
+  support pts"). **Rick, 2026-11-07:** in support points, and "with 9
+  support points a direct, constructive raise is correct". The weak
+  raise through a forcing 1NT is standard 2/1 practice, not yet cited.
 
 - **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #90, #93): the
   notrump rebids answered here; responder's continuations (no systems

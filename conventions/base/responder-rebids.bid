@@ -230,13 +230,22 @@ after 1x (P) 1N (P) 2z (P) when z is not x
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
       when  shown.x.max<=2 | x is C | x is D
   # The 6-12 1NT over a major (2/1 cards) may hold a weak three-card
-  # raise (6-7 HCP: responses.bid), and the preference then
+  # raise (5-7 support points: responses.bid), and the preference then
   # shows it (Rick, 2026-11-06, bridge-classroom-bug-artifacts #87: "2S
-  # or 3S with 5-7 support points").
-  2x  "Preference: two {x}, or three with a weak raise (6-7)"
-      shows (x=2, z<=3, hcp<=10) | (x=3, hcp<=7)
+  # or 3S with 5-7 support pts"; 2026-11-07: support points, not HCP).
+  2x  "Preference: two {x}, or three with a weak raise (5-7 support points)"
+      shows (x=2, z<=3, hcp<=10) | (x=3, tp(x)<=7)
       when  x is H | x is S, shown.x.max>=3
       sets  ask=signoff
+  # A three-card raise worth more (8+ support points) raises at once
+  # (responses.bid), so this hand bid 1NT off our book, as Rick's
+  # board-14 hand did. It still prefers the major; partner reads the
+  # rule above.
+  2x  "Preference: three {x}"
+      shows x=3, hcp<=10
+      when  x is H | x is S, shown.x.max>=3
+      sets  ask=signoff
+      priority -3
   3z  "Raise: 4+ {z}, 9-10"               shows z>=4, points=9..10   sets ask=invite(z)
   # The good raise (11+ points) is the Impossible 2♠ after 1♥ when the
   # card plays it (impossible-2s.bid); otherwise it raises too (it passed).
