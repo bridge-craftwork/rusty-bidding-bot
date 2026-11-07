@@ -293,8 +293,9 @@ Rick, later the same day:
   #83's North (16) still relays and reaches 6♥.
 - **Opener passes responder's 4M without 19+ points**, after any of
   his answers or relay answers (the `after` block at the end of the
-  file, priority 16, above the keycard ask and the control bids). The
-  same in standard Jacoby (jacoby-2nt.notes.md).
+  file, priority 16, above the keycard ask and the control bids). Not in
+  standard Jacoby, whose shortness answer is unlimited
+  (jacoby-2nt.notes.md; an open question for Rick).
 - **The ruling overrides the double-dummy measurement.** What the relays
   tell the defenders (opener's shape, for the lead and the defence) is
   invisible to DD par, which scores every contract as if the defenders
