@@ -1253,7 +1253,29 @@ BBA jumps to 3NT where we bid 2NT; `1C P P (1S)` 1NT agrees. BBA
 style, not taken: the 2NT ladder is Rick's (18-19, partner raises with
 7+, as uncontested).
 
-Measured: see "Compare" below.
+Two small follow-ups found while measuring: over partner's 2-of-a-suit
+sign-off after the reopening 1NT (#90's own board: 1D P P 1H 1NT P 2C)
+opener passes; the generic sign-off answer bid 3C, "16-18 invitation",
+opposite 0-5. And when they compete over opener's 18-19 notrump and
+partner doubles, opener passes ("described: partner's double decides";
+six no-rule positions in the compare, such as 1C P 1H 2S 2N 3S X 4S).
+
+**Compare** (2026-11-07, `--par-all`, errors_diff verdict = the actor's
+contract errors):
+
+| run | boards changed | actor contract errors | all errors | distance from par | no rule |
+|---|---|---|---|---|---|
+| 15 matching scenarios, full (NT_Ladder, Notrump_18-19, Forcing_NT, Gavin_*_2N_Rebid_*, Balancing, After_Opp_Overcalls, Dealing_with_Overcalls_*, Opps_Weak_Jump_Overcall, Minor_Suit_Opener, 1m-1N, GIB_Sandwich_NT_BPH, Jump_Cuebid_Weak, Bergen_Raises; 7,500 boards) | 120 | +8 | +134 | +162 | 96 → 96 |
+| all scenarios `--limit 50` (tripwire) | 32 | -14 | +38 | +36 | 241 → 241 |
+
+Every changed board's first difference is one of the new calls (no
+call elsewhere moved). The one loser is the 12-14 1NT over the
+one-level overcall of the response (`1C P 1D (1S) 1NT`: -50 actor
+contract errors on 18 boards in the matching set, -25 on 7 in the
+tripwire); BBA bids the same 1NT on most of those boards (1m-1N 5 and
+7: both tables 1NT, down), so it is kept as standard and BBA's style;
+the two-level and reopening notrumps gain. Net vs BBA on the matching
+set: errors -2,789 → -2,655, par -2,654 → -2,492.
 
 ## Sources
 
