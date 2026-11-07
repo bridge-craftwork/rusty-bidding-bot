@@ -1264,3 +1264,7 @@ judgment, for Rick to check.
 - Brill daily 2026-10-20, board 7 (field and DD table); the answers
   to 4m and 3M after the jump rebid: standard practice, not yet cited;
   the bare-suit hedge: our judgment (2026-10-20).
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #91): responder's
+  2NT after a 2/1 and opener's two-level rebid is 12-14 or 18+, and
+  forcing. Opener's slam count over it uses responder's minimum
+  (responder-rebids.notes.md).

@@ -387,8 +387,10 @@ after 1m (P) 2N (P)
       priority -5
 
 # Responder's game-forcing 2NT after a two-over-one and opener's rebid
-# (16+, no fit: responder-rebids.bid): opener counts slam on it, with
-# over-3nt.bid's numbers for this shape (2026-09-30).
+# (12-14 or 18+, no fit: responder-rebids.bid, Rick 2026-11-06): it is
+# forcing, and opener counts slam on its minimum with over-3nt.bid's
+# numbers for this shape (2026-09-30); responder's strong branch then
+# invites over the 3NT.
 after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
   6N  "Slam in notrump"
       shows points + partner.points.min >= 33
@@ -399,8 +401,23 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
       sets  ask=quant
       priority 1
   3N  "Game: no extras"                    shows points + partner.points.min <= 30
+# A self-sufficient major plays in game, as over-3nt.bid does over
+# partner's 3NT (ticket b194): before 2026-11-06 responder's minimum
+# bid 3NT and opener answered 4M there; now the minimum bids 2NT, and
+# opener's "no extras" 3NT lost the game in the suit (corpus, Namyats
+# and Misfit boards, -10 IMPs each).
+after 1S (P) 2x (P) 2S (P) 2N (P) when x is not S, we.gf
+  4S  "To play: a self-sufficient ♠ suit"
+      shows (S>=6, quality(S)=3, top5(S)>=4) | (S>=7, quality(S)=3)
+      shows (H<=2, !stop(H)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority 1
+after 1H (P) 2x (P) 2H (P) 2N (P) when x is not H, we.gf
+  4H  "To play: a self-sufficient ♥ suit"
+      shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
+      shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority 1
 # In the Lawrence style opener's 2M was the default rebid, five or more
-# (Rick, 2026-10-16), so over responder's 2NT (16+, two or fewer of the
+# (Rick, 2026-10-16), so over responder's 2NT (12-14 or 18+, two or fewer of the
 # major) a sixth card is news: it makes the doubleton an eight-card fit.
 # Only without extras: with them opener counts slam in notrump as above
 # (measured: 3M first with every hand lost the 4NT/6NT count, -51 by

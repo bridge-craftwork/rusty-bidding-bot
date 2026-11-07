@@ -228,7 +228,16 @@ after 1x (P) 1N (P) 2z (P) when z is not x
       when  m is not x, m is not z
       sets  ask=signoff
   2x  "Preference: 2+ {x}"                 shows x>=2, x>=z | (z<=3, x is H) | (z<=3, x is S)   sets ask=signoff
-  3z  "Raise: 4+ {z}, 9-10"                shows z>=4, points=9..10   sets ask=invite(z)
+      when  shown.x.max<=2 | x is C | x is D
+  # The 6-12 1NT over a major (2/1 cards) may hold a weak three-card
+  # raise (6-7 HCP: responses.bid), and the preference then
+  # shows it (Rick, 2026-11-06, bridge-classroom-bug-artifacts #87: "2S
+  # or 3S with 5-7 support points").
+  2x  "Preference: two {x}, or three with a weak raise (6-7)"
+      shows (x=2, z<=3, hcp<=10) | (x=3, hcp<=7)
+      when  x is H | x is S, shown.x.max>=3
+      sets  ask=signoff
+  3z  "Raise: 4+ {z}, 9-10"               shows z>=4, points=9..10   sets ask=invite(z)
   # The good raise (11+ points) is the Impossible 2♠ after 1♥ when the
   # card plays it (impossible-2s.bid); otherwise it raises too (it passed).
   3z  "Raise: 4+ {z}, 11+ points"          shows z>=4, points>=11   sets ask=invite(z)
@@ -301,13 +310,19 @@ after 1y (P) 2x (P) 2z (P) when x is not y, !(weak_js, two_level_jump(x, y))
       sets  ask=nt_invite
   3N  "Game, no fit"                       shows points>=13, y+partner.y.min<=7 | y is C | y is D
       when  !we.gf
-  # In a game force (2/1 cards) 3NT is the minimum, fast arrival; with
-  # more, 2NT keeps the auction low for opener to count slam (2026-09-30,
-  # random deals: responder's 3NT with the stronger hand, 482 boards short
-  # of slam in 100,000).
-  3N  "Game, no fit: 13-15"  shows points=13..15, y+partner.y.min<=7 | y is C | y is D
+  # In a game force (2/1 cards) the notrump rebids are two ranges (Rick,
+  # 2026-11-06, bridge-classroom-bug-artifacts #91): 2NT is 12-14 or
+  # 18-19 (more is slam at once, or 2NT too), forcing, so opener goes on
+  # describing and counts slam opposite the minimum; the jump to 3NT is
+  # 15-17 balanced, and opener counts slam on it with over-3nt.bid. It
+  # replaced 3NT 13-15 / 2NT 16+ in notrump points (2026-09-30); the
+  # ranges are HCP now, as notrump ranges are, so that over-3nt.bid's
+  # HCP count reads them. Four cards in opener's second major raise it
+  # instead (below).
+  3N  "Game, no fit: 15-17"  shows hcp=15..17, y+partner.y.min<=7 | y is C | y is D
       when  we.gf
-  2N  "Game forcing, no fit: 16+"          shows points>=16, y+partner.y.min<=7 | y is C | y is D, z<=3
+  2N  "Game forcing, no fit: 12-14 or 18+"
+      shows hcp<=14 | hcp>=18, y+partner.y.min<=7 | y is C | y is D, z<=3 | z is C | z is D
       when  we.gf
   3x  "Invitational: 6+ {x}, 11-12"        shows x>=6, suit_points=11..12, y<=2 | y is C | y is D
       when  !we.gf
@@ -413,6 +428,18 @@ after 1y (P) 2x (P) 3y (P) when x is not y, !(weak_js, two_level_jump(x, y))
   3N  "Game, no fit"                       shows points>=11, y<=1 | y is C | y is D
                                            # the jump rebid is six: two is a fit
   P   "Minimum: no game"    priority -5
+
+# After 2NT (12-14 or 18+) and opener's 3NT (no extras: rebids.bid),
+# the strong branch invites (Rick, 2026-11-06, #91): 18-20 quantitative,
+# answered by one-nt.bid's `when asked quant`; 21+ bids the slam. The
+# minimum passes.
+after 1y (P) 2x (P) 2z (P) 2N (P) 3N (P) when x is not y, we.gf, !(weak_js, two_level_jump(x, y))
+  4N  "Quantitative: 18-20, invites 6NT"   shows hcp=18..20
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
+      sets  ask=quant
+      priority 1
+  6N  "Slam: 21+"                          shows hcp>=21
+      priority 1
 
 after 1M (P) 3M (P) 3N (P)
   4M  "Prefers the major: four trumps"     shows M>=4
