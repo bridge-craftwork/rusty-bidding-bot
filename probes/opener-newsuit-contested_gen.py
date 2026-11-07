@@ -14,6 +14,9 @@ suit> o<length in the opened minor>` (st: a stopper in their suit, as
 Each hand gets its own partner: 6-11 HCP with four or more of the
 response suit and at most three of theirs.
 
+--strong writes opnj-*: 17-21 unbalanced openers with a new suit
+(jump shifts and reverses, Rick 2026-11-07: "5: yes").
+
 --responder writes the specs of responder's next call after opener's
 natural new suit (opns-r-*), opener's hand made to fit BBA's meaning.
 """
@@ -35,6 +38,22 @@ POSITIONS = [
     ("opns-1C-1S-2H", "1C Pass 1S 2H", "C", "S", "H", "D"),
 ]
 
+# Strong unbalanced openers (--strong; Rick 2026-11-07, "5: yes"): 17-21
+# HCP, not balanced, four or more of the new suit (a major: four or five,
+# shorter than the opened minor). Same columns as POSITIONS.
+STRONG = [
+    ("opnj-1C-1D-2H", "1C Pass 1D 2H", "C", "D", "H", "S"),
+    ("opnj-1C-1D-1S", "1C Pass 1D 1S", "C", "D", "S", "H"),
+    ("opnj-1C-1D-1H", "1C Pass 1D 1H", "C", "D", "H", "S"),
+    ("opnj-1C-1H-1S", "1C Pass 1H 1S", "C", "H", "S", "D"),
+    ("opnj-1C-1S-2H", "1C Pass 1S 2H", "C", "S", "H", "D"),
+    ("opnj-1D-1S-2C", "1D Pass 1S 2C", "D", "S", "C", "H"),
+    ("opnj-1D-1H-1S", "1D Pass 1H 1S", "D", "H", "S", "C"),
+    ("opnj-1D-1H-2S", "1D Pass 1H 2S", "D", "H", "S", "C"),
+    ("opnj-1D-1S-2H", "1D Pass 1S 2H", "D", "S", "H", "C"),
+    ("opnj-1C-1H-2S", "1C Pass 1H 2S", "C", "H", "S", "D"),
+]
+
 # Responder after opener's new suit: name, prefix, responder's suit,
 # their suit, opener's hand test (lengths L spades first, HCP h), responder's HCP.
 RESP = [
@@ -42,6 +61,22 @@ RESP = [
      "12 <= h <= 16 and L[0] == 4 and L[1] <= 3 and L[3] >= 3 and L[3] >= L[2] and not (bal and 15 <= h <= 17)", (4, 14)),
     ("opns-r-1C-1D-1H-2S", "1C Pass 1D 1H 2S Pass", "D", "H",
      "16 <= h <= 19 and L[0] == 4 and L[1] <= 2 and L[3] >= 4 and L[3] >= L[2]", (4, 14)),
+    # Rick 2026-11-07, "6: yes": 1D P 1H (1S) 2C with five-five in the minors
+    ("opns-r-1D-1H-1S-2C", "1D Pass 1H 1S 2C Pass", "H", "S",
+     "13 <= h <= 17 and L[2] >= 5 and L[3] >= 5 and L[2] >= L[3]", (4, 14)),
+    # Rick 2026-11-07, "5: yes": after BBA's strong new suit, and its 13-19 3C
+    ("opns-r-1C-1D-2H-2S", "1C Pass 1D 2H 2S Pass", "D", "H",
+     "19 <= h <= 21 and 4 <= L[0] <= 5 and L[3] >= 5 and L[3] > L[0] and L[1] <= 2", (4, 14)),
+    ("opns-r-1C-1D-1S-2H", "1C Pass 1D 1S 2H Pass", "D", "S",
+     "19 <= h <= 21 and 4 <= L[1] <= 5 and L[3] >= 5 and L[3] > L[1] and L[0] <= 2", (4, 14)),
+    ("opns-r-1D-1S-2C-2H", "1D Pass 1S 2C 2H Pass", "S", "C",
+     "19 <= h <= 21 and 4 <= L[1] <= 5 and L[2] >= 5 and L[2] > L[1] and L[0] <= 3", (4, 14)),
+    ("opns-r-1C-1S-2H-3D", "1C Pass 1S 2H 3D Pass", "S", "H",
+     "18 <= h <= 21 and L[2] >= 4 and L[3] >= 5 and L[0] <= 2", (4, 14)),
+    ("opns-r-1D-1H-2S-3C", "1D Pass 1H 2S 3C Pass", "H", "S",
+     "13 <= h <= 19 and L[3] >= 4 and L[2] >= 4 and L[2] >= L[3] and L[1] <= 3", (4, 14)),
+    ("opns-r-1D-1S-2H-3C", "1D Pass 1S 2H 3C Pass", "S", "H",
+     "13 <= h <= 19 and L[3] >= 4 and L[2] >= 4 and L[2] >= L[3] and L[0] <= 3", (4, 14)),
 ]
 
 
@@ -73,9 +108,22 @@ def stop(cards, s):
     return "A" in rs or ("K" in rs and n >= 2) or ("Q" in rs and n >= 3) or ("J" in rs and n >= 4)
 
 
-def opener_ok(c, opened, resp, theirs, new):
+def opener_ok(c, opened, resp, theirs, new, strong=False):
     L = lengths(c)
     h = hcp(c)
+    if strong:
+        if balanced(L) or L[SI[new]] < 4 or max(L) > 7:
+            return False
+        if L[0] >= 5 or L[1] >= 5:
+            if not (L[SI[new]] in (4, 5) and L[SI[opened]] > L[SI[new]] and max(L[0], L[1]) == L[SI[new]]):
+                return False
+        if opened == "C" and not (L[3] >= L[2] and L[3] >= 4):
+            return False
+        if opened == "D" and not (L[2] >= L[3] and L[2] >= 4):
+            return False
+        if resp in ("H", "S") and L[SI[resp]] >= 4:
+            return False
+        return True
     if L[0] >= 5 or L[1] >= 5:
         return False
     if balanced(L) and (15 <= h <= 17 or h >= 20):
@@ -123,18 +171,19 @@ def main():
     ap.add_argument("--seed", type=int, default=1108)
     ap.add_argument("--outdir", default="probes")
     ap.add_argument("--responder", action="store_true")
+    ap.add_argument("--strong", action="store_true", help="17-21 unbalanced openers (opnj-*)")
     a = ap.parse_args()
     rng = random.Random(a.seed)
     full = [(s, r) for s in range(4) for r in RANKS]
     if a.responder:
         responder(a, rng, full)
         return
-    for name, prefix, opened, resp, theirs, new in POSITIONS:
+    for name, prefix, opened, resp, theirs, new in (STRONG if a.strong else POSITIONS):
         rows = []
         while len(rows) < a.count:
-            want = rng.randint(11, 20)
+            want = rng.randint(17, 21) if a.strong else rng.randint(11, 20)
             c = deal13(rng, full)
-            if hcp(c) != want or not opener_ok(c, opened, resp, theirs, new):
+            if hcp(c) != want or not opener_ok(c, opened, resp, theirs, new, a.strong):
                 continue
             p = partner_for(rng, [x for x in full if x not in c], resp, theirs)
             if p is None:

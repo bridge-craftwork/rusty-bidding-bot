@@ -1056,6 +1056,33 @@ major with four, five diamonds, else clubs. When they raise over the
 double, the major with four competes at the three level at most (it bid
 4H over 3S on 7 HCP).
 
+### Rick's answers and the strong new suits (2026-11-07, second round)
+
+Rick on responder's notrump over opener's 1S without a heart stopper
+(BBA bids 1NT anyway): **"require a stopper"**. As built.
+
+Rick: **"3: yes. 5: yes 6: yes"** (rebids.notes.md). Responder's side:
+
+- **Over a strong new suit** (game forcing; `ask=rev(w, m, y, z)`): BBA
+  (`probes/opns-r-1C-1D-2H-2S.toml`, `-1C-1D-1S-2H`, `-1D-1S-2C-2H`,
+  `-1C-1S-2H-3D`, 120 hands each): a major raised to game with a
+  minimum (up to 7), one level with 8+; 3NT with their suit held; my
+  own suit with five (a minor) or six (a major); the minor's preference
+  (BBA's 4m "try" is ours 3m or 4m); else the cue bid. BBA's 4NT keycard
+  not taken. Agreement 48, 58, 72, 46 of 120.
+- **Over 1D P 1M (2y) 3C** (13-19, not forcing; `opns-r-1D-1H-2S-3C`,
+  `-1D-1S-2H-3C`): pass with nothing, 3D with three diamonds to 10, 3NT
+  11+ with their suit held, my major with six and 9+, the cue bid 12+
+  without a stopper. When they compete: 4C with four clubs, 3NT, else
+  pass. Agreement 80 and 79 of 120.
+- **Over 1D P 1H (1S) 2C** (five-five, 13-17; `opns-r-1D-1H-1S-2C`):
+  2D or 3C with the longer minor to 9; 2H with six hearts; 2NT 10-11
+  and 3NT 12+ with spades held; 3D 10-11 with three diamonds (opener
+  5D with 15+ points); the cue bid 2S with 12+ and no stopper. BBA's 4NT
+  keycard and its five-level jumps not taken. Agreement 52 of 120.
+- After opener's 14-count raise to 3H (an invitation) the major
+  invitation's answer; after his 2D / 3D or 1NT, pass.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -1124,3 +1151,7 @@ double, the major with four competes at the three level at most (it bid
   `probes/opns-r-*.toml`, 21GF-GIB, 2026-11-07), with a stopper for
   notrump (Rick 2026-10-16); the competitive block and the answers to
   opener's cue bid are our decision. Not cited to a book.
+- **Rick, 2026-11-07** (second round): "require a stopper" (responder's
+  notrump over opener's 1S); "3: yes. 5: yes 6: yes". Responder's
+  continuations from the grids `probes/opns-r-*.toml` (21GF-GIB,
+  2026-11-07), with a stopper for notrump. Not cited to a book.

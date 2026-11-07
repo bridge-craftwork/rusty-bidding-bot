@@ -862,8 +862,8 @@ after 1x (P) 1z (1y) when y is not x, z is not x, z is not y
       shows balanced | shape 5-4-2-2, hcp=13..16, z<=3
       when  stop(y)
       sets  ask=signoff
-  jump(N) "17-18 balanced with a stopper in {y}"
-      shows balanced, hcp=17..18, z<=3
+  jump(N) "17-18 with a stopper in {y}"
+      shows hcp=17..18, z<=3, longest<=6       # BBA: unbalanced too
       when  stop(y)
   3N  "Game: 19+ with a stopper in {y}"
       shows hcp>=19, stop(y), z<=3
@@ -1221,11 +1221,11 @@ after 1x (P) 1z (2y) when y is not x, y is not z, z is not x
       when  !support_x | (support_through is none, rho.last > 2{z}) | (support_through is not none, rho.last > support_through)
       sets  ask=values(z, x, y)
       priority 1
-  2N  "17-18 balanced with a stopper in {y}"
-      shows balanced, hcp=17..18, z<=3
+  2N  "17-18 with a stopper in {y}"
+      shows hcp=17..18, z<=3, longest<=6       # BBA: unbalanced too
       when  stop(y)
-  3N  "19-21 balanced with a stopper in {y}"
-      shows balanced, hcp=19..21, z<=3
+  3N  "19-21 with a stopper in {y}"
+      shows hcp=19..21, z<=3, longest<=6
       when  stop(y)
 # Responder's cue bid over the values double: 10+, nothing in their
 # suit. Notrump with it held, else the major with three, else four of
@@ -1306,6 +1306,111 @@ after 1C (P) 1D (1y) X (P) * (P) | 1C (P) 1D (2y) X (P) * (P) when y is H | y is
       shows hcp>=17
       sets  forcing=round, ask=x_cue(y)
       priority 1
+  # 14-16 bids on with a fit or a stopper (Rick 2026-11-07, "3: yes";
+  # BBA, the same grids): three diamonds and four hearts over the club
+  # answer (2D, or 3D over 3C), the raise of the major with four (invites: responder's
+  # answer was up to 11), 1NT / 2NT over the major with three of it and
+  # their suit held. Otherwise pass.
+  cheapest(D) "14-16, four hearts and three diamonds: competes"   shows hcp<=16, D=3, H=4
+      when  y is S, partner.last=2C | partner.last=3C   # BBA: with three hearts it passes
+  cheapest(D) "14-16, four spades and three diamonds: competes"   shows hcp<=16, D=3, S=4
+      when  y is H, partner.last=2C | partner.last=3C
+      sets  ask=signoff
+  3H  "14-16, four hearts opposite four: invites"     shows hcp<=16, H>=4
+      when  y is S, partner.last=2H
+      sets  trump=H, ask=invite(H)
+  1N  "14-16 with a stopper in {y}"                   shows hcp<=16, stop(y)
+      when  partner.last=1S
+      sets  ask=signoff
+  2N  "14-16, three hearts, a stopper in {y}: invites"   shows hcp<=16, stop(y), H=3
+      when  y is S, partner.last=2H
+      sets  ask=nt_invite
+      priority -1
+# ── Strong new suits over their overcall of the response ─────────────
+# Rick 2026-11-07, "5: yes". BBA (probes/opnj-*.toml, 120 hands each,
+# 17-21 unbalanced with a new suit): a reverse into a major at the two
+# level with 19+ (1C P 1D (2H) 2S, 1C P 1D (1S) 2H, 1D P 1S (2C) 2H:
+# "19 to 21 total points", the minor five or longer); diamonds over
+# clubs at the three level with 18+ (1C P 1H (1S) 3D, a jump; 1C P 1S
+# (2H) 3D, 1C P 1H (2S) 3D); clubs over diamonds with a jump over a
+# one-level overcall, 18+ (1D P 1H (1S) 3C). Forcing to game.
+after 1m (P) 1z (1y) | 1m (P) 1z (2y) when y is not m, z is not m, z is not y
+  2H  "Reverse: four or more hearts, longer {m}, 19+, forcing to game"
+      shows H>=4, m>H, points>=19, !balanced   # balanced: notrump
+      when  z is D, y is not H
+      sets  forcing=game, ask=rev(H, m, y, z)
+      priority 1
+  2H  "Reverse: four or more hearts, longer {m}, 19+, forcing to game"
+      shows H>=4, m>H, points>=19, S<=2, !balanced
+      when  z is S, y is not H
+      sets  forcing=game, ask=rev(H, m, y, z)
+      priority 1
+  2S  "Reverse: four or more spades, longer {m}, 19+, forcing to game"
+      shows S>=4, m>S, points>=19, !balanced
+      when  z is D, y is not S, cheapest_rank(S)>=13   # 1S is natural (1C P 1D (1H), below)
+      sets  forcing=game, ask=rev(S, m, y, z)
+      priority 1
+  2S  "Reverse: four or more spades, longer {m}, 19+, forcing to game"
+      shows S>=4, m>S, points>=19, H<=2, !balanced
+      when  z is H, y is not S
+      sets  forcing=game, ask=rev(S, m, y, z)
+      priority 1
+  3D  "Strong: four or more diamonds, longer clubs, 18+, forcing to game"
+      shows D>=4, C>D, points>=18, z<=2, !balanced, !stop(y)   # support first; notrump with a stopper (BBA)
+      when  m is C, z is not D, y is not D
+      sets  forcing=game, ask=rev(D, m, y, z)
+      priority 1
+  3C  "Strong: four or more clubs, 18+, forcing to game"
+      shows C>=4, D>=C, points>=18, z<=2, !balanced, !stop(y)
+      when  m is D, z is not C, y is not C, rho.last<=1S
+      sets  forcing=game, ask=rev(C, m, y, z)
+      priority 1
+# Opener after responder's answer to the strong new suit (game forced):
+# game in the fit responder raised, 3NT with their suit held, else game
+# in the minor (BBA, probes/opns-r-1C-1D-2H-2S.toml and relatives).
+when answered rev(w, m, y, z), partner.last!=3N, partner.last!=4H, partner.last!=4S, partner.last!=5C, partner.last!=5D
+  4{w} "Game in {w}"                        shows w>=4
+      when  w is H | w is S, we.trump is w
+      priority 2
+  5{w} "Game in {w}"
+      when  w is C | w is D, we.trump is w
+      priority 2
+  3N  "A stopper in {y}: 3NT"               shows stop(y)
+      when  we.trump is none | we.trump is m | we.trump is z
+      priority 1
+  4{z} "Three {z}: game in the fit"         shows z>=3
+      when  z is H | z is S, partner.last=3{z}
+      priority 1
+  5{m} "Game in {m}"
+      when  partner.last=3{m} | partner.last=4{m}
+  5{m} "No stopper: game in {m}"
+      priority -3
+# 1D P 1H (1S) 2C: five-five in the minors, 13-17 (Rick 2026-11-07, "6:
+# yes"; BBA "13 to 17 total points", 7 of 120 strong hands and 9 of 160
+# others, probes/opns-1D-1H-1S.toml, opnj-1D-1H-1S.toml). Not forcing.
+# Over a two-level overcall of 1D P 1M, BBA's 3C is natural and wide,
+# "13 to 19", four or more clubs (probes/opnj-1D-1H-2S.toml,
+# opnj-1D-1S-2H.toml).
+after 1D (P) 1z (1y) | 1D (P) 1z (2y) when y is not D, z is not D, z is not y, z is H | z is S, y is not C
+  2C  "Five or more clubs and diamonds, 13-17"
+      shows C>=5, D>=5, points=13..17, z<=2       # three of partner's major: support first
+      when  rho.last=1S
+      priority 1
+  3C  "Four or more clubs, five or more diamonds, 13-19"
+      shows C>=4, D>=C, D>=5, points=13..19, z<=2
+      when  rho.last>=2H
+      priority 1
+# They competed over the 3C and partner raised to 4C (compare
+# 2026-11-07, GIB_1N5422 13: no rule): the decision was partner's.
+after 1D (P) 1z (2y) 3C (*) 4C (*) when z is H | z is S, y is not z, y is not C, y is not D
+  P   "Partner competed: no more"
+      priority -5
+# Responder's invitational 3D over the five-five 2C (10-11, three
+# diamonds): game with 15+.
+after 1D (P) 1H (1S) 2C (P) 3D (P)
+  5D  "Accepts: 15+"                       shows points>=15
+  P   "Declines"
+      priority -5
 # ── 1C P 1D (1H): opener's natural spades ────────────────────────────
 # BBA (Rick 2026-11-07: "yes to 1 and 2"; probes/opns-1C-1D-1H.toml,
 # 160 hands): 1S with four spades, 11-15 total points, before 1NT and
@@ -1323,7 +1428,7 @@ after 1C (P) 1D (1H)
       priority 1                             # ahead of 2NT and 3NT, as BBA
 # Responder's cue bid over 1S or 2S: game values, no heart stopper.
 # Notrump with one, else a fifth club, else three diamonds, else spades.
-when asked spade_cue(y)
+when asked ns_cue(y)
   3N  "A stopper in {y}"                   shows stop(y)
       priority 1
   cheapest(C) "Five or more clubs, no stopper in {y}"   shows C>=5

@@ -469,3 +469,30 @@ S AJ85.K4.KQ4.AJ84      | 1C P 1D 2H X P 3C P | 3NT | the answer at the three le
 S AQ5.K52.K5.AJ964      | 1C P 1D 1H   | X   | 17 with a heart stopper, three spades: the double, as BBA
 S AQ5.K52.K5.AJ964      | 1C P 1D 1S   | X   | 17 with a spade stopper, three hearts: the double, as BBA
 S AQ5.K5.K54.AJ964      | 1C P 1D 1S   | 2NT | 17, two hearts: no double, 2NT
+
+# 14-16 bids on after the double and a weak answer (Rick 2026-11-07:
+# "3: yes"; BBA, probes/opnt-o-1C-1D-*.toml)
+S A95.K954.AJ3.Q65      | 1C P 1D 1S X P 2C P | 2D  | 14, three diamonds: competes, as BBA
+S 97.AK87.AQT.J754      | 1C P 1D 1S X P 2H P | 3H  | 14, four hearts opposite four: invites, as BBA
+S A64.QJ3.Q6.AQJ82      | 1C P 1D 1S X P 2H P | 2NT | 14, three hearts and a spade stopper: invites, as BBA
+S AJ85.K5.AQ7.8765      | 1C P 1D 2H X P 3C P | 3D  | 15, four spades, three diamonds over 3C, as BBA
+S AJ8.K53.AQ7.8765      | 1C P 1D 2H X P 3C P | P   | three spades: pass, as BBA mostly
+S KJ5.Q84.A4.KQ842      | 1C P 1D 1H X P 1S P | 1NT | 15, a heart stopper: 1NT, as BBA
+S KJ5.984.A4.KQ842      | 1C P 1D 1H X P 1S P | P   | 15, no heart stopper: pass
+
+# Strong new suits over their overcall of the response, and the natural
+# minor-suit bids around them (Rick 2026-11-07: "5: yes", "6: yes";
+# BBA, probes/opnj-*.toml)
+S K874.A4.AJ.AQJT4      | 1C P 1D 2H   | 2S  | 19, four spades and five clubs: the reverse, game forcing
+S AJ2.6.AKJ5.AQ985      | 1C P 1S 2H   | X   | three spades: the support double first
+S A2.6.AKJ5.AQJ985      | 1C P 1S 2H   | 3D  | 19, diamonds and long clubs: 3D, game forcing
+S A2.AKJ5.AQJ85.92      | 1D P 1S 2C   | 2H  | 19, four hearts and five diamonds: the reverse
+S 6.A2.KQJ85.AKJ92      | 1D P 1H 1S   | 3C  | 18, five-five: the jump, game forcing
+S 6.A2.KQJ85.KJ932      | 1D P 1H 1S   | 2C  | 14, five-five in the minors: 2C
+S 62.A2.KQJ85.KJ92      | 1D P 1H 2S   | 3C  | 13, four clubs and five diamonds: 3C, as BBA
+S AQ5.K9.AQ52.KJ42      | 1C P 1H 2S   | 3NT | 19 balanced with a spade stopper
+S AQ.K95.AJT52.KJ4      | 1C P 1S 2H   | 2NT | 18, two spades, a heart stopper: 2NT
+S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 3S P | 4S | partner's raise: game
+S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 3C P | 3NT | hearts held: 3NT
+S 6.A2.QJT85.KJ932      | 1D P 1H 1S 2C P 3D P | P | 11 HCP, 13 points: declines
+S 6.A2.KQJ85.KJ932      | 1D P 1H 1S 2C P 3D P | 5D | 14 HCP, 16 points: accepts
