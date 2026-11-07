@@ -831,6 +831,49 @@ after 1x (P) 1z (2y) 2N (P) | 1x (P) 1z (1y) 2N (P) when y is not x, y is not z,
   4{z} "Game: six or more {z}"             shows z>=6, points>=7
       when  z is H | z is S
 
+# ── Opener's double after 1C P 1D (overcall): the other major ───────
+# 1C P 1D (1S) X (P): opener has three or four hearts and 14-18
+# balanced (15-18 over a two-level overcall; over 1H three spades).
+# BBA (probes/opnt-r-1C-1D-1S-X.toml, opnt-r-1C-1D-2H-X.toml): the
+# major with four, 2NT 8-9 and 3NT 10+ with their suit held, the cue
+# bid 10+ without, otherwise diamonds with five or back to clubs.
+when asked minor_x(M, x, y), rho.last=P, partner.last=X
+  cheapest(M) "Four or more {M}, up to 11"     shows M>=4, hcp<=11
+      sets  ask=signoff
+  3N  "Game: 10+ with a stopper in {y}"        shows hcp>=10, stop(y), M<=3
+  cheapest(y) "Cue bid: 10+, no stopper in {y}, forcing to game"
+      alert  artificial
+      shows hcp>=10
+      sets  forcing=game, ask=minor_x_cue(M, y)
+      priority -1
+  2N  "Invitational: 8-9 with a stopper in {y}"
+      shows hcp=8..9, stop(y), M<=3
+      sets  ask=nt_invite
+  cheapest(D) "Five or more diamonds, up to 9" shows D>=5, hcp<=9
+      sets  ask=signoff
+      priority -1
+  cheapest(x) "Back to {x}"
+      sets  ask=signoff
+      priority -5
+# They raised over the double: compete with four of the major or five
+# diamonds, bid game in notrump with 10+ and their suit held, else pass.
+when asked minor_x(M, x, y), rho.last!=P, partner.last=X
+  cheapest(M) "Four or more {M}, competing"    shows M>=4, hcp<=11
+      sets  ask=signoff
+  3N  "Game: 10+ with a stopper in {y}"        shows hcp>=10, stop(y)
+  cheapest(D) "Five or more diamonds, competing"  shows D>=5, hcp<=9
+      when  cheapest_rank(D)<=14
+      sets  ask=signoff
+      priority -1
+  P   "Nothing more to say"
+      priority -10
+# Opener answered my cue bid in the major: no stopper in
+# their suit. Game in the major with four, else 3NT.
+when answered minor_x_cue(M, y), partner.last=2{M} | partner.last=3{M}
+  4M  "Four {M}: game in the fit"          shows M>=4
+      priority 1
+  3N  "No fit: 3NT"
+
 # ── Opener's values double of their two-level overcall (15-18) ───────
 # 1D P 1H (2S) X (P): opener has 15-18 balanced with at most three of my
 # major and of their suit (rebids.bid). BBA (probes/opnt-r-1D-1H-2S-X,

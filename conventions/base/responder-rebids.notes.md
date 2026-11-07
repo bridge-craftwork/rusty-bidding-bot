@@ -1004,6 +1004,25 @@ Over 2NT (17-18) BBA raises from 7-8 and with a five-card major bids
 3M five, forcing (the uncontested 1x-1y-2NT ladder): an accepted
 difference, for Rick.
 
+## Over opener's double after 1C P 1D (overcall) (Rick, 2026-11-07)
+
+Rick: "yes" to BBA's double there (rebids.notes.md, "Rick's answers").
+Opener shows three or four of the other major, 14-18 balanced (15-18
+over a two-level overcall). Answered against `ask=minor_x(M, x, y)`,
+as BBA (`probes/opnt-r-1C-1D-1S-X.toml`, `opnt-r-1C-1D-2H-X.toml`):
+the major with four (up to 11 HCP), 3NT 10+ with their suit held, the
+cue bid 10+ without (opener: 3NT with a stopper, else the cheapest
+bid in the major, forcing; I raise with four, else 3NT: a separate question,
+`minor_x_cue`, as the major-response cue's 4M with three found a 3-3
+fit on 1m-1_2_or_3_NT 46), 2NT 8-9 with a stopper, diamonds with five
+up to 9, otherwise back to clubs. When they raise over the double:
+the major with four, 3NT 10+ with a stopper, five diamonds at the
+three level, else pass (three no-rule positions in the first compare). Ours agree with BBA on 84 and
+85 of 120 hands (2 and 3 before, no rule). BBA differs on weak hands:
+it often bids 2D/3D with four of the major and five diamonds, and over
+2H bids 2S with three spades and four diamonds; we bid the four-card
+major and go back to clubs.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -1064,3 +1083,6 @@ difference, for Rick.
 - **Rick, 2026-11-07** (#93): "we can follow BBA's lead". Responder's
   answers to opener's values double are BBA's (grids
   `probes/opnt-r-*.toml`, 21GF-GIB, 2026-11-07); not cited to a book.
+- **Rick, 2026-11-07**: "yes" to opener's double after 1C P 1D
+  (overcall); responder's answers are BBA's (grids
+  `probes/opnt-r-1C-1D-*-X.toml`, 21GF-GIB, 2026-11-07).

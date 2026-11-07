@@ -36,6 +36,8 @@ POSITIONS = [
     ("opnt-1D-P-P-1H", "1D Pass Pass 1H", "D", None, "H"),  # reopening (#90)
     ("opnt-1C-P-P-2H", "1C Pass Pass 2H", "C", None, "H"),
     ("opnt-1C-1D-2H", "1C Pass 1D 2H", "C", "D", "H"),   # jump over a minor response
+    ("opnt-1C-1D-1H", "1C Pass 1D 1H", "C", "D", "H"),   # minor response, the double (Rick 2026-11-07)
+    ("opnt-1C-1D-2S", "1C Pass 1D 2S", "C", "D", "S"),
 ]
 
 
@@ -54,6 +56,11 @@ RESP = [
      "13 <= h <= 16 and L[1] <= 2 and L[0] >= 3 and L[3] >= 4", (5, 14)),
     ("opnt-r-1C-1D-1S-1N", "1C Pass 1D 1S 1NT Pass", "D", "S",
      "13 <= h <= 16 and L[0] >= 3 and L[3] >= 4 and L[1] <= 3", (5, 14)),
+    # Over opener's double of their overcall of 1C-1D (Rick 2026-11-07)
+    ("opnt-r-1C-1D-1S-X", "1C Pass 1D 1S X Pass", "D", "S",
+     "14 <= h <= 18 and L[1] >= 3 and L[0] <= 3 and L[3] >= 3 and L[2] <= 3", (5, 12)),
+    ("opnt-r-1C-1D-2H-X", "1C Pass 1D 2H X Pass", "D", "H",
+     "15 <= h <= 18 and L[0] >= 3 and L[1] <= 3 and L[3] >= 3 and L[2] <= 3", (5, 12)),
 ]
 
 
@@ -153,7 +160,10 @@ def responder(a, rng, full):
             L = lengths(c)
             if hcp(c) != want or L[SI[mine]] < 4 or L[SI[theirs]] > 4 or max(L) > 6:
                 continue
-            if mine == "H" and L[0] > L[1] or mine == "D" and (L[0] >= 4 or L[1] >= 4):
+            relaxed = name.startswith("opnt-r-1C-1D-") and name.endswith("-X")
+            if relaxed and mine == "D" and (L[0] >= L[2] or L[1] >= L[2]):
+                continue
+            if not relaxed and (mine == "H" and L[0] > L[1] or mine == "D" and (L[0] >= 4 or L[1] >= 4)):
                 continue
             rest = [x for x in full if x not in c]
             for _ in range(20000):
