@@ -121,3 +121,28 @@ after 1x (P) 2y (P) 2z (P) when z is not x, z is not y
       when  no_ask                         # with Blackwood or RKCB, keycard in the last suit (Rick, 2026-10-03)
       sets  ask=quant
       priority 1
+
+# Opener over responder's 15-17 jump to 3NT after a game-forcing 2/1
+# and opener's two-level rebid (responder-rebids.bid; Rick, 2026-11-06,
+# #91). The count above (34 / 32 on partner's minimum) lost slams
+# opener had bid over the old 16+ 2NT; Rick, 2026-11-07: opener should
+# be more aggressive here. The textbook 33/31 on responder's minimum, in
+# HCP: 18+ bids 6NT, 16-17 a quantitative 4NT. Counting points or
+# partner at mid-range lost (notes).
+after 1y (P) 2x (P) 2z (P) 3N (P) when x is not y, we.gf
+  6N  "Small slam"
+      shows hcp + partner.hcp.min >= 33
+      priority 1
+  4N  "Quantitative: invites 6NT"
+      when  q4n                            # the card plays a quantitative 4NT
+      shows hcp + partner.hcp.min >= 31, hcp + partner.hcp.min <= 32
+      sets  ask=quant
+      priority 1
+# Responder answers it in HCP too: 16-17 accepts, 15 declines (31-32
+# between the hands). one-nt.bid's answer counts points on opener's
+# floor, and his five-card suit made it accept with every 15.
+after 1y (P) 2x (P) 2z (P) 3N (P) 4N (P) when x is not y, we.gf
+  6N  "Accepts the slam invitation: 16-17"   shows hcp>=16
+      priority 1
+  P   "Declines: 15"                          shows hcp<=15
+      priority 1

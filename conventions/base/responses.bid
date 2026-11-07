@@ -151,12 +151,15 @@ after 1H (P)
       sets forcing=round
   1N  "6-10 HCP, no heart fit, no 4 spades"   shows hcp=6..10, H<=2, S<=3
       when  !gf21
-  1N  "Forcing 1NT: 6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (H=3, hcp<=7, !passed_hand, style is not bba, system is not brill), S<=3
+  # 2/1 cards: a weak three-card raise (5-7 support points) may bid
+  # 1NT; a 12-count with 13 points bids its 2/1 (Rick, 2026-11-07, #87;
+  # responder-rebids.notes.md).
+  1N  "Forcing 1NT: 6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (H=3, tp(H)<=7, !passed_hand, style is not bba, system is not brill), S<=3, hcp<=11 | points<=12
       when  gf21, f1n
       sets forcing=round
-  1N  "6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (system is brill, H=3, tp(H)>=10) | (H=3, hcp<=7, !passed_hand, style is not bba, system is not brill), S<=3
+  1N  "6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (system is brill, H=3, tp(H)>=10) | (H=3, tp(H)<=7, !passed_hand, style is not bba, system is not brill), S<=3, hcp<=11 | points<=12
       when  gf21, !f1n, !semi             # brill: a three-card limit raise starts here (3H below)
-  1N  "Semi-forcing 1NT: 6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (H=3, hcp<=7, !passed_hand, style is not bba, system is not brill), S<=3
+  1N  "Semi-forcing 1NT: 6-12 HCP, no heart fit or a weak three-card raise, no 4 spades"   shows hcp=6..12, H<=2 | (H=3, tp(H)<=7, !passed_hand, style is not bba, system is not brill), S<=3, hcp<=11 | points<=12
       when  gf21, !f1n, semi
   2S  "Strong jump shift: 15+, 5+ spades"  shows S>=5, hcp>=15  when strong_js, !weak_js, !soloway, !passed_hand
       sets forcing=game
@@ -196,12 +199,15 @@ after 1H (P)
 after 1S (P)
   1N  "6-10 HCP, no spade fit"             shows hcp=6..10, S<=2
       when  !gf21
-  1N  "Forcing 1NT: 6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (S=3, hcp<=7, !passed_hand, style is not bba, system is not brill)
+  # 2/1 cards: a weak three-card raise (5-7 support points) may bid
+  # 1NT; a 12-count with 13 points bids its 2/1 (Rick, 2026-11-07, #87;
+  # responder-rebids.notes.md).
+  1N  "Forcing 1NT: 6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (S=3, tp(S)<=7, !passed_hand, style is not bba, system is not brill), hcp<=11 | points<=12
       when  gf21, f1n
       sets forcing=round
-  1N  "6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (system is brill, S=3, tp(S)>=10) | (S=3, hcp<=7, !passed_hand, style is not bba, system is not brill)
+  1N  "6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (system is brill, S=3, tp(S)>=10) | (S=3, tp(S)<=7, !passed_hand, style is not bba, system is not brill), hcp<=11 | points<=12
       when  gf21, !f1n, !semi             # brill: a three-card limit raise starts here (3S below)
-  1N  "Semi-forcing 1NT: 6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (S=3, hcp<=7, !passed_hand, style is not bba, system is not brill)
+  1N  "Semi-forcing 1NT: 6-12 HCP, no spade fit or a weak three-card raise"   shows hcp=6..12, S<=2 | (S=3, tp(S)<=7, !passed_hand, style is not bba, system is not brill), hcp<=11 | points<=12
       when  gf21, !f1n, semi
   2C  "11+ points, 4+ clubs"           shows C>=4, points>=11 | C>=6 | (S>=3, tp(S)>=11), suit_points>=10, C>=D, C>=H
       when  !gf21
@@ -253,11 +259,12 @@ after 1M (P)
   # such a card (responses.notes.md, 2026-09-30). Opener reads the wider
   # range from partner.tp(M) (rebids.bid).
   # On the 2/1 cards (their 1NT is 6-12, forcing or not) the single
-  # raise is constructive with three trumps, 8+ support points: a flat
-  # 6-7 bids 1NT and gives preference (the 1NT reads 6-7 HCP, so that
-  # Rick's 7 HCP with two doubletons reads too). With four spades over
-  # 1H there is no 1NT, so 2H. Rick, 2026-11-06,
-  # bridge-classroom-bug-artifacts #87; responses.notes.md. Not by a
+  # raise is constructive with three trumps, 8+ support points; the weak
+  # raise, 5-7 support points, bids 1NT and gives preference (Rick,
+  # 2026-11-07: "support points. with 9 support points a direct,
+  # constructive raise is correct"). With four spades over 1H there is
+  # no 1NT, so 2H. Rick, 2026-11-06/07, bridge-classroom-bug-artifacts
+  # #87; responses.notes.md. Not by a
   # passed hand (the 1NT is not forcing then), nor on the Brill card,
   # whose raises are Brill's.
   2M  "Raise: 3+ {M}"
