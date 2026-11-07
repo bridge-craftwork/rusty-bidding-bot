@@ -96,6 +96,19 @@ when game_reached, we.trump is suit, partner.unread, rho.last=P, !(partner.last=
   cheapest(trump) "Back to the agreed suit"
       priority -40
 
+# Partner answered my quantitative 4NT with a five-level suit our system
+# gives no meaning: below slam it is never a place to stop (Rick,
+# 2026-11-06, bridge-classroom-bug-artifacts #94: 4NT, 5♣ unread, passed
+# in a 4-0 fit with thirteen tricks in four strains). Read it as an
+# acceptance with a suit to offer: slam in notrump. The keycard asks
+# have their own continuations (rkcb-1430.bid, `answered keycards`).
+when answered quant, partner.unread, partner.last >= 5C, partner.last <= 5S, rho.last=P
+  6N  "Slam: partner accepted the invitation"
+      priority -40
+when answered quant_major(M), partner.unread, partner.last >= 5C, partner.last <= 5S, rho.last=P
+  6N  "Slam: partner accepted the invitation"
+      priority -40
+
 # ── Never pass out our own artificial bid ────────────────────────────
 # Brill round robin 2026-10-09, board 90000102: 1S 2S X 3S X P P P, a
 # doubled Michaels cue bid passed out for -1,700. The catch-all passes
