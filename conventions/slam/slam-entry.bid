@@ -118,6 +118,34 @@ define all_covered = covered(C), covered(D), covered(H), covered(S)
 define covered_by_us(x) = trump is x | controlled(x) | partner.cued(x)
 define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)
 
+# ── Working values opposite a shown shortness (Rick, 2026-11-07) ─────
+#
+# Rick: "the idea of the relays is it will allow us to find low HCP
+# slams when there is a good fit. ... opener had a spade void, i think,
+# which means all the combined HCP are 'working', which is the goal of
+# this system (and the standard jacoby 2nt, and splinter bids)." Once
+# partner has shown a singleton or void (`partner.x.max <= 1`), my K, Q
+# and J there are wasted, and opposite a void the ace too (`wasted_hcp`,
+# the engine's term; `working_hcp` is `hcp - wasted_hcp`). The working
+# count is my support points less the waste, plus partner's floor:
+# with nothing wasted it finds slams on fewer high cards than the
+# 31-33 above, because partner's shortness, not counted in his floor,
+# is worth its full ruffing value opposite my small cards.
+define shown_short = partner.C.max <= 1 | partner.D.max <= 1 | partner.H.max <= 1 | partner.S.max <= 1
+define working_count(t) = tp(t) - wasted_hcp + partner.points.min
+
+# Slam on the working count: 23 opposite a void, 27 opposite a
+# singleton (calibrated 2026-11-07 on the Jacoby and splinter
+# scenarios, slam-entry.notes.md "Working values"). Opposite a void
+# that is nearly every hand without wasted honours there: the keycard
+# ask stops short when two are missing.
+define shown_void = partner.C.max <= 0 | partner.D.max <= 0 | partner.H.max <= 0 | partner.S.max <= 0
+define working_slam(t) = (shown_void, working_count(t) >= 23) | (shown_short, working_count(t) >= 27)
+
+# The stronger hand by what has been shown (Rick, 2026-11-07: "keycard
+# should be the stronger hand"): my HCP at least partner's shown floor.
+define stronger_hand = hcp >= partner.hcp.min
+
 # ── A fit known but not agreed (Phase 1, 2026-09-30) ─────────────────
 
 # A suit both hands know we fit: suit agreement (`agreed_fit`,

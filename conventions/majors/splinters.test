@@ -68,3 +68,7 @@ N K863.A72.84.AQJ6      | 1C P 1S P 2S P 4D P  | 4NT    | 14 HCP, nothing wasted
 # ── Responder's splinter over opener's second suit ────────────────────
 S AQ74.KJ85.7.Q963      | 1C P 1H P 1S P       | 4D     | 12 HCP, four spades, singleton diamond
 N AK63.A7.84.KJ862      | 1C P 1H P 1S P 4D P  | 4NT    | 15 HCP, nothing wasted: the keycard ask
+dealer  S
+# Working HCP (Rick, 2026-11-07; the engine's `wasted_hcp`): the same hand with KQ opposite the splinter, and small cards there
+S AKJ52.K73.KQ4.82      | 1S P 4D P   | 4S     | KQ wasted opposite the diamond shortness: 17-5 = 12 support points working, game
+S AKJ52.K73.854.A2      | 1S P 4D P   | 4NT    | nothing wasted: 16 working, keycard

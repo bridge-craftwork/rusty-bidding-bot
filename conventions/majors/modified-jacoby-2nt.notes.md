@@ -150,7 +150,7 @@ that no count on its floor sees; Cohen's guidance is only "If
 responder still has slam interest, he can ask further". Decisions:
 
 - **The gate over 3♣:** `slam_interest(M)` or 16 support points
-  (`mj_try`). 15 or fewer sign off (the 14-count with a doubleton in
+  (`mj_try`; since 2026-11-07 every responder relays, below). 15 or fewer sign off (the 14-count with a doubleton in
   the cases still bids 4M).
 - **The relays after a minimum** (Cohen: "next step asks, using same
   schedule"): one step above the non-minimum schedule. Over 3♥ (short),
@@ -167,7 +167,8 @@ responder still has slam interest, he can ask further". Decisions:
 - **A void goes ahead of the good side suit** in the answer to 3♦ (the
   4x answer now needs `shortest>=1`): a void is the slam news. #83's
   South (a spade void and AQ764 of diamonds) answered 4♦ before.
-- **Keycard once the shape is placed** (`answered mj_relay`, any of
+- **Keycard once the shape is placed** (the count superseded on
+  2026-11-07, below) (`answered mj_relay`, any of
   the modified-Jacoby relays, minimum or not): responder asks (RKCB on
   the card, else Blackwood) with 13 HCP outside a king or queen
   opposite opener's singleton (`mj_working`: K 3, Q 2 taken off; the
@@ -202,6 +203,76 @@ The first version (four-card side suit to keycard, the 3NT re-ask,
 Open: RKCB's own 4NT is read as this rule's 4NT 223 times (`read_as`),
 the same ask with a shape claim opener's answers do not use.
 
+## Working HCP, and the stronger hand asks (Rick, 2026-11-07)
+
+Rick, 2026-11-07, on #83/#84:
+
+> "keycard should be the stronger hand. the idea of the relays is it
+> will allow us to find low HCP slams when there is a good fit. one of
+> the hands had 4-5 weak spades in responder's hand, and opener had a
+> spade void, i think, which means all the combined HCP are 'working',
+> which is the goal of this system (and the standard jacoby 2nt, and
+> splinter bids). this may be a concept we haven't introduced yet."
+
+And over 1♥: keep the minimum's spade-void answer at 4♠ past game
+("responder is looking for something, and still has 4NT for keycard,
+and 5H for bail out"). Kept.
+
+What changed:
+
+- **Working HCP is an engine concept** (`wasted_hcp`, `working_hcp`,
+  `we.working_hcp`; slam-entry.notes.md, "Working values"). The
+  rule-local `mj_working`, `mj_void_waste` and `mj_short_fits` are
+  gone; the jack now counts as wasted too.
+- **The decision is the working count**: `working_slam(trump)`,
+  support points less the waste plus opener's floor, 23 opposite a
+  void, 27 opposite a singleton (calibrated below).
+- **The relay gate**: responder relays whenever slam is possible with
+  everything working, his support points plus opener's top HCP 27 or
+  more (`mj_relay_floor`). Every Jacoby 2NT hand has 13 support points
+  and the minimum's top is 14, so over 3♣ responder always relays; over
+  3♦ (15+, short) and the void re-ask the same gate replaces
+  `slam_interest`. 13 or 15 support points facing a minimum now relay
+  (cases). Floors measured with 23/27: 27 +301, 28 +287, 30 +247.
+- **The stronger hand asks.** Our reading of Rick's rule: the stronger
+  hand by what has been shown, responder's HCP against opener's floor
+  (`stronger_hand`: 10 opposite a minimum, so responder, unlimited, is
+  the captain there; 15 opposite the non-minimum answers). With slam on
+  the count, the stronger responder bids 4NT; a weaker one bids the
+  cheapest suit below game ("slam values opposite your shape: you
+  ask", `ask=mj_captain`) and opener, the stronger hand, bids 4NT.
+  With no room below game (over 1♥ the singleton or void spade lands on
+  4♥/4♠) responder asks himself. The signal's public conditions (a
+  shortness placed, below game, not the trump suit) sit in `when`: in
+  `shows` the reading took responder's 4♠ sign-off as the signal and
+  opener asked over it (−2,191 in the first run).
+- **The side-suit answer** (4x, a good five-card suit) asks with 16 HCP
+  and an honour in it (was 14): with the wider relay the 14-15 hands
+  reached it and went down.
+
+**Measured** (compare `--par-all`, 5,000 boards: Jacoby_2N,
+Jacoby_2N_Leveled, Jacoby_2N_4x_void(_Leveled), Splinters,
+Splinters_By_Opener, Splinters_after_Minor, Slam_After_Major_Fit,
+Gavin_Strong/Weak_Splinter; `--set major_openings.jacoby_2nt.modified=true`;
+PR #81's rules against these; errors_diff): 1,035 boards changed; the
+bidding side's contract errors **+301 IMPs** (halves +127 / +174,
+agree); distance from par +270; "short of slam" 1,041 → 1,000 boards
+(12,803 → 12,323 IMPs), "overbid" 440 → 449. By first difference:
+`P 4S P : 5H -> 4N` +66 on 15 (keycard after the spade void instead of
+5♥), `P 3C P : 4S -> 3D` +48 on 335 (the wider relay), `P 4D P : 4N ->
+4H` +34 on 22, `P 4D P : 4H -> 4N` +32 on 16. Losses small:
+`P 4D P : 4N -> 4S` −8 on 7.
+
+#83 and #84 still reach 6♥ (the auctions above), now on the general
+count: #83's North 17 support points less Q, J of spades (3) plus 12 =
+26; #84's 16 less the jack plus 12 = 27, both opposite the void.
+The neighbour with KQ54 of spades opposite #83's South now asks too
+(17 − 5 + 12 = 24; 13 tricks double dummy), so the case changed; the
+sign-off case is now AKQ4 opposite the void (21: 5♥, 11 tricks DD
+opposite -.AT642.AQ763.963). The low-HCP slam case: 8765.KJ87.KJ8.A2
+opposite -.AQ642.AQ763.963, 24 HCP between them, 13 tricks: relay,
+then keycard.
+
 ## Sources
 
 - Larry Cohen, "Modified Jacoby 2NT",
@@ -214,3 +285,8 @@ the same ask with a shape claim opener's answers do not use.
 - Rick, 2026-11-06 (bridge-classroom-bug-artifacts #83/#84): relay over
   the minimum and go to keycard once the void is known. The 16-point
   gate, the working-HCP test and the void-first answer are ours.
+- Rick, 2026-11-07 (same reports): "keycard should be the stronger
+  hand", working HCP as the goal of the relays, the 4♠ void answer kept
+  past game (quoted above). The reading of "stronger" (HCP against the
+  shown floor), the "you ask" signal, the thresholds and the relay
+  floor are ours.

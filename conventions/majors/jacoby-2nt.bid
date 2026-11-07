@@ -8,6 +8,8 @@ module jacoby-2nt "Jacoby 2NT"
   skill  partnership_bidding/jacoby_2nt
   param  jacoby   = major_openings.jacoby_2nt.play default false
   param  modified = major_openings.jacoby_2nt.modified default false
+  param  rkcb     = slam.rkcb.play default false
+  param  bw       = slam.blackwood.play default false
 
 after 1M (P) when !passed_hand, jacoby | modified
   2N  "Jacoby 2NT: 4+ {M}, game forcing"  alert
@@ -23,3 +25,24 @@ after 1M (P) 2N (P) when jacoby, !modified
   3M  "18+, no shortness"             shows hcp>=18, shortest>=2
   3N  "15-17, no shortness"           shows hcp=15..17, shortest>=2
   4M  "Minimum, no shortness"         shows hcp<=14, shortest>=2
+
+# Responder after the shortness (Rick, 2026-11-07: the goal of Jacoby
+# 2NT, like the relays and splinters, is to find the slams where every
+# high card works). Honours opposite the singleton or void are wasted
+# (slam-entry.bid, `working_count`): with the working count for slam on
+# opener's floor, responder asks for keycards; without it the slam
+# modules decide (control bids, game), since opener's strength is still
+# open: an explicit 4M sign-off here lost opener's extras (notes).
+after 1M (P) 2N (P) 3x (P) when jacoby, !modified, x is not M
+  4N  "Keycard ask in {M}: opener's shortness fits"
+      when  rkcb
+      shows working_slam(M)
+      sets  ask=keycards(M)
+      artificial
+      priority 14
+  4N  "Blackwood: opener's shortness fits"
+      when  bw, !rkcb
+      shows working_slam(M)
+      sets  ask=aces
+      artificial
+      priority 14
