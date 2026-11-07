@@ -7,6 +7,8 @@ use clap::{Parser, Subcommand};
 use rbb_engine::RuleSet;
 
 mod bid_pbn;
+mod bid_rules;
+use bid_rules::{bid_rules, BidRulesArgs};
 mod coverage;
 mod dd;
 
@@ -422,6 +424,56 @@ enum BidCommand {
         /// Print the module inventory as JSON instead: each module's skills,
         /// the card fields it reads and its rule count, and every field the
         /// rule set reads (probes/tools/status_data.py, the status page).
+        #[arg(long)]
+        json: bool,
+    },
+    /// Ask the engine which rules can make the next call after an auction,
+    /// before the hand is known: every rule whose auction context (`after`,
+    /// context `when`, card parameters, asks, what the others have shown)
+    /// holds, ranked as the engine ranks them, with the conditions that
+    /// depend on the hand (`shows`, the hand parts of `when`) left as
+    /// conditions. Use this, not grep, to find what applies after an
+    /// auction.
+    Rules {
+        /// Calls so far, e.g. "1C P 1D 1H" (empty: the opening seat).
+        #[arg(short, long, default_value = "")]
+        auction: String,
+        /// Dealer: N, E, S or W.
+        #[arg(short, long, default_value = "N")]
+        dealer: char,
+        /// Vulnerability: None, NS, EW or All.
+        #[arg(short, long, default_value = "None")]
+        vul: String,
+        /// Scoring: MP or IMP.
+        #[arg(short, long, default_value = "MP")]
+        scoring: String,
+        /// Card for both sides: a .bbsa or card JSON file, or a stock card
+        /// name.
+        #[arg(short, long, default_value = "21GF-DEFAULT")]
+        card: String,
+        /// A different card for East-West.
+        #[arg(long)]
+        ew_card: Option<String>,
+        /// A card change for both sides, `path=value` (repeatable), as in
+        /// `compare --set`.
+        #[arg(long = "set")]
+        card_changes: Vec<String>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Only the rules for this call (PBN: 2S, 1NT, P, X).
+        #[arg(long)]
+        call: Option<String>,
+        /// Also list the rules whose auction context, `when` or legality
+        /// failed, each with the reason, and the modules the card leaves
+        /// off.
+        #[arg(long)]
+        all: bool,
+        /// Leave out the review of the auction so far (text form).
+        #[arg(long)]
+        no_knowledge: bool,
+        /// Print the listing as JSON (`{seat, forced, candidates, rejected,
+        /// inactive, warnings, knowledge}`; docs/CONTRACT.md).
         #[arg(long)]
         json: bool,
     },
@@ -1813,6 +1865,32 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 }
             }
         }
+        BidCommand::Rules {
+            auction,
+            dealer,
+            vul,
+            scoring,
+            card,
+            ew_card,
+            card_changes,
+            rules,
+            call,
+            all,
+            no_knowledge,
+            json,
+        } => bid_rules(&BidRulesArgs {
+            auction: &auction,
+            dealer,
+            vul: &vul,
+            scoring: &scoring,
+            cards: [&card, ew_card.as_deref().unwrap_or(&card)],
+            card_changes: &card_changes,
+            rules: &rules,
+            call: call.as_deref(),
+            all,
+            knowledge: !no_knowledge,
+            json,
+        })?,
         BidCommand::Compile {
             file,
             output,

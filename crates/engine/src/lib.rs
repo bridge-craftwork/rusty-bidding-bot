@@ -39,7 +39,8 @@ pub fn cpu_budget() -> usize {
 
 pub use engine::{
     check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation,
-    OnNoRule, Step, StopReason, Table, TableAuction, TableStop, SET_KEYS,
+    OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table, TableAuction,
+    TableStop, SET_KEYS,
 };
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
