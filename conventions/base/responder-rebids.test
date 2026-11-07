@@ -386,3 +386,12 @@ N J32.QJ86.K32.J54      | 1D P 1H 2S 2N P  | 3NT | 7 opposite 18-19: game
 N J32.KQJ6.832.Q54      | 1C P 1H 1S 2N P  | 3NT | 9 opposite the jump to 2NT: game
 N J32.KQJ6.K32.Q54      | 1C P 1H 1S 1N P  | 2NT | 12 opposite 12-14: invites
 N J32.KQJ6.AK2.Q54      | 1C P 1H 1S 1N P  | 3NT | 15 opposite 12-14: game
+# Opener's values double over 1D P 1H (2S) (Rick 2026-11-07: "we can
+# follow BBA's lead"; probes/opnt-r-1D-1H-2S-X.toml)
+N QJ82.KT75.J3.T87      | 1D P 1H 2S X P  | P   | four spades: penalty, as BBA
+N 432.AKT84.J654.6      | 1D P 1H 2S X P  | 3H  | five hearts, 8: three hearts
+N K82.QT75.KJ3.Q87      | 1D P 1H 2S X P  | 3NT | 11 with a spade stopper: game
+N 82.KT75.AJ3.KT87      | 1D P 1H 2S X P  | 3S  | 11, no spade stopper: cue bid
+N K82.QT75.J73.Q87      | 1D P 1H 2S X P  | 2NT | 8 with a spade stopper: invites
+N 82.QT75.J73.QT87      | 1D P 1H 2S X P  | 3C  | 5, four clubs: three clubs
+N 82.QJ752.K73.Q87      | 1D P 1H 2S X P  | 3H  | five hearts, 8

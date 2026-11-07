@@ -918,6 +918,37 @@ notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
 - `1x (P) 1y (1z) 1NT (P)` (12-14): the block already written for
   `1x (1z) 1y (P) 1NT (P)`: 2NT invites with 11-12, 3NT with 13+.
 
+## Over opener's values double and BBA's ranges (Rick, 2026-11-07)
+
+Rick: **"we can follow BBA's lead"** (#93; rebids.notes.md, "Opener's
+notrump and double over their overcall: BBA's style"). Opener's 2NT
+over their overcall of my response is now 17-18 and 3NT 19-21; over a
+one-level overcall 1NT is 13-16. My answers to those are as before.
+New: `1x (P) 1M (2y) X (P)`, opener's values double (15-18 balanced, at
+most three M, where it is not a support double). Written against the
+question it sets (`ask=values(M, x, y)`), as BBA
+(`probes/opnt-r-1D-1H-2S-X.toml`, `opnt-r-1C-1H-2S-X.toml`; meanings
+from `bba_alert`):
+
+- pass: four of their suit, up to 9 HCP (BBA passes with four spades;
+  with 10+ it bids 3NT);
+- 4M six or more and 10+; 3NT 10+ with their suit stopped and at most
+  four M; the cue bid 10+ without a stopper (or with five M), forcing to
+  game: opener 3NT with a stopper, 4M with three, else four of his minor;
+- 2NT 8-9 with a stopper, invitational (`ask=nt_invite`);
+- three of M with five, up to 9; a minor with four, up to 9; else back
+  to opener's minor.
+
+HCP, not total points: BBA's 3NT and cue start at 10 HCP; with our
+total points shortness pushed 8-9 counts into the cue bid. Ours agree
+with BBA on 62 and 73 of 120 hands (from 10 and 13 with no rule); the
+rest is mostly BBA choosing between 3m and 3H on weak hands.
+
+Over 2NT (17-18) BBA raises from 7-8 and with a five-card major bids
+3NT (`opnt-r-1D-1H-2S-2N.toml`, `opnt-r-1D-1S-2H-2N.toml`); we keep
+3M five, forcing (the uncontested 1x-1y-2NT ladder): an accepted
+difference, for Rick.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -972,3 +1003,6 @@ notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
   over opener's reopening notrump, the 1x-1y-2NT ladder over the
   contested 2NT) are standard practice, not yet cited, and our
   decision (2026-11-07).
+- **Rick, 2026-11-07** (#93): "we can follow BBA's lead". Responder's
+  answers to opener's values double are BBA's (grids
+  `probes/opnt-r-*.toml`, 21GF-GIB, 2026-11-07); not cited to a book.

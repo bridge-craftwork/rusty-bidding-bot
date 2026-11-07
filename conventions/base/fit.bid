@@ -93,9 +93,11 @@ when !asked, we.trump is none, !game_reached | partner.last=3N, !they.bid | rho.
   4S  "Game in the spade fit"
       shows S + partner.S.min >= 8, fit_game_values(S)
       when  shown.S.min + partner.S.min <= 7 | partner.last=3N, partner.S.min >= 2, !partner_named(S), !slam_route, !fit_slam_room(S), !other_major_open(H)
+      when  maybe lho.S<=4, maybe rho.S<=4     # not their suit (1D P 1H (2S) 2NT)
       priority 1
   4H  "Game in the heart fit"
       shows H + partner.H.min >= 8, fit_game_values(H)
       when  shown.H.min + partner.H.min <= 7 | partner.last=3N, partner.H.min >= 2, !partner_named(H), !slam_route, !fit_slam_room(H), !other_major_open(S)
+      when  maybe lho.H<=4, maybe rho.H<=4     # not their suit (1D P 1H (2S) 2NT)
       priority 1
 
