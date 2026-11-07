@@ -287,11 +287,14 @@ card    21GF-DEFAULT
 dealer  N
 N AKJ52.K84.73.Q52      | 1S P 1N P                            | 2C     | three clubs: the forced rebid
 
-# Over responder's game-forcing 2NT (16+) after a 2/1: opener counts slam.
+# Over responder's game-forcing 2NT after a 2/1 (12-14 or 18+, Rick
+# 2026-11-06): opener counts slam on its minimum.
 card    21GF-DEFAULT
 dealer  N
-N AKJ52.KQ84.A3.Q2      | 1S P 2C P 2H P 2N P                  | 6NT    | 19 facing 16+: 33 on his floor
-N AJ852.KQ84.Q3.Q2      | 1S P 2C P 2H P 2N P                  | 4NT    | 15 points: 31, quantitative
+N AKJ52.KQ84.A3.Q2      | 1S P 2C P 2H P 2N P                  | 6NT    | 20 points facing 13+: 33 on his floor
+N AJ852.KQ84.Q3.Q2      | 1S P 2C P 2H P 2N P                  | 3NT    | 15 points facing 12-14 or 18+: 3NT, the strong branch invites over it
+N AKJ52.KQ84.K3.Q2      | 1S P 2C P 2H P 2N P                  | 4NT    | 18 points facing 13+: 31, quantitative
+N AKQJ843.2.5.T532      | 1S P 2D P 2S P 2N P                  | 4S     | a self-sufficient suit plays in game (corpus, Namyats 16)
 
 # ── The major invitation without transfers (2026-09-30) ──────────────
 # Vanilla SAYC random deals (BBA bare SAYC); the answer used to live in
@@ -397,3 +400,24 @@ S 83.Q5.AKQ972.AQ6      | 1D P 1S P 3D P 4D P | P      | 17 HCP but two bare sid
 S A3.Q5.AKQ972.K63      | 1D P 1S P 3D P 4D P | 5D     | 18 HCP, one bare suit: accepts
 S K83.Q5.AKQ972.A6      | 1D P 1S P 3D P 3S P | 4S     | three spades opposite five
 S 83.KQ5.AKQ972.A6      | 1D P 1S P 3D P 3S P | 3NT    | two spades: 3NT
+
+# ── Opener's notrump once they come in after partner passed or responded
+# (Rick, 2026-11-06, bridge-classroom-bug-artifacts #90 and #93; Rick's
+# card stood in by 21GF-GIB with modified Jacoby 2NT and Kokish)
+card    21GF-GIB major_openings.jacoby_2nt.modified=true two_level.kokish.play=true
+dealer  S
+S AKJ.AT.JT43.AJ97      | 1D P P 1H    | 1NT | #90: 18 balanced, hearts held, after partner passed and they reopened
+S AQ5.K9.AQ52.KJ42      | 1C P P 1S    | 1NT | 18-19 with a spade stopper
+S AQ5.K9.AQ52.KJ42      | 1C P P 2H    | 2NT | the same over a two-level reopening
+S AQ5.Q9.Q852.KQ42      | 1C P P 1S    | P   | 14 balanced: pass, 12-14 does not reopen
+S 9875.K9.AQ52.AKJ      | 1C P P 1S    | P   | 18 balanced, no spade stopper: no notrump
+S K6.AK4.Q985.AQ82      | 1D P 1H 2S   | 2NT | #93: 18 balanced, Kx behind the overcaller (controller's decision)
+S AQ.K95.AJ52.KQ42      | 1D P 1S 2H   | 2NT | 19 balanced, two spades: 2NT (three would support-double)
+S K6.A43.Q985.AK82      | 1D P 1H 2S   | P   | 16 balanced: neither 2NT nor a free rebid
+S 76.AK4.Q985.AQ82      | 1D P 1H 2S   | P   | 16, no spade stopper: pass
+S AQ5.K9.Q852.Q842      | 1C P 1H 1S   | 1NT | 12-14 balanced with a spade stopper
+S AQ5.K9.AQ52.KJ42      | 1C P 1H 1S   | 2NT | 18-19 balanced with a spade stopper: jump
+S K6.AK4.Q985.AQ82      | 1D P 1H 2S 2N P 3H P | 4H  | three hearts opposite five
+S K6.AK4.Q985.AQ82      | 1D P 1S 2H 2N P 3S P | 3NT | two spades: 3NT
+S AQ.K95.AJ52.KQ42      | 1D P 1S 2H 2N 3H X 4H | P | described: partner's double decides
+S AKJ.AT.JT43.AJ97      | 1D P P 1H 1N P 2C P | P | #90: partner's 2C is a sign-off opposite 18-19

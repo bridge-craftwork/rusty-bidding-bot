@@ -26,6 +26,7 @@ module strong-openings "2♣ and 2NT openings"
   param  two_c      = two_level.two_clubs.meaning default strong
   param  two_d_resp = two_level.two_clubs.2d_response default waiting
   param  bust_2h    = two_level.parrish_bust.play default false
+  param  kokish     = two_level.kokish.play default false   # 2♣–2♦–2♥ is the relay (openings/kokish.bid)
   # Off: no strong 2C, and strong hands open at the one level (base.bid
   # lifts its 21 HCP cap). A card whose forcing opening is 1C (Precision)
   # keeps 2C as the stand-in until a forcing 1C is built: without it the
@@ -141,6 +142,13 @@ after 2C (P) 2N (P) 3S (P) | 2C (P) 3C (P) 3S (P) | 2C (P) 3D (P) 3S (P)
 after 2C (P) 2N (P) 3H (P) | 2C (P) 3C (P) 3H (P) | 2C (P) 3D (P) 3H (P)
   4H  "Support: three or more hearts"   shows H>=3   sets trump=H, forcing=game
       priority 1
+# Opener's minor after a major positive: four-card support raises below
+# game and agrees it, leaving the keycard ask to opener (2026-11-07,
+# bridge-classroom-bug-artifacts #94: 2C-2H-3D with J942 opposite AKT65
+# bid 3NT, where 6D and 7D make).
+after 2C (P) 2y (P) 3m (P) when y is H | y is S, m is C | m is D, !bust_2h | y is S
+  4m  "Support: four or more {m}"       shows m>=4   sets trump=m, forcing=game
+      priority 1
 
 # The raise is the 22+ hand (Rick, 2026-10-01): the balanced 22-24 that
 # was going to rebid 2NT, or any 22+ with three trumps, even with a suit
@@ -224,6 +232,73 @@ after 2C (P) 2D (P) 2S (P)
   3C  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
 after 2C (P) 2D (P) 3C (P)
   3D  "Second negative: fewer than 3 HCP"  shows hcp<=2  when !bust_2h  artificial  priority 1
+
+# ── Responder's second call over opener's major (2026-11-07) ─────────
+# Rick, bridge-classroom-bug-artifacts #92: 2♣–2♦–2♥ (natural, Kokish
+# off) had no responder rules but the second negative, so every other
+# hand fell through to the base "Game in notrump" (3NT with six good
+# spades, or with a heart fit too weak for slam-entry's raise). Standard
+# practice: a five-card suit of my own is shown (2♠ over 2♥ at the two
+# level, a minor at three, each denying a fit), a raise is slam-entry's
+# or base.bid's game in the fit, and 2NT
+# waits with no fit and nothing to show, leaving room below 3NT for
+# opener's second suit or six-card major. With Kokish on, 2♥ is the
+# relay (kokish.bid) and these are off.
+after 2C (P) 2D (P) 2y (P) when y is S | !kokish, y is H | y is S, !bust_2h
+  2S  "Five or more spades"               shows S>=5, hcp>=3, quality(S)>=fair, H<=2
+      when  y is H
+      priority 1
+  3D  "Five or more diamonds"             shows D>=5, hcp>=3, quality(D)>=fair, y<=2
+  2N  "No fit, nothing to show: waiting"  shows y<=2, hcp>=3
+      priority -1
+
+# Opener after the waiting 2NT: a six-card major rebids, a second suit
+# is shown, 3NT with a five-card major and nothing more to say. Natural
+# and forcing (the 2♣ game force).
+after 2C (P) 2D (P) 2y (P) 2N (P) when y is S | !kokish, y is H | y is S, !bust_2h
+  3y  "Six or more {y}"                     shows y>=6
+      priority 1
+  3S  "Four or more spades"                 shows S>=4
+      when  y is H
+  3D  "Four or more diamonds"               shows D>=4
+  3C  "Four or more clubs"                  shows C>=4
+  3N  "Five {y}, nothing more to show"     shows y=5
+      priority -1
+
+# ── Opener's new suit over responder's transfer (2026-11-07) ─────────
+# Rick, bridge-classroom-bug-artifacts #94: 2♣–2♥(positive)–2NT, systems
+# on (Rick, 2026-10-05), 3♦ transfer, and opener bid 4♦ instead of
+# completing. Opener's 2NT denied three hearts, so it cannot be a
+# super-accept: it is natural, five or more of the minor, slam interest
+# (we are forced to game with 30+ between us). Before, nothing read it
+# (base.bid's runout fallback), responder took it as an answer to the
+# transfer and bid a quantitative 4NT, and the 5♣ that followed was
+# passed. The completion stays opener's own call (priority 0): these are
+# here so the 4m is read, and answered.
+after 2C (P) 2H (P) 2N (P) 3D (P) | 2C (P) 2S (P) 2N (P) 3H (P) when style is not bba, !bust_2h
+  4C  "Five or more clubs: slam interest, no fit"     shows C>=5
+      sets  forcing=game
+      priority -1
+  4D  "Five or more diamonds: slam interest, no fit"  shows D>=5
+      sets  forcing=game
+      priority -1
+
+# Responder: with three or more of opener's minor the fit is found, and
+# with 30+ between us the keycard ask agrees it (0314 or 1430 as the
+# card and rkcb-1430.bid say); without RKCB, slam in the fit. No fit:
+# back to my major, which opener may pass or bid on over.
+after 2C (P) 2y (P) 2N (P) 3x (P) 4m (P) when y is H | y is S, x is D | y is S, x is H | y is H, m is C | m is D, style is not bba, !bust_2h
+  4N  "Keycard ask in {m}: three or more {m}"   shows m>=3
+      when  rkcb
+      sets  trump=m, ask=keycards(m)
+      artificial
+      priority 2
+  6m  "Slam: three or more {m}"                 shows m>=3
+      when  !rkcb
+      sets  trump=m
+      priority 2
+  4y  "No fit for {m}: my {y}"                   shows m<=2
+      priority 1
 
 # ── The 2♥ bust (`two_level.parrish_bust.play`) ─────────────────
 # 2♣–2♥ shows fewer than 3 HCP (2♦ is then waiting with 3+, game

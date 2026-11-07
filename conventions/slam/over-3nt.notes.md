@@ -111,6 +111,14 @@ slam tries as without interference (the main block stops at
 Gerber: Rick, "generally Gerber requires a jump". Not on the Brill card,
 where gerber.bid plays Gerber here for Brill partners.
 
+## After 5-4 shown over 1NT (Rick, 2026-11-06)
+
+Bridge-Classroom #85 (1NT–2♥–2♠–3♣–3NT, 16 HCP opposite 17, 6NT
+makes): the count here is HCP and missed it. The fix lives in
+jacoby-transfers.bid (its notes, "Slam after 5-4 shown"): there
+responder counts total points, and that 4NT takes over this one in
+that auction. The balanced-hand thresholds here are unchanged.
+
 ## Sources
 
 - **The thresholds:** the textbook combined counts for 6NT and a
@@ -130,3 +138,5 @@ where gerber.bid plays Gerber here for Brill partners.
 - **Rick's ruling, 2026-10-03:** 4NT with no notrump bid is keycard
   for the last suit on cards that play an ask.
 - Rick, 2026-10-31: Gerber needs a jump; 4♣ over 3NT is a slam try.
+- Rick, 2026-11-06 (bridge-classroom-bug-artifacts #85): invite slam
+  after 5-4 shown; built in jacoby-transfers.bid.

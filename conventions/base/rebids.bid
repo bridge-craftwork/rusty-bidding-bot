@@ -387,8 +387,10 @@ after 1m (P) 2N (P)
       priority -5
 
 # Responder's game-forcing 2NT after a two-over-one and opener's rebid
-# (16+, no fit: responder-rebids.bid): opener counts slam on it, with
-# over-3nt.bid's numbers for this shape (2026-09-30).
+# (12-14 or 18+, no fit: responder-rebids.bid, Rick 2026-11-06): it is
+# forcing, and opener counts slam on its minimum with over-3nt.bid's
+# numbers for this shape (2026-09-30); responder's strong branch then
+# invites over the 3NT.
 after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
   6N  "Slam in notrump"
       shows points + partner.points.min >= 33
@@ -399,8 +401,23 @@ after 1y (P) 2x (P) 2z (P) 2N (P) when x is not y, we.gf
       sets  ask=quant
       priority 1
   3N  "Game: no extras"                    shows points + partner.points.min <= 30
+# A self-sufficient major plays in game, as over-3nt.bid does over
+# partner's 3NT (ticket b194): before 2026-11-06 responder's minimum
+# bid 3NT and opener answered 4M there; now the minimum bids 2NT, and
+# opener's "no extras" 3NT lost the game in the suit (corpus, Namyats
+# and Misfit boards, -10 IMPs each).
+after 1S (P) 2x (P) 2S (P) 2N (P) when x is not S, we.gf
+  4S  "To play: a self-sufficient ♠ suit"
+      shows (S>=6, quality(S)=3, top5(S)>=4) | (S>=7, quality(S)=3)
+      shows (H<=2, !stop(H)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority 1
+after 1H (P) 2x (P) 2H (P) 2N (P) when x is not H, we.gf
+  4H  "To play: a self-sufficient ♥ suit"
+      shows (H>=6, quality(H)=3, top5(H)>=4) | (H>=7, quality(H)=3)
+      shows (S<=2, !stop(S)) | (D<=2, !stop(D)) | (C<=2, !stop(C))
+      priority 1
 # In the Lawrence style opener's 2M was the default rebid, five or more
-# (Rick, 2026-10-16), so over responder's 2NT (16+, two or fewer of the
+# (Rick, 2026-10-16), so over responder's 2NT (12-14 or 18+, two or fewer of the
 # major) a sixth card is news: it makes the doubleton an eight-card fit.
 # Only without extras: with them opener counts slam in notrump as above
 # (measured: 3M first with every hand lost the 4NT/6NT count, -51 by
@@ -811,8 +828,10 @@ after 1x (*) 1z (P) when they.bid, z is not x
 
 # Notrump is the one rebid that has to know which suit they bid, so it
 # is written with their call bound. Over a takeout double there is no
-# suit to stop and the range is the same.
-after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
+# suit to stop and the range is the same. The same ranges when they
+# overcall partner's response at the one level (1C P 1H (1S) 1NT, Rick
+# 2026-11-06, bridge-classroom-bug-artifacts #93; it had no rule).
+after 1x (1y) 1z (P) | 1x (2y) 1z (P) | 1x (P) 1z (1y) when y is not x, z is not x, z is not y
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
       when  stop(y)
@@ -1143,6 +1162,45 @@ after 1x (1y) P (P) | 1x (2y) P (P) | 1x (3y) P (P) when y is not x
   cheapest(N) "18-19 balanced with a stopper in {y}"
       shows balanced, hcp=18..19
       when  stop(y)
+
+# ── Partner passed and they reopened: opener's notrump ───────────────
+# 1D P P (1H) 1NT is the same bid as 1D (1H) P (P) 1NT above: 18-19
+# balanced with their suit stopped (Rick, 2026-11-06, bridge-classroom-
+# bug-artifacts #90; it had no rule). 15-17 would have opened 1NT and a
+# balanced 12-14 passes. Only the notrump is here; the six-card rebid
+# and the pass are `1x (*) P (*)` above.
+after 1x (P) P (1y) | 1x (P) P (2y) when y is not x
+  cheapest(N) "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19
+      when  stop(y)
+# Partner's two of a suit over it is 0-5 and six cards, to play: opener
+# has shown his hand and passes (the generic sign-off answer would
+# invite with 16-18, which 18-19 opposite 0-5 never is).
+after 1x (P) P (1y) 1N (P) 2z (P) when y is not x, z is not y
+  P   "Partner's sign-off: pass"
+      priority 1
+
+# ── They overcalled partner's response at the two level ──────────────
+# 1D P 1H (2S) 2NT: 18-19 balanced with their suit stopped, not
+# forcing (controller's decision 2026-11-06, bridge-classroom-bug-
+# artifacts #93, for Rick to confirm). A minimum balanced opener passes
+# (or makes a support double where the card has one); the card has no
+# Good/Bad 2NT, so 2NT is natural and strong, the 1x-1y-2NT rebid
+# pushed up by their overcall.
+after 1x (P) 1z (2y) when y is not x, y is not z, z is not x
+  2N  "18-19 balanced with a stopper in {y}"
+      shows balanced, hcp=18..19, z<=3
+      when  stop(y)
+# Responder bid five of his major over 2NT: choose the game.
+after 1x (P) 1z (2y) 2N (P) 3z (P) | 1x (P) 1z (1y) 2N (P) 3z (P) when y is not x, y is not z, z is not x, z is H | z is S
+  4{z} "Three-card support"                shows z>=3
+      sets  trump=z
+  3N  "Two {z}: notrump"                   shows z<=2
+# They competed over opener's 18-19 notrump and partner doubled: opener
+# has described his hand and leaves the decision with partner (compare
+# 2026-11-07: six no-rule positions such as 1C P 1H 2S 2N 3S X 4S).
+after 1x (P) 1z (2y) 2N (*) X (*) | 1x (P) 1z (1y) 2N (*) X (*) | 1x (P) P (1y) 1N (*) X (*) | 1x (P) P (2y) 2N (*) X (*) when y is not x
+  P   "Described: partner's double decides"   priority -10
 
 # Opener answering responder's 2NT invitation with a six-card major
 # (2026-09-27, ticket b220: 1S 2C 2H 2NT, AQ6542.JT65.97.K passed): the

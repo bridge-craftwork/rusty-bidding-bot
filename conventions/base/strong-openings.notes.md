@@ -209,6 +209,66 @@ no rule at all. Added the balanced rebids only: 2NT with 22-23 and a
 stopper (systems on over it), 3NT with 24-25 and a stopper. The suit
 rebids and doubles there are still missing.
 
+## Bridge-Classroom #94 and #92 (Rick, 2026-11-06; rules 2026-11-07)
+
+**#94**, NT Ladder (Lev) board 38, dealer S, EW vul: North
+`K973.AQT43.J942.-`, South (Rick) `AQJ.K8.AKT65.AK2`. Auction 2♣ P 2♥
+(positive) P 2NT P 3♦ (transfer) P 4♦ (Rick) P 4NT (North:
+"Quantitative, 5 ♥", alerted) P 5♣ (no rule) P P P: 5♣ in a 4-0 fit,
+thirteen tricks in ♦, ♥, ♠ and NT. Rick: "Broken Rusty auction.
+Strange 4NT alert."
+
+1. **Systems stay on over 2♣–2♥(positive)–2NT.** Rick ruled this on
+   2026-10-05 ("Systems on over opener's notrump" above), so the 3♦
+   transfer is right: hearts are known, but the transfer makes the 22+
+   hand declarer. Not reopened.
+2. **Opener's 4♦ over the transfer is natural**: five or more diamonds,
+   slam interest. Opener's 2NT denied three hearts (it would have
+   raised), so a super-accept is impossible. It was unread (base.bid's
+   runout fallback); responder still took it as "partner answered my
+   transfer" and jacoby-transfers.bid's quantitative 4NT fired. Now
+   read (`4C`/`4D` after 2♣–2M–2NT–transfer, priority -1: opener's own
+   choice stays the completion).
+3. **Responder over that 4m:** with three or more of the minor the fit
+   is found and 4NT asks for keycards in it (`trump=m`), the card's RKCB;
+   without RKCB, six of the minor; no fit, four of his major.
+4. **The asker never passes an unread five-level answer to a
+   quantitative 4NT** (base.bid, priority -40, above the game-reached
+   pass): 6NT, taking the unread suit as an acceptance. The keycard
+   answers already had their continuations (rkcb-1430.bid passes a
+   5-of-trumps answer only with at most three keycards between us).
+5. **Rusty's own auction on the board** went 2♣ 2♥ 3♦ (five diamonds)
+   3NT: responder had no raise of opener's minor after a major
+   positive. Responder now raises to 4m with four (agrees it), opener
+   asks: 2♣ 2♥ 3♦ 4♦ 4NT 5♣ 6♦.
+
+Calls on the board, before → after (stand-in card 21GF-GIB, modified
+Jacoby 2NT, Kokish on): North over Rick's 4♦: Pass/4NT quantitative →
+4NT keycard in ♦; over 5♣: Pass → 6♦. All-Rusty: 3NT → 6♦.
+
+**#92** (kokish.notes.md has the diagnosis): with Kokish off, 2♣–2♦–2♥
+is natural and responder had only the second negative, so the base
+fallback bid 3NT on everything else. Responder now shows a five-card
+suit without a fit (2♠ over 2♥, 3♦), waits with 2NT with no fit, and
+opener over the 2NT rebids six of his major, shows a second suit or
+bids 3NT. A natural 4♥ raise with few values was tried and dropped:
+opener's 18+ asked for keycards over it (-81 IMPs on the actor's
+contract errors over the strong-2♣ scenarios).
+
+Measured (compare --limit 50 --par-all, Kokish_Relay, NT_Ladder,
+Game_Forcing_2C, To_Finesse_Or_Not_To_Finesse, Bust_Over_Strong_2C,
+Opps_Bid_Over_GF_2C; 255 boards): 13 changed, all at responder's call
+over 2♣–2♦–2M (3NT → 2♠/2NT/3♦). `errors_diff.py` verdict, the actor's
+contract errors: +10 IMPs (halves -5 / +15, they differ: small and
+mixed), distance from par +13; vs BBA by par -185 → -172, by errors
+-173 → -167. The 4m raise and the reading of opener's 4m over the
+transfer did not occur in those 50-board samples (`.test` cases only).
+All-scenario tripwire (`--limit 50`, 17,105 boards): 28 changed, every
+one at responder's call over 2♣–2♦–2M or the new 4♦ raise after
+2♣–2M–3♦ (+12 twice); nothing else moved. Actor's contract errors +22
+(halves -5 / +27), distance from par +25; vs BBA by par -6,223 → -6,198,
+by errors -7,734 → -7,716.
+
 ## Brill (general.system = brill, 2026-10-15)
 
 Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
@@ -254,3 +314,8 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
 - Rick, 2026-10-05: systems on over 2♣–positive–2NT and over 2♣ (2x) P
   (P) 2NT; the balanced rebids after interference are standard practice,
   not yet cited.
+- Rick, 2026-11-06 (bridge-classroom-bug-artifacts #92, #94): the boards
+  and notes. Opener's natural minor over a transfer that cannot be a
+  super-accept, the raise of opener's minor after a positive, the
+  keycard ask in it, 2NT waiting over 2♣–2♦–2M and showing one's own
+  suit there: standard practice, not yet cited.

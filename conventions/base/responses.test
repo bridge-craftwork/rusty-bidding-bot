@@ -132,3 +132,22 @@ S 87.KQ9.A842.J932      | 1H P       | 1NT    | brill: three trumps and 10: 1NT 
 S 87.KQ9.A842.J932      | 1H P 1NT P 2C P | 3H | brill: then the three-card limit raise
 card    21GF-GIB
 S 873.A92.KQ84.Q92      | 1S P       | 3S     | default: three trumps will do
+
+# The weak three-card raise goes through 1NT on the 2/1 cards: the
+# single raise is constructive, 8+ support points with three trumps
+# (Rick, 2026-11-06, bridge-classroom-bug-artifacts #87).
+card    21GF-GIB
+dealer  N
+S Q72.976.A874.J32      | 1S P       | 1NT    | 7 HCP flat, three spades: 7 support points, 1NT, then preference
+S Q72.97.AT8742.J2      | 1S P       | 2S     | #87 (board 14): 7 HCP and two doubletons, 9 support points: Rusty raises (Rick's 1NT reads too)
+S Q72.976.A874.Q32      | 1S P       | 2S     | 8 HCP and three: the constructive raise
+S 72.Q76.A874.J432      | 1H P       | 1NT    | 6 HCP and three hearts: 7 support points
+S Q842.Q82.9874.K9      | 1H P       | 2H     | four spades: no 1NT, so the raise (1S would deny three hearts)
+S Q872.76.A874.J32      | 1S P       | 2S     | four trumps raise at once
+dealer  S
+S Q72.976.AT874.J2      | P P 1S P   | 2S     | a passed hand raises: its 1NT is not forcing
+card    21GF-DEFAULT
+dealer  N
+S Q72.976.A874.J32      | 1S P       | 1NT    | the forcing 1NT holds it too
+card    Basic-Bridge
+S Q72.976.AT874.J2      | 1S P       | 2S     | SAYC: the 6-10 raise

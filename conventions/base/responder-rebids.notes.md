@@ -499,6 +499,59 @@ deals: 482 boards short of slam, responder the stronger hand in 379). Now
 -19 (flat); corpus +318. Most of what is left are 29-32 HCP slams par
 finds double dummy.
 
+## Notrump rebids after a 2/1: 2NT 12-14 or 18+, 3NT 15-17 (Rick, 2026-11-06)
+
+bridge-classroom-bug-artifacts #91 (board 29, NT Ladder, Rick South):
+1♦-2♣-2♥ and North, 12 HCP, jumped to 3NT, read as "Game, no fit:
+13-15". Rick: "In a 2/1 auction responder's jump to 3NT shows 15-17.
+2NT here shows 12-14 or 18-19." So in a game-forcing 2/1, after any
+two-level rebid by opener (his suit again, a new suit, a reverse; 2NT
+is always available there), responder without a fit bids:
+
+- **2NT: 12-14 or 18+**, forcing. Opener may not pass. He counts slam
+  on the minimum (rebids.bid: 6NT, quantitative 4NT, otherwise 3NT).
+  Over opener's 3NT the strong branch invites with a quantitative 4NT
+  (18-20) and bids 6NT with 21+. The minimum passes. Four cards in
+  opener's second suit, when it is a major, raise it instead.
+- **3NT: 15-17**, the jump. Opener counts slam with over-3nt.bid (18
+  opposite 15 bids a quantitative 4NT).
+
+The ranges are now in HCP, as notrump ranges are. Since 2026-09-30
+they had been notrump points, 3NT 13-15 and 2NT 16+ ("Fast arrival in
+notrump" above). In HCP, over-3nt.bid's HCP count reads the 3NT. When
+opener's rebid is 2NT or higher the scheme does not apply, and those
+blocks are unchanged. A 2/1 that forces only one round (`!we.gf`) keeps
+2NT as 11-12 invitational and 3NT as game.
+
+Board 29 now goes 1♦-2♣-2♥-2NT-3NT: the same contract, read right.
+
+**Source:** Rick's ruling. Robert Todd, "Using NT Rebids in 2/1
+Auctions", Advancing in Bridge #425 (2022), gives no ranges for
+responder but points the same way: responder's jump to 3NT "shows
+extra values", and his 2NT does not promise them. The same article
+gives opener's 2NT as 12-14 or 18-19 and his 3NT as 15-17, the scheme
+Rick applies to responder. No book with responder's ranges is cited
+yet (Hardy's and Lawrence's 2/1 books were not checked).
+
+**Measured** with compare --limit 50, `--par-all` and errors_diff.py,
+counting the bidding side's contract errors. Both issues' changes ran
+together; the boards are split by the first differing call. Over all
+343 scenarios, the boards changed by the 2/1 notrump rebids net +44
+IMPs in actor contract errors:
+
+- Responder's 15-17 jump to 3NT, which used to bid 2NT as 16+, lost
+  50 on 21 boards, mostly slams opener no longer counts on the 3NT.
+- The 15-17 3NT, which used to be 13-15, gained 43 on 20 boards.
+- Opener's 3NT, where he had bid 6NT over the old 16+ 2NT, gained 40
+  on 12 boards.
+- The 12-14 2NT lost 12 on 42 boards. That is after adding opener's
+  self-sufficient 4M over it (rebids.bid); over the old 3NT he had bid
+  4M (over-3nt.bid).
+
+Whole set, both issues: actor contract errors +146 (halves +9 / +137),
+distance from par +75. Against BBA, errors went from -8142 to -7857
+and par from -6546 to -6471.
+
 ## 1M-1NT-2M-3M is the two-card raise (2026-09-30)
 
 `after 1x (P) 1N (P) 2x (P)` had two raises: "3+ {x}, maximum for the
@@ -795,6 +848,76 @@ from 6 points, pass below. Over a non-jump 2NT (their 2-level suit) the
 Double_double and Negative_Double boards change both ways, net gain; 51
 boards, errors +74 IMPs to us.
 
+## Preference after the 2/1 cards' 1NT: two, or three and a weak raise (Rick, 2026-11-06)
+
+bridge-classroom-bug-artifacts #87 (board 14, Major Suit Fit, Rick
+South): 1♠-1NT-2♥-2♠ with Q72 in spades and 7 HCP. Rusty read the 1NT
+as 0-2 spades and the preference as exactly two. Rick: "Rusty should
+report this as 2S or 3S with 5-7 support pts." Our reading (the
+controller's interpretation, an open question for Rick): a weak
+three-card raise, too weak for the constructive single raise, goes
+through 1NT and shows up as the preference.
+
+- responses.bid now lets the 6-12 1NT (forcing, semi-forcing or not)
+  hold three trumps with 6-7 HCP.
+- On the 2/1 cards Rusty's single raise with three trumps needs 8+
+  support points, so only a flat 6-7 goes through 1NT; with four
+  spades over 1♥ (no 1NT) it still raises. This does not apply to a
+  passed hand, to the Brill card or to `style=bba`. A first try routed
+  every 6-7 HCP three-card raise through 1NT and lost (below).
+- Here, when my 1NT allowed three, the preference over a two-level
+  rebid has its own rule: "two {M}, or three with a weak raise (6-7)".
+  With three it takes the major even over four of opener's minor.
+- Opener's continuations read only `partner.M.min`, so they do not
+  change: North still passes 2♠ with 14 HCP and 6-4.
+
+**Read in HCP, bid in support points.** In our count Rick's hand has
+9 support points (7 HCP and two doubletons with three trumps), so a
+reading of "5-7 support points" would exclude the very hand he bid
+this way. The reading is therefore 6-7 HCP (6 is the 1NT's floor),
+which includes it. Rusty itself raises that hand directly (9 support
+points), and gives the weak preference only with 6-7 support points.
+Questions for Rick: which count he means, and whether 5 HCP hands
+belong in the 1NT.
+
+**Measured** with compare --limit 50, `--par-all` and errors_diff.py,
+counting the bidding side's contract errors. The first version sent
+every 6-7 HCP three-card raise through 1NT. On 14 2/1 and major
+scenarios it lost:
+
+- 20 IMPs on 11 boards, where opener's game after 1♠-2♠ became
+  1♠-1NT-2x-2♠, passed;
+- 17 IMPs on 6 boards, where hands with 4 spades and 3 hearts passed
+  1♥.
+
+The final version bids in support points (only a flat 6-7 goes
+through 1NT) and raises with four spades. Over all 343 scenarios:
+
+- 1♠-2♠ -> 1NT: -8 on 43 boards (+37 by all errors);
+- 1♥-2♥ -> 1NT: +30 on 40 boards;
+- a side effect of the wider 1NT: 13-count hands that had bid 1NT now
+  bid their 2/1 2♣/2♦, +53 on 28 boards and +27 on 22.
+
+Net: +102 in actor contract errors.
+
+## After opener's notrump in a contested auction (Rick, 2026-11-06)
+
+Partner of the new opener's rebids in rebids.notes.md ("Opener's
+notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
+
+- `1x (P) P (1y) 1NT (P)` / `... (2y) 2NT (P)`: my pass showed 0-5,
+  so there is no game. Pass, or over 1NT play two of a six-card suit.
+  Natural, no Stayman or transfers: it is opener's rebid, not a 1NT
+  opening, and the passed hand has nothing to invite with. (#90's
+  North, 8.53.Q852.QT8532, now bids 2C over 1NT; BBA 2C too.)
+- `1x (P) 1z (2y) 2NT (P)` and `1x (P) 1z (1y) 2NT (P)` (the jump):
+  the uncontested ladder after 1x-1y-2NT: pass to 6, 3NT from 7, three
+  of a five-card major forcing (opener: 4M with three, else 3NT), four
+  with six. The controller's brief suggested raising from 6; 7 is what
+  every other 18-19 2NT here uses, so it stays 7.
+- `1x (P) 1y (1z) 1NT (P)` (12-14): the block already written for
+  `1x (1z) 1y (P) 1NT (P)`: 2NT invites with 11-12, 3NT with 13+.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -834,3 +957,18 @@ boards, errors +74 IMPs to us.
   reads opener's length as each shows it.
 - Brill daily 2026-10-20, board 7 and Brill /explain of 4D ("D >= 3,
   HCP 7-9"); the 3M/4M continuations: standard practice, not yet cited.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #91): after a
+  game-forcing 2/1, responder's 2NT is 12-14 or 18-19 and the jump to
+  3NT is 15-17. Robert Todd, Advancing in Bridge #425, "Using NT
+  Rebids in 2/1 Auctions" (2022): responder's jump to 3NT shows
+  extras, with no ranges given. No book cited for the ranges yet.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #87): the
+  preference after 1M-1NT shows two, or three with a weak raise ("5-7
+  support pts", taken as 6-7 HCP: our decision). The weak raise
+  through a forcing 1NT is standard 2/1 practice, not yet cited.
+
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #90, #93): the
+  notrump rebids answered here; responder's continuations (no systems
+  over opener's reopening notrump, the 1x-1y-2NT ladder over the
+  contested 2NT) are standard practice, not yet cited, and our
+  decision (2026-11-07).
