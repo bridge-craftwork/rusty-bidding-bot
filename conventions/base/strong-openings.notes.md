@@ -269,6 +269,20 @@ one at responder's call over 2♣–2♦–2M or the new 4♦ raise after
 (halves -5 / +27), distance from par +25; vs BBA by par -6,223 → -6,198,
 by errors -7,734 → -7,716.
 
+## 2♣–2♦–3NT with Kokish on (2026-11-07)
+
+With Kokish (`two_level.kokish.play`) the 24-25 balanced goes through the
+relay (2♣–2♦–2♥–2♠–2NT), so 2♣–2♦–3NT reads 26-27 there, not 24-25: the
+ladder's next rung, and what BBA rebids on Kokish_Relay (85 boards: 59
+at 26, 26 at 27; its relay 2NT 93 boards, all 25). Without a Gambling
+3NT the 26-27 opens 3NT and our opener never rebids it, but a partner's
+3NT reads 26-27 and over-3nt.bid counts from 26 (7 HCP: quantitative
+4NT, where 24-25 passed). Kokish off: 24-25 as before. Rick (2026-11-07)
+on transfers: "people playing jacoby transfers normally play them over
+1NT, 2NT, 2C/2NT, and kokish relay, and sometimes 2C/3NT"; over 3NT
+they are Texas (texas-transfers.notes.md). Details and measurements in
+kokish.notes.md.
+
 ## Brill (general.system = brill, 2026-10-15)
 
 Brill's treatment, played on the Brill card only (`cards/json/Brill.json`, `general.system = brill`: a stand-in until convention-card's `general.style` takes a `brill` value; cards/README.md "Brill"). Rusty plays the Brill dailies as South with three Brill robots, so it should read and bid what they do. Every other card is unchanged (a `.test` line on 21GF-GIB beside each Brill line; `compare --limit 50` tripwire against main: no board changed).
@@ -319,3 +333,7 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
   super-accept, the raise of opener's minor after a positive, the
   keycard ask in it, 2NT waiting over 2♣–2♦–2M and showing one's own
   suit there: standard practice, not yet cited.
+- Bridge Bum, "Kokish Relay" (https://www.bridgebum.com/kokish_relay.php,
+  re-read 2026-11-07): relay 2NT "25+", no meaning for 2♣–2♦–3NT with
+  Kokish; 2♣–2♦–3NT 26-27 with Kokish is the ladder's next rung and BBA's
+  practice (Kokish_Relay corpus), not cited further.

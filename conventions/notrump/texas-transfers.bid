@@ -124,6 +124,36 @@ after systems 1N (*) | systems 2N (*) | 2C (*) 2D (*) 3N (P)
       sets  ask=texas2(S)
       artificial
 
+# After 2♣–2♦–3NT there is no Jacoby route for the mild slam hands
+# between the two bands (31-32 combined): opposite Kokish's 26-27 (strong-
+# openings.bid) that is a 4-5 count with six hearts, which passed 3NT
+# (base fallback). They bid game through Texas (2026-11-07).
+after 2C (P) 2D (P) 3N (P)
+  4D  "Texas: 6+ ♥, game"  announce "Transfer"
+      shows H>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  texas_room_d
+      sets  ask=texas(H)
+      artificial
+      priority -1
+  4H  "Texas: 6+ ♠, game"  announce "Transfer"
+      shows S>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  texas_room_h
+      sets  ask=texas(S)
+      artificial
+      priority -1
+  4C  "2-under Texas: 6+ ♥, game"  announce "Transfer"
+      shows H>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  texas2_room_c
+      sets  ask=texas2(H)
+      artificial
+      priority -1
+  4D  "2-under Texas: 6+ ♠, game"  announce "Transfer"
+      shows S>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  texas2_room_d
+      sets  ask=texas2(S)
+      artificial
+      priority -1
+
 # Opener completes, whatever came in between, when it is still legal.
 when asked texas(H)
   4H  "Completes the transfer"

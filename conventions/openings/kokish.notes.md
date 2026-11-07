@@ -67,6 +67,51 @@ it isn't set up yet."
   negative; opener over the 2NT rebids a six-card major, shows a second
   suit or bids 3NT. These are off when Kokish is on (`kokish` param).
 
+## Transfers over every 2NT, and 2♣–2♦–3NT (Rick, 2026-11-07)
+
+Rick: "people playing jacoby transfers normally play them over 1NT, 2NT,
+2C/2NT, and kokish relay, and sometimes 2C/3NT".
+
+- **Over the relay's 2NT the transfers were already on** (systems on,
+  2026-10-05), but a five-card major with a slam invitation bid 4NT: the
+  2NT system's quantitative 4NT and 6NT had no "with five, transfer
+  first" condition, and opposite 24-25 a 7-count (84.KJ863.Q72.J54,
+  KJ863.84.Q72.J54) is a slam invitation, where opposite 20-23 the same
+  hand is game only and transferred. Now 4NT and 6NT over any `nt2` need
+  no five-card major when the card plays Jacoby (two-nt-responses.bid):
+  transfer, then jacoby-transfers.bid's "Quantitative, 5 M" 4NT. The 2NT
+  opening changes the same way (12 with five hearts: 3♦ then 4NT, not
+  4NT), as over 1NT already.
+- **2♣–2♦–3NT with Kokish on is 26-27** (strong-openings.bid): the
+  24-25 goes through the relay, so the direct 3NT is the next rung.
+  Rusty read it as 24-25 and passed with 7 (31-32 on that floor); now 7
+  bids a quantitative 4NT (33-34, over-3nt.bid). BBA on Kokish_Relay
+  (Kokish and Gambling): 2♣–2♦–3NT 85 boards, opener 26 HCP on 59 and 27
+  on 26; the relay's 2NT 93 boards, all 25. Bridge Bum gives no Kokish
+  meaning for the direct 3NT. Without a Gambling 3NT the 26-27 opens 3NT,
+  so we never rebid it; the reading still matters when a human does.
+- **Transfers over 2♣–2♦–3NT** ("sometimes"): no card field; they follow
+  the card's Texas setting (texas-transfers.bid, since 2026-10-29). A
+  six-card major with 4-5 HCP fell between Texas's game-only and slam
+  bands opposite 26-27 and passed 3NT; a fallback Texas to game now takes
+  it. **For Rick:** a card field "transfers over 2♣–2♦–3NT" (a
+  convention-card pull request) if the "sometimes" should be switchable.
+- **Measured** (compare --par-all, all 500 boards of Kokish_Relay,
+  Game_Forcing_2C, NT_Ladder, SCS_Two_Clubs, Bust_Over_Strong_2C, 2N,
+  2N_and_Balanced, 2N_and_Transfers, Smolen_after_2N, Puppet_Stayman_2N,
+  Texas_Transfer, Texas_or_Jacoby, Gerber, Gerber_By_Responder,
+  Slam_after_Transfer; `errors_diff.py`): 51 boards changed
+  (2N_and_Transfers 42, 2N 5, Kokish_Relay 2, Game_Forcing_2C 1,
+  NT_Ladder 1). VERDICT, the actor's contract errors: +13 IMPs (halves
+  +0 / +13), distance from par +13; vs BBA contract −628 → −615. The
+  transfer-first boards (2NT–4NT/6NT → 3♦/3♥ then 4NT/6NT) score the
+  same: the same contract, the suit shown on the way. The +13 is two
+  2♣–2♦–3NT boards where Texas now reaches 4♥ instead of passing.
+  Tripwire, all scenarios --limit 50: 9 boards changed (2NT openings
+  transferring first, one 2♣–2♦–3NT Texas), 0 IMPs either way.
+  Kokish_Relay itself moves little: its card (21GF-SPECIALS) has a
+  Gambling 3NT, so the old reading was already 24-27 there.
+
 ## Sources
 
 - Bridge Bum, "Kokish Relay", https://www.bridgebum.com/kokish_relay.php:
@@ -75,3 +120,10 @@ it isn't set up yet."
 - Practice-Bidding-Scenarios `btn/Kokish_Relay.btn` and `bba/`.
 - Rick, 2026-11-06 (bridge-classroom-bug-artifacts #92): the board and
   his note; the card question is open for him.
+- Bridge Bum, "Kokish Relay" (re-read 2026-11-07): the relay's 2NT "25+
+  points, game-forcing", footnote "2NT can be eased to 24+ points"; the
+  worked example has responder's 3♦ over it as a "Jacoby transfer". The
+  page gives no meaning for 2♣–2♦–3NT with Kokish; its non-Kokish table
+  has 2♣–2♦–3NT 25-27. Our 26-27 is the ladder's next rung and BBA's.
+- Rick, 2026-11-07: transfers over every 2NT and "sometimes" 2♣–2♦–3NT
+  (quoted above).

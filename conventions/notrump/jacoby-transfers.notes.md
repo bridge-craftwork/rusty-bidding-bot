@@ -402,6 +402,18 @@ Replay of #85 (bid-pbn, 21GF-GIB, all four seats Rusty):
 **Rick, 2026-11-07:** asked whether "invite slam" meant the quantitative
 4NT as built: "with 4NT". Settled; the rule stands as above.
 
+## Over every 2NT (Rick, 2026-11-07)
+
+Rick: "people playing jacoby transfers normally play them over 1NT, 2NT,
+2C/2NT, and kokish relay, and sometimes 2C/3NT". The 2NT-level transfers
+(3♦/3♥) live in two-nt-responses.bid under `after nt2` (`systems 2N
+(P)`: 2NT opening, 2♣–2♦–2NT, Kokish's 2NT, 2♣–positive–2NT, a natural
+2NT overcall), and everything after the completion is this module's
+`when answered transfer(M)`, counted against opener's range. What was
+missing was the 2NT system's 4NT/6NT giving way to the transfer with a
+five-card major (two-nt-responses.notes.md, "With five, transfer
+first"). Over 2♣–2♦–3NT the transfers are Texas (texas-transfers.bid).
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").

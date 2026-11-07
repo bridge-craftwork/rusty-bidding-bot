@@ -115,6 +115,14 @@ after 2C (P) 2D (P)
   # (before 2026-10-05 it had no opening at all and passed: Kokish_Relay,
   # 10 of 50 boards). BBA rebids 3NT with 26-27 there.
   3N  "24-25 HCP, balanced"   shows balanced, hcp>=24, hcp<=25 | (gambling, hcp<=27)
+      when  !kokish
+  # With Kokish the 24-25 goes through the relay (kokish.bid, 2♣–2♦–2♥–
+  # 2♠–2NT), so 3NT is the next rung up: 26-27 (BBA, Kokish_Relay with
+  # Gambling: 85 boards, 59 at 26 and 26 at 27; the relay's 2NT 93 at 25).
+  # Without a Gambling 3NT the 26-27 opens 3NT and we never rebid this,
+  # but partner's 3NT reads the same (2026-11-07).
+  3N  "26-27 HCP, balanced"   shows balanced, hcp>=26, hcp<=27
+      when  kokish
   4N  "28+ HCP, balanced"              shows hcp>=28, balanced
   2H  "5+ hearts"                      shows H>=5
   2S  "5+ spades"                      shows S>=5
