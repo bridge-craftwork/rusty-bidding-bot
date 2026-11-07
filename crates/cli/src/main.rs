@@ -464,6 +464,12 @@ enum BidCommand {
         /// Only the rules for this call (PBN: 2S, 1NT, P, X).
         #[arg(long)]
         call: Option<String>,
+        /// Only these rules (repeatable), each with its verdict here,
+        /// matched or not and why: `file:line` (a path suffix is enough:
+        /// `rebids.bid:725`), a file (`rebids.bid`), a module (`rebids`) or
+        /// `module:line`.
+        #[arg(long = "rule")]
+        rule_specs: Vec<String>,
         /// Also list the rules whose auction context, `when` or legality
         /// failed, each with the reason, and the modules the card leaves
         /// off.
@@ -1875,6 +1881,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
             card_changes,
             rules,
             call,
+            rule_specs,
             all,
             no_knowledge,
             json,
@@ -1887,6 +1894,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
             card_changes: &card_changes,
             rules: &rules,
             call: call.as_deref(),
+            rule_specs: &rule_specs,
             all,
             knowledge: !no_knowledge,
             json,

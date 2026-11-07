@@ -188,7 +188,7 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 | `rbb bid skills [--rules DIR] [--doc F]` | the teaching-skill map: each skill, the card fields and the modules that name it, and the gaps (docs/SKILLS.md) |
 | `rbb bid reference [--rules DIR]` | every module and what each call means after each auction |
 | `rbb bid compile FILE [--rules DIR]` | a file's compiled JSON IR |
-| `rbb bid rules -a "1C P 1D 1H" [-d N] [-c CARD] [--set path=value] [--rules DIR] [--call X] [--all] [--json]` | the rules that can make the next call, before the hand is known, in the engine's ranking; with `--all` every rule that failed and why |
+| `rbb bid rules -a "1C P 1D 1H" [-d N] [-c CARD] [--set path=value] [--rules DIR] [--call X] [--rule SPEC] [--all] [--json]` | the rules that can make the next call, before the hand is known, in the engine's ranking; with `--all` every rule that failed and why; with `--rule` the verdict on chosen rules |
 | `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json] [--knowledge]` | the engine's call with every candidate and why it lost |
 | `rbb explain-auction -a "1NT Pass 2C" -d N -c CARD [--deal PBN] [--set path=value] [--json]` | the auction reviewed call by call: what is known about every seat after each call, the flags, each side's state, each hand's own view |
 | `rbb compare [SCENARIO...] --rules DIR [--json F]` | compare with BBA's auctions in Practice-Bidding-Scenarios: agreement, distance from par, "no rule" in live auctions |
@@ -234,6 +234,18 @@ of `when` stay conditions. One JSON object:
 
 With `--call X` only that call's candidates are kept; a rejected rule
 without a concrete call stays when its written call could be `X`.
+
+With `--rule SPEC` (repeatable; `file:line` with any path suffix,
+`rebids.bid:725`, a file, a module, or `module:line`) only the selected
+rules are kept in `candidates`, `rejected` and `inactive` (rejections are
+collected without `--all`), and a `selection` array is added, one object a
+selected rule: `spec`, `rule` (`module`, `file`, `line`), `verdict`
+(`applies`: at least one of its calls is a candidate; `fails`: none is;
+`inactive`: its module is off for this side; `filtered`: with `--call`,
+neither a candidate nor a rejection for that call), `candidates` and
+`rejected` (that rule's entries, shaped as above: one per binding or call)
+and `reasons` (one line each). A SPEC that names no rule is an error that
+lists the near matches.
 
 ### Stability
 

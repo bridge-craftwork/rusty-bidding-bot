@@ -127,7 +127,7 @@ local checkouts").
   Rick's dated rulings, probe specs, corpus measurements) and where they
   differ from that source; "standard practice, not yet cited" when that
   is the truth (docs/CONTRACT.md, Part 2).
-- `./dev-build.sh run -q -p rbb-cli -- bid rules -a "1C P 1D 1H" [-d N] [-v NS] [-c CARD] [--set path=value]... [--rules DIR] [--call 2D] [--all] [--no-knowledge] [--json]`:
+- `./dev-build.sh run -q -p rbb-cli -- bid rules -a "1C P 1D 1H" [-d N] [-v NS] [-c CARD] [--set path=value]... [--rules DIR] [--call 2D] [--rule SPEC]... [--all] [--no-knowledge] [--json]`:
   which rules can make the next call after an auction, asked of the
   engine (`Engine::rules_at`, the candidate list `call` ranks a hand
   against): each with module, file:line, the concrete call (pattern
@@ -141,7 +141,9 @@ local checkouts").
   of its `when`, legality) and the modules the card leaves off. Card
   default `21GF-DEFAULT`; JSON shape in docs/CONTRACT.md. **Use this, not
   grep or sed over `.bid` files, to find which rules apply after an
-  auction**; grep stays for finding text and comments.
+  auction**; grep stays for finding text and comments. To troubleshoot a
+  rule, `--rule file:line` (or a module, `module:line`, a file; repeatable):
+  its verdict here, matched or not, and why.
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
   `--knowledge` reviews the auction so far first). `call --batch -c <card>`

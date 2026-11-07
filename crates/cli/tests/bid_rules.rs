@@ -285,3 +285,108 @@ fn text_form_prints_the_review_and_the_rules() {
     // The review of the auction so far comes first.
     assert!(out.find("1NT").unwrap() < out.find("South to call").unwrap());
 }
+
+fn selection(v: &Value) -> &Vec<Value> {
+    v["selection"].as_array().expect("a selection")
+}
+
+#[test]
+fn rule_that_applies_reports_its_entry() {
+    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", "rebids.bid:725"]);
+    let s = selection(&v);
+    assert_eq!(s.len(), 1);
+    assert_eq!(s[0]["verdict"], "applies");
+    assert_eq!(s[0]["rule"]["line"], 725);
+    let c = &s[0]["candidates"][0];
+    assert_eq!(c["call"], "2D");
+    assert_eq!(c["bindings"]["z"], "D");
+    assert!(c["rank"].as_u64().unwrap() >= 1);
+    // The listing keeps its shape, narrowed to the selection.
+    assert!(v["candidates"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .all(|c| c["rule"]["line"] == 725));
+}
+
+#[test]
+fn rule_rejected_by_after_says_which_line() {
+    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", "base/rebids.bid:57"]);
+    let s = &selection(&v)[0];
+    assert_eq!(s["verdict"], "fails");
+    assert_eq!(s["rejected"][0]["stage"], "after");
+    assert!(s["reasons"][0]
+        .as_str()
+        .unwrap()
+        .contains("`1x (P) 1y (P)`: no alternative matches"));
+}
+
+#[test]
+fn rule_rejected_by_when_names_the_conjunct() {
+    let v = rules_json(&[
+        "-a",
+        "1N P",
+        "--set",
+        "general.style=bba",
+        "--rule",
+        "stayman.bid:19",
+    ]);
+    let s = &selection(&v)[0];
+    assert_eq!(s["verdict"], "fails");
+    assert_eq!(s["rejected"][0]["stage"], "when");
+    assert!(s["reasons"][0]
+        .as_str()
+        .unwrap()
+        .contains("`style is not bba` is false"));
+    // Without --all, the text form still reports it.
+    let text = rbb(&[
+        "bid",
+        "rules",
+        "-c",
+        "cards/bbsa/21GF-DEFAULT.bbsa",
+        "-a",
+        "1N P",
+        "--set",
+        "general.style=bba",
+        "--no-knowledge",
+        "--rule",
+        "stayman.bid:19",
+    ]);
+    assert!(text.contains("DOES NOT APPLY"), "{text}");
+}
+
+#[test]
+fn module_selection_and_inactive_module() {
+    let v = rules_json(&["-a", "1N P", "--rule", "jacoby-transfers", "--call", "2D"]);
+    let s = selection(&v);
+    assert!(s.len() > 2);
+    assert!(s.iter().all(|x| x["rule"]["module"] == "jacoby-transfers"));
+    assert!(s
+        .iter()
+        .any(|x| x["verdict"] == "applies" && x["candidates"][0]["call"] == "2D"));
+    let off = rules_json(&[
+        "-a",
+        "1N P",
+        "--set",
+        "notrump.jacoby_transfers.play=false",
+        "--rule",
+        "jacoby-transfers:19",
+    ]);
+    let s = &selection(&off)[0];
+    assert_eq!(s["verdict"], "inactive");
+    assert!(s["reasons"][0].as_str().unwrap().contains("is off"));
+}
+
+#[test]
+fn bad_rule_spec_lists_near_matches() {
+    for (spec, near) in [("rebids.bid:726", "rebids.bid:725"), ("stayma", "stayman")] {
+        let out = Command::new(env!("CARGO_BIN_EXE_rbb"))
+            .args(["bid", "rules", "-a", "1N P", "--rule", spec])
+            .current_dir(ROOT)
+            .output()
+            .unwrap();
+        assert!(!out.status.success());
+        let err = String::from_utf8_lossy(&out.stderr);
+        assert!(err.contains(near), "{spec}: {err}");
+    }
+}
