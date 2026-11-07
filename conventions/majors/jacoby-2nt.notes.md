@@ -36,6 +36,38 @@ without it **+99 IMPs** (halves +46 / +53, agree; distance from par
 +99, 209 boards changed). "Short of slam" 1,021 → 981 boards
 (12,559 → 12,051 IMPs); "overbid" 433 → 461 (6,111 → 6,524).
 
+## Opener passes 4M without 19+ (Rick, 2026-11-07)
+
+Rick, of modified Jacoby, applied here too as the controller asked:
+
+> "modified jacoby 2nt is mostly useful because responder can jump to
+> game with no slam interest, after a 3C rebid by opener. the main
+> advantage is that it doesn't give the defenders any clues to opener's
+> distribution. so we don't want to always ask. but with say 15+ HCP,
+> responder should probably ask. normally opener doesn't continue for
+> slam exploration after responder chooses not to try, unless opener
+> has 19+ points"
+
+After any of opener's answers (3x shortness, 3NT, 3M, 4x) responder's
+4M ends the auction unless opener holds 19+ points (`P`, priority 16,
+above the keycard ask and the control bids); with 19+ the slam modules
+decide as before. Before, opener with 17-18 and a singleton asked for
+keycards over the sign-off (rkcb-1430's ask on `slam_values`).
+
+Measured against the version before it (265c925; compare `--par-all`,
+the 5,000 Jacoby/splinter boards, standard card; errors_diff): 406
+boards changed; the bidding side's contract errors **−887 IMPs**
+(halves −307 / −580, agree); distance from par −875. All of it is
+opener's pass: `P 4H P : 4N -> P` −675 on 207, `P 4S P : 4N -> P` −212
+on 199; "short of slam" 981 → 1,204 boards (12,051 → 14,899 IMPs),
+"overbid" 461 → 369. Rick's ruling stands; double dummy cannot see
+the defence's side of it, but here the cost is mostly slams opener's
+17-18 used to find, so it is a question for Rick (below).
+
+Open: with standard Jacoby opener's 3x says nothing of strength
+(10-21), so responder's 4M is not a decline after a limited hand as in
+modified Jacoby. Should the 19+ line hold here, or lower (17+)?
+
 ## Sources
 
 - Jacoby 2NT: Oswald Jacoby's game-forcing raise; the answers as
@@ -45,3 +77,6 @@ without it **+99 IMPs** (halves +46 / +53, agree; distance from par
 - Working values after the shortness: Rick, 2026-11-07, quoted above;
   the threshold is our calibration (slam-entry.notes.md, "Working
   values").
+- Opener's pass over 4M without 19+: Rick, 2026-11-07 (quoted above),
+  given for modified Jacoby and applied here at the controller's
+  request.

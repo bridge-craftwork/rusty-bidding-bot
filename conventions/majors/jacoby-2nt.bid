@@ -46,3 +46,11 @@ after 1M (P) 2N (P) 3x (P) when jacoby, !modified, x is not M
       sets  ask=aces
       artificial
       priority 14
+
+# Opener after responder's 4M over his answer (Rick, 2026-11-07):
+# "normally opener doesn't continue for slam exploration after
+# responder chooses not to try, unless opener has 19+ points."
+after 1M (P) 2N (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3N (P) 4M (P) | 1M (P) 2N (P) 4x (P) 4M (P) when jacoby, !modified
+  P   "Responder declined: no slam without 19+"
+      shows points <= 18
+      priority 16
