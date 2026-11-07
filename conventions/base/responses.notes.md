@@ -436,6 +436,26 @@ Question for Rick.
 
 Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): 1M-3M 0% -> 100% of 2,678 boards; 1M-1NT stays 100% of 3,409; Soloway 92% ignoring the artificial flag, as before the card turned it on (0% without the 16+ floor).
 
+## The weak three-card raise goes through 1NT on 2/1 cards (Rick, 2026-11-06)
+
+bridge-classroom-bug-artifacts #87: Rick bid 1♠-1NT-2♥-2♠ with
+Q72.97.AT8742.J2 (7 HCP) and wants the preference read as "2S or 3S
+with 5-7 support pts". On the 2/1 cards (`two_over_one.play`, where
+the 1NT is 6-12, forcing, semi-forcing or not):
+
+- The 1NT is now read as holding a three-card raise with 6-7 HCP.
+- Rusty's direct single raise with three trumps needs 8 support
+  points (constructive), so a flat 6-7 bids 1NT. With four spades over
+  1♥ there is no 1NT, so it still raises.
+- Four trumps raise as before.
+- A passed hand raises as before, since its 1NT is not forcing.
+- The Brill card and `style=bba` keep their own raises.
+
+The preference itself is in responder-rebids.bid (see its notes). The
+band is in HCP, not support points: see the question there.
+
+**Measured:** see responder-rebids.notes.md, the #87 section.
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
@@ -465,3 +485,7 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
   12; the thresholds measured on that set, the corpus and the 21GF
   random set (the section above). No probe: BBA's bare card answers the
   four-trump hands with Bergen, so it cannot show a plain-SAYC choice.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #87): the weak
+  three-card raise goes through 1NT on 2/1 cards. The 6-7 HCP reading
+  and the 8-support-point constructive raise are our decisions (standard 2/1 practice,
+  not yet cited).
