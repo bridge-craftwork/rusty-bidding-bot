@@ -28,6 +28,7 @@ module rebids "Opener's rebid"
   param  style21 = major_openings.two_over_one.rebid_style default bergen
   param  semi = major_openings.one_nt_response.semi_forcing default false
   param  twalsh = minor_openings.one_club.transfer_resp default false
+  param  rkcb = slam.rkcb.play default false
 
 # A notrump jump reaches 3NT at most: the last bid is below 2NT, so the
 # cheapest notrump bid is 2NT or lower. In a suit's terms: the cheapest
@@ -123,9 +124,9 @@ after 1C (P) 1D (P) when !tw(C)
       when  style is not bba | S>=4 | !walsh
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18, S>H
       when  style is not bba | !walsh
-  2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+  2H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game, ask=js(H, C, D)
       when  style is not bba
-  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
+  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game, ask=js(S, C, D)
       when  style is not bba
   # BBA (Walsh style: responder bypasses diamonds with a weak hand and a
   # major) rebids 1NT with 12-17 and one four-card major, even 5-4 with a
@@ -134,9 +135,9 @@ after 1C (P) 1D (P) when !tw(C)
       shows hcp=12..17, H<=4, S<=4, H<=3 | S<=3, C<=5, D<=4, shortest>=2 | C=5
       when  style is bba, walsh               # Walsh off: up the line, as above
       priority 2
-  2H  "Jump shift: 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game
+  2H  "Jump shift: 4+ hearts, 18+"   shows H>=4, hcp>=18, H>=S   sets forcing=game, ask=js(H, C, D)
       when  style is bba
-  2S  "Jump shift: 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game
+  2S  "Jump shift: 4+ spades, 18+"   shows S>=4, hcp>=18, S>H   sets forcing=game, ask=js(S, C, D)
       when  style is bba
 after 1C (P) 1H (P) when !tw(C)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
@@ -144,15 +145,15 @@ after 1C (P) 1H (P) when !tw(C)
       priority 2                           # four spades: 1S before 1NT
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
       priority 1
-  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
-  3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
+  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game, ask=js(S, C, H)
+  3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game, ask=js(D, C, H)
 after 1C (P) 1S (P) when !tw(C)
   2D  "Reverse: 4+ diamonds, longer clubs, 17+"  shows D>=4, C>D, suit_points>=17  sets forcing=round
       priority 1
   2H  "Reverse: 4+ hearts, longer clubs, 17+"    shows H>=4, C>H, suit_points>=17  sets forcing=round
       priority 1
-  3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game
-  3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+  3D  "Jump shift: 4+ diamonds, 19+"       shows D>=4, suit_points>=19   sets forcing=game, ask=js(D, C, S)
+  3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game, ask=js(H, C, S)
 after 1D (P) 1H (P)
   1S  "4+ spades, up to 18"                shows S>=4, suit_points<=18
       when  H<=3                           # four hearts: raise first
@@ -164,8 +165,8 @@ after 1D (P) 1H (P)
       when  style is bba
       priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
-  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game
-  3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
+  2S  "Jump shift: 4+ spades, 19+"         shows S>=4, suit_points>=19   sets forcing=game, ask=js(S, D, H)
+  3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game, ask=js(C, D, H)
 after 1D (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
   1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, S<=3
@@ -176,8 +177,8 @@ after 1D (P) 1S (P)
       priority 1                           # BBA: 1NT before 2C, but 2C with 14
   2H  "Reverse: 4+ hearts, longer diamonds, 17+"  shows H>=4, D>H, suit_points>=17  sets forcing=round
       priority 1
-  3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game
-  3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game
+  3C  "Jump shift: 4+ clubs, 19+"          shows C>=4, suit_points>=19   sets forcing=game, ask=js(C, D, S)
+  3H  "Jump shift: 4+ hearts, 19+"         shows H>=4, suit_points>=19   sets forcing=game, ask=js(H, D, S)
 after 1H (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18
   2D  "4+ diamonds, up to 18"              shows D>=4, suit_points<=18, D>=C | C<=3
@@ -1278,6 +1279,20 @@ after 1C (P) 1D (1y) | 1C (P) 1D (2y) when y is H | y is S
       when  rho.last=2H
       sets  ask=minor_x(S, C, H)
       priority 1
+  # Unbalanced too (Rick 2026-11-07, "4: yes"; BBA "15 to 21 total
+  # points", probes/opnj-1C-1D-1S.toml, -2H.toml: 13 and 34 of 120 strong
+  # hands, all 17-18 HCP with four of the major and five clubs; 19+
+  # reverses): 15-18 HCP, three or four of the major, longer clubs.
+  X   "Three or four hearts, 15-18, longer clubs"
+      shows !balanced, H=3..4, D<=3, C>H, C<=5, hcp=15..18
+      when  rho.last=1S
+      sets  ask=minor_x(H, C, S)
+      priority 1
+  X   "Three or four spades, 15-18, longer clubs"
+      shows !balanced, S=3..4, D<=3, C>S, C<=5, hcp=15..18
+      when  rho.last=2H
+      sets  ask=minor_x(S, C, H)
+      priority 1
 # Opener's third call after the double and responder's weak answer
 # (back to clubs, five diamonds, four of the major; all `ask=signoff`):
 # 14-16 passes, 17-18 bids on (Rick 2026-11-07: "yes to 1 and 2"). BBA
@@ -1336,22 +1351,22 @@ after 1C (P) 1D (1y) X (P) * (P) | 1C (P) 1D (2y) X (P) * (P) when y is H | y is
 # one-level overcall, 18+ (1D P 1H (1S) 3C). Forcing to game.
 after 1m (P) 1z (1y) | 1m (P) 1z (2y) when y is not m, z is not m, z is not y
   2H  "Reverse: four or more hearts, longer {m}, 19+, forcing to game"
-      shows H>=4, m>H, points>=19, !balanced   # balanced: notrump
+      shows H>=4, m>H, !balanced, hcp>=19 | (points>=19, m>=6 | H>=5)   # balanced: notrump; 17-18 with 5-4: the double
       when  z is D, y is not H
       sets  forcing=game, ask=rev(H, m, y, z)
       priority 1
   2H  "Reverse: four or more hearts, longer {m}, 19+, forcing to game"
-      shows H>=4, m>H, points>=19, S<=2, !balanced
+      shows H>=4, m>H, S<=2, !balanced, hcp>=19 | (points>=19, m>=6 | H>=5)
       when  z is S, y is not H
       sets  forcing=game, ask=rev(H, m, y, z)
       priority 1
   2S  "Reverse: four or more spades, longer {m}, 19+, forcing to game"
-      shows S>=4, m>S, points>=19, !balanced
+      shows S>=4, m>S, !balanced, hcp>=19 | (points>=19, m>=6 | S>=5)
       when  z is D, y is not S, cheapest_rank(S)>=13   # 1S is natural (1C P 1D (1H), below)
       sets  forcing=game, ask=rev(S, m, y, z)
       priority 1
   2S  "Reverse: four or more spades, longer {m}, 19+, forcing to game"
-      shows S>=4, m>S, points>=19, H<=2, !balanced
+      shows S>=4, m>S, H<=2, !balanced, hcp>=19 | (points>=19, m>=6 | S>=5)
       when  z is H, y is not S
       sets  forcing=game, ask=rev(S, m, y, z)
       priority 1
@@ -1369,6 +1384,22 @@ after 1m (P) 1z (1y) | 1m (P) 1z (2y) when y is not m, z is not m, z is not y
 # game in the fit responder raised, 3NT with their suit held, else game
 # in the minor (BBA, probes/opns-r-1C-1D-2H-2S.toml and relatives).
 when answered rev(w, m, y, z), partner.last!=3N, partner.last!=4H, partner.last!=4S, partner.last!=5C, partner.last!=5D
+  # Slam: the keycard ask in the agreed suit with 30 between us on
+  # partner's floor (Rick 2026-11-07: "5: yes"; BBA asks after the raise
+  # and the minor try). Without it, game. Responder's 4m is forcing
+  # (Rick: "for our default, let's make it forcing").
+  4N  "Keycard ask in {w}"
+      when  rkcb, w is H | w is S, we.trump is w, partner.last=3{w}
+      shows tp(w) + partner.hcp.min >= 29     # support points: shortness counts in the fit
+      sets  ask=keycards(w)
+      artificial
+      priority 3
+  4N  "Keycard ask in {m}"
+      when  rkcb, we.trump is m, partner.last=4{m}
+      shows points + partner.hcp.min >= 30
+      sets  ask=keycards(m)
+      artificial
+      priority 3
   4{w} "Game in {w}"                        shows w>=4
       when  w is H | w is S, we.trump is w
       priority 2
@@ -1381,10 +1412,44 @@ when answered rev(w, m, y, z), partner.last!=3N, partner.last!=4H, partner.last!
   4{z} "Three {z}: game in the fit"         shows z>=3
       when  z is H | z is S, partner.last=3{z}
       priority 1
-  5{m} "Game in {m}"
+  5{m} "Game in {m}: a minimum for slam"
       when  partner.last=3{m} | partner.last=4{m}
   5{m} "No stopper: game in {m}"
       priority -3
+# Opener after responder's answer to his uncontested jump shift: as
+# after the strong new suit in competition (above), without a suit of
+# theirs to stop.
+when answered js(w, m, z), partner.last!=3N, partner.last!=4H, partner.last!=4S, partner.last!=5C, partner.last!=5D
+  4N  "Keycard ask in {w}"
+      when  rkcb, w is H | w is S, we.trump is w, partner.last=3{w}
+      shows tp(w) + partner.hcp.min >= 29     # support points: shortness counts in the fit
+      sets  ask=keycards(w)
+      artificial
+      priority 3
+  4N  "Keycard ask in {m}"
+      when  rkcb, we.trump is m, partner.last=4{m}
+      shows points + partner.hcp.min >= 30
+      sets  ask=keycards(m)
+      artificial
+      priority 3
+  4{w} "Game in {w}"
+      when  w is H | w is S, we.trump is w
+      priority 2
+  5{w} "Game in {w}"
+      when  w is C | w is D, we.trump is w
+      priority 2
+  4{z} "Three {z}: game in the fit"         shows z>=3
+      when  z is H | z is S, partner.last=3{z} | partner.last=2{z}
+      priority 2
+  3N  "No fit for {z}: 3NT"
+      when  we.trump is none | we.trump is m | we.trump is z
+      priority 1
+  5{m} "Game in {m}: a minimum for slam"
+      when  partner.last=3{m} | partner.last=4{m}
+      priority 1
+  5{m} "Game in {m}"
+      priority -3
+
 # 1D P 1H (1S) 2C: five-five in the minors, 13-17 (Rick 2026-11-07, "6:
 # yes"; BBA "13 to 17 total points", 7 of 120 strong hands and 9 of 160
 # others, probes/opns-1D-1H-1S.toml, opnj-1D-1H-1S.toml). Not forcing.

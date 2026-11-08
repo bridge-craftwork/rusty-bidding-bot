@@ -1083,6 +1083,18 @@ Rick: **"3: yes. 5: yes 6: yes"** (rebids.notes.md). Responder's side:
 - After opener's 14-count raise to 3H (an invitation) the major
   invitation's answer; after his 2D / 3D or 1NT, pass.
 
+### The 4m try and keycard after the strong new suit (Rick, 2026-11-07, third round)
+
+Rick: **"for our default, let's make it forcing"** (responder's 4m after
+opener's jump shift; Minorwood on the card makes it keycard once the
+minor is agreed, untouched) and **"5: yes"** (keycard). Over the strong
+new suit (`ask=rev`) and now over the uncontested jump shift after a
+minor opening (`ask=js`): 3m a minimum (to 6) when there is room, 4m
+three or more with 7+ (BBA's "try"), forcing; 4NT keycard with a fit
+and 32 between us on opener's floor (a minor needs four cards opposite
+the uncontested jump shift); over the uncontested jump shift 3NT with no
+fit, balanced, to 11, ahead of the minor. Measured in rebids.notes.md.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -1155,3 +1167,5 @@ Rick: **"3: yes. 5: yes 6: yes"** (rebids.notes.md). Responder's side:
   notrump over opener's 1S); "3: yes. 5: yes 6: yes". Responder's
   continuations from the grids `probes/opns-r-*.toml` (21GF-GIB,
   2026-11-07), with a stopper for notrump. Not cited to a book.
+- **Rick, 2026-11-07** (third round): 4m forcing after the jump shift;
+  keycard "5: yes". The thresholds are our decision (rebids.notes.md).
