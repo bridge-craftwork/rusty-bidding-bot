@@ -127,6 +127,23 @@ local checkouts").
   Rick's dated rulings, probe specs, corpus measurements) and where they
   differ from that source; "standard practice, not yet cited" when that
   is the truth (docs/CONTRACT.md, Part 2).
+- `./dev-build.sh run -q -p rbb-cli -- bid rules -a "1C P 1D 1H" [-d N] [-v NS] [-c CARD] [--set path=value]... [--rules DIR] [--call 2D] [--rule SPEC]... [--all] [--no-knowledge] [--json]`:
+  which rules can make the next call after an auction, asked of the
+  engine (`Engine::rules_at`, the candidate list `call` ranks a hand
+  against): each with module, file:line, the concrete call (pattern
+  variables bound), meaning, alert/artificial/`sets`, priority and
+  descriptiveness, in the engine's order; its `shows` as written and as
+  partner reads it, its `when` with what the auction settles folded in;
+  the same call from other rules, which one partner reads it by, and a
+  pass a force rules out. The review of the auction so far comes first
+  (as `explain-auction`). `--call` keeps one call; `--all` adds every
+  rule that failed and why (`after` line, context `when`, the public part
+  of its `when`, legality) and the modules the card leaves off. Card
+  default `21GF-DEFAULT`; JSON shape in docs/CONTRACT.md. **Use this, not
+  grep or sed over `.bid` files, to find which rules apply after an
+  auction**; grep stays for finding text and comments. To troubleshoot a
+  rule, `--rule file:line` (or a module, `module:line`, a file; repeatable):
+  its verdict here, matched or not, and why.
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
   `--knowledge` reviews the auction so far first). `call --batch -c <card>`
@@ -249,6 +266,20 @@ local checkouts").
   `[Note]`s for alerts, `--all-meanings` for every call). Uses the rules
   compiled into the binary unless `--rules`; cards may be stock names
   (`21GF-DEFAULT`). docs/RELEASING.md covers it and the release builds.
+  `--json` (alias `--summary`): one JSON line per board instead of PBN
+  (board, dealer, vul, deal, the auction with each call's rule, alert and
+  meaning, contract, declarer, and with the file's double-dummy table or
+  `--par` the contract's tricks and score and par; docs/CONTRACT.md).
+  **Read that, not `grep -A6 Contract` over the PBN.**
+- **`--rules-at <git-ref>`** (`compare`, `bid-pbn`, `call`,
+  `explain-auction`, `bid rules`): the rules directory (`--rules`, default
+  `conventions`) as it was at that commit of the current repository, read
+  from git in memory, named and ordered as the working tree's files are, so
+  before/after runs line up; refused with a clear message for a ref that is
+  not a commit or a rule language this binary does not read. Before/after a
+  rules change: `compare --rules-at main ... --json a.json` and `compare ...
+  --json b.json` with one binary. **Use it instead of copying `conventions/`
+  or binaries.** (An engine change still needs two binaries.)
 - `target/release/rbb dd FILE.pbn...`: double-dummy table and par of every
   distinct deal in PBN files, one JSON line each (tricks by declarer N E S
   W and strain C D H S NT, `par_ns`, `par`, `par_rank`), cached with

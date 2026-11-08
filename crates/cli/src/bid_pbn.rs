@@ -53,54 +53,14 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
     let mut doc = PbnDocument::parse(&strip_owned_header(input)).map_err(|e| e.to_string())?;
     let boards = doc.boards().to_vec();
 
-    let results: Vec<Result<(Direction, DealAuction), String>> = boards
-        .par_iter()
-        .map(|board| {
-            let mut hands: [Hand; 4] = Default::default();
-            for dir in [
-                Direction::North,
-                Direction::East,
-                Direction::South,
-                Direction::West,
-            ] {
-                let h = board.deal.hand(dir);
-                if h.len() != 13 {
-                    return Err(format!(
-                        "{} has {} cards; every hand needs 13",
-                        dir.to_char(),
-                        h.len()
-                    ));
-                }
-                hands[dir.to_index()] = h.clone();
-            }
-            let dealer = board.dealer.unwrap_or(Direction::North);
-            let scoring = opts
-                .scoring
-                .or_else(|| board.extra_tag("Scoring").and_then(ScoringMethod::from_pbn))
-                .unwrap_or_default();
-            engine
-                .bid_deal(
-                    &hands,
-                    dealer,
-                    board.vulnerable,
-                    scoring,
-                    &opts.prefix,
-                    opts.max_calls,
-                )
-                .map(|a| (dealer, a))
-        })
-        .collect();
+    let results = bid_boards(&boards, engine, opts);
 
     let mut stats = Stats {
         deals: boards.len(),
         ..Stats::default()
     };
     for (idx, (board, result)) in boards.iter().zip(&results).enumerate() {
-        let label = board
-            .board_id
-            .clone()
-            .or(board.number.map(|n| n.to_string()))
-            .unwrap_or_else(|| (idx + 1).to_string());
+        let label = label(board, idx);
         let e = |e: bridge_encodings::ParseError| format!("board {label}: {e}");
         if let Some(event) = &opts.event {
             doc.set_tag(idx, "Event", event).map_err(e)?;
@@ -139,14 +99,7 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
                     );
                 }
                 let (rows, notes) = annotated_auction(auction, opts.all_meanings);
-                let mut a = Auction::new(*dealer);
-                calls.extend(std::iter::repeat_n(Call::Pass, 3));
-                for c in calls {
-                    if a.is_complete() {
-                        break;
-                    }
-                    a.add_call(c);
-                }
+                let a = finished(*dealer, &mut calls);
                 let (contract, declarer) = match a.final_contract() {
                     Some(fc) => (fc.to_pbn(), fc.declarer.to_char().to_string()),
                     None => ("Pass".to_string(), String::new()),
@@ -181,6 +134,169 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
     ];
     let mut out: String = header.iter().map(|l| format!("{l}{newline}")).collect();
     out.push_str(&doc.to_pbn());
+    Ok((out, stats))
+}
+
+/// Bid every board (in parallel), each from its dealer: the dealer and the
+/// auction, or why the board cannot be bid.
+fn bid_boards(
+    boards: &[bridge_types::Board],
+    engine: &Engine,
+    opts: &Options,
+) -> Vec<Result<(Direction, DealAuction), String>> {
+    boards
+        .par_iter()
+        .map(|board| {
+            let mut hands: [Hand; 4] = Default::default();
+            for dir in [
+                Direction::North,
+                Direction::East,
+                Direction::South,
+                Direction::West,
+            ] {
+                let h = board.deal.hand(dir);
+                if h.len() != 13 {
+                    return Err(format!(
+                        "{} has {} cards; every hand needs 13",
+                        dir.to_char(),
+                        h.len()
+                    ));
+                }
+                hands[dir.to_index()] = h.clone();
+            }
+            let dealer = board.dealer.unwrap_or(Direction::North);
+            engine
+                .bid_deal(
+                    &hands,
+                    dealer,
+                    board.vulnerable,
+                    scoring_of(board, opts),
+                    &opts.prefix,
+                    opts.max_calls,
+                )
+                .map(|a| (dealer, a))
+        })
+        .collect()
+}
+
+fn scoring_of(board: &bridge_types::Board, opts: &Options) -> ScoringMethod {
+    opts.scoring
+        .or_else(|| board.extra_tag("Scoring").and_then(ScoringMethod::from_pbn))
+        .unwrap_or_default()
+}
+
+/// The board's name: `[Board]`, its number, else its place in the file.
+fn label(board: &bridge_types::Board, idx: usize) -> String {
+    board
+        .board_id
+        .clone()
+        .or(board.number.map(|n| n.to_string()))
+        .unwrap_or_else(|| (idx + 1).to_string())
+}
+
+/// The auction from `dealer`, finished with passes when it stopped early
+/// (`max_calls`).
+fn finished(dealer: Direction, calls: &mut Vec<Call>) -> Auction {
+    let mut a = Auction::new(dealer);
+    calls.extend(std::iter::repeat_n(Call::Pass, 3));
+    for c in calls.drain(..) {
+        if a.is_complete() {
+            break;
+        }
+        a.add_call(c);
+    }
+    a
+}
+
+/// `bid-pbn --json`: one JSON object a board, one line each, in file
+/// order. The shape is in docs/CONTRACT.md ("`rbb bid-pbn --json`"). A
+/// board that cannot be bid is `{board, error}`. `solve` solves the boards
+/// that carry no double-dummy table.
+pub fn bid_json(
+    input: &str,
+    engine: &Engine,
+    opts: &Options,
+    solve: Option<&rbb_compare::par::DdCache>,
+) -> Result<(String, Stats), String> {
+    let doc = PbnDocument::parse(&strip_owned_header(input)).map_err(|e| e.to_string())?;
+    let boards = doc.boards().to_vec();
+    let results = bid_boards(&boards, engine, opts);
+    let mut stats = Stats {
+        deals: boards.len(),
+        ..Stats::default()
+    };
+    let mut out = String::new();
+    for (idx, (board, result)) in boards.iter().zip(&results).enumerate() {
+        let label = label(board, idx);
+        let row = match result {
+            Err(msg) => {
+                stats.errors += 1;
+                eprintln!("board {label}: {msg}");
+                serde_json::json!({ "board": label, "error": msg })
+            }
+            Ok((dealer, auction)) => {
+                stats.auctions += 1;
+                if !auction.complete {
+                    stats.runaway += 1;
+                }
+                let calls: Vec<serde_json::Value> = auction
+                    .calls
+                    .iter()
+                    .map(|c| {
+                        let s = &c.step;
+                        let explained =
+                            s.rule.is_some() && (opts.all_meanings || s.alert.is_some());
+                        serde_json::json!({
+                            "seat": s.caller.to_char().to_string(),
+                            "call": s.call.to_pbn(),
+                            "rule": s.rule.as_ref().map(|r| format!("{}:{}", r.file, r.line)),
+                            "alert": match &s.alert {
+                                Some(bidspec::ast::Alert::Alert { .. }) => Some("alert"),
+                                Some(bidspec::ast::Alert::Announce { .. }) => Some("announce"),
+                                None => None,
+                            },
+                            "meaning": explained.then(|| s.explanation.clone().unwrap_or_default()),
+                            "shown": opts.all_meanings.then(|| s.knowledge.summary()),
+                        })
+                    })
+                    .collect();
+                let mut played: Vec<Call> =
+                    auction.calls.iter().map(|c| c.step.call.clone()).collect();
+                let a = finished(*dealer, &mut played);
+                let fc = a.final_contract();
+                let table = board
+                    .double_dummy_tricks
+                    .filter(|t| !t.is_null())
+                    .map(|t| (t, "file"))
+                    .or_else(|| solve.map(|c| (c.table(&board.deal), "solved")));
+                let mut v = serde_json::json!({
+                    "board": label,
+                    "dealer": dealer.to_char().to_string(),
+                    "vul": board.vulnerable.to_pbn(),
+                    "deal": board.deal.to_pbn(Direction::North),
+                    "scoring": scoring_tag(scoring_of(board, opts)),
+                    "auction": auction.calls.iter().map(|c| c.step.call.to_pbn()).collect::<Vec<_>>(),
+                    "calls": calls,
+                    "complete": auction.complete,
+                    "contract": fc.as_ref().map_or("Pass".to_string(), |f| f.to_pbn()),
+                    "declarer": fc.as_ref().map(|f| f.declarer.to_char().to_string()),
+                });
+                if let Some((t, source)) = table {
+                    let (par_ns, par) = rbb_compare::par::par_ns(&t, board.vulnerable);
+                    v["dd"] = serde_json::json!({
+                        "tricks": fc.as_ref().map(|f| t.tricks(f.declarer, f.strain)),
+                        "score_ns": rbb_compare::par::score_ns(fc.as_ref(), &t, board.vulnerable),
+                        "par_ns": par_ns,
+                        "par": par,
+                        "source": source,
+                    });
+                }
+                v
+            }
+        };
+        out.push_str(&row.to_string());
+        out.push('\n');
+    }
     Ok((out, stats))
 }
 
@@ -282,14 +398,20 @@ fn strip_owned_header(text: &str) -> String {
 }
 
 /// Read, bid, write. `output` `-` is stdout.
+/// With `json`, JSON lines instead of PBN (`bid_json`; `Some(cache)`
+/// solves the boards without a table).
 pub fn run_files(
     input: &Path,
     output: &Path,
     engine: &Engine,
     opts: &Options,
+    json: Option<Option<&rbb_compare::par::DdCache>>,
 ) -> Result<Stats, String> {
     let text = std::fs::read_to_string(input).map_err(|e| format!("{}: {e}", input.display()))?;
-    let (out, stats) = bid_pbn(&text, engine, opts)?;
+    let (out, stats) = match json {
+        Some(solve) => bid_json(&text, engine, opts, solve)?,
+        None => bid_pbn(&text, engine, opts)?,
+    };
     if output == Path::new("-") {
         print!("{out}");
     } else {
@@ -371,5 +493,61 @@ mod tests {
         let (out, stats) = bid_pbn(&bad, &engine(), &opts()).unwrap();
         assert_eq!(stats.errors, 1);
         assert!(!out.contains("[Auction"), "{out}");
+    }
+
+    fn json_rows(out: &str) -> Vec<serde_json::Value> {
+        out.lines()
+            .map(|l| serde_json::from_str(l).unwrap())
+            .collect()
+    }
+
+    #[test]
+    fn json_lines_carry_the_auction_contract_and_dd() {
+        let (out, stats) = bid_json(INPUT, &engine(), &opts(), None).unwrap();
+        assert_eq!((stats.deals, stats.auctions), (1, 1));
+        let rows = json_rows(&out);
+        assert_eq!(rows.len(), 1);
+        let r = &rows[0];
+        assert_eq!(r["board"], "1");
+        assert_eq!(r["dealer"], "N");
+        assert_eq!(r["vul"], "None");
+        assert_eq!(r["auction"][0], "1NT");
+        assert_eq!(r["calls"][0]["alert"], "announce");
+        assert_eq!(r["calls"][2]["call"], "2D");
+        assert_eq!(r["calls"][2]["meaning"], "Transfer to hearts");
+        // A call nobody alerts carries no meaning without --all-meanings.
+        assert!(r["calls"][1]["meaning"].is_null());
+        assert!(r["calls"][0]["shown"].is_null());
+        assert_eq!(r["complete"], true);
+        let contract = r["contract"].as_str().unwrap();
+        assert_ne!(contract, "7N");
+        assert!(r["declarer"].is_string());
+        // The same contract the PBN output writes.
+        let (pbn, _) = bid_pbn(INPUT, &engine(), &opts()).unwrap();
+        assert!(pbn.contains(&format!("[Contract \"{contract}\"]")), "{pbn}");
+
+        // With a solver, every board gets the contract's DD result.
+        let dir = std::env::temp_dir().join(format!("rbb-bidjson-{}", std::process::id()));
+        let cache = rbb_compare::par::DdCache::open(dir.join("dd.jsonl"));
+        let mut o = opts();
+        o.all_meanings = true;
+        let (out, _) = bid_json(INPUT, &engine(), &o, Some(&cache)).unwrap();
+        let r = &json_rows(&out)[0];
+        assert!(r["calls"][0]["shown"].as_str().unwrap().contains("HCP"));
+        let dd = &r["dd"];
+        assert!(dd["tricks"].as_u64().unwrap() <= 13, "{r}");
+        assert!(dd["score_ns"].is_i64(), "{r}");
+        assert!(dd["par"].is_string(), "{r}");
+        let _ = std::fs::remove_dir_all(dir);
+    }
+
+    #[test]
+    fn a_board_that_cannot_be_bid_is_an_error_row() {
+        let bad = INPUT.replace("987.64.T8765.A95", "987.64.T8765.A9");
+        let (out, stats) = bid_json(&bad, &engine(), &opts(), None).unwrap();
+        assert_eq!(stats.errors, 1);
+        let r = &json_rows(&out)[0];
+        assert_eq!(r["board"], "1");
+        assert!(r["error"].as_str().unwrap().contains("13"));
     }
 }

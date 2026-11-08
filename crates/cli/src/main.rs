@@ -7,6 +7,9 @@ use clap::{Parser, Subcommand};
 use rbb_engine::RuleSet;
 
 mod bid_pbn;
+mod bid_rules;
+mod rules_at;
+use bid_rules::{bid_rules, BidRulesArgs};
 mod coverage;
 mod dd;
 
@@ -42,6 +45,11 @@ enum Command {
         /// Directory of .bid modules.
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
+        /// Load the rules directory as it was at this git commit (a branch,
+        /// tag or hash of the current repository), not from the working
+        /// tree: for before/after comparisons without copying rules.
+        #[arg(long, value_name = "GIT_REF")]
+        rules_at: Option<String>,
         /// Score differing contracts against double-dummy par (slow the first
         /// time; results are cached).
         #[arg(long)]
@@ -254,6 +262,23 @@ enum Command {
         /// Directory of .bid modules; default: the rules built into rbb.
         #[arg(long)]
         rules: Option<PathBuf>,
+        /// The rules directory (`--rules`, default `conventions`) as it was
+        /// at this git commit of the current repository.
+        #[arg(long, value_name = "GIT_REF")]
+        rules_at: Option<String>,
+        /// Write one JSON line per board instead of PBN: board, dealer,
+        /// vul, deal, the auction and each call's rule, alert and meaning,
+        /// contract, declarer, and with a double-dummy table (the file's,
+        /// or with --par solved) the contract's tricks and score and par
+        /// (docs/CONTRACT.md).
+        #[arg(long, alias = "summary")]
+        json: bool,
+        /// With --json, solve the boards that carry no double-dummy table.
+        #[arg(long, requires = "json")]
+        par: bool,
+        /// Double-dummy cache file (shared with compare).
+        #[arg(long, default_value = ".rbb-cache/dd.jsonl")]
+        dd_cache: PathBuf,
     },
     /// Double-dummy tables and par for the deals of PBN files: one JSON
     /// line per distinct (deal, vulnerability), with the tricks by declarer
@@ -298,6 +323,11 @@ enum Command {
         /// Directory of .bid modules.
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
+        /// Load the rules directory as it was at this git commit (a branch,
+        /// tag or hash of the current repository), not from the working
+        /// tree: for before/after comparisons without copying rules.
+        #[arg(long, value_name = "GIT_REF")]
+        rules_at: Option<String>,
         /// Print the full decision as JSON.
         #[arg(long)]
         json: bool,
@@ -354,6 +384,11 @@ enum Command {
         /// Directory of .bid modules.
         #[arg(long, default_value = "conventions")]
         rules: PathBuf,
+        /// Load the rules directory as it was at this git commit (a branch,
+        /// tag or hash of the current repository), not from the working
+        /// tree: for before/after comparisons without copying rules.
+        #[arg(long, value_name = "GIT_REF")]
+        rules_at: Option<String>,
         /// Print the rows as JSON.
         #[arg(long)]
         json: bool,
@@ -422,6 +457,67 @@ enum BidCommand {
         /// Print the module inventory as JSON instead: each module's skills,
         /// the card fields it reads and its rule count, and every field the
         /// rule set reads (probes/tools/status_data.py, the status page).
+        #[arg(long)]
+        json: bool,
+    },
+    /// Ask the engine which rules can make the next call after an auction,
+    /// before the hand is known: every rule whose auction context (`after`,
+    /// context `when`, card parameters, asks, what the others have shown)
+    /// holds, ranked as the engine ranks them, with the conditions that
+    /// depend on the hand (`shows`, the hand parts of `when`) left as
+    /// conditions. Use this, not grep, to find what applies after an
+    /// auction.
+    Rules {
+        /// Calls so far, e.g. "1C P 1D 1H" (empty: the opening seat).
+        #[arg(short, long, default_value = "")]
+        auction: String,
+        /// Dealer: N, E, S or W.
+        #[arg(short, long, default_value = "N")]
+        dealer: char,
+        /// Vulnerability: None, NS, EW or All.
+        #[arg(short, long, default_value = "None")]
+        vul: String,
+        /// Scoring: MP or IMP.
+        #[arg(short, long, default_value = "MP")]
+        scoring: String,
+        /// Card for both sides: a .bbsa or card JSON file, or a stock card
+        /// name.
+        #[arg(short, long, default_value = "21GF-DEFAULT")]
+        card: String,
+        /// A different card for East-West.
+        #[arg(long)]
+        ew_card: Option<String>,
+        /// A card change for both sides, `path=value` (repeatable), as in
+        /// `compare --set`.
+        #[arg(long = "set")]
+        card_changes: Vec<String>,
+        /// Directory of .bid modules.
+        #[arg(long, default_value = "conventions")]
+        rules: PathBuf,
+        /// Load the rules directory as it was at this git commit (a branch,
+        /// tag or hash of the current repository), not from the working
+        /// tree: for before/after comparisons without copying rules.
+        #[arg(long, value_name = "GIT_REF")]
+        rules_at: Option<String>,
+        /// Only the rules for this call (PBN: 2S, 1NT, P, X).
+        #[arg(long)]
+        call: Option<String>,
+        /// Only these rules (repeatable), each with its verdict here,
+        /// matched or not and why: `file:line` (a path suffix is enough:
+        /// `rebids.bid:725`), a file (`rebids.bid`), a module (`rebids`) or
+        /// `module:line`.
+        #[arg(long = "rule")]
+        rule_specs: Vec<String>,
+        /// Also list the rules whose auction context, `when` or legality
+        /// failed, each with the reason, and the modules the card leaves
+        /// off.
+        #[arg(long)]
+        all: bool,
+        /// Leave out the review of the auction so far (text form).
+        #[arg(long)]
+        no_knowledge: bool,
+        /// Print the listing as JSON (`{seat, forced, candidates, rejected,
+        /// inactive, warnings, knowledge}`; docs/CONTRACT.md).
         #[arg(long)]
         json: bool,
     },
@@ -528,6 +624,7 @@ fn run(cli: Cli) -> Result<()> {
             pbs,
             limit,
             rules,
+            rules_at,
             par,
             par_all,
             dd_cache,
@@ -562,7 +659,18 @@ fn run(cli: Cli) -> Result<()> {
             if let Some(min) = min_coverage {
                 opts.scenarios = covered_scenarios(&opts, min)?;
             }
-            compare(&opts, filter, top, by_imps, worst, json.as_deref())
+            let rules_at = rules_at
+                .map(|r| rule_set(&opts.rules, Some(&r)))
+                .transpose()?;
+            compare(
+                &opts,
+                rules_at,
+                filter,
+                top,
+                by_imps,
+                worst,
+                json.as_deref(),
+            )
         }
         Command::Probe {
             hands,
@@ -803,9 +911,19 @@ fn run(cli: Cli) -> Result<()> {
             event,
             max_calls,
             rules,
+            rules_at,
+            json,
+            par,
+            dd_cache,
         } => {
             use bridge_types::{Call, ScoringMethod};
-            let rules = rules_from(rules.as_deref())?;
+            let rules = match &rules_at {
+                Some(r) => rule_set(
+                    rules.as_deref().unwrap_or(Path::new("conventions")),
+                    Some(r),
+                )?,
+                None => rules_from(rules.as_deref())?,
+            };
             let ew_card = ew_card.unwrap_or_else(|| ns_card.clone());
             let mut cards = [
                 card_or_stock(&rules.vocab, &ns_card)?,
@@ -837,7 +955,14 @@ fn run(cli: Cli) -> Result<()> {
                 ew_card,
             };
             let started = std::time::Instant::now();
-            let stats = bid_pbn::run_files(&input, &output, &engine, &opts)?;
+            let cache = par.then(|| rbb_compare::par::DdCache::open(dd_cache));
+            let stats = bid_pbn::run_files(
+                &input,
+                &output,
+                &engine,
+                &opts,
+                json.then_some(cache.as_ref()),
+            )?;
             eprintln!(
                 "{} deals, {} auctions, {} errors{} ({:.1}s)",
                 stats.deals,
@@ -864,6 +989,7 @@ fn run(cli: Cli) -> Result<()> {
             card,
             ew_card,
             rules,
+            rules_at,
             json,
             knowledge,
             batch,
@@ -876,6 +1002,7 @@ fn run(cli: Cli) -> Result<()> {
             &card,
             ew_card.as_deref(),
             &rules,
+            rules_at.as_deref(),
             json,
             knowledge,
             batch,
@@ -890,6 +1017,7 @@ fn run(cli: Cli) -> Result<()> {
             ew_card,
             card_changes,
             rules,
+            rules_at,
             json,
         } => explain_auction(
             &auction,
@@ -900,6 +1028,7 @@ fn run(cli: Cli) -> Result<()> {
             [&card, ew_card.as_deref().unwrap_or(&card)],
             &card_changes,
             &rules,
+            rules_at.as_deref(),
             json,
         ),
     }
@@ -1003,8 +1132,10 @@ fn pct(x: f64) -> String {
     format!("{:5.1}%", 100.0 * x)
 }
 
+#[allow(clippy::too_many_arguments)]
 fn compare(
     opts: &rbb_compare::Options,
+    rules_at: Option<RuleSet>,
     filter: rbb_compare::AuctionFilter,
     top: usize,
     by_imps: bool,
@@ -1012,9 +1143,14 @@ fn compare(
     json: Option<&Path>,
 ) -> Result<()> {
     let started = std::time::Instant::now();
-    let mut report = rbb_compare::run(opts, &|done, total| {
-        eprint!("\r{done}/{total} boards");
-    })?;
+    let progress = |done, total| eprint!("\r{done}/{total} boards");
+    let mut report = match rules_at {
+        Some(rules) => {
+            let engines = rbb_compare::Engines::with_rules(opts, rules);
+            rbb_compare::run_with(opts, &engines, &progress)?
+        }
+        None => rbb_compare::run(opts, &progress)?,
+    };
     if filter != rbb_compare::AuctionFilter::All {
         report.retain(filter);
         println!("{} (in BBA's auction)", filter.label());
@@ -1282,6 +1418,15 @@ fn rules_from(dir: Option<&Path>) -> Result<RuleSet> {
     .map_err(|d| diagnostics(d).into())
 }
 
+/// The rules in `dir`, or with `at` that directory as it was at that git
+/// commit (`--rules-at`).
+fn rule_set(dir: &Path, at: Option<&str>) -> Result<RuleSet> {
+    match at {
+        Some(r) => rules_at::load(r, dir),
+        None => rules_from(Some(dir)),
+    }
+}
+
 /// The card vocabulary of the rules in `dir`: its own `card/` files, or
 /// the standard one (`rbb_engine::rules_vocabulary`).
 fn vocab_from(dir: &Path) -> Result<Vocabulary> {
@@ -1435,11 +1580,12 @@ fn call(
     card: &Path,
     ew_card: Option<&Path>,
     rules: &Path,
+    rules_at: Option<&str>,
     json: bool,
     knowledge: bool,
     batch: bool,
 ) -> Result<()> {
-    let rules = rules_from(Some(rules))?;
+    let rules = rule_set(rules, rules_at)?;
     let ns = load_card(&rules.vocab, card)?;
     let ew = match ew_card {
         Some(p) => load_card(&rules.vocab, p)?,
@@ -1516,6 +1662,7 @@ fn explain_auction(
     cards: [&str; 2],
     card_changes: &[String],
     rules: &Path,
+    rules_at: Option<&str>,
     json: bool,
 ) -> Result<()> {
     use bridge_types::{Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
@@ -1546,7 +1693,7 @@ fn explain_auction(
             hands[seat.to_index()] = Some(deal.hand(seat).clone());
         }
     }
-    let rules = rules_from(Some(rules))?;
+    let rules = rule_set(rules, rules_at)?;
     let mut cards = [
         card_or_stock(&rules.vocab, cards[0])?,
         card_or_stock(&rules.vocab, cards[1])?,
@@ -1813,6 +1960,36 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 }
             }
         }
+        BidCommand::Rules {
+            auction,
+            dealer,
+            vul,
+            scoring,
+            card,
+            ew_card,
+            card_changes,
+            rules,
+            rules_at,
+            call,
+            rule_specs,
+            all,
+            no_knowledge,
+            json,
+        } => bid_rules(&BidRulesArgs {
+            auction: &auction,
+            dealer,
+            vul: &vul,
+            scoring: &scoring,
+            cards: [&card, ew_card.as_deref().unwrap_or(&card)],
+            card_changes: &card_changes,
+            rules: &rules,
+            rules_at: rules_at.as_deref(),
+            call: call.as_deref(),
+            rule_specs: &rule_specs,
+            all,
+            knowledge: !no_knowledge,
+            json,
+        })?,
         BidCommand::Compile {
             file,
             output,

@@ -16,6 +16,10 @@ use crate::position::{side, Ask, Forcing, Position, SideState};
 use crate::sample;
 use crate::system::{RuleEntry, RuleRef, System};
 
+mod listing;
+use listing::{alts_text, public_failure, tri_word, Rejected};
+pub use listing::{RuleListing, RuleOption, RuleRejection};
+
 /// A candidate: one rule, one concrete call, and the variable bindings that
 /// produced it.
 #[derive(Debug, Clone)]
@@ -201,7 +205,7 @@ impl Engine {
             return c.clone();
         }
         let mut warnings = Vec::new();
-        let cands = self.candidates(pos, pos.next_caller(), &mut warnings);
+        let cands = self.candidates(pos, pos.next_caller(), &mut warnings, None);
         let c = Arc::new((cands, warnings));
         let mut cache = self.cands.lock().unwrap();
         if cache.len() >= CACHE_LIMIT {
@@ -238,12 +242,16 @@ impl Engine {
     }
 
     /// Every rule of `actor`'s side whose context holds, expanded to legal
-    /// calls, ranked best first on the hand-independent keys.
+    /// calls, ranked best first on the hand-independent keys. With
+    /// `rejected`, each rule (or expanded call) that does not get through
+    /// is recorded there with the reason (`rbb bid rules --all`); the
+    /// candidates are the same either way.
     fn candidates(
         &self,
         pos: &Position,
         actor: Direction,
         warnings: &mut Vec<String>,
+        mut rejected: Option<&mut Vec<Rejected>>,
     ) -> Vec<Cand> {
         let sys = &self.systems[side(actor)];
         let auction = pos.auction();
@@ -251,21 +259,54 @@ impl Engine {
         for (i, entry) in sys.rules.iter().enumerate() {
             let ctx = self.ctx(pos, actor, None, entry);
             let mut b = Bindings::default();
-            if !entry
+            if let Some(j) = entry
                 .patterns
                 .iter()
-                .all(|alts| match_any(alts, &pos.calls, &ctx, &mut b))
+                .position(|alts| !match_any(alts, &pos.calls, &ctx, &mut b))
             {
+                if let Some(r) = rejected.as_deref_mut() {
+                    r.push(Rejected {
+                        entry: i,
+                        call: None,
+                        stage: "after",
+                        reason: format!(
+                            "after {}: no alternative matches",
+                            alts_text(&entry.patterns[j])
+                        ),
+                    });
+                }
                 continue;
             }
             let mut holds = true;
             for c in &entry.conditions {
                 match ctx.cond(c, &mut b) {
                     Ok(Tri::True) => {}
-                    Ok(_) => holds = false,
+                    Ok(t) => {
+                        holds = false;
+                        if let Some(r) = rejected.as_deref_mut() {
+                            r.push(Rejected {
+                                entry: i,
+                                call: None,
+                                stage: "context-when",
+                                reason: format!(
+                                    "context `when {c}` is {}: `{}`",
+                                    tri_word(t),
+                                    first_failing(&ctx, c, &mut b.clone())
+                                ),
+                            });
+                        }
+                    }
                     Err(e) => {
                         warnings.push(format!("{}:{}: {e}", entry.source.file, entry.source.line));
                         holds = false;
+                        if let Some(r) = rejected.as_deref_mut() {
+                            r.push(Rejected {
+                                entry: i,
+                                call: None,
+                                stage: "context-when",
+                                reason: format!("context `when {c}`: error: {e}"),
+                            });
+                        }
                     }
                 }
                 if !holds {
@@ -275,7 +316,18 @@ impl Engine {
             if !holds {
                 continue;
             }
-            for (call, b) in expand(&entry.rule.call, &ctx, b, &auction) {
+            let expanded = expand(&entry.rule.call, &ctx, b, &auction);
+            if expanded.is_empty() {
+                if let Some(r) = rejected.as_deref_mut() {
+                    r.push(Rejected {
+                        entry: i,
+                        call: None,
+                        stage: "call",
+                        reason: format!("call `{}` names no call here", entry.rule.call),
+                    });
+                }
+            }
+            for (call, b) in expanded {
                 // A `when` whose public parts cannot hold rules the rule out
                 // (`x is not M` with x = M; `partner.M>=4` before partner has
                 // shown four; `style is bba` under another style), whatever
@@ -293,6 +345,21 @@ impl Engine {
                         b,
                         priority: entry.rule.priority.unwrap_or(0),
                         descriptiveness: 0.0,
+                    });
+                } else if let Some(r) = rejected.as_deref_mut() {
+                    let legal = auction.is_legal(&call);
+                    let reason = match &entry.rule.when {
+                        Some(w) if legal => format!(
+                            "`when {w}`: public part not true: {}",
+                            public_failure(&ctx, w, &b).unwrap_or_default()
+                        ),
+                        _ => format!("{call} is not legal here"),
+                    };
+                    r.push(Rejected {
+                        entry: i,
+                        stage: if legal { "when" } else { "legal" },
+                        call: Some(call),
+                        reason,
                     });
                 }
             }

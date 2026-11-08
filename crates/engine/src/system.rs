@@ -33,6 +33,9 @@ pub struct RuleEntry {
     pub order: usize,
     /// Its `shows` counts a condition in arithmetic (`+ doubler_four(x)`).
     pub counts_conditions: bool,
+    /// Its `shows` and `when` as written, before named conditions
+    /// (`define`) were written out (`rbb bid rules`).
+    pub written: (Option<Expr>, Option<Expr>),
 }
 
 /// The active rules for one partnership.
@@ -213,6 +216,7 @@ impl System {
             conditions.push(expand(w));
         }
         for rule in &ctx.rules {
+            let written = (rule.shows.clone(), rule.when.clone());
             let mut rule = rule.clone();
             for e in [
                 &mut rule.shows,
@@ -242,6 +246,7 @@ impl System {
                 },
                 order: self.rules.len(),
                 counts_conditions,
+                written,
             });
         }
         for child in &ctx.contexts {

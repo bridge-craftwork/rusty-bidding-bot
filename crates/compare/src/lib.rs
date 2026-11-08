@@ -125,6 +125,17 @@ impl Engines {
         })
     }
 
+    /// Engines for rules already compiled (`rbb compare --rules-at`), with
+    /// `opts`' cards and card changes.
+    pub fn with_rules(opts: &Options, rules: rbb_engine::RuleSet) -> Engines {
+        Engines {
+            pbs: opts.pbs.clone(),
+            changes: opts.card_changes.clone(),
+            rules,
+            cache: Mutex::new(HashMap::new()),
+        }
+    }
+
     /// The engine for North-South playing `ns` and East-West `ew`.
     pub fn get(&self, ns: &str, ew: &str) -> Result<Arc<Engine>, String> {
         let key = (ns.to_string(), ew.to_string());

@@ -188,6 +188,7 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 | `rbb bid skills [--rules DIR] [--doc F]` | the teaching-skill map: each skill, the card fields and the modules that name it, and the gaps (docs/SKILLS.md) |
 | `rbb bid reference [--rules DIR]` | every module and what each call means after each auction |
 | `rbb bid compile FILE [--rules DIR]` | a file's compiled JSON IR |
+| `rbb bid rules -a "1C P 1D 1H" [-d N] [-c CARD] [--set path=value] [--rules DIR] [--call X] [--rule SPEC] [--all] [--json]` | the rules that can make the next call, before the hand is known, in the engine's ranking; with `--all` every rule that failed and why; with `--rule` the verdict on chosen rules |
 | `rbb call S.H.D.C -a "1NT Pass" -d S -c CARD [--rules DIR] [--json] [--knowledge]` | the engine's call with every candidate and why it lost |
 | `rbb explain-auction -a "1NT Pass 2C" -d N -c CARD [--deal PBN] [--set path=value] [--json]` | the auction reviewed call by call: what is known about every seat after each call, the flags, each side's state, each hand's own view |
 | `rbb compare [SCENARIO...] --rules DIR [--json F]` | compare with BBA's auctions in Practice-Bidding-Scenarios: agreement, distance from par, "no rule" in live auctions |
@@ -196,6 +197,76 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 | `rbb grid probes/NAME.toml`, `rbb probe` | ask BBA how it bids hands you make |
 
 The commands and their options are in CLAUDE.md.
+
+Every command that loads rules (`compare`, `bid-pbn`, `call`,
+`explain-auction`, `bid rules`) takes `--rules-at GIT_REF`: the rules
+directory as it was at that commit, read from the repository, with the
+manifest's language checked as for a directory.
+
+#### `rbb bid-pbn --json`
+
+One JSON object a line, one a board in file order: `board` (its
+`[Board]`, else its number or place), `dealer` and `declarer` (`N`... ;
+`declarer` null when passed out), `vul` (PBN), `deal` (PBN, North first),
+`scoring` (`MP`/`IMP`), `auction` (PBN calls), `calls` (per call: `seat`,
+`call`, `rule` (`file:line` or null), `alert` (`alert`, `announce` or
+null), `meaning` (the rule's text where the PBN output writes a note: an
+alerted call, or every explained call with `--all-meanings`), `shown`
+(what the call showed, with `--all-meanings`, else null)), `complete`
+(false when stopped at `--max-calls`), `contract` (`4SX`, `Pass`), and,
+when the board carries a double-dummy table or `--par` solved one, `dd`:
+`tricks` (declarer's, in the contract's strain), `score_ns` (North-South's
+score for the contract at that result), `par_ns`, `par`, `source` (`file`
+or `solved`). A board that cannot be bid is `{"board", "error"}`.
+
+#### `rbb bid rules --json`
+
+`rbb bid rules` lists the engine's own candidate list at a position (the
+list `rbb call` ranks a hand against), read without a hand: the `after`
+patterns, context `when`s, card parameters, asks and what the other seats
+have shown are judged exactly as when bidding, and a rule whose own `when`
+has a public part known not to hold is left out; `shows` and the hand parts
+of `when` stay conditions. One JSON object:
+
+- `seat`, `dealer` (`"North"`...), `auction` (PBN calls), `forced`
+  (partner's call forces this seat to bid);
+- `candidates`, best-ranked first (priority, descriptiveness, file order;
+  `prefer`, which reads the hand, reorders only ties), each with: `rank`
+  (from 1), `call` (PBN: `2S`, `Pass`, `X`), `rule` (`module`, `file`,
+  `line`), `explanation` (filled in), `alert` (`null`, `{"kind": "alert",
+  "text"?}` or `{"kind": "announce", "text"}`), `artificial`, `priority`,
+  `descriptiveness`, `order` (load order), `bindings` (pattern variables:
+  `{"x": "C"}`), `shows` (as written) and `shows_resolved` (as the engine
+  records it for partner), `when` (as written), `when_folded` (what the
+  auction settles replaced by `true`/`false`: what is left depends on the
+  hand) and `when_reads_hand`, `denies`, `prefer`, `sets` (`["forcing=round",
+  "ask=majors"]`), `read_as` (partner reads the call by this rule: the
+  first of its top-priority rules), `same_call` (the other rules here for
+  the same call, as `rule` objects), `excluded` (`"partner's call is
+  forcing"` for a natural pass under a force, else `null`);
+- `rejected` (only with `--all`, in load order): `spec` (the call as
+  written: `2x`), `call` (PBN, when the rule got as far as one), `rule`,
+  `explanation` (as written), `priority`, `stage` (`after`,
+  `context-when`, `call`, `legal`, `when`) and `reason`;
+- `inactive` (with `--all`): `[module, why]` pairs for modules the card
+  leaves off;
+- `warnings`; `knowledge` (the review rows `explain-auction --json`
+  prints; left out with `--no-knowledge`).
+
+With `--call X` only that call's candidates are kept; a rejected rule
+without a concrete call stays when its written call could be `X`.
+
+With `--rule SPEC` (repeatable; `file:line` with any path suffix,
+`rebids.bid:725`, a file, a module, or `module:line`) only the selected
+rules are kept in `candidates`, `rejected` and `inactive` (rejections are
+collected without `--all`), and a `selection` array is added, one object a
+selected rule: `spec`, `rule` (`module`, `file`, `line`), `verdict`
+(`applies`: at least one of its calls is a candidate; `fails`: none is;
+`inactive`: its module is off for this side; `filtered`: with `--call`,
+neither a candidate nor a rejection for that call), `candidates` and
+`rejected` (that rule's entries, shaped as above: one per binding or call)
+and `reasons` (one line each). A SPEC that names no rule is an error that
+lists the near matches.
 
 ### Stability
 
