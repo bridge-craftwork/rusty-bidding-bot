@@ -198,6 +198,27 @@ descriptiveness sample is fixed (seeded), and ties end in file order.
 
 The commands and their options are in CLAUDE.md.
 
+Every command that loads rules (`compare`, `bid-pbn`, `call`,
+`explain-auction`, `bid rules`) takes `--rules-at GIT_REF`: the rules
+directory as it was at that commit, read from the repository, with the
+manifest's language checked as for a directory.
+
+#### `rbb bid-pbn --json`
+
+One JSON object a line, one a board in file order: `board` (its
+`[Board]`, else its number or place), `dealer` and `declarer` (`N`... ;
+`declarer` null when passed out), `vul` (PBN), `deal` (PBN, North first),
+`scoring` (`MP`/`IMP`), `auction` (PBN calls), `calls` (per call: `seat`,
+`call`, `rule` (`file:line` or null), `alert` (`alert`, `announce` or
+null), `meaning` (the rule's text where the PBN output writes a note: an
+alerted call, or every explained call with `--all-meanings`), `shown`
+(what the call showed, with `--all-meanings`, else null)), `complete`
+(false when stopped at `--max-calls`), `contract` (`4SX`, `Pass`), and,
+when the board carries a double-dummy table or `--par` solved one, `dd`:
+`tricks` (declarer's, in the contract's strain), `score_ns` (North-South's
+score for the contract at that result), `par_ns`, `par`, `source` (`file`
+or `solved`). A board that cannot be bid is `{"board", "error"}`.
+
 #### `rbb bid rules --json`
 
 `rbb bid rules` lists the engine's own candidate list at a position (the

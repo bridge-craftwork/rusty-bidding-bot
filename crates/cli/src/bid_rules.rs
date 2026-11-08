@@ -18,6 +18,8 @@ pub struct BidRulesArgs<'a> {
     pub cards: [&'a str; 2],
     pub card_changes: &'a [String],
     pub rules: &'a Path,
+    /// `--rules-at`: the rules directory at this git commit.
+    pub rules_at: Option<&'a str>,
     pub call: Option<&'a str>,
     /// `--rule` specs: `file:line`, `module`, `module:line`.
     pub rule_specs: &'a [String],
@@ -50,7 +52,7 @@ pub fn bid_rules(a: &BidRulesArgs) -> Result<()> {
     if auction.is_complete() {
         return Err("the auction is over: no call to make".into());
     }
-    let rules = crate::rules_from(Some(a.rules))?;
+    let rules = crate::rule_set(a.rules, a.rules_at)?;
     let mut cards = [
         crate::card_or_stock(&rules.vocab, a.cards[0])?,
         crate::card_or_stock(&rules.vocab, a.cards[1])?,
