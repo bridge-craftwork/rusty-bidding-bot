@@ -714,6 +714,54 @@ hearts: since systems are on there (one-nt.notes.md) 3♥ is a transfer,
 and the reading took the agreement. Its context now has
 `!we.systems_on` (partner's last call is our system's notrump).
 
+## Working values opposite a shown shortness (2026-11-07)
+
+Rick, 2026-11-07 (bridge-classroom-bug-artifacts #83/#84, modified
+Jacoby 2NT):
+
+> "keycard should be the stronger hand. the idea of the relays is it
+> will allow us to find low HCP slams when there is a good fit. one of
+> the hands had 4-5 weak spades in responder's hand, and opener had a
+> spade void, i think, which means all the combined HCP are 'working',
+> which is the goal of this system (and the standard jacoby 2nt, and
+> splinter bids). this may be a concept we haven't introduced yet."
+
+The concept is now the engine's: `wasted_hcp` (my K 3, Q 2, J 1 in a
+suit partner has shown at most one card in, `partner.x.max <= 1`; the
+ace 4 too opposite a shown void, `partner.x.max = 0`; an ace opposite a
+singleton works), `working_hcp` (`hcp - wasted_hcp`), and
+`we.working_hcp` (mine plus `partner.working_hcp`: his HCP shown, less
+what he might waste opposite a shortness I have shown). Defines here:
+
+- `shown_short`, `shown_void`: partner has shown a singleton or void
+  (a void) in some suit.
+- `working_count(t)`: `tp(t) - wasted_hcp + partner.points.min`, my
+  support points less the waste, plus partner's floor. It leaves out
+  partner's shortness, which opposite small cards is the point.
+- `working_slam(t)`: 23 or more opposite a void, 27 opposite a singleton.
+- `stronger_hand`: my HCP at least partner's shown floor (Rick: "keycard
+  should be the stronger hand").
+
+**Calibration** (compare `--par-all` on Jacoby_2N, Jacoby_2N_Leveled,
+Jacoby_2N_4x_void(_Leveled), Splinters, Splinters_By_Opener,
+Splinters_after_Minor, Slam_After_Major_Fit, Gavin_Strong/Weak_Splinter,
+500 boards each, 5,000 boards; verdict the bidding side's contract
+errors, `errors_diff.py`, both halves agreeing), with modified Jacoby on
+(`major_openings.jacoby_2nt.modified=true`), void / singleton:
+26/26 −8 (halves differ), 26/28 +83, 26/29 +81, 26/27 +116, 25/28
++171, 25/27 +204, 24/27 +238, **23/27 +287**, 22/27 +290; a single
+threshold 28-32 lost 60-130. Opposite a void nearly every hand without
+honours there asks, and keycard stops when two are missing. On the
+standard card (Jacoby's 3x shortness): 23/27 +99 (halves +46/+53), 26/28
++76. A flat 26 opposite a singleton was the costly mistake: a 14-count
+opposite a minimum's singleton queen went down in six.
+
+Tripwire (all scenarios, `--limit 50`, 17,100 boards, PR #81's rules
+against these): 33 boards changed, every one a Jacoby 2NT auction after
+opener's 3x shortness (Jacoby_2N*, Splinters, Gavin_Strong_Splinter,
+DOPI_ROPI, Soloway, Tislevoll, ...); the bidding side's contract errors
++24 (halves +7 / +17, agree), distance from par +16.
+
 ## Sources
 
 - Rick's rulings, as recorded in rkcb-1430.bid ("The ask", the 33-point
@@ -755,3 +803,7 @@ and the reading took the agreement. Its context now has
   the corpus (170,633 boards) and the 21GF random set (100,000 deals),
   IMPs vs BBA with double-dummy par, even / odd boards, and
   `probes/tools/sideimps.py` on the vanilla set (tables above).
+- Working values (2026-11-07): Rick's ruling quoted in "Working values
+  opposite a shown shortness"; wasted honours opposite shortness as in
+  splinters.notes.md (Wikipedia, "Splinter bid": "Axxx is ideal whereas
+  KJ9x is almost worthless"); the thresholds are our corpus calibration.

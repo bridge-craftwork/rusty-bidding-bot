@@ -3,3 +3,13 @@ dealer  S
 
 # seat hand             | auction     | expect | why
 S AKJ52.K73.Q943.8      | 1S P 2NT P  | 3C     | 13 HCP, singleton club: show the shortness
+# Working HCP after the shortness (Rick, 2026-11-07): honours opposite the singleton are wasted
+N K874.AQ5.AK72.83      | 1S P 2NT P 3C P | 4NT  | nothing wasted opposite the club singleton: keycard
+N K874.AQ5.Q72.KQ3      | 1S P 2NT P 3C P | 4S   | KQ opposite the singleton: game
+# Opener after responder's 4M: standard Jacoby's answer is unlimited, so
+# opener with extras still goes on (the 19+ pass is modified Jacoby's)
+S AKJ52.K73.AQ43.8      | 1S P 2NT P 3C P 4S P | 4NT | 17 HCP, 18 points, 6 controls (24): go on, as BBA
+S AKJ52.K73.QJ43.8      | 1S P 2NT P 3C P 4S P | P   | 15 HCP, 16 points, 4 controls (20): pass, as BBA
+S AKJ52.KQ3.AJ43.8      | 1S P 2NT P 3C P 4S P | 4NT | 18 HCP, 19 points, 6 controls: go on
+S AKJ52.KQ3.QJ4.32      | 1S P 2NT P 3S P 4S P | P   | 3S answered with 17 points: pass
+S AKQ52.KQ3.AQ4.K2      | 1S P 2NT P 3S P 4S P | 4NT | 23 points over 3S: go on

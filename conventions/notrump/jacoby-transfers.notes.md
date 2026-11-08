@@ -359,6 +359,61 @@ Brill's plain completion (a four-card minimum possible) the sign-off read
 it too. Now the invitation is only over the plain completion
 (`partner.last=2{M}`) and the sign-off only after a super-accept.
 
+## Slam after 5-4 shown and opener's 3NT (Rick, 2026-11-06)
+
+Bridge-Classroom report #85 (bridge-classroom-bug-artifacts, board 10):
+N AKT76.A95.9.AJ94 (16 HCP), S J5.KJT.AKT63.KQT (17, 1NT 15-17).
+1NT–2♥–2♠–3♣–3NT and responder passed; 6NT makes (12 tricks), 6♣ and
+6♠ 13. Rick: "Rusty should invite slam here." over-3nt.bid's
+quantitative 4NT counts HCP (16 + 15 = 31, below its measured 32), and
+its 4♣/4♦ tries need six.
+
+Decision: responder who has shown the 5-4 (`answered new_suit(M)`,
+partner's 3NT) counts **total points** (the fifth major card is a
+trick in notrump) on opener's HCP floor: 32-33 a quantitative 4NT, 34
+6NT. This 4NT takes over over-3nt.bid's HCP one in this auction, so
+opener reads one meaning (`ask=quant_two_suits`): he accepts with
+33 − responder's shown floor in total points (16 opposite 17: a flat
+15 declines, a 15 with a five-card suit accepts), in 6♣/6♦ with four of
+responder's minor (the 4-4 fit takes a ruff), else 6NT. The
+balanced-hand count in over-3nt.bid is unchanged (it was measured
+best). A natural 4♣ slam try in the second suit was the alternative;
+the quantitative 4NT is the standard invitation and lets opener pick
+the strain. Cases in jacoby-transfers.test.
+
+A first version answered by HCP (16-17 accepts) and kept over-3nt's
+4NT for 17+ HCP: opener then read the 17-HCP 4NT by this rule and
+declined it with 15 (6 boards, −24). One rule, answered in points,
+fixed it.
+
+**Measured** (compare --par-all, Jacoby_Transfer, Jacoby_Super-Accept,
+Slam_after_Transfer, Slam_after_Stayman_or_Jacoby_w30plus/w31plus,
+Slam_after_NT, 2N_and_Transfers; 3,500 boards; errors_diff): 147
+boards changed; the bidding side's contract errors **+333 IMPs**
+(halves +80 / +253, agree); distance from par +335; vs BBA net +184 →
++488. The gain is `P 3N P : P -> 4N` (+330 on 83 boards); `6N -> P` (a
+4NT declined, −24 on 6) is the cost. Tripwire (`compare --limit 50`,
+all scenarios): 26 of 17,105 boards changed, all this auction
+(Ned_3-Level_Resp_to_1N and 1N_5M_and_6m besides the slam scenarios).
+
+Replay of #85 (bid-pbn, 21GF-GIB, all four seats Rusty):
+1NT–2♥–2♠–3♣–3NT–4NT–6NT (was 3NT passed).
+
+**Rick, 2026-11-07:** asked whether "invite slam" meant the quantitative
+4NT as built: "with 4NT". Settled; the rule stands as above.
+
+## Over every 2NT (Rick, 2026-11-07)
+
+Rick: "people playing jacoby transfers normally play them over 1NT, 2NT,
+2C/2NT, and kokish relay, and sometimes 2C/3NT". The 2NT-level transfers
+(3♦/3♥) live in two-nt-responses.bid under `after nt2` (`systems 2N
+(P)`: 2NT opening, 2♣–2♦–2NT, Kokish's 2NT, 2♣–positive–2NT, a natural
+2NT overcall), and everything after the completion is this module's
+`when answered transfer(M)`, counted against opener's range. What was
+missing was the 2NT system's 4NT/6NT giving way to the transfer with a
+five-card major (two-nt-responses.notes.md, "With five, transfer
+first"). Over 2♣–2♦–3NT the transfers are Texas (texas-transfers.bid).
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
@@ -386,3 +441,9 @@ it too. Now the invitation is only over the plain completion
   opener after the new suit, and responder after a plain super-accept
   ("Accepted differences from BBA"); responder's 2NT/3NT move a point
   with length points.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #85): invite
+  slam after 5-4 shown and opener's 3NT. The total-point count and
+  opener's accept-in-the-minor are ours ("standard practice, not yet
+  cited").
+- **Rick, 2026-11-07** (#85 follow-up): the invitation is the
+  quantitative 4NT ("with 4NT").

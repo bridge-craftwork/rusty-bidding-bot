@@ -119,3 +119,12 @@ N QJ6.KJ3.KQ54.A43      | 1NT P 2H P | 2S     | brill: three spades
 N Q3.KJ32.KQ54.A43      | 1NT P 2D P | 3H     | brill: four hearts, a minimum: the jump
 card    21GF-GIB
 N Q3.KJ32.KQ54.A43      | 1NT P 2D P | 2H     | default: a minimum completes
+
+# Responder over 3NT after showing 5-4 (Rick, 2026-11-06, bridge-classroom #85).
+card    21GF-DEFAULT
+dealer  S
+N AKT76.A95.9.AJ94      | 1N P 2H P 2S P 3C P 3N P             | 4N     | #85: 16 HCP, 18 total points with the 5-4 shown: invite
+N AKT76.K95.9.QJ94      | 1N P 2H P 2S P 3C P 3N P             | P      | 15 HCP, 16 total points: 31, no invitation
+S J5.KJT.AKT63.KQT      | 1N P 2H P 2S P 3C P 3N P 4N P        | 6N     | #85: 17, the top of the range: accept
+S J5.KJ72.AQ6.KJ72      | 1N P 2H P 2S P 3C P 3N P 4N P        | P      | a flat 15: decline
+S J5.KJT.AKT6.KQT3      | 1N P 2H P 2S P 3C P 3N P 4N P        | 6C     | 17 with four clubs: accept in the 4-4 fit

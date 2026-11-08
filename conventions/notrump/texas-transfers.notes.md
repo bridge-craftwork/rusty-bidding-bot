@@ -177,6 +177,47 @@ Compare --limit 50, the whole branch against main: 103 boards, errors
 contract +119, doubling −35 IMPs to us; the 2♣–2♦–3NT part alone 6 boards,
 contract +19.
 
+## 2♣–2♦–3NT with Kokish: 26-27, and the gap (2026-11-07)
+
+Rick: "people playing jacoby transfers normally play them over 1NT, 2NT,
+2C/2NT, and kokish relay, and sometimes 2C/3NT". No card field says
+whether transfers are on over 2♣–2♦–3NT; they follow `notrump.texas.play`
+as before. **Open for Rick:** a card field ("transfers over 2♣–2♦–3NT")
+if he wants the "sometimes" switchable (a convention-card pull request).
+
+With Kokish on, 2♣–2♦–3NT now shows 26-27 (strong-openings.bid,
+kokish.notes.md). Opposite 26-27 Texas's game-only band (suit points <=
+30 - opener's max) ends at 3 and the slam band starts at 7, so a six-card
+major with 4-5 HCP (84.KJ8632.72.954) had no call and passed 3NT. Over
+1NT those hands go through Jacoby and jump to 4M; over 3NT there is no
+such route, so a fallback (priority -1, 2♣–2♦–3NT only) Texases to game
+with anything up to 32 combined. Without Kokish (3NT 24-25) the same gap
+was 6-8 suit points, and those hands passed 3NT too (corpus: 3N board 37,
+now 4♥ through Texas, same score).
+
+Measured (compare --par-all, all 500 boards of Kokish_Relay,
+Game_Forcing_2C, NT_Ladder, SCS_Two_Clubs, Bust_Over_Strong_2C, 2N,
+2N_and_Balanced, 2N_and_Transfers, Smolen_after_2N, Puppet_Stayman_2N,
+Texas_Transfer, Texas_or_Jacoby, Gerber, Gerber_By_Responder,
+Slam_after_Transfer; the whole 2026-11-07 change, kokish.notes.md): 51
+boards changed, the actor's contract errors +13 IMPs (halves +0 / +13),
+all of it from this fallback (two boards P → 4♥ over 2♣–2♦–3NT).
+
+**The card field, pending (Rick, 2026-11-07):** "i would make this a
+treatment on the Jacoby Transfer card". Prepared for convention-card as
+`notrump.jacoby_transfers.over_2c_3nt` (bool, "Transfers over
+2♣–2♦–3NT", skill `bidding_conventions/jacoby_transfers`, level 6),
+branch `field/jacoby-over-2c-3nt`, not yet merged or tagged. Not read
+here until the `bridge-card` pin moves to a tag that has it; then
+Texas over 2♣–2♦–3NT follows that field instead of `notrump.texas.play`
+(the default to settle then: off, as Rick's "sometimes", or on, as
+today's behaviour).
+
+Rick (2026-11-07), on that default: **"5: default to on"**. When the
+field is read, a card that leaves it unset plays transfers over
+2♣–2♦–3NT, as today. Not read yet (the pin has not moved; convention-card
+PR #117).
+
 ## Sources
 
 - **The convention:** Texas transfers (4♦/4♥ over 1NT). Standard
@@ -184,7 +225,9 @@ contract +19.
 - **Rick's rulings:** Texas is game only or slam values followed by
   keycard; slam values are 33 total points even opposite opener's
   minimum, so 18+; 8 HCP with a six-card major invites (2026-09-21); the
-  sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`).
+  sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`); the
+  pending `over_2c_3nt` field defaults to on, "5: default to on"
+  (2026-11-07).
 - **BBA probes:** the dealer3 script `six-hearts.dlr` run through
   `rbb probe --script` (600 deals), given in full in "Evidence from BBA".
   It is not yet kept as a `probes/*.toml` spec.

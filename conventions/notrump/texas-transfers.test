@@ -41,3 +41,13 @@ S 8.AQ9732.K94.AKJ      | 1N P 4C P 4D P  | 4NT | slam values: keycard
 S 82.KQJ974.Q92.53      | 2N P            | 4C | 2NT: 2-under
 card    21GF-DEFAULT
 S 8.KQ9732.K94.Q83      | 2C P 2D P 3N P  | 4D | 2C-2D-3NT: Texas
+
+# After 2♣–2♦–3NT Texas follows the card (Rick, 2026-11-07: "sometimes
+# 2C/3NT"; no card field of its own). With Kokish 3NT is 26-27, and a
+# six-card major with 4-5 HCP (31-32 combined, between game only and
+# slam values) Texases to game instead of passing.
+card    21GF-GIB major_openings.jacoby_2nt.modified=true two_level.kokish.play=true
+dealer  S
+N 84.KJ8632.72.954      | 2C P 2D P 3N P              | 4D  | six hearts, 4 HCP opposite 26-27: Texas to game
+N 84.KJ8632.72.954      | 2C P 2D P 3N P 4D P 4H P    | P   | then pass
+N KJ8632.84.Q2.954      | 2C P 2D P 3N P              | 4H  | six spades: Texas

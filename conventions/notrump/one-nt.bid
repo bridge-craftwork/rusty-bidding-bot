@@ -7,6 +7,13 @@ module notrump-base "1NT opening and natural responses"
   skill  partnership_bidding/basic_notrump
   param  nt_min   = notrump.one_nt.range_min default 15
   param  nt_max   = notrump.one_nt.range_max default 17
+  param  nt_min_plus  = notrump.one_nt.range_min_plus default false
+  param  nt_max_minus = notrump.one_nt.range_max_minus default false
+  param  alt_min  = notrump.one_nt_alt.range_min
+  param  alt_max  = notrump.one_nt_alt.range_max
+  param  alt_min_plus  = notrump.one_nt_alt.range_min_plus default false
+  param  alt_max_minus = notrump.one_nt_alt.range_max_minus default false
+  param  alt_where = notrump.one_nt_alt.seat_vul
   param  one_less = notrump.one_nt.allow_one_less default false
   param  minors   = notrump.minor_transfers.style default relay
   param  mtp      = notrump.minor_transfers.play default true
@@ -61,9 +68,48 @@ define auction nt1 = nt1_undoubled
 # A five-card major only as the card allows (`one_nt.five_card_major`):
 # BBA opens 1NT with one only with "1NT opening shape 5 major"; its bare
 # SAYC card (probe 2026-09-30) opens the major.
-when opening
+#
+# The card's qualifiers (one-nt.notes.md, "Range qualifiers"). A plus on
+# the minimum ("14+") is a good 14: the range is judged, in total points,
+# so 14 HCP opens only with a point more (a five-card suit, two tens) and,
+# the same judgment at the top, a 17 that is worth 18 does not. A minus on
+# the maximum ("15-17-", a poor 17) judges the top only. The plus on the
+# maximum and the minus on the minimum change nothing: the HCP range
+# already takes every hand at those counts. Partner reads the judged range
+# (total points 15-17 for "14+-17") and counts against it.
+#
+# The alternate range (`notrump.one_nt_alt`) is in force where its
+# seat/vulnerability text covers the opener's seat and vulnerability
+# (`seat_vul`: "Not Vul", "3rd/4th", "NV 1st/2nd"), the main range
+# everywhere else. Partner and the opponents read the 1NT by the same
+# rules, so every count against opener's range (responses, slam, our
+# defence's reading) sees the range in force. The responses are the same
+# either way (`one_nt_alt.same_responses`; a separate system for the
+# other range is not modelled).
+define nt_alt = alt_min is not none, alt_max is not none, seat_vul(alt_where)
+define nt_main_range = hcp=nt_min..nt_max, points>=nt_min+1 | !nt_min_plus, points<=nt_max | !(nt_min_plus | nt_max_minus)
+define nt_alt_range = hcp=alt_min..alt_max, points>=alt_min+1 | !alt_min_plus, points<=alt_max | !(alt_min_plus | alt_max_minus)
+# Opener has shown more than the 1NT range in force (a 2NT, 2♣ then
+# notrump): the quantitative answers below.
+define above_1nt = (!nt_alt, shown.hcp.min>=nt_max+1) | (nt_alt, shown.hcp.min>=alt_max+1)
+# A weak notrump in force (the range in force tops at 14 or less: Rick's
+# 11+-14 not vulnerable). Opener's balanced hands too strong for it open
+# a suit, and the rebids show them (Rick, 2026-11-07; rebids.bid, "With
+# a weak notrump"): after a one-level response 1NT from the top of the
+# range up to 17 (`above_weak_nt`: a good 14 to 17 opposite 11+-14),
+# 2NT 18-19; after a 2/1 the jump to 3NT the same, 2NT 12-14 or 18+.
+# The opener's own seat and vulnerability decide it (`seat_vul` reads
+# the actor).
+define weak_nt = (!nt_alt, nt_max <= 14) | (nt_alt, alt_max <= 14)
+# The top of the weak range judged out of it (a 14 worth 15 total points
+# where the range is "11+-14", one-nt.notes.md "Range qualifiers")
+# belongs with the hands above the range. Partner reads the 14 in: a
+# 14-17 reading measured better than 15-17 (rebids.notes.md).
+define weak_nt_top_out = (!nt_alt, hcp=nt_max, points>=nt_max+1) | (nt_alt, hcp=alt_max, points>=alt_max+1)
+define above_weak_nt = (!nt_alt, hcp>=nt_max+1, hcp<=17) | (nt_alt, hcp>=alt_max+1, hcp<=17) | weak_nt_top_out
+when opening, !nt_alt
   1N  "Notrump opening: {nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
-      shows hcp=nt_min..nt_max, balanced, five_major is not never | (H<=4, S<=4)
+      shows nt_main_range, balanced, five_major is not never | (H<=4, S<=4)
   1N  "Notrump opening: {nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
       shows hcp=nt_min-1, points>=nt_min, balanced, five_major is not never | (H<=4, S<=4)
       when one_less
@@ -73,10 +119,20 @@ when opening
   # four spades, always with both doubletons stopped). 4-4-4-1 only with
   # a singleton ace or king.
   1N  "Notrump opening: {nt_min}-{nt_max} HCP, 5-4-2-2"  announce "{nt_min} to {nt_max}"
-      shows hcp=nt_min..nt_max, shape 5-4-2-2, C=5 | D=5, S=2, H>=2, D>=2, C>=2, has(A,S) | has(K,S), H>=3 | has(A,H) | has(K,H), D>=3 | has(A,D) | has(K,D), C>=3 | has(A,C) | has(K,C)
+      shows nt_main_range, shape 5-4-2-2, C=5 | D=5, S=2, H>=2, D>=2, C>=2, has(A,S) | has(K,S), H>=3 | has(A,H) | has(K,H), D>=3 | has(A,D) | has(K,D), C>=3 | has(A,C) | has(K,C)
       when allow_5422
   1N  "Notrump opening: {nt_min}-{nt_max} HCP, 4-4-4-1"  announce "{nt_min} to {nt_max}"
-      shows hcp=nt_min..nt_max, shape 4-4-4-1, S>=2 | has(A,S) | has(K,S), H>=2 | has(A,H) | has(K,H), D>=2 | has(A,D) | has(K,D), C>=2 | has(A,C) | has(K,C)
+      shows nt_main_range, shape 4-4-4-1, S>=2 | has(A,S) | has(K,S), H>=2 | has(A,H) | has(K,H), D>=2 | has(A,D) | has(K,D), C>=2 | has(A,C) | has(K,C)
+      when allow_4441
+# The alternate range, where it is in force: the same rules on its range.
+when opening, nt_alt
+  1N  "Notrump opening: {alt_min}-{alt_max} HCP, balanced"  announce "{alt_min} to {alt_max}"
+      shows nt_alt_range, balanced, five_major is not never | (H<=4, S<=4)
+  1N  "Notrump opening: {alt_min}-{alt_max} HCP, 5-4-2-2"  announce "{alt_min} to {alt_max}"
+      shows nt_alt_range, shape 5-4-2-2, C=5 | D=5, S=2, H>=2, D>=2, C>=2, has(A,S) | has(K,S), H>=3 | has(A,H) | has(K,H), D>=3 | has(A,D) | has(K,D), C>=3 | has(A,C) | has(K,C)
+      when allow_5422
+  1N  "Notrump opening: {alt_min}-{alt_max} HCP, 4-4-4-1"  announce "{alt_min} to {alt_max}"
+      shows nt_alt_range, shape 4-4-4-1, S>=2 | has(A,S) | has(K,S), H>=2 | has(A,H) | has(K,H), D>=2 | has(A,D) | has(K,D), C>=2 | has(A,C) | has(K,C)
       when allow_4441
 
 # Responder. Strength bands are total points measured against opener's
@@ -288,15 +344,15 @@ when answered nt_invite, partner.last=3H | partner.last=3S, style is not bba
 # Opener answers the quantitative 4NT: slam with 32 combined.
 when asked quant
   6N  "Accepts the slam invitation"     shows points>=32-partner.points.min
-      when  style is not bba | shown.hcp.min>=nt_max+1
+      when  style is not bba | above_1nt
   P   "Declines: not enough for slam"   shows points<=31-partner.points.min
-      when  style is not bba | shown.hcp.min>=nt_max+1
+      when  style is not bba | above_1nt
   # BBA, over its 1NT: 17 HCP accepts, 16 declines whatever its tens
   # (1N_Balanced_Raise, Basic_NT).
   6N  "Accepts the slam invitation"     shows hcp>=33-partner.hcp.min
-      when  style is bba, shown.hcp.max<=nt_max
+      when  style is bba, !above_1nt
   P   "Declines: not enough for slam"   shows hcp<=32-partner.hcp.min
-      when  style is bba, shown.hcp.max<=nt_max
+      when  style is bba, !above_1nt
 
 # Responder over a 2♣ overcall of our 1NT, when the card keeps the
 # structure on (`notrump.jacoby_transfers.vs_2c`). The natural notrump calls

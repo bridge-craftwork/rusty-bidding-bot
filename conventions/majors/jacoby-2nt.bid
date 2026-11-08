@@ -8,6 +8,8 @@ module jacoby-2nt "Jacoby 2NT"
   skill  partnership_bidding/jacoby_2nt
   param  jacoby   = major_openings.jacoby_2nt.play default false
   param  modified = major_openings.jacoby_2nt.modified default false
+  param  rkcb     = slam.rkcb.play default false
+  param  bw       = slam.blackwood.play default false
 
 after 1M (P) when !passed_hand, jacoby | modified
   2N  "Jacoby 2NT: 4+ {M}, game forcing"  alert
@@ -23,3 +25,61 @@ after 1M (P) 2N (P) when jacoby, !modified
   3M  "18+, no shortness"             shows hcp>=18, shortest>=2
   3N  "15-17, no shortness"           shows hcp=15..17, shortest>=2
   4M  "Minimum, no shortness"         shows hcp<=14, shortest>=2
+
+# Responder after the shortness (Rick, 2026-11-07: the goal of Jacoby
+# 2NT, like the relays and splinters, is to find the slams where every
+# high card works). Honours opposite the singleton or void are wasted
+# (slam-entry.bid, `working_count`): with the working count for slam on
+# opener's floor, responder asks for keycards; without it the slam
+# modules decide (control bids, game), since opener's strength is still
+# open: an explicit 4M sign-off here lost opener's extras (notes).
+after 1M (P) 2N (P) 3x (P) when jacoby, !modified, x is not M
+  4N  "Keycard ask in {M}: opener's shortness fits"
+      when  rkcb
+      shows working_slam(M)
+      sets  ask=keycards(M)
+      artificial
+      priority 14
+  4N  "Blackwood: opener's shortness fits"
+      when  bw, !rkcb
+      shows working_slam(M)
+      sets  ask=aces
+      artificial
+      priority 14
+
+# Opener after responder's 4M (Rick, 2026-11-07: "for standard jacoby,
+# survey bba to see where it decides to go on"). BBA's line, from the
+# grids probes/jacoby-opener-1{S,H}-*-4{S,H}.toml (jacoby-2nt.notes.md):
+# over the shortness answer it goes on with points + controls (A 2,
+# K 1) of about 24 (19 points with five controls); over 3M with 20+
+# points; over 3NT hardly ever; over the side suit nearly always (left
+# to the slam modules). Par decides, BBA teaches: BBA's 24 cost 526
+# IMPs on the corpus, so ours is 22 (83% agreement with BBA against its
+# own 84%, par-neutral) and 19 points over our 18+ 3M. Going on is the
+# slam modules' call, else the keycard ask.
+define jac_on_short = points + controls >= 22
+define jac_on_3m = points >= 19
+after 1M (P) 2N (P) 3x (P) 4M (P) when jacoby, !modified, x is not M
+  P   "Responder signed off: no extras for slam"
+      shows !jac_on_short
+      priority 16
+  4N  "Keycard ask in {M}: extras opposite the sign-off"
+      when  rkcb
+      shows jac_on_short
+      sets  ask=keycards(M)
+      artificial
+      priority -10                     # the fallback: the slam modules' own calls first (exclusion, control bids)
+after 1M (P) 2N (P) 3M (P) 4M (P) when jacoby, !modified
+  P   "Responder signed off: no extras for slam"
+      shows !jac_on_3m
+      priority 16
+  4N  "Keycard ask in {M}: extras opposite the sign-off"
+      when  rkcb
+      shows jac_on_3m
+      sets  ask=keycards(M)
+      artificial
+      priority -10                     # the fallback: the slam modules' own calls first (exclusion, control bids)
+after 1M (P) 2N (P) 3N (P) 4M (P) when jacoby, !modified
+  P   "Responder signed off: 15-17 has no extras"
+      shows !jac_on_short
+      priority 16

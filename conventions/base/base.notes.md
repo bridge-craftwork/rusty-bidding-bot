@@ -23,6 +23,16 @@ style are explained in the comments of `base.bid` and in
   So today "off" bites only on a card with no forcing opening at all
   (no PBS card).
 
+## An unread answer to a quantitative 4NT (Rick, 2026-11-06)
+
+Bridge-Classroom #94 (strong-openings.notes.md has the board): North
+asked with a quantitative 4NT, South answered 5♣, which no rule reads,
+and North passed (the game-reached pass) in a 4-0 fit. A five-level
+suit over a quantitative 4NT is never a place to stop below slam: the
+asker now bids 6NT (`answered quant` / `answered quant_major(M)`,
+`partner.unread`, 5♣-5♠, priority -40). Keycard answers are read and
+have their own continuations in rkcb-1430.bid.
+
 ## Open questions
 
 - With the field on, should a minimum 6-5 (minor longer) still open the
@@ -38,3 +48,7 @@ style are explained in the comments of `base.bid` and in
 - **The openings:** standard practice (longest suit, higher of two
   five-card suits), as BBA's Basic-Bridge card plays them; not yet cited
   to a book.
+- **Unread answer to a quantitative 4NT:** Rick, 2026-11-06
+  (bridge-classroom-bug-artifacts #94); 6NT as the reading of the answer
+  is standard practice (a five-level suit accepts and offers a strain),
+  not yet cited.

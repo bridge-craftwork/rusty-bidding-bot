@@ -660,6 +660,101 @@ auctions (Preempts 17, Muiderberg_Two_Bids 4) that the old list wrongly
 treated as systems on (a "transfer" completed over the Unusual 1NT's
 preference): those now read the 1NT as Unusual.
 
+## Range qualifiers and the alternate range (2026-11-07)
+
+Prompted by Rick's Bridge-Classroom card (14+-17 vulnerable, 11+-14 not
+vulnerable, same responses). Before this, the rules read only
+`notrump.one_nt.range_min`/`range_max`: "14+" was 14, the alternate range
+was ignored, so a balanced 12 passed non-vulnerable.
+
+**Range qualifiers** (`one_nt.range_min_plus`, `range_min_minus`,
+`range_max_plus`, `range_max_minus`, and the same under `one_nt_alt`).
+Decision: a plus on the minimum is "a good 14", the reading the spec's own
+descriptions give the qualifier on the other notrump ranges ("14+-17 is
+a good 14 to 17", convention-card `spec/fields.toml`) and the usual
+meaning when players write "14+" in a card's range box. "Good" is our
+total points (`points`: HCP, half a ten, a point a card beyond four), so
+the range is judged in total points: the opening shows HCP 14-17 **and**
+total points 15-17. That judges the top end too: a 17 that is worth 18 (a
+five-card suit, two tens) does not open 1NT; it is a good 17. A minus on
+the maximum ("15-17-", a poor 17) judges the top only (total points at
+most 17). A plus on the maximum and a minus on the minimum change nothing:
+the HCP range already holds every hand at those counts. Partner and the
+opponents read the judged range: opposite 14+-17 responder counts 15-17
+(invite 8-9, game 10+, as opposite 15-17); opposite 11+-14, 12-14 (invite
+11-12, game 13+).
+
+Why not "points at least 15" alone: showing a points floor without a
+ceiling made the knowledge take the points range for the whole hand,
+whose top a balanced 17 with length and tens puts at 20, and every count
+opposite it fell (1NT–2NT read as 5-9, so a 17 declined). The judged
+ceiling keeps the reading right and is the same judgment at both ends.
+
+**The alternate range** (`one_nt_alt.range_min`, `range_max`,
+`seat_vul`, `same_responses`). It is in force where its `seat_vul` text
+covers the opener's seat and vulnerability, the main range everywhere
+else; the main range's own `seat_vul` is not read (it is normally the
+complement, "Vul" against "Not Vul"). The text is free (the card has no
+options; Bridgodex and Bridge-Classroom write "Vul", "NV", "Not Vul";
+other cards "1st/2nd", "3rd/4th"). The engine reads it with a new term,
+`seat_vul(p)` (eval.rs, `seat_vul_covers`): NV / Not Vul / Non-vul /
+white, Vul / red, seats 1st..4th, ranges (`1-3`), both kinds in one
+clause (`NV 1st/2nd`, all must hold), clauses joined by `or` or `;`. Text
+it cannot read covers nothing, so an unreadable box leaves the main range
+in force. The opening rules are written twice (`when opening, !nt_alt` /
+`nt_alt`), each with its own range in its text and announcement. One
+NT system answers both: every response, slam count and defence counts
+against opener's shown range, so nothing else needed the range in force,
+except the quantitative 4NT's BBA-treatment switch, which now asks
+whether opener has shown more than the range in force (`above_1nt`).
+`same_responses = false` (a separate system for the other range) is not
+modelled: the same responses are played. "1NT may be 1 HCP light" belongs
+to the main range only (it is a `one_nt` field).
+
+Positions (Rick's card, dealer South, `pos.py` in the session scratch):
+
+| hand | before NV | after NV | before vul | after vul |
+|---|---|---|---|---|
+| KJ5.Q74.A963.K82 (13) | 1♦ | **1NT** | 1♦ | 1♦ |
+| Q85.K74.AT963.Q8 (good 11) | 1♦ | **1NT** | 1♦ | 1♦ |
+| KJ5.Q74.AJ63.K82 (plain 14) | 1NT | 1NT | 1NT | **1♦** |
+| KJ5.QT4.AJT3.K82 (14, two tens) | 1NT | **1♦** | 1NT | 1NT |
+| AJ5.K74.AJ63.K82 (16) | 1NT | **1♦** | 1NT | 1NT |
+| responder Q85.K74.A632.Q82 (11) | 3NT | **2NT** | 3NT | 3NT |
+| responder 982.K74.A632.Q82 (9) | | | 2NT | 2NT |
+
+Measured (2026-11-07):
+
+- Tripwire: `compare --limit 50`, all 342 scenarios (17,105 boards), and
+  `compare --par-all` on all 500 boards of Weak_NT_09-12, Weak_NT_11-16
+  (Precision 13-15 card) and Basic_NT: **0 auctions changed**. No corpus
+  card sets a qualifier or an alternate range (the `.bbsa` format has
+  neither), so the stock cards read exactly as before.
+- Self A/B, Rick's notrump fields for North-South alone against the
+  plain 15-17 (`self_ab.py --name rick-nt-ranges --scenarios
+  Basic_What_To_Open Basic_Minor Basic_NT Basic_Openers_Rebid --side ns`,
+  base `notrump.one_nt.range_min=15`, variant the nine fields of the
+  `.test` block): 594 boards changed, the actor's contract errors **-170
+  IMPs** (halves -32 / -138, z -1.8, leans loss). By first differing call:
+  a balanced 15-17 now opening 1m non-vulnerable (1N → 1♦ 158 boards,
+  -136; 1N → 1♣ 216, -27; 1N → 1♥ +11); the weak notrump itself (1♣ →
+  1N 103, -43; 1♦ → 1N 90, -17; 1♥/1♠ → 1N +22); 1N P 6N → 4N +17. So
+  about -150 is the strong balanced hand's route through 1m, which the
+  rebids do not cover yet: Basic_NT 441 (Basic-Bridge, 1♦–2♣ with 16
+  balanced) has **no rule** for opener's rebid and passes the forcing 2♣
+  opposite 20; 1♦–1♠ jumps to 2NT "15-17" where a weak-notrump card
+  rebids 1NT with 15-17 (or 15-16) and 2NT with 18-19. That is
+  rebids.bid's (another worktree's, not touched here). The weak notrump
+  openings themselves are near even (about -38).
+
+The opener's rebids for a weak-notrump card: built 2026-11-07 on Rick's
+ruling (rebids.notes.md, "With a weak notrump"); `weak_nt`,
+`above_weak_nt` and `weak_nt_top_out` are defined in one-nt.bid,
+beside the ranges they read.
+
+Rick (2026-11-07), on judging "good 14" in total points at both ends:
+**"4: yes"**. The decision above stands.
+
 ## Sources
 
 - **The system:** a 15-17 1NT opening and natural responses (2NT
@@ -701,3 +796,14 @@ preference): those now read the 1NT as Unusual.
   the boundary is his, the decisions listed there are ours. Standard
   practice ("systems on" after a natural notrump overcall or rebid) is
   not yet cited to a book or article.
+- **Range qualifiers and the alternate range (2026-11-07):** the
+  qualifier's meaning from convention-card `spec/fields.toml` (the
+  `*_range_min_plus` descriptions: "14+-17 is a good 14 to 17") and
+  standard card usage, not yet cited to a book; judging "good" in total
+  points, at both ends, is our decision, confirmed by Rick ("4: yes",
+  2026-11-07). Seat/vulnerability
+  ranges are standard practice (weak notrump not vulnerable, strong
+  vulnerable), not yet cited. Prompted by Rick's own card (Bridge-Classroom
+  export, 2026-11-07). No corpus card sets a qualifier or an alternate
+  range, so no BBA evidence; measurements in "Range qualifiers and the
+  alternate range".

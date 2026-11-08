@@ -111,6 +111,52 @@ slam tries as without interference (the main block stops at
 Gerber: Rick, "generally Gerber requires a jump". Not on the Brill card,
 where gerber.bid plays Gerber here for Brill partners.
 
+## After 5-4 shown over 1NT (Rick, 2026-11-06)
+
+Bridge-Classroom #85 (1NT–2♥–2♠–3♣–3NT, 16 HCP opposite 17, 6NT
+makes): the count here is HCP and missed it. The fix lives in
+jacoby-transfers.bid (its notes, "Slam after 5-4 shown"): there
+responder counts total points, and that 4NT takes over this one in
+that auction. The balanced-hand thresholds here are unchanged.
+
+## Opener over responder's 15-17 3NT after a 2/1 (Rick, 2026-11-07)
+
+Since 2026-11-06 (#91, responder-rebids.notes.md) responder's jump to
+3NT after a game-forcing 2/1 and opener's two-level rebid is 15-17
+HCP; the 16+ hands used to bid 2NT, where opener counted slam in
+points on the 16 floor (rebids.bid). Moved to this module's general
+count (34 / 32-33 HCP on partner's minimum), opener lost slams: -50
+IMPs on 21 boards (actor contract errors, last round's split). Rick,
+asked whether opener should be more aggressive opposite a 15-17 3NT:
+"yes".
+
+Now `after 1y (P) 2x (P) 2z (P) 3N (P)` (game force) counts the
+**textbook 33 / 31-32 in HCP on responder's minimum**: 18+ bids 6NT,
+16-17 a quantitative 4NT. Responder answers the 4NT in HCP: 16-17
+accepts, 15 declines. The general count elsewhere is unchanged.
+
+**Measured** (compare `--par-all`, 35 scenarios, 17,500 boards: 2/1,
+forcing 1NT, major raises, misfits, slam; errors_diff.py on the item's
+own run, the bidding side's contract errors; the auction is rare, so
+few boards change):
+
+| opener's count | boards | actor contract errors (halves) | par |
+|---|---|---|---|
+| points, 33 / 31-32 on the minimum | 181 | -378 (-103 / -275) | -280 |
+| points, partner at mid-range (32 / 30-31) | 281 | -666 (-221 / -445) | -542 |
+| HCP, partner at mid-range (32 / 30-31) | 14 | +24 (+29 / -5, differ) | +27 |
+| HCP, 33 / 31-32, `!shortest<=1` | 5 | +24 (+13 / +11) | |
+| HCP, 33 / 31-32, one-nt.bid's answer | 8 | +31 (+26 / +5) | +32 |
+| **HCP, 33 / 31-32, answered in HCP (kept)** | 8 | **+18 (+13 / +5)** | +19 |
+
+Points were a disaster: after a 2/1 misfit opener's long suits count
+length points his partner cannot use in notrump (6-5 and 6-4 hands
+bid 6NT on 30 HCP). one-nt.bid's answer counts points on opener's
+floor, and opener here always has a five-card suit, so it accepted
+with every 15: the 4NT was a 6NT bid by 16-count. It scored one board
+better (Misfit_13-Plus 402, 16 opposite 15 made 6NT) but is the 31-HCP
+slam this module's calibration rejects, so the HCP answer is kept.
+
 ## Sources
 
 - **The thresholds:** the textbook combined counts for 6NT and a
@@ -130,3 +176,9 @@ where gerber.bid plays Gerber here for Brill partners.
 - **Rick's ruling, 2026-10-03:** 4NT with no notrump bid is keycard
   for the last suit on cards that play an ask.
 - Rick, 2026-10-31: Gerber needs a jump; 4♣ over 3NT is a slam try.
+- Rick, 2026-11-06 (bridge-classroom-bug-artifacts #85): invite slam
+  after 5-4 shown; built in jacoby-transfers.bid.
+- **Rick, 2026-11-07** (#91 follow-up): opener should be more
+  aggressive about slam opposite responder's 15-17 3NT after a 2/1.
+  The textbook 33/31 HCP count there is standard practice, not yet
+  cited.

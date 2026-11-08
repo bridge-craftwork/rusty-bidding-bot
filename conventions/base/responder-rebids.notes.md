@@ -499,6 +499,68 @@ deals: 482 boards short of slam, responder the stronger hand in 379). Now
 -19 (flat); corpus +318. Most of what is left are 29-32 HCP slams par
 finds double dummy.
 
+## Notrump rebids after a 2/1: 2NT 12-14 or 18+, 3NT 15-17 (Rick, 2026-11-06)
+
+bridge-classroom-bug-artifacts #91 (board 29, NT Ladder, Rick South):
+1♦-2♣-2♥ and North, 12 HCP, jumped to 3NT, read as "Game, no fit:
+13-15". Rick: "In a 2/1 auction responder's jump to 3NT shows 15-17.
+2NT here shows 12-14 or 18-19." So in a game-forcing 2/1, after any
+two-level rebid by opener (his suit again, a new suit, a reverse; 2NT
+is always available there), responder without a fit bids:
+
+- **2NT: 12-14 or 18+**, forcing. Opener may not pass. He counts slam
+  on the minimum (rebids.bid: 6NT, quantitative 4NT, otherwise 3NT).
+  Over opener's 3NT the strong branch invites with a quantitative 4NT
+  (18-20) and bids 6NT with 21+. The minimum passes. Four cards in
+  opener's second suit, when it is a major, raise it instead.
+- **3NT: 15-17**, the jump. Opener counts slam with over-3nt.bid (18
+  opposite 15 bids a quantitative 4NT).
+
+The ranges are now in HCP, as notrump ranges are. Since 2026-09-30
+they had been notrump points, 3NT 13-15 and 2NT 16+ ("Fast arrival in
+notrump" above). In HCP, over-3nt.bid's HCP count reads the 3NT. When
+opener's rebid is 2NT or higher the scheme does not apply, and those
+blocks are unchanged. A 2/1 that forces only one round (`!we.gf`) keeps
+2NT as 11-12 invitational and 3NT as game.
+
+Board 29 now goes 1♦-2♣-2♥-2NT-3NT: the same contract, read right.
+
+**Source:** Rick's ruling. Robert Todd, "Using NT Rebids in 2/1
+Auctions", Advancing in Bridge #425 (2022), gives no ranges for
+responder but points the same way: responder's jump to 3NT "shows
+extra values", and his 2NT does not promise them. The same article
+gives opener's 2NT as 12-14 or 18-19 and his 3NT as 15-17, the scheme
+Rick applies to responder. No book with responder's ranges is cited
+yet (Hardy's and Lawrence's 2/1 books were not checked).
+
+**Measured** with compare --limit 50, `--par-all` and errors_diff.py,
+counting the bidding side's contract errors. Both issues' changes ran
+together; the boards are split by the first differing call. Over all
+343 scenarios, the boards changed by the 2/1 notrump rebids net +44
+IMPs in actor contract errors:
+
+- Responder's 15-17 jump to 3NT, which used to bid 2NT as 16+, lost
+  50 on 21 boards, mostly slams opener no longer counts on the 3NT.
+- The 15-17 3NT, which used to be 13-15, gained 43 on 20 boards.
+- Opener's 3NT, where he had bid 6NT over the old 16+ 2NT, gained 40
+  on 12 boards.
+- The 12-14 2NT lost 12 on 42 boards. That is after adding opener's
+  self-sufficient 4M over it (rebids.bid); over the old 3NT he had bid
+  4M (over-3nt.bid).
+
+Whole set, both issues: actor contract errors +146 (halves +9 / +137),
+distance from par +75. Against BBA, errors went from -8142 to -7857
+and par from -6546 to -6471.
+
+**Rick, 2026-11-07:** asked whether opener should be more aggressive
+about slam opposite the 15-17 3NT (the -50 above): "yes". Opener now
+counts the textbook 33/31 HCP on responder's minimum there (18+ 6NT,
+16-17 a quantitative 4NT; over-3nt.bid and its notes): +18 IMPs on 8
+boards in actor contract errors. Over the 12-14 / 18+ 2NT opener's
+count is unchanged (points on the 12 floor, rebids.bid); once the
+strong branch shows itself with the quantitative 4NT, opener accepts
+with 14+ points (one-nt.bid), already past the textbook 33.
+
 ## 1M-1NT-2M-3M is the two-card raise (2026-09-30)
 
 `after 1x (P) 1N (P) 2x (P)` had two raises: "3+ {x}, maximum for the
@@ -795,6 +857,269 @@ from 6 points, pass below. Over a non-jump 2NT (their 2-level suit) the
 Double_double and Negative_Double boards change both ways, net gain; 51
 boards, errors +74 IMPs to us.
 
+## Preference after the 2/1 cards' 1NT: two, or three and a weak raise (Rick, 2026-11-06)
+
+bridge-classroom-bug-artifacts #87 (board 14, Major Suit Fit, Rick
+South): 1♠-1NT-2♥-2♠ with Q72 in spades and 7 HCP. Rusty read the 1NT
+as 0-2 spades and the preference as exactly two. Rick: "Rusty should
+report this as 2S or 3S with 5-7 support pts." Our reading (the
+controller's interpretation, an open question for Rick): a weak
+three-card raise, too weak for the constructive single raise, goes
+through 1NT and shows up as the preference.
+
+- responses.bid now lets the 6-12 1NT (forcing, semi-forcing or not)
+  hold three trumps with 6-7 HCP.
+- On the 2/1 cards Rusty's single raise with three trumps needs 8+
+  support points, so only a flat 6-7 goes through 1NT; with four
+  spades over 1♥ (no 1NT) it still raises. This does not apply to a
+  passed hand, to the Brill card or to `style=bba`. A first try routed
+  every 6-7 HCP three-card raise through 1NT and lost (below).
+- Here, when my 1NT allowed three, the preference over a two-level
+  rebid has its own rule: "two {M}, or three with a weak raise (6-7)".
+  With three it takes the major even over four of opener's minor.
+- Opener's continuations read only `partner.M.min`, so they do not
+  change: North still passes 2♠ with 14 HCP and 6-4.
+
+**Read in HCP, bid in support points.** In our count Rick's hand has
+9 support points (7 HCP and two doubletons with three trumps), so a
+reading of "5-7 support points" would exclude the very hand he bid
+this way. The reading is therefore 6-7 HCP (6 is the 1NT's floor),
+which includes it. Rusty itself raises that hand directly (9 support
+points), and gives the weak preference only with 6-7 support points.
+Questions for Rick: which count he means, and whether 5 HCP hands
+belong in the 1NT.
+
+**Measured** with compare --limit 50, `--par-all` and errors_diff.py,
+counting the bidding side's contract errors. The first version sent
+every 6-7 HCP three-card raise through 1NT. On 14 2/1 and major
+scenarios it lost:
+
+- 20 IMPs on 11 boards, where opener's game after 1♠-2♠ became
+  1♠-1NT-2x-2♠, passed;
+- 17 IMPs on 6 boards, where hands with 4 spades and 3 hearts passed
+  1♥.
+
+The final version bids in support points (only a flat 6-7 goes
+through 1NT) and raises with four spades. Over all 343 scenarios:
+
+- 1♠-2♠ -> 1NT: -8 on 43 boards (+37 by all errors);
+- 1♥-2♥ -> 1NT: +30 on 40 boards;
+- a side effect of the wider 1NT: 13-count hands that had bid 1NT now
+  bid their 2/1 2♣/2♦, +53 on 28 boards and +27 on 22.
+
+Net: +102 in actor contract errors.
+
+### Support points, not HCP (Rick, 2026-11-07)
+
+Rick answered the question above: "support points. with 9 support
+points a direct, constructive raise is correct." So:
+
+- the weak three-card raise through 1NT is **5-7 support points** with
+  the major as trump (`tp(M)<=7`; the 1NT's 6 HCP floor stays, so in
+  practice 6-7), and the 1NT and the preference are read that way;
+- the direct single raise with three trumps is **constructive, 8-10
+  support points** (responses.bid already bid it so; its reading
+  `tp(M)=6..10` with `tp(M)>=8` on the 2/1 cards is 8-10);
+- Rick's board-14 hand Q72.97.AT8742.J2 (7 HCP, two doubletons: 9
+  support points) raises 1♠-2♠ at once.
+
+The 6-7 HCP reading had let hands with 8-9 support points into the
+1NT, and over 1♥ the 1NT had won the tie with 2♥ on such hands
+(descriptiveness). Now they raise, as Rick rules. When a hand with 8+
+support points has bid 1NT anyway (Rick's own 1NT on board 14), a
+fallback "Preference: three {M}" (priority -3) still takes the major;
+partner reads the main rule.
+
+The narrower 1NT also became more descriptive than the 2/1 2♣ over
+1♥ with 12 HCP and a long minor and won that tie (descriptiveness),
+undoing last round's flip the other way: -53 IMPs on 28 boards in the
+tripwire. The 1NT on the 2/1 cards now also says `hcp<=11 |
+points<=12`: a 12-count with a long suit has 13 points and bids its
+2/1 (the 2/1 needs 13 points), as it did before.
+
+**Measured** (compare `--par-all`, errors_diff.py, the bidding side's
+contract errors; both issues of 2026-11-07 together, split by the
+first differing call):
+
+- 35 scenarios, 17,500 boards (2/1, forcing 1NT, major raises,
+  misfits, slam): `1♥ P: 1NT -> 2♥` (8-9 support points now raise)
+  -83 on 60 boards (-90 by all errors), mostly the Gavin raise
+  scenarios, where the opponents now compete over 2♥.
+- Tripwire, all 343 scenarios at `--limit 50`: 32 boards changed,
+  **+5** (halves -4 / +9), distance from par +23; `1♥ P: 1NT -> 2♥`
+  -12 on 20, `1♠ P: 1NT -> 2♠` +4 on 4. Against BBA errors -7731 ->
+  -7759 (the doubling half, -30, is the opponents'), par -6329 ->
+  -6306.
+
+The loss on the raise scenarios is the price of Rick's ruling (the
+raise is constructive from 8 support points), not a misread
+definition, so it stands.
+
+## After opener's notrump in a contested auction (Rick, 2026-11-06)
+
+Partner of the new opener's rebids in rebids.notes.md ("Opener's
+notrump once they come in"; bridge-classroom-bug-artifacts #90, #93):
+
+- `1x (P) P (1y) 1NT (P)` / `... (2y) 2NT (P)`: my pass showed 0-5,
+  so there is no game. Pass, or over 1NT play two of a six-card suit.
+  Natural, no Stayman or transfers: it is opener's rebid, not a 1NT
+  opening, and the passed hand has nothing to invite with. (#90's
+  North, 8.53.Q852.QT8532, now bids 2C over 1NT; BBA 2C too.)
+- `1x (P) 1z (2y) 2NT (P)` and `1x (P) 1z (1y) 2NT (P)` (the jump):
+  the uncontested ladder after 1x-1y-2NT: pass to 6, 3NT from 7, three
+  of a five-card major forcing (opener: 4M with three, else 3NT), four
+  with six. The controller's brief suggested raising from 6; 7 is what
+  every other 18-19 2NT here uses, so it stays 7.
+- `1x (P) 1y (1z) 1NT (P)` (12-14): the block already written for
+  `1x (1z) 1y (P) 1NT (P)`: 2NT invites with 11-12, 3NT with 13+.
+
+## Over opener's values double and BBA's ranges (Rick, 2026-11-07)
+
+Rick: **"we can follow BBA's lead"** (#93; rebids.notes.md, "Opener's
+notrump and double over their overcall: BBA's style"). Opener's 2NT
+over their overcall of my response is now 17-18 and 3NT 19-21; over a
+one-level overcall 1NT is 13-16. My answers to those are as before.
+New: `1x (P) 1M (2y) X (P)`, opener's values double (15-18 balanced, at
+most three M, where it is not a support double). Written against the
+question it sets (`ask=values(M, x, y)`), as BBA
+(`probes/opnt-r-1D-1H-2S-X.toml`, `opnt-r-1C-1H-2S-X.toml`; meanings
+from `bba_alert`):
+
+- pass: four of their suit, up to 9 HCP (BBA passes with four spades;
+  with 10+ it bids 3NT);
+- 4M six or more and 10+; 3NT 10+ with their suit stopped and at most
+  four M; the cue bid 10+ without a stopper (or with five M), forcing to
+  game: opener 3NT with a stopper, 4M with three, else four of his minor;
+- 2NT 8-9 with a stopper, invitational (`ask=nt_invite`);
+- three of M with five, up to 9; a minor with four, up to 9; else back
+  to opener's minor.
+
+HCP, not total points: BBA's 3NT and cue start at 10 HCP; with our
+total points shortness pushed 8-9 counts into the cue bid. Ours agree
+with BBA on 62 and 73 of 120 hands (from 10 and 13 with no rule); the
+rest is mostly BBA choosing between 3m and 3H on weak hands.
+
+Over 2NT (17-18) BBA raises from 7-8 and with a five-card major bids
+3NT (`opnt-r-1D-1H-2S-2N.toml`, `opnt-r-1D-1S-2H-2N.toml`); we keep
+3M five, forcing (the uncontested 1x-1y-2NT ladder): an accepted
+difference, for Rick.
+
+## Over opener's double after 1C P 1D (overcall) (Rick, 2026-11-07)
+
+Rick: "yes" to BBA's double there (rebids.notes.md, "Rick's answers").
+Opener shows three or four of the other major, 14-18 balanced (15-18
+over a two-level overcall). Answered against `ask=minor_x(M, x, y)`,
+as BBA (`probes/opnt-r-1C-1D-1S-X.toml`, `opnt-r-1C-1D-2H-X.toml`):
+the major with four (up to 11 HCP), 3NT 10+ with their suit held, the
+cue bid 10+ without (opener: 3NT with a stopper, else the cheapest
+bid in the major, forcing; I raise with four, else 3NT: a separate question,
+`minor_x_cue`, as the major-response cue's 4M with three found a 3-3
+fit on 1m-1_2_or_3_NT 46), 2NT 8-9 with a stopper, diamonds with five
+up to 9, otherwise back to clubs. When they raise over the double:
+the major with four, 3NT 10+ with a stopper, five diamonds at the
+three level, else pass (three no-rule positions in the first compare). Ours agree with BBA on 84 and
+85 of 120 hands (2 and 3 before, no rule). BBA differs on weak hands:
+it often bids 2D/3D with four of the major and five diamonds, and over
+2H bids 2S with three spades and four diamonds; we bid the four-card
+major and go back to clubs.
+
+## After opener's natural spades over 1C P 1D (1H), and his cue bid after the double (Rick, 2026-11-07)
+
+Rick: **"yes to 1 and 2"** (rebids.notes.md, "Opener's natural spades
+and the strong double after 1C P 1D (overcall)"). Opener's 1S is four
+spades, 11-15; 2S four spades, 16+, forcing one round. BBA
+(`probes/opns-r-1C-1D-1H-1S.toml`, `-2S.toml`, 160 hands each; ranges in
+HCP, as BBA's fall):
+
+- over 1S: 2S with four spades up to 9, 3S 10-11, 4S 12+; 1NT up to 10,
+  2NT 11-12, 3NT 13+ with hearts held; 2C with three clubs, 3C 11-12
+  with four; 2D / 3D with six diamonds; the cue bid 2H with 13+ and no
+  stopper (opener: 3NT with a stopper, a fifth club, three diamonds,
+  else 2S; then I pick the game). BBA bids 1NT without a heart stopper
+  too: not taken (Rick 2026-10-16, notrump promises a stopper), so those
+  hands bid 2C or 2D. Agreement 58 → 111 of 160.
+- over 2S: 4S with four spades and 8+ support points, 3S below (BBA:
+  game from about 6); 3NT 9+ with hearts held; 3H cue 10+ without; 3D
+  six diamonds up to 9; otherwise 3C (opener: 3NT with 18+ and a
+  stopper, else pass). BBA's 4C (club fit, slam interest) is not built.
+  Agreement 54 → 90.
+- when they compete over 1S (2H / 3H): 2S with four up to 9, 3S 10-12
+  (over 3H: competing, to 12), 4S 13+, 3NT 13+ with a stopper, 3D with
+  six diamonds, else pass. No BBA grid: our decision, from the compare's
+  losers (the generic block's 3NT on 9 points).
+
+All at priority 1, ahead of the generic block for opener's new suit
+over their call (which reads notrump with no stopper). Over opener's
+cue bid after his double and my weak answer (17-18, no stopper; `ask=
+x_cue`): 3NT with their suit held and 7+, 2NT with it and less, the
+major with four, five diamonds, else clubs. When they raise over the
+double, the major with four competes at the three level at most (it bid
+4H over 3S on 7 HCP).
+
+### Rick's answers and the strong new suits (2026-11-07, second round)
+
+Rick on responder's notrump over opener's 1S without a heart stopper
+(BBA bids 1NT anyway): **"require a stopper"**. As built.
+
+Rick: **"3: yes. 5: yes 6: yes"** (rebids.notes.md). Responder's side:
+
+- **Over a strong new suit** (game forcing; `ask=rev(w, m, y, z)`): BBA
+  (`probes/opns-r-1C-1D-2H-2S.toml`, `-1C-1D-1S-2H`, `-1D-1S-2C-2H`,
+  `-1C-1S-2H-3D`, 120 hands each): a major raised to game with a
+  minimum (up to 7), one level with 8+; 3NT with their suit held; my
+  own suit with five (a minor) or six (a major); the minor's preference
+  (BBA's 4m "try" is ours 3m or 4m); else the cue bid. BBA's 4NT keycard
+  not taken. Agreement 48, 58, 72, 46 of 120.
+- **Over 1D P 1M (2y) 3C** (13-19, not forcing; `opns-r-1D-1H-2S-3C`,
+  `-1D-1S-2H-3C`): pass with nothing, 3D with three diamonds to 10, 3NT
+  11+ with their suit held, my major with six and 9+, the cue bid 12+
+  without a stopper. When they compete: 4C with four clubs, 3NT, else
+  pass. Agreement 80 and 79 of 120.
+- **Over 1D P 1H (1S) 2C** (five-five, 13-17; `opns-r-1D-1H-1S-2C`):
+  2D or 3C with the longer minor to 9; 2H with six hearts; 2NT 10-11
+  and 3NT 12+ with spades held; 3D 10-11 with three diamonds (opener
+  5D with 15+ points); the cue bid 2S with 12+ and no stopper. BBA's 4NT
+  keycard and its five-level jumps not taken. Agreement 52 of 120.
+- After opener's 14-count raise to 3H (an invitation) the major
+  invitation's answer; after his 2D / 3D or 1NT, pass.
+
+### The 4m try and keycard after the strong new suit (Rick, 2026-11-07, third round)
+
+Rick: **"for our default, let's make it forcing"** (responder's 4m after
+opener's jump shift; Minorwood on the card makes it keycard once the
+minor is agreed, untouched) and **"5: yes"** (keycard). Over the strong
+new suit (`ask=rev`) and now over the uncontested jump shift after a
+minor opening (`ask=js`): 3m a minimum (to 6) when there is room, 4m
+three or more with 7+ (BBA's "try"), forcing; 4NT keycard with a fit
+and 32 between us on opener's floor (a minor needs four cards opposite
+the uncontested jump shift); over the uncontested jump shift 3NT with no
+fit, balanced, to 11, ahead of the minor. Measured in rebids.notes.md.
+
+Rick (2026-11-07, fourth round): **"1 yes"**, keep the 4m slam try and
+the unbalanced double over 1C P 1D (overcall); **"2 yes"**, the keycard
+thresholds (32 for responder, 29 / 30 for opener) are accepted.
+
+## Counting against opener's shown range: the weak notrump (Rick, 2026-11-07)
+
+With a weak notrump in force opener's 1NT rebid is a good 14 to 17 (rebids.notes.md,
+"With a weak notrump"), so the counts after it are written against his
+shown HCP minimum instead of as fixed numbers, for a three-point range:
+`nt_rebid_signoff` (my points plus his minimum at most 22),
+`nt_rebid_invite` (23-24), `nt_rebid_game` (25 or more). Counting on
+his maximum as well was tried first: it changed a Precision board
+(Weak_NT_11-16 30, where 1♦ caps the 1NT rebid below 14) in the
+tripwire, so the counts read the minimum only. Opposite 12-14 they are
+the old 10 / 11-12 / 13; opposite the weak-notrump card's 1NT, read as a
+good 14 to 17, 8 / 9-10 / 11. They serve the natural block
+after 1NT, two-way NMF / XYZ and NMF (NMF's continuations count on his
+minimum, which the 2♥/2♠/2NT answers leave unchanged). The contested 1NT
+(`1x (1z) 1y P 1N`, `1x P 1y (1z) 1N`) and the 1NT answer to a negative
+double keep their fixed numbers and have weak-notrump blocks of their
+own (opener's range 14+ to 17 or more), since their stock ranges (13-16,
+10-14) are not 12-14. After 1♦–2♣–2NT with a weak notrump (12-14 or 18+)
+responder counts slam on the minimum, as opener does over responder's
+2NT (#91): 6NT with 33, a quantitative 4NT with 31.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -834,3 +1159,43 @@ boards, errors +74 IMPs to us.
   reads opener's length as each shows it.
 - Brill daily 2026-10-20, board 7 and Brill /explain of 4D ("D >= 3,
   HCP 7-9"); the 3M/4M continuations: standard practice, not yet cited.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #91): after a
+  game-forcing 2/1, responder's 2NT is 12-14 or 18-19 and the jump to
+  3NT is 15-17. Robert Todd, Advancing in Bridge #425, "Using NT
+  Rebids in 2/1 Auctions" (2022): responder's jump to 3NT shows
+  extras, with no ranges given. No book cited for the ranges yet.
+  **Rick, 2026-11-07:** opener more aggressive about slam opposite the
+  15-17 3NT ("yes"); built in over-3nt.bid.
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #87): the
+  preference after 1M-1NT shows two, or three with a weak raise ("5-7
+  support pts"). **Rick, 2026-11-07:** in support points, and "with 9
+  support points a direct, constructive raise is correct". The weak
+  raise through a forcing 1NT is standard 2/1 practice, not yet cited.
+
+- **Rick, 2026-11-06** (bridge-classroom-bug-artifacts #90, #93): the
+  notrump rebids answered here; responder's continuations (no systems
+  over opener's reopening notrump, the 1x-1y-2NT ladder over the
+  contested 2NT) are standard practice, not yet cited, and our
+  decision (2026-11-07).
+- **Rick, 2026-11-07** (#93): "we can follow BBA's lead". Responder's
+  answers to opener's values double are BBA's (grids
+  `probes/opnt-r-*.toml`, 21GF-GIB, 2026-11-07); not cited to a book.
+- **Rick, 2026-11-07**: "yes" to opener's double after 1C P 1D
+  (overcall); responder's answers are BBA's (grids
+  `probes/opnt-r-1C-1D-*-X.toml`, 21GF-GIB, 2026-11-07).
+- **Rick, 2026-11-07**: "yes to 1 and 2". Responder's continuations
+  after opener's 1S / 2S over 1C P 1D (1H) are BBA's (grids
+  `probes/opns-r-*.toml`, 21GF-GIB, 2026-11-07), with a stopper for
+  notrump (Rick 2026-10-16); the competitive block and the answers to
+  opener's cue bid are our decision. Not cited to a book.
+- **Rick, 2026-11-07** (second round): "require a stopper" (responder's
+  notrump over opener's 1S); "3: yes. 5: yes 6: yes". Responder's
+  continuations from the grids `probes/opns-r-*.toml` (21GF-GIB,
+  2026-11-07), with a stopper for notrump. Not cited to a book.
+- **Rick, 2026-11-07** (third round): 4m forcing after the jump shift;
+  keycard "5: yes". The thresholds are our decision (rebids.notes.md).
+  Fourth round: "1 yes", "2 yes" (kept; accepted).
+- **Rick, 2026-11-07** (weak notrump): "3 yes and after 2/1 a jump to
+  3NT shows 15-17, 2NT shows 12-14 or 18-19". Counting 25 for game
+  against the shown range is the standard point-count ladder, not yet
+  cited; writing the counts that way is our decision.

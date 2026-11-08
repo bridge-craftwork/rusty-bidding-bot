@@ -85,3 +85,29 @@ N AKQ2.AKJ.KQ2.K32      |            | 3NT    | brill: 3NT is 25-27 (card)
 N AKQ32.AKJ.KQ2.A2      |            | 2C     | brill: a five-card major opens 2C, not 3NT
 card    21GF-GIB
 N AKQ32.AKJ.KQ2.A2      |            | 3NT    | default: 26-27 balanced, a five-card major included
+
+# ── Bridge-Classroom #94 (Rick, 2026-11-06), NT Ladder board 38 ───────
+# Stand-in for Rick's card: 21GF-GIB with modified Jacoby 2NT and Kokish.
+dealer  S
+vul     EW
+card    21GF-GIB major_openings.jacoby_2nt.modified=true two_level.kokish.play=true
+N K973.AQT43.J942.      | 2C P 2H P 3D P             | 4D   | four diamonds: agree opener's minor below game
+S AQJ.K8.AKT65.AK2      | 2C P 2H P 3D P 4D P        | 4NT  | diamonds agreed, 22+ opposite a positive: keycard
+S AQJ.K8.AKT65.AK2      | 2C P 2H P 3D P 4D P 4NT P 5C P | 6D | all five keycards, no queen: six
+# Systems on over 2NT (Rick, 2026-10-05): the transfer stands. Opener
+# completes; Rick's 4D instead is natural (2NT denied three hearts).
+S AQJ.K8.AKT65.AK2      | 2C P 2H P 2NT P 3D P       | 3H   | complete the transfer
+N K973.AQT43.J942.      | 2C P 2H P 2NT P 3D P 4D P  | 4NT  | 4D natural: three or more diamonds, keycard
+N K973.AQT43.J942.      | 2C P 2H P 2NT P 3D P 4D P 4NT P 5C P | 6D | the asker places the slam, never passes
+N K973.AQT43.82.Q2      | 2C P 2H P 2NT P 3D P 4D P  | 4H   | no diamond fit: back to the hearts
+# Kokish off (21GF-DEFAULT): 2C-2D-2H is natural; responder shows a
+# suit, waits with 2NT, raises, or bids the second negative.
+dealer  S
+vul     None
+card    21GF-DEFAULT
+N KJT973.72.Q43.82      | 2C P 2D P 2H P             | 2S   | five or more spades of my own
+N Q72.J2.KJ643.Q82      | 2C P 2D P 2H P             | 3D   | five or more diamonds
+N KQ42.72.K643.Q82      | 2C P 2D P 2H P             | 2NT  | no fit, nothing to show: waiting
+N 8642.J72.9643.82      | 2C P 2D P 2H P             | 3C   | second negative
+S A4.AKQJ52.AK3.K2      | 2C P 2D P 2H P 2NT P       | 3H   | six hearts
+S A4.AKQJ5.AKJ3.K2      | 2C P 2D P 2H P 2NT P       | 3D   | a second suit

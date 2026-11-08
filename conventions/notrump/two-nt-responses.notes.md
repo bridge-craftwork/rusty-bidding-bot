@@ -84,6 +84,21 @@ bands, one system as Rick asked. For Rick: should the 2NT system's 4NT
 and 6NT move to the catch-all's 32-33 / 34 HCP everywhere (it would
 change the 2NT opening too)?
 
+## With five, transfer first (Rick, 2026-11-07)
+
+Rick: "people playing jacoby transfers normally play them over 1NT, 2NT,
+2C/2NT, and kokish relay, and sometimes 2C/3NT". The transfers were on
+over all of them, but the quantitative 4NT and 6NT here had no
+"with five, transfer first" condition (one-nt.bid has it over 1NT), so a
+five-card major with a slam invitation bid 4NT and hid the suit. That
+showed over Kokish's 2NT, where opposite 24-25 a 7-count is already a
+slam invitation (84.KJ863.Q72.J54: 4NT; now 3♦ then 4NT, "Quantitative,
+5 ♥", answered by jacoby-transfers.bid's `quant_major`). With Jacoby on
+the card, 4NT and 6NT now need H<=4, S<=4; without it they stay as they
+were. Same for the 2NT opening (84.KJ863.KQ2.Q54, 12: 3♦ then 4NT).
+Cases at the end of two-nt-responses.test; measurements in
+kokish.notes.md.
+
 ## Gaps and open questions
 
 - **Minor-suit transfers over 2NT** (`notrump.minor_transfers.over_2nt`,
@@ -319,3 +334,6 @@ Stayman fixed that.
   unreachable on 2026-09-28.
 - Rick, 2026-10-05: one 2NT system for every natural 2NT, opener's
   range from the auction ("systems on", one-nt.notes.md).
+- Rick, 2026-11-07: Jacoby transfers over every 2NT (quoted in "With
+  five, transfer first"); transferring first with a five-card major and
+  slam values is standard practice, not yet cited (as over 1NT).

@@ -23,6 +23,8 @@ module modified-jacoby-2nt "Modified Jacoby 2NT"
   card   major_openings.jacoby_2nt.modified
   needs  jacoby-2nt
   skill  bidding_conventions/modified_jacoby_2nt
+  param  rkcb  = slam.rkcb.play default false
+  param  bw    = slam.blackwood.play default false
 
 # ── Opener's rebid ───────────────────────────────────────────────────
 after 1M (P) 2N (P)
@@ -231,27 +233,44 @@ after 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P
   step(2)  "Step 3: spade void"    alert  shows S=0  artificial  priority 15
 
 # ── Responder: the relays ────────────────────────────────────────────
-# The relays are for slam interest. Without it the slam modules decide,
-# as after standard Jacoby: game, or keycard straight away. An explicit
-# 4M sign-off here cost 141 slams in the self A/B (notes, "Self A/B").
+# Over the minimum (Rick, 2026-11-07): "modified jacoby 2nt is mostly
+# useful because responder can jump to game with no slam interest,
+# after a 3C rebid by opener. the main advantage is that it doesn't
+# give the defenders any clues to opener's distribution. so we don't
+# want to always ask. but with say 15+ HCP, responder should probably
+# ask." So 3♦ with 15+ HCP, else 4M at once. This overrides the
+# double-dummy measurement, which cannot see what the relays tell the
+# defenders (notes, "Ask over 3♣ only with 15+").
+#
+# Over the non-minimum answers (3♦ short, the void) the relays stay
+# wide: responder relays whenever slam is possible with everything
+# working, his support points and opener's top HCP 27 or more
+# (`mj_relay_floor`). Cohen: "If responder still has slam interest, he
+# can ask further".
+define mj_relay_floor = 27
+define mj_try(t) = slam_interest(t) | tp(t) + partner.hcp.max >= mj_relay_floor
+
 after 1M (P) 2N (P) 3C (P)
   3D  "Asks opener to describe the minimum"  alert
-      shows slam_interest(M)
-      sets  ask=relay
+      shows hcp >= 15
+      sets  ask=mj_relay
       artificial
       priority 15                      # the relay, ahead of the control bids (12-14)
+  4M  "Game: no slam interest opposite a minimum"
+      shows hcp <= 14
+      priority 15                      # Rick 2026-11-07: tell the defenders nothing
 
 after 1M (P) 2N (P) 3D (P)
   3H  "Asks where the singleton or void is"  alert
-      shows slam_interest(M)
-      sets  ask=relay
+      shows mj_try(M)
+      sets  ask=mj_relay
       artificial
       priority 15
 
 after 1M (P) 2N (P) 3H (P)
   3S  "Asks for opener's four-card side suit"  alert
       shows slam_interest(M)
-      sets  ask=relay
+      sets  ask=mj_relay
       artificial
       priority 15
 
@@ -273,9 +292,58 @@ after 1M (P) 2N (P) 3C (P) 3D (P)
       shows shape 5-3-3-2, M=5
       priority 15
   4x  "Minimum, a good five-card side suit"
-      shows x>=5, quality(x)>=good
+      shows x>=5, quality(x)>=good, shortest>=1
       when  x is not M, M is S | x is not S
-      priority 16                      # ahead of the shortness most such hands also hold
+      priority 16                      # ahead of a singleton most such hands also hold; a void goes first (3♥)
+
+# The next step asks again (Cohen: "After opener's 3♥ or 3♠ answer to
+# 3♦, next step asks, using same schedule"), one step up from the
+# non-minimum schedule: over 3♥ (short), 3♠ asks: 3NT a void (4♣ asks
+# where: 4♦ clubs, 4♥ diamonds, 4♠ the other major), 4♣/4♦/4♥ a
+# singleton club, diamond, other major. Over 3♠ (5-4-2-2), 3NT asks:
+# 4♣ clubs, 4♦ diamonds, 4♥ the other major. Over 1♥ the singleton or
+# four spades lands on 4♥, the spade void on 4♠: past game, and
+# responder still has 4NT.
+after 1M (P) 2N (P) 3C (P) 3D (P) 3H (P)
+  3S  "Asks where the singleton or void is"  alert
+      shows mj_try(M)
+      sets  ask=mj_relay
+      artificial
+      priority 15
+# Responder does not make the 3NT ask himself: nothing below reads the
+# four-card suit, and relaying cost 53 IMPs on 34 boards against going
+# on at once (notes). Opener still answers a partner who asks.
+after 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)
+  3N  "A void: 4♣ asks where"  alert   shows C=0 | D=0 | H=0     artificial  priority 15
+  4C  "A singleton club"  alert        shows C=1, D>=1, H>=1     artificial  priority 15
+  4D  "A singleton diamond"  alert     shows D=1, C>=2, H>=1     artificial  priority 15
+  4H  "A singleton heart"  alert       shows H=1, C>=2, D>=2     artificial  priority 15
+after 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)
+  3N  "A void: 4♣ asks where"  alert   shows C=0 | D=0 | S=0     artificial  priority 15
+  4C  "A singleton club"  alert        shows C=1, D>=1, S>=1     artificial  priority 15
+  4D  "A singleton diamond"  alert     shows D=1, C>=2, S>=1     artificial  priority 15
+  4H  "A singleton spade"  alert       shows S=1, C>=2, D>=2     artificial  priority 15
+after 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P)
+  4C  "Asks where the void is"  alert
+      sets  ask=mj_relay
+      artificial
+      priority 15
+after 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)
+  4D  "Club void"  alert       shows C=0  artificial  priority 15
+  4H  "Diamond void"  alert    shows D=0  artificial  priority 15
+  4S  "Heart void"  alert      shows H=0  artificial  priority 15
+after 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)
+  4D  "Club void"  alert       shows C=0  artificial  priority 15
+  4H  "Diamond void"  alert    shows D=0  artificial  priority 15
+  4S  "Spade void"  alert      shows S=0  artificial  priority 15
+after 1S (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)
+  4C  "Four clubs"  alert      shows C=4  artificial  priority 15
+  4D  "Four diamonds"  alert   shows D=4  artificial  priority 15
+  4H  "Four hearts"  alert     shows H=4  artificial  priority 15
+after 1H (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)
+  4C  "Four clubs"  alert      shows C=4  artificial  priority 15
+  4D  "Four diamonds"  alert   shows D=4  artificial  priority 15
+  4H  "Four spades"  alert     shows S=4  artificial  priority 15
 
 # ── Opener answers the 3♥ ask (non-minimum, short somewhere) ─────────
 # Steps: a void (3♠), then a singleton in clubs, diamonds, the other
@@ -317,8 +385,8 @@ after 1H (P) 2N (P) 3D (P) 3H (P)
 
 after 1M (P) 2N (P) 3D (P) 3H (P) 3S (P)
   3N  "Asks where the void is"  alert
-      shows slam_interest(M)
-      sets  ask=relay
+      shows mj_try(M)
+      sets  ask=mj_relay
       artificial
       priority 15
 after 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)
@@ -339,3 +407,101 @@ after 1H (P) 2N (P) 3H (P) 3S (P)
   3N  "Four clubs"  alert      shows C=4  artificial  priority 15
   4C  "Four diamonds"  alert   shows D=4  artificial  priority 15
   4D  "Four spades"  alert     shows S=4  artificial  priority 15
+
+# ── Responder: keycard once the relays have placed opener's shape ────
+# (Rick, 2026-11-06, bridge-classroom #83/#84: "ask about south shape
+# and learn of spade void then try keycard"; 2026-11-07: "keycard
+# should be the stronger hand. the idea of the relays is it will allow
+# us to find low HCP slams when there is a good fit.") Once a relay
+# answer has placed opener's singleton or void (`shown_short`),
+# responder counts his working values (slam-entry.bid, `working_count`:
+# support points less the honours wasted opposite the shortness, plus
+# opener's floor; `working_slam`, 26). With that, slam: the stronger hand
+# by what has been shown (`stronger_hand`: responder's HCP at least
+# opener's floor; always opposite a minimum) asks for keycards; the
+# weaker, opposite a non-minimum, bids the cheapest suit below game
+# ("my values work: you ask") and opener asks. Where there is no room
+# below game responder asks himself. Or 14 HCP with an honour in
+# opener's good five-card side suit (the 4x answer). Less is left to
+# the slam modules (game, mostly). Not after the 5-4-2-2's four-card
+# suit: that branch lost 223 IMPs on 46 boards (notes). The keycard
+# answers and the placement are rkcb-1430.bid's (blackwood.bid's
+# without RKCB). The asks are `mj_relay`, not `relay`: minor-
+# transfers.bid's `when answered relay` (pass with clubs) read our
+# relays and passed a 4♥ answer.
+define mj_slam(t) = working_slam(t)
+define mj_side_fits(x) = x is not trump, partner.x >= 5, has(A,x) | has(K,x) | has(Q,x), hcp >= 16
+define mj_room = (trump is not C, under_game(C)) | (trump is not D, under_game(D)) | (trump is not H, under_game(H)) | (trump is not S, under_game(S))
+define mj_fits = (mj_slam(trump), stronger_hand | !mj_room) | mj_side_fits(C) | mj_side_fits(D) | mj_side_fits(H) | mj_side_fits(S)
+
+when answered mj_relay, we.trump is H | we.trump is S, we.forcing = game
+  4N  "Keycard ask in {trump}: opener's shape fits"
+      when  rkcb
+      shows mj_fits
+      sets  ask=keycards(trump)
+      artificial
+      priority 14
+  4N  "Blackwood: opener's shape fits"
+      when  bw, !rkcb
+      shows mj_fits
+      sets  ask=aces
+      artificial
+      priority 14
+  cheapest(C)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not C, under_game(C), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(C)
+      priority 14
+  cheapest(D)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not D, under_game(D), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(D)
+      priority 14
+  cheapest(H)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not H, under_game(H), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(H)
+      priority 14
+  cheapest(S)  "Slam values opposite your shape: you ask"  alert
+      shows mj_slam(trump), !stronger_hand
+      when  rkcb | bw, trump is not S, under_game(S), shown_short   # public: read only where it can be the signal
+      sets  ask=mj_captain
+      artificial
+      prefer 0 - cheapest_rank(S)
+      priority 14
+
+# Opener, the stronger hand, asks over responder's "you ask".
+when asked mj_captain, we.trump is H | we.trump is S
+  4N  "Keycard ask in {trump}: the stronger hand asks"
+      when  rkcb
+      sets  ask=keycards(trump)
+      artificial
+      priority 15
+  4N  "Blackwood: the stronger hand asks"
+      when  bw, !rkcb
+      sets  ask=aces
+      artificial
+      priority 15
+
+# Over 1♥ the spade void is shown with 4♠, past game: without the
+# values for keycard, back to five hearts.
+after 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4S (P)
+  5H  "No slam: back to hearts"
+      priority 13
+
+# ── Opener after responder declines (Rick, 2026-11-07) ───────────────
+# "normally opener doesn't continue for slam exploration after
+# responder chooses not to try, unless opener has 19+ points." When
+# responder bids 4M over any of opener's answers or relay answers,
+# opener passes with 18 points or fewer; with 19+ the slam modules
+# decide as before. Above the keycard ask and the control bids.
+after 1M (P) 2N (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3N (P) 4M (P) | 1M (P) 2N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P) 4x (P) 4M (P)
+  P   "Responder declined: no slam without 19+"
+      shows points <= 18
+      priority 16
