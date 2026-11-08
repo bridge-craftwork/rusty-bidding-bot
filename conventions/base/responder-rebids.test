@@ -461,3 +461,19 @@ N A93.K2.AKJ65.Q42      | 1C P 1D 2H 2S P | 4NT | 17 with clubs: keycard
 N 93.J82.KQJ65.K42      | 1C P 1D P 2S P  | 4C  | uncontested: the same
 N 93.J82.KT765.Q42      | 1C P 1D P 2S P  | 3C  | a minimum: 3C
 N A93.K2.AKJ65.Q42      | 1C P 1D P 2S P  | 6NT | 17 balanced, three clubs only (opener may hold three): 6NT
+
+# Opposite the weak-notrump card's 1NT rebid, 15-17 (Rick, 2026-11-07;
+# rebids.bid), read as a good 14 to 17: invite with 9-10, game with 11+;
+# vulnerable the rebid is 12-14 and the counts as before.
+card    21GF-DEFAULT notrump.one_nt.range_min=14 notrump.one_nt.range_min_plus=true notrump.one_nt.range_max=17 notrump.one_nt.seat_vul=Vul notrump.one_nt_alt.range_min=11 notrump.one_nt_alt.range_min_plus=true notrump.one_nt_alt.range_max=14 notrump.one_nt_alt.seat_vul=NV notrump.one_nt_alt.same_responses=true other_conventions.new_minor_forcing.play=false
+dealer  S
+vul     None
+N KJ64.Q73.82.Q642      | 1D P 1S P 1NT P | P   | 8 opposite a good 14 to 17: no game
+N KJ64.Q73.82.K642      | 1D P 1S P 1NT P | 2NT | 9: invites
+N KJ64.K73.Q2.Q642      | 1D P 1S P 1NT P | 3NT | 11: game
+N KQ4.Q73.K2.AQJ62      | 1D P 2C P 3NT P | 4NT | 17 opposite 15-17: quantitative
+N KQ4.J73.K2.AJ642      | 1D P 2C P 3NT P | P   | 14 opposite 15-17: no slam
+N AQ4.KJ3.K2.AKJ62      | 1D P 2C P 2NT P | 6NT | 21 opposite 12-14 or 18+: slam on the minimum
+vul     NS
+N KJ64.Q73.82.Q642      | 1D P 1S P 1NT P | P   | 8 opposite 12-14: no game
+N KJ64.K73.Q2.Q642      | 1D P 1S P 1NT P | 2NT | 11 opposite 12-14: invites

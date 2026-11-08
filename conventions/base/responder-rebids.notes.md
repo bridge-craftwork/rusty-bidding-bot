@@ -1095,6 +1095,31 @@ and 32 between us on opener's floor (a minor needs four cards opposite
 the uncontested jump shift); over the uncontested jump shift 3NT with no
 fit, balanced, to 11, ahead of the minor. Measured in rebids.notes.md.
 
+Rick (2026-11-07, fourth round): **"1 yes"**, keep the 4m slam try and
+the unbalanced double over 1C P 1D (overcall); **"2 yes"**, the keycard
+thresholds (32 for responder, 29 / 30 for opener) are accepted.
+
+## Counting against opener's shown range: the weak notrump (Rick, 2026-11-07)
+
+With a weak notrump in force opener's 1NT rebid is a good 14 to 17 (rebids.notes.md,
+"With a weak notrump"), so the counts after it are written against his
+shown HCP minimum instead of as fixed numbers, for a three-point range:
+`nt_rebid_signoff` (my points plus his minimum at most 22),
+`nt_rebid_invite` (23-24), `nt_rebid_game` (25 or more). Counting on
+his maximum as well was tried first: it changed a Precision board
+(Weak_NT_11-16 30, where 1♦ caps the 1NT rebid below 14) in the
+tripwire, so the counts read the minimum only. Opposite 12-14 they are
+the old 10 / 11-12 / 13; opposite the weak-notrump card's 1NT, read as a
+good 14 to 17, 8 / 9-10 / 11. They serve the natural block
+after 1NT, two-way NMF / XYZ and NMF (NMF's continuations count on his
+minimum, which the 2♥/2♠/2NT answers leave unchanged). The contested 1NT
+(`1x (1z) 1y P 1N`, `1x P 1y (1z) 1N`) and the 1NT answer to a negative
+double keep their fixed numbers and have weak-notrump blocks of their
+own (opener's range 14+ to 17 or more), since their stock ranges (13-16,
+10-14) are not 12-14. After 1♦–2♣–2NT with a weak notrump (12-14 or 18+)
+responder counts slam on the minimum, as opener does over responder's
+2NT (#91): 6NT with 33, a quantitative 4NT with 31.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above (ticket b400, 2026-10-02: a major fit before 3NT) (the ranges and
@@ -1169,3 +1194,8 @@ fit, balanced, to 11, ahead of the minor. Measured in rebids.notes.md.
   2026-11-07), with a stopper for notrump. Not cited to a book.
 - **Rick, 2026-11-07** (third round): 4m forcing after the jump shift;
   keycard "5: yes". The thresholds are our decision (rebids.notes.md).
+  Fourth round: "1 yes", "2 yes" (kept; accepted).
+- **Rick, 2026-11-07** (weak notrump): "3 yes and after 2/1 a jump to
+  3NT shows 15-17, 2NT shows 12-14 or 18-19". Counting 25 for game
+  against the shown range is the standard point-count ladder, not yet
+  cited; writing the counts that way is our decision.

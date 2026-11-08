@@ -17,22 +17,22 @@ module two-way-nmf "Two-way New Minor Forcing (xyNT)"
 
 after 1x (P) 1y (P) 1N (P) when twoway | xyz, !tw(x)
   2C  "xyNT: relay to 2♦, invitational or a diamond sign-off"   alert
-      shows points=11..12 | (D>=6, points<=10, y is not D, x is not D)
+      shows nt_rebid_invite | (D>=6, nt_rebid_signoff, y is not D, x is not D)
       sets  forcing=round, ask=xy_relay
       artificial
       priority 1
   2D  "xyNT: artificial game force"   alert
-      shows points>=13, y>=5 | (H>=4, S>=4) | !balanced
+      shows nt_rebid_game, y>=5 | (H>=4, S>=4) | !balanced
       sets  forcing=game, ask=xy_gf
       artificial
       priority 1
   2N  "xyNT: relay to 3♣, a club sign-off"   alert
-      shows C>=6, points<=10
+      shows C>=6, nt_rebid_signoff
       when  x is not C, y is not C
       sets  forcing=round, ask=xy_clubs
       artificial
   3y  "Slam try: six or more {y}"
-      shows y>=6, points>=16
+      shows y>=6, points + partner.hcp.min >= 28
       sets  forcing=game, trump=y
 
 when asked xy_relay
@@ -42,16 +42,16 @@ when asked xy_clubs
 
 # ── After the 2♦ relay: weak with diamonds passes, every other call invites
 after 1x (P) 1M (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(x)
-  P   "To play in 2♦"                      shows D>=6, points<=10
-  2M  "Invitational: five {M}"             shows M=5, points=11..12   sets ask=invite(M)
-  3M  "Invitational: six {M}"              shows M>=6, points=11..12   sets ask=invite(M)
-  2N  "Invitational, balanced"             shows points=11..12, M<=5   sets ask=nt_invite
+  P   "To play in 2♦"                      shows D>=6, nt_rebid_signoff
+  2M  "Invitational: five {M}"             shows M=5, nt_rebid_invite   sets ask=invite(M)
+  3M  "Invitational: six {M}"              shows M>=6, nt_rebid_invite   sets ask=invite(M)
+  2N  "Invitational, balanced"             shows nt_rebid_invite, M<=5   sets ask=nt_invite
       priority -1
 after 1C (P) 1D (P) 1N (P) 2C (P) 2D (P) when twoway | xyz, !tw(C)
-  P   "Weak"                               shows points<=10
+  P   "Weak"                               shows nt_rebid_signoff
       priority -5
-  3D  "Invitational: six diamonds"         shows D>=6, points=11..12   sets ask=invite(D)
-  2N  "Invitational, balanced"             shows points=11..12   sets ask=nt_invite
+  3D  "Invitational: six diamonds"         shows D>=6, nt_rebid_invite   sets ask=invite(D)
+  2N  "Invitational, balanced"             shows nt_rebid_invite   sets ask=nt_invite
       priority -1
 after 1x (P) 1y (P) 1N (P) 2N (P) 3C (P) when twoway | xyz, !tw(x)
   P   "To play in 3♣"                      shows C>=6

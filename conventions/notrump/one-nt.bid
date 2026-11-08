@@ -92,6 +92,21 @@ define nt_alt_range = hcp=alt_min..alt_max, points>=alt_min+1 | !alt_min_plus, p
 # Opener has shown more than the 1NT range in force (a 2NT, 2♣ then
 # notrump): the quantitative answers below.
 define above_1nt = (!nt_alt, shown.hcp.min>=nt_max+1) | (nt_alt, shown.hcp.min>=alt_max+1)
+# A weak notrump in force (the range in force tops at 14 or less: Rick's
+# 11+-14 not vulnerable). Opener's balanced hands too strong for it open
+# a suit, and the rebids show them (Rick, 2026-11-07; rebids.bid, "With
+# a weak notrump"): after a one-level response 1NT from the top of the
+# range up to 17 (`above_weak_nt`: a good 14 to 17 opposite 11+-14),
+# 2NT 18-19; after a 2/1 the jump to 3NT the same, 2NT 12-14 or 18+.
+# The opener's own seat and vulnerability decide it (`seat_vul` reads
+# the actor).
+define weak_nt = (!nt_alt, nt_max <= 14) | (nt_alt, alt_max <= 14)
+# The top of the weak range judged out of it (a 14 worth 15 total points
+# where the range is "11+-14", one-nt.notes.md "Range qualifiers")
+# belongs with the hands above the range. Partner reads the 14 in: a
+# 14-17 reading measured better than 15-17 (rebids.notes.md).
+define weak_nt_top_out = (!nt_alt, hcp=nt_max, points>=nt_max+1) | (nt_alt, hcp=alt_max, points>=alt_max+1)
+define above_weak_nt = (!nt_alt, hcp>=nt_max+1, hcp<=17) | (nt_alt, hcp>=alt_max+1, hcp<=17) | weak_nt_top_out
 when opening, !nt_alt
   1N  "Notrump opening: {nt_min}-{nt_max} HCP, balanced"  announce "{nt_min} to {nt_max}"
       shows nt_main_range, balanced, five_major is not never | (H<=4, S<=4)

@@ -19,13 +19,13 @@ module new-minor-forcing "New Minor Forcing"
 # both (no PBS card does).
 after 1C (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz, !tw(C)
   2D  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
-      shows M>=4, points>=11
+      shows M>=4, nt_rebid_invite | nt_rebid_game
       sets  forcing=round, ask=nmf
       artificial
       priority 1                       # ahead of a natural 2NT or 3NT
 after 1D (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz
   2C  "New Minor Forcing: invitational+, 5+ {M} or both majors"  alert
-      shows M>=4, points>=11
+      shows M>=4, nt_rebid_invite | nt_rebid_game
       sets  forcing=round, ask=nmf
       artificial
       priority 1                       # ahead of a natural 2NT or 3NT
@@ -37,19 +37,19 @@ when asked nmf
   2H  "Three hearts"                       shows H=3        when partner.H>=4
   2S  "Three spades"                       shows S=3        when partner.S>=4
   2H  "Four hearts, not three spades"      shows H>=4, S<=2  when partner.S>=4
-  2N  "No fit, minimum: 12-13 HCP"            shows hcp<=13
+  2N  "No fit, minimum"            shows hcp<=shown.hcp.max-1
       priority -1
-  3N  "No fit, maximum: 14 HCP"               shows hcp>=14
+  3N  "No fit, maximum"               shows hcp>=shown.hcp.max
       priority -1
 
 # Responder places the contract: with a fit, invite (3M) or bid game (4M);
 # without one, 2NT invites and 3NT is game.
 when answered nmf
-  4H  "Game in the heart fit"              shows points>=13, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3
-  3H  "Invitational, heart fit"            shows points=11..12, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets ask=invite(H)
-  4S  "Game in the spade fit"              shows points>=13, S>=5   when partner.S>=3
-  3S  "Invitational, spade fit"            shows points=11..12, S>=5   when partner.S>=3   sets ask=invite(S)
-  3N  "Game, no fit"                       shows points>=13
-  2N  "Invitational, no fit"               shows points=11..12   sets ask=nt_invite
+  4H  "Game in the heart fit"              shows points+partner.hcp.min>=25, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3
+  3H  "Invitational, heart fit"            shows points+partner.hcp.min>=23, points+partner.hcp.min<=24, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets ask=invite(H)
+  4S  "Game in the spade fit"              shows points+partner.hcp.min>=25, S>=5   when partner.S>=3
+  3S  "Invitational, spade fit"            shows points+partner.hcp.min>=23, points+partner.hcp.min<=24, S>=5   when partner.S>=3   sets ask=invite(S)
+  3N  "Game, no fit"                       shows points+partner.hcp.min>=25
+  2N  "Invitational, no fit"               shows points+partner.hcp.min>=23, points+partner.hcp.min<=24   sets ask=nt_invite
   P   "Accepts the notrump game"           when partner.last=3N
-  P   "No game: opener is minimum"         shows points<=12   when partner.last=2N
+  P   "No game: opener is minimum"         shows points+partner.hcp.min<=24   when partner.last=2N
