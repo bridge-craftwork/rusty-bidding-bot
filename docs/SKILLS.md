@@ -38,7 +38,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 
 <!-- BEGIN GENERATED: rbb bid skills -->
 
-132 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 89 proposed, 0 unknown. 100 modules declare a skill; 221 card fields carry one.
+132 skills named: 38 in Bridge-Classroom's taxonomy, 5 used only by lessons, 89 proposed, 0 unknown. 100 modules declare a skill; 222 card fields carry one.
 
 ### The map
 
@@ -69,7 +69,7 @@ lesson files use that skillPaths.json lacks; **proposed**, ours.
 | `bidding_conventions/inverted_minors` (Inverted Minor Raises) | proposed | `minor_openings.one_club.single_raise.inv`, `minor_openings.one_club.single_raise.gf`, `minor_openings.inverted_minors.play`, `minor_openings.one_diamond.single_raise.inv`, `minor_openings.one_diamond.single_raise.gf` | `inverted-minors` |
 | `bidding_conventions/jacoby_2nt` (Jacoby 2NT) | proposed | `major_openings.jacoby_2nt.play` | `jacoby-2nt` |
 | `bidding_conventions/jacoby_2nt_splinters` (Jacoby 2NT & Splinters) | taxonomy | `major_openings.jacoby_2nt.play`, `major_openings.jacoby_2nt.modified`, `major_openings.splinters.play`, `major_openings.splinters.by_responder`, `major_openings.splinters.by_opener` | `jacoby-2nt`, `splinters` |
-| `bidding_conventions/jacoby_transfers` (Jacoby Transfers) | taxonomy | `notrump.jacoby_transfers.play`, `notrump.jacoby_transfers.vs_double`, `notrump.jacoby_transfers.vs_2c`, `notrump.jacoby_transfers.over_2nt`, `notrump.texas.play`, `notrump.texas.bid_4c`, `notrump.texas.bid_4d`, `notrump.texas.bid_4h`, `notrump.texas.bid_4s`, `notrump.texas.two_under`, `notrump.texas.over_2nt` | `jacoby-transfers`, `texas-transfers`, `two-nt-responses` |
+| `bidding_conventions/jacoby_transfers` (Jacoby Transfers) | taxonomy | `notrump.jacoby_transfers.play`, `notrump.jacoby_transfers.vs_double`, `notrump.jacoby_transfers.vs_2c`, `notrump.jacoby_transfers.over_2nt`, `notrump.jacoby_transfers.over_2c_3nt`, `notrump.texas.play`, `notrump.texas.bid_4c`, `notrump.texas.bid_4d`, `notrump.texas.bid_4h`, `notrump.texas.bid_4s`, `notrump.texas.two_under`, `notrump.texas.over_2nt` | `jacoby-transfers`, `texas-transfers`, `two-nt-responses` |
 | `bidding_conventions/kickback` (Kickback) | proposed | `slam.kickback.play`, `slam.kickback.rkcb_1430`, `slam.kickback.rkcb_0314` | `kickback` |
 | `bidding_conventions/kokish` (Kokish relay) | proposed | `two_level.kokish.play` | `kokish` |
 | `bidding_conventions/lars_multi` (Lars Multi 2♦) | proposed | `two_level.multi.strong_option` | — |

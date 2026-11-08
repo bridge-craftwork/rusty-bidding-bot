@@ -11,14 +11,14 @@ members = [
 ]
 
 [workspace.package]
-version = "0.14.0"
+version = "0.15.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/bridge-craftwork/rusty-bidding-bot"
 
 [workspace.dependencies]
 bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types", features = ["serde"] }
-bridge-card = { git = "https://github.com/bridge-craftwork/convention-card", tag = "v0.43.2" }
+bridge-card = { git = "https://github.com/bridge-craftwork/convention-card", tag = "v0.44.0" }
 bidspec = { path = "crates/bidspec" }
 rbb-engine = { path = "crates/engine" }
 rbb-compare = { path = "crates/compare" }
