@@ -124,7 +124,11 @@ pub fn load(git_ref: &str, dir: &Path) -> Result<RuleSet> {
     let mut sources: Vec<(String, String)> = Vec::new();
     let (mut manifest, mut fields, mut bbsa_map) = (None, None, None);
     for ((_, rel), bytes) in files.iter().zip(texts) {
-        let name = dir.join(rel).display().to_string();
+        // Named with `/` as `load_modules` names the working tree's files.
+        let mut name = dir.join(rel).display().to_string();
+        if cfg!(windows) {
+            name = name.replace('\\', "/");
+        }
         let text = String::from_utf8(bytes).map_err(|_| fail(format!("{name}: not UTF-8")))?;
         if rel == Path::new(bidspec::manifest::FILE) {
             manifest = Some((name, text));

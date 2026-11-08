@@ -322,8 +322,12 @@ fn all_rules(modules: &[bidspec::Module]) -> Vec<RuleId> {
     out
 }
 
-/// `file` ends with `suffix` at a path boundary.
+/// `file` ends with `suffix` at a path boundary, `/` and `\` alike (module
+/// paths carry the platform's separator: `conventions\base\rebids.bid` on
+/// Windows).
 fn file_matches(file: &str, suffix: &str) -> bool {
+    let file = file.replace('\\', "/");
+    let suffix = suffix.replace('\\', "/");
     file == suffix || file.ends_with(&format!("/{suffix}"))
 }
 
@@ -353,7 +357,7 @@ fn select(modules: &[bidspec::Module], specs: &[String]) -> Result<Vec<(String, 
                 .iter()
                 .filter(|m| {
                     let stem = place.trim_end_matches(".bid");
-                    let stem = stem.rsplit('/').next().unwrap_or(stem);
+                    let stem = stem.rsplit(['/', '\\']).next().unwrap_or(stem);
                     m.name.contains(stem) || m.file.contains(stem)
                 })
                 .map(|m| format!("{} ({})", m.name, m.file))
@@ -545,4 +549,22 @@ fn selection_text(l: &RuleListing, sel: &[Verdict], only: Option<&Call>) -> Stri
         );
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::file_matches;
+
+    #[test]
+    fn rule_file_suffix_matches_either_separator() {
+        for file in [
+            "conventions/base/rebids.bid",
+            r"conventions\base\rebids.bid",
+        ] {
+            assert!(file_matches(file, "rebids.bid"), "{file}");
+            assert!(file_matches(file, "base/rebids.bid"), "{file}");
+            assert!(file_matches(file, r"base\rebids.bid"), "{file}");
+            assert!(!file_matches(file, "ebids.bid"), "{file}");
+        }
+    }
 }
