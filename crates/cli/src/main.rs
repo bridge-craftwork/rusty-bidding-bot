@@ -602,15 +602,26 @@ fn version() -> &'static str {
     })
 }
 
+/// The command runs on a thread of its own with a large stack: Windows
+/// gives the main thread 1 MB, and a debug build there overflowed it in
+/// `bid check` (the v0.15.0 release run). Linux and macOS give 8 MB.
+const STACK: usize = 64 << 20;
+
 fn main() -> ExitCode {
     rbb_compare::init_threads();
-    match run(Cli::parse()) {
-        Ok(()) => ExitCode::SUCCESS,
-        Err(e) => {
-            eprintln!("error: {e}");
-            ExitCode::FAILURE
-        }
-    }
+    std::thread::Builder::new()
+        .name("rbb".into())
+        .stack_size(STACK)
+        .spawn(|| match run(Cli::parse()) {
+            Ok(()) => ExitCode::SUCCESS,
+            Err(e) => {
+                eprintln!("error: {e}");
+                ExitCode::FAILURE
+            }
+        })
+        .expect("spawn the command thread")
+        .join()
+        .unwrap_or(ExitCode::FAILURE)
 }
 
 type Result<T> = std::result::Result<T, Box<dyn std::error::Error>>;
