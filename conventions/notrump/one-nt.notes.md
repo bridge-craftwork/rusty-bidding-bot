@@ -723,10 +723,33 @@ Positions (Rick's card, dealer South, `pos.py` in the session scratch):
 | responder Q85.K74.A632.Q82 (11) | 3NT | **2NT** | 3NT | 3NT |
 | responder 982.K74.A632.Q82 (9) | | | 2NT | 2NT |
 
-Open: Rick's weak notrump changes what opener's 1m–1M–1NT and 2NT
-rebids should show (15-17 balanced now opens 1m non-vulnerable and
-rebids 2NT, "15-17"); that is rebids.bid's (not touched here). Asked in
-the session's questions.
+Measured (2026-11-07):
+
+- Tripwire: `compare --limit 50`, all 342 scenarios (17,105 boards), and
+  `compare --par-all` on all 500 boards of Weak_NT_09-12, Weak_NT_11-16
+  (Precision 13-15 card) and Basic_NT: **0 auctions changed**. No corpus
+  card sets a qualifier or an alternate range (the `.bbsa` format has
+  neither), so the stock cards read exactly as before.
+- Self A/B, Rick's notrump fields for North-South alone against the
+  plain 15-17 (`self_ab.py --name rick-nt-ranges --scenarios
+  Basic_What_To_Open Basic_Minor Basic_NT Basic_Openers_Rebid --side ns`,
+  base `notrump.one_nt.range_min=15`, variant the nine fields of the
+  `.test` block): 594 boards changed, the actor's contract errors **-170
+  IMPs** (halves -32 / -138, z -1.8, leans loss). By first differing call:
+  a balanced 15-17 now opening 1m non-vulnerable (1N → 1♦ 158 boards,
+  -136; 1N → 1♣ 216, -27; 1N → 1♥ +11); the weak notrump itself (1♣ →
+  1N 103, -43; 1♦ → 1N 90, -17; 1♥/1♠ → 1N +22); 1N P 6N → 4N +17. So
+  about -150 is the strong balanced hand's route through 1m, which the
+  rebids do not cover yet: Basic_NT 441 (Basic-Bridge, 1♦–2♣ with 16
+  balanced) has **no rule** for opener's rebid and passes the forcing 2♣
+  opposite 20; 1♦–1♠ jumps to 2NT "15-17" where a weak-notrump card
+  rebids 1NT with 15-17 (or 15-16) and 2NT with 18-19. That is
+  rebids.bid's (another worktree's, not touched here). The weak notrump
+  openings themselves are near even (about -38).
+
+Open: the opener's rebids for a weak-notrump card (1m–1M–1NT 15-17,
+2NT 18-19, the rebid over a 2/1 or 2♣ response with 15-17 balanced),
+asked in the session's questions.
 
 ## Sources
 
