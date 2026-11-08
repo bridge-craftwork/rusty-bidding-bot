@@ -102,3 +102,32 @@ S A4.KQ93.K5.QJ862          |          | 1NT    | 5-4-2-2, five clubs, four hear
 S A4.K5.KQ93.QJ862          |          | 1NT    | five clubs, four diamonds
 S 84.KQ93.A5.AQJ62          |          | 1C     | a small doubleton: open the minor
 S KQ93.A4.K5.QJ862          |          | 1C     | four spades: open the minor
+
+# Two ranges by vulnerability, with qualifiers, as Rick's card
+# (one-nt.notes.md, "Range qualifiers" and "The alternate range"): 14+-17
+# vulnerable, 11+-14 not. "14+" is a good 14: total points 15-17.
+card    21GF-DEFAULT notrump.one_nt.range_min=14 notrump.one_nt.range_min_plus=true notrump.one_nt.range_max=17 notrump.one_nt.seat_vul=Vul notrump.one_nt_alt.range_min=11 notrump.one_nt_alt.range_min_plus=true notrump.one_nt_alt.range_max=14 notrump.one_nt_alt.seat_vul=NV notrump.one_nt_alt.same_responses=true
+dealer  S
+vul     None
+S KJ5.Q74.A963.K82      |          | 1NT    | 13 balanced, not vulnerable: the weak notrump
+S Q85.K74.AT963.Q8      |          | 1NT    | a good 11: the five-card suit makes 12
+S Q85.K74.A963.Q82      |          | P      | a flat 11 is not a good 11
+S KJ5.QT4.AJT3.K82      |          | 1D     | 14 and two tens is worth 15: above the weak range
+S AJ5.K74.AJ63.K82      |          | 1D     | 16: open the minor
+N Q85.K74.A632.Q82      | 1NT P    | 2NT    | 11 opposite 12-14 points: invite
+N KJ5.K74.A632.Q82      | 1NT P    | 3NT    | 13 opposite 12-14: game
+vul     NS
+S KJ5.Q74.A963.K82      |          | 1D     | 13 vulnerable: no weak notrump
+S KJ5.Q74.AJ63.K82      |          | 1D     | a plain 14 is not a good 14
+S KJ5.QT4.AJT3.K82      |          | 1NT    | a good 14: two tens
+S AQ5.K74.AJ63.K82      |          | 1NT    | 17
+N 982.K74.A632.Q82      | 1NT P    | 2NT    | 9 opposite 15-17 points: invite
+N Q85.K74.A632.Q82      | 1NT P    | 3NT    | 11 opposite 15-17: game
+# By seat: the weak notrump only in third and fourth seat.
+card    21GF-DEFAULT notrump.one_nt_alt.range_min=12 notrump.one_nt_alt.range_max=14 notrump.one_nt_alt.seat_vul=3rd/4th
+vul     None
+dealer  S
+S KJ5.Q74.A963.K82      |          | 1D     | 13 in first seat: 15-17 applies
+dealer  W
+S KJ5.Q74.A963.K82      | P P P    | 1NT    | 13 in fourth seat: 12-14
+N KJ5.Q74.A963.K82      | P        | 1D     | 13 in second seat (dealer W: North is second)

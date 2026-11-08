@@ -203,6 +203,16 @@ Slam_after_Transfer; the whole 2026-11-07 change, kokish.notes.md): 51
 boards changed, the actor's contract errors +13 IMPs (halves +0 / +13),
 all of it from this fallback (two boards P → 4♥ over 2♣–2♦–3NT).
 
+**The card field, pending (Rick, 2026-11-07):** "i would make this a
+treatment on the Jacoby Transfer card". Prepared for convention-card as
+`notrump.jacoby_transfers.over_2c_3nt` (bool, "Transfers over
+2♣–2♦–3NT", skill `bidding_conventions/jacoby_transfers`, level 6),
+branch `field/jacoby-over-2c-3nt`, not yet merged or tagged. Not read
+here until the `bridge-card` pin moves to a tag that has it; then
+Texas over 2♣–2♦–3NT follows that field instead of `notrump.texas.play`
+(the default to settle then: off, as Rick's "sometimes", or on, as
+today's behaviour).
+
 ## Sources
 
 - **The convention:** Texas transfers (4♦/4♥ over 1NT). Standard

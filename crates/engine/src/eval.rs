@@ -894,15 +894,7 @@ impl<'a> Ctx<'a> {
             "bids" => Val::Num(Range::point(self.pos.bids_of(self.actor))),
             // `me.has_bid`: I have made a bid, not only passes or doubles.
             "has_bid" => Val::Bool(Tri::from_bool(self.pos.has_bid(self.actor))),
-            "seat" => {
-                let mut d = self.pos.dealer;
-                let mut seat = 1;
-                while d != self.actor {
-                    d = d.next();
-                    seat += 1;
-                }
-                Val::Num(Range::point(seat))
-            }
+            "seat" => Val::Num(Range::point(self.seat())),
             "vul" => Val::Bool(Tri::from_bool(self.pos.is_vulnerable(self.actor))),
             // Our side's last bid is game or higher (and it is our contract).
             "game_reached" => Val::Bool(Tri::from_bool(
@@ -956,8 +948,37 @@ impl<'a> Ctx<'a> {
         })
     }
 
+    /// My seat from the dealer, 1 to 4.
+    fn seat(&self) -> i32 {
+        let mut d = self.pos.dealer;
+        let mut seat = 1;
+        while d != self.actor {
+            d = d.next();
+            seat += 1;
+        }
+        seat
+    }
+
     fn self_func(&self, n: &str, args: &[Expr], b: &mut Bindings) -> R<Val> {
         match n {
+            // A card's seat / vulnerability text (`notrump.one_nt_alt.seat_vul`
+            // read as a text param) covers my seat and vulnerability.
+            "seat_vul" => {
+                let what = "seat_vul(p): p is a card text param (\"NV\", \"Vul 1st/2nd\")";
+                let v = match args.first() {
+                    Some(e) => self.eval(e, b)?,
+                    None => return Err(what.into()),
+                };
+                let covers = match &v {
+                    Val::Sym(t) => {
+                        seat_vul_covers(t, self.seat(), self.pos.is_vulnerable(self.actor))
+                    }
+                    // An unset text field covers nothing.
+                    Val::Nothing => false,
+                    _ => return Err(what.into()),
+                };
+                return Ok(Val::Bool(Tri::from_bool(covers)));
+            }
             // My own side of the control-bid dialogue (`me.denied(x)`).
             "denied" | "cued" => {
                 return self.knowledge_attr(
@@ -2125,7 +2146,86 @@ const POSITION_FUNCS: &[Term] = &[
         "(x)",
         "the cheapest bid in x as level x 5 + C0 D1 H2 S3 (`prefer 0 - cheapest_rank(x)`)",
     ),
+    f(
+        "seat_vul",
+        "(p)",
+        "the card text in param p covers my seat and vulnerability: `NV` (`Not Vul`), `Vul`, `1st/2nd`, `3rd-4th`, both in one clause (`NV 1st/2nd`), clauses joined by `or` or `;`; unset or unreadable text covers nothing",
+    ),
 ];
+
+/// Does a card's seat / vulnerability text cover `seat` (1 to 4 from the
+/// dealer) at this vulnerability? As players fill the seat/vul box of a
+/// 1NT range: `Vul`, `NV` (`Not Vul`, `Non-vul`, `white`), `1st/2nd`,
+/// `3rd/4th`, `1-3`, both kinds in one clause (`NV 1st/2nd`: all must
+/// hold), clauses joined by `or` or `;` (any may hold). `any`, `all`,
+/// `both` lift the vulnerability condition. A clause with nothing
+/// recognisable covers nothing, so text we cannot read never changes
+/// the range.
+pub fn seat_vul_covers(text: &str, seat: i32, vul: bool) -> bool {
+    let lower = text.to_ascii_lowercase().replace(" or ", ";");
+    lower.split(';').any(|clause| {
+        // Words, with a dash kept as its own token (`1st-3rd`, `non-vul`).
+        let spaced = clause.replace('-', " - ");
+        let tokens: Vec<&str> = spaced
+            .split(|c: char| !(c.is_ascii_alphanumeric() || c == '-'))
+            .filter(|t| !t.is_empty())
+            .collect();
+        let seat_of = |t: &str| -> Option<i32> {
+            match t {
+                "first" => return Some(1),
+                "second" => return Some(2),
+                "third" => return Some(3),
+                "fourth" => return Some(4),
+                _ => {}
+            }
+            let split = t.find(|c: char| !c.is_ascii_digit()).unwrap_or(t.len());
+            let (digits, rest) = t.split_at(split);
+            let n: i32 = digits.parse().ok()?;
+            ((1..=4).contains(&n) && matches!(rest, "" | "st" | "nd" | "rd" | "th")).then_some(n)
+        };
+        let (mut nv, mut v, mut any_vul) = (false, false, false);
+        let mut seats = [false; 5];
+        let (mut last_seat, mut dash, mut negated) = (None::<i32>, false, false);
+        for &t in &tokens {
+            if t == "-" {
+                dash = last_seat.is_some();
+                continue;
+            }
+            if matches!(t, "not" | "non" | "none") {
+                negated = true;
+                continue;
+            }
+            if t.starts_with("vul") || t == "v" || t == "red" {
+                if negated {
+                    nv = true;
+                } else {
+                    v = true;
+                }
+            } else if matches!(t, "nv" | "nonvul" | "nonvulnerable" | "white") {
+                nv = true;
+            } else if matches!(t, "any" | "all" | "both" | "either") {
+                any_vul = true;
+            } else if let Some(n) = seat_of(t) {
+                match (dash, last_seat) {
+                    (true, Some(from)) if from <= n => {
+                        (from..=n).for_each(|s| seats[s as usize] = true)
+                    }
+                    _ => seats[n as usize] = true,
+                }
+                last_seat = Some(n);
+            }
+            negated = false;
+            dash = false;
+        }
+        let any_seat = !seats.iter().any(|s| *s);
+        if any_seat && !nv && !v && !any_vul {
+            return false; // nothing we can read
+        }
+        let vul_ok = any_vul || nv == v || (vul && v) || (!vul && nv);
+        let seat_ok = any_seat || seats.get(seat as usize).copied().unwrap_or(false);
+        vul_ok && seat_ok
+    })
+}
 /// What `partner.`, `lho.`, `rho.` and `shown.` take (`knowledge_attr`),
 /// besides suits, variables and `bba_*`.
 /// What `partner.`, `lho.`, `rho.` and `shown.` take (`knowledge_attr`),
@@ -2775,6 +2875,37 @@ mod term_tests {
     use super::*;
     use bridge_types::{ScoringMethod, Vulnerability};
 
+    #[test]
+    fn seat_vul_text() {
+        let all = |t: &str| {
+            let mut out = String::new();
+            for vul in [false, true] {
+                for seat in 1..=4 {
+                    out.push(if seat_vul_covers(t, seat, vul) {
+                        'x'
+                    } else {
+                        '.'
+                    });
+                }
+                out.push(' ');
+            }
+            out.trim_end().to_string()
+        };
+        // Non-vulnerable seats 1-4, then vulnerable seats 1-4.
+        assert_eq!(all("Vul"), ".... xxxx");
+        assert_eq!(all("Not Vul"), "xxxx ....");
+        assert_eq!(all("NV"), "xxxx ....");
+        assert_eq!(all("non-vul"), "xxxx ....");
+        assert_eq!(all("1st/2nd"), "xx.. xx..");
+        assert_eq!(all("3rd/4th"), "..xx ..xx");
+        assert_eq!(all("1st-3rd"), "xxx. xxx.");
+        assert_eq!(all("NV 1st/2nd"), "xx.. ....");
+        assert_eq!(all("NV or 3rd/4th"), "xxxx ..xx");
+        assert_eq!(all("any"), "xxxx xxxx");
+        assert_eq!(all(""), ".... ....");
+        assert_eq!(all("see notes"), ".... ....");
+    }
+
     fn when_of(expr: &str) -> Expr {
         let src = format!("module t \"t\"\nwhen {expr}\n  P  \"x\"\n");
         let m =
@@ -3194,7 +3325,8 @@ mod term_tests {
         let arg = |n: &str| match n {
             "has" => "(A, S)",
             "bypassed" | "denied" | "cued" | "tp" | "keycards" | "stop" | "quality" | "top5"
-            | "under_game" | "cheapest_rank" | "bare" | "safe_level" | "fit" | "named" => "(S)",
+            | "under_game" | "cheapest_rank" | "bare" | "safe_level" | "fit" | "named"
+            | "seat_vul" => "(S)",
             _ => "",
         };
         let mut exprs: Vec<String> = Vec::new();
