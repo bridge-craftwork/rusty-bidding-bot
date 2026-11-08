@@ -492,7 +492,18 @@ S 6.A2.KQJ85.KJ932      | 1D P 1H 1S   | 2C  | 14, five-five in the minors: 2C
 S 62.A2.KQJ85.KJ92      | 1D P 1H 2S   | 3C  | 13, four clubs and five diamonds: 3C, as BBA
 S AQ5.K9.AQ52.KJ42      | 1C P 1H 2S   | 3NT | 19 balanced with a spade stopper
 S AQ.K95.AJT52.KJ4      | 1C P 1S 2H   | 2NT | 18, two spades, a heart stopper: 2NT
-S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 3S P | 4S | partner's raise: game
+S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 3S P | 4NT | 21 support points opposite 8+: keycard
 S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 3C P | 3NT | hearts held: 3NT
 S 6.A2.QJT85.KJ932      | 1D P 1H 1S 2C P 3D P | P | 11 HCP, 13 points: declines
 S 6.A2.KQJ85.KJ932      | 1D P 1H 1S 2C P 3D P | 5D | 14 HCP, 16 points: accepts
+
+# Rick 2026-11-07 ("4: yes", "5: yes", 4m forcing): the unbalanced
+# double, and slam after the strong new suit
+S AKQ2.Q.AT6.K6542      | 1C P 1D 2H   | X   | 18, four spades, five clubs, unbalanced: the double, as BBA
+S K65.AKJ3.9.AK875      | 1C P 1D 1S   | X   | 18, four hearts, five clubs: the double, as BBA
+S A.AKT5.AK5.KT854      | 1C P 1D 1S   | 2H  | 21: the reverse
+S K874.A4.AJ.AQJT4      | 1C P 1D 2H 2S P 4C P | 5C | partner's 4C is forcing: game with a minimum for slam
+S AK74.A4.A2.AKQJ4      | 1C P 1D 2H 2S P 4C P | 4NT | 23 opposite 7+: keycard
+S K874.A4.AJ.AQJT4      | 1C P 1D P 2S P 4C P | 5C | the same uncontested: 4C forcing
+S K874.A4.AJ.AQJT4      | 1C P 1D P 2S P 3S P | 4NT | the same uncontested: keycard
+S K874.A4.AJ.KQJT4      | 1C P 1D P 2S P 3S P | 4S | 18, 20 support points opposite 8: game

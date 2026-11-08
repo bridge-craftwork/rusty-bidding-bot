@@ -31,6 +31,7 @@ module responder-rebids "Responder's second call"
   param  twoway_sw = other_conventions.two_way_nmf default false
   param  xyz = other_conventions.xyz default false   # xyz.bid: two-way NMF after 1NT too
   param  imp2s = major_openings.impossible_2s.play default false
+  param  rkcb = slam.rkcb.play default false
 
 # ── Opener rebid 1NT (12-14) ─────────────────────────────────────────
 after 1x (P) 1y (P) 1N (P) when !tw(x)
@@ -917,18 +918,102 @@ when asked rev(w, m, y, z)
   cheapest(w) "Four or more {w}"             shows w>=4
       when  w is C | w is D
       sets  trump=w
-  3N  "A stopper in {y}"                     shows stop(y), w<=3
+  3N  "A stopper in {y}"                     shows stop(y), w<=3, hcp<=11
       priority 1
+  # Slam (Rick 2026-11-07: "5: yes"): the keycard ask with a fit and 32
+  # between us on opener's floor; BBA asks with 15+ (4NT "0314").
+  4N  "Keycard ask in {w}"
+      when  rkcb, w is H | w is S
+      shows w>=4, hcp + partner.points.min >= 32
+      sets  trump=w, ask=keycards(w)
+      artificial
+      priority 3
+  4N  "Keycard ask in {m}"
+      when  rkcb
+      shows m>=3, hcp + partner.points.min >= 32
+      sets  trump=m, ask=keycards(m)
+      artificial
+      priority 2
   cheapest(z) "Six or more {z}"              shows z>=6
       when  z is H | z is S
   cheapest(z) "Five or more {z}"             shows z>=5, w<=3
       when  z is C | z is D
       priority -1
-  cheapest(m) "Three or more {m}"            shows m>=3
+  # The minor: at the three level 3m is a minimum and 4m (BBA's "try")
+  # shows 7+ with slam interest; with no room below game 4m is the
+  # preference. All forcing: the strong new suit forced to game (Rick
+  # 2026-11-07: "for our default, let's make it forcing").
+  cheapest(m) "Three or more {m}, a minimum"   shows m>=3, hcp<=6
+      when  cheapest_rank(m)<=18
+      sets  trump=m
+      priority 0   # the fit before my own minor
+  4{m} "Three or more {m}, 7+: slam interest, forcing"   shows m>=3, hcp>=7
+      when  cheapest_rank(m)<=18
+      sets  trump=m
+      priority 0   # the fit before my own minor
+  cheapest(m) "Three or more {m}, forcing"     shows m>=3
+      when  cheapest_rank(m)>=20
       sets  trump=m
       priority -1
   cheapest(y) "No stopper in {y}, no fit"
       alert  artificial
+      priority -4
+
+# Opener's uncontested jump shift after a minor opening (19+, forcing to
+# game; `ask=js(w, m, z)`, rebids.bid). The same answers as over the
+# strong new suit in competition, so the two read alike (Rick
+# 2026-11-07: responder's 4m "for our default, let's make it forcing";
+# with Minorwood on the card 4m is the ask once a minor is agreed, and
+# minorwood.bid answers for itself). Before this the generic block for
+# a two-level new suit read 1C-1D-2S-3C as invitational and 4C had no
+# rule.
+when asked js(w, m, z)
+  4N  "Keycard ask in {w}"
+      when  rkcb, w is H | w is S
+      shows w>=4, hcp + partner.points.min >= 32
+      sets  trump=w, ask=keycards(w)
+      artificial
+      priority 3
+  4N  "Keycard ask in {m}"
+      when  rkcb
+      shows m>=4, hcp + partner.points.min >= 32   # opener's minor may be three cards
+      sets  trump=m, ask=keycards(m)
+      artificial
+      priority 3
+  jump(w) "Four {w}, a minimum"              shows w>=4, hcp<=7
+      when  w is H | w is S
+      sets  trump=w
+      priority 2
+  cheapest(w) "Four {w}, 8+"                 shows w>=4, hcp>=8
+      when  w is H | w is S
+      sets  trump=w
+      priority 2
+  cheapest(w) "Four or more {w}"             shows w>=4
+      when  w is C | w is D
+      sets  trump=w
+      priority 1
+  cheapest(m) "Three or more {m}, a minimum"   shows m>=3, hcp<=6
+      when  cheapest_rank(m)<=18
+      sets  trump=m
+      priority 1
+  4{m} "Three or more {m}, 7+: slam interest, forcing"   shows m>=3, hcp>=7
+      when  cheapest_rank(m)<=18
+      sets  trump=m
+      priority 1
+  cheapest(m) "Three or more {m}, forcing"     shows m>=3
+      when  cheapest_rank(m)>=20
+      sets  trump=m
+      priority 1
+  cheapest(z) "Six or more {z}"              shows z>=6
+      when  z is H | z is S
+      priority 1
+  cheapest(z) "Five or more {z}"             shows z>=5, w<=3, m<=2
+      when  z is C | z is D
+      priority 1
+  3N  "No fit"                               shows w<=3, hcp<=11, m<=2 | balanced
+      when  cheapest_rank(N)<=19
+      priority 2                              # balanced: 3NT before the minor (compare 2026-11-07)
+  cheapest(N) "No fit, nothing more to say"
       priority -4
 
 # 1D P 1M (2y) 3C (P): four or more clubs, five diamonds, 13-19, not

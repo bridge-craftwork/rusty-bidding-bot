@@ -444,7 +444,8 @@ N T3.AJ6.QJ9865.J6      | 1C P 1D 1H 1S 2H | 3D  | six diamonds: compete
 N Q932.J82.KT765.2      | 1C P 1D 2H 2S P | 4S  | four spades, a minimum: game
 N Q932.82.KT765.K2      | 1C P 1D 2H 2S P | 3S  | four spades, 8: one level, slam room
 N J93.KJ8.QT765.42      | 1C P 1D 2H 2S P | 3NT | a heart stopper
-N 93.J82.KT765.Q42      | 1C P 1D 2H 2S P | 3D  | five diamonds, no stopper
+N 93.J82.KT765.Q42      | 1C P 1D 2H 2S P | 3C  | three clubs, a minimum: the preference
+N 93.J82.KT7654.42      | 1C P 1D 2H 2S P | 3D  | six diamonds, no stopper, two clubs
 N JT94.K873.Q4.Q52      | 1D P 1H 1S 2C P | 3C  | three clubs, two diamonds, 7: the raise
 N K94.K873.Q4.QJ52      | 1D P 1H 1S 2C P | 2NT | 11 with a spade stopper: invites
 N A94.K873.Q4.KJ52      | 1D P 1H 1S 2C P | 3NT | 13 with a spade stopper
@@ -452,3 +453,11 @@ N 94.K873.A4.KQJ52      | 1D P 1H 1S 2C P | 2S  | 13, no spade stopper: the cue 
 N K4.QJ873.94.K852      | 1D P 1H 2S 3C P | P   | 9: no game opposite 13-19
 N 94.QJ873.K94.K52      | 1D P 1H 2S 3C P | 3D  | three diamonds: preference
 N 94.AJ873.K94.A52      | 1D P 1H 2S 3C P | 3S  | 12, no spade stopper: the cue bid
+
+# After the strong new suit or the uncontested jump shift: the minor
+# try and keycard (Rick 2026-11-07: "5: yes"; 4m "let's make it forcing")
+N 93.J82.KQJ65.K42      | 1C P 1D 2H 2S P | 4C  | three clubs, 9: the try, forcing
+N A93.K2.AKJ65.Q42      | 1C P 1D 2H 2S P | 4NT | 17 with clubs: keycard
+N 93.J82.KQJ65.K42      | 1C P 1D P 2S P  | 4C  | uncontested: the same
+N 93.J82.KT765.Q42      | 1C P 1D P 2S P  | 3C  | a minimum: 3C
+N A93.K2.AKJ65.Q42      | 1C P 1D P 2S P  | 6NT | 17 balanced, three clubs only (opener may hold three): 6NT

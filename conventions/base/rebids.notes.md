@@ -1570,6 +1570,60 @@ errors -5,652 → -5,634, tripwire -7,729 → -7,693. The 14-count 2D was
 narrowed (four of the other major, as BBA) after this run; it changed no
 board in it.
 
+### Rick's answers (2026-11-07, third round)
+
+- **Item 3 and the 13-19 3C:** Rick asked for example auctions
+  (Minor_Suit_Opener 190, GIB_1N5422 13); kept on for now.
+- **Responder's 4m after opener's jump shift:** Rick: **"opener JS
+  normally sets up a GF. If responder raises 4m some people play that
+  passable. many play minorwood where that will be keycard. for our
+  default, let's make it forcing."** Built: after the strong new suit in
+  competition and after the uncontested jump shift (`ask=js`, every
+  minor-opening jump shift in this file) responder's 4m is forcing,
+  three or more of the minor with 7+ ("slam interest"; 3m with less when
+  there is room). Opener bids 5m without slam values, else 4NT keycard.
+  With Minorwood on the card, 4m once the minor is agreed is
+  minorwood.bid's ask: not touched.
+- **"4: yes"**: BBA's double with 15-18 (HCP; BBA "15 to 21 total
+  points") unbalanced over `1C P 1D (1S)` / `(2H)`, three or four of the
+  other major, clubs longer (five): built beside the balanced double,
+  same responder answers (`ask=minor_x`) and third calls. The reverses
+  there now need 19 HCP, or 19 points with six of the minor or five of
+  the major (BBA doubles its 17-18 with five clubs and four of the
+  major, `probes/opnj-1C-1D-1S.toml`, `-2H.toml`). Agreement with BBA
+  over (2H) 45 → 79 of 120, over (1S) 45 → 58.
+- **"5: yes"**: the keycard asks after the strong new suit. Responder
+  asks (4NT, RKCB on the card) with a fit and 32 between us on opener's
+  floor (in the uncontested jump shift a minor needs four cards: opener's
+  1C may be three); opener asks after the raise of his major (8+) with
+  29 support points between us on responder's floor, and after 4m with
+  30. The answers and the rest are rkcb-1430.bid's. BBA's agreement over
+  1C P 1D (2H) 2S (P): 48 → 65 of 120.
+
+Before this the uncontested jump shift after a minor opening had no
+answers of its own: the generic two-level new-suit block read 1C-1D-2S-3C
+as invitational and 4C had no rule (opener passed it). `ask=js` gives it
+the same answers as the contested strong new suit (raise, minor
+preference or try, my own suit, 3NT with no fit, keycard).
+
+**Compare** (2026-11-07, `--par-all`, base = 01177e6, the branch head):
+
+| run | boards changed | actor contract | actor doubling | all errors | distance from par | no rule |
+|---|---|---|---|---|---|---|
+| 22 matching scenarios, full (11,000) | 38 | -3 (halves -1 / -2, agree) | +4 | -4 | -1 | 124 → 124 |
+| all scenarios `--limit 50` | 49 | +78 (halves +39 / +39, agree) | 0 | +83 | +76 | 241 → 241 |
+
+By first differing call: the keycard ask after the raise -24 on 2
+matching boards (Gavin_Transfers_after_2N_Rebid_Unb 466, 499: 6S down
+on DD with one keycard missing; BBA stays in 4S) and +13 / +28 on 3
+tripwire boards; the minor try 4m against 3NT -5 on 6 matching boards,
++18 / +3 on 3 (and +14 tripwire); the uncontested jump shift's other
+answers +9 (3H), +1 (3D); the unbalanced double -10 on 2 and -1 on 2
+matching boards, +1 tripwire (Gavin_Transfers_after_2N_Rebid_Weak 201
+and _Unb 335: BBA's own double). The matching set's -3 agrees in both
+halves but is small against the tripwire's +78; all kept. The 4m try
+and the double are the parts that lose: for Rick.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -1651,3 +1705,8 @@ board in it.
   (21GF-GIB, 2026-11-07). The forcing level (game) after a strong new
   suit over their overcall is BBA's reading of its 18-21 ranges and our
   decision. Not cited to a book.
+- **Rick, 2026-11-07** (third round): 4m after the jump shift "for our
+  default, let's make it forcing"; "4: yes", "5: yes". BBA's double and
+  keycard asks from `probes/opnj-*.toml` and `probes/opns-r-*.toml`; the
+  keycard thresholds (32 / 29 / 30 between us) are our decision, below
+  rkcb-1430.bid's 33 for the shortness a known fit adds. Not cited.
