@@ -203,20 +203,20 @@ Slam_after_Transfer; the whole 2026-11-07 change, kokish.notes.md): 51
 boards changed, the actor's contract errors +13 IMPs (halves +0 / +13),
 all of it from this fallback (two boards P → 4♥ over 2♣–2♦–3NT).
 
-**The card field, pending (Rick, 2026-11-07):** "i would make this a
-treatment on the Jacoby Transfer card". Prepared for convention-card as
-`notrump.jacoby_transfers.over_2c_3nt` (bool, "Transfers over
-2♣–2♦–3NT", skill `bidding_conventions/jacoby_transfers`, level 6),
-branch `field/jacoby-over-2c-3nt`, not yet merged or tagged. Not read
-here until the `bridge-card` pin moves to a tag that has it; then
-Texas over 2♣–2♦–3NT follows that field instead of `notrump.texas.play`
-(the default to settle then: off, as Rick's "sometimes", or on, as
-today's behaviour).
-
-Rick (2026-11-07), on that default: **"5: default to on"**. When the
-field is read, a card that leaves it unset plays transfers over
-2♣–2♦–3NT, as today. Not read yet (the pin has not moved; convention-card
-PR #117).
+**The card field (Rick, 2026-11-07):** "i would make this a treatment on
+the Jacoby Transfer card". It is `notrump.jacoby_transfers.over_2c_3nt`
+(bool, "Transfers over 2♣–2♦–3NT", skill
+`bidding_conventions/jacoby_transfers`, level 6; convention-card v0.44.0,
+PR #117). Rick, on its default: **"5: default to on"**, so a card that
+leaves it unset plays Texas over 2♣–2♦–3NT, as before. Texas there needs
+both this field and `notrump.texas.play` (the module's switch); the
+field does not reach Texas over 1NT or 2NT. Off, 4♦ and 4♥ there are
+natural (the field's own description): over-3nt.bid bids 4♥/4♠ to play
+with the hands Texas would carry (six cards, game values, below the slam
+band), and its natural minor tries come back (`texas_3n` reads the
+field). A card with Texas off and the field on gets the same natural
+game bids: we read the field as a refinement of Texas, not as a second
+way to switch it on (decision, 2026-11-07; open for Rick).
 
 ## Sources
 
@@ -226,7 +226,7 @@ PR #117).
   keycard; slam values are 33 total points even opposite opener's
   minimum, so 18+; 8 HCP with a six-card major invites (2026-09-21); the
   sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`); the
-  pending `over_2c_3nt` field defaults to on, "5: default to on"
+  `over_2c_3nt` field on the Jacoby Transfer card, "default to on"
   (2026-11-07).
 - **BBA probes:** the dealer3 script `six-hearts.dlr` run through
   `rbb probe --script` (600 deals), given in full in "Evidence from BBA".

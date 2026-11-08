@@ -6,6 +6,7 @@ module texas-transfers "Texas Transfers"
   needs  notrump-base
   skill  bidding_conventions/jacoby_transfers
   param  tu = notrump.texas.two_under default false
+  param  o23 = notrump.jacoby_transfers.over_2c_3nt default true
 
 # Texas shows a six-card major and one of two hands: game with no slam
 # interest (pass the completion), or slam values (keycard after it): 33 total
@@ -37,7 +38,13 @@ define texas2_room_c = tu, !me.named(H), rho.last=P | rho.last=X | (they.level<=
 define texas2_room_d = tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C)
 define texas_room_h = !tu, !me.named(S), rho.last=P | rho.last=X | (they.level<=2, they.strain is not S) | (they.level=3, they.strain is C | they.strain is D)
 
-after systems 1N (*) | systems 2N (*) | 2C (*) 2D (*) 3N (P)
+# Over 2♣–2♦–3NT only with `notrump.jacoby_transfers.over_2c_3nt` (Rick,
+# 2026-11-07: "i would make this a treatment on the Jacoby Transfer card";
+# "default to on"). Off, 4♦ and 4♥ there are natural.
+define auction texas_entry = systems 1N (*) | systems 2N (*)
+  2C (*) 2D (*) 3N (P)   when o23
+
+after texas_entry
   4D  "Texas: 6+ ♥, game only or slam values"  announce "Transfer"
       shows H>=6, points>=25-partner.points.min, suit_points<=30-partner.points.max
       when  texas_room_d
@@ -128,7 +135,7 @@ after systems 1N (*) | systems 2N (*) | 2C (*) 2D (*) 3N (P)
 # between the two bands (31-32 combined): opposite Kokish's 26-27 (strong-
 # openings.bid) that is a 4-5 count with six hearts, which passed 3NT
 # (base fallback). They bid game through Texas (2026-11-07).
-after 2C (P) 2D (P) 3N (P)
+after 2C (P) 2D (P) 3N (P) when o23
   4D  "Texas: 6+ ♥, game"  announce "Transfer"
       shows H>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
       when  texas_room_d

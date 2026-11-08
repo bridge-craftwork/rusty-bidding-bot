@@ -18,14 +18,28 @@ module over-3nt "Slam after partner's 3NT"
   param  q4n   = slam.quantitative_4nt.play default true
   param  texas = notrump.texas.play default false
   param  tu    = notrump.texas.two_under default false
+  param  o23   = notrump.jacoby_transfers.over_2c_3nt default true
   param  system = general.system   # `brill`: Gerber here instead (gerber.bid)
 
 # After 2♣–2♦–3NT (24+ shown, opener's second bid) Texas uses 4♦/4♥, or
 # 4♣/4♦ for 2-under (texas-transfers.bid): the tries and natural bids
-# below give way there, or partner would read them as transfers.
-define texas_3n = partner.hcp.min>=24, partner.bids>=2
+# below give way there, or partner would read them as transfers. Only
+# when the card plays transfers there (`notrump.jacoby_transfers.over_2c_3nt`,
+# default on, Rick 2026-11-07); off, 4♦ and 4♥ are natural.
+define big_3n = partner.hcp.min>=24, partner.bids>=2
+define texas_3n = big_3n, o23
 
 when partner.last=3N, !they.bid, we.trump is none
+  # Without Texas over 2♣–2♦–3NT, a six-card major goes to game
+  # naturally: the same hands that Texas carries there (texas-transfers.bid).
+  4H  "To play: six or more hearts"
+      shows H>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  big_3n, !(texas, o23)
+      priority -10
+  4S  "To play: six or more spades"
+      shows S>=6, points>=25-partner.points.min, suit_points<=32-partner.points.min
+      when  big_3n, !(texas, o23)
+      priority -10
   6N  "Small slam"
       shows hcp + partner.hcp.min >= 34
       priority -10

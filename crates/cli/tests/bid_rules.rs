@@ -286,17 +286,44 @@ fn text_form_prints_the_review_and_the_rules() {
     assert!(out.find("1NT").unwrap() < out.find("South to call").unwrap());
 }
 
+/// The line of a rule in `conventions/base/rebids.bid`, found by the text
+/// that follows its context line, so rule edits elsewhere in the file do
+/// not move the tests' targets.
+fn rebids_line(context: &str, rule: &str) -> usize {
+    let text = std::fs::read_to_string(format!("{ROOT}/conventions/base/rebids.bid")).unwrap();
+    let lines: Vec<&str> = text.lines().collect();
+    let at = lines
+        .iter()
+        .position(|l| *l == context)
+        .unwrap_or_else(|| panic!("no context line {context:?} in rebids.bid"));
+    at + 2
+        + lines[at + 1..]
+            .iter()
+            .position(|l| l.trim_start().starts_with(rule))
+            .unwrap_or_else(|| panic!("no rule {rule:?} after {context:?}"))
+}
+
+/// The four-card raise of responder's suit after their overcall.
+fn raise_after_overcall() -> usize {
+    rebids_line(
+        "after 1x (*) 1z (*) when they.bid, z is not x",
+        "cheapest(z) \"Raise: four or more {z}, minimum\"",
+    )
+}
+
 fn selection(v: &Value) -> &Vec<Value> {
     v["selection"].as_array().expect("a selection")
 }
 
 #[test]
 fn rule_that_applies_reports_its_entry() {
-    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", "rebids.bid:725"]);
+    let line = raise_after_overcall();
+    let spec = format!("rebids.bid:{line}");
+    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", &spec]);
     let s = selection(&v);
     assert_eq!(s.len(), 1);
     assert_eq!(s[0]["verdict"], "applies");
-    assert_eq!(s[0]["rule"]["line"], 725);
+    assert_eq!(s[0]["rule"]["line"], line);
     let c = &s[0]["candidates"][0];
     assert_eq!(c["call"], "2D");
     assert_eq!(c["bindings"]["z"], "D");
@@ -306,12 +333,17 @@ fn rule_that_applies_reports_its_entry() {
         .as_array()
         .unwrap()
         .iter()
-        .all(|c| c["rule"]["line"] == 725));
+        .all(|c| c["rule"]["line"] == line));
 }
 
 #[test]
 fn rule_rejected_by_after_says_which_line() {
-    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", "base/rebids.bid:57"]);
+    let line = rebids_line(
+        "after 1x (P) 1y (P) when !tw(x)",
+        "2y  \"Raise: 4+ {y}, minimum\"",
+    );
+    let spec = format!("base/rebids.bid:{line}");
+    let v = rules_json(&["-a", "1C P 1D 1H", "--rule", &spec]);
     let s = &selection(&v)[0];
     assert_eq!(s["verdict"], "fails");
     assert_eq!(s["rejected"][0]["stage"], "after");
@@ -379,7 +411,13 @@ fn module_selection_and_inactive_module() {
 
 #[test]
 fn bad_rule_spec_lists_near_matches() {
-    for (spec, near) in [("rebids.bid:726", "rebids.bid:725"), ("stayma", "stayman")] {
+    let line = raise_after_overcall();
+    // The line after the rule is its `shows`, where no rule starts.
+    let (bad, good) = (
+        format!("rebids.bid:{}", line + 1),
+        format!("rebids.bid:{line}"),
+    );
+    for (spec, near) in [(bad.as_str(), good.as_str()), ("stayma", "stayman")] {
         let out = Command::new(env!("CARGO_BIN_EXE_rbb"))
             .args(["bid", "rules", "-a", "1N P", "--rule", spec])
             .current_dir(ROOT)

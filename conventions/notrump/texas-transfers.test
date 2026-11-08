@@ -51,3 +51,15 @@ dealer  S
 N 84.KJ8632.72.954      | 2C P 2D P 3N P              | 4D  | six hearts, 4 HCP opposite 26-27: Texas to game
 N 84.KJ8632.72.954      | 2C P 2D P 3N P 4D P 4H P    | P   | then pass
 N KJ8632.84.Q2.954      | 2C P 2D P 3N P              | 4H  | six spades: Texas
+
+# `notrump.jacoby_transfers.over_2c_3nt` (Rick, 2026-11-07, default on):
+# off, 4♦ and 4♥ over 2♣–2♦–3NT are natural, and a six-card major bids
+# game itself (over-3nt.bid). Texas over 1NT is unchanged.
+card    21GF-DEFAULT notrump.jacoby_transfers.over_2c_3nt=false
+dealer  N
+S 5.KQJ986.432.432      | 2C P 2D P 3N P              | 4H  | transfers off there: natural game
+S KQJ986.5.432.432      | 2C P 2D P 3N P              | 4S  | six spades: natural game
+N AKQ2.A2.AKQ2.KQ2      | 2C P 2D P 3N P 4H P         | P   | natural: opener passes
+S 5.KQJ986.K32.432      | 1N P                        | 4D  | Texas over 1NT stays on
+card    21GF-DEFAULT
+S 5.KQJ986.432.432      | 2C P 2D P 3N P              | 4D  | default on: Texas

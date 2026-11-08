@@ -157,6 +157,16 @@ with every 15: the 4NT was a 6NT bid by 16-count. It scored one board
 better (Misfit_13-Plus 402, 16 opposite 15 made 6NT) but is the 31-HCP
 slam this module's calibration rejects, so the HCP answer is kept.
 
+## Without transfers over 2♣–2♦–3NT (Rick, 2026-11-07)
+
+`notrump.jacoby_transfers.over_2c_3nt` (default on: "default to on") says
+whether Texas runs over 2♣–2♦–3NT. Off, 4♦ and 4♥ there are natural:
+`texas_3n` reads the field, so the minor tries and the self-sufficient
+4♥ come back, and a six-card major with game values below the slam band
+bids four of it to play (the hands texas-transfers.bid carries there).
+The same natural game bids serve a card with Texas off. Cases in
+`notrump/texas-transfers.test`.
+
 ## Sources
 
 - **The thresholds:** the textbook combined counts for 6NT and a
@@ -182,3 +192,4 @@ slam this module's calibration rejects, so the HCP answer is kept.
   aggressive about slam opposite responder's 15-17 3NT after a 2/1.
   The textbook 33/31 HCP count there is standard practice, not yet
   cited.
+- Rick, 2026-11-07: the `over_2c_3nt` field on the Jacoby Transfer card, default on; off, 4♦/4♥ natural (the field's description).
