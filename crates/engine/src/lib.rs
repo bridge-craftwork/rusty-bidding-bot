@@ -186,7 +186,13 @@ fn compile_dir(
     let mut sources = Vec::new();
     let mut diags = Vec::new();
     for f in files {
-        let name = f.display().to_string();
+        // Rule files are named with `/` on every platform, so rule
+        // references (`conventions/base/rebids.bid:58`), JSON and `--rule`
+        // specs read the same on Windows.
+        let mut name = f.display().to_string();
+        if cfg!(windows) {
+            name = name.replace('\\', "/");
+        }
         match std::fs::read_to_string(&f) {
             Ok(src) => sources.push((name, src)),
             Err(e) => diags.push(bidspec::Diagnostic {
