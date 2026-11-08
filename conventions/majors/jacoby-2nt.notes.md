@@ -102,7 +102,8 @@ What we give up in agreement with BBA on the grids is small: 3x 83%
 with 22 against 84% with BBA's 24 (76% before), 3M 87% with 19 against
 88% with 20 (52% before), 3NT 95% (89% before). The going-on half
 alone changed no corpus board. So we keep BBA's shape of the line
-(points and controls) and par's threshold.
+(points and controls) and par's threshold. Rick, 2026-11-07, asked
+whether to keep it or follow BBA exactly: "keep the 22/19 line."
 
 ## Sources
 
