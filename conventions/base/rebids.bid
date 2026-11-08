@@ -88,6 +88,7 @@ after 1x (P) 1y (P) when !tw(x)
       when  x is C | x is D                 # 5-4-2-2 with 15-18: no other rebid
       priority -4
   1N  "12-14 HCP, balanced"                shows balanced | shape 5-4-2-2, hcp=12..14, y<=3
+      when  !weak_nt
   2N  "18+ HCP, balanced"                  shows balanced | shape 5-4-2-2, hcp>=18, y<=3
   2N  "18-19 HCP, balanced"                shows balanced, hcp=18..19, y<=3
       priority 1                           # ahead of a jump shift or reverse, as BBA
@@ -97,7 +98,15 @@ after 1x (P) 1y (P) when !tw(x)
       shows x>=6, suit_points>=16
       priority -4                          # a long suit with 19+ and no 3NT or 4M
   2N  "15-17 HCP, balanced"     shows balanced, hcp=15..17, y<=3
+      when  !weak_nt
       priority -4                          # 1NT would be a lie: the rebid is 12-14
+  # With a weak notrump (Rick, 2026-11-07: "3 yes"): the balanced hands
+  # too strong for the 1NT opening rebid 1NT, from the top of the range
+  # in force up to 17 (15-17 opposite 11+-14); 2NT stays 18-19.
+  # Responder counts against opener's shown range (responder-rebids.bid).
+  1N  "Balanced, above the weak notrump: up to 17 HCP"
+      shows balanced | shape 5-4-2-2, above_weak_nt, y<=3
+      when  weak_nt
 after 1x (P) 1M (P) when !tw(x)
   4M  "Game raise: 4+ {M}, 19+"            shows M>=4, tp(M)>=19   sets trump=M
       when  style is not bba
@@ -115,10 +124,22 @@ after 1C (P) 1D (P) when !tw(C)
   # with the Walsh switch off (minor_openings.walsh.play, as BBA reads
   # it), bids a four-card major up the line, balanced or not.
   1N  "12-14 HCP, balanced, may hold a 4-card major"   shows balanced | shape 5-4-2-2, hcp=12..14
-      when  style is not bba, style is not standard, walsh
+      when  style is not bba, style is not standard, walsh, !weak_nt
       priority 2
   1N  "12-14 HCP, balanced, no four-card major"   shows balanced | shape 5-4-2-2, hcp=12..14, H<=3, S<=3
       when  style is standard | !walsh
+      when  !weak_nt
+      priority 2
+  # With a weak notrump the same rebids show the hands above it, up to
+  # 17 (above, after a one-level response).
+  1N  "Balanced, above the weak notrump: up to 17 HCP, may hold a 4-card major"
+      shows balanced | shape 5-4-2-2, above_weak_nt
+      when  style is not bba, style is not standard, walsh, weak_nt
+      priority 2
+  1N  "Balanced, above the weak notrump: up to 17 HCP, no four-card major"
+      shows balanced | shape 5-4-2-2, above_weak_nt, H<=3, S<=3
+      when  style is standard | !walsh
+      when  weak_nt
       priority 2
   1H  "4+ hearts, up to 18"                shows H>=4, suit_points<=18, H>=S
       when  style is not bba | S>=4 | !walsh
@@ -159,7 +180,11 @@ after 1D (P) 1H (P)
       when  H<=3                           # four hearts: raise first
       priority 2                           # four spades: 1S before 1NT
   1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, H<=3
-      when  style is not bba               # Rick: balanced rebids 1NT, not 2C
+      when  style is not bba, !weak_nt     # Rick: balanced rebids 1NT, not 2C
+      priority 1
+  1N  "Balanced, above the weak notrump: up to 17 HCP"
+      shows balanced, above_weak_nt, H<=3
+      when  style is not bba, weak_nt
       priority 1
   1N  "12-13 HCP, balanced"   shows balanced, hcp=12..13, H<=3, C=4
       when  style is bba
@@ -170,7 +195,11 @@ after 1D (P) 1H (P)
 after 1D (P) 1S (P)
   2C  "4+ clubs, up to 18"                 shows C>=4, suit_points<=18, D>=C
   1N  "12-14 HCP, balanced"                shows balanced, hcp=12..14, S<=3
-      when  style is not bba               # Rick: balanced rebids 1NT, not 2C
+      when  style is not bba, !weak_nt     # Rick: balanced rebids 1NT, not 2C
+      priority 1
+  1N  "Balanced, above the weak notrump: up to 17 HCP"
+      shows balanced, above_weak_nt, S<=3
+      when  style is not bba, weak_nt
       priority 1
   1N  "12-13 HCP, balanced"   shows balanced, hcp=12..13, S<=3, C=4
       when  style is bba
@@ -279,6 +308,7 @@ after 1m (P) 1y (P) | 1m (P) 2y (P)
   3N  "18-21 with six or more {m}: to play"
       shows m>=6, hcp=18..21
       when  y is not m, !weak_js | !partner.jumped   # opposite a weak jump shift: weak-jump-shifts.bid
+      when  !(weak_nt, partner.last=2C)      # with a weak notrump 1D-2C-3NT is 15-17 balanced (below)
 after 1M (P) 1y (P) | 1M (P) 2y (P)
   4M  "19+ with six or more {M}: game"
       shows M>=6, hcp+length_points>=19
@@ -575,7 +605,33 @@ after 1D (P) 2C (P)
   2H  "4+ hearts"                          shows H>=4
   2S  "4+ spades"                          shows S>=4
   2N  "12-14 HCP, balanced"                shows balanced, hcp=12..14
+      when  !weak_nt
   3N  "18-19 HCP, balanced"                shows balanced, hcp=18..19
+      when  !weak_nt
+  # With a weak notrump (Rick, 2026-11-07: "after 2/1 a jump to 3NT
+  # shows 15-17, 2NT shows 12-14 or 18-19, same as for opening strong
+  # 1NT"): responder's scheme after a 2/1 game force mirrored
+  # (responder-rebids.bid, #91). 2NT forces to game; opposite it
+  # responder counts slam on the minimum, and opener's strong branch
+  # invites over responder's 3NT (below).
+  3N  "Balanced, above the weak notrump: up to 17 HCP"
+      shows balanced, above_weak_nt, !weak_nt_top_out
+      when  weak_nt
+  # The good 14 jumps too, read as the rule above (15-17): the slam
+  # counts over 3NT need its floor (a 17 opposite it invites).
+  3N  "Balanced, above the weak notrump: up to 17 HCP"
+      shows balanced, weak_nt_top_out
+      when  weak_nt
+      priority -1
+  2N  "Balanced: 12-14 or 18+ HCP, game forcing"
+      shows balanced, (hcp<=14, !weak_nt_top_out) | hcp>=18
+      when  weak_nt
+      sets  forcing=game
+after 1D (P) 2C (P) 2N (P) 3N (P) when weak_nt, shown.hcp.max >= 18
+  4N  "Quantitative: 18-19, invites 6NT"   shows hcp>=18
+      when  quant_4nt   # slam.quantitative_4nt.play (slam-entry.bid)
+      sets  ask=quant
+      priority 1
 
 # ── After a reverse over 1NT and responder's preference at three ─────
 # Responder has 6-10 and two or more of opener's first suit; opener had
@@ -834,8 +890,13 @@ after 1x (*) 1z (P) when they.bid, z is not x
 after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
-      when  stop(y)
+      when  stop(y), !weak_nt
       sets  ask=signoff
+  # With a weak notrump: the hands above it, up to 17 (Rick, 2026-11-07,
+  # as uncontested).
+  cheapest(N) "Balanced, above the weak notrump: up to 17, a stopper in {y}"
+      shows balanced | shape 5-4-2-2, above_weak_nt, z<=3
+      when  stop(y), weak_nt
   jump(N) "18-19 balanced with a stopper in {y}"
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19, z<=3
@@ -861,11 +922,20 @@ after 1x (1y) 1z (P) | 1x (2y) 1z (P) when y is not x, z is not x, z is not y
 after 1x (P) 1z (1y) when y is not x, z is not x, z is not y
   cheapest(N) "13-16 balanced with a stopper in {y}"
       shows balanced | shape 5-4-2-2, hcp=13..16, z<=3
-      when  stop(y)
+      when  stop(y), !weak_nt
       sets  ask=signoff
   jump(N) "17-18 with a stopper in {y}"
       shows hcp=17..18, z<=3, longest<=6       # BBA: unbalanced too
-      when  stop(y)
+      when  stop(y), !weak_nt
+  # With a weak notrump the 12-14 hands opened 1NT and the 15-17 ones
+  # did not: 1NT shows those (up to 17), the jump 18-19 (Rick,
+  # 2026-11-07, as uncontested).
+  cheapest(N) "Balanced, above the weak notrump: up to 17, a stopper in {y}"
+      shows balanced | shape 5-4-2-2, above_weak_nt, z<=3
+      when  stop(y), weak_nt
+  jump(N) "18-19 with a stopper in {y}"
+      shows hcp=18..19, z<=3, longest<=6
+      when  stop(y), weak_nt
   3N  "Game: 19+ with a stopper in {y}"
       shows hcp>=19, stop(y), z<=3
   cheapest(y) "Cue bid: 19+, forcing to game"
@@ -876,7 +946,11 @@ after 1x (P) 1z (1y) when y is not x, z is not x, z is not y
 after 1x (X) 1z (P) when z is not x
   cheapest(N) "12-14 balanced"
       shows balanced | shape 5-4-2-2, hcp=12..14, z<=3
+      when  !weak_nt
       sets  ask=signoff
+  cheapest(N) "Balanced, above the weak notrump: up to 17"
+      shows balanced | shape 5-4-2-2, above_weak_nt, z<=3
+      when  weak_nt
   jump(N) "18-19 balanced"
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19, z<=3

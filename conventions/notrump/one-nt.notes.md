@@ -747,9 +747,13 @@ Measured (2026-11-07):
   rebids.bid's (another worktree's, not touched here). The weak notrump
   openings themselves are near even (about -38).
 
-Open: the opener's rebids for a weak-notrump card (1m–1M–1NT 15-17,
-2NT 18-19, the rebid over a 2/1 or 2♣ response with 15-17 balanced),
-asked in the session's questions.
+The opener's rebids for a weak-notrump card: built 2026-11-07 on Rick's
+ruling (rebids.notes.md, "With a weak notrump"); `weak_nt`,
+`above_weak_nt` and `weak_nt_top_out` are defined in one-nt.bid,
+beside the ranges they read.
+
+Rick (2026-11-07), on judging "good 14" in total points at both ends:
+**"4: yes"**. The decision above stands.
 
 ## Sources
 
@@ -796,7 +800,8 @@ asked in the session's questions.
   qualifier's meaning from convention-card `spec/fields.toml` (the
   `*_range_min_plus` descriptions: "14+-17 is a good 14 to 17") and
   standard card usage, not yet cited to a book; judging "good" in total
-  points, at both ends, is our decision, open to Rick. Seat/vulnerability
+  points, at both ends, is our decision, confirmed by Rick ("4: yes",
+  2026-11-07). Seat/vulnerability
   ranges are standard practice (weak notrump not vulnerable, strong
   vulnerable), not yet cited. Prompted by Rick's own card (Bridge-Classroom
   export, 2026-11-07). No corpus card sets a qualifier or an alternate

@@ -1624,6 +1624,121 @@ and _Unb 335: BBA's own double). The matching set's -3 agrees in both
 halves but is small against the tripwire's +78; all kept. The 4m try
 and the double are the parts that lose: for Rick.
 
+### Rick's answers (2026-11-07, fourth round)
+
+- **"1 yes"**: keep the 4m slam try and the unbalanced double over
+  1C P 1D (overcall), the two parts that lost above. Kept as built.
+- **"2 yes"**: the keycard thresholds after the strong bids (32 between
+  us for responder, 29 / 30 for opener) are accepted.
+
+## With a weak notrump (Rick, 2026-11-07)
+
+Rick's card plays 1NT 14+-17 vulnerable and 11+-14 not (one-nt.notes.md,
+"Range qualifiers and the alternate range"). Not vulnerable, a balanced
+15-17 now opens a minor, and the rebids had nothing for it: 1♦–1♠ jumped
+to 2NT "15-17" (rebids.bid's fallback for a strong-notrump card, where
+1NT would be a lie) and 1♦–2♣ had no rule on Basic-Bridge. Asked:
+"With a weak notrump, should opener rebid 15-17 balanced as 1NT after
+1m–1M, with 2NT for 18–19? What over a 2/1 or a 2♣ response?" Rick:
+**"3 yes and after 2/1 a jump to 3NT shows 15-17, 2NT shows 12-14 or
+18-19, same as for opening strong 1NT."**
+
+Built, wherever the range in force for opener's seat and vulnerability
+tops at 14 or less (`weak_nt`, one-nt.bid; on Rick's card not
+vulnerable, never vulnerable):
+
+- **After a one-level response** (every `1x 1y` context, 1♣–1♦ with
+  Walsh or up the line, 1♦–1♥/1♠): 1NT shows the balanced hands above
+  the range in force up to 17 (`above_weak_nt`: 15-17 opposite 11+-14,
+  13-17 opposite 10-12, and the top of the weak range judged out of it,
+  a 14 worth 15 against "11+-14", `weak_nt_top_out`), 2NT stays 18-19.
+  The 12-14 1NT and the 15-17 2NT fallback stand aside. Partner reads
+  the 1NT as 14-17 (a good 14 to 17, as the card writes "14+-17"):
+  first built as 15-17 with the good 14 read in by a lower-priority
+  rule, it lost -56 against the old rules on the self A/B below, mostly
+  from responder pushing to game opposite 14-counts read as 15+; read as
+  14-17, -28 there. "Minimum, no fit" (a 12-14 with no other rebid)
+  still rebids 1NT as the least lie, read as the rest (moving it below
+  the minor's five-card rebid lost -40 more: tried, not kept).
+- **After 1♦–2♣**: the jump to 3NT is 15-17 balanced (the good 14 jumps
+  too, read as 15-17: a 17 opposite needs the 15 floor for the
+  quantitative 4NT), 2NT 12-14 or 18+, forcing to game (responder's scheme after a 2/1, #91, mirrored).
+  Over the 2NT responder counts slam on its minimum (6NT with 33, a
+  quantitative 4NT with 31: responder-rebids.bid); over responder's
+  3NT opener's strong branch bids a quantitative 4NT. The minor's
+  "18-21 with six or more" 3NT stands aside there (it made the 3NT read
+  15-21 and the slam counts failed). Opener's major 2/1s are unchanged:
+  1M–2x–2NT/3NT keep their meanings (the 15-17 with five hearts is a 1M
+  opening on either range).
+- **In competition**: the cheapest notrump over their overcall of the
+  opening (`1x (1y) 1z`, `1x (X) 1z`) and over their overcall of the
+  response (`1x P 1z (1y)`: 1NT a good 14 to 17, the jump 18-19 instead
+  of BBA's 13-16 / 17-18), and the 1NT answer to a negative double
+  (after-interference.bid), all to 17.
+- **Responder** counts against opener's shown minimum, a three-point
+  range: game with 25 between us, invitational 23-24 (`nt_rebid_*`,
+  responder-rebids.bid): opposite 12-14 the old 10 / 11-12 / 13,
+  opposite a good 14 to 17 8 / 9-10 / 11. The same for two-way NMF
+  and XYZ after 1NT (Rick's card) and NMF (its answers 2NT / 3NT now
+  read minimum and maximum of the shown range); the contested 1NT and
+  the negative-double answer have their own weak blocks. Unchanged for
+  every stock card (tripwire below).
+
+Positions (Rick's nine notrump fields on 21GF-DEFAULT; the same on his
+own card, `rickcard/rick.json`, except as noted):
+
+| hand | auction | not vul before | not vul after | vul (unchanged) |
+|---|---|---|---|---|
+| AJ5.Q74.AJ63.K82 (15) | 1♦–1♠ | 2NT | **1NT** | (opens 1NT) |
+| AQ5.K74.AJ63.K82 (17) | 1♦–1♥ | 2NT | **1NT** | (opens 1NT) |
+| AQ5.K74.AQ63.K82 (18) | 1♦–1♠ | 2NT | 2NT | 2NT |
+| AJ5.Q74.K82.AJ63 (15) | 1♣–1♥ | 2NT | **1NT** | (opens 1NT) |
+| AQ5.K74.K82.AQ63 (18) | 1♣–1♥ | 2NT | 2NT | 2NT |
+| AJ5.Q74.AJ63.K82 (15) | 1♦–2♣ | 3NT (Rick's card: no rule, pass) | **3NT** 15-17 | (opens 1NT) |
+| AQ5.K74.AQ63.K82 (18) | 1♦–2♣ | 3NT | **2NT** | 3NT 18-19 |
+| KJ5.QT4.AJT3.K82 (14, two tens) | 1♦–2♣ | 2NT | **3NT** | (opens 1NT) |
+| KJ5.Q74.A963.K82 (13) | 1♦–2♣ | | (opens 1NT) | 2NT 12-14 |
+| responder KJ64.Q73.82.Q642 (8) | 1♦–1♠–1NT | P | P | P |
+| responder KJ64.K73.82.Q642 (9) | 1♦–1♠–1NT | P | **2♣** NMF (Rick's card: 2♣ xyNT relay) | P |
+| responder KJ64.K73.K2.Q642 (12) | 1♦–1♠–1NT | 2♣ NMF (Rick's card: 2♣ relay) | 2♣ NMF (Rick's card: **3NT**) | 2♣ |
+| responder KQ4.Q73.K2.AQJ62 (17) | 1♦–2♣–3NT | 6NT | **4NT** | 6NT |
+| responder KQ4.J73.K2.AJ642 (14) | 1♦–2♣–3NT | 4NT | **P** | 4NT |
+
+Measured (2026-11-07). Tripwire: `compare --limit 50`, all 342
+scenarios (17,105 boards), base 45dde97 (this branch's parent) against
+this change: **0 auctions changed** (the Precision 13-15 card is not a
+weak notrump by this test, max 15; counting responder's invitation on
+opener's maximum had changed Weak_NT_11-16 board 30, so the counts read
+the minimum only). Self A/B of Rick's nine notrump fields for
+North-South (`--ns-set`, all 500 boards of Basic_What_To_Open,
+Basic_Minor, Basic_NT, Basic_Openers_Rebid, 1C_WalshStyle,
+Minor_Suit_Opener, Open_and_Rebid, 1m_1x_2m, New_Minor_Forcing,
+3N_Rebid_by_Opener; base the plain 15-17), actor's contract errors:
+
+| run | boards changed | actor contract (halves) | z |
+|---|---|---|---|
+| 15-17 → Rick's fields, old rules (45dde97) | 1,111 | -189 (-68 / -121) | -1.5 |
+| 15-17 → Rick's fields, these rules | 1,233 | -228 (-96 / -132) | -1.9 |
+| old rules → these rules, Rick's fields | 286 | **-39** (-28 / -11) | -0.7, neutral |
+| the same, the four scenarios of one-nt.notes.md | 153 | +15 (-20 / +35) | |
+
+By first differing call (old → new): 1♦–2♣ now answered +43 (P or 2♦
+→ 3NT, 13 boards), 1♣–1♦–1♥ → 1NT +16 and other rebid changes about
++30; against them the 15-17 1NT instead of a 1♠ bid up the line with
+four spades after 1♣–1♦ (Walsh, -16 on 28), 1NT instead of 2NT -15 on
+25, and responder's game and invitation over the 1NT about -55 on 40
+(on double dummy a 25-count 3NT opposite 14-17 goes down more often
+than it makes on these boards). The weak notrump itself (1N → 1♦ on
+the 15-17 hands that no longer open 1NT) is still the large cost of the
+card: -84 on 159 boards against the plain 15-17 (it was -136 with the
+old rebids). Neutral by the verdict; built as Rick ruled.
+
+Gaps: Checkback and Roudi after the 1NT rebid keep their 12-14
+thresholds (neither is on Rick's card); inverted minors' 2NT 12-14 /
+3NT 18-19 and Transfer Walsh's rebids are untouched; on Rick's own card
+a vulnerable 1♦–2♣ with a hand judged out of 14+-17 (a 17 worth 18) still
+has no rule, as before.
+
 ## Sources
 
 - **Rick's rulings**, dated in the sections above.
@@ -1710,3 +1825,11 @@ and the double are the parts that lose: for Rick.
   keycard asks from `probes/opnj-*.toml` and `probes/opns-r-*.toml`; the
   keycard thresholds (32 / 29 / 30 between us) are our decision, below
   rkcb-1430.bid's 33 for the shortness a known fit adds. Not cited.
+  Fourth round: "1 yes" (keep the 4m try and the unbalanced double),
+  "2 yes" (the thresholds accepted).
+- **Rick, 2026-11-07** (weak notrump): "3 yes and after 2/1 a jump to
+  3NT shows 15-17, 2NT shows 12-14 or 18-19, same as for opening strong
+  1NT." The 1NT rebid above a weak notrump is standard weak-notrump
+  (Acol-style) practice, not yet cited to a book; deriving its range
+  from the card's range in force (top + 1 to 17), the competitive
+  rebids and the 2NT-then-3NT quantitative follow-up are our decisions.

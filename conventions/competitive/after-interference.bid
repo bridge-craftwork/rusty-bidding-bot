@@ -350,7 +350,12 @@ after 1x (1y) X (P) | 1x (2y) X (P) | 1x (3y) X (P)
       when  x is not H, y is not H
   cheapest(N) "12-14 balanced with a stopper in {y}"
       shows balanced, hcp<=14
-      when  stop(y)
+      when  stop(y), !weak_nt
+  # With a weak notrump the balanced hands above it, up to 17 (Rick,
+  # 2026-11-07; one-nt.bid, `weak_nt`).
+  cheapest(N) "Balanced, above the weak notrump: up to 17, a stopper in {y}"
+      shows balanced, above_weak_nt
+      when  stop(y), weak_nt
   jump(N) "18-19 balanced with a stopper in {y}"
       when  nt_jump_to_game                  # 3NT at most (rebids.bid)
       shows balanced, hcp=18..19

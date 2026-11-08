@@ -213,6 +213,11 @@ Texas over 2♣–2♦–3NT follows that field instead of `notrump.texas.play`
 (the default to settle then: off, as Rick's "sometimes", or on, as
 today's behaviour).
 
+Rick (2026-11-07), on that default: **"5: default to on"**. When the
+field is read, a card that leaves it unset plays transfers over
+2♣–2♦–3NT, as today. Not read yet (the pin has not moved; convention-card
+PR #117).
+
 ## Sources
 
 - **The convention:** Texas transfers (4♦/4♥ over 1NT). Standard
@@ -220,7 +225,9 @@ today's behaviour).
 - **Rick's rulings:** Texas is game only or slam values followed by
   keycard; slam values are 33 total points even opposite opener's
   minimum, so 18+; 8 HCP with a six-card major invites (2026-09-21); the
-  sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`).
+  sign-off on an ambiguous keycard answer (`rkcb-1430.notes.md`); the
+  pending `over_2c_3nt` field defaults to on, "5: default to on"
+  (2026-11-07).
 - **BBA probes:** the dealer3 script `six-hearts.dlr` run through
   `rbb probe --script` (600 deals), given in full in "Evidence from BBA".
   It is not yet kept as a `probes/*.toml` spec.

@@ -507,3 +507,30 @@ S AK74.A4.A2.AKQJ4      | 1C P 1D 2H 2S P 4C P | 4NT | 23 opposite 7+: keycard
 S K874.A4.AJ.AQJT4      | 1C P 1D P 2S P 4C P | 5C | the same uncontested: 4C forcing
 S K874.A4.AJ.AQJT4      | 1C P 1D P 2S P 3S P | 4NT | the same uncontested: keycard
 S K874.A4.AJ.KQJT4      | 1C P 1D P 2S P 3S P | 4S | 18, 20 support points opposite 8: game
+
+# With a weak notrump (Rick, 2026-11-07: "3 yes and after 2/1 a jump to
+# 3NT shows 15-17, 2NT shows 12-14 or 18-19"): his card, 14+-17
+# vulnerable, 11+-14 not. Not vulnerable the 15-17 balanced hands open
+# the minor and rebid 1NT, 2NT stays 18-19; after 1D-2C the jump to 3NT
+# is 15-17 and 2NT 12-14 or 18+. Vulnerable (15-17 opens 1NT) as before.
+card    21GF-DEFAULT notrump.one_nt.range_min=14 notrump.one_nt.range_min_plus=true notrump.one_nt.range_max=17 notrump.one_nt.seat_vul=Vul notrump.one_nt_alt.range_min=11 notrump.one_nt_alt.range_min_plus=true notrump.one_nt_alt.range_max=14 notrump.one_nt_alt.seat_vul=NV notrump.one_nt_alt.same_responses=true
+dealer  S
+vul     None
+S AJ5.Q74.AJ63.K82      | 1D P 1S P    | 1NT    | 15 balanced above the weak notrump: 1NT
+S AQ5.K74.AJ63.K82      | 1D P 1H P    | 1NT    | 17: still 1NT
+S AQ5.K74.AQ63.K82      | 1D P 1S P    | 2NT    | 18: 2NT
+S KJ5.QT4.AJT3.K82      | 1D P 1S P    | 1NT    | 14 with two tens, judged out of 11+-14: 1NT
+S AJ5.Q74.K82.AJ63      | 1C P 1H P    | 1NT    | 15 after 1C-1H
+S AJ5.K74.K82.AJ63      | 1C P 1D P    | 1NT    | 16 after 1C-1D
+S AQ5.K74.K82.AQ63      | 1C P 1H P    | 2NT    | 18 after 1C-1H
+S AJ5.Q74.AJ63.K82      | 1D P 2C P    | 3NT    | after the 2/1: 15-17 jumps to 3NT
+S AQ5.K74.AQ63.K82      | 1D P 2C P    | 2NT    | 18: 2NT, 12-14 or 18+, game forcing
+S AQ5.K74.AQ63.K82      | 1D P 2C P 2NT P 3NT P | 4NT | 18 over 3NT: the strong branch invites
+S AJ5.Q74.AJ63.K82      | 1D 1H X P    | 1NT    | the negative double: 15-17 with a heart stopper
+S AJ5.Q74.AJ63.K82      | 1D P 1S P 1NT P 2NT P | P | 15 declines the invitation
+S AQ5.K74.AJ63.K82      | 1D P 1S P 1NT P 2NT P | 3NT | 17 accepts
+vul     NS
+S AQ5.K74.AQ63.K82      | 1D P 1S P    | 2NT    | vulnerable 18: 2NT as before
+S KJ5.Q74.A963.K82      | 1D P 1S P    | 1NT    | vulnerable 13: 1NT 12-14 as before
+S KJ5.Q74.A963.K82      | 1D P 2C P    | 2NT    | vulnerable 13 after the 2/1: 2NT 12-14
+S AQ5.K74.AQ63.K82      | 1D P 2C P    | 3NT    | vulnerable 18 after the 2/1: 3NT 18-19
