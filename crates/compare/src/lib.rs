@@ -177,6 +177,7 @@ pub fn init_threads() {
     if std::env::var_os("RAYON_NUM_THREADS").is_none() {
         let _ = rayon::ThreadPoolBuilder::new()
             .num_threads(rbb_engine::cpu_budget())
+            .stack_size(16 << 20) // the engine recurses; Windows threads are small
             .build_global();
     }
 }
