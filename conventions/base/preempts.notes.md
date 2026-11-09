@@ -12,6 +12,9 @@ Weak two-bids, three- and four-level preempts, and the seat rules in
   200 calls).
 - **Fourth seat has no weak two**: two of a suit there shows a six-card
   suit and the values of a minimum opening.
+  Rick, 2026-11-09: the hand that would open one and rebid two of the
+  suit, **12-15 total points**; 18 with a six-card suit is too strong.
+  The rule allowed 12-21 HCP until then.
 - **With a seven-card suit, open at the three level**, not the two.
 - **Third seat may open one of a good four-card major** with 10-11.
 - **Fourth seat opens by the rule of 15**: HCP plus spade length, 15+.
@@ -365,6 +368,26 @@ eight-card minor opened 5m.
 
 Measured with `probes/tools/brill_probe.py report --card Brill` over the top 2000 corpus auctions (calls of this group, board-weighted, our reading against Brill's): weak twos 0% -> 100% of 7,839 boards; three-level preempts 0% -> 100% of 2,254.
 
+## Fourth seat two-bids capped at 12-15 total points (2026-11-09)
+
+The Brill dailies showed our fourth-seat 2♦/2♥ on 14-19 HCP. Every other
+entrant at the same table opened one of the suit on the same hands (7 of
+7 positions). Brill's robots read them as a fourth-seat preempt, 5-11 or
+10-12, which Rick takes to be a Brill error (a question for Thorvald).
+Our rule showed `hcp>=12, hcp<=21`, against these notes' "values of a
+minimum opening", and its description ranked it over the one-level opening.
+It now shows `points>=12, points<=15`. The rule of 15 still decides
+whether fourth seat opens at all (`base.bid`), so a 10-11 HCP six-card
+hand that passes it now opens two, not one.
+
+Tripwire, `compare --limit 50` of all scenarios before (`--rules-at
+origin/main`) and after, `errors_diff.py`: 17 boards changed. The actor's
+contract errors improved by 29 IMPs, and the two halves agree
+(+18 / +11). Distance from par improved by 33. 2♠→1♠ +37 and 2♥→1♥ +12
+(twice each in the listing), 2♦→1♦ −20 (6 boards), and the new
+1♠/1♥→2♠/2♥ on 10-11 HCP 0. The advances.bid 2NT change in the same
+commit moved no corpus board.
+
 ## Sources
 
 - Brill /explain, 2026-10-15 (Thorvald Aagaard's public Brill service, answers cached in `.rbb-cache/brill-service/explain/`): the rule text quoted in the `brill` section and in the `.bid` comments. Applies to the Brill card only (`general.system = brill`, cards/README.md "Brill").
@@ -373,7 +396,11 @@ Measured with `probes/tools/brill_probe.py report --card Brill` over the top 200
   level; third-seat four-card majors; the rule of 15 in fourth seat; 12
   total points for a one-level opening), 2026-09-22; a major weak two up
   to 10 HCP, 2026-09-23; the default opens weak twos as BBA does, with
-  the previous default kept as the `standard` treatment, 2026-09-24.
+  the previous default kept as the `standard` treatment, 2026-09-24;
+  fourth-seat two-bids 12-15 total points ("would open 1x and rebid
+  2x"), 2026-11-09.
+- **Brill field PBNs** (`.rbb-cache/brill/`, 2026-10-22 to 11-08): the
+  other entrants' openings on our fourth-seat hands, 2026-11-09.
 - **Book practice:** the rule of 15 and the rule of 20 (measured and not
   adopted) are standard practice, not yet cited to a book or article.
 - **BBA probes:** `rbb probe` with the opener's hand fixed, one feature at

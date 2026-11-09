@@ -33,6 +33,8 @@ S Q8.AKQ832.963.KJ      | 1H P 1S P    | 3H     | jump rebid: six hearts, 16-18 
 # ── After 1NT
 S KQ986.K75.AJ.J42      | 1S P 1NT P   | P      | minimum, nothing to add
 S K8765.AJ43.K.Q94      | 1S P 1NT P   | 2H     | a second suit
+S 52.AQJ954.3.KJ54      | 1H P 1NT P   | 2C     | six-four: show the lower four-card suit, not 2H (Rick, 2026-11-09)
+S AQJ954.32.3.KQ54      | 1S P 1NT P   | 2C     | six-four, a minimum: the second suit still comes first
 S AT8754.8.AK8.QT2      | 1S P 1NT P   | 2S     | six spades, minimum
 S KQ987.962.AK.AQ7      | 1S P 1NT P   | 2NT    | 18-19, balanced
 S AQ9762.K4.K5.K83      | 1S P 1NT P   | 3S     | six spades, 16-18

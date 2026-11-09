@@ -128,6 +128,16 @@ this module and in `after-interference.bid`:
 | par, net IMPs | -7574 | -7431 | -244279 | -239918 |
 | no rule in a live auction | 5989 | 5692 | 165221 | 156762 |
 
+## 2NT and a five-card major (2026-11-09)
+
+Over 1♣ (1♦) P, Rusty advanced 2NT with QT6.A8643.J9.KJ5 in a Brill
+daily, and all 8 other entrants bid 1♥ with the same hand. Rick agreed
+that the major comes first. The 2NT advance now denies a five-card major
+when that major can be bid at the one level (`H<=4 | y is S, S<=4`).
+Over a 1♠ overcall 2NT stays: a first version that denied five hearts
+there too bid 2♥ instead on 3 corpus boards and cost 24 IMPs of contract
+errors. No corpus board reaches the one-level case.
+
 ## Gaps and open questions
 
 - Advancer's **continuations** after the overcaller rebids, and after
@@ -358,7 +368,10 @@ z −0.2, **neutral**.
   from `bba-cli --all-meanings` ("Evidence"). Rick has not ruled on the
   advance; the usual ranges are standard practice, not yet cited to a
   book or article.
-- **Rick's rulings:** systems on after a 1NT overcall, and by default
+- **Rick's rulings:** a five-card major the one level allows is bid
+  before 2NT (2026-11-09, from the Brill field PBNs: 8 of 8 entrants
+  bid 1♥);
+  systems on after a 1NT overcall, and by default
   after a penalty double of it (2026-09-27, ticket
   basic-takeout-double-b160).
 - **BBA evidence:** BBA's advances of two-level and balancing overcalls

@@ -65,8 +65,12 @@ after (1x) 1y (P)
       alert  artificial
       shows  y>=3, hcp+length_points>=12
       sets   forcing=round, ask=cue_raise(y)
+  # A five-card major that can be shown at the one level comes first
+  # (Rick, 2026-11-09: the Brill field bid 1H, 8 of 8, with
+  # QT6.A8643.J9.KJ5 over 1C 1D Pass). Over a 1S overcall 2NT stays:
+  # 2H there measured worse (3 boards, -24 IMPs).
   2N  "12-15 total points, balanced, a stopper in {x}"
-      shows balanced, hcp+length_points>=12, hcp+length_points<=15
+      shows balanced, hcp+length_points>=12, hcp+length_points<=15, H<=4 | y is S, S<=4
       when  stop(x), y<=2
   3{x} "Mixed raise: 4+ {y}, 7-9 support points"
       alert  artificial

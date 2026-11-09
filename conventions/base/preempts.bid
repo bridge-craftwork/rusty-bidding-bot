@@ -103,13 +103,15 @@ when opening, seat=3
   2S  "Weak two: five or six spades, 4-9"  shows S>=5, S<=6, hcp=4..9
       when two_s is weak, weak_2s_open, S>=6 | quality(S)>=good
 
-# ── Fourth seat: no weak two; 2 of a suit is a sound opening ─────────
+# ── Fourth seat: no weak two; 2 of a suit is a sound minimum opening ─
+# The hand that would open one and rebid two of the suit: a six-card suit
+# and 12-15 total points (Rick, 2026-11-09). Stronger hands open one.
 when opening, seat=4
-  2D  "Fourth seat: six diamonds, opening values"  shows D>=6, hcp>=12, hcp<=21
+  2D  "Fourth seat: six diamonds, 12-15"  shows D>=6, points>=12, points<=15
       when two_d is weak, weak_2d_open
-  2H  "Fourth seat: six hearts, opening values"    shows H>=6, hcp>=12, hcp<=21
+  2H  "Fourth seat: six hearts, 12-15"    shows H>=6, points>=12, points<=15
       when two_h is weak, weak_2h_open
-  2S  "Fourth seat: six spades, opening values"    shows S>=6, hcp>=12, hcp<=21
+  2S  "Fourth seat: six spades, 12-15"    shows S>=6, points>=12, points<=15
       when two_s is weak, weak_2s_open
 
 # ── Three- and four-level preempts (not in fourth seat) ─────────────
