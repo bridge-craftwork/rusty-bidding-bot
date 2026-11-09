@@ -28,8 +28,10 @@ module dopi-ropi "DOPI and ROPI: answering an ace or keycard ask over interferen
   param  m0314  = slam.rkcb.minor_0314 default false
 
 # The first step of the keycard answers is "1 or 4" (1430) unless the
-# card's treatment makes it "0 or 3", as rkcb-1430.bid decides.
-define kc_first_14(t) = (gstyle is not bba, !m0314 | t is H | t is S) | (gstyle is bba, !(rkcb, rstyle is 0314))
+# card plays 0314 (`slam.rkcb.style`), or its `minor_0314` treatment
+# applies with a minor as trumps (Rick, 2026-11-09: follow the card's
+# keycard order). Shared by rkcb-1430.bid and minorwood.bid.
+define kc_first_14(t) = !(rkcb, rstyle is 0314), !m0314 | t is H | t is S
 
 # They bid a suit over the ask, below six (DOPI); they doubled it (ROPI).
 # A bid, not a pass, double or redouble: checked first, as only bids can

@@ -4,7 +4,7 @@
 # modules set (trump agreed, game forcing), so they work after any auction
 # that reaches that state.
 
-module rkcb-1430 "Roman Keycard Blackwood (1430; 0314 as a treatment)"
+module rkcb-1430 "Roman Keycard Blackwood (1430 or 0314, as the card says)"
   kind   convention
   needs  base
   skill  bidding_conventions/roman_keycard
@@ -220,26 +220,19 @@ when rkcb, we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_a
       priority 15
 
 when rkcb, asked keycards(t)
-  # We play 1430 whatever the card says (Rick, 2026-09-27); the
-  # `minor_0314` treatment swaps the first two answers when a minor is
-  # trumps. BBA plays the card's 0314 (Precision, 21GF-GIB, 21GF-GIB-
-  # Bergen), so `general.style=bba` does too.
+  # The card's keycard order (Rick, 2026-11-09: "we should follow the
+  # card's keycard order"; the 2026-09-27 "1430 whatever the card says"
+  # was a misunderstanding): `slam.rkcb.style` 0314 answers 0314 in every
+  # suit, as BBA and GIB do; 1430 cards keep the `minor_0314` treatment,
+  # which swaps the first two answers when a minor is trumps.
   5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is not bba, !m0314 | t is H | t is S
+      when  kc_first_14(t)
   5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is not bba, !m0314 | t is H | t is S
+      when  kc_first_14(t)
   5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is not bba, m0314, t is C | t is D
+      when  !kc_first_14(t)
   5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is not bba, m0314, t is C | t is D
-  5C  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is bba, !(rkcb, rstyle is 0314)
-  5D  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is bba, !(rkcb, rstyle is 0314)
-  5C  "0 or 3 keycards"                shows keycards(t) in 0|3  artificial
-      when  gstyle is bba, rkcb, rstyle is 0314
-  5D  "1 or 4 keycards"                shows keycards(t) in 1|4  artificial
-      when  gstyle is bba, rkcb, rstyle is 0314
+      when  !kc_first_14(t)
   # Five keycards answer as two: the steps wrap (0/3, 1/4, 2/5), and the
   # asker, holding none, knows which (Benjamin_2D 222, 2026-10-07: we
   # passed the ask with five).
