@@ -56,7 +56,7 @@ when mwplay, !kickback_on, we.trump is suit, !minor_given_way, !asked, !they.bid
 # ── The answers ───────────────────────────────────────────────────────
 #
 # The first two steps as the card's keycard ask has them in a minor
-# (`kc_first_14`, dopi-ropi.bid: 1430 unless a 0314 treatment applies).
+# (`kc_first_14`, dopi-ropi.bid: 1430 unless the card says 0314 or its minor treatment applies).
 
 when mwplay, asked minorwood(t), rho.last = P
   4D  "Minorwood: 1 or 4 keycards"             shows keycards(t) in 1|4   artificial   when t is C, kc_first_14(t)

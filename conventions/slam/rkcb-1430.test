@@ -28,9 +28,9 @@ N K985.AQ.AQT.AJ42      | 1S P 2NT P 4S P                      | 4NT    | 20 HCP
 
 
 # The cards that say 0314 (Precision, 21GF-GIB, 21GF-GIB-Bergen): we
-# play 1430 anyway (Rick, 2026-09-27); BBA's style plays the card.
+# play the card's order (Rick, 2026-11-09), in every suit.
 card    21GF-DEFAULT slam.rkcb.style=0314
-S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P                | 5D     | three keycards, 1430: 5♦
+S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P                | 5C     | three keycards, 0314: 5♣
 S AKQJT4.A654.KQ9.      | 1S P 2NT P 3C P 4S P                 | 4NT    | on 21GF-GIB-Bergen this hand had no ask at all (Bergen_Raises 65)
 card    21GF-DEFAULT slam.rkcb.style=0314 general.style=bba
 S AK5.K74.KQ82.A93      | 1NT P 4D P 4H P 4NT P                | 5C     | BBA's style plays the card's 0314: three keycards is 5♣
