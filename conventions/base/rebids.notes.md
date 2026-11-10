@@ -34,7 +34,9 @@ card beyond four), raises in support points tp(y). Once a fit is found
 pass up to 16, invite 17-18, game 19+; after a limit raise accept at 15+.
 
 Other choices, from BBA: a new suit before rebidding a six-card suit
-(6-4 shows the four); four spades bid 1♠ before 1NT, but four-card support
+(6-4 shows the four; Rick, 2026-11-09, over a 1NT response: show four
+more cards rather than one more, and the new suit's range, 12-18, is
+wider than the rebid's 12-15; `rebids.test` holds two cases); four spades bid 1♠ before 1NT, but four-card support
 for responder's major raises first; 1NT includes 5-4-2-2; after 1♣-1♦ a
 balanced hand rebids 1NT even with one four-card major, and 1♥ with both;
 a minimum with no suit to rebid and no lower suit (5-4 with a singleton)
@@ -1741,7 +1743,8 @@ has no rule, as before.
 
 ## Sources
 
-- **Rick's rulings**, dated in the sections above.
+- **Rick's rulings**, dated in the sections above; 6-4 over 1NT shows
+  the lower four-card suit first, 2026-11-09.
 - **BBA evidence:** the Basic_* and 21GF corpora, `bba-cli --all-meanings`
   and the probes named in each section; the vanilla SAYC random set for
   the major invitation (2026-09-30); for 1♣-1♦ without Walsh the vanilla
