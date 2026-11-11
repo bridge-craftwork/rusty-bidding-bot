@@ -25,6 +25,7 @@ module modified-jacoby-2nt "Modified Jacoby 2NT"
   skill  bidding_conventions/modified_jacoby_2nt
   param  rkcb  = slam.rkcb.play default false
   param  bw    = slam.blackwood.play default false
+  param  cue = slam.cue_bids.play default false
 
 # ── Opener's rebid ───────────────────────────────────────────────────
 after 1M (P) 2N (P)
@@ -488,6 +489,56 @@ when asked mj_captain, we.trump is H | we.trump is S
       sets  ask=aces
       artificial
       priority 15
+
+# With a side suit open, the asker bids a control instead of asking
+# (Rick, 2026-11-10, Bridge-Classroom report: 1H 2N 3D 3H 3NT 4C 4S with
+# AK.QJ8653.JT97.A). Past game it is first-round, and only 4♠ over
+# hearts: a control above 4NT would take the keycard ask away (five-level
+# ones cost 13-26 IMPs on the Jacoby scenarios). A suit skipped is
+# denied, so partner goes on only if he covers it. A new suit here has
+# no natural meaning, so these do not wait for `slam.cue_bids.play`.
+when asked mj_captain, we.trump is H | we.trump is S
+  cheapest(C)  "Control bid in ♣"  alert
+      when  trump is not C, under_game(C)
+      when  side_suit_uncontrolled, controlled(C)
+      sets  ask=control(C), ladder=control
+      artificial
+      prefer 0 - cheapest_rank(C)
+      priority 16
+  cheapest(D)  "Control bid in ♦"  alert
+      when  trump is not D, under_game(D)
+      when  side_suit_uncontrolled, controlled(D)
+      sets  ask=control(D), ladder=control
+      artificial
+      prefer 0 - cheapest_rank(D)
+      priority 16
+  cheapest(H)  "Control bid in ♥"  alert
+      when  trump is not H, under_game(H)
+      when  side_suit_uncontrolled, controlled(H)
+      sets  ask=control(H), ladder=control
+      artificial
+      prefer 0 - cheapest_rank(H)
+      priority 16
+  cheapest(S)  "Control bid in ♠"  alert
+      when  trump is not S, under_game(S)
+      when  side_suit_uncontrolled, controlled(S)
+      sets  ask=control(S), ladder=control
+      artificial
+      prefer 0 - cheapest_rank(S)
+      priority 16
+  cheapest(S)  "Control bid in ♠: first-round control"  alert
+      when  trump is H, !under_game(S), !kb_spade_ask
+      when  side_suit_uncontrolled, first_round(S)
+      sets  ask=control(S), ladder=control
+      artificial
+      prefer 0 - cheapest_rank(S)
+      priority 16
+
+# Past game, without the suit partner skipped: back to five of the
+# trump suit (control-bids.bid has this when the card plays them).
+when asked control(t), !cue, we.trump is H, partner.last = 4S
+  5{trump}  "No slam: a suit is open"
+      priority -6
 
 # Over 1♥ the spade void is shown with 4♠, past game: without the
 # values for keycard, back to five hearts.

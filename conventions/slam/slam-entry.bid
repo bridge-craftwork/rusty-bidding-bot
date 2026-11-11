@@ -109,13 +109,14 @@ define promised_first(x) = trump is x | !partner.denied(x) | first_round(x)
 define denials_promised_first = promised_first(C), promised_first(D), promised_first(H), promised_first(S)
 
 # Every side suit covered for the keycard ask: my control, one partner
-# has cued, or one I denied that partner has promised by bidding on.
-define covered(x) = trump is x | controlled(x) | partner.cued(x) | me.denied(x)
+# has cued or shown short in, or one I denied that partner has promised
+# by bidding on.
+define covered(x) = trump is x | controlled(x) | partner.cued(x) | partner.x.max <= 1 | me.denied(x)
 define all_covered = covered(C), covered(D), covered(H), covered(S)
 
 # The same when I opened the dialogue (partner answered me): my control
 # or partner's.
-define covered_by_us(x) = trump is x | controlled(x) | partner.cued(x)
+define covered_by_us(x) = trump is x | controlled(x) | partner.cued(x) | partner.x.max <= 1
 define all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)
 
 # ── Working values opposite a shown shortness (Rick, 2026-11-07) ─────

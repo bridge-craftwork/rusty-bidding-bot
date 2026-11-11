@@ -83,3 +83,18 @@ N KQ74.A85.872.KQ3      | 1S P 2NT P 3D P 3H P 3N P | 4S     | 14 HCP, KQ opposi
 S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 4S P      | P      | 17 HCP, 18 points: responder declined, pass
 S AKQ52.K7.AQ43.AK      | 1S P 2NT P 3D P 4S P      | 4NT    | 23 HCP: opener goes on with 19+
 S AKJ52.K73.AQ43.8      | 1S P 2NT P 3D P 3H P 3N P 4S P | P | the relays showed the club singleton; responder signed off
+
+# ── A control over "you ask" (Rick, 2026-11-10) ──────────────────────
+# With diamonds open, opener bids 4S (first-round, past game), skipping
+# and so denying 4D. Responder covers diamonds and asks; without them,
+# back to five hearts. Opener's singleton club covers clubs.
+S AK.QJ8653.JT97.A      | 1H P 2NT P 3D P 3H P 3NT P 4C P                 | 4S  | diamonds open: a control, not the keycard ask
+S AK.QJ8653.AT97.A      | 1H P 2NT P 3D P 3H P 3NT P 4C P                 | 4NT | every side suit controlled: the stronger hand asks
+N JT72.AK72.A8.J98      | 1H P 2NT P 3D P 3H P 3NT P 4C P 4S P            | 4NT | covers diamonds; partner's singleton covers clubs
+N JT72.AK72.84.KJ8      | 1H P 2NT P 3D P 3H P 3NT P 4C P 4S P            | 5H  | no diamond control: stop in five
+
+card    21GF-DEFAULT major_openings.jacoby_2nt.modified=true slam.cue_bids.play=false
+S AK.QJ8653.JT97.A      | 1H P 2NT P 3D P 3H P 3NT P 4C P                 | 4S  | the same without the card's control bids: a new suit here has no natural meaning
+N JT72.AK72.A8.J98      | 1H P 2NT P 3D P 3H P 3NT P 4C P 4S P            | 4NT | covers diamonds
+N JT72.AK72.84.KJ8      | 1H P 2NT P 3D P 3H P 3NT P 4C P 4S P            | 5H  | never pass the artificial 4S
+N JT72.AK72.A8.J98      | 1H P 2NT P 3D P 3H P 3NT P 4C P 4S P 4NT P 5S P | 5NT | all the keycards and the queen: on towards the slam

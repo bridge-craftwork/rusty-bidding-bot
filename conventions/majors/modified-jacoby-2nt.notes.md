@@ -311,8 +311,45 @@ errors_diff): 988 boards changed; the bidding side's contract errors
 opener's pass `P 4H P : 4N -> P` −116 on 63, `P 4S P : 4N -> P` +129 on
 50. It is Rick's ruling either way.
 
+## A control over "you ask" (Rick, 2026-11-10)
+
+Reported from Bridge-Classroom practice (dev-report
+`rusty-needs-to-treat-4s-as-a-control-bid-20261110-154645`, Rick's card,
+board 4): 1♥ 2NT 3♦ 3♥ 3NT 4♣ 4♠ with AK.QJ8653.JT97.A opposite
+JT72.AK72.A8.J98. 4♠ had no rule, fell to base.bid's "Runout: our best
+known fit", and responder passed; double dummy makes 12 tricks in hearts.
+Rick: "Rusty needs to treat 4S as a control bid - should be 1st round
+control when over our game contract. with a diamond control, and knowing
+i have a singleton club, should go on for keycard and bid the slam when
+we have them all."
+
+- Over "you ask", the asker with a side suit open bids a control instead
+  of 4NT (priority 16, over the ask's 15): the cheapest below game, or 4♠
+  over hearts as first-round control. It follows his 2026-09-23 ruling:
+  control bids before keycard with an unprotected suit.
+- Controls above 4NT are left out. A first version allowed 5♣ and 5♦,
+  which take the keycard ask away, and cost 13-26 IMPs.
+- These rules do not wait for `slam.cue_bids.play`: a new suit there has
+  no natural meaning. 5{trump} brings a past-game 4♠ back when the card
+  does not play control bids (control-bids.bid has it when it does).
+- Partner's shown singleton or void now covers that suit for the keycard
+  ask (`covered`, `covered_by_us` in slam-entry.bid).
+
+Measured with the module on, Jacoby_2N, Jacoby_2N_Leveled and the two
+4x_void scenarios, all boards, before/after with `errors_diff.py`: 22
+boards changed, 0 IMPs of contract errors and distance from par (19
+boards, 0, with control bids off). `compare --limit 50` of all scenarios
+on the stock cards: 2 boards, 0 IMPs.
+
+**For Rick.** His card has control bids only as text
+(`slam.control_bids`, "First/second round control; First round after
+game level"); `slam.cue_bids.play` is unset, so `control-bids.bid` is off
+for him everywhere else. Ticking "Control (cue) bids" in the editor
+turns it on.
+
 ## Sources
 
+- **Rick's ruling, 2026-11-10:** a new suit past game over "you ask" is a first-round control; responder with the skipped suit covered goes on to keycard (section above).
 - Larry Cohen, "Modified Jacoby 2NT",
   https://www.larryco.com/bridge-articles/modified-jacoby-2nt (the
   schedule, the relays, "should not be used by a passed hand", the
