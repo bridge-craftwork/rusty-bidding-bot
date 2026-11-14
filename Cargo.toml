@@ -18,7 +18,8 @@ repository = "https://github.com/bridge-craftwork/rusty-bidding-bot"
 
 [workspace.dependencies]
 bridge-types = { git = "https://github.com/bridge-craftwork/bridge-types", features = ["serde"] }
-bridge-card = { git = "https://github.com/bridge-craftwork/convention-card", tag = "v0.44.0" }
+# The pack reader, on convention-card's pack/reader branch until it is tagged.
+bridge-card = { git = "https://github.com/bridge-craftwork/convention-card", rev = "68dcf16aae4021c73f81e1c7b1b35233e509d487" }
 bidspec = { path = "crates/bidspec" }
 rbb-engine = { path = "crates/engine" }
 rbb-compare = { path = "crates/compare" }

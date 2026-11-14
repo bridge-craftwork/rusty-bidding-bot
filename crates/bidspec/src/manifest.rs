@@ -26,6 +26,28 @@ pub struct Manifest {
     pub unknown_keys: Vec<String>,
 }
 
+/// A convention pack's manifest, at the pack's root.
+pub const PACK_FILE: &str = "bridge-pack.toml";
+
+/// Read a convention pack's manifest (`bridge-pack.toml`): its `name`,
+/// `description` and `rule_language_version`.
+pub fn parse_pack(source: &str) -> Result<Manifest, String> {
+    let table: toml::Table = toml::from_str(source).map_err(|e| e.message().to_string())?;
+    let text = |key: &str| table.get(key).and_then(toml::Value::as_str).map(str::to_string);
+    let language = match table.get("rule_language_version") {
+        None => return Err("`rule_language_version` is missing".into()),
+        Some(toml::Value::Integer(n)) if *n >= 1 && *n <= u32::MAX as i64 => *n as u32,
+        Some(_) => return Err("`rule_language_version` must be a whole number from 1".into()),
+    };
+    Ok(Manifest {
+        name: text("name").ok_or("`name` is missing")?,
+        description: text("description"),
+        language,
+        engine: None,
+        unknown_keys: Vec::new(),
+    })
+}
+
 /// Read a manifest. Errors name the key at fault.
 pub fn parse(source: &str) -> Result<Manifest, String> {
     let table: toml::Table = toml::from_str(source).map_err(|e| e.message().to_string())?;
