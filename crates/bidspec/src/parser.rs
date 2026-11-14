@@ -19,7 +19,7 @@ const CLAUSES: &[&str] = &[
     "announce",
     "artificial",
 ];
-const HEADERS: &[&str] = &["card", "kind", "needs", "param", "skill"];
+const HEADERS: &[&str] = &["card", "convention", "kind", "needs", "param", "skill"];
 
 struct Line<'a> {
     no: usize,
@@ -145,6 +145,7 @@ impl<'a> Parser<'a> {
             name,
             title,
             file: self.file.to_string(),
+            convention: None,
             card: Vec::new(),
             needs: Vec::new(),
             params: Vec::new(),
@@ -243,7 +244,39 @@ impl<'a> Parser<'a> {
         }
         let words = self.header_words(line);
         let no = lines[line].no;
+        // Under a `convention` header a bare name (no dot, slash or colon)
+        // is one of that convention's treatments.
+        let own = module.convention.clone();
+        let address = |path: &str| match &own {
+            Some(id) if !path.contains(['.', '/', ':']) => format!("{id}:{path}"),
+            _ => path.to_string(),
+        };
         match lines[line].first_word() {
+            Some("convention") => match words.as_slice() {
+                [id] if bridge_card::skills::is_skill_path(id) => {
+                    if module.convention.is_some() {
+                        self.error(line, None, "a module has one `convention` line");
+                    } else if !module.card.is_empty() || !module.params.is_empty() {
+                        self.error(
+                            line,
+                            None,
+                            "`convention` comes before the module's `card` and `param` lines",
+                        );
+                    } else {
+                        module.convention = Some(id.to_string());
+                        module.card.push(CardCond {
+                            path: id.to_string(),
+                            value: None,
+                            line: no,
+                        });
+                    }
+                }
+                _ => self.error(
+                    line,
+                    None,
+                    "expected `convention <category>/<name>` (`bidding_conventions/stayman`)",
+                ),
+            },
             Some("needs") => {
                 if words.is_empty() {
                     self.error(line, None, "expected `needs <module>`");
@@ -258,12 +291,12 @@ impl<'a> Parser<'a> {
             }
             Some("card") => match words.as_slice() {
                 [path] => module.card.push(CardCond {
-                    path: path.to_string(),
+                    path: address(path),
                     value: None,
                     line: no,
                 }),
                 [path, "=", value] => module.card.push(CardCond {
-                    path: path.to_string(),
+                    path: address(path),
                     value: Some(literal(value)),
                     line: no,
                 }),
@@ -276,13 +309,13 @@ impl<'a> Parser<'a> {
             Some("param") => match words.as_slice() {
                 [name, "=", path] => module.params.push(Param {
                     name: name.to_string(),
-                    path: path.to_string(),
+                    path: address(path),
                     default: None,
                     line: no,
                 }),
                 [name, "=", path, "default", value] => module.params.push(Param {
                     name: name.to_string(),
-                    path: path.to_string(),
+                    path: address(path),
                     default: Some(literal(value)),
                     line: no,
                 }),
@@ -338,7 +371,7 @@ impl<'a> Parser<'a> {
             _ => self.error(
                 line,
                 Some(0),
-                "expected `card`, `kind`, `needs`, `param` or `skill` under `module`",
+                "expected `card`, `convention`, `kind`, `needs`, `param` or `skill` under `module`",
             ),
         }
     }

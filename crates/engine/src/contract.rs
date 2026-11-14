@@ -10,7 +10,7 @@ use bidspec::Diagnostic;
 /// The rule language version this engine reads. Raise it when a change to
 /// the language or the term vocabulary would make existing rule files
 /// load differently or not at all (docs/CONTRACT.md, "Stability").
-pub const LANGUAGE_VERSION: u32 = 1;
+pub const LANGUAGE_VERSION: u32 = 2;
 
 /// The oldest language version this engine still reads.
 pub const OLDEST_LANGUAGE_VERSION: u32 = 1;
@@ -25,6 +25,17 @@ pub fn check_manifest(source: &str, file: &str) -> Result<Manifest, Diagnostic> 
         message,
     };
     let m = manifest::parse(source).map_err(fail)?;
+    check_language(m, file)
+}
+
+/// Refuse a rule set written in a language version this engine does not read.
+fn check_language(m: Manifest, file: &str) -> Result<Manifest, Diagnostic> {
+    let fail = |message: String| Diagnostic {
+        file: file.to_string(),
+        line: 0,
+        col: 0,
+        message,
+    };
     if !(OLDEST_LANGUAGE_VERSION..=LANGUAGE_VERSION).contains(&m.language) {
         let supported = if OLDEST_LANGUAGE_VERSION == LANGUAGE_VERSION {
             format!("language {LANGUAGE_VERSION}")
@@ -50,6 +61,19 @@ pub fn check_manifest(source: &str, file: &str) -> Result<Manifest, Diagnostic> 
 /// none. A directory without a manifest is read as the current language
 /// version (`rbb bid check` warns about it).
 pub fn read_manifest(dir: &Path) -> Result<Option<Manifest>, Diagnostic> {
+    // A convention pack says its rule language in `bridge-pack.toml`
+    // (`rule_language_version`), with the pack's name.
+    let pack = dir.join(manifest::PACK_FILE);
+    if let Ok(src) = std::fs::read_to_string(&pack) {
+        let name = pack.display().to_string();
+        let m = manifest::parse_pack(&src).map_err(|message| Diagnostic {
+            file: name.clone(),
+            line: 0,
+            col: 0,
+            message,
+        })?;
+        return check_language(m, &name).map(Some);
+    }
     let path = dir.join(manifest::FILE);
     let name = path.display().to_string();
     match std::fs::read_to_string(&path) {

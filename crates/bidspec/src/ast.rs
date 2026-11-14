@@ -11,6 +11,11 @@ pub struct Module {
     pub title: Option<String>,
     /// Source file, as given to the parser.
     pub file: String,
+    /// The convention these are the rules for (`convention <id>`, rule
+    /// language 2): the module is on when the card plays it, and a bare
+    /// name on a `card` or `param` line is one of its treatments.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub convention: Option<String>,
     /// Activation: every condition must hold on the card.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub card: Vec<CardCond>,

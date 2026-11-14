@@ -99,7 +99,12 @@ fn vocab_diagnostic(e: bridge_card::Error) -> bidspec::Diagnostic {
 /// the standard vocabulary built into `bridge_card` (convention-card's
 /// `spec/`, at the tag Cargo.toml pins).
 pub fn rules_vocabulary(dir: &Path) -> Result<Vocabulary, bridge_card::Error> {
-    if dir.join(Vocabulary::FIELDS).exists() {
+    if bridge_card::Pack::is_pack(dir) {
+        // A convention pack (bridge-common-conventions): conventions,
+        // treatments and settings named by address, with card schema 2's
+        // paths as aliases. The `.bbsa` map is still convention-card's.
+        Vocabulary::load_pack(dir, bridge_card::standard::BBSA_MAP)
+    } else if dir.join(Vocabulary::FIELDS).exists() {
         Vocabulary::load(dir)
     } else {
         bridge_card::standard::vocabulary()

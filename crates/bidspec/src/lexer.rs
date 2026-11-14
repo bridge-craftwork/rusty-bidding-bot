@@ -25,6 +25,7 @@ pub enum Tok {
     Minus,
     /// `/`: only in a `skill` path (`bidding_conventions/stayman`).
     Slash,
+    Colon,
     Star,
     Dot,
     DotDot,
@@ -127,6 +128,8 @@ pub fn lex(text: &str) -> Result<Vec<Token>, LexError> {
                         b'+' => (Tok::Plus, 1),
                         b'-' => (Tok::Minus, 1),
                         b'/' => (Tok::Slash, 1),
+                        // Only in a header's address (`<id>:<treatment>`).
+                        b':' => (Tok::Colon, 1),
                         b'*' => (Tok::Star, 1),
                         b'.' => (Tok::Dot, 1),
                         _ => {
