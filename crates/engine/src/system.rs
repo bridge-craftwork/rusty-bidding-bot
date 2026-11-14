@@ -29,7 +29,7 @@ pub struct RuleEntry {
     pub conditions: Vec<Expr>,
     pub module: usize,
     pub source: RuleRef,
-    /// Position in load order, the last tie-breaker.
+    /// Position in module-name order, the last tie-breaker.
     pub order: usize,
     /// Its `shows` counts a condition in arithmetic (`+ doubler_four(x)`).
     pub counts_conditions: bool,
@@ -91,7 +91,7 @@ fn to_val(v: &Value) -> Val {
 impl System {
     /// Activate `modules` for `card`. A module is active when every `card`
     /// condition holds and every module it `needs` is active. Modules are
-    /// taken in the order given (callers sort by file for stable ranking).
+    /// ranked by module name, whatever order they are given in.
     pub fn new(card: &Card, modules: &[Module]) -> System {
         let mut sys = System::default();
         let mut active: HashSet<&str> = HashSet::new();
@@ -148,7 +148,15 @@ impl System {
                 defined.insert(qualified(&m.name, &p.name), param_value(p));
             }
         }
-        for m in modules.iter().filter(|m| active.contains(m.name.as_str())) {
+        // Rules rank, last of all, by their module's name (rule language 2):
+        // a repeatable order that does not depend on where a file sits or
+        // on the order the files were read in. Module names are unique.
+        let mut by_name: Vec<&Module> = modules
+            .iter()
+            .filter(|m| active.contains(m.name.as_str()))
+            .collect();
+        by_name.sort_by(|a, b| a.name.cmp(&b.name));
+        for m in by_name {
             let idx = sys.modules.len();
             sys.modules.push(m.name.clone());
             let mut params = defined.clone();
