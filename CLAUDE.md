@@ -150,6 +150,13 @@ local checkouts").
   auction**; grep stays for finding text and comments. To troubleshoot a
   rule, `--rule file:line` (or a module, `module:line`, a file; repeatable):
   its verdict here, matched or not, and why.
+- `./dev-build.sh run -q -p rbb-cli -- bid alerts --rules <pack> [--regulator acbl|ebu|wbf] [-v] [--json] [--strict]`:
+  each `alerts.toml` entry against the rules' `alert`/`announce` flags
+  (the entry's fields on `21GF-DEFAULT`, its `after` written out as
+  auctions, `rules_at` for its call; agree / mixed / differ / unresolved
+  with file:line), plus alerted or artificial rules in modules no entry
+  names. Read-only; `--strict` exits nonzero on a difference. The parser
+  is `bidspec::alerts`.
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
   `--knowledge` reviews the auction so far first). `call --batch -c <card>`

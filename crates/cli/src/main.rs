@@ -6,6 +6,7 @@ use bridge_card::{bbsa, schema, Card, Vocabulary};
 use clap::{Parser, Subcommand};
 use rbb_engine::RuleSet;
 
+mod bid_alerts;
 mod bid_pbn;
 mod bid_rules;
 mod rules_at;
@@ -564,6 +565,33 @@ enum BidCommand {
         /// inactive, warnings, knowledge}`; docs/CONTRACT.md).
         #[arg(long)]
         json: bool,
+    },
+    /// Check each rule's alert flag against the pack's alerts.toml: for
+    /// every entry, the card with the entry's fields on, the rules that
+    /// make its call after its auction (`Engine::rules_at`), and whether
+    /// their `alert` / `announce` flag is what the regulator asks. Also
+    /// lists alerted or artificial rules in modules no entry names.
+    /// Read-only.
+    Alerts {
+        /// A pack checkout (its alerts.toml) or snapshot (pack.json).
+        #[arg(long, default_value_os_t = default_rules())]
+        rules: PathBuf,
+        /// Whose alert procedure: acbl, ebu or wbf.
+        #[arg(long, default_value = "acbl")]
+        regulator: String,
+        /// The card the entries' fields are turned on in.
+        #[arg(short, long, default_value = "21GF-DEFAULT")]
+        card: String,
+        /// Every rule found and every unlisted rule, not only the
+        /// differences.
+        #[arg(short, long)]
+        verbose: bool,
+        /// Print the report as JSON.
+        #[arg(long)]
+        json: bool,
+        /// Exit nonzero when an entry (not a variant) differs.
+        #[arg(long)]
+        strict: bool,
     },
     /// Print a .bid file's compiled JSON IR.
     Compile {
@@ -2237,6 +2265,41 @@ fn bid(cmd: BidCommand) -> Result<()> {
             knowledge: !no_knowledge,
             json,
         })?,
+        BidCommand::Alerts {
+            rules,
+            regulator,
+            card,
+            verbose,
+            json,
+            strict,
+        } => {
+            let alerts = bidspec::alerts::load(&rules)?
+                .ok_or_else(|| format!("{}: no alerts.toml", rules.display()))?;
+            if !alerts.regulators.contains_key(&regulator) {
+                return Err(format!(
+                    "--regulator {regulator}: alerts.toml has {}",
+                    alerts
+                        .regulators
+                        .keys()
+                        .cloned()
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )
+                .into());
+            }
+            let rule_set = rules_from(Some(&rules))?;
+            let base = card_or_stock(&rule_set.vocab, &card)?;
+            let mut report = bid_alerts::check(&rule_set, &base, &alerts, &regulator);
+            report.relative_to(&rules.display().to_string());
+            if json {
+                println!("{}", serde_json::to_string_pretty(&report.to_json())?);
+            } else {
+                print!("{}", report.to_text(verbose));
+            }
+            if strict && report.failures() > 0 {
+                return Err(format!("{} entries differ from the rules", report.failures()).into());
+            }
+        }
         BidCommand::Compile {
             file,
             output,
