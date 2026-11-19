@@ -400,12 +400,34 @@ impl Engine {
         calls: &[Call],
         hands: &[Option<Hand>; 4],
     ) -> Vec<ReviewRow> {
+        self.review_by(
+            dealer,
+            vul,
+            scoring,
+            calls,
+            hands,
+            &mut |e, pos, _, call| e.advance(pos, call),
+        )
+    }
+
+    /// `review`, each call read by `advance` (the engine, the position,
+    /// the call's index, the call): `advance`, or `review_with`'s reading
+    /// with the opponents' announcements.
+    pub(crate) fn review_by(
+        &self,
+        dealer: Direction,
+        vul: Vulnerability,
+        scoring: ScoringMethod,
+        calls: &[Call],
+        hands: &[Option<Hand>; 4],
+        advance: &mut dyn FnMut(&Engine, &mut crate::Position, usize, &Call) -> Step,
+    ) -> Vec<ReviewRow> {
         let facts: Vec<Option<Facts>> = hands.iter().map(|h| h.as_ref().map(Facts::new)).collect();
         let mut pos = self.start(dealer, vul, scoring);
         let mut rows = Vec::with_capacity(calls.len());
         for (index, call) in calls.iter().enumerate() {
             let before = pos.clone();
-            let step = self.advance(&mut pos, call);
+            let step = advance(self, &mut pos, index, call);
             let caller = step.caller;
             let (was, now) = (&before.sides[side(caller)], &pos.sides[side(caller)]);
             let ask = now
@@ -489,6 +511,9 @@ pub fn review_text(rows: &[ReviewRow]) -> String {
         if !s.announcement.is_empty() {
             let _ = writeln!(out, "      table: {}", s.announcement);
         }
+        if let Some(h) = &s.heard {
+            let _ = writeln!(out, "      heard: {}", heard_text(h));
+        }
         for (i, seat) in SEATS.iter().enumerate() {
             // The caller always, the others when this call moved them.
             if *seat != s.caller && !r.narrowed[i].any() {
@@ -520,6 +545,30 @@ pub fn review_text(rows: &[ReviewRow]) -> String {
         }
     }
     out
+}
+
+/// An opponent's announcement and what it did: "\"Cappelletti: ...\" ->
+/// Cappelletti: defence_to_1nt.strong=...", "\"5+ hearts\" -> shows H>=5".
+pub fn heard_text(h: &crate::Heard) -> String {
+    let mut parts = Vec::new();
+    if let Some(n) = &h.name {
+        parts.push(format!("{n}: {}", h.sets.join(", ")));
+    }
+    if !h.shows.is_empty() {
+        parts.push(format!("shows {}", h.shows.join(", ")));
+    }
+    if h.artificial {
+        parts.push("artificial".into());
+    }
+    match h.forcing {
+        Forcing::Round => parts.push("forcing".into()),
+        Forcing::Game => parts.push("game forcing".into()),
+        Forcing::None => {}
+    }
+    if parts.is_empty() {
+        parts.push("nothing read".into());
+    }
+    format!("{:?} -> {}", h.text, parts.join("; "))
 }
 
 /// A rule file's path from `conventions/` on.

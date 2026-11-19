@@ -14,6 +14,7 @@ pub mod explain;
 mod facts;
 mod knowledge;
 mod macros;
+pub mod meanings;
 mod position;
 mod review;
 mod sample;
@@ -38,17 +39,17 @@ pub fn cpu_budget() -> usize {
 }
 
 pub use engine::{
-    check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Interpretation,
-    OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table, TableAuction,
-    TableStop, SET_KEYS,
+    check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Heard,
+    Interpretation, OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table,
+    TableAuction, TableStop, SET_KEYS,
 };
 pub use explain::Audience;
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
 pub use position::{side, Ask, Forcing, Position, SideState};
 pub use review::{
-    knowledge_full, knowledge_parts, review_text, side_text, strain_symbol, FitView, Flags,
-    Narrowed, OwnView, Part, ReviewRow, Role,
+    heard_text, knowledge_full, knowledge_parts, review_text, side_text, strain_symbol, FitView,
+    Flags, Narrowed, OwnView, Part, ReviewRow, Role,
 };
 
 /// The playing suit of a strain (`None` for notrump).
@@ -71,6 +72,7 @@ pub use system::{check_card_refs, RuleRef, System};
 
 pub use bidspec::manifest::Manifest;
 pub use bridge_card::Vocabulary;
+pub use meanings::{AnnouncedNames, Meanings};
 
 /// A rule set: its manifest (`conventions.toml`, when it has one), the card
 /// vocabulary its modules were checked against, and the compiled modules.
@@ -83,6 +85,40 @@ pub struct RuleSet {
     pub manifest: Option<Manifest>,
     pub vocab: Vocabulary,
     pub modules: Vec<bidspec::Module>,
+    /// The pack's announced convention names (`announced-names.toml`;
+    /// empty for rules that bring none): what an opponent's announced
+    /// name switches on in their card (`Engine::interpret_with`).
+    pub announced: AnnouncedNames,
+}
+
+impl RuleSet {
+    /// This rule set reading the opponents' announced names with `names`.
+    pub fn with_announced_names(mut self, names: AnnouncedNames) -> RuleSet {
+        self.announced = names;
+        self
+    }
+}
+
+/// The announced-names table of a pack checkout (`announced-names.toml`),
+/// empty when it has none. A file that does not parse is an error; an
+/// entry whose context does not parse is left out (`problems`).
+pub fn read_announced_names(dir: &Path) -> Result<AnnouncedNames, String> {
+    let f = dir.join(meanings::FILE);
+    match std::fs::read_to_string(&f) {
+        Ok(text) => AnnouncedNames::from_toml(&text).map_err(|e| format!("{}: {e}", f.display())),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(AnnouncedNames::default()),
+        Err(e) => Err(format!("{}: {e}", f.display())),
+    }
+}
+
+/// The announced-names table of a pack snapshot (`pack.json`'s
+/// `announced_names`), empty when it has none: older snapshots do not.
+pub fn snapshot_announced_names(text: &str) -> Result<AnnouncedNames, String> {
+    let doc: serde_json::Value = serde_json::from_str(text).map_err(|e| e.to_string())?;
+    match doc.get(meanings::SNAPSHOT_KEY) {
+        Some(v) if !v.is_null() => AnnouncedNames::from_json(v),
+        _ => Ok(AnnouncedNames::default()),
+    }
 }
 
 /// A vocabulary problem as a rule diagnostic (file and line when known).
@@ -161,10 +197,19 @@ pub fn load_rules(dir: &Path) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
     }
     let manifest = read_manifest(dir).map_err(|d| vec![d])?;
     let vocab = rules_vocabulary(dir).map_err(|e| vec![vocab_diagnostic(e)])?;
+    let announced = read_announced_names(dir).map_err(|message| {
+        vec![bidspec::Diagnostic {
+            file: dir.join(meanings::FILE).display().to_string(),
+            line: 0,
+            col: 0,
+            message,
+        }]
+    })?;
     compile_dir(dir, &vocab).map(|modules| RuleSet {
         manifest,
         vocab,
         modules,
+        announced,
     })
 }
 
@@ -195,6 +240,7 @@ pub fn compile_rules<'a>(
         manifest,
         vocab,
         modules,
+        announced: AnnouncedNames::default(),
     })
 }
 
@@ -233,10 +279,24 @@ pub fn compile_snapshot(text: &str, name: &str) -> Result<RuleSet, Vec<bidspec::
             message: e.to_string(),
         }]
     })?;
+    // Optional: a snapshot without the table (built before it existed)
+    // reads no names, and one whose table does not parse is refused.
+    let announced = match doc.get(meanings::SNAPSHOT_KEY) {
+        Some(v) if !v.is_null() => AnnouncedNames::from_json(v).map_err(|message| {
+            vec![bidspec::Diagnostic {
+                file: name.to_string(),
+                line: 0,
+                col: 0,
+                message,
+            }]
+        })?,
+        _ => AnnouncedNames::default(),
+    };
     compile_modules(&vocab, snapshot_rule_files(&doc)).map(|modules| RuleSet {
         manifest: Some(manifest),
         vocab,
         modules,
+        announced,
     })
 }
 

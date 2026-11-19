@@ -157,6 +157,13 @@ local checkouts").
   (`{"hand", "auction", "dealer", "vul", "scoring", "id"}`, all but `hand`
   optional), one `--json` decision a line out, ~5 ms a position instead
   of ~200 ms a process.
+- **The opponents' announced meanings** (`--meanings '["", "Cappelletti:
+  ..."]'` aligned with the auction, or `--meaning N=text`, on `call`,
+  `call --batch` as `meanings`, and `explain-auction` with `--heard-by
+  SEAT`): a convention name the pack's `announced-names.toml` knows
+  switches that field on in their card; otherwise an unread call shows
+  what its text says (`meanings::parse`). Partner's are never read.
+  `Engine::bid_with` / `interpret_with`; docs/CONTRACT.md.
 - `./dev-build.sh run -q -p rbb-cli -- explain-auction -a "1NT Pass 2C Pass 2H" -d N -c <card> --deal "N:..."`:
   the auction call by call: what is known about every seat after each
   call (`*` marks what the call changed), the flags (F1, GF, inv, ask,

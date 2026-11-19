@@ -187,6 +187,7 @@ when opening
         manifest: None,
         vocab,
         modules: vec![module],
+        announced: Default::default(),
     };
     let engine = Engine::new(&card, &card, &rules);
     let i = engine.interpret(
