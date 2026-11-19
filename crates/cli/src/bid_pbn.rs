@@ -29,6 +29,10 @@ pub struct Options {
     /// For the `% CC1` / `% CC2` header lines.
     pub ns_card: String,
     pub ew_card: String,
+    /// Write what the table is told (`Step::announcement`) for this
+    /// audience: in the notes instead of the rule's text, and as
+    /// `announcement` on every call of the JSON.
+    pub audience: Option<rbb_engine::Audience>,
 }
 
 #[derive(Debug, Default)]
@@ -98,7 +102,7 @@ pub fn bid_pbn(input: &str, engine: &Engine, opts: &Options) -> Result<(String, 
                         opts.max_calls
                     );
                 }
-                let (rows, notes) = annotated_auction(auction, opts.all_meanings);
+                let (rows, notes) = annotated_auction(auction, opts.all_meanings, opts.audience);
                 let a = finished(*dealer, &mut calls);
                 let (contract, declarer) = match a.final_contract() {
                     Some(fc) => (fc.to_pbn(), fc.declarer.to_char().to_string()),
@@ -246,7 +250,7 @@ pub fn bid_json(
                         let s = &c.step;
                         let explained =
                             s.rule.is_some() && (opts.all_meanings || s.alert.is_some());
-                        serde_json::json!({
+                        let mut row = serde_json::json!({
                             "seat": s.caller.to_char().to_string(),
                             "call": s.call.to_pbn(),
                             "rule": s.rule.as_ref().map(|r| format!("{}:{}", r.file, r.line)),
@@ -257,7 +261,11 @@ pub fn bid_json(
                             },
                             "meaning": explained.then(|| s.explanation.clone().unwrap_or_default()),
                             "shown": opts.all_meanings.then(|| s.knowledge.summary()),
-                        })
+                        });
+                        if let Some(a) = opts.audience {
+                            row["announcement"] = s.announcement_for(a).into();
+                        }
+                        row
                     })
                     .collect();
                 let mut played: Vec<Call> =
@@ -315,15 +323,23 @@ fn call_text(c: &Call) -> String {
 /// The auction's rows (four calls each, column-aligned, `=n=` after a call
 /// with a note) and the notes, `n:text`. A note explains every alerted or
 /// announced call; with `all_meanings`, every call a rule explains, followed
-/// by what the call showed (` | 15-17 HCP, balanced`).
-fn annotated_auction(auction: &DealAuction, all_meanings: bool) -> (Vec<String>, Vec<String>) {
+/// by what the call showed (` | 15-17 HCP, balanced`). With an `audience`,
+/// a note is what the table is told, written for it (which already says
+/// what the call showed).
+fn annotated_auction(
+    auction: &DealAuction,
+    all_meanings: bool,
+    audience: Option<rbb_engine::Audience>,
+) -> (Vec<String>, Vec<String>) {
     let mut notes = Vec::new();
     let mut entries = Vec::new();
     for c in &auction.calls {
         let s = &c.step;
         let text = s.rule.as_ref().and_then(|_| {
             let explanation = s.explanation.clone().unwrap_or_default();
-            if all_meanings {
+            if let Some(a) = audience {
+                (all_meanings || s.alert.is_some()).then(|| s.announcement_for(a))
+            } else if all_meanings {
                 let shown = s.knowledge.summary();
                 Some(if shown.is_empty() || shown == explanation {
                     explanation
@@ -445,6 +461,7 @@ mod tests {
             max_calls: 60,
             ns_card: "a.bbsa".into(),
             ew_card: "b.bbsa".into(),
+            audience: None,
         }
     }
 

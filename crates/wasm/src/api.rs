@@ -13,7 +13,7 @@ use bridge_types::{
     Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
 };
 use rbb_engine::{
-    Ask, CandidateTrace, DealCall, Engine, Forcing, OnNoRule, Position, RuleRef, RuleSet,
+    Ask, Audience, CandidateTrace, DealCall, Engine, Forcing, OnNoRule, Position, RuleRef, RuleSet,
     SeatKnowledge, SideState, Step, StopReason, Table, Tri,
 };
 use serde::Serialize;
@@ -835,6 +835,18 @@ fn vulnerability(req: &Json, d: &mut Diags) -> Vulnerability {
     }
 }
 
+/// `audience`: who `announcement` is written for, `human` (the default)
+/// or `brill` (the seat service's robots).
+fn audience(req: &Json, d: &mut Diags) -> Audience {
+    match field_str(req, "audience", d) {
+        None => Audience::Human,
+        Some(s) => s.trim().parse().unwrap_or_else(|e: String| {
+            d.error(format!("audience: {e}")).hint("human or brill");
+            Audience::Human
+        }),
+    }
+}
+
 fn scoring(req: &Json, d: &mut Diags) -> ScoringMethod {
     match field_str(req, "scoring", d) {
         None => ScoringMethod::Matchpoints,
@@ -1057,7 +1069,7 @@ fn alert(a: &Option<bidspec::ast::Alert>) -> Json {
     serde_json::to_value(a).unwrap_or(Json::Null)
 }
 
-fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
+fn step_json(s: &Step, index: usize, aud: Audience, d: &mut Diags) -> Json {
     for w in &s.warnings {
         d.warning(format!("call {} ({}): {w}", index + 1, s.call.to_pbn()));
     }
@@ -1065,7 +1077,7 @@ fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
         "seat": seat_str(s.caller),
         "call": s.call.to_pbn(),
         "explanation": s.explanation,
-        "announcement": s.announcement,
+        "announcement": s.announcement_for(aud),
         "alert": alert(&s.alert),
         "rule": rule(&s.rule),
         "artificial": s.artificial,
@@ -1076,8 +1088,8 @@ fn step_json(s: &Step, index: usize, d: &mut Diags) -> Json {
 /// A call of an auction the engine bid: its step, plus `forced` and
 /// `meaning`; for the engine's own calls `explanation`, `rule` and `alert`
 /// are the rule that chose it for the hand.
-fn deal_call_json(c: &DealCall, index: usize, d: &mut Diags) -> Json {
-    let mut j = step_json(&c.step, index, d);
+fn deal_call_json(c: &DealCall, index: usize, aud: Audience, d: &mut Diags) -> Json {
+    let mut j = step_json(&c.step, index, aud, d);
     let m = j.as_object_mut().unwrap();
     // "explanation" is why this hand made the call (the rule that chose
     // it); "meaning" is what the call shows to the table (the step).
@@ -1328,6 +1340,7 @@ pub fn validate(request: &str) -> String {
 pub fn bid(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
+    let aud = audience(&req, &mut d);
     let empty = json!({"call": Json::Null});
     if d.has_errors() {
         return respond(empty, d);
@@ -1368,7 +1381,7 @@ pub fn bid(request: &str) -> String {
         .steps
         .iter()
         .enumerate()
-        .map(|(i, s)| step_json(s, i, &mut d))
+        .map(|(i, s)| step_json(s, i, aud, &mut d))
         .collect();
     for w in &decision.warnings {
         d.warning(w.clone());
@@ -1396,6 +1409,7 @@ pub fn bid(request: &str) -> String {
 pub fn interpret(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
+    let aud = audience(&req, &mut d);
     let empty = json!({"steps": []});
     if d.has_errors() {
         return respond(empty, d);
@@ -1416,7 +1430,7 @@ pub fn interpret(request: &str) -> String {
         .steps
         .iter()
         .enumerate()
-        .map(|(i, s)| step_json(s, i, &mut d))
+        .map(|(i, s)| step_json(s, i, aud, &mut d))
         .collect();
     let (contract, declarer) = contract_json(dealer, &calls);
     let complete = interp.position.auction().is_complete();
@@ -1438,6 +1452,7 @@ pub fn interpret(request: &str) -> String {
 pub fn bid_deal(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
+    let aud = audience(&req, &mut d);
     let empty = json!({"calls": []});
     if d.has_errors() {
         return respond(empty, d);
@@ -1482,7 +1497,7 @@ pub fn bid_deal(request: &str) -> String {
     let mut calls = Vec::new();
     let mut plain = Vec::new();
     for (i, c) in auction.calls.iter().enumerate() {
-        calls.push(deal_call_json(c, i, &mut d));
+        calls.push(deal_call_json(c, i, aud, &mut d));
         plain.push(c.step.call.clone());
     }
     let (contract, declarer) = contract_json(dealer, &plain);
@@ -1605,6 +1620,7 @@ fn bot_seats(req: &Json, d: &mut Diags) -> Option<[bool; 4]> {
 pub fn auction(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
+    let aud = audience(&req, &mut d);
     let empty = json!({"calls": [], "steps": [], "stop": Json::Null});
     if d.has_errors() {
         return respond(empty, d);
@@ -1656,12 +1672,12 @@ pub fn auction(request: &str) -> String {
     let mut plain = Vec::new();
     for (i, c) in t.calls.iter().enumerate() {
         let by = if c.choice.is_some() { "bot" } else { "given" };
-        let mut s = step_json(&c.step, i, &mut Diags::default());
+        let mut s = step_json(&c.step, i, aud, &mut Diags::default());
         s["index"] = json!(i);
         s["by"] = json!(by);
         steps.push(s);
         if let Some(choice) = &c.choice {
-            let mut j = deal_call_json(c, i, &mut d);
+            let mut j = deal_call_json(c, i, aud, &mut d);
             j["index"] = json!(i);
             j["no_rule"] = json!(choice.rule.is_none());
             made.push(j);
@@ -1719,6 +1735,7 @@ pub fn auction(request: &str) -> String {
 pub fn meaning(request: &str) -> String {
     let mut d = Diags::default();
     let req = parse_request(request, &mut d);
+    let aud = audience(&req, &mut d);
     let empty = json!({"index": Json::Null, "known": false, "step": Json::Null});
     if d.has_errors() {
         return respond(empty, d);
@@ -1750,7 +1767,7 @@ pub fn meaning(request: &str) -> String {
     };
     let interp = engine.interpret(dealer, vul, scoring, &calls[..=index]);
     let step = &interp.steps[index];
-    let mut s = step_json(step, index, &mut d);
+    let mut s = step_json(step, index, aud, &mut d);
     s["index"] = json!(index);
     respond(
         json!({
@@ -2372,6 +2389,30 @@ mod tests {
                 "hands": {"S": "AK52.KJ7.Q94.K83"}}"#,
             "no_rule:",
         );
+    }
+
+    #[test]
+    fn announcement_audience() {
+        let req = |aud: &str| {
+            parse(&interpret(&format!(
+                r#"{{"cards": {{"ns": "21GF-DEFAULT"}}, "dealer": "N", "auction": "1NT Pass 4H"{aud}}}"#
+            )))
+        };
+        let human = req("");
+        assert_eq!(human["ok"], true, "{human}");
+        assert_eq!(req(r#", "audience": "human""#)["steps"], human["steps"]);
+        let brill = req(r#", "audience": "brill""#);
+        assert_eq!(brill["ok"], true, "{brill}");
+        let text = |r: &Json| r["steps"][2]["announcement"].as_str().unwrap().to_string();
+        assert!(!text(&human).contains("transfer to spades"), "{human}");
+        assert!(text(&brill).contains("transfer to spades"), "{brill}");
+        // Only the announcement differs.
+        assert_eq!(
+            human["steps"][2]["explanation"],
+            brill["steps"][2]["explanation"]
+        );
+        let bad = req(r#", "audience": "robot""#);
+        assert_eq!(bad["ok"], false, "{bad}");
     }
 
     #[test]

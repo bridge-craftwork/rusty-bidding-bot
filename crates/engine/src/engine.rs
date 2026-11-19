@@ -55,8 +55,13 @@ pub struct Step {
     /// What the table is told: the rule's description and what the call
     /// newly showed, suits spelled out (`explain::explanation`): "5+
     /// spades; 10-21 HCP". Empty for a call no rule reads that showed
-    /// nothing.
+    /// nothing. Written for the engine's audience (`Engine::with_audience`,
+    /// `Audience::Human` unless set); `announcement_for` writes it for
+    /// another.
     pub announcement: String,
+    /// What the announcement is made from, to write it for any audience.
+    #[serde(skip)]
+    pub announced: crate::explain::Announced,
     /// Problems met while interpreting (unknown terms, contradictions).
     pub warnings: Vec<String>,
 }
@@ -158,6 +163,16 @@ pub struct Engine {
     interned: Mutex<HashMap<Vec<u32>, usize, FastHash>>,
     descriptiveness: Mutex<HashMap<String, f64, FastHash>>,
     cands: Mutex<CandCache>,
+    /// Who `Step::announcement` is written for.
+    audience: crate::explain::Audience,
+}
+
+impl Step {
+    /// What the table is told about this call, written for `audience`
+    /// (`announcement` is the engine's audience's).
+    pub fn announcement_for(&self, audience: crate::explain::Audience) -> String {
+        self.announced.render(audience)
+    }
 }
 
 impl Engine {
@@ -187,7 +202,20 @@ impl Engine {
             interned: Mutex::default(),
             descriptiveness: Mutex::default(),
             cands: Mutex::default(),
+            audience: Default::default(),
         }
+    }
+
+    /// Write `Step::announcement` for `audience` (`Audience::Human` by
+    /// default; the seat service's robots read `Audience::Brill`).
+    pub fn with_audience(mut self, audience: crate::explain::Audience) -> Engine {
+        self.audience = audience;
+        self
+    }
+
+    /// Who `Step::announcement` is written for.
+    pub fn audience(&self) -> crate::explain::Audience {
+        self.audience
     }
 
     /// Count total points differently (weights in quarter points).
@@ -655,6 +683,7 @@ impl Engine {
             artificial: false,
             knowledge: k.clone(),
             announcement: String::new(),
+            announced: Default::default(),
             warnings: Vec::new(),
         };
         let best = matching.first().copied();
@@ -835,7 +864,8 @@ impl Engine {
         pos.unread.resize(pos.calls.len(), false);
         pos.unread.push(step.rule.is_none());
         pos.calls.push(call.clone());
-        step.announcement = announce(pos, caller, &before, &was, &step, &told);
+        step.announced = announce(pos, caller, &before, &was, &step, &told);
+        step.announcement = step.announced.render(self.audience);
         step
     }
 
@@ -1393,9 +1423,11 @@ fn common_description(texts: &[String]) -> String {
     }
 }
 
-/// `Step::announcement` for `step`, just applied to `pos`. A force counts
-/// when this call set it, not when it only kept partner's. A pass no rule
-/// reads is announced as "Pass" and what it shows.
+/// What the table is told about `step`, just applied to `pos`
+/// (`Step::announced`). A force counts when this call set it, not when it
+/// only kept partner's. A pass no rule reads is announced as "Pass" and what
+/// it shows. A transfer is a question this call asked (`transfer`, `texas`,
+/// `texas2`) naming one suit.
 fn announce(
     pos: &Position,
     caller: Direction,
@@ -1403,7 +1435,7 @@ fn announce(
     was: &crate::SideState,
     step: &Step,
     told: &str,
-) -> String {
+) -> crate::explain::Announced {
     let now = pos.side_state(caller);
     let forcing = if now.forcing_by == Some(caller)
         && (was.forcing_by != Some(caller) || was.forcing != now.forcing)
@@ -1417,8 +1449,17 @@ fn announce(
         None if step.call.is_pass() => "Pass",
         None => "",
     };
+    let transfer = now
+        .ask
+        .as_ref()
+        .filter(|a| a.by == caller && was.ask.as_ref() != Some(*a))
+        .filter(|a| matches!(a.kind.as_str(), "transfer" | "texas" | "texas2"))
+        .and_then(|a| match a.args.as_slice() {
+            [s] => crate::eval::suit_of_strain(*s),
+            _ => None,
+        });
     let seat = caller.to_index();
-    crate::explain::explanation(&crate::explain::Shown {
+    let mut announced = crate::explain::Announced::new(&crate::explain::Shown {
         description,
         before,
         after: &pos.knowledge[seat],
@@ -1426,7 +1467,9 @@ fn announce(
         artificial: step.artificial,
         forcing,
         trump: now.trump.and_then(crate::eval::suit_of_strain),
-    })
+    });
+    announced.transfer = transfer;
+    announced
 }
 
 fn apply_sets(

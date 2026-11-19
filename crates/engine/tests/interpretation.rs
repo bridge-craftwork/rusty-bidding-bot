@@ -291,3 +291,81 @@ fn review_snapshots_every_seat_and_flags_the_calls() {
     assert_eq!(fit.role, rbb_engine::Role::Equal);
     assert!(!rbb_engine::review_text(&rows).is_empty());
 }
+
+#[test]
+fn announcements_by_audience() {
+    use rbb_engine::Audience;
+    // (auction, dealer North; the announcement of its last call for people,
+    // then for Brill's robots).
+    let cases = [
+        (
+            "1NT Pass 2C",
+            "Stayman: asks for a 4-card major; artificial, forcing",
+            "Stayman: asks for a 4-card major; artificial, forcing",
+        ),
+        (
+            "1NT Pass 2D",
+            "Transfer to hearts; 5+ hearts, artificial, forcing",
+            "Transfer to hearts; 5+ hearts, artificial, forcing",
+        ),
+        (
+            "1NT Pass 4H",
+            "Texas: 6+ spades, game only or slam values; unbalanced, artificial",
+            "Texas: 6+ spades, game only or slam values; unbalanced, transfer to spades, \
+             artificial",
+        ),
+        (
+            "1H 2D",
+            "Overcall: five diamonds, 12-17 total points; 11-16 HCP, 0-4 spades, 5+ diamonds, \
+             0-4 clubs",
+            "Overcall: 5 diamonds, 12-17 total points; 11-16 HCP, 0-4 spades, 5+ diamonds, \
+             0-4 clubs",
+        ),
+        (
+            "2C",
+            "Strong 2C; 17+ HCP, artificial, game forcing",
+            "Strong 2C; 17+ HCP, artificial, game forcing",
+        ),
+        (
+            "1S Pass 4D",
+            "Splinter: 4+ spades, game values, at most one diamonds; 11-15 HCP, 15-23 support \
+             points, unbalanced, 0-1 diamonds, artificial, game forcing",
+            "Splinter: 4+ spades, game values, 0-1 diamonds; 11-15 HCP, 15-23 support points, \
+             unbalanced, artificial, game forcing",
+        ),
+        (
+            "2H",
+            "Weak two: six hearts, 4-10; 4-10 HCP, unbalanced, 6 hearts",
+            "Weak two: 6 hearts, 4-10; 4-10 HCP, unbalanced",
+        ),
+    ];
+    let read = |e: &Engine, a: &str| {
+        e.interpret(
+            Direction::North,
+            Vulnerability::None,
+            ScoringMethod::Matchpoints,
+            &calls(a),
+        )
+        .steps
+        .pop()
+        .unwrap()
+    };
+    for (auction, human, brill) in cases {
+        let s = read(engine(), auction);
+        assert_eq!(s.announcement, human, "{auction}");
+        assert_eq!(s.announcement_for(Audience::Human), human, "{auction}");
+        assert_eq!(s.announcement_for(Audience::Brill), brill, "{auction}");
+    }
+    // An engine for Brill writes `announcement` for it.
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let text = std::fs::read_to_string(root.join("cards/bbsa/21GF-DEFAULT.bbsa")).unwrap();
+    let rules = rbb_engine::load_rules(&root.join("pack/pack.json")).unwrap();
+    let (card, _) = bbsa::import(&rules.vocab, &text, None).unwrap();
+    let robots = Engine::new(&card, &card, &rules).with_audience(Audience::Brill);
+    assert_eq!(robots.audience(), Audience::Brill);
+    for (auction, human, brill) in cases {
+        let s = read(&robots, auction);
+        assert_eq!(s.announcement, brill, "{auction}");
+        assert_eq!(s.announcement_for(Audience::Human), human, "{auction}");
+    }
+}

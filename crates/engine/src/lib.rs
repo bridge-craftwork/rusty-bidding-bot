@@ -42,6 +42,7 @@ pub use engine::{
     OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table, TableAuction,
     TableStop, SET_KEYS,
 };
+pub use explain::Audience;
 pub use facts::{Facts, Valuation};
 pub use knowledge::{Range, SeatKnowledge, Tri};
 pub use position::{side, Ask, Forcing, Position, SideState};

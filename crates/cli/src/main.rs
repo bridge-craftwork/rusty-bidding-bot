@@ -254,6 +254,10 @@ enum Command {
         /// only for alerted calls.
         #[arg(long)]
         all_meanings: bool,
+        /// Notes (and `announcement` in --json) are what the table is told,
+        /// written for `human` or `brill` (the seat service's robots).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
         /// Force these calls at the start of every auction, e.g. "1C Pass 1H".
         #[arg(long, value_name = "CALLS")]
         auction_prefix: Option<String>,
@@ -335,6 +339,12 @@ enum Command {
         /// Print the full decision as JSON.
         #[arg(long)]
         json: bool,
+        /// Who the announcements are written for: `human` (the default
+        /// text) or `brill` (the seat service's robots: every bound they can
+        /// use, lengths in digits, the transfer's suit). Also prints what
+        /// the table is told about the chosen call (`announcement` in --json).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
         /// Also review the auction so far, call by call: what is known
         /// about every seat after each call, the flags, and this hand's own
         /// view (as `explain-auction`; with --json, a `knowledge` array).
@@ -396,6 +406,11 @@ enum Command {
         /// Print the rows as JSON.
         #[arg(long)]
         json: bool,
+        /// Who the announcements are written for: `human` (the default
+        /// text) or `brill` (the seat service's robots: every bound they can
+        /// use, lengths in digits, the transfer's suit).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
     },
 }
 
@@ -969,6 +984,7 @@ fn run(cli: Cli) -> Result<()> {
             card_changes,
             scoring,
             all_meanings,
+            audience,
             auction_prefix,
             event,
             max_calls,
@@ -1012,6 +1028,7 @@ fn run(cli: Cli) -> Result<()> {
                 max_calls,
                 ns_card,
                 ew_card,
+                audience,
             };
             let started = std::time::Instant::now();
             let cache = par.then(|| rbb_compare::par::DdCache::open(dd_cache));
@@ -1050,6 +1067,7 @@ fn run(cli: Cli) -> Result<()> {
             rules,
             rules_at,
             json,
+            audience,
             knowledge,
             batch,
         } => call(
@@ -1063,6 +1081,7 @@ fn run(cli: Cli) -> Result<()> {
             &rules,
             rules_at.as_deref(),
             json,
+            audience,
             knowledge,
             batch,
         ),
@@ -1078,6 +1097,7 @@ fn run(cli: Cli) -> Result<()> {
             rules,
             rules_at,
             json,
+            audience,
         } => explain_auction(
             &auction,
             deal.as_deref(),
@@ -1089,6 +1109,7 @@ fn run(cli: Cli) -> Result<()> {
             &rules,
             rules_at.as_deref(),
             json,
+            audience.unwrap_or_default(),
         ),
     }
 }
@@ -1597,8 +1618,27 @@ fn decide(
     (d, rows)
 }
 
+/// What the table is told about the chosen call: the auction read with it
+/// (as the seat service reads it), for the engine's audience.
+fn announcement(engine: &rbb_engine::Engine, p: &Position, d: &rbb_engine::Decision) -> String {
+    let mut calls = p.calls.clone();
+    calls.push(d.call.clone());
+    let read = engine.interpret(p.dealer, p.vul, p.scoring, &calls);
+    read.steps
+        .last()
+        .map(|s| s.announcement.clone())
+        .unwrap_or_default()
+}
+
 /// `call --batch`: positions from stdin as JSON lines, one decision a line.
-fn call_batch(engine: &rbb_engine::Engine, defaults: [&str; 3], knowledge: bool) -> Result<()> {
+/// With `told`, each decision also carries `announcement`: what the table
+/// is told about the chosen call, for the engine's audience.
+fn call_batch(
+    engine: &rbb_engine::Engine,
+    defaults: [&str; 3],
+    knowledge: bool,
+    told: bool,
+) -> Result<()> {
     use std::io::{BufRead, Write};
     let [dealer, vul, scoring] = defaults;
     let stdout = std::io::stdout();
@@ -1628,10 +1668,17 @@ fn call_batch(engine: &rbb_engine::Engine, defaults: [&str; 3], knowledge: bool)
         };
         let mut row = match result {
             Err(e) => serde_json::json!({ "error": e }),
-            Ok(p) => match decide(engine, &p, knowledge) {
-                (d, Some(rows)) => serde_json::json!({ "decision": d, "knowledge": rows }),
-                (d, None) => serde_json::to_value(&d)?,
-            },
+            Ok(p) => {
+                let (d, rows) = decide(engine, &p, knowledge);
+                let mut v = serde_json::to_value(&d)?;
+                if told {
+                    v["announcement"] = announcement(engine, &p, &d).into();
+                }
+                match rows {
+                    Some(rows) => serde_json::json!({ "decision": v, "knowledge": rows }),
+                    None => v,
+                }
+            }
         };
         if !id.is_null() {
             row["id"] = id;
@@ -1654,6 +1701,7 @@ fn call(
     rules: &Path,
     rules_at: Option<&str>,
     json: bool,
+    audience: Option<rbb_engine::Audience>,
     knowledge: bool,
     batch: bool,
 ) -> Result<()> {
@@ -1663,23 +1711,34 @@ fn call(
         Some(p) => load_card(&rules.vocab, p)?,
         None => ns.clone(),
     };
-    let engine = rbb_engine::Engine::new(&ns, &ew, &rules);
+    let engine =
+        rbb_engine::Engine::new(&ns, &ew, &rules).with_audience(audience.unwrap_or_default());
     let dealer = dealer.to_string();
     if batch {
-        return call_batch(&engine, [&dealer, vul, scoring], knowledge);
+        return call_batch(
+            &engine,
+            [&dealer, vul, scoring],
+            knowledge,
+            audience.is_some(),
+        );
     }
     let p = position(hand.unwrap_or_default(), auction, &dealer, vul, scoring)?;
     let (d, rows) = decide(&engine, &p, knowledge);
+    let told = audience.map(|_| announcement(&engine, &p, &d));
     if json {
+        let mut v = serde_json::to_value(&d)?;
+        if let Some(t) = &told {
+            v["announcement"] = t.as_str().into();
+        }
         match rows {
             Some(rows) => println!(
                 "{}",
                 serde_json::to_string_pretty(&serde_json::json!({
-                    "decision": d,
+                    "decision": v,
                     "knowledge": rows,
                 }))?
             ),
-            None => println!("{}", serde_json::to_string_pretty(&d)?),
+            None => println!("{}", serde_json::to_string_pretty(&v)?),
         }
         return Ok(());
     }
@@ -1690,6 +1749,9 @@ fn call(
     println!("{}: {}", d.call, d.explanation);
     if let Some(r) = &d.rule {
         println!("  rule: {}:{} ({})", r.file, r.line, r.module);
+    }
+    if let Some(t) = &told {
+        println!("  table: {t}");
     }
     println!("\ncandidates (best-ranked first):");
     for c in &d.candidates {
@@ -1736,6 +1798,7 @@ fn explain_auction(
     rules: &Path,
     rules_at: Option<&str>,
     json: bool,
+    audience: rbb_engine::Audience,
 ) -> Result<()> {
     use bridge_types::{Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
     let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
@@ -1775,7 +1838,7 @@ fn explain_auction(
             card.apply_change(change)?;
         }
     }
-    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules);
+    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules).with_audience(audience);
     let rows = engine.review(dealer, vul, scoring, &calls, &hands);
     if json {
         println!("{}", serde_json::to_string_pretty(&rows)?);
