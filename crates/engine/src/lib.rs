@@ -39,7 +39,7 @@ pub fn cpu_budget() -> usize {
 }
 
 pub use engine::{
-    check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Heard,
+    check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Heard, HeardRead,
     Interpretation, OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table,
     TableAuction, TableStop, SET_KEYS,
 };

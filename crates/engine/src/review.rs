@@ -554,8 +554,14 @@ pub fn heard_text(h: &crate::Heard) -> String {
     if let Some(n) = &h.name {
         parts.push(format!("{n}: {}", h.sets.join(", ")));
     }
-    if !h.shows.is_empty() {
-        parts.push(format!("shows {}", h.shows.join(", ")));
+    match h.read {
+        crate::HeardRead::Narrowed => {
+            parts.push(format!("narrows our reading: {}", h.shows.join(", ")))
+        }
+        crate::HeardRead::Agrees => parts.push("agrees with our reading".into()),
+        crate::HeardRead::Contradicts => parts.push("contradicts our reading: ignored".into()),
+        _ if !h.shows.is_empty() => parts.push(format!("shows {}", h.shows.join(", "))),
+        _ => {}
     }
     if h.artificial {
         parts.push("artificial".into());

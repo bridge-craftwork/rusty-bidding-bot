@@ -21,7 +21,8 @@ use bridge_types::{Call, Strain};
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct Parsed {
     pub hcp: Option<Range>,
-    /// Total points (`points`).
+    /// Total points (`points`): "total points" only; plain "points" are
+    /// HCP.
     pub points: Option<Range>,
     pub len: [Option<Range>; 4],
     pub balanced: Option<bool>,
@@ -359,10 +360,13 @@ fn unit(toks: &[Tok], mut j: usize, written_as_length: bool) -> (Unit, usize) {
         Some("hcp" | "hp" | "hcps") => (Unit::Hcp, j + 1),
         Some("high") if matches!(w(j + 1), Some("card" | "cards")) => (Unit::Hcp, j + 3),
         Some("total" | "tp") => (Unit::Points, j + 1),
-        Some("support" | "dummy") => (Unit::Other, j + 1),
+        Some("support" | "dummy" | "playing") => (Unit::Other, j + 1),
         // "15-17p": the European shorthand counts high cards.
         Some("p") if !card => (Unit::Hcp, j + 1),
-        Some("points" | "pts" | "pt" | "point") if !card => (Unit::Points, j + 1),
+        // Plain "points" are high-card points unless qualified (total,
+        // support, dummy, playing; Rick, 2026-11-20): "15-17 points" is
+        // the HCP most players mean by it.
+        Some("points" | "pts" | "pt" | "point") if !card => (Unit::Hcp, j + 1),
         Some("majors" | "major") if w(j) == Some("majors") => (Unit::Majors, j + 1),
         Some("minors") => (Unit::Minors, j + 1),
         Some(x) => {
@@ -780,7 +784,16 @@ mod tests {
         assert_eq!(conds("≥16 HCP"), c(&["hcp>=16"]));
         assert_eq!(conds("0-14 HCP"), c(&["hcp<=14"]));
         assert_eq!(conds("12-22 total points"), c(&["points=12..22"]));
-        assert_eq!(conds("6-9 points"), c(&["points=6..9"]));
+        // Plain points are HCP; qualified ones are total points, or
+        // (support, dummy, playing) something not read (Rick, 2026-11-20).
+        assert_eq!(conds("6-9 points"), c(&["hcp=6..9"]));
+        assert_eq!(conds("15-17 points"), c(&["hcp=15..17"]));
+        assert_eq!(conds("12+ pts"), c(&["hcp>=12"]));
+        assert_eq!(conds("12+ total points"), c(&["points>=12"]));
+        assert_eq!(conds("12+ TP"), c(&["points>=12"]));
+        assert!(conds("10-12 support points").is_empty());
+        assert!(conds("6-9 dummy points").is_empty());
+        assert!(conds("8+ playing points").is_empty());
         // A bare range is the strength when nothing else is named.
         assert_eq!(conds("15-17"), c(&["hcp=15..17"]));
         assert_eq!(conds("Weak: 10-12"), c(&["hcp=10..12"]));
@@ -801,6 +814,9 @@ mod tests {
         assert_eq!(conds("6+ card club suit"), c(&["C>=6"]));
         assert_eq!(conds("at least 4 diamonds"), c(&["D>=4"]));
         assert_eq!(conds("five spades"), c(&["S>=5"]));
+        // A plain count is a floor (Rick, 2026-11-20).
+        assert_eq!(conds("four hearts"), c(&["H>=4"]));
+        assert_eq!(conds("Four hearts, 6-9 HCP"), c(&["hcp=6..9", "H>=4"]));
         assert_eq!(conds("exactly 4 hearts"), c(&["H=4"]));
         assert_eq!(conds("0-1 clubs"), c(&["C<=1"]));
         assert_eq!(conds("5+ in hearts"), c(&["H>=5"]));

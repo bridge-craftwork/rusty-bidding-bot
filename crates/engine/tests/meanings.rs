@@ -9,7 +9,7 @@ use std::sync::OnceLock;
 
 use bridge_card::Card;
 use bridge_types::{Call, Direction, Hand, ScoringMethod, Vulnerability};
-use rbb_engine::{meanings, AnnouncedNames, Engine, Meanings, RuleSet};
+use rbb_engine::{meanings, AnnouncedNames, Engine, HeardRead, Meanings, RuleSet};
 
 fn root() -> std::path::PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -35,6 +35,14 @@ set = ["bidding_conventions/multi_2d", "opening.2d=bidding_conventions/multi_2d"
 [[name]]
 names = ["Bogus"]
 set = ["no_such/field"]
+
+[[name]]
+names = ["Drury", "Reverse Drury"]
+set = ["bidding_conventions/drury", "bidding_conventions/drury:reverse"]
+
+[[name]]
+names = ["Original Drury", "Standard Drury"]
+set = ["bidding_conventions/drury", "bidding_conventions/drury:reverse=false"]
 "#;
 
 fn rules() -> &'static RuleSet {
@@ -241,7 +249,7 @@ fn a_snapshot_without_the_table_reads_no_names() {
     let table: toml::Value = toml::from_str(TABLE).unwrap();
     doc[meanings::SNAPSHOT_KEY] = serde_json::to_value(table).unwrap();
     let rules = rbb_engine::compile_snapshot(&doc.to_string(), "pack.json").unwrap();
-    assert_eq!(rules.announced.len(), 4);
+    assert_eq!(rules.announced.len(), 6);
 }
 
 /// Our own announcements, for people and for Brill (`Audience`), read
@@ -336,4 +344,141 @@ fn our_announcements_read_back() {
         }
     }
     assert!(read > 30, "only {read} bounds read back");
+}
+
+// Rick's rulings of 2026-11-20 on reading their texts.
+
+#[test]
+fn a_name_reads_their_earlier_calls_too() {
+    // Cappelletti named on advancer's 2D only: overcaller's 2C before it
+    // is read by our Cappelletti module as well.
+    let a = calls("1NT 2C P 2D");
+    let plain = engine().interpret(Direction::North, NV, IMP, &a);
+    let m = heard_by_south(&["", "", "", "Cappelletti: relay"]);
+    let read = engine().interpret_with(Direction::North, NV, IMP, &a, &m);
+    let module = |s: &rbb_engine::Step| s.rule.as_ref().map(|r| r.module.clone());
+    assert_ne!(module(&plain.steps[1]).as_deref(), Some("cappelletti"));
+    assert_eq!(module(&read.steps[1]).as_deref(), Some("cappelletti"));
+    assert!(read.steps[1].heard.is_none(), "nothing was said on 2C");
+}
+
+#[test]
+fn a_text_narrows_the_rules_reading() {
+    // East opens 1H on the Natural card: a rule reads it. "11-15 points"
+    // (plain points are HCP) narrows its range.
+    let a = calls("1H");
+    let plain = engine().interpret(Direction::East, NV, IMP, &a);
+    let k0 = &plain.steps[0].knowledge;
+    assert!(plain.steps[0].rule.is_some());
+    assert!(k0.hcp.hi > 15, "{k0:?}");
+    let m = heard_by_south(&["5+ hearts, 11-15 points"]);
+    let read = engine().interpret_with(Direction::East, NV, IMP, &a, &m);
+    let s = &read.steps[0];
+    assert_eq!(s.rule, plain.steps[0].rule, "the rule still reads it");
+    let h = s.heard.as_ref().unwrap();
+    assert_eq!(h.read, HeardRead::Narrowed);
+    assert_eq!(h.shows, texts(&["hcp=11..15"]), "5+ hearts adds nothing");
+    assert_eq!(
+        (s.knowledge.hcp.lo, s.knowledge.hcp.hi),
+        (k0.hcp.lo.max(11), 15)
+    );
+    assert_eq!(s.knowledge.len, k0.len);
+    assert_ne!(read.position.heard, "", "the caches tell it apart");
+}
+
+#[test]
+fn a_text_that_agrees_changes_nothing() {
+    let a = calls("1H");
+    let plain = engine().interpret(Direction::East, NV, IMP, &a);
+    let m = heard_by_south(&["5+ hearts"]);
+    let read = engine().interpret_with(Direction::East, NV, IMP, &a, &m);
+    assert_eq!(
+        read.steps[0].heard.as_ref().unwrap().read,
+        HeardRead::Agrees
+    );
+    assert_eq!(read.position.knowledge, plain.position.knowledge);
+    assert_eq!(read.position.heard, "");
+}
+
+#[test]
+fn a_text_that_contradicts_the_rule_is_ignored() {
+    // 1H is five or more hearts; a text of two to three hearts and some
+    // HCP that would fit is not read at all: the rule's reading stands.
+    let a = calls("1H");
+    let plain = engine().interpret(Direction::East, NV, IMP, &a);
+    let m = heard_by_south(&["2-3 hearts, 12-14 HCP"]);
+    let read = engine().interpret_with(Direction::East, NV, IMP, &a, &m);
+    let s = &read.steps[0];
+    let h = s.heard.as_ref().unwrap();
+    assert_eq!(h.read, HeardRead::Contradicts);
+    assert!(h.shows.is_empty());
+    assert_eq!(read.position.knowledge, plain.position.knowledge);
+    assert_eq!(read.position.heard, "");
+    assert!(
+        s.warnings.iter().any(|w| w.contains("text ignored")),
+        "{:?}",
+        s.warnings
+    );
+}
+
+#[test]
+fn an_unread_call_with_a_text_counts_as_read() {
+    // 1H 2H is unread on the Natural card; a text that says what it shows
+    // makes it read (`unread` false), one that says nothing does not.
+    let a = calls("1H 2H");
+    let plain = engine().interpret(Direction::North, NV, IMP, &a);
+    assert!(plain.position.unread(Direction::East));
+    let m = heard_by_south(&["", "5+ spades and a 5+ minor, 8-15 HCP"]);
+    let read = engine().interpret_with(Direction::North, NV, IMP, &a, &m);
+    assert!(!read.position.unread(Direction::East));
+    assert_eq!(
+        read.steps[1].heard.as_ref().unwrap().read,
+        HeardRead::Unread
+    );
+    let m = heard_by_south(&["", "artificial"]);
+    let read = engine().interpret_with(Direction::North, NV, IMP, &a, &m);
+    assert!(
+        read.position.unread(Direction::East),
+        "a flag shows nothing"
+    );
+    let m = heard_by_south(&["", "see our card"]);
+    let read = engine().interpret_with(Direction::North, NV, IMP, &a, &m);
+    assert!(read.position.unread(Direction::East));
+}
+
+#[test]
+fn drury_is_reverse_unless_original() {
+    // Dealer East: E P, S P, W 1H, N P, E 2C (Drury); North and South hear.
+    let a = calls("P P 1H P 2C P 2D");
+    let with = |t: &str| {
+        let m = heard_by_south(&["", "", "", "", t, "", ""]);
+        engine().interpret_with(Direction::East, NV, IMP, &a, &m)
+    };
+    let plain = with("Drury");
+    let h = plain.steps[4].heard.as_ref().unwrap();
+    assert_eq!(h.name.as_deref(), Some("Drury"));
+    assert!(
+        h.sets
+            .iter()
+            .any(|s| s == "bidding_conventions/drury:reverse=true"),
+        "{h:?}"
+    );
+    let original = with("Original Drury");
+    let h = original.steps[4].heard.as_ref().unwrap();
+    assert!(
+        h.sets
+            .iter()
+            .any(|s| s == "bidding_conventions/drury:reverse=false"),
+        "{h:?}"
+    );
+    let module = |s: &rbb_engine::Step| s.rule.as_ref().map(|r| r.module.clone());
+    assert_eq!(module(&plain.steps[4]).as_deref(), Some("drury"));
+    assert_eq!(module(&original.steps[4]).as_deref(), Some("drury"));
+    // Opener's 2D: a full opening in Reverse Drury, a light one in the
+    // original.
+    let (r, o) = (
+        &plain.steps[6].knowledge.hcp,
+        &original.steps[6].knowledge.hcp,
+    );
+    assert!(r.lo > o.lo || r.hi > o.hi, "reverse {r:?} original {o:?}");
 }

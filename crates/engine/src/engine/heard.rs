@@ -5,6 +5,7 @@
 
 use super::*;
 use crate::meanings::{self, Meanings};
+use crate::HeardRead;
 
 /// What one call's announcement will do, worked out before the replay.
 #[derive(Debug, Clone)]
@@ -40,6 +41,21 @@ impl std::ops::Deref for Reader<'_> {
             Reader::Variant(e) => e,
         }
     }
+}
+
+/// What a seat's knowledge bounds, to tell whether a condition narrowed
+/// it.
+fn bounds(k: &SeatKnowledge) -> impl PartialEq {
+    (k.hcp, k.len, k.balanced, k.pts, k.tp, k.dp)
+}
+
+/// Record what an announced text added to call `at` (`Position::heard`),
+/// so the caches tell the position from one without it.
+fn push_heard(pos: &mut Position, at: usize, what: &str) {
+    if !pos.heard.is_empty() {
+        pos.heard.push(' ');
+    }
+    pos.heard.push_str(&format!("{at}:{what}"));
 }
 
 fn force_rank(f: Forcing) -> u8 {
@@ -208,10 +224,11 @@ impl Engine {
             heard.name = Some(name.clone());
             heard.sets = sets.clone();
         }
+        let parsed = meanings::parse(&planned.text, Some(call));
+        let caller = step.caller;
+        let at = pos.calls.len() - 1;
         if step.rule.is_none() {
-            let parsed = meanings::parse(&planned.text, Some(call));
-            let caller = step.caller;
-            let at = pos.calls.len() - 1;
+            // No rule read the call: what the text says is what it shows.
             let mut k = pos.knowledge(caller).clone();
             for c in parsed.conditions() {
                 match condition(&c) {
@@ -233,6 +250,11 @@ impl Engine {
                 pos.knowledge[caller.to_index()] = k.clone();
                 step.knowledge = k;
                 pos.apply_deck_hcp();
+                // Read now: terms and fallbacks for a call no rule read
+                // (`unread`) leave it alone (Rick, 2026-11-20).
+                if let Some(u) = pos.unread.get_mut(at) {
+                    *u = false;
+                }
             }
             if parsed.artificial {
                 heard.artificial = true;
@@ -250,13 +272,53 @@ impl Engine {
                 }
             }
             if !parsed.is_empty() {
-                if !pos.heard.is_empty() {
-                    pos.heard.push(' ');
-                }
-                pos.heard.push_str(&format!("{at}:{}", parsed.summary()));
+                heard.read = HeardRead::Unread;
+                push_heard(pos, at, &parsed.summary());
                 if step.announcement.is_empty() {
                     step.announcement = planned.text.clone();
                 }
+            }
+        } else {
+            // A rule read the call (Rick, 2026-11-20): the text narrows
+            // that reading where the two agree; where any part contradicts
+            // it, the rule's reading stands and the text is ignored (it is
+            // likely describing another agreement). Its flags are the
+            // rule's.
+            let conds = parsed.conditions();
+            let mut k = pos.knowledge(caller).clone();
+            let mut narrowed = Vec::new();
+            let mut contradicts = false;
+            for c in conds.iter() {
+                let Some(e) = condition(c) else {
+                    step.warnings
+                        .push(format!("announced `{c}`: not a condition"));
+                    continue;
+                };
+                let mut t = k.clone();
+                if !t.add(e) {
+                    contradicts = true;
+                    break;
+                }
+                if bounds(&t) != bounds(&k) {
+                    k = t;
+                    narrowed.push(c.clone());
+                }
+            }
+            if contradicts {
+                heard.read = HeardRead::Contradicts;
+                step.warnings.push(format!(
+                    "announced {:?} contradicts our reading of {call}: text ignored",
+                    planned.text
+                ));
+            } else if !narrowed.is_empty() {
+                heard.read = HeardRead::Narrowed;
+                push_heard(pos, at, &narrowed.join(", "));
+                pos.knowledge[caller.to_index()] = k.clone();
+                step.knowledge = k;
+                pos.apply_deck_hcp();
+                heard.shows = narrowed;
+            } else if !conds.is_empty() {
+                heard.read = HeardRead::Agrees;
             }
         }
         step.heard = Some(heard);

@@ -121,15 +121,45 @@ entry given). For each opponent's text:
   for the request: the engine reads with a variant whose card carries
   them (made once per set of changes and kept), so that call and every
   other call of theirs are read by our module for it;
-- then, for a call no rule reads, the text is parsed (`meanings::parse`:
-  HCP and total-point ranges, suit lengths, balanced, shortness,
-  artificial, forcing and game forcing, transfer to a suit) and what it
-  says is added to the caller's knowledge, so later rules (`partner.*`,
-  `lho.*`, the opponents' terms) see it; a text that parses to nothing
-  changes nothing.
+- then the text is parsed (`meanings::parse`: HCP and total-point ranges,
+  suit lengths, balanced, shortness, artificial, forcing and game forcing,
+  transfer to a suit). For a call no rule reads, what it says is added to
+  the caller's knowledge, so later rules (`partner.*`, `lho.*`, the
+  opponents' terms) see it; a text that parses to nothing changes nothing.
+
+Rick's rulings (2026-11-20) on how a text is read:
+
+- **Points are HCP.** "15-17 points" is `hcp=15..17`; only points
+  qualified as *total* (`TP`) are total points (`points`), and *support*,
+  *dummy* or *playing* points are not read.
+- **A plain count is a floor.** "four hearts" is `H>=4`, as "4 hearts" is;
+  "exactly 4 hearts" is `H=4`.
+- **A name counts for the whole board.** A known name switches its fields
+  on for every call of that side, the calls before the announced one
+  included: Cappelletti named on advancer's 2D relay reads overcaller's
+  2C as Cappelletti too.
+- **A rule's reading is narrowed, not replaced.** When one of our rules
+  reads the call, the text's ranges and lengths are intersected with what
+  the rule shows: where every part agrees with it, the parts that narrow
+  it are added (`Step::heard.read` `narrowed`, `shows` the parts; `agrees`
+  when none narrows); where any part contradicts it (an empty
+  intersection), our reading stands and the whole text is ignored
+  (`contradicts`, with a warning). The text's artificial and forcing
+  flags do not override the rule's.
+- **Drury is Reverse Drury.** A plain "Drury" switches on
+  `bidding_conventions/drury` with `:reverse`; "Original Drury" or
+  "Standard Drury" sets `:reverse=false` (the pack's table).
+- **A parsed call is read.** A call no rule read whose text added to what
+  is known about it counts as read: `Position::unread` is false for it, so
+  the `unread` term (`lho.unread`, `partner.unread`) and fallback rules for
+  unread calls leave it alone. A text that says nothing, or only a flag
+  ("artificial"), leaves it unread. What the text added is in
+  `Position::heard`, which keys the caches, so the two readings never
+  share a cached candidate list.
 
 `Step::heard` records each text and what it did (the name and the changes,
-or the conditions read). `review_with` and `rules_at_with` take the same
+the conditions read, and `read`: `unread` for a call no rule read,
+`narrowed`, `agrees` or `contradicts` for one a rule read). `review_with` and `rules_at_with` take the same
 input. `rbb call` and `explain-auction` take `--meanings '["", "..."]'`
 (aligned with the auction) and `--meaning N=text`; `explain-auction
 --heard-by SEAT` names the listener; `call --batch` reads a `meanings`

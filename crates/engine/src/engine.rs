@@ -83,16 +83,46 @@ pub struct Heard {
     /// The card changes that name made in their side's card.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub sets: Vec<String>,
-    /// For a call no rule read: what the text was read to show, as
-    /// conditions (`hcp=15..17`, `S>=5`).
+    /// What the text was read to add to the call's meaning, as conditions
+    /// (`hcp=15..17`, `S>=5`): for a call no rule read, all it was read to
+    /// show; for one a rule read, the parts that narrowed the rule's
+    /// reading (`read`).
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub shows: Vec<String>,
+    /// How the text met the rule's reading of the call.
+    #[serde(skip_serializing_if = "HeardRead::is_nothing")]
+    pub read: HeardRead,
     /// The text marked the call artificial.
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub artificial: bool,
     /// The force the text named.
     #[serde(skip_serializing_if = "is_no_force")]
     pub forcing: Forcing,
+}
+
+/// How an announced text met the engine's own reading of the call
+/// (Rick, 2026-11-20).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum HeardRead {
+    /// The text says nothing the parser reads (or only a name).
+    #[default]
+    Nothing,
+    /// No rule read the call: what the text says is what it shows.
+    Unread,
+    /// A rule read the call and the text narrowed it (`shows`).
+    Narrowed,
+    /// A rule read the call and the text says nothing it does not.
+    Agrees,
+    /// A rule read the call and the text contradicts it: the rule's
+    /// reading is kept and the text ignored.
+    Contradicts,
+}
+
+impl HeardRead {
+    pub fn is_nothing(&self) -> bool {
+        *self == HeardRead::Nothing
+    }
 }
 
 fn is_no_force(f: &Forcing) -> bool {
