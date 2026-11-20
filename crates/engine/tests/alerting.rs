@@ -20,8 +20,8 @@ fn rules() -> &'static RuleSet {
     RULES.get_or_init(|| rbb_engine::load_rules(&root().join("pack/pack.json")).unwrap())
 }
 
-/// SAYC, with Stayman marked forcing: the pack's Stayman entries are
-/// written for `bidding_conventions/stayman:forcing`.
+/// SAYC, with Stayman marked forcing (the pack's Stayman entries named that
+/// treatment until bridge-common-conventions#136; now any Stayman).
 fn card() -> Card {
     let mut c = plain_card();
     c.apply_change("bidding_conventions/stayman:forcing=true")
@@ -102,8 +102,11 @@ fn stayman_is_exempt_announced_or_alerted_by_regulator() {
     );
 }
 
+/// The Stayman entries name the convention (bridge-common-conventions#136,
+/// Rick 2026-11-20), so they apply to a card that plays Stayman without
+/// marking it forcing: exempt at an ACBL table.
 #[test]
-fn an_entry_for_a_treatment_the_card_does_not_play_keeps_the_flag() {
+fn stayman_entries_apply_to_any_stayman() {
     let c = plain_card();
     let e = Engine::new(&c, &c, rules()).with_regulator(Regulator::Acbl);
     let steps = e
@@ -114,7 +117,7 @@ fn an_entry_for_a_treatment_the_card_does_not_play_keeps_the_flag() {
             &calls("1NT Pass 2C"),
         )
         .steps;
-    assert_eq!(kind(&steps[2].alert), "alert");
+    assert_eq!(kind(&steps[2].alert), "none");
 }
 
 #[test]
