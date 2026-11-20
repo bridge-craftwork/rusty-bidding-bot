@@ -903,7 +903,10 @@ impl<'a> Parser<'a> {
                     _ => return Err((kw.end, format!("expected a quoted string after `{name}`"))),
                 };
                 rule.alert = Some(if name == "alert" {
-                    Alert::Alert { text }
+                    Alert::Alert {
+                        text,
+                        delayed: false,
+                    }
                 } else {
                     let Some(text) = text else {
                         return Err((kw.end, "`announce` needs the text to announce".into()));

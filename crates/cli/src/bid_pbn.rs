@@ -262,6 +262,12 @@ pub fn bid_json(
                             "meaning": explained.then(|| s.explanation.clone().unwrap_or_default()),
                             "shown": opts.all_meanings.then(|| s.knowledge.summary()),
                         });
+                        if matches!(
+                            s.alert,
+                            Some(bidspec::ast::Alert::Alert { delayed: true, .. })
+                        ) {
+                            row["delayed"] = true.into();
+                        }
                         if let Some(a) = opts.audience {
                             row["announcement"] = s.announcement_for(a).into();
                         }

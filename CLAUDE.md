@@ -151,12 +151,22 @@ local checkouts").
   rule, `--rule file:line` (or a module, `module:line`, a file; repeatable):
   its verdict here, matched or not, and why.
 - `./dev-build.sh run -q -p rbb-cli -- bid alerts --rules <pack> [--regulator acbl|ebu|wbf] [-v] [--json] [--strict]`:
-  each `alerts.toml` entry against the rules' `alert`/`announce` flags
-  (the entry's fields on `21GF-DEFAULT`, its `after` written out as
-  auctions, `rules_at` for its call; agree / mixed / differ / unresolved
-  with file:line), plus alerted or artificial rules in modules no entry
-  names. Read-only; `--strict` exits nonzero on a difference. The parser
-  is `bidspec::alerts`.
+  each `alerts.toml` entry against what the engine alerts and against the
+  rules' own `alert`/`announce` flags (the entry's fields on
+  `21GF-DEFAULT`, its `after` written out as auctions, `rules_at` for its
+  call; agree / mixed / differ / unresolved with file:line, the entry that
+  decided or why the rule's flag stood), plus alerted or artificial rules
+  in modules no entry names. Read-only; `--strict` exits nonzero where the
+  engine differs. The parser is `bidspec::alerts`.
+- **Alerts come from `alerts.toml` and a regulator** (bridge-common-conventions#132,
+  Rick 2026-11-20): `Engine::with_regulator(Regulator::Acbl|Ebu|Wbf)`
+  (default ACBL; `--regulator` on `call`, `explain-auction`, `bid-pbn`;
+  `regulator` in WASM requests). Where an entry is written for the
+  auction and call, the card plays its field and the rule making the call
+  is one of its modules', its kind for the regulator is the alert
+  (`delayed` is `{"kind": "alert", "delayed": true}`); elsewhere the
+  rule's flag. Never changes bidding: systems-on reads the rule's flag.
+  The matching is `rbb_engine::alerting` (`AlertTable::decide`).
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
   `--knowledge` reviews the auction so far first). `call --batch -c <card>`

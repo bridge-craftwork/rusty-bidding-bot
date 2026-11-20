@@ -116,6 +116,7 @@ through.
 | vul | `"None"`, `"NS"`, `"EW"`, `"All"` | also `"Both"`, `"-"`. Default `"None"`. |
 | scoring | `"MP"`, `"IMP"` | Default `"MP"`. |
 | audience | `"human"`, `"brill"` | Who each step's `announcement` is written for (`bid`, `interpret`, `bidDeal`, `auction`, `meaning`). Default `"human"`. See the step's `announcement` below. |
+| regulator | `"acbl"`, `"ebu"`, `"wbf"` | Whose alert procedure decides `alert` (the rules' `alerts.toml`; added after 0.17.0). Default `"acbl"`. Part of the engine: give it to `createEngine` or with `cards`; a request naming an `engine` made for another regulator is refused. See `alert` below. |
 | auction | `"1NT Pass 2C"` or `["1NT", "Pass", "2C"]` | Calls from the dealer on. `1C`..`7NT` (`1N` also), `Pass`/`P`, `X`, `XX`. Separated by spaces or commas. Checked for legality. |
 | call (in responses) | `"1NT"`, `"Pass"`, `"X"`, `"XX"` | Always this spelling. |
 | card spec | see below | |
@@ -179,12 +180,13 @@ rules do, so it can key caches and label results. `language` is the rule languag
 
 ### `createEngine(request)` → JSON
 
-Request: `{"cards": {...}}`, plus optionally a rule set (`rules`, `fields`,
+Request: `{"cards": {...}}`, plus optionally `regulator` (`"acbl"`, the
+default, `"ebu"` or `"wbf"`) and a rule set (`rules`, `fields`,
 `bbsa_map`, `manifest`: [below](#rule-sets-supplied-at-run-time)); without
 one, the embedded rules.
 
 ```json
-{"ok": true, "engine": 1, "rules_id": "d737c980a4bbdb8c",
+{"ok": true, "engine": 1, "rules_id": "d737c980a4bbdb8c", "regulator": "acbl",
  "ns": {"name": "21GF-DEFAULT", "modules": ["base", "notrump-base", "stayman", "..."]},
  "ew": {"name": "21GF-GIB", "modules": ["..."]},
  "diagnostics": [{"severity": "info", "message": "cards.ns: 27 .bbsa keys have no card field ...", "line": 12}]}
@@ -193,8 +195,9 @@ one, the embedded rules.
 `engine` is a handle (a small integer) for the other calls; `null` when
 `ok` is false. `rules_id` identifies its rule set. `modules` lists the
 modules each side plays (active under its card). Calling `createEngine`
-again with the same `cards` (same JSON text) and the same rule set returns
-the same handle without rebuilding. Making an engine takes a few ms (plus
+again with the same `cards` (same JSON text), the same regulator and the
+same rule set returns the same handle without rebuilding. `regulator`
+(added after 0.17.0) is the one the engine alerts by. Making an engine takes a few ms (plus
 compiling a supplied rule set the first time it is seen).
 
 ### `freeEngine(request)` → JSON
@@ -343,7 +346,7 @@ Response:
 | `seat` | the seat bidding |
 | `call` | the call chosen |
 | `explanation` | the chosen rule's explanation, filled in for this hand; `"No rule applies"` when no rule matched (the engine then passes, and an `info` diagnostic says so) |
-| `alert` | `null`, `{"kind": "alert", "text": string or absent}`, or `{"kind": "announce", "text": string}`; `{name}`s in the text are filled in (`"15 to 17"`) |
+| `alert` | `null`, `{"kind": "alert", "text": string or absent, "delayed": true or absent}`, or `{"kind": "announce", "text": string}`; `{name}`s in the text are filled in (`"15 to 17"`). Decided by the regulator (`regulator`, default ACBL) where the rules' `alerts.toml` has an entry for the call, the rule that makes it and the card; elsewhere the rule's own flag (the only source before 0.18). `delayed: true` (added after 0.17.0): the regulator explains it after the auction instead of alerting it at the time (ACBL, conventional calls at 3NT and above from opener's rebid on); a reader that ignores the key sees an alert. An announcement the entry asks for that the rule does not word is the rule's explanation |
 | `rule` | `{module, file, line}` of the chosen rule, or `null` |
 | `candidates` | every rule considered, best-ranked first: `outcome` is `"chosen"`, `"outranked"`, `"partner's call is forcing"` (a pass not allowed), or why the hand does not qualify (`hand fails ...`) |
 | `auction` | the auction so far as the engine read it: one `step` per call (below) |

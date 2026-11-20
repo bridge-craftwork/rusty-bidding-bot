@@ -1,7 +1,7 @@
 {
  "generated_from": "bridge-common-conventions pack.json (do not edit: python3 scripts/sync_pack.py)",
- "source_commit": "51506dcb3b8cd99bd42b1a46bbbd8603944cf4e4",
- "rules_number": 32,
+ "source_commit": "1676851058ed577705d22ad23a97daf49f18782c",
+ "rules_number": 33,
  "schema": "pack/v1",
  "pack": {
   "name": "bridge-common-conventions",
@@ -8083,7 +8083,7 @@
   "alert": [
    {
     "fields": [
-     "bidding_conventions/stayman:forcing"
+     "bidding_conventions/stayman"
     ],
     "call": "2♣",
     "after": "1NT",
@@ -8095,7 +8095,7 @@
    },
    {
     "fields": [
-     "bidding_conventions/stayman:forcing"
+     "bidding_conventions/stayman"
     ],
     "call": "3♣",
     "after": "2NT",
@@ -8107,7 +8107,7 @@
    },
    {
     "fields": [
-     "bidding_conventions/stayman:forcing"
+     "bidding_conventions/stayman"
     ],
     "call": "2♦",
     "after": "1NT–2♣",
@@ -8118,7 +8118,7 @@
    },
    {
     "fields": [
-     "bidding_conventions/stayman:forcing"
+     "bidding_conventions/stayman"
     ],
     "call": "2♥/2♠",
     "after": "1NT–2♣",
@@ -8128,7 +8128,7 @@
    },
    {
     "fields": [
-     "bidding_conventions/stayman:forcing"
+     "bidding_conventions/stayman"
     ],
     "call": "2NT/3NT",
     "after": "1NT–2♣–reply",

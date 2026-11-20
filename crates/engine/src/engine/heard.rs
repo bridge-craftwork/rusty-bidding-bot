@@ -178,6 +178,7 @@ impl Engine {
             systems: [system(0), system(1)],
             valuation: self.valuation,
             audience: self.audience,
+            regulator: self.regulator,
             cards,
             rules: self.rules.clone(),
             variants: Mutex::default(),

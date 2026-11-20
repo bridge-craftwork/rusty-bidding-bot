@@ -294,7 +294,9 @@ One JSON object a line, one a board in file order: `board` (its
 `declarer` null when passed out), `vul` (PBN), `deal` (PBN, North first),
 `scoring` (`MP`/`IMP`), `auction` (PBN calls), `calls` (per call: `seat`,
 `call`, `rule` (`file:line` or null), `alert` (`alert`, `announce` or
-null), `meaning` (the rule's text where the PBN output writes a note: an
+null: under `--regulator`, default ACBL, as the pack's `alerts.toml` says
+where it has an entry for the call, else the rule's flag), `delayed`
+(true, present only for a delayed alert), `meaning` (the rule's text where the PBN output writes a note: an
 alerted call, or every explained call with `--all-meanings`), `shown`
 (what the call showed, with `--all-meanings`, else null)), `complete`
 (false when stopped at `--max-calls`), `contract` (`4SX`, `Pass`), and,
@@ -317,8 +319,12 @@ of `when` stay conditions. One JSON object:
 - `candidates`, best-ranked first (priority, descriptiveness, file order;
   `prefer`, which reads the hand, reorders only ties), each with: `rank`
   (from 1), `call` (PBN: `2S`, `Pass`, `X`), `rule` (`module`, `file`,
-  `line`), `explanation` (filled in), `alert` (`null`, `{"kind": "alert",
-  "text"?}` or `{"kind": "announce", "text"}`), `artificial`, `priority`,
+  `line`), `explanation` (filled in), `alert` (the rule's own flag: `null`,
+  `{"kind": "alert", "text"?}` or `{"kind": "announce", "text"}`),
+  `table_alert` (what the table is told under the engine's regulator,
+  ACBL by default: the same shape, with `"delayed": true` for a delayed
+  alert), `alert_entry` (the `alerts.toml` entry, 1-based, that decided
+  `table_alert`; absent when the rule's flag stood), `artificial`, `priority`,
   `descriptiveness`, `order` (load order), `bindings` (pattern variables:
   `{"x": "C"}`), `shows` (as written) and `shows_resolved` (as the engine
   records it for partner), `when` (as written), `when_folded` (what the

@@ -1,364 +1,41 @@
-//! `rbb bid alerts`: each rule's `alert` / `announce` flag checked against
-//! the pack's `alerts.toml` (bridge-common-conventions#132).
+//! `rbb bid alerts`: the pack's `alerts.toml` against the rules
+//! (bridge-common-conventions#132), as the engine alerts by both.
 //!
 //! For every entry the card gets the entry's fields turned on, the entry's
-//! `after` is written out as concrete auctions, and the engine is asked
-//! which rules make the entry's `call` there (`Engine::rules_at`, as `rbb
-//! bid rules` asks). Each such rule's flag is compared with what the
-//! regulator does. Read-only: it changes neither file.
-//!
-//! `after` and `call` are written for people (`1NT–2♣`, `(1x)`, `2♦/2♥`,
-//! `New suit`). Calls are read; `–` separates them, `( )` marks the
-//! opponents', `/` and ` or ` give alternatives, the opponents pass between
-//! two calls of ours, `M` is a major, `m` a minor and `x`, `y`, `z` other
-//! suits (all different). Prose (`suit agreed`, `Cuebid`) is left
-//! unresolved, with the reason.
+//! `after` is written out as concrete auctions (`rbb_engine::alerting`,
+//! the same reading the engine alerts by), and the engine is asked which
+//! rules make the entry's `call` there (`Engine::rules_at`, as `rbb bid
+//! rules` asks). For each such rule the report gives what the engine tells
+//! the table under the regulator (`Engine::alert_at`: the entry's kind
+//! where the entry decides, the rule's own flag where it falls back, and
+//! why) beside the rule's own flag, so both "does the engine do what the
+//! entry says" and "does the `.bid` flag agree" can be read. Read-only: it
+//! changes neither file.
 
 use std::collections::{BTreeMap, BTreeSet};
 
 use bidspec::alerts::{AlertEntry, AlertRule, Alerts};
 use bidspec::ast::{Alert, Context};
 use bridge_card::{Card, FieldKind, Value, Vocabulary};
-use bridge_types::{Auction, Call, Direction, ScoringMethod, Strain, Vulnerability};
-use rbb_engine::{Engine, RuleSet};
+use bridge_types::{Direction, ScoringMethod, Vulnerability};
+use rbb_engine::alerting::{entry_modules, entry_probes, pbn, Probe};
+use rbb_engine::{Engine, Regulator, RuleRef, RuleSet};
 use serde_json::{json, Value as Json};
-
-/// A strain as written: a suit, or a variable for one.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Strn {
-    Fixed(Strain),
-    /// `M`, `m`, `x`, `y`, `z`, and `O` for the other major (`3 of other
-    /// major`).
-    Var(char),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Pat {
-    Pass,
-    Double,
-    Redouble,
-    Bid(u8, Strn),
-    /// `overcall`: a suit at the cheapest level.
-    Cheapest(Strain),
-}
-
-/// One call of `after`: whose, and its alternatives.
-#[derive(Debug, Clone, PartialEq)]
-struct Seg {
-    theirs: bool,
-    alts: Vec<Pat>,
-}
-
-/// One written alternative as the calls it stands for: a call, or a
-/// phrase (`overcall`, `3 of the major`, `4 of their suit`). `their` is
-/// the variable of the opponents' suit, when `after` has one.
-fn parse_alt(s: &str, their: Option<char>) -> Option<Vec<Pat>> {
-    let s = s.trim();
-    if s == "overcall" {
-        return Some(SUITS.iter().map(|&x| Pat::Cheapest(x)).collect());
-    }
-    if let Some((level, rest)) = s.split_once(" of ") {
-        let level = level.parse::<u8>().ok().filter(|l| (1..=7).contains(l))?;
-        let v = match rest {
-            "the major" => 'M',
-            "other major" => 'O',
-            "their suit" => their?,
-            _ => return None,
-        };
-        return Some(vec![Pat::Bid(level, Strn::Var(v))]);
-    }
-    parse_pat(s).map(|p| vec![p])
-}
-
-fn parse_pat(s: &str) -> Option<Pat> {
-    let s = s.trim();
-    match s {
-        "P" | "Pass" => return Some(Pat::Pass),
-        "X" => return Some(Pat::Double),
-        "XX" => return Some(Pat::Redouble),
-        _ => {}
-    }
-    let mut chars = s.chars();
-    let level = chars.next()?.to_digit(10).filter(|l| (1..=7).contains(l))? as u8;
-    let strain = match chars.as_str() {
-        "NT" | "N" => Strn::Fixed(Strain::NoTrump),
-        "♣" | "C" => Strn::Fixed(Strain::Clubs),
-        "♦" | "D" => Strn::Fixed(Strain::Diamonds),
-        "♥" | "H" => Strn::Fixed(Strain::Hearts),
-        "♠" | "S" => Strn::Fixed(Strain::Spades),
-        v @ ("M" | "m" | "x" | "y" | "z") => Strn::Var(v.chars().next().unwrap()),
-        _ => return None,
-    };
-    Some(Pat::Bid(level, strain))
-}
-
-/// Alternatives: `2♦/2♥`, `1♣ or 1♦`.
-fn alternatives(s: &str) -> Vec<&str> {
-    s.split('/')
-        .flat_map(|p| p.split(" or "))
-        .map(str::trim)
-        .collect()
-}
-
-/// `after` as calls. `opening` is the empty auction; a trailing `(1st/2nd
-/// seat)` or `(3rd/4th seat)` puts the auction in that seat.
-fn parse_after(s: &str) -> Result<Vec<Seg>, String> {
-    let mut s = s.trim();
-    let mut segs = Vec::new();
-    if let Some(rest) = s.strip_suffix("(3rd/4th seat)") {
-        // Partner and the opponent on the right have passed.
-        segs.push(Seg {
-            theirs: false,
-            alts: vec![Pat::Pass],
-        });
-        s = rest.trim();
-    } else if let Some(rest) = s.strip_suffix("(1st/2nd seat)") {
-        s = rest.trim();
-    }
-    if s == "opening" {
-        return Ok(segs);
-    }
-    for part in s.split('–') {
-        let part = part.trim();
-        let (theirs, inner) = match part.strip_prefix('(').and_then(|p| p.strip_suffix(')')) {
-            Some(inner) => (true, inner),
-            None => (false, part),
-        };
-        let mut alts = Vec::new();
-        for a in alternatives(inner) {
-            alts.extend(parse_alt(a, None).ok_or_else(|| format!("after: {a:?} is not a call"))?);
-        }
-        segs.push(Seg { theirs, alts });
-    }
-    Ok(segs)
-}
-
-/// The call's alternatives. A qualifier in parentheses at the end
-/// (`(natural)`, `(forced)`, `(three cards)`) is dropped.
-fn parse_call(s: &str, after: &[Seg]) -> Result<Vec<Pat>, String> {
-    let their = after
-        .iter()
-        .filter(|g| g.theirs)
-        .flat_map(|g| &g.alts)
-        .find_map(|p| match p {
-            Pat::Bid(_, Strn::Var(v)) => Some(*v),
-            _ => None,
-        });
-    let mut s = s.trim();
-    if s.ends_with(')') {
-        if let Some(i) = s.rfind(" (") {
-            s = s[..i].trim();
-        }
-    }
-    let mut out = Vec::new();
-    for a in alternatives(s) {
-        out.extend(parse_alt(a, their).ok_or_else(|| format!("call: {a:?} is not a call"))?);
-    }
-    Ok(out)
-}
-
-/// One concrete question: the calls so far and the call to look up.
-#[derive(Debug, Clone, PartialEq)]
-struct Probe {
-    calls: Vec<Call>,
-    call: Call,
-}
-
-const SUITS: [Strain; 4] = [
-    Strain::Clubs,
-    Strain::Diamonds,
-    Strain::Hearts,
-    Strain::Spades,
-];
-
-fn domain(v: char) -> Vec<Strain> {
-    match v {
-        'M' | 'O' => vec![Strain::Hearts, Strain::Spades],
-        'm' => vec![Strain::Clubs, Strain::Diamonds],
-        _ => SUITS.to_vec(),
-    }
-}
-
-/// Every assignment of suits to `vars`, all different.
-fn assignments(vars: &[char]) -> Vec<BTreeMap<char, Strain>> {
-    let mut out = vec![BTreeMap::new()];
-    for &v in vars {
-        let mut next = Vec::new();
-        for a in &out {
-            for s in domain(v) {
-                if !a.values().any(|t| *t == s) {
-                    let mut b = a.clone();
-                    b.insert(v, s);
-                    next.push(b);
-                }
-            }
-        }
-        out = next;
-    }
-    out
-}
-
-fn rank(s: Strain) -> u8 {
-    match s {
-        Strain::Clubs => 0,
-        Strain::Diamonds => 1,
-        Strain::Hearts => 2,
-        Strain::Spades => 3,
-        Strain::NoTrump => 4,
-    }
-}
-
-/// The call `p` stands for after `before`; `None` for an overcall in a
-/// suit the other side has bid (a cuebid, not an overcall).
-fn concrete(p: Pat, a: &BTreeMap<char, Strain>, before: &[Call]) -> Option<Call> {
-    let n = before.len();
-    Some(match p {
-        Pat::Cheapest(strain) => {
-            let theirs = before.iter().enumerate().any(|(j, c)| {
-                (n - j) % 2 == 1 && matches!(c, Call::Bid { strain: s, .. } if *s == strain)
-            });
-            if theirs {
-                return None;
-            }
-            let level = match before.iter().rev().find_map(|c| match c {
-                Call::Bid { level, strain } => Some((*level, *strain)),
-                _ => None,
-            }) {
-                None => 1,
-                Some((l, s)) if rank(strain) > rank(s) => l,
-                Some((l, _)) => l + 1,
-            };
-            Call::Bid { level, strain }
-        }
-        Pat::Pass => Call::Pass,
-        Pat::Double => Call::Double,
-        Pat::Redouble => Call::Redouble,
-        Pat::Bid(level, Strn::Fixed(strain)) => Call::Bid { level, strain },
-        Pat::Bid(level, Strn::Var(v)) => Call::Bid {
-            level,
-            strain: a[&v],
-        },
-    })
-}
-
-/// The calls before ours: the opponents pass between two calls of one
-/// side, and after the last call of ours.
-fn auction_calls(segs: &[Seg], pick: &[Pat], a: &BTreeMap<char, Strain>) -> Option<Vec<Call>> {
-    let mut out = Vec::new();
-    let mut last: Option<bool> = None;
-    for (seg, p) in segs.iter().zip(pick) {
-        if last == Some(seg.theirs) {
-            out.push(Call::Pass);
-        }
-        let c = concrete(*p, a, &out)?;
-        out.push(c);
-        last = Some(seg.theirs);
-    }
-    if last == Some(false) {
-        out.push(Call::Pass);
-    }
-    Some(out)
-}
-
-fn legal(calls: &[Call], call: &Call) -> bool {
-    let mut auction = Auction::new(Direction::North);
-    for c in calls {
-        if auction.is_complete() || !auction.is_legal(c) {
-            return false;
-        }
-        auction.add_call(c.clone());
-    }
-    !auction.is_complete() && auction.is_legal(call)
-}
-
-/// Every legal auction `after` and `call` stand for. When the call has as
-/// many alternatives as a call of `after` (the last such), they go in
-/// pairs: `1NT–2♦/2♥` then `2♥/2♠` is each transfer and its completion.
-fn expand(segs: &[Seg], call: &[Pat]) -> Vec<Probe> {
-    let mut vars: Vec<char> = Vec::new();
-    for p in segs.iter().flat_map(|s| &s.alts).chain(call) {
-        if let Pat::Bid(_, Strn::Var(v)) = p {
-            if !vars.contains(v) {
-                vars.push(*v);
-            }
-        }
-    }
-    let paired = (call.len() > 1)
-        .then(|| segs.iter().rposition(|s| s.alts.len() == call.len()))
-        .flatten();
-    let mut picks: Vec<Vec<usize>> = vec![Vec::new()];
-    for seg in segs {
-        picks = picks
-            .into_iter()
-            .flat_map(|p| {
-                (0..seg.alts.len()).map(move |i| {
-                    let mut q = p.clone();
-                    q.push(i);
-                    q
-                })
-            })
-            .collect();
-    }
-    let mut out: BTreeMap<String, Probe> = BTreeMap::new();
-    for a in assignments(&vars) {
-        for pick in &picks {
-            let chosen: Vec<Pat> = segs.iter().zip(pick).map(|(s, &i)| s.alts[i]).collect();
-            let Some(calls) = auction_calls(segs, &chosen, &a) else {
-                continue;
-            };
-            let which: Vec<usize> = match paired {
-                Some(k) => vec![pick[k]],
-                None => (0..call.len()).collect(),
-            };
-            for i in which {
-                let Some(c) = concrete(call[i], &a, &calls) else {
-                    continue;
-                };
-                if legal(&calls, &c) {
-                    out.insert(
-                        format!("{} {}", pbn(&calls), c.to_pbn()),
-                        Probe {
-                            calls: calls.clone(),
-                            call: c,
-                        },
-                    );
-                }
-            }
-        }
-    }
-    out.into_values().collect()
-}
-
-/// Who is to call after `calls`: opener, responder, overcaller or
-/// advancer.
-fn role(calls: &[Call]) -> &'static str {
-    let n = calls.len();
-    let mine = |j: usize| (n - j) % 4 == 0;
-    let ours = |j: usize| (n - j) % 2 == 0;
-    match calls.iter().position(|c| matches!(c, Call::Bid { .. })) {
-        None => "opener",
-        Some(i) if mine(i) => "opener",
-        Some(i) if ours(i) => "responder",
-        Some(i) => match (i..n).find(|&j| ours(j) && calls[j] != Call::Pass) {
-            Some(j) if !mine(j) => "advancer",
-            _ => "overcaller",
-        },
-    }
-}
 
 fn kind(alert: &Option<Alert>) -> &'static str {
     match alert {
+        Some(Alert::Alert { delayed: true, .. }) => "delayed",
         Some(Alert::Alert { .. }) => "alert",
         Some(Alert::Announce { .. }) => "announce",
         None => "none",
     }
 }
 
-/// Whether a rule flagged `kind` does what the regulator asks. The rule
-/// language has no delayed alert: an alerted rule stands for one.
-fn agrees(expected: AlertRule, kind: &str) -> bool {
+/// Whether a call alerted as `kind` is what the regulator asks. A rule's
+/// own flag (`flag`) has no delayed alert: an alerted rule stands for one.
+fn agrees(expected: AlertRule, kind: &str, flag: bool) -> bool {
     match expected {
-        AlertRule::Delayed => kind == "alert",
+        AlertRule::Delayed if flag => kind == "alert",
         e => e.as_str() == kind,
     }
 }
@@ -454,13 +131,24 @@ pub struct Found {
     pub line: usize,
     pub call: String,
     pub explanation: String,
+    /// What the engine tells the table under the regulator (in the first
+    /// auction it was found after).
     pub kind: &'static str,
+    /// The rule's own flag.
+    pub flag: &'static str,
     pub artificial: bool,
     /// Partner reads the call by it (the call's top rule).
     pub read_as: bool,
     /// The best-ranked judged rule for the call in one of its auctions.
     pub decides: bool,
+    /// The engine does what the entry asks, in every auction.
     pub agrees: bool,
+    /// The rule's flag is what the entry asks.
+    pub flag_agrees: bool,
+    /// The `alerts.toml` entries that decided the engine's alert.
+    pub entries: BTreeSet<usize>,
+    /// Where none did: why the rule's flag stood.
+    pub fallbacks: BTreeSet<String>,
     /// The auctions it was found after (PBN, space-separated).
     pub auctions: Vec<String>,
 }
@@ -488,13 +176,30 @@ impl Status {
             Status::Unresolved => "unresolved",
         }
     }
+
+    /// From the judged rules, by `agrees` (the engine's alert) or
+    /// `flag_agrees` (the rules' flags).
+    fn of(found: &[Found], ok: impl Fn(&Found) -> bool) -> Status {
+        if found.is_empty() {
+            Status::Unresolved
+        } else if found.iter().filter(|f| f.decides).any(|f| !ok(f)) {
+            Status::Differ
+        } else if found.iter().any(|f| !ok(f)) {
+            Status::Mixed
+        } else {
+            Status::Agree
+        }
+    }
 }
 
 #[derive(Debug, Clone)]
 pub struct EntryResult {
     pub entry: AlertEntry,
     pub expected: AlertRule,
+    /// What the engine does against the entry.
     pub status: Status,
+    /// The rules' own flags against the entry (the pack's work list).
+    pub flag_status: Status,
     /// Why it is unresolved; for one resolved, auctions where no rule
     /// makes the call.
     pub reason: Option<String>,
@@ -520,60 +225,31 @@ pub struct Unlisted {
 }
 
 pub struct Report {
-    pub regulator: String,
+    pub regulator: Regulator,
     pub entries: Vec<EntryResult>,
     pub unlisted: Vec<Unlisted>,
 }
 
-fn pbn(calls: &[Call]) -> String {
-    if calls.is_empty() {
-        return "(opening)".into();
-    }
-    calls.iter().map(Call::to_pbn).collect::<Vec<_>>().join(" ")
-}
-
-fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: &str) -> EntryResult {
-    let expected = e.rule_for(regulator);
+fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: Regulator) -> EntryResult {
+    let expected = e.rule_for(regulator.key());
     let mut r = EntryResult {
         entry: e.clone(),
         expected,
         status: Status::Unresolved,
+        flag_status: Status::Unresolved,
         reason: None,
         card_changes: Vec::new(),
         probes: 0,
         own_rules: false,
         found: Vec::new(),
     };
-    let parsed = parse_after(&e.after).and_then(|a| {
-        let c = parse_call(&e.call, &a)?;
-        Ok((a, c))
-    });
-    let (segs, call) = match parsed {
+    let probes: Vec<Probe> = match entry_probes(e) {
         Ok(p) => p,
         Err(m) => {
             r.reason = Some(m);
             return r;
         }
     };
-    let all = expand(&segs, &call);
-    if all.is_empty() {
-        r.reason = Some("no legal auction".into());
-        return r;
-    }
-    let probes: Vec<Probe> = all
-        .iter()
-        .filter(|p| e.by == "either" || role(&p.calls) == e.by)
-        .cloned()
-        .collect();
-    if probes.is_empty() {
-        r.reason = Some(format!(
-            "by = {:?}, but {} puts the {} to call",
-            e.by,
-            pbn(&all[0].calls),
-            role(&all[0].calls)
-        ));
-        return r;
-    }
     r.probes = probes.len();
     let (card, changes) = match card_for(base, &rules.vocab, &e.fields) {
         Ok(c) => c,
@@ -583,8 +259,8 @@ fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: &str) ->
         }
     };
     r.card_changes = changes;
-    let mine = entry_modules(rules, &e.fields);
-    let engine = Engine::new(&card, &card, rules);
+    let mine = entry_modules(&rules.modules, &rules.vocab, &e.fields);
+    let engine = Engine::new(&card, &card, rules).with_regulator(regulator);
     // Each auction's rules for the call, best-ranked first.
     let mut asked: Vec<(String, Vec<Candidate>)> = Vec::new();
     for p in &probes {
@@ -600,16 +276,34 @@ fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: &str) ->
             .candidates
             .iter()
             .filter(|o| o.call == pc)
-            .map(|o| Candidate {
-                module: o.rule.module.clone(),
-                file: o.rule.file.clone(),
-                line: o.rule.line,
-                call: pc.clone(),
-                explanation: o.explanation.clone(),
-                kind: kind(&o.alert),
-                artificial: o.artificial,
-                read_as: o.read_as,
-                mine: mine.contains(&o.rule.module),
+            .map(|o| {
+                let (alert, decided) = engine
+                    .alert_at(&interp.position, &p.call, &o.rule)
+                    .unwrap_or((
+                        o.alert.clone(),
+                        Err(rbb_engine::alerting::Fallback::NoEntry),
+                    ));
+                Candidate {
+                    rule: o.rule.clone(),
+                    call: pc.clone(),
+                    explanation: o.explanation.clone(),
+                    kind: kind(&alert),
+                    flag: kind(&o.alert),
+                    decided: decided.map(|d| d.entry).map_err(|f| match f {
+                        rbb_engine::alerting::Fallback::Ambiguous { entries } => format!(
+                            "entries {} disagree",
+                            entries
+                                .iter()
+                                .map(|i| format!("#{i}"))
+                                .collect::<Vec<_>>()
+                                .join(", ")
+                        ),
+                        f => f.as_str().to_string(),
+                    }),
+                    artificial: o.artificial,
+                    read_as: o.read_as,
+                    mine: mine.contains(&o.rule.module),
+                }
             })
             .collect();
         asked.push((format!("{} -> {pc}", pbn(&p.calls)), list));
@@ -629,42 +323,56 @@ fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: &str) ->
             continue;
         }
         for (i, o) in judged.into_iter().enumerate() {
-            match found
-                .iter_mut()
-                .find(|f| f.file == o.file && f.line == o.line)
+            let at = match found
+                .iter()
+                .position(|f| f.file == o.rule.file && f.line == o.rule.line && f.call == o.call)
             {
-                Some(f) => {
-                    f.read_as |= o.read_as;
-                    f.decides |= i == 0;
-                    f.auctions.push(auction.clone());
+                Some(at) => at,
+                None => {
+                    found.push(Found {
+                        module: o.rule.module.clone(),
+                        file: o.rule.file.clone(),
+                        line: o.rule.line,
+                        call: o.call.clone(),
+                        explanation: o.explanation.clone(),
+                        kind: o.kind,
+                        flag: o.flag,
+                        artificial: o.artificial,
+                        read_as: false,
+                        decides: false,
+                        agrees: true,
+                        flag_agrees: agrees(expected, o.flag, true),
+                        entries: BTreeSet::new(),
+                        fallbacks: BTreeSet::new(),
+                        auctions: Vec::new(),
+                    });
+                    found.len() - 1
                 }
-                None => found.push(Found {
-                    module: o.module.clone(),
-                    file: o.file.clone(),
-                    line: o.line,
-                    call: o.call.clone(),
-                    explanation: o.explanation.clone(),
-                    kind: o.kind,
-                    artificial: o.artificial,
-                    read_as: o.read_as,
-                    decides: i == 0,
-                    agrees: agrees(expected, o.kind),
-                    auctions: vec![auction.clone()],
-                }),
+            };
+            let f = &mut found[at];
+            f.read_as |= o.read_as;
+            f.decides |= i == 0;
+            // A more specific entry for the same call (`1♣/1♦–(1♥/1♠)`
+            // within `1x–(overcall)`) decides it there: alerts.toml's word.
+            let by_other = matches!(o.decided, Ok(n) if n != e.index);
+            f.agrees &= by_other || agrees(expected, o.kind, false);
+            match &o.decided {
+                Ok(n) => {
+                    f.entries.insert(*n);
+                }
+                Err(why) => {
+                    f.fallbacks.insert(why.clone());
+                }
             }
+            f.auctions.push(auction.clone());
         }
     }
     if found.is_empty() {
         r.reason = Some(format!("no rule makes the call: {}", missing.join("; ")));
         return r;
     }
-    r.status = if found.iter().filter(|f| f.decides).any(|f| !f.agrees) {
-        Status::Differ
-    } else if found.iter().any(|f| !f.agrees) {
-        Status::Mixed
-    } else {
-        Status::Agree
-    };
+    r.status = Status::of(&found, |f| f.agrees);
+    r.flag_status = Status::of(&found, |f| f.flag_agrees);
     if !missing.is_empty() {
         r.reason = Some(format!("no rule makes the call: {}", missing.join("; ")));
     }
@@ -674,50 +382,19 @@ fn check_entry(rules: &RuleSet, base: &Card, e: &AlertEntry, regulator: &str) ->
 
 /// A rule for the call in one auction.
 struct Candidate {
-    module: String,
-    file: String,
-    line: usize,
+    rule: RuleRef,
     call: String,
     explanation: String,
+    /// The engine's alert under the regulator.
     kind: &'static str,
+    /// The rule's own flag.
+    flag: &'static str,
+    /// The entry that decided the engine's alert, or why none did.
+    decided: Result<usize, String>,
     artificial: bool,
     read_as: bool,
     /// Its module belongs to the entry's fields.
     mine: bool,
-}
-
-/// The modules an entry's fields belong to: the convention a module is
-/// for (`convention` line, a `skill` line), or a field a `card` line or a
-/// `param` reads (or an enum whose option plays the convention).
-fn entry_modules(rules: &RuleSet, fields: &[String]) -> BTreeSet<String> {
-    let reg = rules.vocab.registry();
-    let canonical = |p: &str| reg.get(p).map_or_else(|| p.to_string(), |d| d.path.clone());
-    let fields: Vec<String> = fields.iter().map(|f| canonical(f)).collect();
-    let ids: Vec<&str> = fields
-        .iter()
-        .map(|f| f.split_once(':').map_or(f.as_str(), |(id, _)| id))
-        .collect();
-    rules
-        .modules
-        .iter()
-        .filter(|m| {
-            m.convention
-                .as_deref()
-                .is_some_and(|c| ids.contains(&canonical(c).as_str()))
-                || m.card.iter().any(|c| {
-                    let p = canonical(&c.path);
-                    fields.contains(&p) || ids.contains(&p.as_str())
-                })
-                || m.skills.iter().any(|k| ids.contains(&k.path.as_str()))
-                || m.params.iter().any(|p| {
-                    fields.contains(&canonical(&p.path))
-                        || reg
-                            .get(&p.path)
-                            .is_some_and(|d| d.plays.values().any(|id| ids.contains(&id.as_str())))
-                })
-        })
-        .map(|m| m.name.clone())
-        .collect()
 }
 
 /// The canonical paths and convention IDs `alerts` names.
@@ -786,10 +463,10 @@ fn unlisted(rules: &RuleSet, alerts: &Alerts) -> Vec<Unlisted> {
 }
 
 /// Check every entry of `alerts` against `rules`, on `base` with each
-/// entry's fields turned on, for `regulator` (`acbl`, `ebu`, `wbf`).
-pub fn check(rules: &RuleSet, base: &Card, alerts: &Alerts, regulator: &str) -> Report {
+/// entry's fields turned on, for `regulator`.
+pub fn check(rules: &RuleSet, base: &Card, alerts: &Alerts, regulator: Regulator) -> Report {
     Report {
-        regulator: regulator.to_string(),
+        regulator,
         entries: alerts
             .entries
             .iter()
@@ -814,7 +491,7 @@ impl Report {
         self.unlisted.iter_mut().for_each(|u| strip(&mut u.file));
     }
 
-    /// Entries that are not variants (`when`), by status.
+    /// Entries that are variants (`when`) or not, by what the engine does.
     pub fn count(&self, s: Status, variants: bool) -> usize {
         self.entries
             .iter()
@@ -822,7 +499,16 @@ impl Report {
             .count()
     }
 
-    /// Entries that are not variants and do not agree (`--strict`).
+    /// The same by the rules' own flags.
+    pub fn count_flags(&self, s: Status, variants: bool) -> usize {
+        self.entries
+            .iter()
+            .filter(|r| r.flag_status == s && r.entry.when.is_some() == variants)
+            .count()
+    }
+
+    /// Entries that are not variants where the engine does not do what
+    /// the entry asks (`--strict`).
     pub fn failures(&self) -> usize {
         self.count(Status::Differ, false) + self.count(Status::Mixed, false)
     }
@@ -841,6 +527,7 @@ impl Report {
                     "when": r.entry.when,
                     "expected": r.expected.as_str(),
                     "status": r.status.as_str(),
+                    "flag_status": r.flag_status.as_str(),
                     "reason": r.reason,
                     "card_changes": r.card_changes,
                     "auctions": r.probes,
@@ -852,27 +539,40 @@ impl Report {
                         "call": f.call,
                         "explanation": f.explanation,
                         "alert": f.kind,
+                        "flag": f.flag,
                         "artificial": f.artificial,
                         "read_as": f.read_as,
                         "decides": f.decides,
                         "agrees": f.agrees,
+                        "flag_agrees": f.flag_agrees,
+                        "entries": f.entries,
+                        "fallbacks": f.fallbacks,
                         "auctions": f.auctions,
                     })).collect::<Vec<_>>(),
                 })
             })
             .collect();
-        let summary = |variants: bool| {
+        let summary = |variants: bool, flags: bool| {
+            let n = |s| {
+                if flags {
+                    self.count_flags(s, variants)
+                } else {
+                    self.count(s, variants)
+                }
+            };
             json!({
-                "agree": self.count(Status::Agree, variants),
-                "mixed": self.count(Status::Mixed, variants),
-                "differ": self.count(Status::Differ, variants),
-                "unresolved": self.count(Status::Unresolved, variants),
+                "agree": n(Status::Agree),
+                "mixed": n(Status::Mixed),
+                "differ": n(Status::Differ),
+                "unresolved": n(Status::Unresolved),
             })
         };
         json!({
-            "regulator": self.regulator,
-            "summary": summary(false),
-            "variants": summary(true),
+            "regulator": self.regulator.key(),
+            "summary": summary(false, false),
+            "variants": summary(true, false),
+            "flag_summary": summary(false, true),
+            "flag_variants": summary(true, true),
             "entries": entries,
             "unlisted": self.unlisted.iter().map(|u| json!({
                 "module": u.module,
@@ -890,23 +590,36 @@ impl Report {
     pub fn to_text(&self, verbose: bool) -> String {
         use std::fmt::Write as _;
         let mut s = String::new();
-        let reg = self.regulator.to_uppercase();
+        let reg = self.regulator.key().to_uppercase();
         let _ = writeln!(
             s,
-            "alerts.toml against the rules' alert flags ({reg}): {} entries",
+            "alerts.toml against the engine's alerts and the rules' flags ({reg}): {} entries",
             self.entries.len()
         );
-        let line = |v: bool| {
+        let line = |v: bool, flags: bool| {
+            let n = |st| {
+                if flags {
+                    self.count_flags(st, v)
+                } else {
+                    self.count(st, v)
+                }
+            };
             format!(
                 "agree {}, mixed {}, differ {}, unresolved {}",
-                self.count(Status::Agree, v),
-                self.count(Status::Mixed, v),
-                self.count(Status::Differ, v),
-                self.count(Status::Unresolved, v)
+                n(Status::Agree),
+                n(Status::Mixed),
+                n(Status::Differ),
+                n(Status::Unresolved)
             )
         };
-        let _ = writeln!(s, "  entries: {}", line(false));
-        let _ = writeln!(s, "  variants (`when`, informational): {}", line(true));
+        let _ = writeln!(s, "  the engine's alerts: {}", line(false, false));
+        let _ = writeln!(
+            s,
+            "    variants (`when`, never applied): {}",
+            line(true, false)
+        );
+        let _ = writeln!(s, "  the rules' own flags: {}", line(false, true));
+        let _ = writeln!(s, "    variants: {}", line(true, true));
         let head = |r: &EntryResult| {
             format!(
                 "#{} {} {} after {} by {}: {reg} {}{}{}",
@@ -928,11 +641,29 @@ impl Report {
                 }
             )
         };
-        let rule_line = |f: &Found| {
+        let rule_line = |f: &Found, ok: bool| {
+            let source = if f.entries.is_empty() {
+                format!(
+                    "flag ({})",
+                    f.fallbacks.iter().cloned().collect::<Vec<_>>().join("; ")
+                )
+            } else {
+                let e: Vec<String> = f.entries.iter().map(|i| format!("#{i}")).collect();
+                let also = if f.fallbacks.is_empty() {
+                    String::new()
+                } else {
+                    format!(
+                        ", elsewhere flag ({})",
+                        f.fallbacks.iter().cloned().collect::<Vec<_>>().join("; ")
+                    )
+                };
+                format!("entry {}{also}", e.join(", "))
+            };
             format!(
-                "      {} {:8} {}:{} {} \"{}\"{}{}  [{}]",
-                if f.agrees { "ok" } else { "!=" },
+                "      {} {:8} flag {:8} {}:{} {} \"{}\"{}{}  by {source}  [{}]",
+                if ok { "ok" } else { "!=" },
                 f.kind,
+                f.flag,
                 f.file,
                 f.line,
                 f.call,
@@ -946,41 +677,77 @@ impl Report {
                 f.auctions.first().map(String::as_str).unwrap_or_default()
             )
         };
+        // What the engine does that the entry does not ask: where it fell
+        // back on a rule's flag that disagrees.
         for status in [Status::Differ, Status::Mixed] {
-            // Grouped by what the entry asks and what the rules say.
-            let mut groups: BTreeMap<String, Vec<&EntryResult>> = BTreeMap::new();
-            for r in self.entries.iter().filter(|r| r.status == status) {
-                let got: BTreeSet<&str> = r
-                    .found
-                    .iter()
-                    .filter(|f| !f.agrees && (f.decides || status == Status::Mixed))
-                    .map(|f| f.kind)
-                    .collect();
-                let got: Vec<&str> = got.into_iter().collect();
-                groups
-                    .entry(format!(
-                        "{reg} {}, rule {}",
-                        r.expected.as_str(),
-                        got.join("/")
-                    ))
-                    .or_default()
-                    .push(r);
-            }
-            if groups.is_empty() {
+            let list: Vec<&EntryResult> =
+                self.entries.iter().filter(|r| r.status == status).collect();
+            if list.is_empty() {
                 continue;
             }
-            let _ = writeln!(s, "\n{}:", match status {
-                Status::Differ => "Differ (the best-ranked rule for the call, in at least one auction)",
-                _ => "Mixed (the best-ranked rules agree, a lower one for the same call does not)",
-            });
-            for (g, list) in groups {
-                let _ = writeln!(s, "  {g} ({}):", list.len());
-                for r in list {
-                    let _ = writeln!(s, "    {}", head(r));
-                    for f in &r.found {
-                        if verbose || !f.agrees || f.decides {
-                            let _ = writeln!(s, "{}", rule_line(f));
-                        }
+            let _ = writeln!(
+                s,
+                "\nThe engine {} ({}):",
+                match status {
+                    Status::Differ =>
+                        "differs (the best-ranked rule for the call, in at least one auction)",
+                    _ => "is mixed (the best-ranked rules agree, a lower one does not)",
+                },
+                list.len()
+            );
+            for r in list {
+                let _ = writeln!(s, "    {}", head(r));
+                for f in &r.found {
+                    if verbose || !f.agrees || f.decides {
+                        let _ = writeln!(s, "{}", rule_line(f, f.agrees));
+                    }
+                }
+            }
+        }
+        // Where the engine alerted by a rule's flag although an entry was
+        // read for the call.
+        let fell: Vec<&EntryResult> = self
+            .entries
+            .iter()
+            .filter(|r| r.entry.when.is_none() && r.found.iter().any(|f| !f.fallbacks.is_empty()))
+            .collect();
+        if !fell.is_empty() {
+            let _ = writeln!(
+                s,
+                "\nThe rule's own flag stood, in at least one auction ({}):",
+                fell.len()
+            );
+            for r in fell {
+                let _ = writeln!(s, "    {}", head(r));
+                for f in r.found.iter().filter(|f| !f.fallbacks.is_empty()) {
+                    let _ = writeln!(s, "{}", rule_line(f, f.agrees));
+                }
+            }
+        }
+        // The pack's work list: flags the entry now overrides.
+        for status in [Status::Differ, Status::Mixed] {
+            let list: Vec<&EntryResult> = self
+                .entries
+                .iter()
+                .filter(|r| r.flag_status == status)
+                .collect();
+            if list.is_empty() {
+                continue;
+            }
+            let _ = writeln!(
+                s,
+                "\nRule flags that {} the entry ({}):",
+                match status {
+                    Status::Differ => "differ from",
+                    _ => "partly differ from",
+                },
+                list.len()
+            );
+            for r in list {
+                let _ = writeln!(s, "    {}", head(r));
+                for f in &r.found {
+                    if verbose || !f.flag_agrees {
+                        let _ = writeln!(s, "{}", rule_line(f, f.flag_agrees));
                     }
                 }
             }
@@ -1003,14 +770,14 @@ impl Report {
         }
         let _ = writeln!(
             s,
-            "\nAgree ({}):",
+            "\nThe engine agrees ({}):",
             self.count(Status::Agree, false) + self.count(Status::Agree, true)
         );
         for r in self.entries.iter().filter(|r| r.status == Status::Agree) {
             let _ = writeln!(s, "    {}", head(r));
             if verbose {
                 for f in &r.found {
-                    let _ = writeln!(s, "{}", rule_line(f));
+                    let _ = writeln!(s, "{}", rule_line(f, f.agrees));
                 }
             }
         }
@@ -1189,90 +956,38 @@ by = "responder"
 rule = "none"
 "#;
 
-    fn report(regulator: &str) -> Report {
-        let rules = rules();
-        let base = Card::new(&rules.vocab);
+    fn report(regulator: Regulator, engine_reads_alerts: bool) -> Report {
         let alerts = bidspec::alerts::parse(ALERTS).unwrap();
+        let rules = if engine_reads_alerts {
+            rules().with_alerts(alerts.clone())
+        } else {
+            rules()
+        };
+        let base = Card::new(&rules.vocab);
         check(&rules, &base, &alerts, regulator)
     }
 
     #[test]
-    fn reads_the_written_auctions() {
-        let segs = parse_after("1NT–(2x)").unwrap();
-        assert_eq!(segs.len(), 2);
-        assert!(segs[1].theirs);
-        assert_eq!(parse_after("opening").unwrap(), Vec::new());
-        assert_eq!(parse_after("1♥/1♠ (3rd/4th seat)").unwrap().len(), 2);
-        assert_eq!(parse_call("2♣/2♦ (three cards)", &[]).unwrap().len(), 2);
-        assert_eq!(parse_call("1♣ or 1♦", &[]).unwrap().len(), 2);
-        assert!(parse_after("suit agreed").is_err());
-        assert!(parse_call("New suit", &[]).is_err());
-        assert_eq!(parse_after("1x–(X or overcall)").unwrap()[1].alts.len(), 5);
-        assert!(parse_call("3 of their suit", &[]).is_err());
-    }
-
-    #[test]
-    fn expands_with_passes_variables_and_pairs() {
-        let p = |a: &str, c: &str| {
-            let segs = parse_after(a).unwrap();
-            expand(&segs, &parse_call(c, &segs).unwrap())
-        };
-        let t = |calls: &[Call]| pbn(calls);
-        let probes = p("1NT–2♦/2♥", "2♥/2♠");
-        let got: Vec<String> = probes
-            .iter()
-            .map(|p| format!("{} {}", t(&p.calls), p.call.to_pbn()))
-            .collect();
-        assert_eq!(got, ["1NT Pass 2D Pass 2H", "1NT Pass 2H Pass 2S"]);
-        // The opponents' calls go in as written: no pass before ours.
-        let probes = p("(1x)", "X");
-        assert_eq!(probes.len(), 4);
-        assert!(probes
-            .iter()
-            .all(|p| p.calls.len() == 1 && role(&p.calls) == "overcaller"));
-        // Different suits, and only legal auctions.
-        let probes = p("1x–1y", "1NT");
-        assert!(probes.iter().all(|p| p.calls[0] != p.calls[2]));
-        assert_eq!(probes.len(), 6);
-        // Third seat.
-        let probes = p("1♥/1♠ (3rd/4th seat)", "2♣");
-        assert_eq!(t(&probes[0].calls), "Pass Pass 1H Pass");
-        assert_eq!(role(&probes[0].calls), "responder");
-        assert_eq!(role(&p("(2x)–X–(P)", "2NT")[0].calls), "advancer");
-        // Phrases: the major, the other major, their suit, an overcall.
-        let got: Vec<String> = p("1M–2NT", "3 of other major")
-            .iter()
-            .map(|p| format!("{} {}", t(&p.calls), p.call.to_pbn()))
-            .collect();
-        assert_eq!(got, ["1H Pass 2NT Pass 3S", "1S Pass 2NT Pass 3H"]);
-        let got: Vec<String> = p("1NT–(2x)", "3 of their suit")
-            .iter()
-            .map(|p| p.call.to_pbn())
-            .collect();
-        assert_eq!(got, ["3C", "3D", "3H", "3S"]);
-        let got: Vec<String> = p("1♥–(overcall)", "X")
-            .iter()
-            .map(|p| t(&p.calls))
-            .collect();
-        assert_eq!(got, ["1H 1S", "1H 2C", "1H 2D"]);
-    }
-
-    #[test]
     fn compares_each_entry_with_the_rules() {
-        let r = report("acbl");
-        let status: Vec<Status> = r.entries.iter().map(|e| e.status).collect();
+        let r = report(Regulator::Acbl, true);
+        let status: Vec<(Status, Status)> = r
+            .entries
+            .iter()
+            .map(|e| (e.status, e.flag_status))
+            .collect();
         assert_eq!(
             status,
             [
-                // Stayman is alerted in the rule; the ACBL exempts it.
-                Status::Differ,
+                // Stayman is alerted in the rule; the ACBL exempts it, and
+                // the engine follows the entry.
+                (Status::Agree, Status::Differ),
                 // 2♦ announced (agrees), 2♥ alerted (does not).
-                Status::Differ,
-                Status::Agree,
-                Status::Unresolved,
-                Status::Unresolved,
-                Status::Unresolved,
-                Status::Unresolved,
+                (Status::Agree, Status::Differ),
+                (Status::Agree, Status::Agree),
+                (Status::Unresolved, Status::Unresolved),
+                (Status::Unresolved, Status::Unresolved),
+                (Status::Unresolved, Status::Unresolved),
+                (Status::Unresolved, Status::Unresolved),
             ]
         );
         // Judged on the rules of the entry's own module only.
@@ -1283,14 +998,23 @@ rule = "none"
             .collect();
         assert_eq!(modules, ["stayman"]);
         assert!(r.entries[0].own_rules);
+        let stayman = &r.entries[0].found[0];
+        assert_eq!(stayman.entries, BTreeSet::from([1]));
+        assert_eq!((stayman.kind, stayman.flag), ("none", "alert"));
         let transfers = &r.entries[1];
         assert_eq!(transfers.card_changes, ["transfers.play=true"]);
-        let by_call: BTreeMap<&str, bool> = transfers
+        let by_call: BTreeMap<&str, (bool, bool, &str)> = transfers
             .found
             .iter()
-            .map(|f| (f.call.as_str(), f.agrees))
+            .map(|f| (f.call.as_str(), (f.agrees, f.flag_agrees, f.kind)))
             .collect();
-        assert_eq!(by_call, BTreeMap::from([("2D", true), ("2H", false)]));
+        assert_eq!(
+            by_call,
+            BTreeMap::from([
+                ("2D", (true, true, "announce")),
+                ("2H", (true, false, "announce"))
+            ])
+        );
         assert!(r.entries[3]
             .reason
             .as_deref()
@@ -1311,14 +1035,21 @@ rule = "none"
             .as_deref()
             .unwrap()
             .contains("not a card field"));
+        assert_eq!(r.failures(), 0);
         // The WBF alerts Stayman, as the rule does.
-        assert_eq!(report("wbf").entries[0].status, Status::Agree);
-        assert_eq!(r.failures(), 2);
+        let wbf = report(Regulator::Wbf, true);
+        assert_eq!(wbf.entries[0].status, Status::Agree);
+        assert_eq!(wbf.entries[0].found[0].kind, "alert");
+        // Rules that bring no alerts.toml: the engine alerts by the flags.
+        let flags = report(Regulator::Acbl, false);
+        assert_eq!(flags.entries[0].status, Status::Differ);
+        assert!(flags.entries[0].found[0].fallbacks.contains("no entry"));
+        assert_eq!(flags.failures(), 2);
     }
 
     #[test]
     fn lists_alerted_rules_in_modules_no_entry_names() {
-        let r = report("acbl");
+        let r = report(Regulator::Acbl, false);
         let got: Vec<(&str, &str, &str)> = r
             .unlisted
             .iter()

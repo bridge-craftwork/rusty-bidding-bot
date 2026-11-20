@@ -259,6 +259,10 @@ enum Command {
         /// written for `human` or `brill` (the seat service's robots).
         #[arg(long, value_name = "AUDIENCE")]
         audience: Option<rbb_engine::Audience>,
+        /// Whose alert procedure decides which calls are alerted or
+        /// announced (the pack's alerts.toml): acbl (default), ebu or wbf.
+        #[arg(long, value_name = "REGULATOR")]
+        regulator: Option<rbb_engine::Regulator>,
         /// Force these calls at the start of every auction, e.g. "1C Pass 1H".
         #[arg(long, value_name = "CALLS")]
         auction_prefix: Option<String>,
@@ -346,6 +350,10 @@ enum Command {
         /// the table is told about the chosen call (`announcement` in --json).
         #[arg(long, value_name = "AUDIENCE")]
         audience: Option<rbb_engine::Audience>,
+        /// Whose alert procedure decides which calls are alerted or
+        /// announced (the pack's alerts.toml): acbl (default), ebu or wbf.
+        #[arg(long, value_name = "REGULATOR")]
+        regulator: Option<rbb_engine::Regulator>,
         /// Also review the auction so far, call by call: what is known
         /// about every seat after each call, the flags, and this hand's own
         /// view (as `explain-auction`; with --json, a `knowledge` array).
@@ -437,6 +445,10 @@ enum Command {
         /// use, lengths in digits, the transfer's suit).
         #[arg(long, value_name = "AUDIENCE")]
         audience: Option<rbb_engine::Audience>,
+        /// Whose alert procedure decides which calls are alerted or
+        /// announced (the pack's alerts.toml): acbl (default), ebu or wbf.
+        #[arg(long, value_name = "REGULATOR")]
+        regulator: Option<rbb_engine::Regulator>,
     },
 }
 
@@ -578,7 +590,7 @@ enum BidCommand {
         rules: PathBuf,
         /// Whose alert procedure: acbl, ebu or wbf.
         #[arg(long, default_value = "acbl")]
-        regulator: String,
+        regulator: rbb_engine::Regulator,
         /// The card the entries' fields are turned on in.
         #[arg(short, long, default_value = "21GF-DEFAULT")]
         card: String,
@@ -1038,6 +1050,7 @@ fn run(cli: Cli) -> Result<()> {
             scoring,
             all_meanings,
             audience,
+            regulator,
             auction_prefix,
             event,
             max_calls,
@@ -1062,7 +1075,8 @@ fn run(cli: Cli) -> Result<()> {
                     card.apply_change(change)?;
                 }
             }
-            let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules);
+            let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules)
+                .with_regulator(regulator.unwrap_or_default());
             let opts = bid_pbn::Options {
                 prefix: auction_prefix
                     .as_deref()
@@ -1121,6 +1135,7 @@ fn run(cli: Cli) -> Result<()> {
             rules_at,
             json,
             audience,
+            regulator,
             knowledge,
             meanings,
             meaning,
@@ -1137,6 +1152,7 @@ fn run(cli: Cli) -> Result<()> {
             rules_at.as_deref(),
             json,
             audience,
+            regulator.unwrap_or_default(),
             knowledge,
             &meaning_texts(meanings.as_deref(), &meaning)?,
             batch,
@@ -1157,6 +1173,7 @@ fn run(cli: Cli) -> Result<()> {
             heard_by,
             json,
             audience,
+            regulator,
         } => explain_auction(
             &auction,
             deal.as_deref(),
@@ -1171,6 +1188,7 @@ fn run(cli: Cli) -> Result<()> {
             heard_by,
             json,
             audience.unwrap_or_default(),
+            regulator.unwrap_or_default(),
         ),
     }
 }
@@ -1802,6 +1820,7 @@ fn call(
     rules_at: Option<&str>,
     json: bool,
     audience: Option<rbb_engine::Audience>,
+    regulator: rbb_engine::Regulator,
     knowledge: bool,
     meanings: &[String],
     batch: bool,
@@ -1812,8 +1831,9 @@ fn call(
         Some(p) => load_card(&rules.vocab, p)?,
         None => ns.clone(),
     };
-    let engine =
-        rbb_engine::Engine::new(&ns, &ew, &rules).with_audience(audience.unwrap_or_default());
+    let engine = rbb_engine::Engine::new(&ns, &ew, &rules)
+        .with_audience(audience.unwrap_or_default())
+        .with_regulator(regulator);
     let dealer = dealer.to_string();
     if batch {
         return call_batch(
@@ -1906,6 +1926,7 @@ fn explain_auction(
     heard_by: Option<char>,
     json: bool,
     audience: rbb_engine::Audience,
+    regulator: rbb_engine::Regulator,
 ) -> Result<()> {
     use bridge_types::{Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
     let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
@@ -1945,7 +1966,9 @@ fn explain_auction(
             card.apply_change(change)?;
         }
     }
-    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules).with_audience(audience);
+    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules)
+        .with_audience(audience)
+        .with_regulator(regulator);
     let heard = rbb_engine::Meanings {
         texts: meanings.to_vec(),
         listener: match heard_by {
@@ -2275,7 +2298,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
         } => {
             let alerts = bidspec::alerts::load(&rules)?
                 .ok_or_else(|| format!("{}: no alerts.toml", rules.display()))?;
-            if !alerts.regulators.contains_key(&regulator) {
+            if !alerts.regulators.contains_key(regulator.key()) {
                 return Err(format!(
                     "--regulator {regulator}: alerts.toml has {}",
                     alerts
@@ -2289,7 +2312,7 @@ fn bid(cmd: BidCommand) -> Result<()> {
             }
             let rule_set = rules_from(Some(&rules))?;
             let base = card_or_stock(&rule_set.vocab, &card)?;
-            let mut report = bid_alerts::check(&rule_set, &base, &alerts, &regulator);
+            let mut report = bid_alerts::check(&rule_set, &base, &alerts, regulator);
             report.relative_to(&rules.display().to_string());
             if json {
                 println!("{}", serde_json::to_string_pretty(&report.to_json())?);
@@ -2297,7 +2320,11 @@ fn bid(cmd: BidCommand) -> Result<()> {
                 print!("{}", report.to_text(verbose));
             }
             if strict && report.failures() > 0 {
-                return Err(format!("{} entries differ from the rules", report.failures()).into());
+                return Err(format!(
+                    "{} entries: the engine does not alert as they say",
+                    report.failures()
+                )
+                .into());
             }
         }
         BidCommand::Compile {
