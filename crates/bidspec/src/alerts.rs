@@ -2,11 +2,11 @@
 //! announcement, by card field, and where the regulators differ (the
 //! pack's DESIGN.md, "Alerts").
 //!
-//! The engine does not read it yet: a rule's `alert` / `announce` flag is
-//! what it alerts by. `rbb bid alerts` checks the two against each other;
-//! this module only reads the file, from a pack checkout or from the
-//! snapshot (`pack.json`, whose `alerts` key holds the same tables), so
-//! the rule set's loading can share it once alerts are driven by it.
+//! This module only reads the file, from a pack checkout or from the
+//! snapshot (`pack.json`, whose `alerts` key holds the same tables). The
+//! engine alerts by it for a regulator (`rbb_engine::alerting`), falling
+//! back on a rule's `alert` / `announce` flag where no entry applies;
+//! `rbb bid alerts` reports both against each other.
 //!
 //! ```
 //! let a = bidspec::alerts::parse(r#"

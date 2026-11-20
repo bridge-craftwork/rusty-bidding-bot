@@ -305,6 +305,11 @@ pub enum Alert {
     Alert {
         #[serde(default, skip_serializing_if = "Option::is_none")]
         text: Option<String>,
+        /// Explained after the auction instead of alerted at the time (a
+        /// regulator's delayed alert, `alerts.toml`). A rule never says
+        /// so: the engine sets it for a regulator that delays the call.
+        #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+        delayed: bool,
     },
     Announce {
         text: String,

@@ -36,7 +36,7 @@ after 1N (P)
 ";
     let m = bidspec::parse(src, "demo.bid").unwrap();
     let rule = &m.contexts[0].rules[0];
-    assert!(matches!(rule.alert, Some(Alert::Alert { text: None })));
+    assert!(matches!(rule.alert, Some(Alert::Alert { text: None, .. })));
     assert!(matches!(&rule.shows, Some(Expr::And { all }) if all.len() == 2));
     assert_eq!(rule.sets.len(), 2);
     assert_eq!(rule.priority, Some(-1));

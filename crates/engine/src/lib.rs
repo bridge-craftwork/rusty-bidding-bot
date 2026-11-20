@@ -6,6 +6,7 @@
 //! by ranking the candidate rules (priority, descriptiveness, prefer, file
 //! order) among those the hand satisfies.
 
+pub mod alerting;
 pub mod cases;
 mod contract;
 mod engine;
@@ -38,6 +39,7 @@ pub fn cpu_budget() -> usize {
         .max(1)
 }
 
+pub use alerting::{AlertTable, Regulator};
 pub use engine::{
     check_sets, CandidateTrace, Choice, DealAuction, DealCall, Decision, Engine, Heard, HeardRead,
     Interpretation, OnNoRule, RuleListing, RuleOption, RuleRejection, Step, StopReason, Table,
@@ -89,9 +91,21 @@ pub struct RuleSet {
     /// empty for rules that bring none): what an opponent's announced
     /// name switches on in their card (`Engine::interpret_with`).
     pub announced: AnnouncedNames,
+    /// The pack's `alerts.toml` read against these modules: which calls a
+    /// regulator alerts or announces (`Engine::with_regulator`). Empty for
+    /// rules that bring none: then every call is alerted as its rule's
+    /// flag says.
+    pub alerts: std::sync::Arc<AlertTable>,
 }
 
 impl RuleSet {
+    /// This rule set alerting by `alerts` (`alerts.toml`), resolved
+    /// against its modules.
+    pub fn with_alerts(mut self, alerts: bidspec::alerts::Alerts) -> RuleSet {
+        self.alerts = std::sync::Arc::new(AlertTable::new(alerts, &self.modules, &self.vocab));
+        self
+    }
+
     /// This rule set reading the opponents' announced names with `names`.
     pub fn with_announced_names(mut self, names: AnnouncedNames) -> RuleSet {
         self.announced = names;
@@ -205,11 +219,26 @@ pub fn load_rules(dir: &Path) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
             message,
         }]
     })?;
-    compile_dir(dir, &vocab).map(|modules| RuleSet {
-        manifest,
-        vocab,
-        modules,
-        announced,
+    let alerts = bidspec::alerts::load(dir).map_err(|message| {
+        vec![bidspec::Diagnostic {
+            file: dir.join(bidspec::alerts::FILE).display().to_string(),
+            line: 0,
+            col: 0,
+            message,
+        }]
+    })?;
+    compile_dir(dir, &vocab).map(|modules| {
+        let set = RuleSet {
+            manifest,
+            vocab,
+            modules,
+            announced,
+            alerts: Default::default(),
+        };
+        match alerts {
+            Some(a) => set.with_alerts(a),
+            None => set,
+        }
     })
 }
 
@@ -241,6 +270,7 @@ pub fn compile_rules<'a>(
         vocab,
         modules,
         announced: AnnouncedNames::default(),
+        alerts: Default::default(),
     })
 }
 
@@ -292,11 +322,27 @@ pub fn compile_snapshot(text: &str, name: &str) -> Result<RuleSet, Vec<bidspec::
         })?,
         _ => AnnouncedNames::default(),
     };
-    compile_modules(&vocab, snapshot_rule_files(&doc)).map(|modules| RuleSet {
-        manifest: Some(manifest),
-        vocab,
-        modules,
-        announced,
+    // Optional too: the snapshot's `alerts` (alerts.toml as JSON).
+    let alerts = bidspec::alerts::from_snapshot(&doc).map_err(|message| {
+        vec![bidspec::Diagnostic {
+            file: name.to_string(),
+            line: 0,
+            col: 0,
+            message: format!("alerts: {message}"),
+        }]
+    })?;
+    compile_modules(&vocab, snapshot_rule_files(&doc)).map(|modules| {
+        let set = RuleSet {
+            manifest: Some(manifest),
+            vocab,
+            modules,
+            announced,
+            alerts: Default::default(),
+        };
+        match alerts {
+            Some(a) => set.with_alerts(a),
+            None => set,
+        }
     })
 }
 

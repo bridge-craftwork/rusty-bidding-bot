@@ -162,8 +162,8 @@ fn spec_may_be(spec: &str, call: &Call) -> bool {
 fn flags(c: &RuleOption) -> String {
     let mut f = Vec::new();
     match &c.alert {
-        Some(bidspec::ast::Alert::Alert { text: Some(t) }) => f.push(format!("alert: {t}")),
-        Some(bidspec::ast::Alert::Alert { text: None }) => f.push("alert".into()),
+        Some(bidspec::ast::Alert::Alert { text: Some(t), .. }) => f.push(format!("alert: {t}")),
+        Some(bidspec::ast::Alert::Alert { text: None, .. }) => f.push("alert".into()),
         Some(bidspec::ast::Alert::Announce { text }) => f.push(format!("announce: {text}")),
         None => {}
     }

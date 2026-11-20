@@ -241,6 +241,8 @@ pub struct Engine {
     cands: Mutex<CandCache>,
     /// Who `Step::announcement` is written for.
     audience: crate::explain::Audience,
+    /// Whose alerting rules `alert` follows (`alerts.toml`).
+    regulator: crate::alerting::Regulator,
 }
 
 impl Step {
@@ -282,7 +284,105 @@ impl Engine {
             descriptiveness: Mutex::default(),
             cands: Mutex::default(),
             audience: Default::default(),
+            regulator: Default::default(),
         }
+    }
+
+    /// Alert and announce calls as `regulator` asks (`Regulator::Acbl` by
+    /// default): where an entry of the rules' `alerts.toml` is written for
+    /// the call, the rule that makes it and the card, its kind for the
+    /// regulator; elsewhere the rule's own `alert` / `announce` flag. Only
+    /// `alert` changes: what a call means and how it is bid do not.
+    pub fn with_regulator(mut self, regulator: crate::alerting::Regulator) -> Engine {
+        self.regulator = regulator;
+        self.variants.lock().unwrap().clear();
+        self
+    }
+
+    /// Whose alerting rules the engine follows.
+    pub fn regulator(&self) -> crate::alerting::Regulator {
+        self.regulator
+    }
+
+    /// How the table is told of `call` after `pos` when the rule `entry`
+    /// makes it (or reads it), `rule_alert` being its own flag filled in
+    /// and `explanation` its text: the regulator's kind where an
+    /// `alerts.toml` entry decides (`AlertTable::decide`), else the flag.
+    /// `call_modules` are the modules of every rule that makes the same
+    /// call here.
+    fn table_alert<'a>(
+        &self,
+        pos: &Position,
+        call: &Call,
+        entry: &RuleEntry,
+        rule_alert: Option<Alert>,
+        explanation: &str,
+        call_modules: impl IntoIterator<Item = &'a str> + Clone,
+    ) -> (
+        Option<Alert>,
+        Result<crate::alerting::Decided, crate::alerting::Fallback>,
+    ) {
+        let decided = self.rules.alerts.decide(
+            self.regulator,
+            &self.cards[side(pos.next_caller())],
+            &pos.calls,
+            call,
+            &entry.source.module,
+            call_modules,
+            rule_alert.is_some(),
+        );
+        let Ok(d) = &decided else {
+            return (rule_alert, decided);
+        };
+        let text = match &rule_alert {
+            Some(Alert::Alert { text, .. }) => text.clone(),
+            Some(Alert::Announce { text }) => Some(text.clone()),
+            None => None,
+        };
+        use bidspec::alerts::AlertRule;
+        let alert = match d.rule {
+            AlertRule::None => None,
+            AlertRule::Alert | AlertRule::Delayed => Some(Alert::Alert {
+                text,
+                delayed: d.rule == AlertRule::Delayed,
+            }),
+            // An announcement says what the call is: the rule's text, or
+            // failing one its explanation.
+            AlertRule::Announce => Some(Alert::Announce {
+                text: text.unwrap_or_else(|| explanation.to_string()),
+            }),
+        };
+        (alert, decided)
+    }
+
+    /// How the table is told of `call` after `pos` under the engine's
+    /// regulator, when the rule at `rule` (file and line) makes it: the
+    /// alert, and the `alerts.toml` entry that decided it or why the
+    /// rule's own flag stands. `None` when no rule there makes the call.
+    /// What `rbb bid alerts` reports the engine doing.
+    #[allow(clippy::type_complexity)]
+    pub fn alert_at(
+        &self,
+        pos: &Position,
+        call: &Call,
+        rule: &RuleRef,
+    ) -> Option<(
+        Option<Alert>,
+        Result<crate::alerting::Decided, crate::alerting::Fallback>,
+    )> {
+        let actor = pos.next_caller();
+        let sys = &self.systems[side(actor)];
+        let cands = self.cands_at(pos, &pos_key(pos));
+        let same: Vec<&Cand> = cands.0.iter().filter(|c| &c.call == call).collect();
+        let c = same.iter().find(|c| sys.rules[c.entry].source == *rule)?;
+        let entry = &sys.rules[c.entry];
+        let ctx = self.ctx(pos, actor, None, entry);
+        let explanation = ctx.interpolate(&entry.rule.explanation, &mut c.b.clone());
+        let filled = fill_alert(&entry.rule.alert, &ctx, &c.b);
+        let modules = same
+            .iter()
+            .map(|o| sys.rules[o.entry].source.module.as_str());
+        Some(self.table_alert(pos, call, entry, filled, &explanation, modules))
     }
 
     /// Write `Step::announcement` for `audience` (`Audience::Human` by
@@ -790,8 +890,17 @@ impl Engine {
             step.rule = Some(entry.source.clone());
             step.explanation = Some(ctx.interpolate(&entry.rule.explanation, &mut b));
             // On a copy of the bindings: filling in the text must not
-            // change what the rest of this step resolves.
-            step.alert = fill_alert(&entry.rule.alert, &ctx, &b);
+            // change what the rest of this step resolves. The regulator
+            // decides how the table is told (`alerts.toml`).
+            let filled = fill_alert(&entry.rule.alert, &ctx, &b);
+            let modules = cands
+                .iter()
+                .filter(|c| &c.call == call)
+                .map(|c| sys.rules[c.entry].source.module.as_str());
+            let explanation = step.explanation.clone().unwrap_or_default();
+            step.alert = self
+                .table_alert(pos, call, entry, filled, &explanation, modules)
+                .0;
             step.artificial = entry.rule.artificial;
             // What the call shows: the union over every rule that makes it.
             let meanings: Vec<Expr> = matching
@@ -922,7 +1031,12 @@ impl Engine {
                 ..
             }
         ) && !step.artificial
-            && !matches!(step.alert, Some(Alert::Alert { .. }))
+            // The rule's own flag, not the regulator's alert: what the
+            // call is decides the system, not how a table is told of it.
+            && !matches!(
+                best.map(|b| &sys.rules[b.entry].rule.alert),
+                Some(Some(Alert::Alert { .. }))
+            )
             && sys.systems_on.iter().any(|s| {
                 let ctx = Ctx {
                     pos,
@@ -1051,10 +1165,23 @@ impl Engine {
         let (call, explanation, alert, rule) = match chosen {
             Some(idx) => {
                 let t = &traces[idx];
+                // How the table is told: the regulator's (`alerts.toml`).
+                let modules = cands
+                    .iter()
+                    .filter(|c| c.call == t.call)
+                    .map(|c| sys.rules[c.entry].source.module.as_str());
+                let (alert, _) = self.table_alert(
+                    pos,
+                    &t.call,
+                    &sys.rules[cands[idx].entry],
+                    alerts[idx].take(),
+                    &t.explanation,
+                    modules,
+                );
                 (
                     t.call.clone(),
                     t.explanation.clone(),
-                    alerts[idx].take(),
+                    alert,
                     Some(t.rule.clone()),
                 )
             }
@@ -1301,8 +1428,9 @@ fn fill_alert(alert: &Option<Alert>, ctx: &Ctx, b: &Bindings) -> Option<Alert> {
         }
     };
     alert.as_ref().map(|a| match a {
-        Alert::Alert { text } => Alert::Alert {
+        Alert::Alert { text, delayed } => Alert::Alert {
             text: text.as_deref().map(fill),
+            delayed: *delayed,
         },
         Alert::Announce { text } => Alert::Announce { text: fill(text) },
     })

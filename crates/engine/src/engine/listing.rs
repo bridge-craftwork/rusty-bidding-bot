@@ -34,7 +34,15 @@ pub struct RuleOption {
     pub rule: RuleRef,
     /// The rule's text with `{…}` filled in.
     pub explanation: String,
+    /// The rule's own `alert` / `announce` flag.
     pub alert: Option<Alert>,
+    /// How the table is told of the call under the engine's regulator
+    /// (`Engine::with_regulator`): `alert` unless an `alerts.toml` entry
+    /// decides it (`alert_entry`).
+    pub table_alert: Option<Alert>,
+    /// The `alerts.toml` entry (1-based) that decided `table_alert`.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alert_entry: Option<usize>,
     pub artificial: bool,
     pub priority: i64,
     /// Share of the hands consistent with the caller's earlier calls that
@@ -134,12 +142,22 @@ impl Engine {
                 .map(|(_, o)| sys.rules[o.entry].source.clone())
                 .collect();
             let read_as = cands.iter().position(|o| o.call == c.call) == Some(idx);
+            let explanation = ctx.interpolate(&r.explanation, &mut c.b.clone());
+            let alert = fill_alert(&r.alert, &ctx, &c.b);
+            let modules = cands
+                .iter()
+                .filter(|o| o.call == c.call)
+                .map(|o| sys.rules[o.entry].source.module.as_str());
+            let (table_alert, decided) =
+                self.table_alert(pos, &c.call, entry, alert.clone(), &explanation, modules);
             out.push(RuleOption {
                 rank: idx + 1,
                 call: c.call.to_pbn(),
                 rule: entry.source.clone(),
-                explanation: ctx.interpolate(&r.explanation, &mut c.b.clone()),
-                alert: fill_alert(&r.alert, &ctx, &c.b),
+                explanation,
+                alert,
+                table_alert,
+                alert_entry: decided.ok().map(|d| d.entry),
                 artificial: r.artificial,
                 priority: c.priority,
                 descriptiveness: c.descriptiveness,

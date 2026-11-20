@@ -435,7 +435,7 @@ impl Engine {
                 .as_ref()
                 .filter(|a| a.by == caller && was.ask.as_ref() != Some(*a));
             let (alert, announce) = match &step.alert {
-                Some(Alert::Alert { text }) => (Some(text.clone().unwrap_or_default()), None),
+                Some(Alert::Alert { text, .. }) => (Some(text.clone().unwrap_or_default()), None),
                 Some(Alert::Announce { text }) => (None, Some(text.clone())),
                 None => (None, None),
             };

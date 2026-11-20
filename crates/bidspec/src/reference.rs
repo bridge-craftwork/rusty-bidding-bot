@@ -66,8 +66,8 @@ fn pattern(calls: &[PatternCall]) -> String {
 
 fn alert_text(a: &Alert) -> String {
     match a {
-        Alert::Alert { text: Some(t) } => format!("alert: {t}"),
-        Alert::Alert { text: None } => "alert".into(),
+        Alert::Alert { text: Some(t), .. } => format!("alert: {t}"),
+        Alert::Alert { text: None, .. } => "alert".into(),
         Alert::Announce { text } => format!("announce: {text}"),
     }
 }

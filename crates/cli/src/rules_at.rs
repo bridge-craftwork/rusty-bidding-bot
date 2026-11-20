@@ -180,14 +180,15 @@ pub fn load(git_ref: &str, dir: &Path) -> Result<RuleSet> {
             sources.push((name, text));
         }
     }
-    let (manifest, vocab, announced) = match &pack_dir {
+    let (manifest, vocab, announced, alerts) = match &pack_dir {
         Some(tmp) => {
             let read = rbb_engine::read_manifest(tmp)
                 .map_err(|d| fail(d.to_string()))
                 .and_then(|m| {
                     let v = rbb_engine::rules_vocabulary(tmp).map_err(|e| fail(e.to_string()))?;
                     let names = rbb_engine::read_announced_names(tmp).map_err(fail)?;
-                    Ok((m, v, names))
+                    let alerts = bidspec::alerts::load(tmp).map_err(fail)?;
+                    Ok((m, v, names, alerts))
                 });
             let _ = std::fs::remove_dir_all(tmp);
             read?
@@ -202,7 +203,7 @@ pub fn load(git_ref: &str, dir: &Path) -> Result<RuleSet> {
                     .map_err(|e| fail(e.to_string()))?,
                 None => bridge_card::standard::vocabulary().map_err(|e| fail(e.to_string()))?,
             };
-            (manifest, vocab, rbb_engine::AnnouncedNames::default())
+            (manifest, vocab, rbb_engine::AnnouncedNames::default(), None)
         }
     };
     let modules = rbb_engine::compile_modules(
@@ -210,10 +211,15 @@ pub fn load(git_ref: &str, dir: &Path) -> Result<RuleSet> {
         sources.iter().map(|(n, s)| (n.as_str(), s.as_str())),
     )
     .map_err(|d| fail(crate::diagnostics(d)))?;
-    Ok(RuleSet {
+    let set = RuleSet {
         manifest,
         vocab,
         modules,
         announced,
+        alerts: Default::default(),
+    };
+    Ok(match alerts {
+        Some(a) => set.with_alerts(a),
+        None => set,
     })
 }

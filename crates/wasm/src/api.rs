@@ -13,8 +13,8 @@ use bridge_types::{
     Auction, Call, Contract, Deal, Direction, Doubled, Hand, ScoringMethod, Strain, Vulnerability,
 };
 use rbb_engine::{
-    Ask, Audience, CandidateTrace, DealCall, Engine, Forcing, OnNoRule, Position, RuleRef, RuleSet,
-    SeatKnowledge, SideState, Step, StopReason, Table, Tri,
+    Ask, Audience, CandidateTrace, DealCall, Engine, Forcing, OnNoRule, Position, Regulator,
+    RuleRef, RuleSet, SeatKnowledge, SideState, Step, StopReason, Table, Tri,
 };
 use serde::Serialize;
 use serde_json::{json, Map, Value as Json};
@@ -737,15 +737,21 @@ fn entry_by_id(id: u32) -> Option<Entry> {
     ENGINES.with(|r| r.borrow().1.iter().find(|e| e.id == id).cloned())
 }
 
-/// The engine for `cards` under `rules`, made once per distinct pair.
-fn engine_for_cards(cards: &Json, rules: Arc<Rules>, d: &mut Diags) -> Option<Entry> {
+/// The engine for `cards` under `rules` alerting as `regulator`, made once
+/// per distinct triple.
+fn engine_for_cards(
+    cards: &Json,
+    rules: Arc<Rules>,
+    regulator: Regulator,
+    d: &mut Diags,
+) -> Option<Entry> {
     // A rule set's id covers its rule files and its vocabulary.
-    let key = format!("{} {}", rules.id, cards);
+    let key = format!("{} {} {regulator}", rules.id, cards);
     if let Some(found) = ENGINES.with(|r| r.borrow().1.iter().find(|e| e.key == key).cloned()) {
         return Some(found);
     }
     let (cards, names) = load_cards(cards, &rules.set.vocab, d)?;
-    let engine = Arc::new(Engine::new(&cards[0], &cards[1], &rules.set));
+    let engine = Arc::new(Engine::new(&cards[0], &cards[1], &rules.set).with_regulator(regulator));
     let entry = ENGINES.with(|r| {
         let mut r = r.borrow_mut();
         r.0 += 1;
@@ -770,7 +776,16 @@ fn engine_for(req: &Json, d: &mut Diags) -> Option<Entry> {
             d.error("engine: expected the number create_engine returned");
             return None;
         };
+        let asked = regulator(req, d);
         return match entry_by_id(id as u32) {
+            Some(e) if asked.is_some_and(|r| r != e.engine.regulator()) => {
+                d.error(format!(
+                    "regulator: engine {id} alerts as {}",
+                    e.engine.regulator()
+                ))
+                .hint("give the regulator to createEngine, or send cards instead of engine");
+                None
+            }
             Some(e) => Some(e),
             None => {
                 d.error(format!("engine: no engine {id}"))
@@ -781,7 +796,8 @@ fn engine_for(req: &Json, d: &mut Diags) -> Option<Entry> {
     }
     if let Some(cards) = req.get("cards") {
         let rules = rules_for(req, d)?;
-        return engine_for_cards(cards, rules, d);
+        let regulator = regulator(req, d).unwrap_or_default();
+        return engine_for_cards(cards, rules, regulator, d);
     }
     d.error("give \"engine\" (from createEngine) or \"cards\"")
         .hint("e.g. {\"cards\": {\"ns\": \"21GF-DEFAULT\"}, ...}");
@@ -844,6 +860,19 @@ fn audience(req: &Json, d: &mut Diags) -> Audience {
             d.error(format!("audience: {e}")).hint("human or brill");
             Audience::Human
         }),
+    }
+}
+
+/// `regulator`: whose alert procedure decides which calls are alerted or
+/// announced (`acbl`, the default, `ebu` or `wbf`); `None` when not given.
+fn regulator(req: &Json, d: &mut Diags) -> Option<Regulator> {
+    let s = field_str(req, "regulator", d)?;
+    match s.trim().parse() {
+        Ok(r) => Some(r),
+        Err(e) => {
+            d.error(format!("regulator: {e}")).hint("acbl, ebu or wbf");
+            None
+        }
     }
 }
 
@@ -1239,13 +1268,15 @@ pub fn create_engine(request: &str) -> String {
                     .hint("{\"cards\": {\"ns\": \"21GF-DEFAULT\", \"ew\": \"21GF-GIB\"}}");
             }
             Some(cards) => {
-                if let Some(e) =
-                    rules_for(&req, &mut d).and_then(|rules| engine_for_cards(cards, rules, &mut d))
+                let regulator = regulator(&req, &mut d).unwrap_or_default();
+                if let Some(e) = rules_for(&req, &mut d)
+                    .and_then(|rules| engine_for_cards(cards, rules, regulator, &mut d))
                 {
                     let side = |seat: Direction, name: &str| json!({"name": name, "modules": e.engine.system(seat).modules});
                     body = json!({
                         "engine": e.id,
                         "rules_id": e.rules.id,
+                        "regulator": e.engine.regulator().key(),
                         "ns": side(Direction::North, &e.names[0]),
                         "ew": side(Direction::East, &e.names[1]),
                     });
@@ -2413,6 +2444,38 @@ mod tests {
         );
         let bad = req(r#", "audience": "robot""#);
         assert_eq!(bad["ok"], false, "{bad}");
+    }
+
+    #[test]
+    fn alerts_by_regulator() {
+        // A Jacoby transfer: announced in the ACBL (the default), alerted
+        // in the WBF, which has no announcements.
+        let req = |reg: &str| {
+            parse(&interpret(&format!(
+                r#"{{"cards": {{"ns": "21GF-DEFAULT"}}, "dealer": "N", "auction": "1NT Pass 2D"{reg}}}"#
+            )))
+        };
+        let acbl = req("");
+        assert_eq!(acbl["ok"], true, "{acbl}");
+        assert_eq!(acbl["steps"][2]["alert"]["kind"], "announce", "{acbl}");
+        assert_eq!(req(r#", "regulator": "acbl""#)["steps"], acbl["steps"]);
+        let wbf = req(r#", "regulator": "wbf""#);
+        assert_eq!(wbf["steps"][2]["alert"]["kind"], "alert", "{wbf}");
+        // The 1NT range: announced in the ACBL, not in the WBF.
+        assert_eq!(acbl["steps"][0]["alert"]["kind"], "announce", "{acbl}");
+        assert_eq!(wbf["steps"][0]["alert"], Json::Null, "{wbf}");
+        let bad = req(r#", "regulator": "fia""#);
+        assert_eq!(bad["ok"], false, "{bad}");
+        // An engine alerts as it was made.
+        let made = parse(&create_engine(
+            r#"{"cards": {"ns": "21GF-DEFAULT"}, "regulator": "ebu"}"#,
+        ));
+        assert_eq!(made["regulator"], "ebu", "{made}");
+        let id = made["engine"].as_u64().unwrap();
+        let other = parse(&interpret(&format!(
+            r#"{{"engine": {id}, "dealer": "N", "auction": "1NT", "regulator": "wbf"}}"#
+        )));
+        assert_eq!(other["ok"], false, "{other}");
     }
 
     #[test]
