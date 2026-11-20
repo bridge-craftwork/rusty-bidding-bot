@@ -93,6 +93,11 @@ pub struct Position {
     pub knowledge: [SeatKnowledge; 4],
     /// By `side`.
     pub sides: [SideState; 2],
+    /// What the opponents' announced meanings added to calls no rule read
+    /// (`Engine::interpret_with`), one entry a call, as text: positions
+    /// that differ only here are different positions to the caches.
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub heard: String,
 }
 
 impl Position {
@@ -107,6 +112,7 @@ impl Position {
             unread: Vec::new(),
             knowledge: Default::default(),
             sides: Default::default(),
+            heard: String::new(),
         }
     }
 

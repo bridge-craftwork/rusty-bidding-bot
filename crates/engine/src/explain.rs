@@ -14,8 +14,97 @@
 //! would act on. A low HCP floor is worse than nothing, since a reader takes
 //! "5+ HCP" for the strength shown; a raise that shows 13+ support points
 //! says that instead.
+//!
+//! People and robots want different texts (issue #98), so the text is
+//! written for an `Audience`: the step keeps what the call showed
+//! (`Announced`) and renders it for whoever asks (`Step::announcement_for`).
+
+use serde::Serialize;
 
 use crate::{Forcing, Range, SeatKnowledge, Tri};
+
+/// Who reads the text. `Human` is the classroom, the auction explorer, the
+/// CLI and the WASM default; `Brill` is the seat service, whose opponents
+/// are robots that pull lengths, HCP ranges and a few keywords out of free
+/// text (rusty-seat-service docs/seat-api.txt §5: length, point range and
+/// the words *artificial*, *forcing*, *game forcing* and *transfer*).
+///
+/// `Brill` words the text the way a heuristic parser reads it:
+/// - lengths in digits: "five or more hearts" is "5+ hearts", "at most
+///   one diamond" is "0-1 diamonds", "six hearts" is "6 hearts";
+/// - a transfer names its target ("transfer to spades" after Texas);
+/// - no negated "forcing" for a substring match to misread: "not forcing"
+///   and "non-forcing" are "passable", "forcing to game" is "game forcing".
+///
+/// The thresholds are the same for both (the `Policy` keeps them apart for
+/// when they are not). Lower floors were tried on Stayman, Jacoby
+/// transfer, Splinters and Jacoby 2NT deals and only misled: "5+ HCP"
+/// beside "13+ support points" (Jacoby 2NT) reads as the strength shown,
+/// and a 2-card floor puts "2+ diamonds" on keycard asks and signoffs,
+/// which a parser can take for the suit the call shows.
+///
+/// `Human` is the text as it always was.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Audience {
+    #[default]
+    Human,
+    Brill,
+}
+
+impl Audience {
+    pub const ALL: [Audience; 2] = [Audience::Human, Audience::Brill];
+
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Audience::Human => "human",
+            Audience::Brill => "brill",
+        }
+    }
+
+    fn policy(self) -> Policy {
+        match self {
+            Audience::Human => Policy {
+                hcp_floor: HCP_FLOOR,
+                length_floor: LENGTH_FLOOR,
+                length_ceiling: LENGTH_CEILING,
+                robot: false,
+            },
+            Audience::Brill => Policy {
+                hcp_floor: HCP_FLOOR,
+                length_floor: LENGTH_FLOOR,
+                length_ceiling: LENGTH_CEILING,
+                robot: true,
+            },
+        }
+    }
+}
+
+impl std::fmt::Display for Audience {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+impl std::str::FromStr for Audience {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Audience, String> {
+        match s.to_ascii_lowercase().as_str() {
+            "human" => Ok(Audience::Human),
+            "brill" => Ok(Audience::Brill),
+            _ => Err(format!("audience must be human or brill, not {s:?}")),
+        }
+    }
+}
+
+/// What an audience is told, as numbers and switches.
+struct Policy {
+    hcp_floor: i32,
+    length_floor: i32,
+    length_ceiling: i32,
+    /// Lengths in digits, the transfer's target, no negated "forcing".
+    robot: bool,
+}
 
 /// What one call showed, as the engine read it.
 pub struct Shown<'a> {
@@ -45,14 +134,102 @@ const HCP_FLOOR: i32 = 6;
 const LENGTH_FLOOR: i32 = 3;
 const LENGTH_CEILING: i32 = 6;
 
-/// The explanation for one call.
+/// The part of a seat's knowledge an explanation reads.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Sketch {
+    pub hcp: Range,
+    /// C D H S.
+    pub len: [Range; 4],
+    pub balanced: Tri,
+    /// Support points, C D H S.
+    pub tp: [Range; 4],
+}
+
+impl From<&SeatKnowledge> for Sketch {
+    fn from(k: &SeatKnowledge) -> Sketch {
+        Sketch {
+            hcp: k.hcp,
+            len: k.len,
+            balanced: k.balanced,
+            tp: k.tp,
+        }
+    }
+}
+
+/// What one call showed, kept with its step (`Step::announced`), so the
+/// knowledge is worked out once and the text rendered for any audience.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct Announced {
+    /// The rule's description of the call (may be empty).
+    pub description: String,
+    pub before: Sketch,
+    pub after: Sketch,
+    pub others: [Sketch; 3],
+    pub artificial: bool,
+    pub forcing: Forcing,
+    /// The agreed suit, C D H S index: support points are stated in it.
+    pub trump: Option<usize>,
+    /// The suit the call asks partner to bid when it is a transfer (C D H
+    /// S index); only `Audience::Brill` states it.
+    pub transfer: Option<usize>,
+}
+
+impl Default for Announced {
+    fn default() -> Announced {
+        let k = Sketch::from(&SeatKnowledge::default());
+        Announced {
+            description: String::new(),
+            before: k,
+            after: k,
+            others: [k; 3],
+            artificial: false,
+            forcing: Forcing::None,
+            trump: None,
+            transfer: None,
+        }
+    }
+}
+
+impl Announced {
+    pub fn new(s: &Shown) -> Announced {
+        Announced {
+            description: s.description.to_string(),
+            before: s.before.into(),
+            after: s.after.into(),
+            others: s.others.map(Sketch::from),
+            artificial: s.artificial,
+            forcing: s.forcing,
+            trump: s.trump,
+            transfer: None,
+        }
+    }
+
+    /// The text for `audience`.
+    pub fn render(&self, audience: Audience) -> String {
+        render(self, &audience.policy())
+    }
+}
+
+/// The explanation for one call, for people (`Audience::Human`).
 pub fn explanation(s: &Shown) -> String {
-    let description = words(s.description.trim());
+    explanation_for(s, Audience::Human)
+}
+
+/// The explanation for one call, for `audience`.
+pub fn explanation_for(s: &Shown, audience: Audience) -> String {
+    Announced::new(s).render(audience)
+}
+
+fn render(s: &Announced, p: &Policy) -> String {
+    let mut description = words(s.description.trim());
+    if p.robot {
+        description = robot_words(&description);
+    }
     let said = description.to_lowercase();
 
     let mut extras = Vec::new();
     let hcp_cap = (40 - s.others.iter().map(|k| k.hcp.lo).sum::<i32>()).min(37);
-    if let Some(r) = narrowed(s.after.hcp, s.before.hcp, hcp_cap, HCP_FLOOR, hcp_cap) {
+    if let Some(r) = narrowed(s.after.hcp, s.before.hcp, hcp_cap, p.hcp_floor, hcp_cap) {
         extras.push(format!("{r} HCP"));
     }
     // Support points in the agreed suit, where they show more than the HCP
@@ -60,7 +237,7 @@ pub fn explanation(s: &Shown) -> String {
     if let Some(i) = s.trump {
         let tp = s.after.tp[i];
         if tp.lo > s.after.hcp.lo {
-            if let Some(r) = narrowed(tp, s.before.tp[i], i32::MAX, HCP_FLOOR, i32::MAX) {
+            if let Some(r) = narrowed(tp, s.before.tp[i], i32::MAX, p.hcp_floor, i32::MAX) {
                 extras.push(format!("{r} support points"));
             }
         }
@@ -75,7 +252,7 @@ pub fn explanation(s: &Shown) -> String {
         }
         // A notrump range shows no shape flag, but 2-5 in every suit is
         // balanced as far as anyone reading the text is concerned.
-        (_, Tri::Unknown) if flat(s.after) && !flat(s.before) => Some("balanced"),
+        (_, Tri::Unknown) if flat(&s.after) && !flat(&s.before) => Some("balanced"),
         _ => None,
     };
     match balanced {
@@ -99,13 +276,18 @@ pub fn explanation(s: &Shown) -> String {
                     s.after.len[i],
                     s.before.len[i],
                     cap,
-                    LENGTH_FLOOR,
-                    LENGTH_CEILING,
+                    p.length_floor,
+                    p.length_ceiling,
                 );
                 if let Some(r) = r {
                     extras.push(format!("{r} {name}"));
                 }
             }
+        }
+    }
+    if p.robot {
+        if let Some((_, name)) = s.transfer.and_then(|t| SUITS.iter().find(|(i, _)| *i == t)) {
+            extras.push(format!("transfer to {name}"));
         }
     }
     if s.artificial {
@@ -125,8 +307,100 @@ pub fn explanation(s: &Shown) -> String {
     }
 }
 
+/// A description as a robot's parser reads it (`Audience::Brill`): lengths
+/// in digits ("five or more hearts" is "5+ hearts", "at most one diamonds"
+/// is "0-1 diamonds", "Six hearts" is "6 hearts", "three or more" is
+/// "3+"), and no negated "forcing" for a substring match to misread ("not
+/// forcing" and "non-forcing" are "passable", "forcing to game" is "game
+/// forcing").
+fn robot_words(text: &str) -> String {
+    const NUMBERS: [&str; 13] = [
+        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+        "twelve", "thirteen",
+    ];
+    const SUIT_WORDS: [(&str, &str); 8] = [
+        ("spades", "spades"),
+        ("spade", "spades"),
+        ("hearts", "hearts"),
+        ("heart", "hearts"),
+        ("diamonds", "diamonds"),
+        ("diamond", "diamonds"),
+        ("clubs", "clubs"),
+        ("club", "clubs"),
+    ];
+    // A token is a word and the punctuation after it ("hearts," "18:").
+    fn bare(t: &str) -> &str {
+        t.trim_end_matches([',', ';', ':', '.', ')'])
+    }
+    fn tail(t: &str) -> &str {
+        &t[bare(t).len()..]
+    }
+    let number = |t: &str| {
+        (bare(t) == t)
+            .then(|| NUMBERS.iter().position(|n| n.eq_ignore_ascii_case(t)))
+            .flatten()
+            .map(|i| i + 1)
+    };
+    let suit = |t: &str| {
+        SUIT_WORDS
+            .iter()
+            .find(|(w, _)| w.eq_ignore_ascii_case(bare(t)))
+            .map(|(_, s)| *s)
+    };
+    let tokens: Vec<&str> = text.split(' ').collect();
+    let mut out: Vec<String> = Vec::new();
+    let mut k = 0;
+    while k < tokens.len() {
+        let at = |j: usize| tokens.get(k + j).copied().unwrap_or("");
+        // "at most N <suit>"
+        if at(0).eq_ignore_ascii_case("at") && at(1) == "most" {
+            if let (Some(n), Some(s)) = (number(at(2)), suit(at(3))) {
+                out.push(format!("0-{n} {s}{}", tail(at(3))));
+                k += 4;
+                continue;
+            }
+        }
+        if let Some(n) = number(at(0)) {
+            // "N or more <suit>", "N or more"
+            if at(1) == "or" && bare(at(2)) == "more" {
+                match suit(at(3)).filter(|_| tail(at(2)).is_empty()) {
+                    Some(s) => {
+                        out.push(format!("{n}+ {s}{}", tail(at(3))));
+                        k += 4;
+                    }
+                    None => {
+                        out.push(format!("{n}+{}", tail(at(2))));
+                        k += 3;
+                    }
+                }
+                continue;
+            }
+            // "N <suit>"
+            if let Some(s) = suit(at(1)) {
+                out.push(format!("{n} {s}{}", tail(at(1))));
+                k += 2;
+                continue;
+            }
+        }
+        out.push(at(0).to_string());
+        k += 1;
+    }
+    let mut text = out.join(" ");
+    for (from, to) in [
+        ("non-forcing", "passable"),
+        ("Non-forcing", "Passable"),
+        ("not forcing", "passable"),
+        ("Not forcing", "Passable"),
+        ("forcing to game", "game forcing"),
+        ("Forcing to game", "Game forcing"),
+    ] {
+        text = text.replace(from, to);
+    }
+    text
+}
+
 /// At most 5 and at least 2 in every suit.
-fn flat(k: &SeatKnowledge) -> bool {
+fn flat(k: &Sketch) -> bool {
     k.len.iter().all(|r| r.lo >= 2 && r.hi <= 5)
 }
 
@@ -305,6 +579,61 @@ mod tests {
             explanation(&s),
             "Jacoby 2NT: 4+ spades, game forcing; 13+ support points, artificial"
         );
+    }
+
+    #[test]
+    fn robot_wording() {
+        assert_eq!(
+            robot_words("8+ total points, five or more hearts"),
+            "8+ total points, 5+ hearts"
+        );
+        assert_eq!(
+            robot_words("Splinter: 4+ spades, game values, at most one diamonds"),
+            "Splinter: 4+ spades, game values, 0-1 diamonds"
+        );
+        assert_eq!(
+            robot_words("Four hearts, five spades, game forcing"),
+            "4 hearts, 5 spades, game forcing"
+        );
+        assert_eq!(
+            robot_words("Forcing 1NT: three or more, up to 18"),
+            "Forcing 1NT: 3+, up to 18"
+        );
+        assert_eq!(
+            robot_words("4+ clubs, 5+ hearts, not forcing"),
+            "4+ clubs, 5+ hearts, passable"
+        );
+        assert_eq!(
+            robot_words("Cue bid: 13+, no stopper, forcing to game"),
+            "Cue bid: 13+, no stopper, game forcing"
+        );
+        // Numbers that are not lengths stay words.
+        assert_eq!(
+            robot_words("5+ spades: forcing one round"),
+            "5+ spades: forcing one round"
+        );
+    }
+
+    #[test]
+    fn audiences_differ_only_where_brill_needs_it() {
+        // A two-card floor is left out for both: beside a keycard ask it
+        // would read as the suit shown.
+        let fresh = SeatKnowledge::default();
+        let after = know((10, 21), [(0, 8), (2, 8), (0, 8), (0, 8)]);
+        let s = shown("Six or more ♥", &fresh, &after, [&fresh, &fresh, &fresh]);
+        assert_eq!(explanation(&s), "Six or more hearts; 10-21 HCP");
+        assert_eq!(explanation_for(&s, Audience::Brill), "6+ hearts; 10-21 HCP");
+        // A transfer names its suit for Brill only.
+        let mut a = Announced::new(&s);
+        a.transfer = Some(3);
+        assert_eq!(a.render(Audience::Human), "Six or more hearts; 10-21 HCP");
+        assert_eq!(
+            a.render(Audience::Brill),
+            "6+ hearts; 10-21 HCP, transfer to spades"
+        );
+        assert_eq!("brill".parse::<Audience>(), Ok(Audience::Brill));
+        assert_eq!("Human".parse::<Audience>(), Ok(Audience::Human));
+        assert!("robot".parse::<Audience>().is_err());
     }
 
     #[test]

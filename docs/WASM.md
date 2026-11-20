@@ -115,6 +115,7 @@ through.
 | seat | `"N"`, `"E"`, `"S"`, `"W"` | only the first letter is read (`"North"` works). |
 | vul | `"None"`, `"NS"`, `"EW"`, `"All"` | also `"Both"`, `"-"`. Default `"None"`. |
 | scoring | `"MP"`, `"IMP"` | Default `"MP"`. |
+| audience | `"human"`, `"brill"` | Who each step's `announcement` is written for (`bid`, `interpret`, `bidDeal`, `auction`, `meaning`). Default `"human"`. See the step's `announcement` below. |
 | auction | `"1NT Pass 2C"` or `["1NT", "Pass", "2C"]` | Calls from the dealer on. `1C`..`7NT` (`1N` also), `Pass`/`P`, `X`, `XX`. Separated by spaces or commas. Checked for legality. |
 | call (in responses) | `"1NT"`, `"Pass"`, `"X"`, `"XX"` | Always this spelling. |
 | card spec | see below | |
@@ -429,6 +430,12 @@ A **step**:
   forcing*, *transfer* out of it (rusty-seat-service, the same function,
   `rbb_engine::explain`). A UI may swap the suit names for symbols. `""`
   for a call no rule reads that showed nothing.
+  With `"audience": "brill"` in the request (added after 0.17.0) it is
+  written for an opponent's robot instead: lengths in digits (`"5+ hearts"` for "five or more hearts",
+  `"0-1 diamonds"` for "at most one diamond"), a transfer's target named
+  (`"transfer to spades"` after Texas), and no negated *forcing* (`not
+  forcing` is `passable`, `forcing to game` is `game forcing`). Only
+  `announcement` changes; `explanation` is the rule's text either way.
 - `artificial`: the call does not name a place to play (a transfer, an ask).
 - `knowledge`: what the caller's hand is known to hold **after** this call,
   from all their calls so far. `balanced` is `true`, `false` or `null`

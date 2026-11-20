@@ -6,6 +6,7 @@ use bridge_card::{bbsa, schema, Card, Vocabulary};
 use clap::{Parser, Subcommand};
 use rbb_engine::RuleSet;
 
+mod bid_alerts;
 mod bid_pbn;
 mod bid_rules;
 mod rules_at;
@@ -254,6 +255,10 @@ enum Command {
         /// only for alerted calls.
         #[arg(long)]
         all_meanings: bool,
+        /// Notes (and `announcement` in --json) are what the table is told,
+        /// written for `human` or `brill` (the seat service's robots).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
         /// Force these calls at the start of every auction, e.g. "1C Pass 1H".
         #[arg(long, value_name = "CALLS")]
         auction_prefix: Option<String>,
@@ -335,15 +340,32 @@ enum Command {
         /// Print the full decision as JSON.
         #[arg(long)]
         json: bool,
+        /// Who the announcements are written for: `human` (the default
+        /// text) or `brill` (the seat service's robots: every bound they can
+        /// use, lengths in digits, the transfer's suit). Also prints what
+        /// the table is told about the chosen call (`announcement` in --json).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
         /// Also review the auction so far, call by call: what is known
         /// about every seat after each call, the flags, and this hand's own
         /// view (as `explain-auction`; with --json, a `knowledge` array).
         #[arg(long)]
         knowledge: bool,
+        /// What the opponents announced for the calls so far (only the opponents' entries are read: the seat to call is the listener): a JSON array
+        /// of strings aligned with the auction (`'["", "Cappelletti: one
+        /// long suit"]'`; `""` where nothing was said), as the seat API's
+        /// `meanings` (rusty-seat-service docs/seat-api.txt section 3).
+        #[arg(long)]
+        meanings: Option<String>,
+        /// One call's announced meaning, `N=text` with N counting calls
+        /// from 1 (repeatable; over --meanings).
+        #[arg(long = "meaning", value_name = "N=TEXT")]
+        meaning: Vec<String>,
         /// Read positions from stdin, one JSON object a line:
         /// `{"hand": "S.H.D.C", "auction": "1NT Pass", "dealer": "N",
-        /// "vul": "None", "scoring": "MP", "id": ...}` (all but `hand`
-        /// optional; missing ones take the command line's values). Prints
+        /// "vul": "None", "scoring": "MP", "meanings": ["", "..."], "id":
+        /// ...}` (all but `hand` optional; missing ones take the command
+        /// line's values; `meanings` as --meanings). Prints
         /// one line each, in order: the decision as --json prints it (with
         /// --knowledge, `{"decision", "knowledge"}`), plus `id` when given,
         /// or `{"id", "error"}` for a position that cannot be read. The
@@ -393,9 +415,28 @@ enum Command {
         /// tree: for before/after comparisons without copying rules.
         #[arg(long, value_name = "GIT_REF")]
         rules_at: Option<String>,
+        /// What the opponents announced for the calls so far: a JSON array
+        /// of strings aligned with the auction (`'["", "Cappelletti: one
+        /// long suit"]'`; `""` where nothing was said), as the seat API's
+        /// `meanings` (rusty-seat-service docs/seat-api.txt section 3).
+        #[arg(long)]
+        meanings: Option<String>,
+        /// One call's announced meaning, `N=text` with N counting calls
+        /// from 1 (repeatable; over --meanings).
+        #[arg(long = "meaning", value_name = "N=TEXT")]
+        meaning: Vec<String>,
+        /// The seat hearing the announcements: only its opponents' entries
+        /// are read. Without it every entry given is read.
+        #[arg(long, value_name = "SEAT")]
+        heard_by: Option<char>,
         /// Print the rows as JSON.
         #[arg(long)]
         json: bool,
+        /// Who the announcements are written for: `human` (the default
+        /// text) or `brill` (the seat service's robots: every bound they can
+        /// use, lengths in digits, the transfer's suit).
+        #[arg(long, value_name = "AUDIENCE")]
+        audience: Option<rbb_engine::Audience>,
     },
 }
 
@@ -524,6 +565,33 @@ enum BidCommand {
         /// inactive, warnings, knowledge}`; docs/CONTRACT.md).
         #[arg(long)]
         json: bool,
+    },
+    /// Check each rule's alert flag against the pack's alerts.toml: for
+    /// every entry, the card with the entry's fields on, the rules that
+    /// make its call after its auction (`Engine::rules_at`), and whether
+    /// their `alert` / `announce` flag is what the regulator asks. Also
+    /// lists alerted or artificial rules in modules no entry names.
+    /// Read-only.
+    Alerts {
+        /// A pack checkout (its alerts.toml) or snapshot (pack.json).
+        #[arg(long, default_value_os_t = default_rules())]
+        rules: PathBuf,
+        /// Whose alert procedure: acbl, ebu or wbf.
+        #[arg(long, default_value = "acbl")]
+        regulator: String,
+        /// The card the entries' fields are turned on in.
+        #[arg(short, long, default_value = "21GF-DEFAULT")]
+        card: String,
+        /// Every rule found and every unlisted rule, not only the
+        /// differences.
+        #[arg(short, long)]
+        verbose: bool,
+        /// Print the report as JSON.
+        #[arg(long)]
+        json: bool,
+        /// Exit nonzero when an entry (not a variant) differs.
+        #[arg(long)]
+        strict: bool,
     },
     /// Print a .bid file's compiled JSON IR.
     Compile {
@@ -969,6 +1037,7 @@ fn run(cli: Cli) -> Result<()> {
             card_changes,
             scoring,
             all_meanings,
+            audience,
             auction_prefix,
             event,
             max_calls,
@@ -1012,6 +1081,7 @@ fn run(cli: Cli) -> Result<()> {
                 max_calls,
                 ns_card,
                 ew_card,
+                audience,
             };
             let started = std::time::Instant::now();
             let cache = par.then(|| rbb_compare::par::DdCache::open(dd_cache));
@@ -1050,7 +1120,10 @@ fn run(cli: Cli) -> Result<()> {
             rules,
             rules_at,
             json,
+            audience,
             knowledge,
+            meanings,
+            meaning,
             batch,
         } => call(
             hand.as_deref(),
@@ -1063,7 +1136,9 @@ fn run(cli: Cli) -> Result<()> {
             &rules,
             rules_at.as_deref(),
             json,
+            audience,
             knowledge,
+            &meaning_texts(meanings.as_deref(), &meaning)?,
             batch,
         ),
         Command::ExplainAuction {
@@ -1077,7 +1152,11 @@ fn run(cli: Cli) -> Result<()> {
             card_changes,
             rules,
             rules_at,
+            meanings,
+            meaning,
+            heard_by,
             json,
+            audience,
         } => explain_auction(
             &auction,
             deal.as_deref(),
@@ -1088,7 +1167,10 @@ fn run(cli: Cli) -> Result<()> {
             &card_changes,
             &rules,
             rules_at.as_deref(),
+            &meaning_texts(meanings.as_deref(), &meaning)?,
+            heard_by,
             json,
+            audience.unwrap_or_default(),
         ),
     }
 }
@@ -1547,6 +1629,33 @@ fn card_or_stock(vocab: &Vocabulary, spec: &str) -> Result<Card> {
     }
 }
 
+/// The opponents' announced meanings from `--meanings` (a JSON array of
+/// strings) and `--meaning N=text` (N from 1), as one list aligned with
+/// the auction.
+fn meaning_texts(json: Option<&str>, each: &[String]) -> Result<Vec<String>> {
+    let mut texts: Vec<String> = match json {
+        Some(j) => serde_json::from_str(j)
+            .map_err(|e| format!("--meanings: a JSON array of strings: {e}"))?,
+        None => Vec::new(),
+    };
+    for m in each {
+        let (n, text) = m
+            .split_once('=')
+            .ok_or_else(|| format!("--meaning {m:?}: expected N=text"))?;
+        let n: usize = n
+            .trim()
+            .parse()
+            .ok()
+            .filter(|&n| n >= 1)
+            .ok_or_else(|| format!("--meaning {m:?}: N counts calls from 1"))?;
+        if texts.len() < n {
+            texts.resize(n, String::new());
+        }
+        texts[n - 1] = text.to_string();
+    }
+    Ok(texts)
+}
+
 /// One position for `call`: the hand, the calls so far and the table.
 struct Position {
     hand: bridge_types::Hand,
@@ -1554,6 +1663,8 @@ struct Position {
     dealer: bridge_types::Direction,
     vul: bridge_types::Vulnerability,
     scoring: bridge_types::ScoringMethod,
+    /// What the opponents announced, aligned with `calls`.
+    meanings: Vec<String>,
 }
 
 fn position(
@@ -1578,6 +1689,7 @@ fn position(
             .ok_or("dealer must be N, E, S or W")?,
         vul: Vulnerability::from_pbn(vul).ok_or("vulnerability must be None, NS, EW or All")?,
         scoring: ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?,
+        meanings: Vec::new(),
     })
 }
 
@@ -1588,17 +1700,38 @@ fn decide(
     p: &Position,
     knowledge: bool,
 ) -> (rbb_engine::Decision, Option<Vec<rbb_engine::ReviewRow>>) {
-    let d = engine.bid(&p.hand, p.dealer, p.vul, p.scoring, &p.calls);
+    let d = engine.bid_with(&p.hand, p.dealer, p.vul, p.scoring, &p.calls, &p.meanings);
     let rows = knowledge.then(|| {
         let mut hands: [Option<bridge_types::Hand>; 4] = Default::default();
-        hands[d.auction.position.next_caller().to_index()] = Some(p.hand.clone());
-        engine.review(p.dealer, p.vul, p.scoring, &p.calls, &hands)
+        let seat = d.auction.position.next_caller();
+        hands[seat.to_index()] = Some(p.hand.clone());
+        let heard = rbb_engine::Meanings::heard_by(seat, p.meanings.clone());
+        engine.review_with(p.dealer, p.vul, p.scoring, &p.calls, &hands, &heard)
     });
     (d, rows)
 }
 
+/// What the table is told about the chosen call: the auction read with it
+/// (as the seat service reads it), for the engine's audience.
+fn announcement(engine: &rbb_engine::Engine, p: &Position, d: &rbb_engine::Decision) -> String {
+    let mut calls = p.calls.clone();
+    calls.push(d.call.clone());
+    let read = engine.interpret(p.dealer, p.vul, p.scoring, &calls);
+    read.steps
+        .last()
+        .map(|s| s.announcement.clone())
+        .unwrap_or_default()
+}
+
 /// `call --batch`: positions from stdin as JSON lines, one decision a line.
-fn call_batch(engine: &rbb_engine::Engine, defaults: [&str; 3], knowledge: bool) -> Result<()> {
+/// With `told`, each decision also carries `announcement`: what the table
+/// is told about the chosen call, for the engine's audience.
+fn call_batch(
+    engine: &rbb_engine::Engine,
+    defaults: [&str; 3],
+    knowledge: bool,
+    told: bool,
+) -> Result<()> {
     use std::io::{BufRead, Write};
     let [dealer, vul, scoring] = defaults;
     let stdout = std::io::stdout();
@@ -1613,25 +1746,39 @@ fn call_batch(engine: &rbb_engine::Engine, defaults: [&str; 3], knowledge: bool)
             Ok(v) => {
                 let s =
                     |k: &str, d: &str| v.get(k).and_then(|x| x.as_str()).unwrap_or(d).to_string();
-                let p = match v.get("hand").and_then(|x| x.as_str()) {
-                    None => Err("no \"hand\"".to_string()),
-                    Some(h) => position(
+                let meanings = match v.get("meanings") {
+                    None | Some(serde_json::Value::Null) => Ok(Vec::new()),
+                    Some(m) => serde_json::from_value::<Vec<String>>(m.clone())
+                        .map_err(|e| format!("\"meanings\": an array of strings: {e}")),
+                };
+                let p = match (v.get("hand").and_then(|x| x.as_str()), meanings) {
+                    (None, _) => Err("no \"hand\"".to_string()),
+                    (_, Err(e)) => Err(e),
+                    (Some(h), Ok(m)) => position(
                         h,
                         &s("auction", ""),
                         &s("dealer", dealer),
                         &s("vul", vul),
                         &s("scoring", scoring),
-                    ),
+                    )
+                    .map(|p| Position { meanings: m, ..p }),
                 };
                 (v.get("id").cloned().unwrap_or(serde_json::Value::Null), p)
             }
         };
         let mut row = match result {
             Err(e) => serde_json::json!({ "error": e }),
-            Ok(p) => match decide(engine, &p, knowledge) {
-                (d, Some(rows)) => serde_json::json!({ "decision": d, "knowledge": rows }),
-                (d, None) => serde_json::to_value(&d)?,
-            },
+            Ok(p) => {
+                let (d, rows) = decide(engine, &p, knowledge);
+                let mut v = serde_json::to_value(&d)?;
+                if told {
+                    v["announcement"] = announcement(engine, &p, &d).into();
+                }
+                match rows {
+                    Some(rows) => serde_json::json!({ "decision": v, "knowledge": rows }),
+                    None => v,
+                }
+            }
         };
         if !id.is_null() {
             row["id"] = id;
@@ -1654,7 +1801,9 @@ fn call(
     rules: &Path,
     rules_at: Option<&str>,
     json: bool,
+    audience: Option<rbb_engine::Audience>,
     knowledge: bool,
+    meanings: &[String],
     batch: bool,
 ) -> Result<()> {
     let rules = rule_set(rules, rules_at)?;
@@ -1663,23 +1812,35 @@ fn call(
         Some(p) => load_card(&rules.vocab, p)?,
         None => ns.clone(),
     };
-    let engine = rbb_engine::Engine::new(&ns, &ew, &rules);
+    let engine =
+        rbb_engine::Engine::new(&ns, &ew, &rules).with_audience(audience.unwrap_or_default());
     let dealer = dealer.to_string();
     if batch {
-        return call_batch(&engine, [&dealer, vul, scoring], knowledge);
+        return call_batch(
+            &engine,
+            [&dealer, vul, scoring],
+            knowledge,
+            audience.is_some(),
+        );
     }
-    let p = position(hand.unwrap_or_default(), auction, &dealer, vul, scoring)?;
+    let mut p = position(hand.unwrap_or_default(), auction, &dealer, vul, scoring)?;
+    p.meanings = meanings.to_vec();
     let (d, rows) = decide(&engine, &p, knowledge);
+    let told = audience.map(|_| announcement(&engine, &p, &d));
     if json {
+        let mut v = serde_json::to_value(&d)?;
+        if let Some(t) = &told {
+            v["announcement"] = t.as_str().into();
+        }
         match rows {
             Some(rows) => println!(
                 "{}",
                 serde_json::to_string_pretty(&serde_json::json!({
-                    "decision": d,
+                    "decision": v,
                     "knowledge": rows,
                 }))?
             ),
-            None => println!("{}", serde_json::to_string_pretty(&d)?),
+            None => println!("{}", serde_json::to_string_pretty(&v)?),
         }
         return Ok(());
     }
@@ -1690,6 +1851,9 @@ fn call(
     println!("{}: {}", d.call, d.explanation);
     if let Some(r) = &d.rule {
         println!("  rule: {}:{} ({})", r.file, r.line, r.module);
+    }
+    if let Some(t) = &told {
+        println!("  table: {t}");
     }
     println!("\ncandidates (best-ranked first):");
     for c in &d.candidates {
@@ -1716,6 +1880,9 @@ fn call(
                 k.len[1],
                 k.len[0]
             );
+            if let Some(h) = &s.heard {
+                println!("        heard: {}", rbb_engine::heard_text(h));
+            }
         }
     }
     for w in &d.warnings {
@@ -1735,7 +1902,10 @@ fn explain_auction(
     card_changes: &[String],
     rules: &Path,
     rules_at: Option<&str>,
+    meanings: &[String],
+    heard_by: Option<char>,
     json: bool,
+    audience: rbb_engine::Audience,
 ) -> Result<()> {
     use bridge_types::{Call, Deal, Direction, Hand, ScoringMethod, Vulnerability};
     let scoring = ScoringMethod::from_pbn(scoring).ok_or("scoring must be MP or IMP")?;
@@ -1775,8 +1945,23 @@ fn explain_auction(
             card.apply_change(change)?;
         }
     }
-    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules);
-    let rows = engine.review(dealer, vul, scoring, &calls, &hands);
+    let engine = rbb_engine::Engine::new(&cards[0], &cards[1], &rules).with_audience(audience);
+    let heard = rbb_engine::Meanings {
+        texts: meanings.to_vec(),
+        listener: match heard_by {
+            Some(c) => Some(
+                Direction::from_char(c.to_ascii_uppercase())
+                    .ok_or("--heard-by must be N, E, S or W")?,
+            ),
+            None => None,
+        },
+    };
+    let rows = engine.review_with(dealer, vul, scoring, &calls, &hands, &heard);
+    for w in rows.iter().flat_map(|r| &r.step.warnings) {
+        if w.starts_with("announced") {
+            eprintln!("warning: {w}");
+        }
+    }
     if json {
         println!("{}", serde_json::to_string_pretty(&rows)?);
     } else {
@@ -1870,6 +2055,24 @@ fn bid(cmd: BidCommand) -> Result<()> {
                             m.file
                         );
                         warnings += 1;
+                    }
+                }
+            }
+            // The pack's announced names: every change applies to a card.
+            if rules.is_dir() {
+                match rbb_engine::read_announced_names(&rules) {
+                    Ok(names) => {
+                        for e in names.check(&vocab) {
+                            eprintln!("{}: {e}", rules.display());
+                            errors += 1;
+                        }
+                        if !names.is_empty() {
+                            println!("{}: {} announced names", rules.display(), names.len());
+                        }
+                    }
+                    Err(e) => {
+                        eprintln!("{e}");
+                        errors += 1;
                     }
                 }
             }
@@ -2062,6 +2265,41 @@ fn bid(cmd: BidCommand) -> Result<()> {
             knowledge: !no_knowledge,
             json,
         })?,
+        BidCommand::Alerts {
+            rules,
+            regulator,
+            card,
+            verbose,
+            json,
+            strict,
+        } => {
+            let alerts = bidspec::alerts::load(&rules)?
+                .ok_or_else(|| format!("{}: no alerts.toml", rules.display()))?;
+            if !alerts.regulators.contains_key(&regulator) {
+                return Err(format!(
+                    "--regulator {regulator}: alerts.toml has {}",
+                    alerts
+                        .regulators
+                        .keys()
+                        .cloned()
+                        .collect::<Vec<_>>()
+                        .join(", ")
+                )
+                .into());
+            }
+            let rule_set = rules_from(Some(&rules))?;
+            let base = card_or_stock(&rule_set.vocab, &card)?;
+            let mut report = bid_alerts::check(&rule_set, &base, &alerts, &regulator);
+            report.relative_to(&rules.display().to_string());
+            if json {
+                println!("{}", serde_json::to_string_pretty(&report.to_json())?);
+            } else {
+                print!("{}", report.to_text(verbose));
+            }
+            if strict && report.failures() > 0 {
+                return Err(format!("{} entries differ from the rules", report.failures()).into());
+            }
+        }
         BidCommand::Compile {
             file,
             output,

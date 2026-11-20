@@ -150,6 +150,13 @@ local checkouts").
   auction**; grep stays for finding text and comments. To troubleshoot a
   rule, `--rule file:line` (or a module, `module:line`, a file; repeatable):
   its verdict here, matched or not, and why.
+- `./dev-build.sh run -q -p rbb-cli -- bid alerts --rules <pack> [--regulator acbl|ebu|wbf] [-v] [--json] [--strict]`:
+  each `alerts.toml` entry against the rules' `alert`/`announce` flags
+  (the entry's fields on `21GF-DEFAULT`, its `after` written out as
+  auctions, `rules_at` for its call; agree / mixed / differ / unresolved
+  with file:line), plus alerted or artificial rules in modules no entry
+  names. Read-only; `--strict` exits nonzero on a difference. The parser
+  is `bidspec::alerts`.
 - `./dev-build.sh run -q -p rbb-cli -- call <S.H.D.C> -a "1NT Pass" -d S -c <card.bbsa>`:
   the engine's call with the candidate trace (`--json` for everything;
   `--knowledge` reviews the auction so far first). `call --batch -c <card>`
@@ -157,6 +164,13 @@ local checkouts").
   (`{"hand", "auction", "dealer", "vul", "scoring", "id"}`, all but `hand`
   optional), one `--json` decision a line out, ~5 ms a position instead
   of ~200 ms a process.
+- **The opponents' announced meanings** (`--meanings '["", "Cappelletti:
+  ..."]'` aligned with the auction, or `--meaning N=text`, on `call`,
+  `call --batch` as `meanings`, and `explain-auction` with `--heard-by
+  SEAT`): a convention name the pack's `announced-names.toml` knows
+  switches that field on in their card; otherwise an unread call shows
+  what its text says (`meanings::parse`). Partner's are never read.
+  `Engine::bid_with` / `interpret_with`; docs/CONTRACT.md.
 - `./dev-build.sh run -q -p rbb-cli -- explain-auction -a "1NT Pass 2C Pass 2H" -d N -c <card> --deal "N:..."`:
   the auction call by call: what is known about every seat after each
   call (`*` marks what the call changed), the flags (F1, GF, inv, ask,

@@ -16,6 +16,7 @@ use crate::position::{side, Ask, Forcing, Position, SideState};
 use crate::sample;
 use crate::system::{RuleEntry, RuleRef, System};
 
+mod heard;
 mod listing;
 use listing::{alts_text, public_failure, tri_word, Rejected};
 pub use listing::{RuleListing, RuleOption, RuleRejection};
@@ -55,10 +56,77 @@ pub struct Step {
     /// What the table is told: the rule's description and what the call
     /// newly showed, suits spelled out (`explain::explanation`): "5+
     /// spades; 10-21 HCP". Empty for a call no rule reads that showed
-    /// nothing.
+    /// nothing. Written for the engine's audience (`Engine::with_audience`,
+    /// `Audience::Human` unless set); `announcement_for` writes it for
+    /// another.
     pub announcement: String,
+    /// What the announcement is made from, to write it for any audience.
+    #[serde(skip)]
+    pub announced: crate::explain::Announced,
     /// Problems met while interpreting (unknown terms, contradictions).
     pub warnings: Vec<String>,
+    /// What the opponents announced for this call and how it was read
+    /// (`Engine::interpret_with`); `None` when nothing was heard.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub heard: Option<Heard>,
+}
+
+/// An opponent's announced meaning of one call, and what the engine made
+/// of it (`crate::meanings`).
+#[derive(Debug, Clone, Default, PartialEq, Serialize)]
+pub struct Heard {
+    /// The text as announced.
+    pub text: String,
+    /// The convention name the pack's table matched (`announced-names.toml`).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// The card changes that name made in their side's card.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub sets: Vec<String>,
+    /// What the text was read to add to the call's meaning, as conditions
+    /// (`hcp=15..17`, `S>=5`): for a call no rule read, all it was read to
+    /// show; for one a rule read, the parts that narrowed the rule's
+    /// reading (`read`).
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub shows: Vec<String>,
+    /// How the text met the rule's reading of the call.
+    #[serde(skip_serializing_if = "HeardRead::is_nothing")]
+    pub read: HeardRead,
+    /// The text marked the call artificial.
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub artificial: bool,
+    /// The force the text named.
+    #[serde(skip_serializing_if = "is_no_force")]
+    pub forcing: Forcing,
+}
+
+/// How an announced text met the engine's own reading of the call
+/// (Rick, 2026-11-20).
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize)]
+#[serde(rename_all = "snake_case")]
+pub enum HeardRead {
+    /// The text says nothing the parser reads (or only a name).
+    #[default]
+    Nothing,
+    /// No rule read the call: what the text says is what it shows.
+    Unread,
+    /// A rule read the call and the text narrowed it (`shows`).
+    Narrowed,
+    /// A rule read the call and the text says nothing it does not.
+    Agrees,
+    /// A rule read the call and the text contradicts it: the rule's
+    /// reading is kept and the text ignored.
+    Contradicts,
+}
+
+impl HeardRead {
+    pub fn is_nothing(&self) -> bool {
+        *self == HeardRead::Nothing
+    }
+}
+
+fn is_no_force(f: &Forcing) -> bool {
+    *f == Forcing::None
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -138,6 +206,12 @@ fn pos_key(pos: &Position) -> String {
         k.push(' ');
         k.push_str(&c.to_pbn());
     }
+    // What an announced meaning added to a call no rule read is part of
+    // the position too (`Position::heard`).
+    if !pos.heard.is_empty() {
+        k.push_str(" | ");
+        k.push_str(&pos.heard);
+    }
     k
 }
 
@@ -152,12 +226,29 @@ pub struct Engine {
     systems: [System; 2],
     /// By side: how each side counts points (its card's `general.style`).
     valuation: [Valuation; 2],
-    pool: Vec<Facts>,
+    /// By side: the cards the systems were made from, and the rules, for
+    /// the variants an announced convention name asks for (`variant`).
+    cards: [Card; 2],
+    rules: Arc<crate::RuleSet>,
+    /// Engines whose cards carry what the opponents announced, by the
+    /// changes made (`variant`).
+    variants: Mutex<HashMap<String, Arc<Engine>>>,
+    pool: Arc<Vec<Facts>>,
     consistent: Mutex<IndexCache>,
     /// Serial numbers of the distinct consistent sets (`Consistent`).
     interned: Mutex<HashMap<Vec<u32>, usize, FastHash>>,
     descriptiveness: Mutex<HashMap<String, f64, FastHash>>,
     cands: Mutex<CandCache>,
+    /// Who `Step::announcement` is written for.
+    audience: crate::explain::Audience,
+}
+
+impl Step {
+    /// What the table is told about this call, written for `audience`
+    /// (`announcement` is the engine's audience's).
+    pub fn announcement_for(&self, audience: crate::explain::Audience) -> String {
+        self.announced.render(audience)
+    }
 }
 
 impl Engine {
@@ -182,17 +273,34 @@ impl Engine {
         Engine {
             systems: [System::new(ns, modules), System::new(ew, modules)],
             valuation: [Valuation::for_card(ns), Valuation::for_card(ew)],
-            pool: sample::pool(),
+            cards: [ns.clone(), ew.clone()],
+            rules: Arc::new(rules.clone()),
+            variants: Mutex::default(),
+            pool: Arc::new(sample::pool()),
             consistent: Mutex::default(),
             interned: Mutex::default(),
             descriptiveness: Mutex::default(),
             cands: Mutex::default(),
+            audience: Default::default(),
         }
+    }
+
+    /// Write `Step::announcement` for `audience` (`Audience::Human` by
+    /// default; the seat service's robots read `Audience::Brill`).
+    pub fn with_audience(mut self, audience: crate::explain::Audience) -> Engine {
+        self.audience = audience;
+        self
+    }
+
+    /// Who `Step::announcement` is written for.
+    pub fn audience(&self) -> crate::explain::Audience {
+        self.audience
     }
 
     /// Count total points differently (weights in quarter points).
     pub fn with_valuation(mut self, valuation: Valuation) -> Engine {
         self.valuation = [valuation; 2];
+        self.variants.lock().unwrap().clear();
         self.descriptiveness.lock().unwrap().clear();
         self.consistent.lock().unwrap().clear();
         self.cands.lock().unwrap().clear();
@@ -496,12 +604,13 @@ impl Engine {
                 pos.is_imps(),
             );
             format!(
-                "{}|{}|{}|{:?}|{:?}|{board:?}",
+                "{}|{}|{}|{:?}|{:?}|{board:?}|{}",
                 side(actor),
                 c.entry,
                 c.call,
                 sorted(&c.b),
-                pos.calls
+                pos.calls,
+                pos.heard
             )
         };
         if let Some(v) = self.descriptiveness.lock().unwrap().get(&key) {
@@ -655,7 +764,9 @@ impl Engine {
             artificial: false,
             knowledge: k.clone(),
             announcement: String::new(),
+            announced: Default::default(),
             warnings: Vec::new(),
+            heard: None,
         };
         let best = matching.first().copied();
         // What the table is told the call is: every rule that reads it
@@ -835,7 +946,8 @@ impl Engine {
         pos.unread.resize(pos.calls.len(), false);
         pos.unread.push(step.rule.is_none());
         pos.calls.push(call.clone());
-        step.announcement = announce(pos, caller, &before, &was, &step, &told);
+        step.announced = announce(pos, caller, &before, &was, &step, &told);
+        step.announcement = step.announced.render(self.audience);
         step
     }
 
@@ -1393,9 +1505,11 @@ fn common_description(texts: &[String]) -> String {
     }
 }
 
-/// `Step::announcement` for `step`, just applied to `pos`. A force counts
-/// when this call set it, not when it only kept partner's. A pass no rule
-/// reads is announced as "Pass" and what it shows.
+/// What the table is told about `step`, just applied to `pos`
+/// (`Step::announced`). A force counts when this call set it, not when it
+/// only kept partner's. A pass no rule reads is announced as "Pass" and what
+/// it shows. A transfer is a question this call asked (`transfer`, `texas`,
+/// `texas2`) naming one suit.
 fn announce(
     pos: &Position,
     caller: Direction,
@@ -1403,7 +1517,7 @@ fn announce(
     was: &crate::SideState,
     step: &Step,
     told: &str,
-) -> String {
+) -> crate::explain::Announced {
     let now = pos.side_state(caller);
     let forcing = if now.forcing_by == Some(caller)
         && (was.forcing_by != Some(caller) || was.forcing != now.forcing)
@@ -1417,8 +1531,17 @@ fn announce(
         None if step.call.is_pass() => "Pass",
         None => "",
     };
+    let transfer = now
+        .ask
+        .as_ref()
+        .filter(|a| a.by == caller && was.ask.as_ref() != Some(*a))
+        .filter(|a| matches!(a.kind.as_str(), "transfer" | "texas" | "texas2"))
+        .and_then(|a| match a.args.as_slice() {
+            [s] => crate::eval::suit_of_strain(*s),
+            _ => None,
+        });
     let seat = caller.to_index();
-    crate::explain::explanation(&crate::explain::Shown {
+    let mut announced = crate::explain::Announced::new(&crate::explain::Shown {
         description,
         before,
         after: &pos.knowledge[seat],
@@ -1426,7 +1549,9 @@ fn announce(
         artificial: step.artificial,
         forcing,
         trump: now.trump.and_then(crate::eval::suit_of_strain),
-    })
+    });
+    announced.transfer = transfer;
+    announced
 }
 
 fn apply_sets(

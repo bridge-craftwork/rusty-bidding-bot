@@ -8,6 +8,7 @@
 //!
 //! See docs/LANGUAGE.md for the language.
 
+pub mod alerts;
 pub mod ast;
 mod check;
 pub mod coverage;
