@@ -1,7 +1,7 @@
 {
  "generated_from": "bridge-common-conventions pack.json (do not edit: python3 scripts/sync_pack.py)",
- "source_commit": "e6fc37c5c045ac63c3432947bab976a642d73448",
- "rules_number": 30,
+ "source_commit": "51506dcb3b8cd99bd42b1a46bbbd8603944cf4e4",
+ "rules_number": 32,
  "schema": "pack/v1",
  "pack": {
   "name": "bridge-common-conventions",
@@ -10342,6 +10342,1513 @@
    }
   ]
  },
+ "announced_names": {
+  "name": [
+   {
+    "names": [
+     "BART"
+    ],
+    "set": [
+     "bidding_conventions/bart"
+    ]
+   },
+   {
+    "names": [
+     "Benjamin 2♦",
+     "Benjamin",
+     "Benjamin twos"
+    ],
+    "set": [
+     "bidding_conventions/benjamin_2d",
+     "opening.2c=bidding_conventions/benjamin_2d",
+     "opening.2d=bidding_conventions/benjamin_2d"
+    ]
+   },
+   {
+    "names": [
+     "Bergen raises",
+     "Bergen",
+     "Bergen raise"
+    ],
+    "set": [
+     "bidding_conventions/bergen_raises"
+    ]
+   },
+   {
+    "names": [
+     "Blackwood",
+     "Standard Blackwood",
+     "Easley Blackwood",
+     "Plain Blackwood",
+     "4NT ace ask"
+    ],
+    "set": [
+     "bidding_conventions/blackwood"
+    ]
+   },
+   {
+    "names": [
+     "Checkback",
+     "Checkback Stayman"
+    ],
+    "set": [
+     "bidding_conventions/checkback"
+    ]
+   },
+   {
+    "names": [
+     "Control bids",
+     "Control-showing bids",
+     "Italian cuebids",
+     "Italian cue bids",
+     "Ace-and-king cuebids"
+    ],
+    "set": [
+     "bidding_conventions/control_bids"
+    ]
+   },
+   {
+    "names": [
+     "DEPO",
+     "Double even, pass odd"
+    ],
+    "set": [
+     "bidding_conventions/depo"
+    ]
+   },
+   {
+    "names": [
+     "DOPI and ROPI",
+     "DOPI",
+     "ROPI",
+     "DOPI/ROPI",
+     "D0P1",
+     "R0P1"
+    ],
+    "set": [
+     "bidding_conventions/dopi_ropi",
+     "bidding_conventions/dopi_ropi:dopi",
+     "bidding_conventions/dopi_ropi:ropi"
+    ]
+   },
+   {
+    "names": [
+     "Drury",
+     "Reverse Drury"
+    ],
+    "set": [
+     "bidding_conventions/drury",
+     "bidding_conventions/drury:reverse"
+    ]
+   },
+   {
+    "names": [
+     "Original Drury",
+     "Standard Drury"
+    ],
+    "set": [
+     "bidding_conventions/drury",
+     "bidding_conventions/drury:reverse=false"
+    ]
+   },
+   {
+    "names": [
+     "Exclusion Blackwood",
+     "Exclusion",
+     "Exclusion RKC",
+     "Voidwood",
+     "Exclusion keycard"
+    ],
+    "set": [
+     "bidding_conventions/exclusion_blackwood"
+    ]
+   },
+   {
+    "names": [
+     "Flannery 2♦",
+     "Flannery"
+    ],
+    "set": [
+     "bidding_conventions/flannery",
+     "opening.2d=bidding_conventions/flannery"
+    ]
+   },
+   {
+    "names": [
+     "Forcing 1NT",
+     "Forcing NT",
+     "1NT forcing",
+     "1NT forcing response"
+    ],
+    "set": [
+     "bidding_conventions/forcing_1nt",
+     "major_openings.one_nt_response.forcing=true"
+    ]
+   },
+   {
+    "names": [
+     "4NT opening"
+    ],
+    "set": [
+     "bidding_conventions/four_nt_opening"
+    ]
+   },
+   {
+    "names": [
+     "Fourth Suit Forcing",
+     "4th suit forcing",
+     "FSF",
+     "Fourth suit game force",
+     "4SF"
+    ],
+    "set": [
+     "bidding_conventions/fourth_suit_forcing"
+    ]
+   },
+   {
+    "names": [
+     "French 2♦"
+    ],
+    "set": [
+     "bidding_conventions/french_2d",
+     "opening.2d=bidding_conventions/french_2d"
+    ]
+   },
+   {
+    "names": [
+     "Gambling 3NT",
+     "Acol 3NT"
+    ],
+    "set": [
+     "bidding_conventions/gambling_3nt"
+    ]
+   },
+   {
+    "names": [
+     "Gazzilli"
+    ],
+    "set": [
+     "bidding_conventions/gazzilli"
+    ]
+   },
+   {
+    "names": [
+     "Gerber",
+     "4♣ Gerber",
+     "1430 Gerber"
+    ],
+    "set": [
+     "bidding_conventions/gerber"
+    ]
+   },
+   {
+    "names": [
+     "Grand slam force",
+     "GSF",
+     "Josephine",
+     "5NT grand slam force"
+    ],
+    "set": [
+     "bidding_conventions/grand_slam_force"
+    ]
+   },
+   {
+    "names": [
+     "Help Suit Game Try",
+     "Help suit"
+    ],
+    "set": [
+     "bidding_conventions/help_suit_game_try"
+    ]
+   },
+   {
+    "names": [
+     "Impossible 2♠",
+     "Impossible Spade"
+    ],
+    "set": [
+     "bidding_conventions/impossible_2s"
+    ]
+   },
+   {
+    "names": [
+     "Ingberman 2NT",
+     "Ingberman",
+     "Lebensohl after a reverse"
+    ],
+    "set": [
+     "bidding_conventions/ingberman"
+    ]
+   },
+   {
+    "names": [
+     "Intermediate two-bids",
+     "Intermediate twos",
+     "Intermediate two"
+    ],
+    "set": [
+     "opening.2d=bidding_conventions/intermediate_twos",
+     "opening.2h=bidding_conventions/intermediate_twos",
+     "opening.2s=bidding_conventions/intermediate_twos"
+    ]
+   },
+   {
+    "names": [
+     "Inverted Minor Raises",
+     "Inverted minors",
+     "Inverted raises",
+     "Inverted minor"
+    ],
+    "set": [
+     "bidding_conventions/inverted_minors"
+    ]
+   },
+   {
+    "names": [
+     "Jacoby 2NT"
+    ],
+    "set": [
+     "bidding_conventions/jacoby_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Jacoby Transfers",
+     "Jacoby transfer"
+    ],
+    "set": [
+     "bidding_conventions/jacoby_transfers"
+    ]
+   },
+   {
+    "names": [
+     "Kickback",
+     "Kickback keycard",
+     "Redwood"
+    ],
+    "set": [
+     "bidding_conventions/kickback"
+    ]
+   },
+   {
+    "names": [
+     "Kokish relay",
+     "Kokish"
+    ],
+    "set": [
+     "bidding_conventions/kokish"
+    ]
+   },
+   {
+    "names": [
+     "Kokish game tries"
+    ],
+    "set": [
+     "bidding_conventions/kokish_game_tries"
+    ]
+   },
+   {
+    "names": [
+     "Lars Multi 2♦",
+     "Lars Multi"
+    ],
+    "set": [
+     "bidding_conventions/lars_multi"
+    ]
+   },
+   {
+    "names": [
+     "Last Train",
+     "Last train to Clarksville"
+    ],
+    "set": [
+     "bidding_conventions/last_train"
+    ]
+   },
+   {
+    "names": [
+     "McCabe adjunct",
+     "McCabe"
+    ],
+    "set": [
+     "bidding_conventions/mccabe"
+    ]
+   },
+   {
+    "names": [
+     "Mini-Roman 2♦",
+     "Mini-Roman",
+     "Roman 2♦",
+     "Mini-Maxi Roman"
+    ],
+    "set": [
+     "bidding_conventions/mini_roman_2d",
+     "opening.2d=bidding_conventions/mini_roman_2d"
+    ]
+   },
+   {
+    "names": [
+     "Mini-splinters"
+    ],
+    "set": [
+     "bidding_conventions/mini_splinters"
+    ]
+   },
+   {
+    "names": [
+     "Minor Suit Stayman",
+     "MSS",
+     "2♠ Minor Suit Stayman",
+     "Minor Stayman"
+    ],
+    "set": [
+     "bidding_conventions/minor_suit_stayman"
+    ]
+   },
+   {
+    "names": [
+     "Minor-Suit Transfers over 1NT",
+     "minor suit transfers",
+     "four-suit transfers",
+     "4-way transfers",
+     "four way transfers",
+     "2♠ relay",
+     "Minor transfer",
+     "Minor transfers"
+    ],
+    "set": [
+     "bidding_conventions/minor_suit_transfers",
+     "bidding_conventions/minor_suit_transfers:over_1nt"
+    ]
+   },
+   {
+    "names": [
+     "Minorwood",
+     "4m keycard",
+     "Crosswood"
+    ],
+    "set": [
+     "bidding_conventions/minorwood"
+    ]
+   },
+   {
+    "names": [
+     "Modified Jacoby 2NT",
+     "Modified Jacoby"
+    ],
+    "set": [
+     "bidding_conventions/modified_jacoby_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Muiderberg twos",
+     "Muiderberg",
+     "Muiderberg 2♥/2♠"
+    ],
+    "set": [
+     "bidding_conventions/muiderberg",
+     "opening.2h=bidding_conventions/muiderberg",
+     "opening.2s=bidding_conventions/muiderberg"
+    ]
+   },
+   {
+    "names": [
+     "Multi 2♦",
+     "Multi",
+     "Multi-colored 2♦"
+    ],
+    "set": [
+     "bidding_conventions/multi_2d",
+     "opening.2d=bidding_conventions/multi_2d"
+    ]
+   },
+   {
+    "names": [
+     "Namyats",
+     "South African Texas"
+    ],
+    "set": [
+     "bidding_conventions/namyats"
+    ]
+   },
+   {
+    "names": [
+     "New Minor Forcing",
+     "NMF"
+    ],
+    "set": [
+     "bidding_conventions/new_minor_forcing"
+    ]
+   },
+   {
+    "names": [
+     "Ogust",
+     "Ogust 2NT"
+    ],
+    "set": [
+     "bidding_conventions/ogust",
+     "two_level.weak_two_2nt_response=ogust"
+    ]
+   },
+   {
+    "names": [
+     "Over-splinters",
+     "Over-splinter"
+    ],
+    "set": [
+     "bidding_conventions/over_splinters"
+    ]
+   },
+   {
+    "names": [
+     "Parrish relay"
+    ],
+    "set": [
+     "bidding_conventions/two_heart_bust",
+     "bidding_conventions/two_heart_bust:relay"
+    ]
+   },
+   {
+    "names": [
+     "Pick-a-slam 5NT",
+     "Pick-a-slam",
+     "5NT pick a slam",
+     "5NT choice of slams"
+    ],
+    "set": [
+     "bidding_conventions/pick_a_slam_5nt"
+    ]
+   },
+   {
+    "names": [
+     "Picture 3NT",
+     "3NT picture bid",
+     "Picture bid"
+    ],
+    "set": [
+     "bidding_conventions/picture_3nt"
+    ]
+   },
+   {
+    "names": [
+     "Polish two-suiters",
+     "Polish 2♥/2♠"
+    ],
+    "set": [
+     "bidding_conventions/polish_two_suiters",
+     "opening.2h=bidding_conventions/polish_two_suiters",
+     "opening.2s=bidding_conventions/polish_two_suiters"
+    ]
+   },
+   {
+    "names": [
+     "Precision 1♣",
+     "Strong club",
+     "Strong 1♣"
+    ],
+    "set": [
+     "bidding_conventions/precision_1c"
+    ]
+   },
+   {
+    "names": [
+     "Precision 2♦"
+    ],
+    "set": [
+     "bidding_conventions/precision_2d",
+     "opening.2d=bidding_conventions/precision_2d"
+    ]
+   },
+   {
+    "names": [
+     "Keycard over preempts",
+     "Preempt keycard",
+     "4♣ keycard over a weak two"
+    ],
+    "set": [
+     "bidding_conventions/preempt_keycard"
+    ]
+   },
+   {
+    "names": [
+     "Puppet Stayman",
+     "Puppet",
+     "5-card Stayman",
+     "five-card Stayman"
+    ],
+    "set": [
+     "bidding_conventions/puppet_stayman"
+    ]
+   },
+   {
+    "names": [
+     "Quantitative 4NT",
+     "Quantitative"
+    ],
+    "set": [
+     "bidding_conventions/quantitative_4nt"
+    ]
+   },
+   {
+    "names": [
+     "Range Stayman",
+     "Size ask",
+     "2♠ size ask"
+    ],
+    "set": [
+     "bidding_conventions/range_stayman"
+    ]
+   },
+   {
+    "names": [
+     "Reverse Bergen raises",
+     "Reverse Bergen"
+    ],
+    "set": [
+     "bidding_conventions/bergen_raises",
+     "bidding_conventions/bergen_raises:reverse"
+    ]
+   },
+   {
+    "names": [
+     "Reverse Flannery"
+    ],
+    "set": [
+     "bidding_conventions/reverse_flannery",
+     "bidding_conventions/reverse_flannery:two_h",
+     "bidding_conventions/reverse_flannery:two_s"
+    ]
+   },
+   {
+    "names": [
+     "Roman Keycard",
+     "RKCB",
+     "Roman Key Card Blackwood",
+     "Keycard",
+     "1430",
+     "0314",
+     "RKC",
+     "Roman Keycard Blackwood",
+     "Keycard Blackwood"
+    ],
+    "set": [
+     "bidding_conventions/roman_keycard"
+    ]
+   },
+   {
+    "names": [
+     "Roudi"
+    ],
+    "set": [
+     "bidding_conventions/roudi"
+    ]
+   },
+   {
+    "names": [
+     "Schuler shift",
+     "Schuler"
+    ],
+    "set": [
+     "bidding_conventions/schuler_shift"
+    ]
+   },
+   {
+    "names": [
+     "Semi-forcing 1NT",
+     "Semi-forcing NT",
+     "1NT semi-forcing"
+    ],
+    "set": [
+     "bidding_conventions/semi_forcing_1nt",
+     "major_openings.one_nt_response.semi_forcing=true"
+    ]
+   },
+   {
+    "names": [
+     "Serious 3NT",
+     "Non-serious 3NT",
+     "Frivolous 3NT",
+     "Nonserious 3NT"
+    ],
+    "set": [
+     "bidding_conventions/serious_3nt"
+    ]
+   },
+   {
+    "names": [
+     "Six-key Roman Keycard",
+     "Six-key RKCB",
+     "6-key RKC",
+     "Six key Blackwood"
+    ],
+    "set": [
+     "bidding_conventions/six_key_rkcb"
+    ]
+   },
+   {
+    "names": [
+     "Smolen"
+    ],
+    "set": [
+     "bidding_conventions/smolen"
+    ]
+   },
+   {
+    "names": [
+     "Soloway jump shifts",
+     "Soloway"
+    ],
+    "set": [
+     "bidding_conventions/soloway"
+    ]
+   },
+   {
+    "names": [
+     "Spiral",
+     "Spiral cue bids",
+     "Spiral 2NT"
+    ],
+    "set": [
+     "bidding_conventions/spiral"
+    ]
+   },
+   {
+    "names": [
+     "Splinters",
+     "Splinter",
+     "Splinter bids",
+     "Splinter raise",
+     "Splinter bid"
+    ],
+    "set": [
+     "bidding_conventions/splinters",
+     "bidding_conventions/splinters:by_responder",
+     "bidding_conventions/splinters:by_opener"
+    ]
+   },
+   {
+    "names": [
+     "Stayman",
+     "Regular Stayman",
+     "Non-forcing Stayman",
+     "Forcing Stayman",
+     "Garbage Stayman",
+     "Crawling Stayman"
+    ],
+    "set": [
+     "bidding_conventions/stayman"
+    ]
+   },
+   {
+    "names": [
+     "Strong 2♣",
+     "2♣ strong",
+     "Strong artificial 2♣",
+     "2♣ forcing"
+    ],
+    "set": [
+     "bidding_conventions/strong_2c",
+     "opening.2c=bidding_conventions/strong_2c"
+    ]
+   },
+   {
+    "names": [
+     "Strong jump shifts",
+     "Strong jump shift",
+     "SJS"
+    ],
+    "set": [
+     "bidding_conventions/strong_jump_shifts",
+     "bidding_conventions/strong_jump_shifts:two_level"
+    ]
+   },
+   {
+    "names": [
+     "Strong two-bids",
+     "Strong twos",
+     "Strong two",
+     "Acol twos",
+     "Acol two-bids"
+    ],
+    "set": [
+     "opening.2d=bidding_conventions/strong_twos",
+     "opening.2h=bidding_conventions/strong_twos",
+     "opening.2s=bidding_conventions/strong_twos"
+    ]
+   },
+   {
+    "names": [
+     "Super-Accepting a Transfer",
+     "super-accept",
+     "superaccept",
+     "super-acceptance"
+    ],
+    "set": [
+     "bidding_conventions/jacoby_transfers",
+     "bidding_conventions/jacoby_transfers:super_accept",
+     "bidding_conventions/jacoby_transfers:super_accept_doubleton"
+    ]
+   },
+   {
+    "names": [
+     "Texas transfers",
+     "Texas",
+     "4-level transfers",
+     "Texas transfer"
+    ],
+    "set": [
+     "bidding_conventions/texas",
+     "bidding_conventions/texas:over_1nt"
+    ]
+   },
+   {
+    "names": [
+     "3NT raise of a major"
+    ],
+    "set": [
+     "bidding_conventions/three_nt_raise"
+    ]
+   },
+   {
+    "names": [
+     "Tislevoll slam try",
+     "Tislevoll"
+    ],
+    "set": [
+     "bidding_conventions/tislevoll"
+    ]
+   },
+   {
+    "names": [
+     "Transfer Walsh",
+     "Transfer responses to 1♣",
+     "transfer responses"
+    ],
+    "set": [
+     "bidding_conventions/transfer_walsh"
+    ]
+   },
+   {
+    "names": [
+     "Transfers after a takeout double",
+     "Transfer responses after a double",
+     "Transfers over a double",
+     "Rubin transfers"
+    ],
+    "set": [
+     "bidding_conventions/transfers_after_double"
+    ]
+   },
+   {
+    "names": [
+     "2♥ bust over 2♣",
+     "Parrish",
+     "2♥ bust",
+     "Parrish 2♥ bust",
+     "Double negative",
+     "Second negative"
+    ],
+    "set": [
+     "bidding_conventions/two_heart_bust"
+    ]
+   },
+   {
+    "names": [
+     "2/1 Game Force",
+     "2/1 GF"
+    ],
+    "set": [
+     "bidding_conventions/two_over_one"
+    ]
+   },
+   {
+    "names": [
+     "Two-way Drury",
+     "2-way Drury",
+     "Two-way Reverse Drury"
+    ],
+    "set": [
+     "bidding_conventions/drury",
+     "bidding_conventions/drury:reverse",
+     "bidding_conventions/drury:two_d"
+    ]
+   },
+   {
+    "names": [
+     "Two-way game tries",
+     "Two-way game try"
+    ],
+    "set": [
+     "bidding_conventions/two_way_game_tries"
+    ]
+   },
+   {
+    "names": [
+     "Two-way new minor forcing",
+     "Two-way NMF",
+     "xyNT"
+    ],
+    "set": [
+     "bidding_conventions/two_way_nmf"
+    ]
+   },
+   {
+    "names": [
+     "Walsh",
+     "Walsh style",
+     "Walsh responses"
+    ],
+    "set": [
+     "bidding_conventions/walsh"
+    ]
+   },
+   {
+    "names": [
+     "Weak jump shifts",
+     "Weak jump shift",
+     "WJS"
+    ],
+    "set": [
+     "bidding_conventions/weak_jump_shifts",
+     "bidding_conventions/weak_jump_shifts:two_level"
+    ]
+   },
+   {
+    "names": [
+     "Western cue bid",
+     "Western cuebid"
+    ],
+    "set": [
+     "bidding_conventions/western_cuebid"
+    ]
+   },
+   {
+    "names": [
+     "Wilkosz 2♦",
+     "Wilkosz"
+    ],
+    "set": [
+     "bidding_conventions/wilkosz",
+     "opening.2d=bidding_conventions/wilkosz"
+    ]
+   },
+   {
+    "names": [
+     "Wolff signoff",
+     "Wolff",
+     "Transfer Wolff"
+    ],
+    "set": [
+     "bidding_conventions/wolff_signoff"
+    ]
+   },
+   {
+    "names": [
+     "XYZ"
+    ],
+    "set": [
+     "bidding_conventions/xyz"
+    ]
+   },
+   {
+    "names": [
+     "Anti-lead-directing doubles",
+     "Anti-lead-directing double",
+     "Anti lead directing"
+    ],
+    "set": [
+     "competitive_bidding/anti_lead_directing_doubles"
+    ]
+   },
+   {
+    "names": [
+     "BROMAD",
+     "Bergen raises over a double"
+    ],
+    "set": [
+     "competitive_bidding/bromad"
+    ]
+   },
+   {
+    "names": [
+     "Cappelletti over 1NT",
+     "Cappelletti",
+     "Hamilton",
+     "Pottage"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/cappelletti",
+     "defence_to_1nt.weak=competitive_bidding/cappelletti"
+    ]
+   },
+   {
+    "names": [
+     "Collante"
+    ],
+    "set": [
+     "competitive_bidding/collante"
+    ]
+   },
+   {
+    "names": [
+     "CRASH"
+    ],
+    "set": [
+     "competitive_bidding/crash"
+    ]
+   },
+   {
+    "names": [
+     "DONT",
+     "D.O.N.T.",
+     "Disturb Opponents' No Trump",
+     "Disturbing Opponents NT"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/dont",
+     "defence_to_1nt.weak=competitive_bidding/dont"
+    ]
+   },
+   {
+    "names": [
+     "Equal level conversion",
+     "ELC"
+    ],
+    "set": [
+     "competitive_bidding/equal_level_conversion"
+    ]
+   },
+   {
+    "names": [
+     "Exit transfers",
+     "Runout after 1NT doubled"
+    ],
+    "set": [
+     "competitive_bidding/exit_transfers"
+    ]
+   },
+   {
+    "names": [
+     "Fit-showing jumps",
+     "Fit jumps",
+     "Fit showing jump"
+    ],
+    "set": [
+     "competitive_bidding/fit_showing_jumps"
+    ]
+   },
+   {
+    "names": [
+     "Forcing pass"
+    ],
+    "set": [
+     "competitive_bidding/forcing_pass"
+    ]
+   },
+   {
+    "names": [
+     "Ghestem"
+    ],
+    "set": [
+     "competitive_bidding/ghestem"
+    ]
+   },
+   {
+    "names": [
+     "Good/bad 2NT"
+    ],
+    "set": [
+     "competitive_bidding/good_bad_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Jordan 2NT",
+     "Jordan",
+     "Truscott",
+     "Jordan Truscott 2NT",
+     "Dormer",
+     "Truscott 2NT"
+    ],
+    "set": [
+     "competitive_bidding/jordan_2nt",
+     "competitive_bidding/jordan_2nt:over_major",
+     "competitive_bidding/jordan_2nt:over_minor"
+    ]
+   },
+   {
+    "names": [
+     "Landy"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/landy",
+     "defence_to_1nt.weak=competitive_bidding/landy"
+    ]
+   },
+   {
+    "names": [
+     "Lead-directing doubles",
+     "Lead-directing double",
+     "Lightner"
+    ],
+    "set": [
+     "competitive_bidding/lead_directing_doubles"
+    ]
+   },
+   {
+    "names": [
+     "Leaping Michaels",
+     "Leaping Mich",
+     "Leap Mich"
+    ],
+    "set": [
+     "competitive_bidding/leaping_michaels"
+    ]
+   },
+   {
+    "names": [
+     "Lebensohl",
+     "Lebensohl over interference"
+    ],
+    "set": [
+     "competitive_bidding/lebensohl",
+     "competitive_bidding/lebensohl:over_1nt_interference",
+     "competitive_bidding/lebensohl:after_weak_two_double"
+    ]
+   },
+   {
+    "names": [
+     "Mathe",
+     "Mathe over 1♣"
+    ],
+    "set": [
+     "competitive_bidding/mathe"
+    ]
+   },
+   {
+    "names": [
+     "Maximal doubles",
+     "Maximal double"
+    ],
+    "set": [
+     "competitive_bidding/maximal_doubles"
+    ]
+   },
+   {
+    "names": [
+     "Meckwell over 1NT",
+     "Meckwell",
+     "Meckwell defense"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/meckwell",
+     "defence_to_1nt.weak=competitive_bidding/meckwell"
+    ]
+   },
+   {
+    "names": [
+     "Michaels cue bid",
+     "Michaels",
+     "Michaels cuebid"
+    ],
+    "set": [
+     "competitive_bidding/michaels"
+    ]
+   },
+   {
+    "names": [
+     "Mitchell Stayman"
+    ],
+    "set": [
+     "competitive_bidding/mitchell_stayman"
+    ]
+   },
+   {
+    "names": [
+     "Mixed raise",
+     "Mixed raises"
+    ],
+    "set": [
+     "competitive_bidding/mixed_raise"
+    ]
+   },
+   {
+    "names": [
+     "Modified Cappelletti"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/modified_cappelletti",
+     "defence_to_1nt.weak=competitive_bidding/modified_cappelletti"
+    ]
+   },
+   {
+    "names": [
+     "Landy and Multi-Landy over 1NT",
+     "Multi-Landy",
+     "Woolsey"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/multi_landy",
+     "defence_to_1nt.weak=competitive_bidding/multi_landy"
+    ]
+   },
+   {
+    "names": [
+     "Negative Doubles",
+     "Negative double",
+     "Sputnik"
+    ],
+    "set": [
+     "competitive_bidding/negative_doubles"
+    ]
+   },
+   {
+    "names": [
+     "Non-leaping Michaels"
+    ],
+    "set": [
+     "competitive_bidding/non_leaping_michaels"
+    ]
+   },
+   {
+    "names": [
+     "Raptor 1NT",
+     "Raptor"
+    ],
+    "set": [
+     "competitive_bidding/raptor"
+    ]
+   },
+   {
+    "names": [
+     "Responsive Doubles",
+     "Responsive double"
+    ],
+    "set": [
+     "competitive_bidding/responsive_doubles"
+    ]
+   },
+   {
+    "names": [
+     "Rodrigue"
+    ],
+    "set": [
+     "competitive_bidding/rodrigue"
+    ]
+   },
+   {
+    "names": [
+     "Rosenkranz double",
+     "Rosenkranz",
+     "Rosenkranz redouble"
+    ],
+    "set": [
+     "competitive_bidding/rosenkranz"
+    ]
+   },
+   {
+    "names": [
+     "Rubensohl",
+     "Transfer Lebensohl"
+    ],
+    "set": [
+     "competitive_bidding/rubensohl",
+     "competitive_bidding/rubensohl:over_1nt_interference",
+     "competitive_bidding/rubensohl:after_double"
+    ]
+   },
+   {
+    "names": [
+     "Sandwich 1NT",
+     "Sandwich NT"
+    ],
+    "set": [
+     "competitive_bidding/sandwich_nt"
+    ]
+   },
+   {
+    "names": [
+     "Scrambling 2NT",
+     "Scrambling"
+    ],
+    "set": [
+     "competitive_bidding/scrambling_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Snapdragon doubles",
+     "Snapdragon",
+     "Snapdragon double"
+    ],
+    "set": [
+     "competitive_bidding/snapdragon"
+    ]
+   },
+   {
+    "names": [
+     "SOS redouble",
+     "SOS",
+     "Rescue redouble"
+    ],
+    "set": [
+     "competitive_bidding/sos_redouble"
+    ]
+   },
+   {
+    "names": [
+     "Spear"
+    ],
+    "set": [
+     "competitive_bidding/spear"
+    ]
+   },
+   {
+    "names": [
+     "Suction"
+    ],
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/suction",
+     "defence_to_1nt.weak=competitive_bidding/suction"
+    ]
+   },
+   {
+    "names": [
+     "Support Cuebids",
+     "Cue-bid raise",
+     "Cuebid raise",
+     "Support cue bid"
+    ],
+    "set": [
+     "competitive_bidding/support_cuebids"
+    ]
+   },
+   {
+    "names": [
+     "Support Doubles and Redoubles",
+     "Support double",
+     "Support doubles",
+     "Support redouble",
+     "Support redoubles"
+    ],
+    "set": [
+     "competitive_bidding/support_doubles"
+    ]
+   },
+   {
+    "names": [
+     "Thrump double",
+     "Thrump X",
+     "Bergen Thrump"
+    ],
+    "set": [
+     "competitive_bidding/thrump_double"
+    ]
+   },
+   {
+    "names": [
+     "Transfer advances",
+     "Transfer advances of overcalls",
+     "Transfers after partner's overcall"
+    ],
+    "set": [
+     "competitive_bidding/transfer_advances"
+    ]
+   },
+   {
+    "names": [
+     "Unusual notrump",
+     "Unusual 2NT"
+    ],
+    "set": [
+     "competitive_bidding/unusual_notrump",
+     "competitive_bidding/unusual_notrump:at_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Unusual vs Unusual",
+     "Unusual over Unusual",
+     "UvU",
+     "UvsU"
+    ],
+    "set": [
+     "competitive_bidding/unusual_vs_unusual"
+    ]
+   },
+   {
+    "names": [
+     "Feature ask",
+     "Feature"
+    ],
+    "set": [
+     "two_level.weak_two_2nt_response=feature"
+    ]
+   },
+   {
+    "names": [
+     "Two under"
+    ],
+    "set": [
+     "bidding_conventions/texas",
+     "bidding_conventions/texas:two_under"
+    ]
+   },
+   {
+    "names": [
+     "Competitive WJS",
+     "Competitive weak jump shift"
+    ],
+    "set": [
+     "competitive.jump_shift_after_overcall=weak"
+    ]
+   },
+   {
+    "names": [
+     "WJS over overcall",
+     "Weak jump shift in competition"
+    ],
+    "set": [
+     "bidding_conventions/weak_jump_shifts",
+     "bidding_conventions/weak_jump_shifts:in_comp"
+    ]
+   },
+   {
+    "names": [
+     "Unusual 1NT"
+    ],
+    "set": [
+     "competitive_bidding/unusual_notrump",
+     "competitive_bidding/unusual_notrump:at_1nt"
+    ]
+   },
+   {
+    "names": [
+     "Unusual 4NT"
+    ],
+    "set": [
+     "competitive_bidding/unusual_notrump",
+     "competitive_bidding/unusual_notrump:at_4nt"
+    ]
+   },
+   {
+    "names": [
+     "Multi",
+     "Multi 2♦"
+    ],
+    "call": "2D",
+    "after": "(1N) | (1N) P (P)",
+    "set": [
+     "defence_to_1nt.strong=competitive_bidding/multi_landy",
+     "defence_to_1nt.weak=competitive_bidding/multi_landy"
+    ]
+   },
+   {
+    "names": [
+     "Jacoby"
+    ],
+    "call": [
+     "2D",
+     "2H"
+    ],
+    "after": "1N (P)",
+    "set": [
+     "bidding_conventions/jacoby_transfers"
+    ]
+   },
+   {
+    "names": [
+     "Jacoby"
+    ],
+    "call": "2N",
+    "after": "1M (P)",
+    "set": [
+     "bidding_conventions/jacoby_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Puppet Stayman",
+     "Puppet",
+     "5-card Stayman",
+     "five-card Stayman"
+    ],
+    "call": "2C",
+    "after": "1N (P)",
+    "set": [
+     "bidding_conventions/puppet_stayman",
+     "bidding_conventions/puppet_stayman:over_1nt"
+    ]
+   },
+   {
+    "names": [
+     "Puppet Stayman",
+     "Puppet",
+     "5-card Stayman",
+     "five-card Stayman"
+    ],
+    "call": "3C",
+    "after": "2N (P)",
+    "set": [
+     "bidding_conventions/puppet_stayman",
+     "bidding_conventions/puppet_stayman:over_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Minor Suit Stayman",
+     "MSS",
+     "Minor Stayman"
+    ],
+    "call": "2S",
+    "after": "1N (P)",
+    "set": [
+     "bidding_conventions/minor_suit_stayman",
+     "bidding_conventions/minor_suit_stayman:over_1nt"
+    ]
+   },
+   {
+    "names": [
+     "Minor Suit Stayman",
+     "MSS",
+     "Minor Stayman"
+    ],
+    "call": "3S",
+    "after": "2N (P)",
+    "set": [
+     "bidding_conventions/minor_suit_stayman",
+     "bidding_conventions/minor_suit_stayman:over_2nt"
+    ]
+   },
+   {
+    "names": [
+     "Michaels cue bid",
+     "Michaels",
+     "Michaels cuebid"
+    ],
+    "call": "2m",
+    "after": "(1m) | (1m) P (P)",
+    "set": [
+     "competitive_bidding/michaels",
+     "competitive_bidding/michaels:over_minor"
+    ]
+   },
+   {
+    "names": [
+     "Michaels cue bid",
+     "Michaels",
+     "Michaels cuebid"
+    ],
+    "call": "2M",
+    "after": "(1M) | (1M) P (P)",
+    "set": [
+     "competitive_bidding/michaels",
+     "competitive_bidding/michaels:over_major"
+    ]
+   }
+  ]
+ },
  "deals": {
   "source": [
    {
@@ -11716,7 +13223,7 @@
   "conventions/bidding_conventions/mccabe/mccabe.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# The McCabe adjunct (Robert S. Todd, \"McCabe Responses to Preempts\",\n# Adventures in Bridge; PBS `McCabe_After_Weak_2`): after our weak two is\n# doubled for takeout, responder's new suit below three of opener's suit\n# is a raise that names the lead, and the redouble shows a long suit of\n# responder's own:\n#\n#   3♣/3♦/3♥  a raise to three of opener's suit with a good holding in\n#             the suit bid (two of the top three): opener bids 3 of his suit\n#   XX        a long suit of my own, no fit: opener bids the next step,\n#             responder passes it or bids his suit\n#   2NT       the ask, as without the double (weak-two-responses.bid)\n#\n# The direct raises and pass are unchanged. See mccabe.notes.md.\n\nmodule mccabe \"McCabe adjunct\"\n  kind   convention\n  convention  bidding_conventions/mccabe\n  needs  weak-two-responses\n  skill  bidding_conventions/mccabe\n\n# ── Responder over the double ────────────────────────────────────────\nafter 2x (X) when weak_two_suit(x), x is D | x is H | x is S\n  3y  \"McCabe: a raise, lead {y}\"   alert\n      shows x>=3, quality(y)>=good, hcp<=14\n      when  y is not x, y is C | (y is D, x is not D) | (y is H, x is S)\n      artificial\n      priority 1\n  2N  \"Asks: how good is the weak two?\"   alert\n      shows hcp>=15, x>=2\n      sets  forcing=round, ask=weak_two(x)\n      artificial\n  XX  \"McCabe: own long suit, asks for the next step\"   alert\n      shows x<=1, longest>=6, hcp<=14\n      artificial\n      priority 1\n\n# ── Opener after the lead-directing raise: back to his suit ──────────\nafter 2x (X) 3y (P) when weak_two_suit(x), x is D | x is H | x is S, y is not x\n  3x  \"Back to my suit\"\n      priority 1\n\n# ── The redouble: opener bids the next step, responder places it ────\nafter 2D (X) XX (P)\n  2H  \"Next step, as asked\"   artificial   priority 1\nafter 2H (X) XX (P)\n  2S  \"Next step, as asked\"   artificial   priority 1\nafter 2S (X) XX (P)\n  2N  \"Next step, as asked\"   artificial   priority 1\nafter 2D (X) XX (P) 2H (P) | 2H (X) XX (P) 2S (P) | 2S (X) XX (P) 2N (P)\n  P   \"My suit: to play\"           shows H>=6\n      when  partner.last=2H\n      priority 1\n  P   \"My suit: to play\"           shows S>=6\n      when  partner.last=2S\n      priority 1\n  2S  \"My suit: to play\"           shows S>=6\n  3C  \"My suit: to play\"           shows C>=6\n  3D  \"My suit: to play\"           shows D>=6\n  3H  \"My suit: to play\"           shows H>=6\n# They bid over the redouble: opener has nothing more to say.\nafter 2D (X) XX (*) | 2H (X) XX (*) | 2S (X) XX (*)\n  P   \"No further bid\"\n      priority -5\n",
   "conventions/bidding_conventions/mini_roman_2d/mini-roman.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Mini-Roman 2♦ (Bridge Hands, \"Mini Roman\",\n# https://www.bridgehands.com/M/Mini_Roman.htm; ACBL Unit 390,\n# \"Mini-Roman\"; the slam continuations are Rick Wilson's additions):\n# an opening 2♦ shows 11-15 HCP and a three-suited hand, 4-4-4-1 or\n# 5-4-4-0. The five-card suit of a 5-4-4-0 is a minor (with five in a\n# major the hand opens 1M). The weak 2♦ is off (preempts.bid).\n#\n# Responder:\n#\n#   Pass  five or more diamonds, weak\n#   2♥ 2♠ 3♣  to play, weak: opener passes, or with a singleton or void\n#            there bids his next four-card suit up the line\n#   2NT   11+, game forcing, asks for the short suit:\n#         3♣ short clubs, 3♦ short diamonds, 3♥ short hearts, 3♠ short spades\n#   3♥/3♠ invitational, five or more\n#   4♥/4♠ to play\n#\n# See mini-roman.notes.md.\n\nmodule mini-roman \"Mini-Roman 2♦\"\n  kind   convention\n  convention  bidding_conventions/mini_roman_2d\n  needs  preempts\n  skill  bidding_conventions/mini_roman_2d\n\ndefine three_suiter = (longest=4, shortest=1) | (longest=5, second_longest=4, shortest=0, S<=4, H<=4)\n\n# ── The opening ──────────────────────────────────────────────────────\n# Priority 1: it takes these hands from the one-level openings.\nwhen opening\n  2D  \"Mini-Roman: 11-15, 4-4-4-1 or 5-4-4-0\"   alert\n      shows hcp=11..15, three_suiter\n      artificial\n      priority 1\n\n# ── Responder ────────────────────────────────────────────────────────\n# The weak calls: the cheapest four-card suit, which opener holds unless\n# it is his short suit; a diamond pass needs five.\nafter 2D (P) | 2D (X)\n  2N  \"Asks for the short suit: 11+, game forcing\"   alert\n      shows hcp>=11\n      sets  forcing=game, ask=mini_roman\n      artificial\n  4H  \"To play\"                         shows H>=6, hcp=8..14\n  4S  \"To play\"                         shows S>=6, hcp=8..14\n  3H  \"Invitational: five or more hearts\"   shows H>=5, hcp=9..10\n  3S  \"Invitational: five or more spades\"   shows S>=5, hcp=9..10\n  P   \"Five or more diamonds: to play\"    shows D>=5, hcp<=10\n      priority 1\n  2H  \"To play: four or more hearts\"     shows H>=4, hcp<=10\n  2S  \"To play: four or more spades\"     shows S>=4, hcp<=10, H<=3\n  3C  \"To play: five or more clubs\"      shows C>=5, hcp<=10, H<=3, S<=3\n  2H  \"Weak: pass or correct\"            shows hcp<=10\n      priority -2\n\n# ── Opener: pass, or correct from the short suit ─────────────────────\nafter 2D (P) 2H (P) | 2D (X) 2H (P)\n  P   \"Four or more hearts\"              shows H>=4\n  2S  \"Short in hearts: four spades\"     shows H<=1, S>=4\n  3C  \"Short in hearts, no four spades: clubs\"   shows H<=1, C>=4\nafter 2D (P) 2S (P) | 2D (X) 2S (P)\n  P   \"Four or more spades\"              shows S>=4\n  3C  \"Short in spades: clubs\"           shows S<=1, C>=4\nafter 2D (P) 3C (P) | 2D (X) 3C (P)\n  P   \"Four or more clubs\"               shows C>=4\n  3D  \"Short in clubs: diamonds\"         shows C<=1, D>=4\n# Responder accepts the correction.\nafter 2D (P) 2H (P) 2S (P) | 2D (P) 2H (P) 3C (P) | 2D (P) 2S (P) 3C (P) | 2D (P) 3C (P) 3D (P)\n  P   \"Partner's suit: to play\"\n      priority -1\n\n# Opener over the invitation: game with a maximum and support.\nafter 2D (P) 3H (P)\n  4H  \"Accepts: 14-15 with four hearts\"  shows H>=4, hcp>=14\n  P   \"Declines\"\n      priority -1\nafter 2D (P) 3S (P)\n  4S  \"Accepts: 14-15 with four spades\"  shows S>=4, hcp>=14\n  P   \"Declines\"\n      priority -1\n\n# ── Opener answers 2NT: the short suit ───────────────────────────────\nwhen asked mini_roman\n  3C  \"Short clubs\"       shows C<=1\n  3D  \"Short diamonds\"    shows D<=1\n  3H  \"Short hearts\"      shows H<=1\n  3S  \"Short spades\"      shows S<=1\n\n# ── Responder places the contract ────────────────────────────────────\n# Game in a major with four (opener holds four of it unless short there),\n# 3NT with the short suit stopped, else five of a minor.\nafter 2D (P) 2N (P) 3x (P)\n  4S  \"Game in spades\"     shows S>=4    when x is not S\n      priority 2\n  4H  \"Game in hearts\"     shows H>=4    when x is not H\n      priority 1\n  3N  \"Game in notrump: the short suit held\"   shows x>=4 | stop(x)\n  5C  \"Game in clubs\"      shows C>=4    when x is not C\n      priority -1\n  5D  \"Game in diamonds\"   shows D>=4    when x is not D\n      priority -1\n  3N  \"Game in notrump\"\n      priority -2\n\n# ── They overcall the 2♦ (2026-10-05) ───────────────────────────────\n# The self A/B against the weak 2♦ found responder passing every\n# overcall, 13 HCP and a fit included (2♦ (2♥) P P P on 32 boards). With\n# game values: 3NT with their suit stopped, four of a major with five\n# (four when they bid the other major: opener is then likely short in\n# theirs and holds four of ours), else a double, values for defence\n# or for opener to describe. Weaker hands pass. Standard practice for a\n# three-suited opening, not yet cited.\nafter 2D (2y) | 2D (3y) when y is not D\n  4S  \"Game: 11+ and spades\"           shows S>=5 | (S>=4, y is H), hcp>=11\n      when  y is not S\n      priority 2\n  4H  \"Game: 11+ and hearts\"           shows H>=5 | (H>=4, y is S), hcp>=11\n      when  y is not H\n      priority 2\n  3N  \"Game: 11+, {y} stopped\"         shows hcp>=11, stop(y)\n      priority 1\n  X   \"11+: values, defence or a game for opener to choose\"   shows hcp>=11\n  P   \"Not enough to act\"\n      priority -3\n\n# Opener after the double: defend with three or more of their suit;\n# short there, bid the cheapest four-card suit, a major first.\nafter 2D (2y) X (P) | 2D (3y) X (P)\n  P   \"Defend: three or more {y}\"      shows y>=3\n      priority 1\n  cheapest(S) \"Short in {y}: four spades\"    shows S>=4, y<=1   when y is not S   priority 3\n  cheapest(H) \"Short in {y}: four hearts\"    shows H>=4, y<=1   when y is not H   priority 2\n  cheapest(C) \"Short in {y}: four clubs\"     shows C>=4, y<=1   when y is not C   priority 1\n  cheapest(D) \"Short in {y}: four diamonds\"  shows D>=4, y<=1   when y is not D\n\n# Responder places the game: four of opener's major with four, 3NT with\n# their suit stopped, else five of opener's minor.\nafter 2D (2y) X (P) 2z (P) | 2D (2y) X (P) 3z (P) | 2D (3y) X (P) 3z (P) | 2D (3y) X (P) 4z (P)\n  4{z} \"Game in {z}\"                    shows z>=4\n      when  z is H | z is S\n      priority 2\n  3N  \"Game in notrump: {y} stopped\"   shows stop(y)\n      priority 1\n  5{z} \"Game in {z}\"                    shows z>=3\n      when  z is C | z is D\n  P   \"Partner's suit: to play\"\n      priority -2\n\n# They come in over the weak response: opener passes (responder may act).\nafter 2D (P) 2H (*) | 2D (P) 2S (*) | 2D (P) 3C (*)\n  P   \"No further bid\"\n      priority -5\n",
   "conventions/bidding_conventions/minor_suit_stayman/minor-suit-stayman.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Minor Suit Stayman over 1NT (`notrump.minor_suit_stayman.play`), as\n# GIB and BBA play it (minor-suit-stayman.notes.md): 2♠ asks for a\n# four-card minor with five-four or better in the minors and game\n# values. Opener bids 3♣ with four or more clubs, 3♦ with four or more\n# diamonds and not four clubs, 2NT with neither.\n#\n# The minor-suit transfers that go with it on 21GF-MSTandMSS (2NT to\n# clubs, 3♣ to diamonds) are `notrump.minor_transfers.style = two_nt_three_c`,\n# in minor-transfers.bid.\n\nmodule minor-suit-stayman \"Minor Suit Stayman over 1NT\"\n  kind   convention\n  convention  bidding_conventions/minor_suit_stayman\n  card   over_1nt\n  needs  notrump-base\n  skill  bidding_conventions/minor_suit_stayman\n  param  systems_on = nt_overcalls.direct.systems_on default true\n  param  rkcb   = bidding_conventions/roman_keycard default false\n\nafter nt1_undoubled when !they.bid | systems_on\n  2S  \"Minor Suit Stayman: 5-4+ in the minors, game values\"  alert\n      shows C>=4, D>=4, C+D>=9, H<=3, S<=3, strength>=game\n      sets  forcing=game\n      artificial\n      priority 1                         # ahead of 3NT and the minor slam tries\n\n# Opener answers Minor Suit Stayman. With a maximum BBA jumps: 4♣/4♦\n# with the minor, 3NT without (corpus, 2026-10-07: every 17-count of\n# 15-17 and no other; minimums bid 3♣/3♦/2NT). The jump leaves\n# responder the room for keycard below game in the minor.\nafter nt1_undoubled 2S (P)\n  4C  \"Four or more clubs, a maximum\"        alert  shows C>=4, hcp>=shown.hcp.max\n      artificial\n      priority 1\n  4D  \"Four or more diamonds, not four clubs, a maximum\"  alert  shows D>=4, C<=3, hcp>=shown.hcp.max\n      artificial\n      priority 1\n  3N  \"No four-card minor, a maximum\"        shows C<=3, D<=3, hcp>=shown.hcp.max\n      priority 1\n  3C  \"Four or more clubs\"                   alert  shows C>=4\n      artificial\n  3D  \"Four or more diamonds, not four clubs\"  alert  shows D>=4, C<=3\n      artificial\n  2N  \"No four-card minor\"                   alert  shows C<=3, D<=3\n      artificial\n\n# Responder. With a fit and slam values (33 total points between the\n# hands): keycard for the minor when the card plays it (BBA asks there,\n# \"Blackwood 1430, for ♣/♦\"), else six. With game values only and a\n# singleton or void in a major, three of that major: shortness, asking\n# for a stopper (BBA's \"artificial\" 3♥/3♠, read from its auctions);\n# opener bids 3NT with it, else four of the\n# minor, and responder bids five. Otherwise 3NT. Without a fit: 3NT,\n# 4NT quantitative or 6NT, on HCP (a notrump slam takes high cards;\n# the long minors' length points sent 13-counts to 6NT).\nafter nt1_undoubled 2S (P) 3m (P) | nt1_undoubled 2S (P) 4m (P)\n  4N  \"Keycard ask in {m}\"                   alert\n      when  rkcb\n      shows tp(m)>=33-partner.hcp.min\n      sets  trump=m, ask=keycards(m)\n      artificial\n      priority 1\n  6m  \"Slam in the minor fit\"                shows tp(m)>=33-partner.hcp.min\n      sets  trump=m\n  3H  \"Short hearts: asks for a heart stopper\"  alert\n      shows H<=1\n      artificial\n      priority -1\n  3S  \"Short spades: asks for a spade stopper\"  alert\n      shows S<=1, H>=2\n      artificial\n      priority -1\n  3N  \"Game in notrump\"\n      priority -2\nafter nt1_undoubled 2S (P) 3m (P) 3M (P)\n  3N  \"A stopper in {M}: game in notrump\"    shows stop(M)\n  4m  \"No stopper in {M}\"                    shows !stop(M)\n      priority -1\nafter nt1_undoubled 2S (P) 3m (P) 3M (P) 4m (P)\n  5m  \"Game in the minor fit\"\n      sets  trump=m\nafter nt1_undoubled 2S (P) 3m (P) 3M (P) 3N (P)\n  P   \"Game in notrump\"\nafter nt1_undoubled 2S (P) 4m (P)\n  5m  \"Game in the minor fit\"\n      sets  trump=m\n      priority -1\nafter nt1_undoubled 2S (P) 2N (P) | nt1_undoubled 2S (P) 3N (P)\n  6N  \"No fit: slam values\"                  shows hcp>=33-partner.hcp.min\n  4N  \"No fit: quantitative, invites 6NT\"    shows hcp>=31-partner.hcp.min, hcp<=32-partner.hcp.min\n      sets  ask=quant\n  3N  \"No fit: game\"\n      priority -1\nafter nt1_undoubled 2S (P) 3N (P)\n  P   \"No fit: 3NT\"\n      priority -2\n",
-  "conventions/bidding_conventions/modified_jacoby_2nt/modified-jacoby-2nt.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Modified Jacoby 2NT (Larry Cohen, \"Modified Jacoby 2NT\",\n# https://www.larryco.com/bridge-articles/modified-jacoby-2nt):\n# responder's 2NT is the same game-forcing raise (jacoby-2nt.bid), but\n# opener's rebids sort the hand by strength first and shape second, and\n# responder relays for more:\n#\n#   4M   the worst minimum: 5-3-3-2, nothing extra\n#   3♣   any other minimum              3♦ asks: 3♥ short, 3♠ 5-4-2-2,\n#                                       3NT 6+ trumps, 4M 5-3-3-2, 4x a side suit\n#   3♦   non-minimum, a singleton or void      3♥ asks which\n#   3♥   non-minimum, 5-4-2-2                  3♠ asks for the four-card suit\n#   3♠   non-minimum, 6+ trumps, no shortness\n#   3NT  non-minimum, 5-3-3-2\n#   4x   a good five-card side suit\n#\n# The suits are fixed: over 1♥ too, 3♥ is the 5-4-2-2 and 3♠ the six\n# trumps (Cohen writes one schedule for both majors). Minimum is 14 HCP or\n# fewer, the standard module's line. See modified-jacoby-2nt.notes.md.\n\nmodule modified-jacoby-2nt \"Modified Jacoby 2NT\"\n  kind   convention\n  convention  bidding_conventions/modified_jacoby_2nt\n  needs  jacoby-2nt\n  skill  bidding_conventions/modified_jacoby_2nt\n  param  rkcb  = bidding_conventions/roman_keycard default false\n  param  bw    = bidding_conventions/blackwood default false\n\n# ── Opener's rebid ───────────────────────────────────────────────────\nafter 1M (P) 2N (P)\n  4M  \"Minimum, 5-3-3-2, nothing extra\"\n      shows hcp<=12, shape 5-3-3-2, M=5\n      priority 1                       # ahead of 3♣, which these hands also fit\n  3C  \"Minimum, 14 HCP or less: 3♦ asks\"  alert\n      shows hcp<=14\n      artificial\n  3D  \"15+, a singleton or void: 3♥ asks where\"  alert\n      shows hcp>=15, shortest<=1\n      artificial\n  3H  \"15+, 5-4-2-2: 3♠ asks for the four-card suit\"  alert\n      shows hcp>=15, shape 5-4-2-2, M=5\n      artificial\n  3S  \"15+, six or more trumps, no singleton or void\"  alert\n      shows hcp>=15, M>=6, shortest>=2\n      artificial\n  3N  \"15+, 5-3-3-2\"\n      shows hcp>=15, shape 5-3-3-2, M=5\n  4x  \"15+, a good five-card side suit\"\n      shows hcp>=15, x>=5, quality(x)>=good\n      when  x is not M, M is S | x is not S\n\n# ── They bid over the 2NT ────────────────────────────────────────────\n# Cohen: double shows shortness in their suit, a new suit is natural or\n# a control, 3NT a balanced maximum with the ace or king of their suit,\n# the jump to 4M a dead minimum with 6-3-2-2, and pass a flat hand. The pass is forcing (Rick, 2026-10-28): we are in a game\n# force, so responder must act, by doubling them for penalty or bidding\n# on. It is marked artificial because the engine otherwise drops a pass\n# below game in a game force.\nafter 1M (P) 2N (2x) | 1M (P) 2N (3x) when x is not M\n  X   \"Short in {x}: a singleton or void\"  alert\n      shows x<=1\n      artificial\n      priority 16                      # ahead of everything else here, as the shortness is the news\n  3N  \"15+, balanced, the ace or king of {x}\"\n      shows hcp>=15, balanced, has(A,x) | has(K,x)\n      priority 15\n  4M  \"Dead minimum, 6-3-2-2\"\n      shows hcp<=12, shape 6-3-2-2, M=6\n      priority 15\n  3y  \"Natural or a control in {y}\"\n      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)\n      when  y is not M, y is not x\n      priority 15\n  4y  \"Natural or a control in {y}\"\n      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)\n      when  y is not M, y is not x, M is S | y is not S\n      priority 15\n  P   \"Forcing pass: a flat hand\"  alert\n      artificial\n      priority 14                      # below the descriptions, above the generic competitive calls\n\n# Responder after the forcing pass (Cohen: \"after which, responder's\n# X = penalty\"; Rick, 2026-10-28): opener is flat, perhaps an awful\n# 5-3-3-2, so with their suit held responder doubles them, whatever his\n# strength. Else game; with slam interest the slam modules act.\nafter 1M (P) 2N (2x) P (P) | 1M (P) 2N (3x) P (P) when x is not M\n  X   \"Penalty: {x} held\"\n      shows x>=4 | (x>=3, has(A,x) | has(K,x))\n      priority 15\n  4M  \"Game: no slam interest\"\n      shows !slam_interest(M)\n      priority 14\n\n# ── They double or bid over an ask ───────────────────────────────────\n# Cohen: \"If they double Asks or re-asks: XX = business, Pass = S1, etc.\n# If they bid after Ask or re-ask: X = Penalty, Pass = S1, etc.\" Pass is\n# the first step and the bids follow in order from the cheapest\n# (`step(1)` the second step). The pass is artificial, so the game force\n# keeps it legal and makes responder bid again. 2NT is the first ask:\n# over their double of it the steps hold; over their bid, the schedule\n# above (X short there, as Cohen says).\n\ndefine mj_business(a) = a>=4, has(A,a) | has(K,a)\n\nafter 1M (P) 2N (X)\n  XX  \"Business: 15+, balanced, to play 2NT redoubled\"\n      shows hcp>=15, balanced\n      priority 16\n  P   \"Step 1: a minimum, 14 or less\"  alert\n      shows hcp<=14\n      artificial\n      priority 15\n  step(1)  \"Step 2: 15+, a singleton or void\"  alert\n      shows hcp>=15, shortest<=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: 15+, 5-4-2-2\"  alert\n      shows hcp>=15, shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  step(3)  \"Step 4: 15+, six or more trumps, no singleton or void\"  alert\n      shows hcp>=15, M>=6, shortest>=2\n      artificial\n      priority 15\n  step(4)  \"Step 5: 15+, 5-3-3-2\"  alert\n      shows hcp>=15, shape 5-3-3-2, M=5\n      artificial\n      priority 15\n\n# The 3♦ ask after a minimum.\nafter 1M (P) 2N (P) 3C (P) 3D (X)\n  XX  \"Business: good diamonds\"\n      shows mj_business(D)\n      priority 16\nafter 1M (P) 2N (P) 3C (P) 3D (3z) | 1M (P) 2N (P) 3C (P) 3D (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1M (P) 2N (P) 3C (P) 3D (*) when !rho.last=P\n  P   \"Step 1: a singleton or void\"  alert\n      shows shortest<=1\n      artificial\n      priority 15\n  step(1)  \"Step 2: 5-4-2-2\"  alert\n      shows shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  step(2)  \"Step 3: six or more trumps, no singleton or void\"  alert\n      shows M>=6, shortest>=2\n      artificial\n      priority 15\n  step(3)  \"Step 4: 5-3-3-2\"  alert\n      shows shape 5-3-3-2, M=5\n      artificial\n      priority 15\n\n# The 3♥ ask after shortness.\nafter 1M (P) 2N (P) 3D (P) 3H (X)\n  XX  \"Business: good hearts\"\n      shows mj_business(H)\n      when  M is S\n      priority 16\nafter 1M (P) 2N (P) 3D (P) 3H (3z) | 1M (P) 2N (P) 3D (P) 3H (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3D (P) 3H (*) when !rho.last=P\n  P   \"Step 1: a void\"  alert\n      shows C=0 | D=0 | H=0\n      artificial\n      priority 15\n  step(1)  \"Step 2: a singleton club\"  alert\n      shows C=1, D>=1, H>=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: a singleton diamond\"  alert\n      shows D=1, C>=2, H>=1\n      artificial\n      priority 15\n  step(3)  \"Step 4: a singleton heart\"  alert\n      shows H=1, C>=2, D>=2\n      artificial\n      priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (*) when !rho.last=P\n  P   \"Step 1: a void\"  alert\n      shows C=0 | D=0 | S=0\n      artificial\n      priority 15\n  step(1)  \"Step 2: a singleton club\"  alert\n      shows C=1, D>=1, S>=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: a singleton diamond\"  alert\n      shows D=1, C>=2, S>=1\n      artificial\n      priority 15\n  step(3)  \"Step 4: a singleton spade\"  alert\n      shows S=1, C>=2, D>=2\n      artificial\n      priority 15\n\n# The 3♠ ask after 5-4-2-2.\nafter 1M (P) 2N (P) 3H (P) 3S (X)\n  XX  \"Business: good spades\"\n      shows mj_business(S)\n      when  M is H\n      priority 16\nafter 1M (P) 2N (P) 3H (P) 3S (3z) | 1M (P) 2N (P) 3H (P) 3S (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3H (P) 3S (*) when !rho.last=P\n  P        \"Step 1: four clubs\"     alert  shows C=4  artificial  priority 15\n  step(1)  \"Step 2: four diamonds\"  alert  shows D=4  artificial  priority 15\n  step(2)  \"Step 3: four hearts\"    alert  shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3H (P) 3S (*) when !rho.last=P\n  P        \"Step 1: four clubs\"     alert  shows C=4  artificial  priority 15\n  step(1)  \"Step 2: four diamonds\"  alert  shows D=4  artificial  priority 15\n  step(2)  \"Step 3: four spades\"    alert  shows S=4  artificial  priority 15\n\n# The 3NT re-ask: where is the void?\nafter 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P\n  P        \"Step 1: club void\"     alert  shows C=0  artificial  priority 15\n  step(1)  \"Step 2: diamond void\"  alert  shows D=0  artificial  priority 15\n  step(2)  \"Step 3: heart void\"    alert  shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P\n  P        \"Step 1: club void\"     alert  shows C=0  artificial  priority 15\n  step(1)  \"Step 2: diamond void\"  alert  shows D=0  artificial  priority 15\n  step(2)  \"Step 3: spade void\"    alert  shows S=0  artificial  priority 15\n\n# ── Responder: the relays ────────────────────────────────────────────\n# Over the minimum (Rick, 2026-11-07): \"modified jacoby 2nt is mostly\n# useful because responder can jump to game with no slam interest,\n# after a 3C rebid by opener. the main advantage is that it doesn't\n# give the defenders any clues to opener's distribution. so we don't\n# want to always ask. but with say 15+ HCP, responder should probably\n# ask.\" So 3♦ with 15+ HCP, else 4M at once. This overrides the\n# double-dummy measurement, which cannot see what the relays tell the\n# defenders (notes, \"Ask over 3♣ only with 15+\").\n#\n# Over the non-minimum answers (3♦ short, the void) the relays stay\n# wide: responder relays whenever slam is possible with everything\n# working, his support points and opener's top HCP 27 or more\n# (`mj_relay_floor`). Cohen: \"If responder still has slam interest, he\n# can ask further\".\ndefine mj_relay_floor = 27\ndefine mj_try(t) = slam_interest(t) | tp(t) + partner.hcp.max >= mj_relay_floor\n\nafter 1M (P) 2N (P) 3C (P)\n  3D  \"Asks opener to describe the minimum\"  alert\n      shows hcp >= 15\n      sets  ask=mj_relay\n      artificial\n      priority 15                      # the relay, ahead of the control bids (12-14)\n  4M  \"Game: no slam interest opposite a minimum\"\n      shows hcp <= 14\n      priority 15                      # Rick 2026-11-07: tell the defenders nothing\n\nafter 1M (P) 2N (P) 3D (P)\n  3H  \"Asks where the singleton or void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n\nafter 1M (P) 2N (P) 3H (P)\n  3S  \"Asks for opener's four-card side suit\"  alert\n      shows slam_interest(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n\n# ── Opener answers the 3♦ ask (a minimum) ────────────────────────────\nafter 1M (P) 2N (P) 3C (P) 3D (P)\n  3H  \"Minimum, a singleton or void\"  alert\n      shows shortest<=1\n      artificial\n      priority 15\n  3S  \"Minimum, 5-4-2-2\"  alert\n      shows shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  3N  \"Minimum, six or more trumps, no singleton or void\"  alert\n      shows M>=6, shortest>=2\n      artificial\n      priority 15\n  4M  \"Minimum, 5-3-3-2\"\n      shows shape 5-3-3-2, M=5\n      priority 15\n  4x  \"Minimum, a good five-card side suit\"\n      shows x>=5, quality(x)>=good, shortest>=1\n      when  x is not M, M is S | x is not S\n      priority 16                      # ahead of a singleton most such hands also hold; a void goes first (3♥)\n\n# The next step asks again (Cohen: \"After opener's 3♥ or 3♠ answer to\n# 3♦, next step asks, using same schedule\"), one step up from the\n# non-minimum schedule: over 3♥ (short), 3♠ asks: 3NT a void (4♣ asks\n# where: 4♦ clubs, 4♥ diamonds, 4♠ the other major), 4♣/4♦/4♥ a\n# singleton club, diamond, other major. Over 3♠ (5-4-2-2), 3NT asks:\n# 4♣ clubs, 4♦ diamonds, 4♥ the other major. Over 1♥ the singleton or\n# four spades lands on 4♥, the spade void on 4♠: past game, and\n# responder still has 4NT.\nafter 1M (P) 2N (P) 3C (P) 3D (P) 3H (P)\n  3S  \"Asks where the singleton or void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n# Responder does not make the 3NT ask himself: nothing below reads the\n# four-card suit, and relaying cost 53 IMPs on 34 boards against going\n# on at once (notes). Opener still answers a partner who asks.\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)\n  3N  \"A void: 4♣ asks where\"  alert   shows C=0 | D=0 | H=0     artificial  priority 15\n  4C  \"A singleton club\"  alert        shows C=1, D>=1, H>=1     artificial  priority 15\n  4D  \"A singleton diamond\"  alert     shows D=1, C>=2, H>=1     artificial  priority 15\n  4H  \"A singleton heart\"  alert       shows H=1, C>=2, D>=2     artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)\n  3N  \"A void: 4♣ asks where\"  alert   shows C=0 | D=0 | S=0     artificial  priority 15\n  4C  \"A singleton club\"  alert        shows C=1, D>=1, S>=1     artificial  priority 15\n  4D  \"A singleton diamond\"  alert     shows D=1, C>=2, S>=1     artificial  priority 15\n  4H  \"A singleton spade\"  alert       shows S=1, C>=2, D>=2     artificial  priority 15\nafter 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Asks where the void is\"  alert\n      sets  ask=mj_relay\n      artificial\n      priority 15\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)\n  4D  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4H  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4S  \"Heart void\"  alert      shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)\n  4D  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4H  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4S  \"Spade void\"  alert      shows S=0  artificial  priority 15\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)\n  4C  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4D  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4H  \"Four hearts\"  alert     shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)\n  4C  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4D  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4H  \"Four spades\"  alert     shows S=4  artificial  priority 15\n\n# ── Opener answers the 3♥ ask (non-minimum, short somewhere) ─────────\n# Steps: a void (3♠), then a singleton in clubs, diamonds, the other\n# major. After the void, 3NT asks where: clubs, diamonds, the other major.\nafter 1S (P) 2N (P) 3D (P) 3H (P)\n  3S  \"A void: 3NT asks where\"  alert\n      shows C=0 | D=0 | H=0\n      artificial\n      priority 15\n  3N  \"A singleton club\"  alert\n      shows C=1, D>=1, H>=1\n      artificial\n      priority 15\n  4C  \"A singleton diamond\"  alert\n      shows D=1, C>=2, H>=1\n      artificial\n      priority 15\n  4D  \"A singleton heart\"  alert\n      shows H=1, C>=2, D>=2\n      artificial\n      priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P)\n  3S  \"A void: 3NT asks where\"  alert\n      shows C=0 | D=0 | S=0\n      artificial\n      priority 15\n  3N  \"A singleton club\"  alert\n      shows C=1, D>=1, S>=1\n      artificial\n      priority 15\n  4C  \"A singleton diamond\"  alert\n      shows D=1, C>=2, S>=1\n      artificial\n      priority 15\n  4D  \"A singleton spade\"  alert\n      shows S=1, C>=2, D>=2\n      artificial\n      priority 15\n\nafter 1M (P) 2N (P) 3D (P) 3H (P) 3S (P)\n  3N  \"Asks where the void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\nafter 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4D  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4H  \"Heart void\"  alert      shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4D  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4H  \"Spade void\"  alert      shows S=0  artificial  priority 15\n\n# ── Opener answers the 3♠ ask (non-minimum, 5-4-2-2) ─────────────────\nafter 1S (P) 2N (P) 3H (P) 3S (P)\n  3N  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4C  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4D  \"Four hearts\"  alert     shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3H (P) 3S (P)\n  3N  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4C  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4D  \"Four spades\"  alert     shows S=4  artificial  priority 15\n\n# ── Responder: keycard once the relays have placed opener's shape ────\n# (Rick, 2026-11-06, bridge-classroom #83/#84: \"ask about south shape\n# and learn of spade void then try keycard\"; 2026-11-07: \"keycard\n# should be the stronger hand. the idea of the relays is it will allow\n# us to find low HCP slams when there is a good fit.\") Once a relay\n# answer has placed opener's singleton or void (`shown_short`),\n# responder counts his working values (slam-entry.bid, `working_count`:\n# support points less the honours wasted opposite the shortness, plus\n# opener's floor; `working_slam`, 26). With that, slam: the stronger hand\n# by what has been shown (`stronger_hand`: responder's HCP at least\n# opener's floor; always opposite a minimum) asks for keycards; the\n# weaker, opposite a non-minimum, bids the cheapest suit below game\n# (\"my values work: you ask\") and opener asks. Where there is no room\n# below game responder asks himself. Or 14 HCP with an honour in\n# opener's good five-card side suit (the 4x answer). Less is left to\n# the slam modules (game, mostly). Not after the 5-4-2-2's four-card\n# suit: that branch lost 223 IMPs on 46 boards (notes). The keycard\n# answers and the placement are rkcb-1430.bid's (blackwood.bid's\n# without RKCB). The asks are `mj_relay`, not `relay`: minor-\n# transfers.bid's `when answered relay` (pass with clubs) read our\n# relays and passed a 4♥ answer.\ndefine mj_slam(t) = working_slam(t)\ndefine mj_side_fits(x) = x is not trump, partner.x >= 5, has(A,x) | has(K,x) | has(Q,x), hcp >= 16\ndefine mj_room = (trump is not C, under_game(C)) | (trump is not D, under_game(D)) | (trump is not H, under_game(H)) | (trump is not S, under_game(S))\ndefine mj_fits = (mj_slam(trump), stronger_hand | !mj_room) | mj_side_fits(C) | mj_side_fits(D) | mj_side_fits(H) | mj_side_fits(S)\n\nwhen answered mj_relay, we.trump is H | we.trump is S, we.forcing = game\n  4N  \"Keycard ask in {trump}: opener's shape fits\"\n      when  rkcb\n      shows mj_fits\n      sets  ask=keycards(trump)\n      artificial\n      priority 14\n  4N  \"Blackwood: opener's shape fits\"\n      when  bw, !rkcb\n      shows mj_fits\n      sets  ask=aces\n      artificial\n      priority 14\n  cheapest(C)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not C, under_game(C), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(C)\n      priority 14\n  cheapest(D)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not D, under_game(D), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(D)\n      priority 14\n  cheapest(H)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not H, under_game(H), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(H)\n      priority 14\n  cheapest(S)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not S, under_game(S), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(S)\n      priority 14\n\n# Opener, the stronger hand, asks over responder's \"you ask\".\nwhen asked mj_captain, we.trump is H | we.trump is S\n  4N  \"Keycard ask in {trump}: the stronger hand asks\"\n      when  rkcb\n      sets  ask=keycards(trump)\n      artificial\n      priority 15\n  4N  \"Blackwood: the stronger hand asks\"\n      when  bw, !rkcb\n      sets  ask=aces\n      artificial\n      priority 15\n\n# Over 1♥ the spade void is shown with 4♠, past game: without the\n# values for keycard, back to five hearts.\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4S (P)\n  5H  \"No slam: back to hearts\"\n      priority 13\n\n# ── Opener after responder declines (Rick, 2026-11-07) ───────────────\n# \"normally opener doesn't continue for slam exploration after\n# responder chooses not to try, unless opener has 19+ points.\" When\n# responder bids 4M over any of opener's answers or relay answers,\n# opener passes with 18 points or fewer; with 19+ the slam modules\n# decide as before. Above the keycard ask and the control bids.\nafter 1M (P) 2N (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3N (P) 4M (P) | 1M (P) 2N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P) 4x (P) 4M (P)\n  P   \"Responder declined: no slam without 19+\"\n      shows points <= 18\n      priority 16\n",
+  "conventions/bidding_conventions/modified_jacoby_2nt/modified-jacoby-2nt.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Modified Jacoby 2NT (Larry Cohen, \"Modified Jacoby 2NT\",\n# https://www.larryco.com/bridge-articles/modified-jacoby-2nt):\n# responder's 2NT is the same game-forcing raise (jacoby-2nt.bid), but\n# opener's rebids sort the hand by strength first and shape second, and\n# responder relays for more:\n#\n#   4M   the worst minimum: 5-3-3-2, nothing extra\n#   3♣   any other minimum              3♦ asks: 3♥ short, 3♠ 5-4-2-2,\n#                                       3NT 6+ trumps, 4M 5-3-3-2, 4x a side suit\n#   3♦   non-minimum, a singleton or void      3♥ asks which\n#   3♥   non-minimum, 5-4-2-2                  3♠ asks for the four-card suit\n#   3♠   non-minimum, 6+ trumps, no shortness\n#   3NT  non-minimum, 5-3-3-2\n#   4x   a good five-card side suit\n#\n# The suits are fixed: over 1♥ too, 3♥ is the 5-4-2-2 and 3♠ the six\n# trumps (Cohen writes one schedule for both majors). Minimum is 14 HCP or\n# fewer, the standard module's line. See modified-jacoby-2nt.notes.md.\n\nmodule modified-jacoby-2nt \"Modified Jacoby 2NT\"\n  kind   convention\n  convention  bidding_conventions/modified_jacoby_2nt\n  needs  jacoby-2nt\n  skill  bidding_conventions/modified_jacoby_2nt\n  param  rkcb  = bidding_conventions/roman_keycard default false\n  param  bw    = bidding_conventions/blackwood default false\n  param  cue   = bidding_conventions/control_bids default false\n\n# ── Opener's rebid ───────────────────────────────────────────────────\nafter 1M (P) 2N (P)\n  4M  \"Minimum, 5-3-3-2, nothing extra\"\n      shows hcp<=12, shape 5-3-3-2, M=5\n      priority 1                       # ahead of 3♣, which these hands also fit\n  3C  \"Minimum, 14 HCP or less: 3♦ asks\"  alert\n      shows hcp<=14\n      artificial\n  3D  \"15+, a singleton or void: 3♥ asks where\"  alert\n      shows hcp>=15, shortest<=1\n      artificial\n  3H  \"15+, 5-4-2-2: 3♠ asks for the four-card suit\"  alert\n      shows hcp>=15, shape 5-4-2-2, M=5\n      artificial\n  3S  \"15+, six or more trumps, no singleton or void\"  alert\n      shows hcp>=15, M>=6, shortest>=2\n      artificial\n  3N  \"15+, 5-3-3-2\"\n      shows hcp>=15, shape 5-3-3-2, M=5\n  4x  \"15+, a good five-card side suit\"\n      shows hcp>=15, x>=5, quality(x)>=good\n      when  x is not M, M is S | x is not S\n\n# ── They bid over the 2NT ────────────────────────────────────────────\n# Cohen: double shows shortness in their suit, a new suit is natural or\n# a control, 3NT a balanced maximum with the ace or king of their suit,\n# the jump to 4M a dead minimum with 6-3-2-2, and pass a flat hand. The pass is forcing (Rick, 2026-10-28): we are in a game\n# force, so responder must act, by doubling them for penalty or bidding\n# on. It is marked artificial because the engine otherwise drops a pass\n# below game in a game force.\nafter 1M (P) 2N (2x) | 1M (P) 2N (3x) when x is not M\n  X   \"Short in {x}: a singleton or void\"  alert\n      shows x<=1\n      artificial\n      priority 16                      # ahead of everything else here, as the shortness is the news\n  3N  \"15+, balanced, the ace or king of {x}\"\n      shows hcp>=15, balanced, has(A,x) | has(K,x)\n      priority 15\n  4M  \"Dead minimum, 6-3-2-2\"\n      shows hcp<=12, shape 6-3-2-2, M=6\n      priority 15\n  3y  \"Natural or a control in {y}\"\n      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)\n      when  y is not M, y is not x\n      priority 15\n  4y  \"Natural or a control in {y}\"\n      shows (y>=5, quality(y)>=good) | has(A,y) | has(K,y)\n      when  y is not M, y is not x, M is S | y is not S\n      priority 15\n  P   \"Forcing pass: a flat hand\"  alert\n      artificial\n      priority 14                      # below the descriptions, above the generic competitive calls\n\n# Responder after the forcing pass (Cohen: \"after which, responder's\n# X = penalty\"; Rick, 2026-10-28): opener is flat, perhaps an awful\n# 5-3-3-2, so with their suit held responder doubles them, whatever his\n# strength. Else game; with slam interest the slam modules act.\nafter 1M (P) 2N (2x) P (P) | 1M (P) 2N (3x) P (P) when x is not M\n  X   \"Penalty: {x} held\"\n      shows x>=4 | (x>=3, has(A,x) | has(K,x))\n      priority 15\n  4M  \"Game: no slam interest\"\n      shows !slam_interest(M)\n      priority 14\n\n# ── They double or bid over an ask ───────────────────────────────────\n# Cohen: \"If they double Asks or re-asks: XX = business, Pass = S1, etc.\n# If they bid after Ask or re-ask: X = Penalty, Pass = S1, etc.\" Pass is\n# the first step and the bids follow in order from the cheapest\n# (`step(1)` the second step). The pass is artificial, so the game force\n# keeps it legal and makes responder bid again. 2NT is the first ask:\n# over their double of it the steps hold; over their bid, the schedule\n# above (X short there, as Cohen says).\n\ndefine mj_business(a) = a>=4, has(A,a) | has(K,a)\n\nafter 1M (P) 2N (X)\n  XX  \"Business: 15+, balanced, to play 2NT redoubled\"\n      shows hcp>=15, balanced\n      priority 16\n  P   \"Step 1: a minimum, 14 or less\"  alert\n      shows hcp<=14\n      artificial\n      priority 15\n  step(1)  \"Step 2: 15+, a singleton or void\"  alert\n      shows hcp>=15, shortest<=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: 15+, 5-4-2-2\"  alert\n      shows hcp>=15, shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  step(3)  \"Step 4: 15+, six or more trumps, no singleton or void\"  alert\n      shows hcp>=15, M>=6, shortest>=2\n      artificial\n      priority 15\n  step(4)  \"Step 5: 15+, 5-3-3-2\"  alert\n      shows hcp>=15, shape 5-3-3-2, M=5\n      artificial\n      priority 15\n\n# The 3♦ ask after a minimum.\nafter 1M (P) 2N (P) 3C (P) 3D (X)\n  XX  \"Business: good diamonds\"\n      shows mj_business(D)\n      priority 16\nafter 1M (P) 2N (P) 3C (P) 3D (3z) | 1M (P) 2N (P) 3C (P) 3D (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1M (P) 2N (P) 3C (P) 3D (*) when !rho.last=P\n  P   \"Step 1: a singleton or void\"  alert\n      shows shortest<=1\n      artificial\n      priority 15\n  step(1)  \"Step 2: 5-4-2-2\"  alert\n      shows shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  step(2)  \"Step 3: six or more trumps, no singleton or void\"  alert\n      shows M>=6, shortest>=2\n      artificial\n      priority 15\n  step(3)  \"Step 4: 5-3-3-2\"  alert\n      shows shape 5-3-3-2, M=5\n      artificial\n      priority 15\n\n# The 3♥ ask after shortness.\nafter 1M (P) 2N (P) 3D (P) 3H (X)\n  XX  \"Business: good hearts\"\n      shows mj_business(H)\n      when  M is S\n      priority 16\nafter 1M (P) 2N (P) 3D (P) 3H (3z) | 1M (P) 2N (P) 3D (P) 3H (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3D (P) 3H (*) when !rho.last=P\n  P   \"Step 1: a void\"  alert\n      shows C=0 | D=0 | H=0\n      artificial\n      priority 15\n  step(1)  \"Step 2: a singleton club\"  alert\n      shows C=1, D>=1, H>=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: a singleton diamond\"  alert\n      shows D=1, C>=2, H>=1\n      artificial\n      priority 15\n  step(3)  \"Step 4: a singleton heart\"  alert\n      shows H=1, C>=2, D>=2\n      artificial\n      priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (*) when !rho.last=P\n  P   \"Step 1: a void\"  alert\n      shows C=0 | D=0 | S=0\n      artificial\n      priority 15\n  step(1)  \"Step 2: a singleton club\"  alert\n      shows C=1, D>=1, S>=1\n      artificial\n      priority 15\n  step(2)  \"Step 3: a singleton diamond\"  alert\n      shows D=1, C>=2, S>=1\n      artificial\n      priority 15\n  step(3)  \"Step 4: a singleton spade\"  alert\n      shows S=1, C>=2, D>=2\n      artificial\n      priority 15\n\n# The 3♠ ask after 5-4-2-2.\nafter 1M (P) 2N (P) 3H (P) 3S (X)\n  XX  \"Business: good spades\"\n      shows mj_business(S)\n      when  M is H\n      priority 16\nafter 1M (P) 2N (P) 3H (P) 3S (3z) | 1M (P) 2N (P) 3H (P) 3S (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3H (P) 3S (*) when !rho.last=P\n  P        \"Step 1: four clubs\"     alert  shows C=4  artificial  priority 15\n  step(1)  \"Step 2: four diamonds\"  alert  shows D=4  artificial  priority 15\n  step(2)  \"Step 3: four hearts\"    alert  shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3H (P) 3S (*) when !rho.last=P\n  P        \"Step 1: four clubs\"     alert  shows C=4  artificial  priority 15\n  step(1)  \"Step 2: four diamonds\"  alert  shows D=4  artificial  priority 15\n  step(2)  \"Step 3: four spades\"    alert  shows S=4  artificial  priority 15\n\n# The 3NT re-ask: where is the void?\nafter 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (4z)\n  X   \"Penalty: good {z}\"\n      shows mj_business(z)\n      priority 16\nafter 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P\n  P        \"Step 1: club void\"     alert  shows C=0  artificial  priority 15\n  step(1)  \"Step 2: diamond void\"  alert  shows D=0  artificial  priority 15\n  step(2)  \"Step 3: heart void\"    alert  shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (*) when !rho.last=P\n  P        \"Step 1: club void\"     alert  shows C=0  artificial  priority 15\n  step(1)  \"Step 2: diamond void\"  alert  shows D=0  artificial  priority 15\n  step(2)  \"Step 3: spade void\"    alert  shows S=0  artificial  priority 15\n\n# ── Responder: the relays ────────────────────────────────────────────\n# Over the minimum (Rick, 2026-11-07): \"modified jacoby 2nt is mostly\n# useful because responder can jump to game with no slam interest,\n# after a 3C rebid by opener. the main advantage is that it doesn't\n# give the defenders any clues to opener's distribution. so we don't\n# want to always ask. but with say 15+ HCP, responder should probably\n# ask.\" So 3♦ with 15+ HCP, else 4M at once. This overrides the\n# double-dummy measurement, which cannot see what the relays tell the\n# defenders (notes, \"Ask over 3♣ only with 15+\").\n#\n# Over the non-minimum answers (3♦ short, the void) the relays stay\n# wide: responder relays whenever slam is possible with everything\n# working, his support points and opener's top HCP 27 or more\n# (`mj_relay_floor`). Cohen: \"If responder still has slam interest, he\n# can ask further\".\ndefine mj_relay_floor = 27\ndefine mj_try(t) = slam_interest(t) | tp(t) + partner.hcp.max >= mj_relay_floor\n\nafter 1M (P) 2N (P) 3C (P)\n  3D  \"Asks opener to describe the minimum\"  alert\n      shows hcp >= 15\n      sets  ask=mj_relay\n      artificial\n      priority 15                      # the relay, ahead of the control bids (12-14)\n  4M  \"Game: no slam interest opposite a minimum\"\n      shows hcp <= 14\n      priority 15                      # Rick 2026-11-07: tell the defenders nothing\n\nafter 1M (P) 2N (P) 3D (P)\n  3H  \"Asks where the singleton or void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n\nafter 1M (P) 2N (P) 3H (P)\n  3S  \"Asks for opener's four-card side suit\"  alert\n      shows slam_interest(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n\n# ── Opener answers the 3♦ ask (a minimum) ────────────────────────────\nafter 1M (P) 2N (P) 3C (P) 3D (P)\n  3H  \"Minimum, a singleton or void\"  alert\n      shows shortest<=1\n      artificial\n      priority 15\n  3S  \"Minimum, 5-4-2-2\"  alert\n      shows shape 5-4-2-2, M=5\n      artificial\n      priority 15\n  3N  \"Minimum, six or more trumps, no singleton or void\"  alert\n      shows M>=6, shortest>=2\n      artificial\n      priority 15\n  4M  \"Minimum, 5-3-3-2\"\n      shows shape 5-3-3-2, M=5\n      priority 15\n  4x  \"Minimum, a good five-card side suit\"\n      shows x>=5, quality(x)>=good, shortest>=1\n      when  x is not M, M is S | x is not S\n      priority 16                      # ahead of a singleton most such hands also hold; a void goes first (3♥)\n\n# The next step asks again (Cohen: \"After opener's 3♥ or 3♠ answer to\n# 3♦, next step asks, using same schedule\"), one step up from the\n# non-minimum schedule: over 3♥ (short), 3♠ asks: 3NT a void (4♣ asks\n# where: 4♦ clubs, 4♥ diamonds, 4♠ the other major), 4♣/4♦/4♥ a\n# singleton club, diamond, other major. Over 3♠ (5-4-2-2), 3NT asks:\n# 4♣ clubs, 4♦ diamonds, 4♥ the other major. Over 1♥ the singleton or\n# four spades lands on 4♥, the spade void on 4♠: past game, and\n# responder still has 4NT.\nafter 1M (P) 2N (P) 3C (P) 3D (P) 3H (P)\n  3S  \"Asks where the singleton or void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\n# Responder does not make the 3NT ask himself: nothing below reads the\n# four-card suit, and relaying cost 53 IMPs on 34 boards against going\n# on at once (notes). Opener still answers a partner who asks.\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)\n  3N  \"A void: 4♣ asks where\"  alert   shows C=0 | D=0 | H=0     artificial  priority 15\n  4C  \"A singleton club\"  alert        shows C=1, D>=1, H>=1     artificial  priority 15\n  4D  \"A singleton diamond\"  alert     shows D=1, C>=2, H>=1     artificial  priority 15\n  4H  \"A singleton heart\"  alert       shows H=1, C>=2, D>=2     artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P)\n  3N  \"A void: 4♣ asks where\"  alert   shows C=0 | D=0 | S=0     artificial  priority 15\n  4C  \"A singleton club\"  alert        shows C=1, D>=1, S>=1     artificial  priority 15\n  4D  \"A singleton diamond\"  alert     shows D=1, C>=2, S>=1     artificial  priority 15\n  4H  \"A singleton spade\"  alert       shows S=1, C>=2, D>=2     artificial  priority 15\nafter 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Asks where the void is\"  alert\n      sets  ask=mj_relay\n      artificial\n      priority 15\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)\n  4D  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4H  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4S  \"Heart void\"  alert      shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P)\n  4D  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4H  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4S  \"Spade void\"  alert      shows S=0  artificial  priority 15\nafter 1S (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)\n  4C  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4D  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4H  \"Four hearts\"  alert     shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P)\n  4C  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4D  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4H  \"Four spades\"  alert     shows S=4  artificial  priority 15\n\n# ── Opener answers the 3♥ ask (non-minimum, short somewhere) ─────────\n# Steps: a void (3♠), then a singleton in clubs, diamonds, the other\n# major. After the void, 3NT asks where: clubs, diamonds, the other major.\nafter 1S (P) 2N (P) 3D (P) 3H (P)\n  3S  \"A void: 3NT asks where\"  alert\n      shows C=0 | D=0 | H=0\n      artificial\n      priority 15\n  3N  \"A singleton club\"  alert\n      shows C=1, D>=1, H>=1\n      artificial\n      priority 15\n  4C  \"A singleton diamond\"  alert\n      shows D=1, C>=2, H>=1\n      artificial\n      priority 15\n  4D  \"A singleton heart\"  alert\n      shows H=1, C>=2, D>=2\n      artificial\n      priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P)\n  3S  \"A void: 3NT asks where\"  alert\n      shows C=0 | D=0 | S=0\n      artificial\n      priority 15\n  3N  \"A singleton club\"  alert\n      shows C=1, D>=1, S>=1\n      artificial\n      priority 15\n  4C  \"A singleton diamond\"  alert\n      shows D=1, C>=2, S>=1\n      artificial\n      priority 15\n  4D  \"A singleton spade\"  alert\n      shows S=1, C>=2, D>=2\n      artificial\n      priority 15\n\nafter 1M (P) 2N (P) 3D (P) 3H (P) 3S (P)\n  3N  \"Asks where the void is\"  alert\n      shows mj_try(M)\n      sets  ask=mj_relay\n      artificial\n      priority 15\nafter 1S (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4D  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4H  \"Heart void\"  alert      shows H=0  artificial  priority 15\nafter 1H (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P)\n  4C  \"Club void\"  alert       shows C=0  artificial  priority 15\n  4D  \"Diamond void\"  alert    shows D=0  artificial  priority 15\n  4H  \"Spade void\"  alert      shows S=0  artificial  priority 15\n\n# ── Opener answers the 3♠ ask (non-minimum, 5-4-2-2) ─────────────────\nafter 1S (P) 2N (P) 3H (P) 3S (P)\n  3N  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4C  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4D  \"Four hearts\"  alert     shows H=4  artificial  priority 15\nafter 1H (P) 2N (P) 3H (P) 3S (P)\n  3N  \"Four clubs\"  alert      shows C=4  artificial  priority 15\n  4C  \"Four diamonds\"  alert   shows D=4  artificial  priority 15\n  4D  \"Four spades\"  alert     shows S=4  artificial  priority 15\n\n# ── Responder: keycard once the relays have placed opener's shape ────\n# (Rick, 2026-11-06, bridge-classroom #83/#84: \"ask about south shape\n# and learn of spade void then try keycard\"; 2026-11-07: \"keycard\n# should be the stronger hand. the idea of the relays is it will allow\n# us to find low HCP slams when there is a good fit.\") Once a relay\n# answer has placed opener's singleton or void (`shown_short`),\n# responder counts his working values (slam-entry.bid, `working_count`:\n# support points less the honours wasted opposite the shortness, plus\n# opener's floor; `working_slam`, 26). With that, slam: the stronger hand\n# by what has been shown (`stronger_hand`: responder's HCP at least\n# opener's floor; always opposite a minimum) asks for keycards; the\n# weaker, opposite a non-minimum, bids the cheapest suit below game\n# (\"my values work: you ask\") and opener asks. Where there is no room\n# below game responder asks himself. Or 14 HCP with an honour in\n# opener's good five-card side suit (the 4x answer). Less is left to\n# the slam modules (game, mostly). Not after the 5-4-2-2's four-card\n# suit: that branch lost 223 IMPs on 46 boards (notes). The keycard\n# answers and the placement are rkcb-1430.bid's (blackwood.bid's\n# without RKCB). The asks are `mj_relay`, not `relay`: minor-\n# transfers.bid's `when answered relay` (pass with clubs) read our\n# relays and passed a 4♥ answer.\ndefine mj_slam(t) = working_slam(t)\ndefine mj_side_fits(x) = x is not trump, partner.x >= 5, has(A,x) | has(K,x) | has(Q,x), hcp >= 16\ndefine mj_room = (trump is not C, under_game(C)) | (trump is not D, under_game(D)) | (trump is not H, under_game(H)) | (trump is not S, under_game(S))\ndefine mj_fits = (mj_slam(trump), stronger_hand | !mj_room) | mj_side_fits(C) | mj_side_fits(D) | mj_side_fits(H) | mj_side_fits(S)\n\nwhen answered mj_relay, we.trump is H | we.trump is S, we.forcing = game\n  4N  \"Keycard ask in {trump}: opener's shape fits\"\n      when  rkcb\n      shows mj_fits\n      sets  ask=keycards(trump)\n      artificial\n      priority 14\n  4N  \"Blackwood: opener's shape fits\"\n      when  bw, !rkcb\n      shows mj_fits\n      sets  ask=aces\n      artificial\n      priority 14\n  cheapest(C)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not C, under_game(C), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(C)\n      priority 14\n  cheapest(D)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not D, under_game(D), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(D)\n      priority 14\n  cheapest(H)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not H, under_game(H), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(H)\n      priority 14\n  cheapest(S)  \"Slam values opposite your shape: you ask\"  alert\n      shows mj_slam(trump), !stronger_hand\n      when  rkcb | bw, trump is not S, under_game(S), shown_short   # public: read only where it can be the signal\n      sets  ask=mj_captain\n      artificial\n      prefer 0 - cheapest_rank(S)\n      priority 14\n\n# Opener, the stronger hand, asks over responder's \"you ask\".\nwhen asked mj_captain, we.trump is H | we.trump is S\n  4N  \"Keycard ask in {trump}: the stronger hand asks\"\n      when  rkcb\n      sets  ask=keycards(trump)\n      artificial\n      priority 15\n  4N  \"Blackwood: the stronger hand asks\"\n      when  bw, !rkcb\n      sets  ask=aces\n      artificial\n      priority 15\n\n# With a side suit open, the asker bids a control instead of asking\n# (Rick, 2026-11-10, Bridge-Classroom report: 1H 2N 3D 3H 3NT 4C 4S with\n# AK.QJ8653.JT97.A). Past game it is first-round, and only 4♠ over\n# hearts: a control above 4NT would take the keycard ask away (five-level\n# ones cost 13-26 IMPs on the Jacoby scenarios). A suit skipped is\n# denied, so partner goes on only if he covers it. A new suit here has\n# no natural meaning, so these do not wait for `bidding_conventions/control_bids`.\nwhen asked mj_captain, we.trump is H | we.trump is S\n  cheapest(C)  \"Control bid in ♣\"  alert\n      when  trump is not C, under_game(C)\n      when  side_suit_uncontrolled, controlled(C)\n      sets  ask=control(C), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(C)\n      priority 16\n  cheapest(D)  \"Control bid in ♦\"  alert\n      when  trump is not D, under_game(D)\n      when  side_suit_uncontrolled, controlled(D)\n      sets  ask=control(D), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(D)\n      priority 16\n  cheapest(H)  \"Control bid in ♥\"  alert\n      when  trump is not H, under_game(H)\n      when  side_suit_uncontrolled, controlled(H)\n      sets  ask=control(H), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(H)\n      priority 16\n  cheapest(S)  \"Control bid in ♠\"  alert\n      when  trump is not S, under_game(S)\n      when  side_suit_uncontrolled, controlled(S)\n      sets  ask=control(S), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(S)\n      priority 16\n  cheapest(S)  \"Control bid in ♠: first-round control\"  alert\n      when  trump is H, !under_game(S), !kb_spade_ask\n      when  side_suit_uncontrolled, first_round(S)\n      sets  ask=control(S), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(S)\n      priority 16\n\n# Past game, without the suit partner skipped: back to five of the\n# trump suit (control-bids.bid has this when the card plays them).\nwhen asked control(t), !cue, we.trump is H, partner.last = 4S\n  5{trump}  \"No slam: a suit is open\"\n      priority -6\n\n# Over 1♥ the spade void is shown with 4♠, past game: without the\n# values for keycard, back to five hearts.\nafter 1H (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4S (P)\n  5H  \"No slam: back to hearts\"\n      priority 13\n\n# ── Opener after responder declines (Rick, 2026-11-07) ───────────────\n# \"normally opener doesn't continue for slam exploration after\n# responder chooses not to try, unless opener has 19+ points.\" When\n# responder bids 4M over any of opener's answers or relay answers,\n# opener passes with 18 points or fewer; with 19+ the slam modules\n# decide as before. Above the keycard ask and the control bids.\nafter 1M (P) 2N (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3N (P) 4M (P) | 1M (P) 2N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3D (P) 3H (P) 3S (P) 3N (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3H (P) 3S (P) 3N (P) 4C (P) 4x (P) 4M (P) | 1M (P) 2N (P) 3C (P) 3D (P) 3S (P) 3N (P) 4x (P) 4M (P)\n  P   \"Responder declined: no slam without 19+\"\n      shows points <= 18\n      priority 16\n",
   "conventions/bidding_conventions/multi_2d/multi.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Multi 2♦ (Bridge Bum, \"Multi 2D\"): an opening 2♦ shows a weak two in\n# one of the majors. The strong options (a 4-4-4-1 or a 20-21 notrump,\n# Lars Multi) are not written: the card has no field for them and BBA\n# opens those hands naturally (probes/multi-openings.toml). With Multi on,\n# the natural weak twos are off (preempts.bid): every weak two in a major\n# opens 2♦, as BBA does.\n#\n# Responder bids \"pass or correct\":\n#\n#   2♥   happy in 2♥ or 2♠: opener passes with hearts, bids 2♠ with spades\n#   2♠   three or more hearts: opener passes with spades, bids 3♥ with hearts\n#   2NT  asks: 3♣ maximum hearts, 3♦ maximum spades, 3♥ minimum hearts,\n#        3♠ minimum spades\n#   3♥   preemptive, three or more in both majors: pass or correct\n#   4♦   game: opener bids his major\n#   4♥   preemptive game, four or more in both: pass or correct\n#   3♣   to play\n#\n# See multi.notes.md.\n\nmodule multi \"Multi 2♦\"\n  kind   convention\n  convention  bidding_conventions/multi_2d\n  needs  preempts\n  skill  bidding_conventions/multi_2d\n\n# ── The opening ──────────────────────────────────────────────────────\n# The weak two of preempts.bid, either major: 5-10 HCP and a six-card\n# suit, vulnerable a good one. A ten-count with the ace-king of the suit,\n# or its ace and a side ace, opens at the one level (BBA, as in\n# preempts.bid's default).\nwhen opening, seat<=3\n  2D  \"Multi: a weak two in hearts or spades\"   alert\n      shows hcp=5..10, (H=6, S<=3, hcp<=9 | !has(A,H) | (!has(K,H), !has(A,S), !has(A,D), !has(A,C))) | (S=6, H<=3, hcp<=9 | !has(A,S) | (!has(K,S), !has(A,H), !has(A,D), !has(A,C)))\n      when  !vul | (H=6, quality(H)>=good | top5(H)>=3) | (S=6, quality(S)>=good | top5(S)>=3)\n      artificial\n\n# ── Responder ────────────────────────────────────────────────────────\nafter 2D (P) | 2D (X)\n  2H  \"Pass or correct: no game interest\"   alert\n      shows hcp<=14\n      priority -1\n  2S  \"Pass or correct: three or more hearts, short spades\"   alert\n      shows H>=3, S<=2, hcp=6..14\n  3H  \"Pass or correct, preemptive: three or more in both majors\"   alert\n      shows H>=3, S>=3, H+S>=8, hcp<=10\n  4H  \"Pass or correct to game: 4+ in both majors\"   alert\n      shows H>=4, S>=4, hcp<=12\n  4D  \"Game: bid your major\"   alert\n      shows hcp>=15, H>=3, S>=3\n      artificial\n  3C  \"Six or more clubs: to play\"\n      shows C>=6, H<=2, S<=2, hcp<=14\n  2N  \"Asks: which major, minimum or maximum?\"   alert\n      shows hcp>=15\n      sets  forcing=round, ask=multi\n      artificial\n\n# ── Opener: pass or correct ──────────────────────────────────────────\nafter 2D (P) 2H (P) | 2D (X) 2H (P)\n  P   \"My suit is hearts\"     shows H=6\n  2S  \"My suit is spades\"     shows S=6\nafter 2D (P) 2S (P) | 2D (X) 2S (P)\n  P   \"My suit is spades\"     shows S=6\n  3H  \"My suit is hearts\"     shows H=6\nafter 2D (P) 3H (P) | 2D (X) 3H (P)\n  P   \"My suit is hearts\"     shows H=6\n  3S  \"My suit is spades\"     shows S=6\nafter 2D (P) 4H (P) | 2D (X) 4H (P)\n  P   \"My suit is hearts\"     shows H=6\n  4S  \"My suit is spades\"     shows S=6\nafter 2D (P) 4D (P) | 2D (X) 4D (P)\n  4H  \"My suit is hearts\"     shows H=6\n  4S  \"My suit is spades\"     shows S=6\nafter 2D (P) 3C (P) | 2D (X) 3C (P)\n  P   \"Partner's suit: to play\"\n\n# They come in over the pass-or-correct response: opener passes (the\n# auction is theirs; responder may still act).\nafter 2D (P) 2H (*) | 2D (P) 2S (*)\n  P   \"No further bid\"\n      priority -5\n\n# Responder after the correction: the contract is placed.\nafter 2D (P) 2H (P) 2S (P) | 2D (P) 2S (P) 3H (P) | 2D (P) 3H (P) 3S (P) | 2D (P) 4H (P) 4S (P) | 2D (X) 2H (P) 2S (P) | 2D (X) 2S (P) 3H (P) | 2D (X) 3H (P) 3S (P) | 2D (X) 4H (P) 4S (P)\n  P   \"Partner's major: to play\"\n\n# Opener after the asker's sign-off: pass.\nafter 2D (P) 2N (P) 3C (P) 3H (P) | 2D (P) 2N (P) 3D (P) 3S (P)\n  P   \"No further bid\"\n\n# ── Opener answers 2NT ───────────────────────────────────────────────\nwhen asked multi\n  3C  \"Maximum with hearts: 8-10\"   shows H=6, hcp>=8   artificial\n  3D  \"Maximum with spades: 8-10\"   shows S=6, hcp>=8   artificial\n  3H  \"Minimum with hearts\"          shows H=6, hcp<=7\n  3S  \"Minimum with spades\"          shows S=6, hcp<=7\n\n# ── The asker places the contract ────────────────────────────────────\nafter 2D (P) 2N (P) 3C (P)\n  4H  \"Game opposite a maximum\"   shows H>=2 | hcp>=18\n  3H  \"No game: sign off\"\n      priority -1\nafter 2D (P) 2N (P) 3D (P)\n  4S  \"Game opposite a maximum\"   shows S>=2 | hcp>=18\n  3S  \"No game: sign off\"\n      priority -1\nafter 2D (P) 2N (P) 3H (P)\n  4H  \"Game opposite a minimum\"   shows H>=2, hcp>=18 | (H>=3, hcp>=16)\n  P   \"No game: play 3♥\"\n      priority -1\nafter 2D (P) 2N (P) 3S (P)\n  4S  \"Game opposite a minimum\"   shows S>=2, hcp>=18 | (S>=3, hcp>=16)\n  P   \"No game: play 3♠\"\n      priority -1\n",
   "conventions/bidding_conventions/namyats/namyats.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Namyats (Bridge Bum, \"Namyats\"): 4♣ shows a strong four-level preempt\n# in hearts, 4♦ the same in spades: a good seven- or eight-card major and\n# eight or nine playing tricks, too good for a plain 4♥/4♠ and not\n# strong enough for 2♣. The direct 4♥/4♠ stays the weaker preempt\n# (preempts.bid).\n#\n# Responder: the next step (4♦ over 4♣, 4♥ over 4♦) is a relay with slam\n# interest; the major is the sign-off. After the relay opener bids his\n# major without a side shortness, or shows a singleton or void.\n# See namyats.notes.md.\n\nmodule namyats \"Namyats: 4♣/4♦ strong major preempts\"\n  kind   convention\n  convention  bidding_conventions/namyats\n  needs  preempts\n  skill  bidding_conventions/namyats\n\n# ── The opening ──────────────────────────────────────────────────────\n# Exactly seven cards headed by the ace-king-queen, 9-13 HCP, no side\n# ace or king: the hand BBA opens 4♣/4♦ (nine times in the whole corpus,\n# all of them this hand, 21GF-GIB; with eight such cards and 9-10 it\n# opens 4M, with a side ace or king 1M). Bridge Bum's \"8-9 tricks\" alone took 1M openings\n# (the first version, 10-15 HCP with five losers, changed ~70 boards\n# where BBA opened 1M; namyats.notes.md). Ahead of the one-level opening.\nwhen opening, seat<=3\n  4C  \"Namyats: a strong preempt in hearts, 8-9 tricks\"   alert\n      shows H=7, has(A,H), has(K,H), has(Q,H), hcp=9..13, S<=3\n      shows !has(A,S), !has(K,S), !has(A,D), !has(K,D), !has(A,C), !has(K,C)\n      artificial\n      priority 1\n  4D  \"Namyats: a strong preempt in spades, 8-9 tricks\"   alert\n      shows S=7, has(A,S), has(K,S), has(Q,S), hcp=9..13, H<=3\n      shows !has(A,H), !has(K,H), !has(A,D), !has(K,D), !has(A,C), !has(K,C)\n      artificial\n      priority 1\n\n# ── Responder ────────────────────────────────────────────────────────\nafter 4C (P) | 4C (X)\n  4H  \"Sign-off: no slam interest\"\n      priority -1\n  4D  \"Relay: slam interest in hearts\"   alert\n      shows controls>=5 | hcp>=15, quick_tricks>=3\n      sets  trump=H, ask=namyats(H)\n      artificial\nafter 4D (P) | 4D (X)\n  4S  \"Sign-off: no slam interest\"\n      priority -1\n  4H  \"Relay: slam interest in spades\"   alert\n      shows controls>=5 | hcp>=15, quick_tricks>=3\n      sets  trump=S, ask=namyats(S)\n      artificial\n\n# Opener after the sign-off: pass.\nafter 4C (P) 4H (P) | 4D (P) 4S (P)\n  P   \"No further bid\"\n\n# ── Opener after the relay ───────────────────────────────────────────\nwhen asked namyats(t)\n  4{t}  \"No side shortness: back to my suit\"\n        priority -1\n  4S    \"A singleton or void in spades\"     shows S<=1\n        when  t is H\n  5C    \"A singleton or void in clubs\"      shows C<=1\n  5D    \"A singleton or void in diamonds\"   shows D<=1\n  5H    \"A singleton or void in hearts\"     shows H<=1\n        when  t is S\n",
   "conventions/bidding_conventions/new_minor_forcing/new-minor-forcing.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# New Minor Forcing: after 1m-1M-1NT, two of the other minor is artificial,\n# invitational or better, and asks opener about support for responder's\n# major (and four cards in the other major). Without it, that bid is natural\n# and not forcing (responder-rebids.bid).\n\nmodule new-minor-forcing \"New Minor Forcing\"\n  kind   convention\n  convention  bidding_conventions/new_minor_forcing\n  card   after_1nt_rebid\n  needs  responder-rebids\n  skill  bidding_conventions/new_minor_forcing\n  param  checkback = bidding_conventions/checkback default false\n  param  roudi = bidding_conventions/roudi default false\n  param  twoway = bidding_conventions/two_way_nmf default false\n  param  xyz = bidding_conventions/xyz default false\n\n# Checkback, Roudi and two-way NMF each replace NMF when the card has\n# both (no PBS card does).\nafter 1C (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz, !tw(C)\n  2D  \"New Minor Forcing: invitational+, 5+ {M} or both majors\"  alert\n      shows M>=4, nt_rebid_invite | nt_rebid_game\n      sets  forcing=round, ask=nmf\n      artificial\n      priority 1                       # ahead of a natural 2NT or 3NT\nafter 1D (P) 1M (P) 1N (P) when !checkback, !roudi, !twoway, !xyz\n  2C  \"New Minor Forcing: invitational+, 5+ {M} or both majors\"  alert\n      shows M>=4, nt_rebid_invite | nt_rebid_game\n      sets  forcing=round, ask=nmf\n      artificial\n      priority 1                       # ahead of a natural 2NT or 3NT\n\n# Opener answers: three cards in responder's major first, then four hearts\n# after a 1S response (1NT over 1S can hide four hearts; over 1H it denies\n# four spades), else notrump by strength.\nwhen asked nmf\n  2H  \"Three hearts\"                       shows H=3        when partner.H>=4\n  2S  \"Three spades\"                       shows S=3        when partner.S>=4\n  2H  \"Four hearts, not three spades\"      shows H>=4, S<=2  when partner.S>=4\n  2N  \"No fit, minimum\"            shows hcp<=shown.hcp.max-1\n      priority -1\n  3N  \"No fit, maximum\"               shows hcp>=shown.hcp.max\n      priority -1\n\n# Responder places the contract: with a fit, invite (3M) or bid game (4M);\n# without one, 2NT invites and 3NT is game.\nwhen answered nmf\n  4H  \"Game in the heart fit\"              shows points+partner.hcp.min>=25, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3\n  3H  \"Invitational, heart fit\"            shows points+partner.hcp.min>=23, points+partner.hcp.min<=24, H>=5 | (H>=4, partner.H.min>=4)   when partner.H>=3   sets ask=invite(H)\n  4S  \"Game in the spade fit\"              shows points+partner.hcp.min>=25, S>=5   when partner.S>=3\n  3S  \"Invitational, spade fit\"            shows points+partner.hcp.min>=23, points+partner.hcp.min<=24, S>=5   when partner.S>=3   sets ask=invite(S)\n  3N  \"Game, no fit\"                       shows points+partner.hcp.min>=25\n  2N  \"Invitational, no fit\"               shows points+partner.hcp.min>=23, points+partner.hcp.min<=24   sets ask=nt_invite\n  P   \"Accepts the notrump game\"           when partner.last=3N\n  P   \"No game: opener is minimum\"         shows points+partner.hcp.min<=24   when partner.last=2N\n",
@@ -11802,7 +13309,7 @@
   "rules/slam/rkcb-1430.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# No auction patterns here. These rules key off auction state that other\n# modules set (trump agreed, game forcing), so they work after any auction\n# that reaches that state.\n\nmodule rkcb-1430 \"Roman Keycard Blackwood (1430 or 0314, as the card says)\"\n  kind   convention\n  needs  base\n  skill  bidding_conventions/roman_keycard\n  param  rkcb   = bidding_conventions/roman_keycard default false\n  param  rstyle = bidding_conventions/roman_keycard:style default 1430\n  param  m0314 = bidding_conventions/roman_keycard:minor_0314 default false\n  param  gstyle = general.style\n  param  style = bidding_conventions/control_bids:style default first_or_second_round\n  param  kstyle = slam.king_ask.style default five_nt   # five_nt | next_step | none (convention-card 0.28); a card that is silent plays 5NT (2026-10-29)\n  param  kspec  = bidding_conventions/roman_keycard:king_ask_specific default false\n\n# ── The ask ───────────────────────────────────────────────────────────\n#\n# Rick's ruling:\n#\n#   Slam asks isn't about 18 -- what has partner shown? It's more about\n#   33+ combined points, where in a suit contract the player with fewer\n#   trumps gets to switch to short-suit points -- 1 for a doubleton, 3\n#   for a singleton, 5 for a void, capped by number of trumps held. When\n#   the slam asker has unprotected suits, we will normally use control\n#   bids before keycard, and stop in game if there is a suit unprotected\n#   in both hands.\n#\n# So the test is **33 combined support points with the agreed suit as\n# trump**, `we.tp(trump)`: my exact count plus the range a raise recorded\n# for partner. It replaces `tp(trump) + partner.hcp.max`, which was a\n# workaround from before raises showed support points. The evidence\n# behind the boundaries is in slam-catch.notes.md.\n#\n# Two branches, because partner's range is read from a different end.\n#\n# 1. **Partner is limited** (a raise, a limit raise) and nothing has\n#    forced us to game. Partner has shown a top as well as a bottom, and\n#    the only other call on offer is game, so the ask carries the whole\n#    decision and 33 is measured against partner's maximum:\n#    `we.tp(trump).max >= 33`. With it, the hand must play for twelve\n#    tricks opposite a minimum (`losers <= 4`) and must not have **two\n#    bare side suits** -- two or more cards with neither the ace nor the\n#    king, where the first two tricks can go. That last test replaces\n#    `controls >= 7`: it says which suit is the problem rather than\n#    counting. One bare suit is allowed, because a raise facing it will\n#    usually hold something there; two is where partner cannot cover\n#    both. BBA draws the same line: over `1S P 2S P` and `1S P 3S P` on\n#    the Basic-Bridge card it asks with none or one bare suit (272\n#    boards) and never with two.\n#\n# 2. **We are already forced to game.** Partner's range has no top, so\n#    `we.tp(trump).max` says nothing; what is known is partner's floor.\n#    33 between us on that floor is the test, and where the trump\n#    agreement recorded no support points for partner the fallback is my\n#    own 18, a game force being worth about 13 (`slam_values`, named in\n#    slam-entry.bid with the other shared conditions). Here the\n#    ask ranks *behind* the system's descriptive calls: shortness, a\n#    second suit and a control bid all say more than 4NT does, and the\n#    ask is what is left when they are used up.\n#\n# When the card plays control bids (`slam.cue_bids.play`), a hand with a\n# bare suit goes to `control-bids.bid` first and comes back here only\n# once partner has shown a control.\n\nwhen rkcb, we.trump is suit, !minor_given_way, !asked, we.forcing = none | we.forcing = round, !kb_asks(trump), !mw_asks(trump)   # Kickback, Minorwood: their own ask\n  4N  \"Keycard ask in {trump}\"\n      when  slam_values_limited     # 33 facing partner's maximum\n      when  !two_bare_suits  # and no two bare side suits\n      sets  ask=keycards(trump)\n      artificial\n      priority 1\n\nwhen rkcb, we.trump is suit, !minor_given_way, !asked, we.forcing = game, !answered control, !kb_asks(trump), !mw_asks(trump)   # after a control dialogue its own rules decide\n  4N  \"Keycard ask in {trump}\"\n      when  slam_values  # 33 on partner's floor, or 18 of my own\n      sets  ask=keycards(trump)\n      artificial\n\n# A fit known but not agreed (docs/JUDGMENT-LAYER.md, Phase 1): partner's\n# game raise, his preempt, a transfer completed. No rule set `trump`, so\n# the asks above never saw it. The ask agrees the major on the way.\n# Majors only for now: the sign-offs after an answer are awkward in a\n# minor.\nwhen rkcb, we.trump is none, !asked, !they.bid   # uncontested for now: in competition it cost\n  4N  \"Keycard ask in ♠\"\n      when  shown_fit(S), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)\n      sets  trump=S, ask=keycards(S)\n      artificial\n      priority 1\n  4N  \"Keycard ask in ♥\"\n      when  shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)\n      sets  trump=H, ask=keycards(H)\n      artificial\n      priority 1\n\n# The keycard suit when no rule has set the one we play in (Rick,\n# 2026-10-03; `kc_open`, slam-entry.bid): a suit agreed by what we have\n# shown, else, with no notrump bid by us, the last suit we bid\n# (1H-1S-2H-4NT asks in hearts). The ask sets it as trump. The majors\n# agreed publicly, and partner's own six-card major, are the rules above.\n# The ask needs the fit and the values, as above.\nwhen rkcb, we.trump is none, !asked, !they.bid\n  4N  \"Keycard ask in ♠\"\n      when  kc_open(S), !shown_fit(S), !shown_fit(H), we.fit(S).min >= 8, fit_slam_values(S), !two_bare_beside(S)\n      sets  trump=S, ask=keycards(S)\n      artificial\n      priority -1\n  4N  \"Keycard ask in ♥\"\n      when  kc_open(H), !shown_fit(S), !shown_fit(H), we.fit(H).min >= 8, fit_slam_values(H), !two_bare_beside(H)\n      sets  trump=H, ask=keycards(H)\n      artificial\n      priority -1\n  4N  \"Keycard ask in ♦\"\n      when  kc_open(D), !shown_fit(S), !shown_fit(H), we.fit(D).min >= 8, fit_slam_values(D), !two_bare_beside(D)\n      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)\n      sets  trump=D, ask=keycards(D)\n      artificial\n      priority -1\n  4N  \"Keycard ask in ♣\"\n      when  kc_open(C), !shown_fit(S), !shown_fit(H), we.fit(C).min >= 8, fit_slam_values(C), !two_bare_beside(C)\n      when  hcp + partner.hcp.min >= 30   # a minor slam needs the high cards (rebids.test: 17 facing a preference)\n      sets  trump=C, ask=keycards(C)\n      artificial\n      priority -1\n\n# The same 4NT in competition, for reading only (2026-10-05, DOPI and\n# ROPI): the asks above are off once they have bid, but partner's 4NT is\n# still keycard for the suit we play in, and the answer comes by DOPI or\n# ROPI (dopi-ropi.bid). Never chosen: `read_only` is a condition on the\n# caller's hand that no hand meets, and that a reader cannot judge, so\n# it stays possible when the call is read (docs/LANGUAGE.md, section 8).\n# Low priority as well, so any other meaning of 4NT comes first.\ndefine read_only = bare(C), !bare(C)\n\nwhen rkcb, we.trump is none, !asked, they.bid\n  4N  \"Keycard ask in ♠\"\n      when  kc_open(S) | shown_fit(S)\n      sets  trump=S, ask=keycards(S)\n      artificial\n      when  read_only\n      priority -60\n  4N  \"Keycard ask in ♥\"\n      when  kc_open(H) | shown_fit(H), !shown_fit(S)\n      sets  trump=H, ask=keycards(H)\n      artificial\n      when  read_only\n      priority -60\n  4N  \"Keycard ask in ♦\"\n      when  kc_open(D), !shown_fit(S), !shown_fit(H)\n      sets  trump=D, ask=keycards(D)\n      artificial\n      when  read_only\n      priority -60\n  4N  \"Keycard ask in ♣\"\n      when  kc_open(C), !shown_fit(S), !shown_fit(H)\n      sets  trump=C, ask=keycards(C)\n      artificial\n      when  read_only\n      priority -60\n\n# A trump suit agreed and partner's jump to game in competition\n# (total-tricks.bid's `ask=signoff`, 1H-2NT-(3C)-4H): 4NT over the\n# sign-off is still keycard. For reading, as above.\nwhen rkcb, we.trump is suit, they.bid, asked signoff\n  4N  \"Keycard ask in {trump}\"\n      sets  ask=keycards(trump)\n      artificial\n      when  read_only\n      priority -60\n\n# A minor set as trump, and a major agreed since (Rick, 2026-10-03:\n# \"normally a major fit will replace a minor fit\"; 1S-2C-3C-4S-4NT): the\n# ask is in the major, and makes it trump.\nwhen rkcb, minor_given_way, !asked\n  4N  \"Keycard ask in ♠\"\n      when  major_over_minor(S), fit_slam_values(S), !two_bare_beside(S)\n      sets  trump=S, ask=keycards(S)\n      artificial\n      priority 1\n  4N  \"Keycard ask in ♥\"\n      when  major_over_minor(H), !major_over_minor(S), fit_slam_values(H), !two_bare_beside(H)\n      sets  trump=H, ask=keycards(H)\n      artificial\n      priority 1\n\n# After a control-bid exchange (`control-bids.bid`, when the card plays\n# them). `asked control(t)` is partner's control bid; `answered control(u)`\n# says partner was answering mine, so I am the hand that opened the\n# dialogue and the one that takes charge. Above it, the stop-in-game rule\n# at priority 20 has already ruled out a suit bare in both hands; below\n# it, any control still to show outranks the ask.\n\n# In a control-bid dialogue (control-bids.bid): ask once every side suit\n# is covered -- a control of mine, one partner has cued, or one I denied\n# that partner has promised by bidding on. A control bid below game still\n# comes first (priority 12), the ask before one past game (10).\nwhen rkcb, we.trump is suit, asked control(t), !kb_asks(trump)\n  4N  \"Keycard ask in {trump}\"\n      when  all_covered\n      sets  ask=keycards(trump)\n      artificial\n      priority 11\n  # Partner's control bid has passed 4NT (a first-round control past\n  # game, as over a non-serious 3NT, serious-3nt.bid): with every suit\n  # covered and the values, bid the slam rather than go on cueing and\n  # stop in five (2026-10-05, Serious boards 17 and 47).\n  6{trump}  \"Small slam\"\n      when  all_covered, slam_values, partner.last >= 5C\n      priority 11\n\nwhen rkcb, we.trump is suit, answered control(t), partner.last = 4{trump}, !kb_asks(trump)\n  4N  \"Keycard ask in {trump}\"\n      when  all_covered_by_us\n      sets  ask=keycards(trump)\n      artificial\n      priority 15\n\nwhen rkcb, asked keycards(t)\n  # The card's keycard order (Rick, 2026-11-09: \"we should follow the\n  # card's keycard order\"; the 2026-09-27 \"1430 whatever the card says\"\n  # was a misunderstanding): `slam.rkcb.style` 0314 answers 0314 in every\n  # suit, as BBA and GIB do; 1430 cards keep the `minor_0314` treatment,\n  # which swaps the first two answers when a minor is trumps.\n  5C  \"1 or 4 keycards\"                shows keycards(t) in 1|4  artificial\n      when  kc_first_14(t)\n  5D  \"0 or 3 keycards\"                shows keycards(t) in 0|3  artificial\n      when  kc_first_14(t)\n  5C  \"0 or 3 keycards\"                shows keycards(t) in 0|3  artificial\n      when  !kc_first_14(t)\n  5D  \"1 or 4 keycards\"                shows keycards(t) in 1|4  artificial\n      when  !kc_first_14(t)\n  # Five keycards answer as two: the steps wrap (0/3, 1/4, 2/5), and the\n  # asker, holding none, knows which (Benjamin_2D 222, 2026-10-07: we\n  # passed the ask with five).\n  5H  \"2 or 5 keycards, no {t} queen\"     shows keycards(t) in 2|5, !has(Q,t)  artificial\n  5S  \"2 or 5 keycards and the {t} queen\" shows keycards(t) in 2|5, has(Q,t)  artificial\n\n# The asker places the contract. we.keycards(t) combines my exact count\n# with partner's answer; the deck limit of 5 keycards resolves \"1 or 4\".\nwhen rkcb, answered keycards(t)\n  7{t}  \"Grand slam\"\n        when we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S, grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)\n  # The king ask (`slam.king_ask.style = five_nt`, 2026-10-05): every keycard\n  # and the queen are ours, and the grand turns on the side kings.\n  5N    \"King ask: all keycards and the {t} queen held\"\n        when kstyle is five_nt, we.keycards(t)=5, has(Q,t) | partner.has(Q,t) | partner.last = 5S\n        sets ask=kings(t)\n        artificial\n  6{t}  \"Small slam\"\n        when we.keycards(t)>=4\n  # The count that fits (2026-10-07): with 30 HCP between us the low\n  # count of an open answer is impossible (`kc_high`, slam-entry.bid),\n  # so no sign-off: on with all five and the queen, else six.\n  7{t}  \"Grand slam\"\n        when kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S, grand_try, kstyle is not five_nt   # with the king ask, ask first (2026-10-07)\n  5N    \"King ask: all keycards and the {t} queen held\"\n        when kstyle is five_nt, kc_high(t), we.keycards(t).max=5, has(Q,t) | partner.last = 5S\n        sets ask=kings(t)\n        artificial\n  6{t}  \"Small slam\"\n        when kc_high(t)\n  P     \"To play\"\n        when partner.last=5{t}, we.keycards(t).max<=3\n  5{t}  \"Signoff\"\n        when we.keycards(t).max<=3     # filtered out as illegal when the answer\n                                       # is already 5{t}; P above covers that\n        sets ask=keycard_correct(t)    # partner corrects only with 3-4\n  5{t}  \"Signoff\"\n        when maybe we.keycards(t)>=4   # 0 or 3 / 1 or 4 still open\n        sets ask=keycard_correct(t)\n  # With clubs as trumps every answer but 5♣ passes the sign-off\n  # (2026-10-05: we passed partner's artificial 5♦ on ~30 boards). Six\n  # then: the answer is never a place to play, and an open count (\"0 or\n  # 3\") is far more often the higher one opposite slam values.\n  6{t}  \"Small slam\"\n        priority -1\n\n# The king ask by 5NT: the number of kings outside the trump suit (its\n# king is a keycard), by steps from 6♣. As ACBL's SAYC booklet and BBA\n# (6♣ 0, 6♦ 1, 6♥ 2, 6♠ 3). Kings are controls less two for each ace.\n# The text says \"One king\", as blackwood.bid's answers do: the trump\n# king was counted as a keycard, and these rules also read the answers\n# to Blackwood's 5NT (kings(N)), where differing texts left the table\n# told only \"artificial\".\ndefine side_kings(t) = controls - keycards(N) - keycards(N) - has(K,t)\n\nwhen kstyle is five_nt, asked kings(t), !kspec | t is C | t is D\n  6C  \"No king\"     shows side_kings(t) = 0   artificial\n  6D  \"One king\"    shows side_kings(t) = 1   artificial\n  6H  \"Two kings\"   shows side_kings(t) = 2   artificial\n  6S  \"Three kings\" shows side_kings(t) = 3   artificial\n\n# The asker: the grand with every side king between us, or with two, 33\n# HCP on partner's floor and a hand that can take care of the missing\n# king's suit (a singleton or void, or six trumps in either hand); else six, or 6NT when\n# the answer has passed six of a minor. With a flat hand the missing king\n# is a finesse for the grand: on Puppet Stayman's 4-4 fits it went down\n# as often as it made (2026-10-07, rkcb-1430.notes.md).\ndefine partner_side_kings = (partner.last = 6D) + (partner.last = 6H) + (partner.last = 6H) + (partner.last = 6S) + (partner.last = 6S) + (partner.last = 6S)\ndefine our_side_kings(t) = side_kings(t) + partner_side_kings\n\nwhen kstyle is five_nt, answered kings(t), !kspec | t is C | t is D\n  7{t}  \"Grand slam\"\n        when our_side_kings(t) >= 3\n  7{t}  \"Grand slam\"\n        when our_side_kings(t) >= 2, hcp + partner.hcp.min >= 33, C<=1 | D<=1 | H<=1 | S<=1 | t>=6 | partner.t.min>=6\n  P     \"To play\"\n        when partner.last = 6{t}\n  6{t}  \"Small slam\"\n  6N    \"Small slam\"\n\n# ── Specific kings (`slam.king_ask.specific`, Rick, 2026-10-28) ──────\n# 5NT is answered by the cheapest side king below six of trumps, six of\n# trumps with none of those. With hearts trumps the spade king is not\n# shown; the asker can ask for it with 6♠ (7♥ with it, 6NT without).\n# Majors only: with a minor as trumps every side king is above six of\n# it, so the count answers stay. A new suit below trumps then asks\n# for that king: seven of trumps with it, six of a higher suit below\n# trumps with that king instead, six of trumps with neither. The asker\n# places the grand: with every side king accounted for (in either hand,\n# or the asker short in the suit, at most one card), seven; with one\n# missing and askable, he asks; else six.\nwhen kstyle is five_nt, kspec, asked kings(t), t is H | t is S\n  6C  \"The club king\"\n      shows has(K,C)\n      when  t is not C\n      artificial\n  6D  \"The diamond king, not the club king\"\n      shows has(K,D), !has(K,C)\n      when  t is H | t is S\n      artificial\n  6H  \"The heart king, no club or diamond king\"\n      shows has(K,H), !has(K,C), !has(K,D)\n      when  t is S\n      artificial\n  6{t}  \"No side king below {t}\"\n      shows !has(K,C), !has(K,D), t is not S | !has(K,H)\n\ndefine king_held(s) = has(K,s) | partner.last = 6{s}   # partner's answer names its king\n# Side kings not accounted for. One of them is still worth the grand\n# with the count style's margin (33 HCP, shortness or six trumps).\ndefine kings_unheld(t) = (!(t is C | king_held(C))) + (!(t is D | king_held(D))) + (!(t is H | king_held(H))) + (!(t is S | king_held(S)))\ndefine king_margin(t) = hcp + partner.hcp.min >= 33, C<=1 | D<=1 | H<=1 | S<=1 | t>=6 | partner.t.min>=6\n\nwhen kstyle is five_nt, kspec, answered kings(t), t is H | t is S\n  # Ask when the king asked for is the only one missing, or one of two\n  # with the margin for the other (the answer 7 can leave one unknown).\n  6D    \"Asks for the diamond king\"  alert\n        when t is H | t is S, !king_held(D), kings_unheld(t) = 1 | (kings_unheld(t) = 2, king_margin(t))\n        sets ask=king_in(D)\n        artificial\n        priority 3\n  6H    \"Asks for the heart king\"  alert\n        when t is S, !king_held(H), kings_unheld(t) = 1 | (kings_unheld(t) = 2, king_margin(t))\n        sets ask=king_in(H)\n        artificial\n        priority 3\n  # Hearts trumps: the spade king is asked above six of trumps (7♥ with\n  # it, 6NT without), after the diamond king is settled.\n  6S    \"Asks for the spade king\"  alert\n        when t is H, !king_held(S), king_held(D) | !partner.last = 6C, kings_unheld(t) = 1 | (kings_unheld(t) = 2, king_margin(t))\n        sets ask=king_in(S)\n        artificial\n        priority 2\n  7{t}  \"Grand slam\"\n        when kings_unheld(t) = 0 | (kings_unheld(t) = 1, king_margin(t))\n        priority 1\n  P     \"To play\"\n        when partner.last = 6{t}\n  6{t}  \"Small slam\"\n  6N    \"Small slam\"\n\nwhen kspec, asked king_in(z)\n  7{trump}  \"The {z} king\"\n            shows has(K,z)\n  6H        \"No diamond king; the heart king\"\n            shows !has(K,D), has(K,H)\n            when  z is D, we.trump is S\n            artificial\n  6{trump}  \"Neither king\"\n            shows !has(K,z)\n  6N        \"No spade king\"\n            shows !has(K,S)\n            when  z is S, we.trump is H\n            artificial\n\nwhen kspec, answered king_in(z)\n  P         \"To play\"\n            when partner.last = 7{trump} | partner.last = 6{trump} | partner.last = 6N\n  6{trump}  \"Small slam\"\n\n# When the answer was ambiguous the asker signs off in five, and the answerer\n# corrects to six holding the higher count (3 or 4 keycards).\nwhen rkcb, asked keycard_correct(t)\n  6{t}  \"Corrects to six: the higher count\"   shows keycards(t) in 3|4|5\n  P     \"Accepts the sign-off\"\n\n# TODO: queen ask (next step after 5C/5D), specific-king ask at 5NT.\n",
   "rules/slam/serious-3nt.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Non-serious 3NT: in a game force with a major agreed at the three\n# level (and neither of us shown balanced), the next hand's 3NT is\n# artificial: mild slam interest, asking partner to start control bids\n# with a good hand. A control bid instead is serious (the slam values of\n# control-bids.bid), and four of the major has no interest. Partner\n# answers 3NT with a control bid (extras), the keycard ask (slam values\n# and every suit controlled), or four of the major. Notes:\n# serious-3nt.notes.md.\n\nmodule serious-3nt \"Non-serious 3NT before control bids in a major-fit game force\"\n  kind   convention\n  needs  base\n  skill  bidding_conventions/serious_3nt\n  param  nsplay = bidding_conventions/serious_3nt default false\n  param  cue    = bidding_conventions/control_bids default false\n  param  rkcb   = bidding_conventions/roman_keycard default false\n\n# Partner has just agreed (or raised) our major at the three level.\ndefine ns_position = partner.last = 3{trump}, !our_notrump\n\n# ── The 3NT ───────────────────────────────────────────────────────────\n#\n# Within two points of the slam values that make a control bid serious\n# (`slam_count`, slam-entry.bid: 30 for the long hand, 31 short, 32\n# equal, on partner's floor), but short of them. The source puts the\n# non-serious 3NT about 14-15 opposite a 2/1, the serious control bid\n# 16+. Priority 12, level with the control bids: the two never hold on\n# the same hand. Partner control-bids over it with a good hand.\ndefine ns_count(t) = (longer(t), count_long(t) >= 28) | (longer(t), count_long_p(t) >= 28) | (shorter(t), count_short(t) >= 29) | (shorter(t), count_short_l(t) >= 29) | (!longer(t), !shorter(t), count_equal(t) >= 30) | (!longer(t), !shorter(t), count_equal_p(t) >= 30)\n\nwhen nsplay, cue, we.trump is suit, trump is H | trump is S, we.forcing = game, !asked, !answered control\n  3N  \"Non-serious 3NT: mild slam interest\"  alert\n      shows ns_count(trump)\n      when  ns_position\n      when  !slam_values\n      sets  ask=ns3nt(trump)\n      artificial\n      priority 12\n\n# ── Partner over the 3NT ──────────────────────────────────────────────\n#\n# Extras of my own (the count on partner's raised floor): show the\n# cheapest control below game, as control-bids.bid's opening. The keycard\n# ask with slam values and every side suit controlled. Otherwise game.\n\nwhen nsplay, cue, asked ns3nt(t)\n  cheapest(C)  \"Control bid in ♣\"  alert\n      when  t is not C, under_game(C), slam_interest(t), controlled(C)\n      sets  ask=control(C), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(C)\n      priority 12\n  cheapest(D)  \"Control bid in ♦\"  alert\n      when  t is not D, under_game(D), slam_interest(t), controlled(D)\n      sets  ask=control(D), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(D)\n      priority 12\n  cheapest(H)  \"Control bid in ♥\"  alert\n      when  t is not H, under_game(H), slam_interest(t), controlled(H)\n      sets  ask=control(H), ladder=control\n      artificial\n      prefer 0 - cheapest_rank(H)\n      priority 12\n  4N  \"Keycard ask in {t}\"\n      when  rkcb\n      when  slam_values, !side_suit_uncontrolled\n      sets  ask=keycards(t)\n      artificial\n      priority 13\n  4{t}  \"Signoff: no slam interest\"\n",
   "rules/slam/slam-catch.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# The card-independent half of the catch that takes over once a trump suit\n# is agreed. There are no auction patterns here: the rules key on\n# `we.trump` and `we.forcing`, so the same rule serves a simple raise, a\n# limit raise, a Jacoby 2NT, a splinter, a two-over-one and a transfer.\n#\n# The ask lives in blackwood.bid and rkcb-1430.bid, because which of them\n# is active is a card question and the answers differ. The test that\n# decides *whether* to ask is the same in both, and is written up in\n# slam-catch.notes.md. When the card plays control bids, control-bids.bid\n# runs first and this sign-off is what the dialogue falls back to.\n\nmodule slam-catch \"Game or slam once a trump suit is agreed\"\n  kind   judgement\n  needs  base\n  skill  partnership_bidding/slam_bidding\n\n# ── The sign-off ──────────────────────────────────────────────────────\n#\n# Once a suit is agreed and we are forced to game, game in that suit is\n# always a call we can fall back on. Nothing here says anything about the\n# hand, so it ranks last: any rule with something to show beats it, and\n# the slam tries above it beat it. It exists so that an auction which has\n# agreed a trump suit never dies below game for want of a rule.\n\nwhen we.trump is suit, we.forcing = game, !asked\n  4{trump}  \"Signoff\"\n            when trump is H | trump is S\n            priority -20\n",
-  "rules/slam/slam-entry.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Slam entry: the conditions the slam modules share, named once\n# (docs/JUDGMENT-LAYER.md, Phase 0). rkcb-1430.bid, blackwood.bid and\n# control-bids.bid used to spell each of them out, up to 1,300 characters\n# a line. No rules yet: what decides whether slam is worth looking for\n# (Phase 1) will live here, and the modules that ask keep deciding how.\n#\n# The thresholds are Rick's (rkcb-1430.bid, \"The ask\"; slam-catch.notes.md):\n# 33 support points between us with the agreed suit as trump, or 18 of my\n# own facing a game force; the control rulings are control-bids.bid's.\n\nmodule slam-entry \"Slam entry: the conditions the slam modules share\"\n  kind   judgement\n  skill  partnership_bidding/slam_bidding\n  param  style = bidding_conventions/control_bids:style default first_or_second_round\n  param  bw    = bidding_conventions/blackwood default false\n  param  rkcb   = bidding_conventions/roman_keycard default false\n  param  q4n   = bidding_conventions/quantitative_4nt default true\n\n# ── The count: declarer points and support points (2026-10-01) ───────\n#\n# Rick (2026-10-01): \"point count for any auction is normally declarer\n# points for the hand with longer trumps, and support points for the\n# other hand. With 4-4 fits both hands can use support points.\" The\n# long-trump hand counts HCP + length (one a card beyond four, in every\n# suit), not its own shortness; the short hand counts HCP + shortness\n# (`tp(t)`, capped by its trumps). `we.tp(t)` counted shortness in both\n# hands, which double counts.\n#\n# Trump lengths are compared with what partner has shown (`partner.t.min`):\n# longer than that, I am the long hand; shorter, partner is; equal, both\n# count support points (4-4, 5-5). A raiser shows the length he raised\n# with, so the raiser is the support hand unless I hold no more trumps.\n\ndefine longer(t)  = t > partner.t.min\ndefine shorter(t) = t < partner.t.min\n\n# The count on partner's floor, by role. Partner as the long hand counts\n# his shown points (HCP + length), or his HCP and the length he has shown\n# when no call showed points: either is a floor. As the short hand (or\n# with equal length) his support points when a raise showed them, else\n# the points he showed (`_p`): a call that shows total points leaves\n# his HCP floor, and so `partner.tp`, near zero (1S-2D-3C-3S: 13+\n# points). Each condition takes the better of the floors.\ndefine count_long(t)    = hcp + length_points + partner.tp(t).min\ndefine count_long_p(t)  = hcp + length_points + partner.points.min\ndefine count_short(t)   = tp(t) + partner.points.min\ndefine count_short_l(t) = tp(t) + partner.hcp.min + partner.length_points.min\ndefine count_equal(t)   = tp(t) + partner.tp(t).min\ndefine count_equal_p(t) = tp(t) + partner.points.min\n\n# The same on partner's maximum.\ndefine count_long_max(t)  = hcp + length_points + partner.tp(t).max\ndefine count_short_max(t) = tp(t) + partner.points.max\ndefine count_equal_max(t) = tp(t) + partner.tp(t).max\n\n# The count at the thresholds the slam conditions use. The textbook 33\n# (32 on partner's floor, `slam_values`) holds where both hands count\n# support points; the long hand, which no longer counts its shortness,\n# needs two less, the short hand one less (calibrated 2026-10-01 on the\n# corpus and the 21GF random set: slam-entry.notes.md).\ndefine slam_count_interest(t) = (longer(t), count_long(t) >= 29) | (longer(t), count_long_p(t) >= 29) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 31) | (!longer(t), !shorter(t), count_equal_p(t) >= 31)\ndefine slam_count(t) = (longer(t), count_long(t) >= 30) | (longer(t), count_long_p(t) >= 30) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 32) | (!longer(t), !shorter(t), count_equal_p(t) >= 32)\ndefine slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), count_short_max(t) >= 32) | (!longer(t), !shorter(t), count_equal_max(t) >= 33)\n\n# ── Values ────────────────────────────────────────────────────────────\n\n# Facing a game force: the count on partner's floor (`slam_count`: 32\n# with support points in both hands), or 18 of my own. Partner's floor\n# understates him, so one point under the textbook 33 (calibrated\n# 2026-09-30 on random deals and the corpus: slam-entry.notes.md).\n# The 18 of my own only while my range is still open (more than four\n# HCP wide): an 18-19 2NT rebid has told partner, and his game bid\n# after it is his sign-off, not an invitation (2026-10-05: 1x-1M-2NT-\n# 3m(NMF)-...-4M asked with every 18-19 opener).\ndefine slam_values = slam_count(trump) | (tp(trump) >= 18, !(shown.hcp.max - shown.hcp.min <= 4))\n\n# Facing a limited hand (a raise with a top): the count on partner's\n# maximum (`slam_count_max`: 33 with support points in both hands), and\n# a hand of four losers or fewer.\ndefine slam_values_limited = slam_count_max(trump), losers <= 4\n\n# ── Controls ──────────────────────────────────────────────────────────\n\n# A control in x: the ace or a void, or with `first_or_second_round` the\n# king or a singleton. Shortness counts only when partner has not shown\n# four of x (a singleton in partner's suit is not a control).\ndefine controlled(x) = has(A,x) | (x<=0, partner.x.min<=3) | (style is first_or_second_round, has(K,x) | (x<=1, partner.x.min<=3))\n\n# First-round control only: past game.\ndefine first_round(x) = has(A,x) | (x<=0, partner.x.min<=3)\n\n# A side suit I cannot control on my own: what sends a hand to control\n# bids rather than straight to the keycard ask.\ndefine side_suit_uncontrolled = (trump is not C, !controlled(C)) | (trump is not D, !controlled(D)) | (trump is not H, !controlled(H)) | (trump is not S, !controlled(S))\n\n# Rick's rule for the ask: no two bare side suits (2+ cards, neither the\n# ace nor the king).\ndefine two_bare_suits = (bare(C), bare(D)) | (bare(C), bare(H)) | (bare(C), bare(S)) | (bare(D), bare(H)) | (bare(D), bare(S)) | (bare(H), bare(S))\n\n# Going on in the dialogue promises every suit partner denied: it is the\n# trump suit, partner did not skip it, or I control it.\ndefine promised(x) = trump is x | !partner.denied(x) | controlled(x)\ndefine denials_promised = promised(C), promised(D), promised(H), promised(S)\n\n# The same past game, with first-round controls.\ndefine promised_first(x) = trump is x | !partner.denied(x) | first_round(x)\ndefine denials_promised_first = promised_first(C), promised_first(D), promised_first(H), promised_first(S)\n\n# Every side suit covered for the keycard ask: my control, one partner\n# has cued, or one I denied that partner has promised by bidding on.\ndefine covered(x) = trump is x | controlled(x) | partner.cued(x) | me.denied(x)\ndefine all_covered = covered(C), covered(D), covered(H), covered(S)\n\n# The same when I opened the dialogue (partner answered me): my control\n# or partner's.\ndefine covered_by_us(x) = trump is x | controlled(x) | partner.cued(x)\ndefine all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)\n\n# ── Working values opposite a shown shortness (Rick, 2026-11-07) ─────\n#\n# Rick: \"the idea of the relays is it will allow us to find low HCP\n# slams when there is a good fit. ... opener had a spade void, i think,\n# which means all the combined HCP are 'working', which is the goal of\n# this system (and the standard jacoby 2nt, and splinter bids).\" Once\n# partner has shown a singleton or void (`partner.x.max <= 1`), my K, Q\n# and J there are wasted, and opposite a void the ace too (`wasted_hcp`,\n# the engine's term; `working_hcp` is `hcp - wasted_hcp`). The working\n# count is my support points less the waste, plus partner's floor:\n# with nothing wasted it finds slams on fewer high cards than the\n# 31-33 above, because partner's shortness, not counted in his floor,\n# is worth its full ruffing value opposite my small cards.\ndefine shown_short = partner.C.max <= 1 | partner.D.max <= 1 | partner.H.max <= 1 | partner.S.max <= 1\ndefine working_count(t) = tp(t) - wasted_hcp + partner.points.min\n\n# Slam on the working count: 23 opposite a void, 27 opposite a\n# singleton (calibrated 2026-11-07 on the Jacoby and splinter\n# scenarios, slam-entry.notes.md \"Working values\"). Opposite a void\n# that is nearly every hand without wasted honours there: the keycard\n# ask stops short when two are missing.\ndefine shown_void = partner.C.max <= 0 | partner.D.max <= 0 | partner.H.max <= 0 | partner.S.max <= 0\ndefine working_slam(t) = (shown_void, working_count(t) >= 23) | (shown_short, working_count(t) >= 27)\n\n# The stronger hand by what has been shown (Rick, 2026-11-07: \"keycard\n# should be the stronger hand\"): my HCP at least partner's shown floor.\ndefine stronger_hand = hcp >= partner.hcp.min\n\n# ── A fit known but not agreed (Phase 1, 2026-09-30) ─────────────────\n\n# A suit both hands know we fit: suit agreement (`agreed_fit`,\n# fit.bid: eight cards shown between us), or partner's own six-card suit.\n# Public, so partner knows what a keycard ask agrees.\ndefine shown_fit(x) = agreed_fit(x) | partner.x.min >= 6\n\n# ── The keycard suit (Rick, 2026-10-03) ──────────────────────────────\n#\n# \"A 4NT with no prior NT bids is normally keycard regardless, and if\n# there hasn't been suit agreement, it's for the last bid suit. So\n# 1H-1S-2H-4NT would be keycard for H.\" And: \"Normally a major fit will\n# replace a minor fit.\" For the cards that play Blackwood or RKCB; with\n# neither (bare SAYC) 4NT stays natural or quantitative. Notes:\n# rkcb-1430.notes.md, \"The keycard suit\".\n#\n# The suit, in order:\n#   1. a trump suit set by a rule, unless it is a minor and a major has\n#      since been agreed (`major_over_minor`: 1S-2C-3C-4S-4NT asks in ♠);\n#   2. with none set, a suit agreed by what the two hands have shown\n#      (eight between us; a major before a minor);\n#   3. with no agreement and no notrump bid by us, the last suit our side\n#      bid: partner's last call, when it was a bid in a suit that showed\n#      two or more cards of it (not an artificial 2♦ waiting bid or a\n#      fourth-suit call).\n# With notrump bid by us and no agreement, 4NT is quantitative\n# (1NT-2D-2H-4NT): the notrump modules' rules.\n\n# Eight cards in x shown between us (fit.bid's `agreed_fit` without the\n# trump state).\ndefine shown_eight(x) = shown.x.min + partner.x.min >= 8\n\n# A minor set as trump, and a major agreed since: the major takes over.\ndefine major_over_minor(x) = x is S | x is H, trump is C | trump is D, shown_eight(x)\ndefine minor_given_way = major_over_minor(S) | major_over_minor(H)\n\n# Our side has bid notrump: either of us made a natural notrump bid at\n# any point (`we.named(N)`, 2026-10-03; artificial calls such as a 2NT\n# feature ask do not count), or either hand has shown a balanced hand.\ndefine our_notrump = we.named(N) | !(maybe !partner.balanced) | !(maybe !shown.balanced)\n\n# Partner's last call was a natural bid in x.\ndefine last_suit(x) = partner_named(x), partner.x.min >= 2\n\ndefine no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !shown_eight(C)\n\n# 4NT after our side has bid notrump, with no suit agreed, is\n# quantitative (Rick, 2026-10-03). The notrump modules write it auction\n# by auction; this is the fallback below them, so that a 4NT after, say,\n# 1C-1S-1NT-2D (new minor) is read and answered rather than \"no rule\".\n# The answer is one-nt.bid's `when asked quant` (6NT from 32 between us).\n#\n# `quant_4nt` is the card's switch (`slam.quantitative_4nt.play`, on by\n# default and on every stock card), for the quantitative 4NTs the\n# notrump and base modules write (2026-10-05).\ndefine quant_4nt = q4n\n\n# Ranked below every pass, so it is for reading: our own 4NT stays with\n# the modules that judge it (a higher rank took over their 3NT and pass).\nwhen we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight\n  4N  \"Quantitative: invites 6NT\"\n      when  q4n                            # the card plays a quantitative 4NT\n      shows points + partner.points.min >= 31, points + partner.points.min <= 32\n      sets  ask=quant\n      priority -60\n\n# The keycard suit with no trump set (2 and 3 above), one suit at most.\ndefine kc_shown(x) = shown_eight(x), x is S | !shown_eight(S), x is S | x is H | !shown_eight(H), x is S | x is H | x is D | !shown_eight(D)\ndefine kc_open(x) = kc_shown(x) | (no_shown_eight, !our_notrump, last_suit(x))\n\n# Slam values with x as trump before it is agreed: the count on\n# partner's floor (as `slam_values`), or, when he has limited his hand to a\n# range of seven points or less (a preempt, a weak two), his top does and\n# my hand has four losers or fewer (as `slam_values_limited`).\ndefine fit_slam_values(x) = slam_count(x) | (slam_count_max(x), losers <= 4, partner.points.max - partner.points.min <= 6)\n\n# Two side suits, beside t, of 2+ cards without the ace or king.\ndefine bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)\ndefine two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(C,t), bare_beside(H,t)) | (bare_beside(C,t), bare_beside(S,t)) | (bare_beside(D,t), bare_beside(H,t)) | (bare_beside(D,t), bare_beside(S,t)) | (bare_beside(H,t), bare_beside(S,t))\n\n# An ambiguous keycard answer (\"1 or 4\" facing my one: 2 or 5) settled\n# by the high cards (2026-10-07, rkcb-1430.notes.md \"The count that\n# fits\"): three keycards missing are at least 11 HCP (two aces and the\n# trump king), so with 30 HCP on our floor at most two are missing and\n# the low count is impossible. The answers that stay open after the\n# deck's limit are 3 apart (2|5, 1|4, 0|3), so the count is the high one.\ndefine kc_high(t) = maybe we.keycards(t) >= 4, hcp + partner.hcp.min >= 30\n\n# ── Fast arrival (Phase 1, 2026-09-30) ────────────────────────────────\n#\n# In a game force with an eight-card fit known and no suit agreed, the\n# cheapest bid in the fit agrees it and shows slam interest; jumping to\n# game in it (base.bid's fallback) is then the minimum, and denies the\n# interest. Once it is agreed, control bids and the keycard ask take over.\n# On 20,000 random deals we bid a slam on 15 of 63 boards with a fit and\n# 33 HCP between us (BBA 55); the usual path was a jump to game after a\n# jump shift or a reverse, where neither hand could count 33 on the\n# other's floor.\n\n# Not straight over partner's notrump where systems are on (2♣–2♠–2NT,\n# 2026-10-05): there the cheapest bid is the system's (a transfer).\n# Slam interest: the count on partner's floor, 31 (29 for the long hand).\ndefine slam_interest(x) = slam_count_interest(x)\n\nwhen we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid, !we.systems_on\n  cheapest(S)  \"Agrees ♠: slam interest\"\n      shows we.fit(S).min >= 8, slam_interest(S)\n      when  partner.S.min >= 3, under_game(S)   # public: a raise of partner's suit, never read into a natural bid\n      sets  trump=S\n  cheapest(H)  \"Agrees ♥: slam interest\"\n      shows we.fit(H).min >= 8, slam_interest(H)\n      when  partner.H.min >= 3, under_game(H)   # public: a raise of partner's suit, never read into a natural bid\n      sets  trump=H\n\n# ── Slam without an ask (Phase B, 2026-09-30) ─────────────────────────\n#\n# With no keycard or ace ask on the card, nothing past game read the\n# count: on the vanilla SAYC random set the slams BBA bid and we missed\n# stopped at base.bid's \"Game reached\" pass (2,917 boards, -10,007\n# IMPs). BBA jumps to slam on support points: my tp plus partner's\n# floor, 50% at 31-32 in six made-hand positions (slam-entry.notes.md,\n# Phase A), with aces and kings counting a little extra. So, with a suit\n# agreed and the values, bid it. Cards that ask (Blackwood, RKCB) keep\n# asking: the rule is off for them.\n#\n# The count is our support points on partner's floor plus my controls\n# (A 2, K 1), 35, with at least 29 in support points. Calibrated on the\n# vanilla set (notes): 32 in support points alone +1,494 IMPs, 33\n# +1,203, 31 +1,413; with controls 37 (tp 30+) +1,962, 36 +2,124, **35\n# +2,325**, 34 +1,652; both halves of the set agree. Below BBA's own\n# 31-32 because partner's floor understates him (as for slam_values).\n#\n# Since 2026-10-01 the count is declarer points for the long-trump hand\n# and support points for the other (`count_*` above): 28 on partner's\n# floor, and 35 with my controls. Par scores it level with the support\n# points it replaced (+31 IMPs on the vanilla set, both halves).\n#\n# It ranks above the descriptive calls (priority 1, 2026-10-01): with the\n# values, jump to slam at once, as BBA's \"calculated bid\" does, rather\n# than describe and stop in game. Vanilla +596 IMPs against -10 (below\n# every descriptive call), both halves.\n\n# No ace or keycard ask on the card.\ndefine no_ask = !bw, !rkcb\n\n# Slam values for a direct slam: the count 28, and 35 with my controls.\ndefine direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)\ndefine direct_slam_values = direct_count(trump)\n\nwhen we.trump is suit, !minor_given_way, !they.bid, !asked, no_ask\n  6{trump}  \"Small slam\"\n      shows direct_slam_values\n      priority 1\n\n# A minor set as trump and a major agreed since: the slam is in the major\n# (Rick, 2026-10-03: \"normally a major fit will replace a minor fit\").\nwhen minor_given_way, !they.bid, !asked, no_ask\n  6S  \"Small slam\"\n      shows direct_count(S)\n      when  major_over_minor(S)\n      sets  trump=S\n      priority 1\n  6H  \"Small slam\"\n      shows direct_count(H)\n      when  major_over_minor(H), !major_over_minor(S)\n      sets  trump=H\n      priority 1\n\n# ── A fit known but not agreed: the direct slam (2026-10-01) ──────────\n#\n# 1H-2D-3H (six hearts, 16-18) does not set hearts in standard bidding,\n# but responder with two knows the fit (Rick, 2026-10-01); the same when\n# a new suit shows me partner's four-card suit (1S-2D-3C with four\n# clubs). The hand that sees the fit counts as the role says: the short\n# hand support points on partner's declarer points. Bid six on the\n# direct count. Reworks the held-back version (branch\n# slam-fit-not-agreed, which counted my support points on partner's\n# points in every case).\n#\n# Above the descriptive calls, as the agreed-suit slam: at -10 (only once\n# game is reached) +809 IMPs on the vanilla set, at 1 +3,122. Not when my\n# own range is four points or less (1NT, 2NT, a jump rebid): partner is\n# then the captain (+54). Vanilla calibration (slam-entry.notes.md).\nwhen we.trump is none, !they.bid, !asked, no_ask, !(shown.hcp.max - shown.hcp.min <= 4)\n  6S  \"Small slam\"\n      shows we.fit(S).min >= 8, direct_count(S)\n      priority 1\n  6H  \"Small slam\"\n      shows we.fit(H).min >= 8, direct_count(H)\n      priority 1\n  6D  \"Small slam\"\n      shows we.fit(D).min >= 8, direct_count(D)\n      priority 1\n  6C  \"Small slam\"\n      shows we.fit(C).min >= 8, direct_count(C)\n      priority 1\n",
+  "rules/slam/slam-entry.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Slam entry: the conditions the slam modules share, named once\n# (docs/JUDGMENT-LAYER.md, Phase 0). rkcb-1430.bid, blackwood.bid and\n# control-bids.bid used to spell each of them out, up to 1,300 characters\n# a line. No rules yet: what decides whether slam is worth looking for\n# (Phase 1) will live here, and the modules that ask keep deciding how.\n#\n# The thresholds are Rick's (rkcb-1430.bid, \"The ask\"; slam-catch.notes.md):\n# 33 support points between us with the agreed suit as trump, or 18 of my\n# own facing a game force; the control rulings are control-bids.bid's.\n\nmodule slam-entry \"Slam entry: the conditions the slam modules share\"\n  kind   judgement\n  skill  partnership_bidding/slam_bidding\n  param  style = bidding_conventions/control_bids:style default first_or_second_round\n  param  bw    = bidding_conventions/blackwood default false\n  param  rkcb   = bidding_conventions/roman_keycard default false\n  param  q4n   = bidding_conventions/quantitative_4nt default true\n\n# ── The count: declarer points and support points (2026-10-01) ───────\n#\n# Rick (2026-10-01): \"point count for any auction is normally declarer\n# points for the hand with longer trumps, and support points for the\n# other hand. With 4-4 fits both hands can use support points.\" The\n# long-trump hand counts HCP + length (one a card beyond four, in every\n# suit), not its own shortness; the short hand counts HCP + shortness\n# (`tp(t)`, capped by its trumps). `we.tp(t)` counted shortness in both\n# hands, which double counts.\n#\n# Trump lengths are compared with what partner has shown (`partner.t.min`):\n# longer than that, I am the long hand; shorter, partner is; equal, both\n# count support points (4-4, 5-5). A raiser shows the length he raised\n# with, so the raiser is the support hand unless I hold no more trumps.\n\ndefine longer(t)  = t > partner.t.min\ndefine shorter(t) = t < partner.t.min\n\n# The count on partner's floor, by role. Partner as the long hand counts\n# his shown points (HCP + length), or his HCP and the length he has shown\n# when no call showed points: either is a floor. As the short hand (or\n# with equal length) his support points when a raise showed them, else\n# the points he showed (`_p`): a call that shows total points leaves\n# his HCP floor, and so `partner.tp`, near zero (1S-2D-3C-3S: 13+\n# points). Each condition takes the better of the floors.\ndefine count_long(t)    = hcp + length_points + partner.tp(t).min\ndefine count_long_p(t)  = hcp + length_points + partner.points.min\ndefine count_short(t)   = tp(t) + partner.points.min\ndefine count_short_l(t) = tp(t) + partner.hcp.min + partner.length_points.min\ndefine count_equal(t)   = tp(t) + partner.tp(t).min\ndefine count_equal_p(t) = tp(t) + partner.points.min\n\n# The same on partner's maximum.\ndefine count_long_max(t)  = hcp + length_points + partner.tp(t).max\ndefine count_short_max(t) = tp(t) + partner.points.max\ndefine count_equal_max(t) = tp(t) + partner.tp(t).max\n\n# The count at the thresholds the slam conditions use. The textbook 33\n# (32 on partner's floor, `slam_values`) holds where both hands count\n# support points; the long hand, which no longer counts its shortness,\n# needs two less, the short hand one less (calibrated 2026-10-01 on the\n# corpus and the 21GF random set: slam-entry.notes.md).\ndefine slam_count_interest(t) = (longer(t), count_long(t) >= 29) | (longer(t), count_long_p(t) >= 29) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 31) | (!longer(t), !shorter(t), count_equal_p(t) >= 31)\ndefine slam_count(t) = (longer(t), count_long(t) >= 30) | (longer(t), count_long_p(t) >= 30) | (shorter(t), count_short(t) >= 31) | (shorter(t), count_short_l(t) >= 31) | (!longer(t), !shorter(t), count_equal(t) >= 32) | (!longer(t), !shorter(t), count_equal_p(t) >= 32)\ndefine slam_count_max(t) = (longer(t), count_long_max(t) >= 31) | (shorter(t), count_short_max(t) >= 32) | (!longer(t), !shorter(t), count_equal_max(t) >= 33)\n\n# ── Values ────────────────────────────────────────────────────────────\n\n# Facing a game force: the count on partner's floor (`slam_count`: 32\n# with support points in both hands), or 18 of my own. Partner's floor\n# understates him, so one point under the textbook 33 (calibrated\n# 2026-09-30 on random deals and the corpus: slam-entry.notes.md).\n# The 18 of my own only while my range is still open (more than four\n# HCP wide): an 18-19 2NT rebid has told partner, and his game bid\n# after it is his sign-off, not an invitation (2026-10-05: 1x-1M-2NT-\n# 3m(NMF)-...-4M asked with every 18-19 opener).\ndefine slam_values = slam_count(trump) | (tp(trump) >= 18, !(shown.hcp.max - shown.hcp.min <= 4))\n\n# Facing a limited hand (a raise with a top): the count on partner's\n# maximum (`slam_count_max`: 33 with support points in both hands), and\n# a hand of four losers or fewer.\ndefine slam_values_limited = slam_count_max(trump), losers <= 4\n\n# ── Controls ──────────────────────────────────────────────────────────\n\n# A control in x: the ace or a void, or with `first_or_second_round` the\n# king or a singleton. Shortness counts only when partner has not shown\n# four of x (a singleton in partner's suit is not a control).\ndefine controlled(x) = has(A,x) | (x<=0, partner.x.min<=3) | (style is first_or_second_round, has(K,x) | (x<=1, partner.x.min<=3))\n\n# First-round control only: past game.\ndefine first_round(x) = has(A,x) | (x<=0, partner.x.min<=3)\n\n# A side suit I cannot control on my own: what sends a hand to control\n# bids rather than straight to the keycard ask.\ndefine side_suit_uncontrolled = (trump is not C, !controlled(C)) | (trump is not D, !controlled(D)) | (trump is not H, !controlled(H)) | (trump is not S, !controlled(S))\n\n# Rick's rule for the ask: no two bare side suits (2+ cards, neither the\n# ace nor the king).\ndefine two_bare_suits = (bare(C), bare(D)) | (bare(C), bare(H)) | (bare(C), bare(S)) | (bare(D), bare(H)) | (bare(D), bare(S)) | (bare(H), bare(S))\n\n# Going on in the dialogue promises every suit partner denied: it is the\n# trump suit, partner did not skip it, or I control it.\ndefine promised(x) = trump is x | !partner.denied(x) | controlled(x)\ndefine denials_promised = promised(C), promised(D), promised(H), promised(S)\n\n# The same past game, with first-round controls.\ndefine promised_first(x) = trump is x | !partner.denied(x) | first_round(x)\ndefine denials_promised_first = promised_first(C), promised_first(D), promised_first(H), promised_first(S)\n\n# Every side suit covered for the keycard ask: my control, one partner\n# has cued or shown short in, or one I denied that partner has promised\n# by bidding on.\ndefine covered(x) = trump is x | controlled(x) | partner.cued(x) | partner.x.max <= 1 | me.denied(x)\ndefine all_covered = covered(C), covered(D), covered(H), covered(S)\n\n# The same when I opened the dialogue (partner answered me): my control\n# or partner's.\ndefine covered_by_us(x) = trump is x | controlled(x) | partner.cued(x) | partner.x.max <= 1\ndefine all_covered_by_us = covered_by_us(C), covered_by_us(D), covered_by_us(H), covered_by_us(S)\n\n# ── Working values opposite a shown shortness (Rick, 2026-11-07) ─────\n#\n# Rick: \"the idea of the relays is it will allow us to find low HCP\n# slams when there is a good fit. ... opener had a spade void, i think,\n# which means all the combined HCP are 'working', which is the goal of\n# this system (and the standard jacoby 2nt, and splinter bids).\" Once\n# partner has shown a singleton or void (`partner.x.max <= 1`), my K, Q\n# and J there are wasted, and opposite a void the ace too (`wasted_hcp`,\n# the engine's term; `working_hcp` is `hcp - wasted_hcp`). The working\n# count is my support points less the waste, plus partner's floor:\n# with nothing wasted it finds slams on fewer high cards than the\n# 31-33 above, because partner's shortness, not counted in his floor,\n# is worth its full ruffing value opposite my small cards.\ndefine shown_short = partner.C.max <= 1 | partner.D.max <= 1 | partner.H.max <= 1 | partner.S.max <= 1\ndefine working_count(t) = tp(t) - wasted_hcp + partner.points.min\n\n# Slam on the working count: 23 opposite a void, 27 opposite a\n# singleton (calibrated 2026-11-07 on the Jacoby and splinter\n# scenarios, slam-entry.notes.md \"Working values\"). Opposite a void\n# that is nearly every hand without wasted honours there: the keycard\n# ask stops short when two are missing.\ndefine shown_void = partner.C.max <= 0 | partner.D.max <= 0 | partner.H.max <= 0 | partner.S.max <= 0\ndefine working_slam(t) = (shown_void, working_count(t) >= 23) | (shown_short, working_count(t) >= 27)\n\n# The stronger hand by what has been shown (Rick, 2026-11-07: \"keycard\n# should be the stronger hand\"): my HCP at least partner's shown floor.\ndefine stronger_hand = hcp >= partner.hcp.min\n\n# ── A fit known but not agreed (Phase 1, 2026-09-30) ─────────────────\n\n# A suit both hands know we fit: suit agreement (`agreed_fit`,\n# fit.bid: eight cards shown between us), or partner's own six-card suit.\n# Public, so partner knows what a keycard ask agrees.\ndefine shown_fit(x) = agreed_fit(x) | partner.x.min >= 6\n\n# ── The keycard suit (Rick, 2026-10-03) ──────────────────────────────\n#\n# \"A 4NT with no prior NT bids is normally keycard regardless, and if\n# there hasn't been suit agreement, it's for the last bid suit. So\n# 1H-1S-2H-4NT would be keycard for H.\" And: \"Normally a major fit will\n# replace a minor fit.\" For the cards that play Blackwood or RKCB; with\n# neither (bare SAYC) 4NT stays natural or quantitative. Notes:\n# rkcb-1430.notes.md, \"The keycard suit\".\n#\n# The suit, in order:\n#   1. a trump suit set by a rule, unless it is a minor and a major has\n#      since been agreed (`major_over_minor`: 1S-2C-3C-4S-4NT asks in ♠);\n#   2. with none set, a suit agreed by what the two hands have shown\n#      (eight between us; a major before a minor);\n#   3. with no agreement and no notrump bid by us, the last suit our side\n#      bid: partner's last call, when it was a bid in a suit that showed\n#      two or more cards of it (not an artificial 2♦ waiting bid or a\n#      fourth-suit call).\n# With notrump bid by us and no agreement, 4NT is quantitative\n# (1NT-2D-2H-4NT): the notrump modules' rules.\n\n# Eight cards in x shown between us (fit.bid's `agreed_fit` without the\n# trump state).\ndefine shown_eight(x) = shown.x.min + partner.x.min >= 8\n\n# A minor set as trump, and a major agreed since: the major takes over.\ndefine major_over_minor(x) = x is S | x is H, trump is C | trump is D, shown_eight(x)\ndefine minor_given_way = major_over_minor(S) | major_over_minor(H)\n\n# Our side has bid notrump: either of us made a natural notrump bid at\n# any point (`we.named(N)`, 2026-10-03; artificial calls such as a 2NT\n# feature ask do not count), or either hand has shown a balanced hand.\ndefine our_notrump = we.named(N) | !(maybe !partner.balanced) | !(maybe !shown.balanced)\n\n# Partner's last call was a natural bid in x.\ndefine last_suit(x) = partner_named(x), partner.x.min >= 2\n\ndefine no_shown_eight = !shown_eight(S), !shown_eight(H), !shown_eight(D), !shown_eight(C)\n\n# 4NT after our side has bid notrump, with no suit agreed, is\n# quantitative (Rick, 2026-10-03). The notrump modules write it auction\n# by auction; this is the fallback below them, so that a 4NT after, say,\n# 1C-1S-1NT-2D (new minor) is read and answered rather than \"no rule\".\n# The answer is one-nt.bid's `when asked quant` (6NT from 32 between us).\n#\n# `quant_4nt` is the card's switch (`slam.quantitative_4nt.play`, on by\n# default and on every stock card), for the quantitative 4NTs the\n# notrump and base modules write (2026-10-05).\ndefine quant_4nt = q4n\n\n# Ranked below every pass, so it is for reading: our own 4NT stays with\n# the modules that judge it (a higher rank took over their 3NT and pass).\nwhen we.named(N), we.trump is none, !asked, !they.bid, no_shown_eight\n  4N  \"Quantitative: invites 6NT\"\n      when  q4n                            # the card plays a quantitative 4NT\n      shows points + partner.points.min >= 31, points + partner.points.min <= 32\n      sets  ask=quant\n      priority -60\n\n# The keycard suit with no trump set (2 and 3 above), one suit at most.\ndefine kc_shown(x) = shown_eight(x), x is S | !shown_eight(S), x is S | x is H | !shown_eight(H), x is S | x is H | x is D | !shown_eight(D)\ndefine kc_open(x) = kc_shown(x) | (no_shown_eight, !our_notrump, last_suit(x))\n\n# Slam values with x as trump before it is agreed: the count on\n# partner's floor (as `slam_values`), or, when he has limited his hand to a\n# range of seven points or less (a preempt, a weak two), his top does and\n# my hand has four losers or fewer (as `slam_values_limited`).\ndefine fit_slam_values(x) = slam_count(x) | (slam_count_max(x), losers <= 4, partner.points.max - partner.points.min <= 6)\n\n# Two side suits, beside t, of 2+ cards without the ace or king.\ndefine bare_beside(x, t) = x is not t, x>=2, !has(A,x), !has(K,x)\ndefine two_bare_beside(t) = (bare_beside(C,t), bare_beside(D,t)) | (bare_beside(C,t), bare_beside(H,t)) | (bare_beside(C,t), bare_beside(S,t)) | (bare_beside(D,t), bare_beside(H,t)) | (bare_beside(D,t), bare_beside(S,t)) | (bare_beside(H,t), bare_beside(S,t))\n\n# An ambiguous keycard answer (\"1 or 4\" facing my one: 2 or 5) settled\n# by the high cards (2026-10-07, rkcb-1430.notes.md \"The count that\n# fits\"): three keycards missing are at least 11 HCP (two aces and the\n# trump king), so with 30 HCP on our floor at most two are missing and\n# the low count is impossible. The answers that stay open after the\n# deck's limit are 3 apart (2|5, 1|4, 0|3), so the count is the high one.\ndefine kc_high(t) = maybe we.keycards(t) >= 4, hcp + partner.hcp.min >= 30\n\n# ── Fast arrival (Phase 1, 2026-09-30) ────────────────────────────────\n#\n# In a game force with an eight-card fit known and no suit agreed, the\n# cheapest bid in the fit agrees it and shows slam interest; jumping to\n# game in it (base.bid's fallback) is then the minimum, and denies the\n# interest. Once it is agreed, control bids and the keycard ask take over.\n# On 20,000 random deals we bid a slam on 15 of 63 boards with a fit and\n# 33 HCP between us (BBA 55); the usual path was a jump to game after a\n# jump shift or a reverse, where neither hand could count 33 on the\n# other's floor.\n\n# Not straight over partner's notrump where systems are on (2♣–2♠–2NT,\n# 2026-10-05): there the cheapest bid is the system's (a transfer).\n# Slam interest: the count on partner's floor, 31 (29 for the long hand).\ndefine slam_interest(x) = slam_count_interest(x)\n\nwhen we.forcing = game, we.trump is none, !asked, !game_reached, !they.bid, !we.systems_on\n  cheapest(S)  \"Agrees ♠: slam interest\"\n      shows we.fit(S).min >= 8, slam_interest(S)\n      when  partner.S.min >= 3, under_game(S)   # public: a raise of partner's suit, never read into a natural bid\n      sets  trump=S\n  cheapest(H)  \"Agrees ♥: slam interest\"\n      shows we.fit(H).min >= 8, slam_interest(H)\n      when  partner.H.min >= 3, under_game(H)   # public: a raise of partner's suit, never read into a natural bid\n      sets  trump=H\n\n# ── Slam without an ask (Phase B, 2026-09-30) ─────────────────────────\n#\n# With no keycard or ace ask on the card, nothing past game read the\n# count: on the vanilla SAYC random set the slams BBA bid and we missed\n# stopped at base.bid's \"Game reached\" pass (2,917 boards, -10,007\n# IMPs). BBA jumps to slam on support points: my tp plus partner's\n# floor, 50% at 31-32 in six made-hand positions (slam-entry.notes.md,\n# Phase A), with aces and kings counting a little extra. So, with a suit\n# agreed and the values, bid it. Cards that ask (Blackwood, RKCB) keep\n# asking: the rule is off for them.\n#\n# The count is our support points on partner's floor plus my controls\n# (A 2, K 1), 35, with at least 29 in support points. Calibrated on the\n# vanilla set (notes): 32 in support points alone +1,494 IMPs, 33\n# +1,203, 31 +1,413; with controls 37 (tp 30+) +1,962, 36 +2,124, **35\n# +2,325**, 34 +1,652; both halves of the set agree. Below BBA's own\n# 31-32 because partner's floor understates him (as for slam_values).\n#\n# Since 2026-10-01 the count is declarer points for the long-trump hand\n# and support points for the other (`count_*` above): 28 on partner's\n# floor, and 35 with my controls. Par scores it level with the support\n# points it replaced (+31 IMPs on the vanilla set, both halves).\n#\n# It ranks above the descriptive calls (priority 1, 2026-10-01): with the\n# values, jump to slam at once, as BBA's \"calculated bid\" does, rather\n# than describe and stop in game. Vanilla +596 IMPs against -10 (below\n# every descriptive call), both halves.\n\n# No ace or keycard ask on the card.\ndefine no_ask = !bw, !rkcb\n\n# Slam values for a direct slam: the count 28, and 35 with my controls.\ndefine direct_count(t) = (longer(t), count_long(t) >= 28, count_long(t) + controls >= 35) | (longer(t), count_long_p(t) >= 28, count_long_p(t) + controls >= 35) | (shorter(t), count_short(t) >= 28, count_short(t) + controls >= 35) | (shorter(t), count_short_l(t) >= 28, count_short_l(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal(t) >= 28, count_equal(t) + controls >= 35) | (!longer(t), !shorter(t), count_equal_p(t) >= 28, count_equal_p(t) + controls >= 35)\ndefine direct_slam_values = direct_count(trump)\n\nwhen we.trump is suit, !minor_given_way, !they.bid, !asked, no_ask\n  6{trump}  \"Small slam\"\n      shows direct_slam_values\n      priority 1\n\n# A minor set as trump and a major agreed since: the slam is in the major\n# (Rick, 2026-10-03: \"normally a major fit will replace a minor fit\").\nwhen minor_given_way, !they.bid, !asked, no_ask\n  6S  \"Small slam\"\n      shows direct_count(S)\n      when  major_over_minor(S)\n      sets  trump=S\n      priority 1\n  6H  \"Small slam\"\n      shows direct_count(H)\n      when  major_over_minor(H), !major_over_minor(S)\n      sets  trump=H\n      priority 1\n\n# ── A fit known but not agreed: the direct slam (2026-10-01) ──────────\n#\n# 1H-2D-3H (six hearts, 16-18) does not set hearts in standard bidding,\n# but responder with two knows the fit (Rick, 2026-10-01); the same when\n# a new suit shows me partner's four-card suit (1S-2D-3C with four\n# clubs). The hand that sees the fit counts as the role says: the short\n# hand support points on partner's declarer points. Bid six on the\n# direct count. Reworks the held-back version (branch\n# slam-fit-not-agreed, which counted my support points on partner's\n# points in every case).\n#\n# Above the descriptive calls, as the agreed-suit slam: at -10 (only once\n# game is reached) +809 IMPs on the vanilla set, at 1 +3,122. Not when my\n# own range is four points or less (1NT, 2NT, a jump rebid): partner is\n# then the captain (+54). Vanilla calibration (slam-entry.notes.md).\nwhen we.trump is none, !they.bid, !asked, no_ask, !(shown.hcp.max - shown.hcp.min <= 4)\n  6S  \"Small slam\"\n      shows we.fit(S).min >= 8, direct_count(S)\n      priority 1\n  6H  \"Small slam\"\n      shows we.fit(H).min >= 8, direct_count(H)\n      priority 1\n  6D  \"Small slam\"\n      shows we.fit(D).min >= 8, direct_count(D)\n      priority 1\n  6C  \"Small slam\"\n      shows we.fit(C).min >= 8, direct_count(C)\n      priority 1\n",
   "rules/slam/spiral.bid": "# Syntax: docs/LANGUAGE.md. Check with `rbb bid check`.\n#\n# Spiral 2NT: after opener raises responder's major to two (1X-1M-2M),\n# responder's 2NT asks for the length of the raise and its strength, so\n# responder can judge game, or 3NT opposite three trumps:\n#\n#   3♣  three trumps, minimum      3♥  four trumps, minimum\n#   3♦  three trumps, maximum      3♠  four trumps, maximum\n#   3NT 4-3-3-3 with four trumps, maximum\n#\n# Card field `slam.spiral_cuebids.play`. Opener raises with four in our\n# base system, so the three-card answers come from a system that raises\n# with three. Notes: spiral.notes.md.\n\nmodule spiral \"Spiral 2NT: how many trumps, minimum or maximum, after 1X-1M-2M\"\n  kind   convention\n  needs  base\n  skill  bidding_conventions/spiral\n  param  spiral = bidding_conventions/spiral default false\n\n# A maximum for the single raise (12-15 HCP opener): 14 or more.\ndefine sp_max = hcp >= 14\n\n# ── The ask ───────────────────────────────────────────────────────────\n#\n# The invitational hand that would raise to three (responder-rebids.bid:\n# 11-12 support points) asks instead: game opposite a maximum. Priority\n# 1 over the natural raise.\n\nafter 1x (P) 1M (P) 2M (P) when spiral, x is not M\n  2N  \"Spiral: how many {M}, minimum or maximum?\"  alert\n      shows M>=4, tp(M)=11..12\n      sets  ask=spiral(M)\n      artificial\n      priority 1\n\n# ── Opener's answer ───────────────────────────────────────────────────\n\nwhen spiral, asked spiral(M), rho.last = P\n  3C  \"Spiral: three {M}, minimum\"            shows M=3, !sp_max   artificial\n  3D  \"Spiral: three {M}, maximum\"            shows M=3, sp_max    artificial\n  3H  \"Spiral: four {M}, minimum\"             shows M>=4, !sp_max  artificial\n  3S  \"Spiral: four {M}, maximum\"             shows M>=4, sp_max   artificial\n  3N  \"Spiral: 4-3-3-3 with four {M}, maximum\"  shows M=4, shape 4333, sp_max   artificial\n\n# ── Responder places the contract ─────────────────────────────────────\n#\n# Game opposite a maximum: 3NT with four of the major facing three and a\n# balanced hand, else four of the major; a pass of 3NT when balanced.\n# Opposite a minimum, three of the major.\n\nwhen spiral, answered spiral(M)\n  4M  \"To play\"\n      when  partner.last = 3D | partner.last = 3S | partner.last = 3N\n  3N  \"To play: balanced\"\n      when  partner.last = 3D, M=4, balanced\n      priority 1\n  P   \"To play: balanced\"\n      when  partner.last = 3N, M=4, balanced   # with five, the 9-card fit\n      priority 1\n  3M  \"Signoff\"\n      when  partner.last = 3C | (partner.last = 3H, M is S)\n  P   \"Signoff\"\n      when  partner.last = 3H, M is H\n"
  }
 }
