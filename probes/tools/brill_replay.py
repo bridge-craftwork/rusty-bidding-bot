@@ -182,7 +182,7 @@ class Engine:
     def __init__(self, args, card, ew_card=None):
         self.rbb, self.card = args.rbb, card
         self.ew = ["--ew-card", ew_card] if ew_card else []
-        self.rules = os.path.join(ROOT, "conventions")
+        self.rules = []  # the rules compiled into rbb
         self.memo = {}
 
     def call(self, hand, calls, dealer, vul, scoring):
@@ -190,7 +190,7 @@ class Engine:
         if k not in self.memo:
             d = br.run_json([self.rbb, "call", br.sorted_hand(hand), "-a", " ".join(calls),
                              "-d", dealer, "-v", br.vul_arg(vul), "-s", scoring, "-c", self.card,
-                             *self.ew, "--rules", self.rules, "--json"])
+                             *self.ew, *self.rules, "--json"])
             self.memo[k] = {"call": br.call_name(d["call"]), "rule": rule_id(d.get("rule")),
                             "module": (d.get("rule") or {}).get("module") or "(no rule)",
                             "explanation": d.get("explanation") or ""}

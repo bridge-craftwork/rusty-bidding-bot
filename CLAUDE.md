@@ -343,6 +343,13 @@ local checkouts").
   `probes/tools/brill_fetch.py [--report]` pulls new days into
   `.rbb-cache/brill/<day>/` through the script's token-protected web app
   (config `~/.config/rusty-bidding-bot/brill-drive.json`) and reports on them.
+- `probes/tools/brill_field.py [--since DAY] [--min-boards 200]`: every
+  entrant in the dailies (all sit South with the same Brill robots), bidding
+  and card play rated apart: each contract at DD against the field's at DD,
+  the play as the rest, and tricks against the other tables in the same
+  contract by role (declarer, defence, Brill North declaring as a control).
+  Reads every day under `.rbb-cache/brill/`; `brill_fetch.py --report`
+  rewrites `.rbb-cache/brill/field-rollup.md` after new days.
 - `probes/tools/brill_probe.py run [--top 2000]`: where our reading of
   auctions on 21GF-GIB differs from Brill's. The top N auctions of a
   compare JSON (`auctions`), Brill's `/explain` of each from Thorvald's

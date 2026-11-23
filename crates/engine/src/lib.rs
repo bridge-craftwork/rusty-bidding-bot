@@ -209,6 +209,17 @@ pub fn load_rules(dir: &Path) -> Result<RuleSet, Vec<bidspec::Diagnostic>> {
         })?;
         return compile_snapshot(&text, &name);
     }
+    if !dir.is_dir() {
+        // A missing directory would otherwise load as an empty rule set and
+        // bid Pass everywhere, as the old in-repo `conventions/` did once
+        // the rules moved to the pack.
+        return Err(vec![bidspec::Diagnostic {
+            file: dir.display().to_string(),
+            line: 0,
+            col: 0,
+            message: "no such rules directory or snapshot file".into(),
+        }]);
+    }
     let manifest = read_manifest(dir).map_err(|d| vec![d])?;
     let vocab = rules_vocabulary(dir).map_err(|e| vec![vocab_diagnostic(e)])?;
     let announced = read_announced_names(dir).map_err(|message| {

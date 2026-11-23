@@ -79,6 +79,13 @@ def main():
                  "--json", os.path.join(folder, "report.json"),
                  "--history", os.path.join(OUT, "history.jsonl")],
                 cwd=ROOT, check=False)
+        if new_days:
+            # The whole field, every day so far: bidding and play by entrant.
+            subprocess.run(
+                [sys.executable, os.path.join(ROOT, "probes", "tools", "brill_field.py"),
+                 "--out", os.path.join(OUT, "field-rollup.md"),
+                 "--json", os.path.join(OUT, "field-rollup.json")],
+                cwd=ROOT, check=False)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ and a running table across days.
 
     probes/tools/brill_report.py FIELD.pbn... [--out report.md]
         [--history .rbb-cache/brill/history.jsonl] [--us Rusty]
-        [--card 21GF-GIB] [--scoring MP|IMP] [--worst 5] [--no-recheck]
+        [--card Brill] [--scoring MP|IMP] [--worst 5] [--no-recheck]
     probes/tools/brill_report.py --history H --table-only   # the running table
     probes/tools/brill_report.py --self-test                 # on the fixture
 
@@ -427,6 +427,8 @@ def tables_of(games, us):
             "hands": hands,
             "south": south,
             "north": t.get("North", "").strip(),
+            "east": t.get("East", "").strip(),
+            "west": t.get("West", "").strip(),
             "label": south + "".join(f" {t[k]}" for k in ("Room", "Table") if t.get(k)),
             "ours": bool(usre.fullmatch(south)),
             "calls": calls,
@@ -503,8 +505,12 @@ def call_name(c):
 
 
 def card_path(card):
-    p = os.path.join(ROOT, "cards", "bbsa", card + ".bbsa")
-    return p if os.path.exists(p) else card
+    """A stock card name as a file; card JSON first, as the seat loads it."""
+    for p in (os.path.join(ROOT, "cards", "json", card + ".json"),
+              os.path.join(ROOT, "cards", "bbsa", card + ".bbsa")):
+        if os.path.exists(p):
+            return p
+    return card
 
 
 def hand_shape(hand):
@@ -593,8 +599,7 @@ def misunderstandings(t, rows, card, recheck, rbb, scoring):
             if seat_of(i) != "S":
                 continue
             args = [rbb, "call", t["hands"]["S"], "-a", " ".join(calls[:i]), "-d", t["first"],
-                    "-v", vul_arg(t["vul"]), "-s", scoring, "-c", card_path(card),
-                    "--rules", os.path.join(ROOT, "conventions"), "--json"]
+                    "-v", vul_arg(t["vul"]), "-s", scoring, "-c", card_path(card), "--json"]
             try:
                 d = run_json(args)
             except RuntimeError as e:
@@ -614,8 +619,7 @@ def vul_arg(v):
 def explain(t, card, rbb, scoring):
     calls = " ".join(c for c, _ in t["calls"])
     args = [rbb, "explain-auction", "-a", calls, "-d", t["first"], "-v", vul_arg(t["vul"]),
-            "-s", scoring, "-c", card, "--deal", t["deal"],
-            "--rules", os.path.join(ROOT, "conventions")]
+            "-s", scoring, "-c", card_path(card), "--deal", t["deal"]]
     return args
 
 
@@ -995,7 +999,7 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("pbn", nargs="*", help="field PBN file(s)")
     ap.add_argument("--us", default="Rusty", help="our South player name (regex, case-insensitive)")
-    ap.add_argument("--card", default="21GF-GIB", help="the card all four seats play (stock name or file)")
+    ap.add_argument("--card", default="Brill", help="the card all four seats play (stock name or file; the seat plays Brill)")
     ap.add_argument("--scoring", default="MP", choices=["MP", "IMP"],
                     help="scoring when the file does not say")
     ap.add_argument("--history", default="",

@@ -229,7 +229,7 @@ def resolve_card(card):
 def our_reading(rbb, card, rules, auction, sets=()):
     extra = [a for s in sets for a in ("--set", s)]
     p = subprocess.run([rbb, "explain-auction", "-a", auction, "-d", "N", "-c", card,
-                        "--rules", rules, "--json", *extra], capture_output=True, text=True)
+                        *(["--rules", rules] if rules else []), "--json", *extra], capture_output=True, text=True)
     if p.returncode != 0:
         return {"error": p.stderr.strip()[:500]}
     return json.loads(p.stdout)
@@ -466,7 +466,7 @@ def cmd_report(args):
     print(f"{len(have)}/{len(rows)} auctions have Brill's reading; computing ours ...", file=sys.stderr)
     rbb = str(ROOT / "target/release/rbb")
     card = resolve_card(args.card)
-    rules = str(ROOT / "conventions")
+    rules = None  # the rules compiled into rbb
     print(f"card {card}" + "".join(f" --set {s}" for s in args.set), file=sys.stderr)
     with ThreadPoolExecutor(args.jobs) as ex:
         ours = list(ex.map(lambda r: our_reading(rbb, card, rules, r["auction"], args.set), have))
