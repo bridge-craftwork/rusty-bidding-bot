@@ -427,6 +427,8 @@ def tables_of(games, us):
             "hands": hands,
             "south": south,
             "north": t.get("North", "").strip(),
+            "east": t.get("East", "").strip(),
+            "west": t.get("West", "").strip(),
             "label": south + "".join(f" {t[k]}" for k in ("Room", "Table") if t.get(k)),
             "ours": bool(usre.fullmatch(south)),
             "calls": calls,
