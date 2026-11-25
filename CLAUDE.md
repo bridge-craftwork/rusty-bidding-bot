@@ -2,6 +2,8 @@
 
 Rule-based bridge bidding engine in Rust (native + WASM). Design: docs/DESIGN.md;
 the proposed top-down judgment layer (placement, competition, slam entry): docs/JUDGMENT-LAYER.md.
+Decisions on the bidding model (captaincy, floors and tops of ranges, controls) and
+their basis: docs/BIDDING-MODEL.md; add to it when Rick rules or an experiment settles one.
 
 ## Hard rules
 
@@ -354,6 +356,11 @@ local checkouts").
   every response cached in `.rbb-cache/brill-service/explain/` (main
   checkout) and never fetched twice, so a rerun resumes. Run the fetch
   in the background (2000 auctions take ~35 min).
+- `probes/tools/gib_tree.py show P-P-1S-P-2C-P` / `run --compare ALL.json --top 2000`:
+  our readings against GIB's bidding tree (BBO's `gibrest` service; one
+  request a second, every answer archived in `.rbb-cache/gib-tree/xml/` and
+  never asked again): HCP, total points and lengths per call, "wide" where
+  ours says less (an open top). docs/BIDDING-MODEL.md section 4.
 - `probes/tools/brill_replay.py [FIELD.pbn...] [--card 21GF-GIB]`: our
   past Brill tables replayed with today's engine: the actual auction up
   to the first South call that changes, then South from `rbb call` and
