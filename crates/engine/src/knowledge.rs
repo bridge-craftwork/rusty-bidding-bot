@@ -870,6 +870,54 @@ fn apply_const(r: Range, op: CmpOp, n: i32) -> Range {
     }
 }
 
+/// The per-suit hull of the length vectors (C D H S, summing to 13, inside
+/// `len`) whose sorted distribution matches `pattern` (as
+/// `Facts::shape_matches`: `5422`, `5-4-2-2`, `5-5-x-x`). `None` when no
+/// vector fits; `len` itself when the pattern does not parse.
+fn shape_hull(len: &[Range; 4], pattern: &str) -> Option<[Range; 4]> {
+    let parts: Vec<&str> = if pattern.contains('-') {
+        pattern.split('-').collect()
+    } else {
+        pattern.split("").filter(|s| !s.is_empty()).collect()
+    };
+    if parts.len() != 4 {
+        return Some(*len);
+    }
+    let mut want = [None; 4];
+    for (i, p) in parts.iter().enumerate() {
+        if *p != "x" {
+            match p.parse::<i32>() {
+                Ok(n) => want[i] = Some(n),
+                Err(_) => return Some(*len),
+            }
+        }
+    }
+    let lo = |i: usize| len[i].lo.max(0);
+    let hi = |i: usize| len[i].hi.min(13);
+    let mut out: Option<[Range; 4]> = None;
+    for c in lo(0)..=hi(0) {
+        for d in lo(1)..=hi(1).min(13 - c) {
+            for h in lo(2)..=hi(2).min(13 - c - d) {
+                let s = 13 - c - d - h;
+                if s < lo(3) || s > hi(3) {
+                    continue;
+                }
+                let v = [c, d, h, s];
+                let mut dist = v;
+                dist.sort_by(|a, b| b.cmp(a));
+                if (0..4).any(|i| want[i].is_some_and(|n| n != dist[i])) {
+                    continue;
+                }
+                out = Some(match out {
+                    None => v.map(Range::point),
+                    Some(o) => std::array::from_fn(|i| o[i].hull(Range::point(v[i]))),
+                });
+            }
+        }
+    }
+    out
+}
+
 /// Narrow `k` by `e` (or by its negation when `positive` is false).
 fn narrow(k: Bounds, e: &Expr, positive: bool) -> Bounds {
     let mut out = k;
@@ -977,6 +1025,17 @@ fn narrow(k: Bounds, e: &Expr, positive: bool) -> Bounds {
                 *r = hull;
             }
         }
+        // A shape pattern (`shape 5-4-2-2`, `shape 5-5-x-x`): each suit's
+        // length is the hull over the length vectors the pattern and the
+        // known ranges allow. Its negation narrows nothing.
+        Expr::Shape { pattern } if positive => match shape_hull(&out.len, pattern) {
+            Some(h) => {
+                for i in 0..4 {
+                    out.len[i] = out.len[i].intersect(h[i]);
+                }
+            }
+            None => return Bounds::contradiction(),
+        },
         Expr::Path { path } if path.len() == 1 && path[0].name == "balanced" => {
             let want = Tri::from_bool(positive);
             if out.balanced == want.negate() {
@@ -1323,6 +1382,22 @@ mod tests {
         assert!(k.add(expr("(S=4, H=4) | (S=5, H<=3), D<=3, C<=3")));
         assert_eq!(k.len[3], Range::new(4, 5));
         assert_eq!(k.len[2], Range::new(2, 4));
+    }
+
+    #[test]
+    fn shape_patterns_narrow_lengths() {
+        // The notrump rules read `balanced | shape 5-4-2-2`: both halves
+        // must narrow for the hull to.
+        let mut k = SeatKnowledge::default();
+        k.add(expr("balanced | shape 5-4-2-2"));
+        assert!(k.len.iter().all(|r| *r == Range::new(2, 5)));
+        let mut k = SeatKnowledge::default();
+        k.add(expr("shape 4-4-4-1, S>=2"));
+        assert_eq!(k.len[3], Range::new(4, 4));
+        let mut k = SeatKnowledge::default();
+        k.add(expr("shape 5-5-x-x"));
+        assert_eq!(k.len[0], Range::new(0, 5));
+        assert!(!k.add(expr("S>=6")));
     }
 
     #[test]
