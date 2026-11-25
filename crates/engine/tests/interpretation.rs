@@ -325,14 +325,14 @@ fn announcements_by_audience() {
         ),
         (
             "2C",
-            "Strong 2C; 17+ HCP, artificial, game forcing",
-            "Strong 2C; 17+ HCP, artificial, game forcing",
+            "Strong 2C; 19+ HCP, artificial, game forcing",
+            "Strong 2C; 19+ HCP, artificial, game forcing",
         ),
         (
             "1S Pass 4D",
-            "Splinter: 4+ spades, game values, at most one diamonds; 11-15 HCP, 15-23 support \
+            "Splinter: 4+ spades, game values, at most one diamonds; 11-15 HCP, 15-22 support \
              points, unbalanced, 0-1 diamonds, artificial, game forcing",
-            "Splinter: 4+ spades, game values, 0-1 diamonds; 11-15 HCP, 15-23 support points, \
+            "Splinter: 4+ spades, game values, 0-1 diamonds; 11-15 HCP, 15-22 support points, \
              unbalanced, artificial, game forcing",
         ),
         (

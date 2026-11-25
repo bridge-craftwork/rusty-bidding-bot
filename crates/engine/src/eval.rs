@@ -3506,7 +3506,12 @@ mod knowledge_soundness {
         };
         let exprs: Vec<Expr> = SHOWS.iter().map(|s| when_of(s)).collect();
         let mut seed = 0x9e37_79b9_7f4a_7c15u64;
-        let hands: Vec<Facts> = (0..3000).map(|_| hand(&mut seed)).collect();
+        // Freak patterns are read as absent until shown (docs/BIDDING-MODEL.md
+        // 3.5), so narrowing may exclude them.
+        let hands: Vec<Facts> = (0..3000)
+            .map(|_| hand(&mut seed))
+            .filter(|f| !crate::knowledge::is_freak(&f.dist))
+            .collect();
         for v in [Valuation::default(), bba] {
             let fits: Vec<Vec<bool>> = exprs
                 .iter()

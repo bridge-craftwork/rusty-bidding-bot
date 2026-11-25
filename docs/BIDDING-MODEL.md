@@ -125,6 +125,15 @@ Consequences:
 - a strong hand has no way to show its extras, so slams are missed
   from the other side too.
 
+**Rick (2026-11-25), the tops these calls should have:**
+- **Drury 4♠** does not go up to 28: with that much opposite a Drury
+  bidder's 10 or more, opener looks for slam. Its top is where opener's
+  slam try starts (GIB: 4♠ 14-18, 3♠ 19-22 forcing).
+- **Splinter by responder** (1♠–4♣) is normally 10-12 HCP, 13-15
+  support points: a limited bid. With more, responder uses Jacoby 2NT,
+  or without it starts with a 2/1 and supports at the three level (no
+  fast arrival). Ours reads 11-15 HCP.
+
 **Proposed:** every module that ends in a game bid should either give it
 a real top, or the engine should read a catch-all game bid on its floor.
 Then the system needs the stronger calls (slam tries) that make the top
@@ -185,6 +194,44 @@ stack up:
 4. 4♠ itself says only "15+" (3.2), and the opening has no points top
    (above).
 
+**Rick (2026-11-25):** the 1♠ opening is normally 12-21 HCP, and not
+enough for a 2♣ opening by tricks. With five spades and 25 declarer
+points the hand would almost always open 2♣.
+
+**Tried (2026-11-25, pack worktree `points-tops`, not merged), on the
+100,000 random deals with the freak-pattern engine:**
+- the one-level openings show `hcp+length_points<=22 | hcp<=18`;
+- a new 2♣ "23+ declarer points" (19+ HCP, unbalanced);
+- Drury 4M becomes 15-18, with a new 3M slam try at 19+;
+- responder's splinter becomes 10-12 HCP.
+
+Together: 881 auctions changed, -931 IMPs from par, and the bidding
+side's contract errors -1,306. Grouped by the first call that changed:
+- the Drury 3M slam try, -666: after 3M–4M opener still asks for
+  keycards, through `slam_values`' "18 support points of my own"
+  branch, which counts the long hand in support points (3.3);
+- the quantitative 4NT over 1m–2♠ (strong jump shift)–3NT, -350:
+  opener's new 20 top lets more responders pass
+  `hcp + partner.hcp.max <= 35`, and 4NT goes down;
+- the splinter, -18; Jacoby 2NT +11; the new 2♣ +60.
+
+The tops themselves read right (1♠: decl 12-22; Drury 4♠: 15-18;
+splinter: 10-12 HCP). The losses are in the rules downstream, which
+were tuned on the open tops. Next: give each part its own measurement,
+and before the Drury slam try, settle its follow-up (opener as the
+captain, counting declarer points).
+
+**Rick (2026-11-25): the bottom first, then rebalance the top.** The
+higher bids (slam thresholds, quantitative 4NT, the Drury follow-ups)
+must be rebalanced for the narrower ranges at the bottom. Before that,
+review the early rounds more thoroughly against GIB (section 4.2).
+GIB's own Drury continuation is a candidate to adopt. After
+P–P–1♠–P–2♣–P–3♠ (3♠: 19-22, forcing), responder bids:
+- 4♠ with 10-12 total points;
+- 3NT: 3-4 spades, 9-11 HCP, partial stoppers;
+- a cue bid of an ace (4♣/4♦/4♥) with 11-12 total points;
+- 4NT Blackwood with 12.
+
 **Proposed:** the one-level openings state their points top outright
 (`hcp+length_points<=22` or similar, checked against the strong 2♣
 rule so no hand is left without an opening), measured on random deals.
@@ -230,15 +277,69 @@ That could be losers against points, or the count of tricks.
    is read as not holding one: the shortness and length tops come only
    from normal patterns (`vertex_max` skips freak patterns), and so do
    the points tops that follow from them.
-2. **Rules:** a freak module, ranked ahead of the system:
-   - weak freaks open a high preempt;
-   - strong ones open 2♣;
-   - its calls show `freak`, so partner reads them as such.
+2. ~~**Rules:** a freak module whose calls show `freak`.~~ **Ruled
+   out (Rick, 2026-11-25):** no call is known to show a freak. An
+   8-5-0-0 may open 4♠, but that is advertised as a preempt, which
+   could as easily be 8-3-1-1; partner reads it as a preempt. Freak
+   hands borrow normal calls and the meanings stay normal. So there is
+   no `freak` term for what a call shows. A hand term for choosing the
+   call may come later, if a rule needs one.
 
-   Every other call is read as `!freak` without saying so.
+   Rick, restated: with a freak the bidder chooses a call whose
+   description won't match the hand but is the best bid anyhow, and
+   partner and the opponents take it in its normal meaning. Gambling
+   3NT is the one convention built for a freak, because that hand is
+   common enough to earn one; other freaks find nothing that matches
+   or describes them as well.
 3. **Measure:** how often freaks occur in our random sets (about 0.1% of
    hands at 99.9%), and the effect on the ranges partner reads. The GIB
    comparison (section 4) should then show fewer open tops.
+
+**Built, engine part (2026-11-25; branch `freak-patterns`, not yet
+merged):** `knowledge.rs` holds the 25 normal patterns
+(`NORMAL_PATTERNS`, through 6-6-1-0) and `is_freak`. A seat's lengths
+and the counts they allow (length points, support-point bonus) come from
+the length vectors of normal patterns only, each counted exactly rather
+than at the corners of the length ranges. A seat is read as holding a
+freak only when its calls together leave no normal pattern (seven
+spades, then six hearts): its constraints are then read again with every
+pattern allowed. No call shows a freak (Rick's ruling under 2).
+
+What partner reads now: no suit longer than eight and at most four
+length points until shown otherwise. The tops below are only what the
+pattern arithmetic leaves; they are not the system's tops, which come
+from the stronger alternatives (3.2, 3.4 and Rick's tops there). 1♠ opener reads decl 12-25 (was
+12-30); the Drury 4♠ reads ♠sup 15-28 (was 15-31); the strong 2♣
+(`hcp+length_points>=23`) reads 19+ HCP (was 17+); a splinter 15-22
+support points (was 15-23).
+
+Measured on the 100,000 random deals (against the balanced fix): 358
+auctions changed. Distance from par +256 IMPs (+0.72 ± 0.25 a changed
+board). For the side that bid the change: contract errors +144 and
+doubling errors +608 (both halves agree). Most of the doubling gain is
+penalty doubles of the opponents' overcalls and competitive bids, now
+that their tops are known. Slams bid with a slam par went from 2,712 to
+2,721; failed slams went from 797 to 798. In the GIB comparison,
+call-boards with any difference fell from 441,390 to 310,162, and "open
+top" in points fell from 326,897 to 180,961.
+
+**Side effect on the slam thresholds.** The exact counts also tighten
+deductions that have nothing to do with freaks. Every hand with four
+spades and four clubs has a doubleton, so after 1♠–2♣ (which denies
+four spades with 13+ support points) responder is read as holding at
+most three spades. In 1♠–2♣–2♠–3♠ (Lawrence style) responder then
+reads as 13+ HCP and 16+ support points (was 12+ and 12+). The long
+hand's slam count, `slam_count` at 30 on partner's floor, was
+calibrated (2026-10-01) when that floor was understated. Five
+`slam/serious-3nt.test` cases now fail:
+- a 13-14 HCP opener asks for keycards instead of bidding the
+  non-serious 3NT;
+- the 3NT reading itself contradicts the narrower ranges, so it shows
+  nothing, and responder then signs off where the test expects a
+  control bid.
+
+The pack's slam thresholds need recalibrating against the new floors
+before this engine change is released.
 
 ### 3.6 A call's description is narrower than its licence
 
@@ -348,6 +449,20 @@ deals: 1,995 fetched in 34 minutes, no failures; 7,657 calls compared
   - 1♦–1♥–1♠ reads up to 21, GIB up to 18.
 
 The report and its JSON are in `.rbb-cache/gib-tree/report-random100k.*`.
+
+### 4.2 The early rounds as a base (Rick, 2026-11-25)
+
+Find the most common auction positions (1,000, maybe 5,000), measure
+what share of all calls they cover by call number, and check how deep
+they reach. Then compare GIB's ranges with ours there, and get those
+early rounds solid. Probing GIB over time to grow the archive is fine.
+
+GIB plays many treatments we don't, some of them uncommon. The
+comparison keeps only calls with basically the same meaning, at
+positions whose whole path agrees. The rest go to a GIB-treatments
+queue, ranked by frequency, from which rules may be added later to see
+how well we track GIB. Being built by an agent: `gib_tree.py coverage`
+and the agreed-path filter.
 
 ## 5. Controls
 

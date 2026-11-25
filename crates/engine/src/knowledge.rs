@@ -121,6 +121,12 @@ pub struct SeatKnowledge {
     /// Suit lengths, C D H S.
     pub len: [Range; 4],
     pub balanced: Tri,
+    /// Read as holding a freak pattern (`is_freak`). No call shows one: a
+    /// freak bids a normal call (an 8-5-0-0 may open 4♠, read as any
+    /// preempt), so every seat is read as holding a normal pattern, and its
+    /// lengths and the counts they allow come from those, unless its calls
+    /// together leave none (docs/BIDDING-MODEL.md 3.5).
+    pub freak: Tri,
     /// Total points in quarter points, [notrump, suit] (see
     /// `facts::Valuation`).
     pub pts: [Range; 2],
@@ -155,6 +161,7 @@ impl SeatKnowledge {
             hcp: Range::new(0, 37),
             len: [Range::new(0, 13); 4],
             balanced: Tri::Unknown,
+            freak: Tri::Unknown,
             pts: [Range::new(0, 4 * 37 + 4 * 4 + 4 * 9); 2],
             tp: [Range::new(0, 37 + 13); 4],
             dp: Range::new(0, 37 + MAX_LENGTH_POINTS),
@@ -216,6 +223,7 @@ impl SeatKnowledge {
             hcp: self.hcp,
             len: self.len,
             balanced: self.balanced,
+            freak: self.freak,
             pts: self.pts,
             tp: self.tp,
             dp: self.dp,
@@ -227,6 +235,7 @@ impl SeatKnowledge {
         self.hcp = b.hcp;
         self.len = b.len;
         self.balanced = b.balanced;
+        self.freak = b.freak;
         self.pts = b.pts;
         self.tp = b.tp;
         self.dp = b.dp;
@@ -235,7 +244,7 @@ impl SeatKnowledge {
     /// Length points (one a card beyond four in every suit), as far as the
     /// lengths, the deck and the declarer points allow.
     pub fn length_points(&self) -> Range {
-        let lp = derived(&self.len).lp;
+        let lp = derived(&self.len, self.freak).lp;
         lp.intersect(Range::new(
             self.dp.lo - self.hcp.hi,
             self.dp.hi - self.hcp.lo,
@@ -246,7 +255,7 @@ impl SeatKnowledge {
     /// (quarters), with nothing shown about points themselves.
     fn implied_points(&self, kind: usize) -> Range {
         let (ten, w) = weights(self.valuation, kind);
-        let lp = derived(&self.len).lp;
+        let lp = derived(&self.len, self.freak).lp;
         Range::new(
             4 * self.hcp.lo + w * lp.lo,
             4 * self.hcp.hi + 4 * ten + w * lp.hi,
@@ -256,7 +265,7 @@ impl SeatKnowledge {
     /// Have the calls said something about declarer points beyond what the
     /// HCP and lengths imply?
     pub fn declarer_points_shown(&self) -> bool {
-        let lp = derived(&self.len).lp;
+        let lp = derived(&self.len, self.freak).lp;
         self.dp.lo > self.hcp.lo + lp.lo || self.dp.hi < self.hcp.hi + lp.hi
     }
 
@@ -303,10 +312,26 @@ impl SeatKnowledge {
     }
 
     /// The ranges `add(e)` leaves, or `None` if `e` contradicts them.
+    /// A seat read as holding a normal pattern whose calls rule every
+    /// normal pattern out (seven spades, then six hearts) has shown a
+    /// freak: its constraints are read again with freaks allowed.
     fn added(&self, e: &Expr) -> Option<Bounds> {
         let narrowed = narrow(self.bounds(), e, true);
         if narrowed.is_contradiction() {
-            return None;
+            if self.freak != Tri::Unknown {
+                return None;
+            }
+            let mut k = SeatKnowledge::unknown(self.valuation);
+            k.freak = Tri::True;
+            let mut b = k.bounds();
+            b.normalize();
+            k.set_bounds(b);
+            for c in &self.constraints {
+                if !k.add(c.clone()) {
+                    return None;
+                }
+            }
+            return k.added(e);
         }
         // Earlier disjunctions may settle now ("4 hearts or 4 spades",
         // then "not 4 hearts"): narrow by everything once more, `e` last
@@ -383,6 +408,7 @@ struct Bounds {
     hcp: Range,
     len: [Range; 4],
     balanced: Tri,
+    freak: Tri,
     pts: [Range; 2],
     /// Support points per trump suit, C D H S (whole points).
     tp: [Range; 4],
@@ -401,45 +427,51 @@ fn weights(v: Valuation, kind: usize) -> (i32, i32) {
     }
 }
 
-/// The most `f` reaches over the hands whose suit lengths lie in `len` and
-/// add up to 13. `f` is convex in the lengths (length points, shortness),
-/// so its maximum over that polytope is at a vertex: three lengths at an
-/// end of their ranges, the fourth what the deck leaves. `None` when no
-/// length assignment fits.
-fn vertex_max(len: &[Range; 4], f: impl Fn(&[i32; 4]) -> i32) -> Option<i32> {
-    let mut best: Option<i32> = None;
-    for free in 0..4 {
-        let others: Vec<usize> = (0..4).filter(|&j| j != free).collect();
-        for mask in 0..8 {
-            let mut l = [0; 4];
-            for (bit, &j) in others.iter().enumerate() {
-                l[j] = if mask & (1 << bit) != 0 {
-                    len[j].hi
-                } else {
-                    len[j].lo
-                };
-            }
-            l[free] = 13 - others.iter().map(|&j| l[j]).sum::<i32>();
-            if len[free].lo <= l[free] && l[free] <= len[free].hi {
-                let v = f(&l);
-                best = Some(best.map_or(v, |b| b.max(v)));
-            }
-        }
-    }
-    best
+/// The hand patterns (longest suit first) that cover 99.9% of all hands,
+/// through 6-6-1-0 (Rick, 2026-11-25; docs/BIDDING-MODEL.md 3.5). The rest
+/// (8-4-1-0, every nine-card suit, 7-6-0-0, 8-5-0-0, ...; 0.09% of hands)
+/// are freaks: a call that has not shown one is read as not holding one.
+const NORMAL_PATTERNS: [[i32; 4]; 25] = [
+    [4, 4, 3, 2],
+    [5, 3, 3, 2],
+    [5, 4, 3, 1],
+    [5, 4, 2, 2],
+    [4, 3, 3, 3],
+    [6, 3, 2, 2],
+    [6, 4, 2, 1],
+    [6, 3, 3, 1],
+    [5, 5, 2, 1],
+    [4, 4, 4, 1],
+    [7, 3, 2, 1],
+    [6, 4, 3, 0],
+    [5, 4, 4, 0],
+    [5, 5, 3, 0],
+    [6, 5, 1, 1],
+    [6, 5, 2, 0],
+    [7, 2, 2, 2],
+    [7, 4, 1, 1],
+    [7, 4, 2, 0],
+    [7, 3, 3, 0],
+    [8, 2, 2, 1],
+    [8, 3, 1, 1],
+    [8, 3, 2, 0],
+    [7, 5, 1, 0],
+    [6, 6, 1, 0],
+];
+
+/// Is this distribution (any order) a freak pattern, outside the 99.9%
+/// most common ones?
+pub fn is_freak(len: &[i32; 4]) -> bool {
+    let mut d = *len;
+    d.sort_by(|a, b| b.cmp(a));
+    !NORMAL_PATTERNS.contains(&d)
 }
 
 /// Length points the known lengths allow: at least the sum of each suit's
 /// sure excess over four, at most what the most lopsided hand that fits
 /// the ranges and the deck holds.
-fn length_points(len: &[Range; 4]) -> Range {
-    if len.iter().any(Range::is_empty) {
-        return Range::new(0, MAX_LENGTH_POINTS);
-    }
-    let lo = len.iter().map(|r| (r.lo - 4).max(0)).sum();
-    let hi =
-        vertex_max(len, |l| l.iter().map(|x| (x - 4).max(0)).sum()).unwrap_or(MAX_LENGTH_POINTS);
-    Range::new(lo, hi.min(MAX_LENGTH_POINTS))
+fn length_points_of(l: &[i32; 4]) -> i32 {
+    l.iter().map(|x| (x - 4).max(0)).sum()
 }
 
 /// Shortness points for one side suit (`Facts::total_points`).
@@ -453,54 +485,91 @@ fn shortness(l: i32) -> i32 {
 }
 
 /// What support points add to the HCP with `t` as trump: shortness in the
-/// side suits, capped by the trumps held.
-fn support_bonus(len: &[Range; 4], t: usize) -> Range {
-    if len.iter().any(Range::is_empty) {
-        return Range::new(0, 13);
-    }
-    let side = |l: &[i32; 4]| {
-        (0..4)
-            .filter(|&j| j != t)
-            .map(|j| shortness(l[j]))
-            .sum::<i32>()
-    };
-    let lo: i32 = (0..4)
-        .filter(|&j| j != t)
-        .map(|j| shortness(len[j].hi))
-        .sum();
-    let hi = vertex_max(len, side).unwrap_or(15);
-    Range::new(lo.min(len[t].lo), hi.min(len[t].hi))
+/// side suits, capped by the trumps held (`Facts::total_points`).
+fn support_bonus_of(l: &[i32; 4], t: usize) -> i32 {
+    let side: i32 = (0..4).filter(|&j| j != t).map(|j| shortness(l[j])).sum();
+    side.min(l[t])
 }
 
-/// What the lengths alone bound: the length points and, per trump suit,
-/// what shortness adds to the HCP.
+/// What the lengths alone bound: the per-suit hull of the hands that fit
+/// them, the length points and, per trump suit, what shortness adds to
+/// the HCP. Taken over the normal patterns only, unless the seat has shown
+/// a freak or no normal pattern fits (then over every pattern).
 #[derive(Clone, Copy)]
 struct Derived {
+    hull: [Range; 4],
     lp: Range,
     bonus: [Range; 4],
 }
 
+/// Every length vector (C D H S, summing to 13) inside `len`, normal
+/// patterns only when `normal`.
+fn derive(len: &[Range; 4], normal: bool) -> Option<Derived> {
+    let lo = |i: usize| len[i].lo.max(0);
+    let hi = |i: usize| len[i].hi.min(13);
+    let mut out: Option<Derived> = None;
+    for c in lo(0)..=hi(0) {
+        for d in lo(1)..=hi(1).min(13 - c) {
+            for h in lo(2)..=hi(2).min(13 - c - d) {
+                let s = 13 - c - d - h;
+                if s < lo(3) || s > hi(3) {
+                    continue;
+                }
+                let v = [c, d, h, s];
+                if normal && is_freak(&v) {
+                    continue;
+                }
+                let lp = Range::point(length_points_of(&v));
+                let bonus: [Range; 4] =
+                    std::array::from_fn(|t| Range::point(support_bonus_of(&v, t)));
+                out = Some(match out {
+                    None => Derived {
+                        hull: v.map(Range::point),
+                        lp,
+                        bonus,
+                    },
+                    Some(o) => Derived {
+                        hull: std::array::from_fn(|i| o.hull[i].hull(Range::point(v[i]))),
+                        lp: o.lp.hull(lp),
+                        bonus: std::array::from_fn(|t| o.bonus[t].hull(bonus[t])),
+                    },
+                });
+            }
+        }
+    }
+    out
+}
+
 /// `Derived` for these lengths, from a small per-thread cache: narrowing
 /// asks for the same few length ranges over and over, and each answer
-/// takes a walk over the vertices.
-fn derived(len: &[Range; 4]) -> Derived {
-    let compute = || Derived {
-        lp: length_points(len),
-        bonus: std::array::from_fn(|t| support_bonus(len, t)),
+/// takes a walk over the length vectors. Nothing fits: the lengths
+/// themselves, and the widest counts.
+fn derived(len: &[Range; 4], freak: Tri) -> Derived {
+    let compute = || {
+        let normal = if freak == Tri::True {
+            None
+        } else {
+            derive(len, true)
+        };
+        normal.or_else(|| derive(len, false)).unwrap_or(Derived {
+            hull: *len,
+            lp: Range::new(0, MAX_LENGTH_POINTS),
+            bonus: [Range::new(0, 13); 4],
+        })
     };
     if len.iter().any(|r| r.lo < 0 || r.hi > 13 || r.is_empty()) {
         return compute();
     }
-    // Eight numbers 0..=13, four bits each.
-    let key = len
-        .iter()
-        .fold(0u32, |k, r| (k << 8) | ((r.lo as u32) << 4) | r.hi as u32);
+    // Eight numbers 0..=13, four bits each, and the freak flag.
+    let key = len.iter().fold(u64::from(freak == Tri::True), |k, r| {
+        (k << 8) | ((r.lo as u64) << 4) | r.hi as u64
+    });
     const SLOTS: usize = 1 << 12;
     thread_local! {
-        static CACHE: std::cell::RefCell<Vec<Option<(u32, Derived)>>> =
+        static CACHE: std::cell::RefCell<Vec<Option<(u64, Derived)>>> =
             std::cell::RefCell::new(vec![None; SLOTS]);
     }
-    let slot = (key.wrapping_mul(0x9e37_79b1) >> 20) as usize % SLOTS;
+    let slot = (key.wrapping_mul(0x9e37_79b9_7f4a_7c15) >> 52) as usize % SLOTS;
     CACHE.with(|c| {
         let mut c = c.borrow_mut();
         match c[slot] {
@@ -564,6 +633,11 @@ impl Bounds {
                 self.len[i] = self.len[i].intersect(Range::new(13 - others_hi, 13 - others_lo));
             }
         }
+        // The hands that fit: normal patterns unless a freak was shown.
+        let h = derived(&self.len, self.freak).hull;
+        for i in 0..4 {
+            self.len[i] = self.len[i].intersect(h[i]);
+        }
     }
 
     /// Each point count is the HCP plus a bonus the lengths bound, so each
@@ -576,7 +650,7 @@ impl Bounds {
     /// ceiling on the high cards, and a 2♥ overcall of 12+ total points
     /// with five or six hearts says 10+ HCP.
     fn bridge(&mut self) {
-        let mut d = derived(&self.len);
+        let mut d = derived(&self.len, self.freak);
         let lp = d.lp;
         // Declarer points.
         self.dp = self
@@ -591,7 +665,7 @@ impl Bounds {
             self.dp.hi - self.hcp.lo,
         ));
         if self.len != len {
-            d = derived(&self.len);
+            d = derived(&self.len, self.freak);
         }
         let lp = d.lp;
         // Total points, quarters: 4 HCP + ten a ten + w a card beyond four.
@@ -682,6 +756,11 @@ impl Bounds {
         k.dp = self.dp.hull(o.dp);
         k.balanced = if self.balanced == o.balanced {
             self.balanced
+        } else {
+            Tri::Unknown
+        };
+        k.freak = if self.freak == o.freak {
+            self.freak
         } else {
             Tri::Unknown
         };
@@ -1227,7 +1306,8 @@ mod tests {
         assert_eq!(k.hcp.hi, 12, "support points are at least the high cards");
         // Only spades were agreed; hearts keep the bound the high cards
         // and the possible heart length imply.
-        assert_eq!(k.tp[2], Range::new(0, k.hcp.hi + k.len[2].hi));
+        assert_eq!(k.tp[2].lo, k.hcp.lo);
+        assert!(k.tp[2].hi > k.hcp.hi && k.tp[2].hi <= k.hcp.hi + k.len[2].hi);
         // Support points never fall below the high cards.
         let mut k = SeatKnowledge::default();
         assert!(k.add(expr("hcp>=13")));
@@ -1290,7 +1370,8 @@ mod tests {
         // than 12 points (the old bound assumed tens only).
         let mut k = SeatKnowledge::default();
         assert!(k.add(expr("hcp<=10")));
-        assert!(k.pts[0].hi >= 4 * 10 + 8 + 4 * 9);
+        // Four length points at most: no normal pattern has more.
+        assert!(k.pts[0].hi >= 4 * 10 + 8 + 4 * 4);
     }
 
     #[test]
@@ -1355,11 +1436,15 @@ mod tests {
     fn suit_relations_bound_lengths_through_the_deck() {
         let mut k = SeatKnowledge::default();
         assert!(k.add(expr("hcp>=10, C>D | (C=3, D=3), H<=4 | H<C, S<=4 | S<C")));
-        assert_eq!(k.len[0], Range::new(3, 13), "1♣: three or more clubs");
-        assert_eq!(k.len[1].hi, 6, "fewer diamonds than clubs");
+        assert_eq!(
+            k.len[0],
+            Range::new(3, 8),
+            "1♣: three or more clubs, eight at most"
+        );
+        assert_eq!(k.len[1].hi, 5, "fewer diamonds than clubs (7-6 is a freak)");
         assert_eq!(
             (k.len[2].hi, k.len[3].hi),
-            (6, 6),
+            (5, 5),
             "a major longer than four is shorter than clubs"
         );
         // 1♦: three or more, and never fewer than clubs.
@@ -1398,6 +1483,27 @@ mod tests {
         k.add(expr("shape 5-5-x-x"));
         assert_eq!(k.len[0], Range::new(0, 5));
         assert!(!k.add(expr("S>=6")));
+    }
+
+    #[test]
+    fn freak_patterns_are_left_out_until_shown() {
+        // Nothing known: no suit beyond eight, at most four length points.
+        let k = SeatKnowledge::default();
+        assert!(k.len.iter().all(|r| r.hi == 8));
+        assert_eq!(k.length_points(), Range::new(0, 4));
+        // Seven spades: 7-5-1-0 is normal, 7-6-0-0 is not.
+        let mut k = SeatKnowledge::default();
+        k.add(expr("S>=7"));
+        assert_eq!(k.len[3], Range::new(7, 8));
+        assert!(k.len[..3].iter().all(|r| r.hi <= 5));
+        // Spades as trump: a void and a singleton (7-5-1-0) at most,
+        // capped by the seven trumps.
+        assert_eq!(k.tp[3].hi - k.hcp.hi, 7);
+        // A freak forced by the lengths is allowed.
+        let mut k = SeatKnowledge::default();
+        assert!(k.add(expr("S>=7, H>=6")));
+        assert_eq!((k.len[3], k.len[2]), (Range::point(7), Range::point(6)));
+        assert!(is_freak(&[0, 0, 5, 8]) && !is_freak(&[1, 0, 6, 6]));
     }
 
     #[test]
