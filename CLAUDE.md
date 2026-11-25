@@ -360,7 +360,11 @@ local checkouts").
   our readings against GIB's bidding tree (BBO's `gibrest` service; one
   request a second, every answer archived in `.rbb-cache/gib-tree/xml/` and
   never asked again): HCP, total points and lengths per call, "wide" where
-  ours says less (an open top). docs/BIDDING-MODEL.md section 4.
+  ours says less (an open top). `coverage --compare ALL.json` prints how
+  much of all bidding the top N positions cover (by call number, contested
+  or not); `agreed --tag T` compares ranges only on calls with the same
+  kind of meaning on fully agreed paths, and queues the rest as GIB
+  treatments by frequency. docs/BIDDING-MODEL.md section 4.
 - `probes/tools/brill_replay.py [FIELD.pbn...] [--card 21GF-GIB]`: our
   past Brill tables replayed with today's engine: the actual auction up
   to the first South call that changes, then South from `rbb call` and

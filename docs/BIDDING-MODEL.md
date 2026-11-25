@@ -461,8 +461,57 @@ GIB plays many treatments we don't, some of them uncommon. The
 comparison keeps only calls with basically the same meaning, at
 positions whose whole path agrees. The rest go to a GIB-treatments
 queue, ranked by frequency, from which rules may be added later to see
-how well we track GIB. Being built by an agent: `gib_tree.py coverage`
-and the agreed-path filter.
+how well we track GIB. Built as `gib_tree.py coverage` and
+`gib_tree.py agreed`.
+
+**First run (2026-11-25):**
+- **Input:** the 100,000 random deals bid by the freak-pattern engine on
+  the pack's main rules: 971,231 calls at 82,790 positions.
+- **Coverage:** the share of calls made from a top-N position.
+
+  | N | all | uncontested | contested | whole auctions inside |
+  |---|---|---|---|---|
+  | 1,000 | 58% | 73% | 18% | 14% |
+  | 5,000 | 75% | 87% | 41% | 41% |
+  | 20,000 | 89% | 95% | 74% | 74% |
+
+  The first two calls are covered from N = 500. By call number, the top
+  5,000 cover 99%+ of the 3rd call, 96% of the 4th, 88% of the 5th, 76% of
+  the 6th and 64% of the 7th. Contested positions are where coverage thins:
+  74% of contested 5th calls, 52% of contested 6th calls.
+- **Fetched:** the top 5,000 positions are archived (0 failures).
+- **Agreed paths:** 99% of the call-boards at those positions lie on
+  agreed paths (100% through the 4th call, 96-99% to the 15th). That
+  share is a little generous: passes always agree, and natural calls
+  agree when the meaning differs only in points (Drury 2♠: GIB 12-13,
+  ours 13-14). So the range differences there mean what they say.
+- **Biggest range differences on agreed calls, in call-boards:**
+  1. passes without a points top ("no overcall", "no further bid"),
+     about 90k;
+  2. one-level openings with no points top, about 70k (this engine has
+     no opening tops; the `points-tops` pack branch adds them);
+  3. one-level overcalls with an HCP floor of 4 against GIB's 8, 10.5k;
+  4. the takeout double showing no lengths, 8.7k;
+  5. third-seat light majors (4+ from 10 HCP against GIB's 5+ from 12),
+     5.4k;
+  6. weak twos allowing side voids, 5.3k;
+  7. floors after interference (negative double 2 against 5, redouble 6
+     against 10), 3.4k;
+  8. the forcing 1NT reading up to 15 against 12, 2.4k;
+  9. notrump shapes: 1N–3N, 1♦–1N, opener's 1NT rebids.
+- **The GIB treatments queue, at the top:**
+  - 1N–2N, minor transfer against our invitation (959 call-boards,
+    2,745 below it);
+  - P–P–P–1♣–1N, natural against our Unusual 1NT;
+  - 1♣–1♦–1♥–1♠, fourth suit forcing against our natural;
+  - 1N–2♠, Minor Stayman against our transfer;
+  - the superaccept after a transfer;
+  - the Impossible 2♠;
+  - responsive doubles and takeout doubles of their game against our
+    penalty doubles.
+
+The reports are in `.rbb-cache/gib-tree/` (main checkout):
+`coverage-random100k.json` and `agreed-random100k-top5000.md` / `.json`.
 
 ## 5. Controls
 
