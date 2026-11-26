@@ -734,7 +734,13 @@ they are not forgotten. Highest first; "par" means settle by par tests.
    100k random deals; the tight ones gain 27. Still open: the opening
    side's answers to these calls.
 2. Balancing in the pass-out seat over their fit, and the borrowed king
-   in balancing ranges and advances (3.8). (In progress, `balancing-fit`.)
+   in balancing ranges and advances (3.8). Done 2026-11-26 (merged): over
+   (1x) P (2x) P P and (1x) P (1y) P (2y) P P, double and three-level
+   suits need shortness in their suit, 2NT two places, advances three
+   points up; +1,170 IMPs on the balancing side's contract errors in 100k
+   random deals. Still open: other stops (1x P 1N P 2x, three-level),
+   vulnerability, fit jumps after a balancing overcall, the balancing
+   suit's 8-15 range.
 3. `general.style=gib`: third-seat four-card majors, weak twos with a
    four-card side suit (3.9). Help-suit try choice (4.4). Done 2026-11-26
    (merged): the style's item list is the pack's `settings/styles.md`.
