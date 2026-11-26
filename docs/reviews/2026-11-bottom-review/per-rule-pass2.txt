@@ -1,0 +1,121 @@
+call-boards with a difference: base 230784, after 225477
+  24208 ->   24194  competitive/advances.bid:411: No further bid
+          before {'pts open-top': 17819, 'pts top-wide': 2393, 'pts top-narrow': 2182, 'pts floor-wide': 769}
+          after  {'pts open-top': 17729, 'pts top-wide': 2474, 'pts top-narrow': 2182, 'pts floor-wide': 769}
+   6423 ->    6423  base/base.bid:90: No further bid
+          before {'pts open-top': 2730, 'hcp top-narrow': 1410, 'hcp open-top': 816, 'pts conflict': 569}
+          after  {'pts open-top': 2730, 'hcp top-narrow': 1410, 'hcp open-top': 816, 'pts conflict': 569}
+   6214 ->       6  competitive/takeout-double.bid:46: Takeout: the unbid suits and 12+
+          before {'D max-wide': 1731, 'S max-wide': 1683, 'C max-wide': 1416, 'H max-wide': 1378}
+          after  {'C min-narrow': 6, 'D min-narrow': 2, 'H max-narrow': 2, 'S max-narrow': 2}
+   3586 ->    2170  competitive/after-interference.bid:531: No further bid
+          before {'pts open-top': 3417, 'pts top-wide': 100, 'pts top-narrow': 50, 'H min-wide': 13}
+          after  {'pts open-top': 2025, 'pts top-wide': 100, 'pts top-narrow': 26, 'H min-wide': 13}
+   3232 ->    3232  competitive/advances.bid:420: No further bid
+          before {'pts open-top': 2761, 'pts top-wide': 302, 'pts top-narrow': 109, 'D min-narrow': 81}
+          after  {'pts open-top': 2761, 'pts top-wide': 302, 'D min-narrow': 115, 'pts top-narrow': 109}
+   2854 ->    2854  base/base.bid:77: Major opening: 4+ good spades, 10-11 HCP
+          before {'S min-wide': 2854}
+          after  {'S min-wide': 2854}
+   2568 ->    2568  base/base.bid:79: Major opening: 4+ good hearts, 10-11 HCP
+          before {'H min-wide': 2568}
+          after  {'H min-wide': 2568}
+   2054 ->    2049  base/rebids.bid:707: No further bid
+          before {'D min-wide': 1240, 'H min-wide': 934, 'S max-narrow': 889, 'C max-narrow': 585}
+          after  {'H min-wide': 934, 'D min-wide': 903, 'S max-narrow': 889, 'C max-narrow': 585}
+   1966 ->    1966  base/rebids.bid:858: No further bid
+          before {'D max-narrow': 700, 'C min-wide': 551, 'C max-narrow': 435, 'S max-wide': 358}
+          after  {'D max-narrow': 700, 'C min-wide': 551, 'C max-narrow': 435, 'S max-wide': 358}
+   1835 ->    1835  base/preempts.bid:98: Weak two: six hearts, 4-10
+          before {'D max-wide': 1835, 'S max-wide': 1835}
+          after  {'D max-wide': 1835, 'S max-wide': 1835}
+   1833 ->    1833  base/preempts.bid:106: Weak two: six spades, 4-10
+          before {'D max-wide': 1833, 'H max-wide': 1833}
+          after  {'D max-wide': 1833, 'H max-wide': 1833}
+   1813 ->    1813  competitive/total-tricks.bid:69: Competes: to play
+          before {'pts floor-wide': 1229, 'pts open-top': 909, 'S min-narrow': 502, 'H min-narrow': 475}
+          after  {'pts open-top': 880, 'S min-narrow': 502, 'H min-narrow': 475, 'pts floor-wide': 363}
+   1714 ->    1714  base/rebids.bid:735: No further bid
+          before {'pts open-top': 863, 'D min-wide': 488, 'pts floor-wide': 474, 'C min-wide': 469}
+          after  {'pts open-top': 863, 'D min-wide': 488, 'pts floor-wide': 474, 'C min-wide': 469}
+   1673 ->    1673  base/preempts.bid:90: Weak two: six diamonds, 4-10
+          before {'H max-wide': 1673, 'S max-wide': 1673}
+          after  {'H max-wide': 1673, 'S max-wide': 1673}
+   1581 ->    1581  notrump/one-nt.bid:158: To play: 10-15 total points
+          before {'hcp floor-wide': 1581}
+          after  {'hcp floor-wide': 1581}
+   1567 ->    1567  base/responder-rebids.bid:46: Weak: no game
+          before {'C min-wide': 1567, 'D min-wide': 1146, 'H min-wide': 1110, 'S min-wide': 878}
+          after  {'C min-wide': 1567, 'D min-wide': 1146, 'H min-wide': 1110, 'S min-wide': 878}
+   1527 ->    1527  competitive/balancing.bid:37: Reopening double: 8+ total points and the unbid suits
+          before {'H max-narrow': 1195, 'S max-narrow': 1151, 'C max-narrow': 1142, 'D max-narrow': 1093}
+          after  {'H max-narrow': 1195, 'S max-narrow': 1151, 'C max-narrow': 1142, 'D max-narrow': 1093}
+   1429 ->     206  base/rebids.bid:1265: No further bid
+          before {'pts open-top': 1429, 'hcp open-top': 311, 'D min-narrow': 16}
+          after  {'hcp top-wide': 206, 'D min-narrow': 16}
+   1354 ->    1282  competitive/total-tricks.bid:75: Competes: to play
+          before {'S min-narrow': 469, 'pts floor-wide': 455, 'H min-narrow': 368, 'C min-narrow': 174}
+          after  {'S min-narrow': 469, 'H min-narrow': 368, 'pts floor-wide': 201, 'C min-narrow': 174}
+   1257 ->    1257  base/rebids.bid:196: 12-14 HCP, balanced
+          before {'C max-narrow': 1257}
+          after  {'C max-narrow': 1257}
+   1208 ->    1208  base/rebids.bid:178: 4+ spades, up to 18
+          before {'D min-wide': 1208, 'H max-wide': 1208, 'S max-narrow': 1208}
+          after  {'S max-narrow': 1208}
+   1143 ->    1143  base/base.bid:161: Game in notrump
+          before {'hcp floor-wide': 320, 'H max-wide': 318, 'hcp open-top': 317, 'S max-wide': 251}
+          after  {'hcp floor-wide': 320, 'H max-wide': 318, 'hcp open-top': 317, 'S max-wide': 251}
+   1118 ->    1118  base/responses.bid:308: Raise: 3+ ♠
+          before {'S max-narrow': 1118}
+          after  {'S max-narrow': 1118}
+   1117 ->     350  competitive/after-interference.bid:41: Negative double: 6+ total points, the unbid suits
+          before {'S max-wide': 767, 'pts floor-wide': 350, 'C min-wide': 350, 'D min-wide': 350}
+          after  {'pts floor-wide': 350}
+   1097 ->    1097  base/responder-rebids.bid:667: No further bid
+          before {'pts open-top': 1097}
+          after  {'pts open-top': 1097}
+   1083 ->    1083  bidding_conventions/stayman/stayman.bid:55: 4+ hearts
+          before {'S max-wide': 955, 'H max-narrow': 128, 'S min-narrow': 27}
+          after  {'S max-wide': 955, 'H max-narrow': 128, 'S min-narrow': 27}
+   1068 ->    1068  competitive/takeout-double.bid:310: No free bid
+          before {'pts top-wide': 1068}
+          after  {'pts top-wide': 1068}
+   1038 ->    1038  base/responses.bid:308: Raise: 3+ ♥
+          before {'H max-narrow': 1038}
+          after  {'H max-narrow': 1038}
+   1021 ->    1021  base/rebids.bid:89: 12-14 HCP, balanced
+          before {'C max-wide': 544, 'D max-wide': 544, 'C min-narrow': 477}
+          after  {'C max-wide': 544, 'D max-wide': 544, 'C min-narrow': 477}
+    989 ->     989  notrump/one-nt.bid:347: Accepts the invitation
+          before {'hcp floor-wide': 725, 'S max-narrow': 196, 'pts floor-wide': 176, 'H max-narrow': 90}
+          after  {'hcp floor-wide': 725, 'S max-narrow': 196, 'pts floor-wide': 176, 'H max-narrow': 90}
+    959 ->     959  base/responses.bid:74: 6-10 HCP, no 4-card major
+          before {'C min-wide': 959, 'D min-wide': 959, 'H min-wide': 959, 'S min-wide': 959}
+          after  {'C min-wide': 959, 'D min-wide': 959, 'H min-wide': 959, 'S min-wide': 959}
+    954 ->     954  base/rebids.bid:125: 12-14 HCP, balanced, may hold a 4-card major
+          before {'D max-wide': 954, 'H max-wide': 954, 'S max-wide': 954}
+          after  {'D max-wide': 954, 'H max-wide': 954, 'S max-wide': 954}
+    950 ->     950  competitive/after-interference.bid:307: Redouble: 10+ total points
+          before {'S max-wide': 339, 'D max-wide': 233, 'H max-wide': 202, 'C max-wide': 176}
+          after  {'S max-wide': 339, 'D max-wide': 233, 'H max-wide': 202, 'C max-wide': 176}
+    929 ->     929  competitive/after-interference.bid:460: Minimum: signs off
+          before {'pts open-top': 588, 'C min-wide': 543, 'D min-wide': 415, 'hcp top-narrow': 269}
+          after  {'C min-wide': 543, 'D min-wide': 415, 'hcp top-narrow': 269, 'pts top-narrow': 269}
+    895 ->     895  base/responder-rebids.bid:128: 6-10, no fit
+          before {'S min-wide': 895, 'C min-wide': 749, 'D min-wide': 602, 'H max-narrow': 602}
+          after  {'S min-wide': 895, 'C min-wide': 749, 'D min-wide': 602, 'H max-narrow': 602}
+    857 ->     113  base/rebids.bid:776: Declines: minimum
+          before {'pts open-top': 838, 'D min-wide': 59, 'C min-wide': 24, 'pts conflict': 10}
+          after  {'D min-wide': 59, 'pts open-top': 48, 'C min-wide': 24, 'pts top-wide': 11}
+    847 ->     847  base/base.bid:82: No opening bid: HCP and spades under 15
+          before {'hcp top-wide': 847, 'pts open-top': 847}
+          after  {'hcp top-wide': 847, 'pts open-top': 847}
+    834 ->     834  base/rebids.bid:417: Accepts the limit raise
+          before {'hcp floor-wide': 834}
+          after  {'hcp floor-wide': 834}
+    819 ->     819  base/rebids.bid:445: Game: no extras
+          before {'hcp top-narrow': 819, 'pts top-narrow': 819, 'S max-narrow': 345, 'pts floor-wide': 334}
+          after  {'hcp top-narrow': 819, 'pts top-narrow': 819, 'S max-narrow': 345, 'pts floor-wide': 334}
+    811 ->     811  base/rebids.bid:163: 4+ spades, up to 18
+          before {'H max-wide': 811, 'S max-narrow': 811}
+          after  {'S max-narrow': 811}

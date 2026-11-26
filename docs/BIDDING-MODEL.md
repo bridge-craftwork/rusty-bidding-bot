@@ -165,6 +165,24 @@ give the term both meanings (`tp(x)` as declarer points when the hand
 has shown more trumps than partner). That is a language question for
 CONTRACT.md before it is built.
 
+**Built (2026-11-25, pack `bottom-review` 71ad51d):** about 60 long-hand
+uses of `tp(x)` became `hcp+length_points`. Thresholds were kept where a
+5-3-3-2 counts the same, and moved to GIB's numbers where GIB's tree states
+a range. **Revised (Rick, 2026-11-26):** the GIB numbers are provisional.
+GIB finds flaws; it is not the target. We don't know its primitives (how it
+counts points) or how honestly it bids to its own descriptions, so its
+boundaries won't match ours exactly. Where a threshold matters, par tests
+settle it; GIB and probes of BBA, Brill and WBridge5 show the boundaries
+others use (the range probe, `probes/range-probe/`, starts with
+responder's 1NT after 1x–P).
+
+**Rules or engine (2026-11-26):** which count a hand uses (declarer points
+for the long hand, support points for the short) belongs in the engine: it
+knows from the auction which hand has shown more trumps, and the rules
+should only state the range. Auctions where either hand may be the long
+one need that engine change (a role-aware `tp`); it is on the work queue
+(section 8), not yet built. Ranges themselves stay in the rules.
+
 ### 3.4 Openings have tops in points, not only HCP
 
 **Decided (Rick, 2026-11-25).** A one-level opening cannot hold 31
@@ -370,6 +388,52 @@ the seat again without the double's meaning (what the double denied
 stays). After 1♦ X P 1♥ P 1♠ the doubler reads ♠5+, 18+ declarer points,
 no heart length; after 1♦ X P 1♥ P 1NT, 19-21 balanced.
 
+**The least lie (Rick, 2026-11-26).** Sometimes no call fits the hand,
+and the bidder chooses the least lie: a takeout double with four cards in
+opener's suit, or 1♣–P–1♠–P–1NT with a singleton spade. Descriptions
+don't widen to cover those hands. The takeout double still reads short in
+their suit, and the 1NT rebid still reads at least two cards in every
+suit. As with freaks (3.5), the meaning assumes the normal hand, and when
+someone tells a least lie the table believes it. So a gap in the GIB
+comparison that comes only from least-lie hands is not a flaw to fix.
+
+**Inferences from calls not made** are fine: after 1♦–P–1♥–P–1♠–P–1NT
+GIB's tree limits hands by the calls responder didn't choose, and ours may
+do the same.
+
+**Licence that depends on scoring (Rick, 2026-11-26).** After
+1♦–1♥–1♠–1NT with 4-3-5-1, GIB lets opener rebid 2♦; we pass. Players
+usually leave it in 1NT at matchpoints and correct to 2♦ at IMPs: 2♦ is
+more likely to make, but 1NT making two beats 2♦ making two at
+matchpoints. The `gibrest` request carries no scoring (`s=` auction,
+`t=g`, client fields only), so the tree is one description for both
+scorings; the robot's actual choice may still depend on scoring through
+its simulations. Scoring-dependent licence belongs in our rules as
+`scoring` conditions, not in the description partner reads.
+
+### 3.8 Balancing: borrowing a king (Rick, 2026-11-26)
+
+A balancing call is normally about 3 points lighter than the same call in
+the direct seat: partner is marked with some values. So (1♣)–P–(P)–1NT is
+12-14 when the direct 1NT overcall is 15-17. This is "borrowing a king".
+Partner correspondingly subtracts a king when answering a balancing call,
+so the king is not counted twice: advancer's thresholds after a balancing
+call are about 3 points higher than after the direct one. The balancing
+seat also covers the pass-out seat after the opponents find a fit and stop
+low (e.g. (1♥)–P–(2♥)–P–(P)), where we did not act at all before
+2026-11-26.
+
+### 3.9 Styles, grouped by robot (Rick, 2026-11-26)
+
+Many values are partnership agreement rather than right or wrong: the
+power double's strength, a third-seat four-card major, a weak two with a
+four-card side suit. Eventually each becomes a card setting, so people
+can practise with Rusty on their own card. For now they are grouped by
+robot (`general.style=bba`, `general.style=gib`), so a comparison run
+against one robot switches all of its style at once. Each style also lists
+every item it changes. That list is the map of what will need its own
+setting later.
+
 ### 3.7 What "total points" means in the GIB comparison
 
 GIB states HCP and total points: HCP plus length for the long hand,
@@ -555,6 +619,25 @@ The reports are in `.rbb-cache/gib-tree/` (main checkout):
   played by the new version, which will matter later, e.g. to capture
   Precision auctions, now available online.
 
+### 4.4 The bottom review (2026-11-25/26)
+
+Two passes over the lower levels on pack branch `bottom-review`, measured
+by `gib_tree.py agreed` at the top 5,000 and then 20,000 positions of 100k
+random deals. The report, with the before and after tables, is
+[reviews/2026-11-bottom-review.md](reviews/2026-11-bottom-review.md).
+
+**Decisions (Rick, 2026-11-26):**
+
+- Drury opener's 4♠ floor (GIB 14, ours 15) and opener's 4♥ over the
+  cue-bid raise after 1♥–1♠–2♠ (GIB 15-17, ours 14+) are settled by par
+  tests, not by GIB. Both are on the work queue.
+- **Help-suit game tries:** when opener needs help in more than one suit,
+  try the lowest-ranking one. If partner has no help there, they can show
+  help in a higher suit by bidding it, as long as it is below three of the
+  trump suit.
+- Branches may be pushed, but nothing reaches `main` until the higher
+  levels are rebalanced.
+
 ## 5. Controls
 
 **Decided (Rick, 2026-11-24):**
@@ -637,6 +720,34 @@ entered with slam values and an uncontrolled side suit). Not tracked yet:
    the engine read any game bid without a stated top on its floor?
 3. Which control style is the default for 21GF-DEFAULT, and does the
    splinter default stay "any singleton"?
+
+## 8. Work queue
+
+Lower-level items found by the GIB comparison and the bottom review, so
+they are not forgotten. Highest first; "par" means settle by par tests.
+
+1. Fourth seat after their 1M–P–1NT: no overcall or double rule existed.
+   (In progress 2026-11-26, pack branch `fourth-seat`.)
+2. Balancing in the pass-out seat over their fit, and the borrowed king
+   in balancing ranges and advances (3.8). (In progress, `balancing-fit`.)
+3. `general.style=gib`: third-seat four-card majors, weak twos with a
+   four-card side suit, the power double's strength (3.9). Help-suit try
+   choice (4.4). (In progress, `gib-style`.)
+4. Range probe across BBA, Brill, WBridge5 and GIB, starting with
+   responder's 1NT after 1x–P (3.3). (In progress, `range-probe`.)
+5. Par: Drury opener's 4♠ from 14 or 15.
+6. Par: opener's 4♥ over the cue-bid raise after 1♥–1♠–2♠, 15-17 or 14+.
+7. Par: the long-hand thresholds moved to GIB's numbers in 71ad51d.
+8. Responder's actions over interference after our weak two (game raise,
+   2NT ask): today the competitive raise has no top.
+9. Engine: a role-aware `tp` for auctions where either hand may hold the
+   long trumps (3.3). To do, not started.
+10. Reopening double's notrump rebid range (19-21 for now).
+11. Scoring-dependent licence, e.g. 1♦–1♥–1♠–1NT, correct to 2♦ at IMPs
+    (3.6).
+12. Higher levels, after all of the above: opener's passes after game,
+    GIB's Drury continuation after 3M (4.3), slam thresholds, quantitative
+    4NT, `serious-3nt.test`.
 
 ## Sources
 
