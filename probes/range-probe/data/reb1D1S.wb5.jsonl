@@ -1,0 +1,200 @@
+{"id": "reb1D1S-001", "call": null, "reached": false, "auction": "Pass Pass Pass Pass"}
+{"id": "reb1D1S-002", "call": null, "reached": false, "auction": "Pass Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-003", "call": null, "reached": false, "auction": "Pass Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-004", "call": null, "reached": false, "auction": "1D Pass 1S X Pass 2NT Pass Pass Pass"}
+{"id": "reb1D1S-005", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-006", "call": null, "reached": false, "auction": "1D Pass 1S X XX 2C 2S 3C Pass Pass 3S Pass Pass Pass"}
+{"id": "reb1D1S-007", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT X Pass Pass Pass"}
+{"id": "reb1D1S-008", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-009", "call": null, "reached": false, "auction": "1D Pass 1S X XX 1NT 2S Pass Pass Pass"}
+{"id": "reb1D1S-010", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-011", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-012", "call": null, "reached": false, "auction": "1D Pass 1S X 1NT Pass Pass Pass"}
+{"id": "reb1D1S-013", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-014", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-015", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-016", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-017", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 3D Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-018", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-019", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 3D Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-020", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 4D Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-021", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3H Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-022", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-023", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 4D Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-024", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3H Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-025", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-026", "call": null, "reached": false, "auction": "1D Pass 1S 2H 2S 3D 4S Pass Pass Pass"}
+{"id": "reb1D1S-027", "call": null, "reached": false, "auction": "1D Pass 1S 2D 2S 3C 3S X Pass 5C Pass Pass Pass"}
+{"id": "reb1D1S-028", "call": null, "reached": false, "auction": "1D Pass 1S 2H 2S 3H 3S 4H Pass Pass Pass"}
+{"id": "reb1D1S-029", "call": null, "reached": false, "auction": "1D Pass 1S X 2S 2NT 3S Pass Pass Pass"}
+{"id": "reb1D1S-030", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S X 3S Pass Pass Pass"}
+{"id": "reb1D1S-031", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S X 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-032", "call": null, "reached": false, "auction": "1D X 1S 2H 2S Pass 3S 4H 4S Pass Pass Pass"}
+{"id": "reb1D1S-033", "call": null, "reached": false, "auction": "1D 2C X 3C 4S Pass Pass Pass"}
+{"id": "reb1D1S-034", "call": null, "reached": false, "auction": "1D X 1S 2C 2S 3C 3S Pass Pass 4C 4S Pass Pass Pass"}
+{"id": "reb1D1S-035", "call": null, "reached": false, "auction": "1D Pass 1S X 2S Pass Pass Pass"}
+{"id": "reb1D1S-036", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-037", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-038", "call": "3S", "reached": true, "auction": "1D Pass 1S Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-039", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-040", "call": "2S", "reached": true, "auction": "1D Pass 1S Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-041", "call": "3S", "reached": true, "auction": "1D Pass 1S Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-042", "call": null, "reached": false, "auction": "1D 3C Pass Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-043", "call": null, "reached": false, "auction": "1D 2C Pass Pass Pass"}
+{"id": "reb1D1S-044", "call": null, "reached": false, "auction": "1D 1H 1S 2H 4H Pass 4NT Pass 5C Pass 5D Pass 5H Pass 6S Pass Pass Pass"}
+{"id": "reb1D1S-045", "call": null, "reached": false, "auction": "1D 2C X 2H 4S Pass Pass Pass"}
+{"id": "reb1D1S-046", "call": null, "reached": false, "auction": "1D Pass 1S 2D 3H 4H 4S 5H X Pass Pass Pass"}
+{"id": "reb1D1S-047", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-048", "call": "4H", "reached": true, "auction": "1D Pass 1S Pass 4H Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-049", "call": "3S", "reached": true, "auction": "1D Pass 1S Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-050", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-051", "call": "3S", "reached": true, "auction": "1D Pass 1S Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-052", "call": null, "reached": false, "auction": "1D Pass 1S X 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-053", "call": "4S", "reached": true, "auction": "1D Pass 1S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-054", "call": null, "reached": false, "auction": "1NT Pass 2C Pass 2S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-055", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-056", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-057", "call": "4H", "reached": true, "auction": "1D Pass 1S Pass 4H Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-058", "call": "4C", "reached": true, "auction": "1D Pass 1S Pass 4C Pass 4NT Pass 5H Pass 5S Pass Pass Pass"}
+{"id": "reb1D1S-059", "call": "4S", "reached": true, "auction": "1D Pass 1S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-060", "call": null, "reached": false, "auction": "2C 3C X Pass 3D Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-061", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4NT Pass 5D Pass 6S Pass Pass Pass"}
+{"id": "reb1D1S-062", "call": null, "reached": false, "auction": "2D Pass 2S Pass 3D Pass 3S Pass 4NT Pass 5C X 7S Pass Pass Pass"}
+{"id": "reb1D1S-063", "call": "4C", "reached": true, "auction": "1D Pass 1S Pass 4C Pass 4H Pass 4NT Pass 5D Pass 5H Pass 5S Pass Pass Pass"}
+{"id": "reb1D1S-064", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 6S Pass Pass Pass"}
+{"id": "reb1D1S-065", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 4S Pass 4NT Pass 5D Pass 5S Pass Pass Pass"}
+{"id": "reb1D1S-066", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3S Pass 4S Pass 4NT Pass 5D Pass 5H Pass 5S Pass 6S Pass Pass Pass"}
+{"id": "reb1D1S-067", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-068", "call": "4C", "reached": true, "auction": "1D Pass 1S Pass 4C Pass 4S Pass 4NT Pass 5D Pass 5H Pass 5S Pass 6S Pass Pass Pass"}
+{"id": "reb1D1S-069", "call": null, "reached": false, "auction": "3NT Pass 4C Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-070", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D X Pass 3H Pass Pass Pass"}
+{"id": "reb1D1S-071", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass X Pass 2H Pass Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-072", "call": null, "reached": false, "auction": "1D X 1S 3C Pass Pass Pass"}
+{"id": "reb1D1S-073", "call": null, "reached": false, "auction": "1D X 1S 2NT 3D Pass Pass Pass"}
+{"id": "reb1D1S-074", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-075", "call": null, "reached": false, "auction": "1D Pass 1S X 2D 2NT Pass Pass Pass"}
+{"id": "reb1D1S-076", "call": null, "reached": false, "auction": "3NT Pass 4C Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-077", "call": null, "reached": false, "auction": "1D X 1S 1NT 2D Pass Pass Pass"}
+{"id": "reb1D1S-078", "call": null, "reached": false, "auction": "1D Pass 1S 2H 3D Pass Pass Pass"}
+{"id": "reb1D1S-079", "call": null, "reached": false, "auction": "1D Pass 1S X 2D 2H Pass Pass 3D Pass Pass 3H Pass Pass Pass"}
+{"id": "reb1D1S-080", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-081", "call": null, "reached": false, "auction": "1D X 1S Pass 3D Pass 3NT X Pass Pass Pass"}
+{"id": "reb1D1S-082", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass X Pass Pass Pass"}
+{"id": "reb1D1S-083", "call": null, "reached": false, "auction": "1D Pass 1S 2C 5D Pass Pass Pass"}
+{"id": "reb1D1S-084", "call": null, "reached": false, "auction": "1D Pass 1S X 2D Pass Pass Pass"}
+{"id": "reb1D1S-085", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-086", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-087", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-088", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-089", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-090", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-091", "call": null, "reached": false, "auction": "1D Pass 1S 2H 5D Pass Pass Pass"}
+{"id": "reb1D1S-092", "call": null, "reached": false, "auction": "1D 2NT Pass 4H 5D Pass Pass Pass"}
+{"id": "reb1D1S-093", "call": "3NT", "reached": true, "auction": "1D Pass 1S Pass 3NT Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-094", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-095", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-096", "call": null, "reached": false, "auction": "1NT Pass 2C Pass 2D Pass 2S Pass 3D Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-097", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-098", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-099", "call": "3NT", "reached": true, "auction": "1D Pass 1S Pass 3NT Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-100", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-101", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-102", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 4H Pass 5D Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-103", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-104", "call": "3NT", "reached": true, "auction": "1D Pass 1S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-105", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 4H Pass 5D Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-106", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-107", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-108", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 4S Pass 5D Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-109", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4D Pass 5D Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-110", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-111", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 4H Pass 5D Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-112", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4D Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-113", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass Pass Pass"}
+{"id": "reb1D1S-114", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-115", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-116", "call": null, "reached": false, "auction": "Pass Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-117", "call": null, "reached": false, "auction": "1D X 1S 2H 3D 3H Pass Pass Pass"}
+{"id": "reb1D1S-118", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-119", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass Pass Pass"}
+{"id": "reb1D1S-120", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-121", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-122", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-123", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT X Pass Pass Pass"}
+{"id": "reb1D1S-124", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-125", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-126", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-127", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-128", "call": null, "reached": false, "auction": "1D Pass 1S X 1NT 2H Pass Pass Pass"}
+{"id": "reb1D1S-129", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-130", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-131", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 2S Pass 2NT Pass Pass Pass"}
+{"id": "reb1D1S-132", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass 2D Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-133", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 2S Pass 2NT Pass 3D Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-134", "call": "2C", "reached": true, "auction": "1D Pass 1S Pass 2C Pass Pass Pass"}
+{"id": "reb1D1S-135", "call": null, "reached": false, "auction": "1NT Pass 2C Pass 2D Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-136", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 2S Pass 2NT Pass 3D Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-137", "call": null, "reached": false, "auction": "2C 2H Pass 3H 4D Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-138", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-139", "call": "3D", "reached": true, "auction": "1D Pass 1S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-140", "call": null, "reached": false, "auction": "1D Pass 1S X 3C 3H X Pass Pass Pass"}
+{"id": "reb1D1S-141", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-142", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-143", "call": "3C", "reached": true, "auction": "1D Pass 1S Pass 3C Pass 3S Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-144", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 4D Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-145", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-146", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-147", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-148", "call": null, "reached": false, "auction": "2C 2H X 3H 4D Pass 4S X Pass Pass XX Pass Pass Pass"}
+{"id": "reb1D1S-149", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-150", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 3NT Pass 4D Pass 4H Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-151", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4D Pass 5D Pass Pass Pass"}
+{"id": "reb1D1S-152", "call": "3C", "reached": true, "auction": "1D Pass 1S Pass 3C Pass 3S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-153", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4C Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-154", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-155", "call": null, "reached": false, "auction": "2C 2H Pass Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-156", "call": null, "reached": false, "auction": "2D Pass 2NT Pass 3D Pass 3S Pass 4D Pass 4NT Pass 5C Pass 6D Pass Pass Pass"}
+{"id": "reb1D1S-157", "call": null, "reached": false, "auction": "Pass Pass Pass Pass"}
+{"id": "reb1D1S-158", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-159", "call": null, "reached": false, "auction": "1D 2C X 3C 3H Pass Pass Pass"}
+{"id": "reb1D1S-160", "call": null, "reached": false, "auction": "1D 2C Pass 2NT Pass 3C Pass 3NT Pass Pass X Pass Pass 4C Pass 5C Pass Pass Pass"}
+{"id": "reb1D1S-161", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-162", "call": null, "reached": false, "auction": "1D X 1S 1NT Pass Pass Pass"}
+{"id": "reb1D1S-163", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-164", "call": null, "reached": false, "auction": "1D X 1S 1NT 2D Pass Pass Pass"}
+{"id": "reb1D1S-165", "call": null, "reached": false, "auction": "1D 1S X 2C 2H Pass Pass 3C 3H Pass Pass Pass"}
+{"id": "reb1D1S-166", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass Pass Pass"}
+{"id": "reb1D1S-167", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-168", "call": null, "reached": false, "auction": "1D 2C X 3C 4H 5C X Pass Pass Pass"}
+{"id": "reb1D1S-169", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-170", "call": "1NT", "reached": true, "auction": "1D Pass 1S Pass 1NT Pass 2S Pass Pass Pass"}
+{"id": "reb1D1S-171", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-172", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-173", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3C Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-174", "call": null, "reached": false, "auction": "1NT Pass 2C Pass 2H 3C 3H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-175", "call": null, "reached": false, "auction": "1D 1H 1S 2C 3S Pass Pass Pass"}
+{"id": "reb1D1S-176", "call": "2D", "reached": true, "auction": "1D Pass 1S Pass 2D Pass Pass Pass"}
+{"id": "reb1D1S-177", "call": null, "reached": false, "auction": "1D 2C X 3C 4H Pass Pass Pass"}
+{"id": "reb1D1S-178", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3D Pass Pass Pass"}
+{"id": "reb1D1S-179", "call": null, "reached": false, "auction": "1NT Pass 2H Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-180", "call": null, "reached": false, "auction": "1D 1S X 2S 4D Pass Pass Pass"}
+{"id": "reb1D1S-181", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-182", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3D Pass 3H Pass Pass Pass"}
+{"id": "reb1D1S-183", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-184", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-185", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-186", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-187", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-188", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 2NT Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-189", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 4NT Pass 5C Pass 5H Pass Pass Pass"}
+{"id": "reb1D1S-190", "call": null, "reached": false, "auction": "2C Pass 2D Pass 3D Pass 3S Pass 4D Pass Pass Pass"}
+{"id": "reb1D1S-191", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 4C Pass 4S Pass Pass Pass"}
+{"id": "reb1D1S-192", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-193", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3C Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-194", "call": "2NT", "reached": true, "auction": "1D Pass 1S Pass 2NT Pass 3C Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-195", "call": null, "reached": false, "auction": "2C Pass 2S Pass 3D Pass 3H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-196", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-197", "call": null, "reached": false, "auction": "2NT Pass 3H Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-198", "call": null, "reached": false, "auction": "2NT Pass 3C Pass 3H Pass 4H Pass Pass Pass"}
+{"id": "reb1D1S-199", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3NT Pass Pass Pass"}
+{"id": "reb1D1S-200", "call": "2H", "reached": true, "auction": "1D Pass 1S Pass 2H Pass 2S Pass 3NT Pass 4H Pass Pass Pass"}

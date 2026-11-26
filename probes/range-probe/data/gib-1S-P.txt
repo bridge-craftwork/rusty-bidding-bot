@@ -1,0 +1,93 @@
+1S-P-*  (S to call, dealer N; GIB tree, ours on 21GF-GIB)
+
+  P  GIB  No suitable call -- 5- HCP
+     agreed: pass
+     ours Fewer than 6 HCP [base/responses.bid:391]: 0-5 HCP, 0-9 decl  ♠0-8 ♥0-8 ♦0-8 ♣0-8
+
+ 5N  GIB  Grand slam force (S trump) -- 3+ !S; 24+ total points
+     differing: GIB grand_slam_force / ours unmapped
+     ours Pick a slam: choose the strain [conventions/bidding_conventions/pick_a_slam_5nt/pick-a-slam.bid:24]: 20+ HCP, 24+ decl  ♠3 ♥0-8 ♦0-8 ♣0-8
+       ≠ ♠ ours 3 / GIB 3-13
+
+ 4N  GIB  Blackwood (S) -- 3+ !S; 20+ total points
+     agreed: blackwood
+     ours Keycard ask in ♠ [slam/rkcb-1430.bid:106]: 0+ HCP, 0+ ♠ sup  ♠0-8 ♥0-8 ♦0-8 ♣0-8
+       ≠ pts floor-wide: ours 0+ / GIB 20+
+       ≠ ♠ ours 0-8 / GIB 3-13
+
+ 4S  GIB  Preemptive raise -- 5+ !S; 8- HCP; 4+ total points
+     agreed: natural
+     ours Preemptive raise: 5+ ♠, weak [base/responses.bid:273]: 5-9 HCP, 6-13 decl  ♠5-8 ♥0-7 ♦0-7 ♣0-7
+
+ 4H  GIB  Splinter -- 1- !H; 4+ !S; 13-16 total points
+     agreed: splinter
+     ours Splinter: 4+ ♠, game values, at most one ♥ [conventions/bidding_conventions/splinters/splinters.bid:59]: 11-15 HCP, 15-22 ♠ sup  ♠4-8 ♥0-1 ♦0-7 ♣0-7
+       ≠ pts open-top: ours 15-22 / GIB 13-16
+
+ 4D  GIB  Splinter -- 1- !D; 4+ !S; 13-16 total points
+     agreed: splinter
+     ours Splinter: 4+ ♠, game values, at most one ♦ [conventions/bidding_conventions/splinters/splinters.bid:59]: 11-15 HCP, 15-22 ♠ sup  ♠4-8 ♥0-7 ♦0-1 ♣0-7
+       ≠ pts open-top: ours 15-22 / GIB 13-16
+
+ 4C  GIB  Splinter -- 1- !C; 4+ !S; 13-16 total points
+     agreed: splinter
+     ours Splinter: 4+ ♠, game values, at most one ♣ [conventions/bidding_conventions/splinters/splinters.bid:59]: 11-15 HCP, 15-22 ♠ sup  ♠4-8 ♥0-7 ♦0-7 ♣0-1
+       ≠ pts open-top: ours 15-22 / GIB 13-16
+
+ 3N  GIB  Balanced, choice of games. -- 3-4 !C; 3-4 !D; 3-4 !H; 3 !S; 13-15 total points
+     agreed: natural
+     ours 13-15, balanced [base/responses.bid:323]: 10-15 HCP, 11-15 decl  ♠2-3 ♥2-5 ♦2-5 ♣2-5
+       ≠ ♣ ours 2-5 / GIB 3-4
+       ≠ ♦ ours 2-5 / GIB 3-4
+       ≠ ♥ ours 2-5 / GIB 3-4
+       ≠ ♠ ours 2-3 / GIB 3
+
+ 3S  GIB  Limit major raise -- 4+ !S; 10-12 total points
+     agreed: natural
+     ours Limit raise: 11-12 support points, 3+ spades [base/responses.bid:236]: 3-12 HCP, 10-12 ♠ sup  ♠3-8 ♥0-8 ♦0-8 ♣0-8
+       ≠ ♠ ours 3-8 / GIB 4-13
+
+ 3H  GIB  Invite -- 6+ !H; 2- !S; 9-11 HCP; !HQ
+     agreed: natural
+     ours Invitational jump shift: 10-12 points, 6+ hearts [base/responses.bid:252]: 4-10 HCP, 8-12 decl  ♠0-2 ♥6-8 ♦0-5 ♣0-5
+       ≠ hcp floor-wide: ours 4-10 / GIB 9-11
+
+ 3D  GIB  Invite -- 6+ !D; 3- !H; 2- !S; 9-11 HCP; !DQ
+     agreed: natural
+     ours Invitational jump shift: 10-12 points, 6+ diamonds [base/responses.bid:251]: 4-10 HCP, 8-12 decl  ♠0-2 ♥0-6 ♦6-8 ♣0-6
+       ≠ hcp floor-wide: ours 4-10 / GIB 9-11
+       ≠ ♥ ours 0-6 / GIB 0-3
+
+ 3C  GIB  Invite -- 6+ !C; 3- !H; 2- !S; 9-11 HCP; !CQ
+     agreed: natural
+     ours Invitational jump shift: 10-12 points, 6+ clubs [base/responses.bid:250]: 4-10 HCP, 8-12 decl  ♠0-2 ♥0-6 ♦0-5 ♣6-8
+       ≠ hcp floor-wide: ours 4-10 / GIB 9-11
+       ≠ ♥ ours 0-6 / GIB 0-3
+
+ 2N  GIB  Jacoby -> support; balanced -- 4+ !S; 13+ total points
+     agreed: jacoby_2nt
+     ours Jacoby 2NT: 4+ ♠, game forcing [majors/jacoby-2nt.bid:13]: 6+ HCP, 13+ ♠ sup  ♠4-8 ♥0-7 ♦0-7 ♣0-7
+
+ 2S  GIB  Simple raise -- 3+ !S; 7-10 total points
+     agreed: natural
+     ours Raise: 3+ ♠ [base/responses.bid:268]: 6-10 HCP, 6-10 ♠ sup  ♠3-4 ♥0-8 ♦0-8 ♣0-8
+       ≠ ♠ ours 3-4 / GIB 3-13
+
+ 2H  GIB  Forcing two over one -- 5+ !H; 12+ HCP; 13+ total points; forcing to 3N
+     agreed: natural
+     ours Two over one, game forcing: 5+ hearts [base/responses.bid:232]: 12+ HCP, 13+ decl  ♠0-3 ♥5-8 ♦0-7 ♣0-7
+
+ 2D  GIB  Forcing two over one -- 13+ HCP; biddable !D; 14+ total points; forcing to 3N
+     agreed: natural
+     ours Two over one, game forcing: 4+ diamonds [base/responses.bid:224]: 12+ HCP, 12+ decl  ♠0-3 ♥0-4 ♦4-8 ♣0-5
+
+ 2C  GIB  Forcing two over one -- 13+ HCP; biddable !C; 14+ total points; forcing to 3N
+     agreed: natural
+     ours Two over one, game forcing: 4+ clubs [base/responses.bid:215]: 12+ HCP, 12+ decl  ♠0-3 ♥0-4 ♦0-6 ♣4-8
+
+ 1N  GIB  Forcing one notrump -- 3- !S; 6+ HCP; 12- total points
+     agreed: natural
+     ours 6-12 HCP, no spade fit or a weak three-card raise [base/responses.bid:206]: 6-12 HCP, 6-15 decl  ♠0-3 ♥0-8 ♦0-8 ♣0-8
+       ≠ pts top-wide: ours 6-15 / GIB 0-12
+
+GIB has, we have no rule for: 7N 7S 7H 7D 7C 6N 6S 6H 6D 6C 5S 5H 5D 5C

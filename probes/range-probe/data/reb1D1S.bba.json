@@ -1,0 +1,6013 @@
+{
+  "mode": "List",
+  "seat": "North",
+  "columns": [
+    {
+      "vul": "None",
+      "scoring": "IMP"
+    }
+  ],
+  "rows": [
+    {
+      "label": "reb1D1S-001",
+      "hand": "A76.62.AQJ7.T975",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-002",
+      "hand": "754.KJ86.KJT2.K6",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-003",
+      "hand": "AQ6.QJ9.Q952.T95",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass 2♠ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-004",
+      "hand": "94.K94.AT653.AT8",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-005",
+      "hand": "KT2.J654.AT93.A6",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-006",
+      "hand": "A94.A65.A652.963",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♣ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-007",
+      "hand": "AT6.T92.KJ732.A5",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-008",
+      "hand": "84.QJ5.AQ964.K63",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-009",
+      "hand": "AT6.Q9.A9865.K96",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        2,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass 2♠ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-010",
+      "hand": "43.A542.AKQ2.T93",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-011",
+      "hand": "KT4.K984.9876.AK",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-012",
+      "hand": "A9.AQT5.T952.K32",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-013",
+      "hand": "A4.KT8.AJT7.Q853",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-014",
+      "hand": "K8.Q92.AT82.AJ52",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-015",
+      "hand": "93.Q965.AQ75.AQ3",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-016",
+      "hand": "J4.AK2.KT72.K983",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-017",
+      "hand": "K2.AK2.AT862.A86",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT 3♦ Pass Pass X Pass 3♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-018",
+      "hand": "93.AJT.AKQ54.KJ2",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-019",
+      "hand": "JT.KT2.AKJ6.AQ97",
+      "hcp": 18,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3♣ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-020",
+      "hand": "872.AK2.AQJT7.A6",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-021",
+      "hand": "Q86.A7.AK95.KQJ3",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-022",
+      "hand": "T73.A65.AKQ9.AQ7",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3♣ X 3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-023",
+      "hand": "Q72.K2.AK982.AK2",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        3,
+        2,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-024",
+      "hand": "AQ8.QJ.AKQ4.JT62",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-025",
+      "hand": "A976.96.AK53.983",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-026",
+      "hand": "KQ54.5.K864.KT62",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♦ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-027",
+      "hand": "AQ43.93.KQT86.97",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-028",
+      "hand": "J963.2.AQ72.A985",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ X Pass 3♥ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-029",
+      "hand": "QT87.Q92.KJ972.A",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♣ Pass 3♦ 3♠ Pass Pass X Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-030",
+      "hand": "AQ86.QT.9764.KJ3",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-031",
+      "hand": "AJ74.92.T753.AKT",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-032",
+      "hand": "QT72.2.AQJ432.K3",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-033",
+      "hand": "AQT3.963.AK764.7",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-034",
+      "hand": "AJT7.J2.AQJ973.8",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-035",
+      "hand": "QT75.KQ6.K9874.K",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♣ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-036",
+      "hand": "A943.AT.KQT7.763",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-037",
+      "hand": "J963.A82.AKQ9.87",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-038",
+      "hand": "KQT4.A95.AJT98.5",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-039",
+      "hand": "AT43.A.AT854.QT3",
+      "hcp": 14,
+      "tens": 3,
+      "shape": [
+        4,
+        1,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♦ 3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-040",
+      "hand": "AJ63.T5.AQ95.KT3",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-041",
+      "hand": "Q742.AK2.AQ762.T",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-042",
+      "hand": "AQT8.AQ5.K8754.6",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-043",
+      "hand": "JT43.9.KQ32.AKQ3",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-044",
+      "hand": "K542.9.AK94.AJT8",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♥ 3♠ 4♥ X Pass Pass Pass",
+          "bba_alert": "calculated bid | 11 to 16 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-045",
+      "hand": "AT84..AKQT4.QJ63",
+      "hcp": 16,
+      "tens": 2,
+      "shape": [
+        4,
+        0,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-046",
+      "hand": "AJ94.9.AQT65.KQ9",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-047",
+      "hand": "KQ74.A8.KT972.A3",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-048",
+      "hand": "A983.3.AQT95.AQT",
+      "hcp": 16,
+      "tens": 2,
+      "shape": [
+        4,
+        1,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-049",
+      "hand": "AT73.KJ.AQ632.KT",
+      "hcp": 17,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-050",
+      "hand": "KT87.AQ.AK432.J3",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-051",
+      "hand": "AT98.A.AQ96.K652",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-052",
+      "hand": "AJ43.A85.KJ965.A",
+      "hcp": 17,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-053",
+      "hand": "KQ87.K5.AKQJ8.83",
+      "hcp": 18,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-054",
+      "hand": "AQ84.T75.AQ82.AQ",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-055",
+      "hand": "AT93.K5.A732.AK8",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-056",
+      "hand": "Q754.QJ.AKQ8.A82",
+      "hcp": 18,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 14 to 18 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-057",
+      "hand": "AQ84.Q.KQ954.AQ2",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        4,
+        1,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♥ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 1 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-058",
+      "hand": "AJ93.KT6.AKQ53.Q",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♣ Pass 4NT Pass 5♥ X 5♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 1 cards in clubs, 3 to 13 cards in diamonds, 0 to 3 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-059",
+      "hand": "KQ54.AJ.AJT76.A3",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-060",
+      "hand": "Q984.A.AKQ975.KJ",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        4,
+        1,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-061",
+      "hand": "AJ94.AK.AKJT63.5",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "4NT Pass 5♦ Pass 5♥ Pass 5NT Pass 6♠ Pass Pass Pass",
+          "bba_alert": "Blackwood 0314, for !S | 21 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-062",
+      "hand": "KQT2.AQ8.AKQ976.",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        6,
+        0
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "4♣ Pass 4♦ Pass 5♣ Pass 5♥ Pass 6♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 1 cards in clubs, 3 to 13 cards in diamonds, 0 to 3 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-063",
+      "hand": "A864.QJ5.AKQ92.A",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♣ Pass 4♥ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 1 cards in clubs, 3 to 13 cards in diamonds, 0 to 3 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-064",
+      "hand": "AJ64.A.AT63.AK84",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♥ Pass 4NT Pass 5♦ Pass 6♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 1 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-065",
+      "hand": "K854.A6.AKQT9.AJ",
+      "hcp": 21,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-066",
+      "hand": "AT83.A.AK76.AQ96",
+      "hcp": 21,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♥ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 1 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-067",
+      "hand": "AJ64.AK.AQ963.K5",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 16 to 21 total points, 0 to 6 cards in clubs, 3 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-068",
+      "hand": "K852.A54.AKQJ9.A",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♣ Pass 4♦ Pass 4♥ Pass 4NT Pass 5♦ Pass 5♥ Pass 5♠ Pass 6♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 17 to 21 total points, 0 to 1 cards in clubs, 3 to 13 cards in diamonds, 0 to 3 cards in hearts, 4 to 6 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-069",
+      "hand": "86.6.AKQT975.QT9",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 3♦ Pass 4♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-070",
+      "hand": "J9.98.A97653.AQ7",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass X Pass 2♥ 2♠ X Pass Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-071",
+      "hand": "5.Q9.AQT9863.K65",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass X Pass 2♥ Pass Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-072",
+      "hand": "Q4.A6.KT98762.Q9",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-073",
+      "hand": "J.JT.KQT9752.KQ9",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        1,
+        2,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-074",
+      "hand": "5.K62.QT9864.AK3",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-075",
+      "hand": "86.Q7.KQ6542.AJ3",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-076",
+      "hand": "9.96.AKQJT92.QT9",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        1,
+        2,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass X Pass 2♥ 2♠ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-077",
+      "hand": "72.AQ2.KQJ762.J3",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-078",
+      "hand": "86.QJ.AK98742.K7",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-079",
+      "hand": "J9.86.AKQ9652.K9",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-080",
+      "hand": "T4.KQ5.AKJ942.65",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-081",
+      "hand": "A.T6.AKQT654.JT5",
+      "hcp": 14,
+      "tens": 3,
+      "shape": [
+        1,
+        2,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-082",
+      "hand": "93.K98.AKT753.A8",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-083",
+      "hand": "82.AJ9.AKQT7643.",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        8,
+        0
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 5,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 13 to 21 total points, 0 to 6 cards in clubs, 8 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-084",
+      "hand": "Q3.J7.KT9872.AKJ",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-085",
+      "hand": "A7.62.AK97632.A4",
+      "hcp": 15,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass 4♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-086",
+      "hand": "87.AQ2.AKQ762.T8",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-087",
+      "hand": "3.Q76.AKQ986.AT3",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-088",
+      "hand": "J7.A2.AKT932.K75",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-089",
+      "hand": "2.KQ4.AKT972.KJ8",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-090",
+      "hand": "4.A3.AKQ8742.K95",
+      "hcp": 16,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-091",
+      "hand": "T7.A.AQT9752.AQ8",
+      "hcp": 16,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-092",
+      "hand": "K2.8.AKQ9432.KJ5",
+      "hcp": 16,
+      "tens": 0,
+      "shape": [
+        2,
+        1,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-093",
+      "hand": "A3.AT5.KQT954.A6",
+      "hcp": 17,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-094",
+      "hand": "4.KT8.AKQJT93.AT",
+      "hcp": 17,
+      "tens": 3,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-095",
+      "hand": "8.AJ6.AKJ9764.AT",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-096",
+      "hand": "Q8.AJ.AQ8654.A76",
+      "hcp": 17,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 15 to 18 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-097",
+      "hand": "7.A62.AKJT62.AQ7",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-098",
+      "hand": "K8.AQ9.AQT9432.K",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        7,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-099",
+      "hand": "T6.AT.AKQ954.AJ7",
+      "hcp": 18,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-100",
+      "hand": "3.K96.AKJT92.AK5",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-101",
+      "hand": "8.AQ4.AKQ962.AT3",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-102",
+      "hand": "A6.AQ3.AKQT84.32",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-103",
+      "hand": "3.AJ5.AKT732.AK7",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-104",
+      "hand": "Q7.Q5.AKQJT8.AJ8",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-105",
+      "hand": "Q.AJ5.AKQ852.AT7",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-106",
+      "hand": "63.A6.AK9753.AKQ",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-107",
+      "hand": "KT.65.AKQ876.AKJ",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-108",
+      "hand": "A8.JT7.AKQT65.AQ",
+      "hcp": 20,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-109",
+      "hand": "A.AT9.AKQT975.A4",
+      "hcp": 21,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-110",
+      "hand": "QT.A5.AKJ874.AKT",
+      "hcp": 21,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-111",
+      "hand": "AT.A75.AKQT54.KJ",
+      "hcp": 21,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-112",
+      "hand": "7.AK5.AKQ752.KQ7",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-113",
+      "hand": "7.Q62.AKJ42.J653",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-114",
+      "hand": "Q8.T.AK9752.QT75",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-115",
+      "hand": "A.T6.KQ9753.Q943",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-116",
+      "hand": "Q.KJ4.J8743.KJ32",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-117",
+      "hand": "43.A.A98542.A532",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-118",
+      "hand": "3.K6.AKQ973.T543",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-119",
+      "hand": "7.952.AKJ76.AT32",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-120",
+      "hand": "Q8.63.Q8542.AKJT",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-121",
+      "hand": "6.KT2.KJT63.AQT7",
+      "hcp": 13,
+      "tens": 3,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-122",
+      "hand": "K2.A6.KQT82.JT82",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-123",
+      "hand": "Q3.Q7.KQT62.KJ97",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-124",
+      "hand": "A9.T5.A7653.KQ87",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-125",
+      "hand": "72.65.AQJ84.AK65",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-126",
+      "hand": "A9.T6.AK742.QJ52",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-127",
+      "hand": "94.K8.KJ953.AK97",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-128",
+      "hand": "K7.54.AQJ62.A653",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-129",
+      "hand": ".J65.AK8652.AK96",
+      "hcp": 15,
+      "tens": 0,
+      "shape": [
+        0,
+        3,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-130",
+      "hand": "9.AJ2.AQJT3.KT73",
+      "hcp": 15,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-131",
+      "hand": "K5.K8.KQ962.A653",
+      "hcp": 15,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-132",
+      "hand": "AT3.Q.AQT62.KT75",
+      "hcp": 15,
+      "tens": 3,
+      "shape": [
+        3,
+        1,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-133",
+      "hand": "94.A5.AKQT5.K987",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-134",
+      "hand": "Q.A95.KT982.AKT8",
+      "hcp": 16,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-135",
+      "hand": "Q8.AJ.KQ975.KJ53",
+      "hcp": 16,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-136",
+      "hand": "73.KJ.KQ975.AK87",
+      "hcp": 16,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-137",
+      "hand": "KT.4.AQJT97.AK53",
+      "hcp": 17,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ 2♥ 3♣ 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-138",
+      "hand": ".QJ6.AK9874.AKT5",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        0,
+        3,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-139",
+      "hand": "T.AK.KJ9762.AQ84",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-140",
+      "hand": "T87.K.AQT83.AKJ3",
+      "hcp": 17,
+      "tens": 2,
+      "shape": [
+        3,
+        1,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-141",
+      "hand": "4.Q3.AK9765.AKQ2",
+      "hcp": 18,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-142",
+      "hand": ".KJT.AQJ963.AKT8",
+      "hcp": 18,
+      "tens": 2,
+      "shape": [
+        0,
+        3,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-143",
+      "hand": "KT5.8.AKJ83.AK63",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        3,
+        1,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass 5♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 17 to 21 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-144",
+      "hand": ".J73.AKQ854.AKJ9",
+      "hcp": 18,
+      "tens": 0,
+      "shape": [
+        0,
+        3,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-145",
+      "hand": "AJ.85.AKT95.AK98",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2NT Pass 3♣ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-146",
+      "hand": "K4.AK.AJT74.AT85",
+      "hcp": 19,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-147",
+      "hand": "98.J5.AKQ54.AKQ2",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-148",
+      "hand": "J6.A.AKQJ72.A943",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-149",
+      "hand": "87.K9.AKQJ9.AKT2",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-150",
+      "hand": "A.AQ.KQ8654.AJ76",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-151",
+      "hand": "A.95.AKQT65.AK84",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-152",
+      "hand": "Q.A95.AKQ98.AJ32",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass 5♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 17 to 21 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-153",
+      "hand": "A.AQ9.AKT75.A973",
+      "hcp": 21,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 17 to 21 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-154",
+      "hand": "AT.AJ.AKQJ7.QT98",
+      "hcp": 21,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2NT Pass 3♣ X 3♦ Pass 3NT Pass 4NT Pass 5♣ X 5♦ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-155",
+      "hand": "K2.K.AQJ986.AKJ5",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-156",
+      "hand": "AQ.9.AQ9754.AKQ9",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        2,
+        1,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass Pass Pass",
+          "bba_alert": "calculated bid | 18 to 21 total points, 0 to 3 cards in clubs, 6 to 13 cards in diamonds, 0 to 3 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-157",
+      "hand": "J9.AJ95.K7532.QT",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♣ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-158",
+      "hand": "Q.A842.AJ9873.62",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        1,
+        4,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-159",
+      "hand": "86.A765.AKT86.76",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ X Pass 3♣ Pass Pass 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-160",
+      "hand": "J6.A984.AQ9765.T",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-161",
+      "hand": "K.Q942.KT864.A63",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-162",
+      "hand": ".AQJ5.A9654.J763",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        0,
+        4,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-163",
+      "hand": "AJ.A864.JT962.Q5",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♣ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-164",
+      "hand": "8.KJ64.KJT762.A8",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-165",
+      "hand": "A8.7653.AQ986.K6",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-166",
+      "hand": "74.JT92.AKJ53.A7",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-167",
+      "hand": "Q85.AK85.AT876.5",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-168",
+      "hand": "T4.AQT3.KT642.A7",
+      "hcp": 13,
+      "tens": 3,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 3♣ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-169",
+      "hand": "3.KJT2.KQJ975.A5",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-170",
+      "hand": "T4.KQ98.AJ872.A8",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-171",
+      "hand": ".AJT9.AT652.KQ72",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        0,
+        4,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-172",
+      "hand": ".KT85.AKQ9762.Q8",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass Pass X Pass 3♣ Pass Pass 3♦ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 14 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-173",
+      "hand": ".J864.AQ972.AKJ3",
+      "hcp": 15,
+      "tens": 0,
+      "shape": [
+        0,
+        4,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass Pass Pass",
+          "bba_alert": "bidable suit | 11 to 17 total points, 4 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-174",
+      "hand": "A4.AT65.AQ652.JT",
+      "hcp": 15,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass 2♥ Pass 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-175",
+      "hand": "A76.A985.AKT93.4",
+      "hcp": 15,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-176",
+      "hand": "KT7.KQJ4.KQT74.J",
+      "hcp": 15,
+      "tens": 2,
+      "shape": [
+        3,
+        4,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 11 to 16 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-177",
+      "hand": "A98.AQ76.AQT86.6",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-178",
+      "hand": ".A984.AKJT75.A74",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3♦ Pass 3♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-179",
+      "hand": "KT.A652.Q9732.AK",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-180",
+      "hand": ".QJ97.AQT7652.AK",
+      "hcp": 16,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-181",
+      "hand": "A6.AT86.AK752.Q4",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-182",
+      "hand": "Q.KQ86.AQJT42.K3",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3♦ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-183",
+      "hand": ".AJ73.AQ976.AQT6",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-184",
+      "hand": "A3.AK65.KJT75.Q7",
+      "hcp": 17,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-185",
+      "hand": "Q.AJ65.AKT82.A52",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-186",
+      "hand": "6.AQT7.AKT64.AJT",
+      "hcp": 18,
+      "tens": 3,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-187",
+      "hand": ".AKJT.AKJT76.Q87",
+      "hcp": 18,
+      "tens": 2,
+      "shape": [
+        0,
+        4,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3♦ Pass 3♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-188",
+      "hand": "2.AKQ9.AQT94.K83",
+      "hcp": 18,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-189",
+      "hand": "Q6.A965.AKQT87.A",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-190",
+      "hand": ".KJ96.AKJT92.AK9",
+      "hcp": 19,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-191",
+      "hand": "KQ7.AJ62.AKQ98.2",
+      "hcp": 19,
+      "tens": 0,
+      "shape": [
+        3,
+        4,
+        5,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-192",
+      "hand": "A9.AQT3.AT652.AJ",
+      "hcp": 19,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 4NT Pass 5♦ Pass 6♥ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-193",
+      "hand": ".AT82.AKQ62.AK98",
+      "hcp": 20,
+      "tens": 1,
+      "shape": [
+        0,
+        4,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-194",
+      "hand": "KQ.KJ64.AK842.A2",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-195",
+      "hand": "A6.A975.AKQ652.K",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-196",
+      "hand": "A4.K852.AKQ97.A8",
+      "hcp": 20,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT 3♣ Pass Pass 3♦ Pass 3♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-197",
+      "hand": "K8.QJ84.AKJ42.AK",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-198",
+      "hand": "AQ.AQT6.AKT42.Q7",
+      "hcp": 21,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT Pass 3♥ Pass 4NT Pass 5♦ Pass 6♥ Pass Pass Pass",
+          "bba_alert": "strong | 18 to 19 total points, 2 to 4 cards in clubs, 3 to 5 cards in diamonds, 2 to 4 cards in hearts, 1 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-199",
+      "hand": "4.AJ42.AKQJ9.AQ3",
+      "hcp": 21,
+      "tens": 0,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "reb1D1S-200",
+      "hand": "K.K864.AKJ74.AKT",
+      "hcp": 21,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2♠ Pass 3NT Pass Pass Pass",
+          "bba_alert": "bidable suit | 16 to 21 total points, 0 to 6 cards in clubs, 5 to 13 cards in diamonds, 4 to 6 cards in hearts, 0 to 3 cards in spades."
+        }
+      ]
+    }
+  ],
+  "out_dir": ".rbb-cache/grids/range-reb1D1S"
+}

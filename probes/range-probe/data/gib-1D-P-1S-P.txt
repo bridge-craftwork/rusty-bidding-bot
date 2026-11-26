@@ -1,0 +1,102 @@
+1D-P-1S-P-*  (N to call, dealer N; GIB tree, ours on 21GF-GIB)
+
+ 5N  GIB  Grand slam force (S trump) -- 3+ !D; 4+ !S; 21 HCP; 22 total points
+     differing: GIB grand_slam_force / ours unmapped
+     ours Pick a slam: choose the strain [conventions/bidding_conventions/pick_a_slam_5nt/pick-a-slam.bid:24]: 10-21 HCP, 12+ decl  ♠0-5 ♥0-5 ♦3-8 ♣0-6
+       ≠ hcp floor-wide: ours 10-21 / GIB 21
+       ≠ pts floor-wide: ours 12+ / GIB 22
+       ≠ pts open-top: ours 12+ / GIB 22
+       ≠ ♠ ours 0-5 / GIB 4-13
+
+ 4N  GIB  Blackwood (S) -- 3+ !D; 4+ !S; 21 HCP; 22 total points
+     agreed: blackwood
+     ours Keycard ask in ♠ [slam/rkcb-1430.bid:106]: 10-21 HCP, 10-24 ♠ sup  ♠0-5 ♥0-5 ♦3-8 ♣0-6
+       ≠ hcp floor-wide: ours 10-21 / GIB 21
+       ≠ pts floor-wide: ours 10-24 / GIB 22
+       ≠ ♠ ours 0-5 / GIB 4-13
+
+ 4S  GIB  Double jump raise -- 3+ !D; 4+ !S; 21- HCP; 19-22 total points
+     agreed: natural
+     ours Game raise: 4+ ♠, 19+ [base/rebids.bid:110]: 14-21 HCP, 15+ decl  ♠4-5 ♥0-4 ♦3-7 ♣0-4
+       ≠ pts floor-wide: ours 15+ / GIB 19-22
+       ≠ pts open-top: ours 15+ / GIB 19-22
+       ≠ ♠ ours 4-5 / GIB 4-13
+
+ 4H  GIB  Splinter -- 3+ !D; 1- !H; 4+ !S; 21- HCP; 19-22 total points
+     agreed: splinter
+     ours Splinter: 4 ♠, 17-21, at most one ♥ [conventions/bidding_conventions/splinters/splinters.bid:100]: 16-21 HCP, 17+ decl  ♠4-5 ♥0-1 ♦4-7 ♣0-4
+       ≠ pts open-top: ours 17+ / GIB 19-22
+       ≠ ♦ ours 4-7 / GIB 3-13
+       ≠ ♠ ours 4-5 / GIB 4-13
+
+ 4C  GIB  Splinter -- 1- !C; 3+ !D; 4+ !S; 21- HCP; 19-22 total points
+     agreed: splinter
+     ours Splinter: 4 ♠, 17-21, at most one ♣ [conventions/bidding_conventions/splinters/splinters.bid:100]: 16-21 HCP, 17+ decl  ♠4-5 ♥0-4 ♦4-7 ♣0-1
+       ≠ pts open-top: ours 17+ / GIB 19-22
+       ≠ ♦ ours 4-7 / GIB 3-13
+       ≠ ♠ ours 4-5 / GIB 4-13
+
+ 3N  GIB  11-21 HCP; solid 7-card !D; 12-22 total points; partial stop in !C; partial stop in !H
+     agreed: natural
+     ours 18-21 with six or more ♦: to play [base/rebids.bid:307]: 18-21 HCP, 20+ decl  ♠0-3 ♥0-3 ♦6-8 ♣0-3
+       ≠ hcp floor-narrow: ours 18-21 / GIB 11-21
+       ≠ pts floor-narrow: ours 20+ / GIB 12-22
+       ≠ pts open-top: ours 20+ / GIB 12-22
+
+ 3S  GIB  Jump raise -- 3+ !D; 4+ !S; 16-18 total points
+     agreed: natural
+     ours Jump raise: 4+ ♠, 16-18 [base/rebids.bid:59]: 11-18 HCP, 12-20 decl  ♠4-5 ♥0-4 ♦3-7 ♣0-4
+       ≠ pts floor-wide: ours 12-20 / GIB 16-18
+       ≠ ♠ ours 4-5 / GIB 4-13
+
+ 3H  GIB  Splinter -- 3+ !D; 1- !H; 4+ !S; 21- HCP; 19-22 total points
+     differing: GIB splinter / ours natural
+     ours Jump shift: 4+ hearts, 19+ [base/rebids.bid:209]: 19-21 HCP, 19-21 decl  ♠2-3 ♥4 ♦4 ♣2-3
+       ≠ ♦ ours 4 / GIB 3-13
+       ≠ ♥ ours 4 / GIB 0-1
+       ≠ ♠ ours 2-3 / GIB 4-13
+
+ 3D  GIB  Opener rebid -- 6+ !D; 3- !S; 17-20 total points
+     agreed: natural
+     ours Jump rebid: 6+ ♦, 16-18 [base/rebids.bid:79]: 14-17 HCP, 17-20 decl  ♠0-3 ♥0-5 ♦6-8 ♣0-3
+
+ 3C  GIB  Jump shift -- 5+ !D; 18-21 HCP; biddable !C; 19-22 total points; forcing to 3N
+     agreed: natural
+     ours Jump shift: 4+ clubs, 19+ [base/rebids.bid:208]: 17-21 HCP, 19+ decl  ♠0-3 ♥0-4 ♦4-7 ♣4-6
+       ≠ pts open-top: ours 19+ / GIB 19-22
+       ≠ ♦ ours 4-7 / GIB 5-13
+
+ 2N  GIB  Jump in notrump -- 2-4 !C; 3-5 !D; 2-4 !H; 2-3 !S; 18-19 HCP; 22- total points; partial stop in !C; partial stop in !H
+     agreed: natural
+     ours 18-19 HCP, balanced [base/rebids.bid:92]: 18-19 HCP, 18-20 decl  ♠2-3 ♥2-4 ♦4-5 ♣2-4
+       ≠ ♦ ours 4-5 / GIB 3-5
+
+ 2S  GIB  Simple raise -- 3+ !D; 4 !S; 11+ HCP; 12-15 total points
+     agreed: natural
+     ours Raise: 4+ ♠, minimum [base/rebids.bid:57]: 10-15 HCP, 12-18 decl  ♠4-5 ♥0-4 ♦3-7 ♣0-4
+       ≠ pts top-wide: ours 12-18 / GIB 12-15
+       ≠ ♠ ours 4-5 / GIB 4
+
+ 2H  GIB  Opener reverse -- 5+ !D; 4+ !H; 3- !S; 21- HCP; 18-22 total points
+     agreed: natural
+     ours Reverse: 4+ hearts, longer diamonds, 17+ [base/rebids.bid:206]: 15-21 HCP, 18+ decl  ♠0-4 ♥4-5 ♦5-7 ♣0-4
+       ≠ pts open-top: ours 18+ / GIB 18-22
+       ≠ ♥ ours 4-5 / GIB 4-13
+       ≠ ♠ ours 0-4 / GIB 0-3
+
+ 2D  GIB  Opener rebids D -- 3- !S; 11-15 HCP; twice rebiddable !D; 12-16 total points
+     agreed: natural
+     ours Rebids ♦: 5+, minimum [base/rebids.bid:75]: 10-15 HCP, 12-17 decl  ♠0-5 ♥0-5 ♦5-8 ♣0-6
+       ≠ ♠ ours 0-5 / GIB 0-3
+
+ 2C  GIB  Opener two rebid -- 4+ !C; 4+ !D; 3- !S; 11-16 HCP; 12-18 total points
+     agreed: natural
+     ours 4+ clubs, up to 18 [base/rebids.bid:195]: 10-18 HCP, 12-20 decl  ♠0-4 ♥0-4 ♦4-7 ♣4-6
+       ≠ ♠ ours 0-4 / GIB 0-3
+
+ 1N  GIB  2-5 !C; 4-5 !D; 2-4 !H; 2-3 !S; 12-14 HCP
+     agreed: natural
+     ours 12-14 HCP, balanced [base/rebids.bid:196]: 12-14 HCP, 12-15 decl  ♠2-3 ♥2-4 ♦4-5 ♣2-4
+       ≠ ♣ ours 2-4 / GIB 2-5
+
+GIB has, we have no rule for: P 7N 7S 7H 7D 7C 6N 6S 6H 6D 6C 5S 5H 5D 5C 4D

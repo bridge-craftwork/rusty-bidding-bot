@@ -1,0 +1,240 @@
+{"id": "resp1H-001", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-002", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-003", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-004", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-005", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-006", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-007", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-008", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-009", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-010", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-011", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-012", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-013", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-014", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-015", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-016", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-017", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-018", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-019", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-020", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-021", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-022", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-023", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-024", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-025", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-026", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-027", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-028", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-029", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-030", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-031", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-032", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-033", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-034", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-035", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-036", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-037", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-038", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-039", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-040", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-041", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-042", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-043", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-044", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-045", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-046", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-047", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-048", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-049", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-050", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-051", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-052", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-053", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-054", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-055", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-056", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-057", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-058", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-059", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-060", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-061", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-062", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-063", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-064", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-065", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-066", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-067", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-068", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-069", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-070", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-071", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-072", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-073", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-074", "call": "3C", "ruleSet": "InvitingJumpShifts", "requires": "C >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('C', 2, 4) and D <= 4", "alert": true}
+{"id": "resp1H-075", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-076", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-077", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-078", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-079", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-080", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-081", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-082", "call": "3C", "ruleSet": "InvitingJumpShifts", "requires": "C >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('C', 2, 4) and D <= 4", "alert": true}
+{"id": "resp1H-083", "call": "3D", "ruleSet": "InvitingJumpShifts", "requires": "D >= 6 and H <= 2 and S <= 3 and hcp >= 9 and hcp <= 11 and HasTopHonors('D', 2, 4) and C <= 4", "alert": true}
+{"id": "resp1H-084", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-085", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-086", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-087", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-088", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-089", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-090", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-091", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-092", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-093", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-094", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-095", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-096", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-097", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-098", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-099", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-100", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-101", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-102", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-103", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-104", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-105", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-106", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-107", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-108", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-109", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-110", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-111", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-112", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-113", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-114", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-115", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-116", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-117", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-118", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-119", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-120", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-121", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-122", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-123", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-124", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-125", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-126", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-127", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-128", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-129", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-130", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-131", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-132", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-133", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-134", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-135", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-136", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-137", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-138", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-139", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-140", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-141", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-142", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-143", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-144", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-145", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-146", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-147", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-148", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-149", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-150", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-151", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-152", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-153", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-154", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-155", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-156", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-157", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-158", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-159", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-160", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-161", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-162", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-163", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-164", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-165", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-166", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-167", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-168", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-169", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-170", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-171", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-172", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-173", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-174", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-175", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-176", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-177", "call": "1NT", "ruleSet": "Responses to 1Ma-P", "requires": "(C >= 6 and hcp >= 5 and hcp <= 9) | (D >= 6 and hcp >= 5 and hcp <= 9) | (hcp <= 12 and H < 4 and hcp>= 6)", "alert": true}
+{"id": "resp1H-178", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-179", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-180", "call": "1S", "ruleSet": "Responses to 1H-P", "requires": "totalpoints >= 6 and spades >= 4 and (spadelongest or hcp < 12)", "alert": true}
+{"id": "resp1H-181", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-182", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-183", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-184", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-185", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-186", "call": "3NT", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 12 and hcp<= 15 and H == 3 and balanced and stoppersOK", "alert": true}
+{"id": "resp1H-187", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-188", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-189", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-190", "call": "2D", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and diamondlongest and diamonds > spades and (diamonds > clubs or diamonds >= 5)) | (lightminoropening('D'))", "alert": true}
+{"id": "resp1H-191", "call": "2C", "ruleSet": "Responses to 1H-P | Responses to 1Ma-P", "requires": "(hcp >= 12 and clublongest and clubs > spades and (clubs > diamonds or clubs == 4)) | (lightminoropening('C'))", "alert": true}
+{"id": "resp1H-192", "call": "3NT", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 12 and hcp<= 15 and H == 3 and balanced and stoppersOK", "alert": true}
+{"id": "resp1H-193", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-194", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-195", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-196", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-197", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-198", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-199", "call": "Pass", "ruleSet": "Responses to 1Ma-P", "requires": "hcp <= 5", "alert": true}
+{"id": "resp1H-200", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-201", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-202", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-203", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-204", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-205", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-206", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-207", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-208", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-209", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-210", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-211", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-212", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-213", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-214", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-215", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-216", "call": "2H", "ruleSet": "Responses to 1Ma-P", "requires": "(totalpoints >= 6 and hcp< 10 and H >= 3) or (hcp >= 5 and hcp< 10 and H >= 4)", "alert": true}
+{"id": "resp1H-217", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-218", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-219", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-220", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-221", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-222", "call": "4D", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5)  and hcp <= 14 and D <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-223", "call": "4C", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5)  and hcp <= 14 and C <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-224", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-225", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-226", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-227", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-228", "call": "3H", "ruleSet": "Responses to 1Ma-P", "requires": "hcp >= 9 and hcp< 12 and H >= 4", "alert": true}
+{"id": "resp1H-229", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-230", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-231", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-232", "call": "3S", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5) and hcp <= 14 and S <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-233", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-234", "call": "4D", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5)  and hcp <= 14 and D <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-235", "call": "4C", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5)  and hcp <= 14 and C <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-236", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-237", "call": "3S", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5) and hcp <= 14 and S <= 1 and H >= 4", "alert": true}
+{"id": "resp1H-238", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-239", "call": "2NT", "ruleSet": "Jacoby2NT", "requires": "(H_points >= 12 and hcp >= 12) and H >= 4", "alert": true}
+{"id": "resp1H-240", "call": "4C", "ruleSet": "Splinter", "requires": "(hcp >= 10 or losers <= 5)  and hcp <= 14 and C <= 1 and H >= 4", "alert": true}

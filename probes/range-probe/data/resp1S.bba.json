@@ -1,0 +1,6613 @@
+{
+  "mode": "List",
+  "seat": "South",
+  "columns": [
+    {
+      "vul": "None",
+      "scoring": "IMP"
+    }
+  ],
+  "rows": [
+    {
+      "label": "resp1S-001",
+      "hand": "Q6.T92.JT987.752",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-002",
+      "hand": "42.86.T643.K9854",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-003",
+      "hand": "T8.9.K9732.T8642",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        5,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass 2♠ Pass 3♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-004",
+      "hand": "64.9.QJ952.T9652",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        2,
+        1,
+        5,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-005",
+      "hand": "92.62.K983.JT653",
+      "hcp": 4,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 3♥ Pass 3♠ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-006",
+      "hand": "2.96.T8653.KJT75",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        1,
+        2,
+        5,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-007",
+      "hand": "T.Q86.T9652.Q542",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-008",
+      "hand": "86.K7.J765.97653",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 1NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-009",
+      "hand": "T5.92.T9743.AJ73",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 1NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-010",
+      "hand": "63.632.A65.JT954",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-011",
+      "hand": "83.872.952.KQ952",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-012",
+      "hand": "87.J93.KJ976.983",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-013",
+      "hand": "95.T96.KT98.K852",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-014",
+      "hand": "42.Q52.Q65.Q8754",
+      "hcp": 6,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♦ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-015",
+      "hand": "85.942.KT3.K9865",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-016",
+      "hand": ".T73.Q6542.AT832",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        0,
+        3,
+        5,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-017",
+      "hand": "2.Q94.A943.JT752",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-018",
+      "hand": "3.KJ3.T8642.K975",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-019",
+      "hand": "8.A8.K9765.T9854",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        5,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2♥ Pass 3♠ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-020",
+      "hand": "76.87.K6542.A765",
+      "hcp": 7,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-021",
+      "hand": "Q8.QJ7.KT985.T53",
+      "hcp": 8,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♣ Pass Pass 2♦ X Pass 3♣ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-022",
+      "hand": "42.J2.Q954.KQT87",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2♥ 2♠ Pass Pass 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-023",
+      "hand": "2.986.AJT5.K9862",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-024",
+      "hand": "T7.JT2.AQJ65.T87",
+      "hcp": 8,
+      "tens": 3,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-025",
+      "hand": "Q5.964.843.AK875",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-026",
+      "hand": "76.KQ2.864.KJT85",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-027",
+      "hand": "J8.T64.KJ765.AT9",
+      "hcp": 9,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-028",
+      "hand": "A.873.AJ632.9876",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-029",
+      "hand": "86.97.KT87.AKT32",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♣ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-030",
+      "hand": "A4.T87.QT632.A94",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-031",
+      "hand": "K2.843.J962.AQ98",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♥ Pass Pass 2♠ 3♥ Pass Pass X Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-032",
+      "hand": "Q7.J95.QJ2.AT863",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-033",
+      "hand": "T8.Q76.A843.AJ62",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-034",
+      "hand": "42.K62.A985.A987",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-035",
+      "hand": "KJ.Q87.965.KQT94",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-036",
+      "hand": "AT.97.J9654.AQ76",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-037",
+      "hand": "Q3.52.AK98.QJ863",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-038",
+      "hand": "J.K92.T9864.AKJ4",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-039",
+      "hand": "43.AQ9.A7653.Q82",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-040",
+      "hand": "82.K85.AJ74.A653",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-041",
+      "hand": "95.Q52.KJT7.AK65",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-042",
+      "hand": "74.96.AQ64.AK874",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-043",
+      "hand": "T5.AQT.AJ75.Q864",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-044",
+      "hand": "A4.KJ8.J7542.A97",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-045",
+      "hand": "QT.J5.KJ43.AQJ63",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3♦ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-046",
+      "hand": "A6.32.AQ96.KJT98",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ 2♥ 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-047",
+      "hand": "4.QJ4.AKJ75.K962",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-048",
+      "hand": "A2.954.AQ9.AT876",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-049",
+      "hand": "93.96.T4.KT76532",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        2,
+        7
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-050",
+      "hand": "93.KT6.T98432.85",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass 2♠ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-051",
+      "hand": "T5.72.KT97632.84",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♣ Pass 2♥ Pass 2♠ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-052",
+      "hand": "8.J92.973.QT9832",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 1NT Pass 2♣ Pass 2♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-053",
+      "hand": "98.92.543.AT8762",
+      "hcp": 4,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-054",
+      "hand": "32.98.AT8653.T54",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass 3♥ Pass 3NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-055",
+      "hand": "T.T83.KJT9765.98",
+      "hcp": 4,
+      "tens": 3,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-056",
+      "hand": "7.J84.J93.QT9765",
+      "hcp": 4,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-057",
+      "hand": "T8.9.AJ98754.T53",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        2,
+        1,
+        7,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-058",
+      "hand": "96.97.Q3.KT98754",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        2,
+        7
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-059",
+      "hand": "4.632.AJT532.842",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-060",
+      "hand": "4.J.A976532.9752",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        1,
+        1,
+        7,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-061",
+      "hand": "92.542.T9.AQT872",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        2,
+        6
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-062",
+      "hand": "43.953.AQT642.97",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-063",
+      "hand": "K4.642.KT9752.84",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "Pass 2♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-064",
+      "hand": "T.872.A76.Q98532",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-065",
+      "hand": "Q2.J4.854.KJ8752",
+      "hcp": 7,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-066",
+      "hand": "3.T.AT65432.KT94",
+      "hcp": 7,
+      "tens": 3,
+      "shape": [
+        1,
+        1,
+        7,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-067",
+      "hand": "43.643.KJT763.K8",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-068",
+      "hand": "2.KT4.A96542.T52",
+      "hcp": 7,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-069",
+      "hand": "9.A5.J984.QJT752",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT 2♠ Pass 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-070",
+      "hand": "63.82.983.AKJT94",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT 2♠ Pass 3♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-071",
+      "hand": "2.Q3.T975.AQ8654",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-072",
+      "hand": "Q7.954.A97643.Q8",
+      "hcp": 8,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-073",
+      "hand": "9.QJ9.KJ5.QT7653",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-074",
+      "hand": "73.T72.86.AKQT74",
+      "hcp": 9,
+      "tens": 2,
+      "shape": [
+        2,
+        3,
+        2,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT 2♥ Pass Pass 3♣ Pass Pass 3♥ Pass Pass 4♣ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-075",
+      "hand": "4.63.AK32.QT9642",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-076",
+      "hand": "42.543.AKQ732.T6",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-077",
+      "hand": "6.74.AKJ973.QT32",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-078",
+      "hand": ".9.A965432.AQT95",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        0,
+        1,
+        7,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2♥ 3♦ 3♥ 4♦ 4♥ 4NT Pass 5♥ X 6♦ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-079",
+      "hand": "T5.984.AJ.KQ8542",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        2,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 6 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-080",
+      "hand": "87.J7.AJ9652.A95",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        2,
+        2,
+        6,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-081",
+      "hand": "6.T9.A87543.AQJ5",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-082",
+      "hand": "A4.Q82.AT8643.J7",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-083",
+      "hand": "5.Q3.AK9753.Q852",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3♦ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-084",
+      "hand": "A.T43.K32.AT9852",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        1,
+        3,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3♣ Pass 5♣ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 6 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-085",
+      "hand": "3.AJ.KJ94.QJ7532",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 6 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-086",
+      "hand": "92.765.A9.AKJT97",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        2,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 6 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-087",
+      "hand": "J5.J6.AT6.AQT864",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♣ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 6 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-088",
+      "hand": "6.974.AKQJ532.Q8",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-089",
+      "hand": "52.AJ.T43.AKJ865",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ 2NT 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-090",
+      "hand": "A2.J87.AT98642.A",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        3,
+        7,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-091",
+      "hand": "4.Q7.AKJT7653.K8",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        1,
+        2,
+        8,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3♦ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-092",
+      "hand": "2.97.AQJ942.AQ73",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3♣ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-093",
+      "hand": "8.A42.KJT8543.AQ",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        1,
+        3,
+        7,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-094",
+      "hand": "92.K92.AQ9853.AJ",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        3,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-095",
+      "hand": "T5.A4.JT6.AKQT82",
+      "hcp": 14,
+      "tens": 3,
+      "shape": [
+        2,
+        2,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-096",
+      "hand": "A.85.KJ6532.AQ32",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        1,
+        2,
+        6,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-097",
+      "hand": "Q9.T976.T97.J853",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-098",
+      "hand": "63.K9863.65.T874",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        2,
+        5,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♦ Pass 3♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-099",
+      "hand": "T8.QT84.JT632.92",
+      "hcp": 3,
+      "tens": 3,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-100",
+      "hand": "42.KT97.953.T765",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♣ Pass 2♦ Pass 2♠ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-101",
+      "hand": "T.Q542.J8753.JT7",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        1,
+        4,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-102",
+      "hand": "6.QT8765.T943.QT",
+      "hcp": 4,
+      "tens": 3,
+      "shape": [
+        1,
+        6,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-103",
+      "hand": "32.T97632.6.A865",
+      "hcp": 4,
+      "tens": 1,
+      "shape": [
+        2,
+        6,
+        1,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-104",
+      "hand": "Q.J8543.J542.975",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        1,
+        5,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-105",
+      "hand": "T6.QJT742.943.Q6",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        2,
+        6,
+        3,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-106",
+      "hand": "63.J952.9862.AT9",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-107",
+      "hand": "32.QJ962.96.Q852",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        2,
+        5,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 1NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-108",
+      "hand": "64.J8432.KJ6.752",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        2,
+        5,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-109",
+      "hand": "8.Q654.753.KJT86",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-110",
+      "hand": "93.J7632.95.AJT5",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        2,
+        5,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "Pass 2♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-111",
+      "hand": "T3.AT9862.93.Q92",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        2,
+        6,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-112",
+      "hand": "T.JT74.AJ93.9632",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        1,
+        4,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT X Pass 2♦ Pass Pass X Pass 2♥ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-113",
+      "hand": "92.T976.975.AK65",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-114",
+      "hand": "97.K952.T8653.KJ",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-115",
+      "hand": "J.AQ962.T763.T82",
+      "hcp": 7,
+      "tens": 2,
+      "shape": [
+        1,
+        5,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-116",
+      "hand": "AQ.9875.J75.9762",
+      "hcp": 7,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-117",
+      "hand": "3.AT764.KJT543.5",
+      "hcp": 8,
+      "tens": 2,
+      "shape": [
+        1,
+        5,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-118",
+      "hand": "97.Q862.A432.Q87",
+      "hcp": 8,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-119",
+      "hand": "52.T982.J932.AK9",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT X Pass 2♣ 2♠ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-120",
+      "hand": ".KJT752.A942.632",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        0,
+        6,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-121",
+      "hand": "85.Q764.K.A76532",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        1,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-122",
+      "hand": "76.KQJT3.Q9.J754",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        2,
+        5,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2♦ 2♥ 3♦ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-123",
+      "hand": "54.AJT9.A952.864",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-124",
+      "hand": "A.KT7542.Q74.976",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        1,
+        6,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-125",
+      "hand": "T.AQ965.JT53.K73",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        1,
+        5,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-126",
+      "hand": "J4.KQJ75.54.K985",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        2,
+        5,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass 2NT Pass 3♦ Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-127",
+      "hand": "4.AQT973.32.A942",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        1,
+        6,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "3♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 6 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-128",
+      "hand": "7.K932.AK7642.85",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        1,
+        4,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-129",
+      "hand": "5.Q975.AJ8.KJ532",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        1,
+        4,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-130",
+      "hand": "64.KQ92.AT96.Q95",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-131",
+      "hand": "T.Q642.AT2.KQT96",
+      "hcp": 11,
+      "tens": 3,
+      "shape": [
+        1,
+        4,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-132",
+      "hand": "A7.9432.K96.A852",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-133",
+      "hand": "Q8.A97652.A9.Q83",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        2,
+        6,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "3♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 6 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-134",
+      "hand": "2.QJT62.AQT52.K5",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        1,
+        5,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-135",
+      "hand": "K8.Q972.KT32.A98",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "1NT Pass Pass Pass",
+          "bba_alert": "balanced | 6 to 11 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-136",
+      "hand": "Q.KJT3.KQJ7643.6",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        7,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3♦ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Inviting Jump Shifts | 10 to 12 total points, 0 to 6 cards in clubs, 6 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 2 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-137",
+      "hand": "92.AT76.AKJ43.J7",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        2,
+        4,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ 5♣ X Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-138",
+      "hand": "A.JT93.652.AKJ54",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        1,
+        4,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3♥ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-139",
+      "hand": "KJ.J632.A52.A965",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-140",
+      "hand": "A7.KT532.A95.QT6",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        2,
+        5,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 3♥ Pass 4♦ Pass 4♠ Pass 4NT Pass 5♦ Pass 5♠ Pass 6♣ Pass 6♥ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-141",
+      "hand": "92.A9764.K97.AK2",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        5,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-142",
+      "hand": "9.KJ93.963.AKQJ7",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        1,
+        4,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3♣ Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-143",
+      "hand": "K.A9843.JT5.AQ92",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        1,
+        5,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2NT Pass 3NT Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-144",
+      "hand": "A7.9854.A.AQ8732",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        2,
+        4,
+        1,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ Pass 2NT Pass 3♣ Pass 5♣ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-145",
+      "hand": "832.QT96.J853.65",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-146",
+      "hand": "J97.T7.Q64.T9874",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass 2♠ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-147",
+      "hand": "832.JT987..Q9542",
+      "hcp": 3,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        0,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 3♦ Pass 5♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-148",
+      "hand": "T62.JT972.92.Q53",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        3,
+        5,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♦ Pass 3♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-149",
+      "hand": "653.Q75.J9873.J5",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♣ Pass 2♠ Pass 3♦ Pass 3♥ Pass 4♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-150",
+      "hand": "432.86.98532.A75",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        3,
+        2,
+        5,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass Pass 2♠ Pass Pass 3♥ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-151",
+      "hand": "543.J9632.J97.Q8",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        3,
+        5,
+        3,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♣ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-152",
+      "hand": "T87.53.Q97.QT953",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ 2♠ 3♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-153",
+      "hand": "T86.J.954.KJT762",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        3,
+        1,
+        3,
+        6
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-154",
+      "hand": "974.532.QT94.KT5",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-155",
+      "hand": "J53.2.J9753.K852",
+      "hcp": 5,
+      "tens": 0,
+      "shape": [
+        3,
+        1,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "2♠ Pass Pass 3♥ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-156",
+      "hand": "Q87.K9732.6.T753",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        1,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "2♠ 3♦ 3♠ 4♦ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-157",
+      "hand": "T85.642.753.AQ75",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-158",
+      "hand": "A32.Q953.96.T985",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♦ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-159",
+      "hand": "853.T82.K763.K52",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-160",
+      "hand": "876.J4.AJ92.T875",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 1,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-161",
+      "hand": "QT2.42.T4.KQ8763",
+      "hcp": 7,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        2,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-162",
+      "hand": "A62.732.QT9654.J",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        6,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-163",
+      "hand": "T42.T3.K72.A8654",
+      "hcp": 7,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-164",
+      "hand": "T42.J52.KQJ32.97",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♣ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-165",
+      "hand": "T92.J97.A3.KT852",
+      "hcp": 8,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        2,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ Pass Pass 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-166",
+      "hand": "J76.KT976.62.A75",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-167",
+      "hand": "J54.T932.KJ32.K4",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-168",
+      "hand": "Q76.T32.Q9753.A9",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♣ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-169",
+      "hand": "T95.4.AK83.Q8753",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        3,
+        1,
+        4,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-170",
+      "hand": "632.762.AQ84.K85",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-171",
+      "hand": "K43.Q86.A9.T8654",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        2,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-172",
+      "hand": "AQ4.K9832.95.532",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        3,
+        5,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-173",
+      "hand": "T92.A9.K987.K876",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-174",
+      "hand": "A76.QT852.65.A87",
+      "hcp": 10,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-175",
+      "hand": "T54.A3.A63.QT982",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-176",
+      "hand": "AT4.973.9.AQT865",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        1,
+        6
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "preemptive | 3 to 7 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-177",
+      "hand": "Q63.A9.T98.KQT86",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "preemptive | 3 to 7 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-178",
+      "hand": "J94.KT.Q93.KQT94",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass Pass",
+          "bba_alert": "preemptive | 3 to 7 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-179",
+      "hand": "KJ4.9876.7.AK986",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        3,
+        4,
+        1,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-180",
+      "hand": "T42.KT7.AQ.Q9763",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        2,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-181",
+      "hand": "QT8.AJT4.87.AJ72",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        3,
+        4,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♣ 3♦ 3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 4 to 13 cards in clubs, 0 to 6 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-182",
+      "hand": "962.KQ932.AQ96.J",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        3,
+        5,
+        4,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-183",
+      "hand": "T52.Q32.AJT.KQ62",
+      "hcp": 12,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-184",
+      "hand": "Q72.K3.AJ9754.Q6",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        3,
+        2,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-185",
+      "hand": "Q82.T9.AKJT53.K5",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        3,
+        2,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-186",
+      "hand": "J93.QJ8.Q63.AKT5",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass 4♦ Pass 4♥ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "support | 13 to 15 total points, 3 to 4 cards in clubs, 3 to 4 cards in diamonds, 3 to 4 cards in hearts, 3 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-187",
+      "hand": "KT2.A98.A72.Q854",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "support | 13 to 15 total points, 3 to 4 cards in clubs, 3 to 4 cards in diamonds, 3 to 4 cards in hearts, 3 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-188",
+      "hand": "T64.K93.A542.AQ9",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3NT Pass 4♣ Pass 4♦ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "support | 13 to 15 total points, 3 to 4 cards in clubs, 3 to 4 cards in diamonds, 3 to 4 cards in hearts, 3 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-189",
+      "hand": "Q83.QT4.AT43.AQ7",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        3,
+        3,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "support | 13 to 15 total points, 3 to 4 cards in clubs, 3 to 4 cards in diamonds, 3 to 4 cards in hearts, 3 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-190",
+      "hand": "J63.KQT62.Q.AQ97",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        1,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2NT Pass 3♠ Pass 3NT Pass 4♣ Pass 4♦ X Pass Pass 4♥ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-191",
+      "hand": "JT5.AQJ86.2.AQ86",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        3,
+        5,
+        1,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♥ Pass 2NT Pass 4♦ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 5 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-192",
+      "hand": "AQ4.K43.KQ532.86",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        3,
+        3,
+        5,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 3♠ Pass 3NT Pass 4♠ Pass 4NT Pass 5♦ Pass 5♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-193",
+      "hand": "T952.QT952.JT87.",
+      "hcp": 3,
+      "tens": 3,
+      "shape": [
+        4,
+        5,
+        4,
+        0
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "4♠ Pass Pass 5♣ Pass Pass Pass",
+          "bba_alert": "preemptive | 3 to 7 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-194",
+      "hand": "6432.JT7.T982.QT",
+      "hcp": 3,
+      "tens": 3,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♣ Pass 2NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-195",
+      "hand": "8432.T7.KT76.862",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-196",
+      "hand": "Q876.T983.J9.T62",
+      "hcp": 3,
+      "tens": 2,
+      "shape": [
+        4,
+        4,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♣ 2♠ X Pass 3♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-197",
+      "hand": "9653.974.73.KJ82",
+      "hcp": 4,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 1NT Pass 2♣ 2♠ Pass Pass X Pass 3♦ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-198",
+      "hand": "9632.JT83.T82.K4",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        4,
+        4,
+        3,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass X Pass 2♥ 2♠ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-199",
+      "hand": "T854.T986.96.AT4",
+      "hcp": 4,
+      "tens": 3,
+      "shape": [
+        4,
+        4,
+        2,
+        3
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♥ Pass Pass 2♠ X Pass 3NT Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-200",
+      "hand": "T874.KT852.J2.82",
+      "hcp": 4,
+      "tens": 2,
+      "shape": [
+        4,
+        5,
+        2,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2♦ Pass Pass 2♠ 3♦ Pass Pass 3♠ Pass Pass 4♦ Pass Pass 4♠ X Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-201",
+      "hand": "9865.AJT6.T54.65",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        4,
+        4,
+        3,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-202",
+      "hand": "J742.J973.2.KT54",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        4,
+        4,
+        1,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-203",
+      "hand": "J832.T82.A762.T2",
+      "hcp": 5,
+      "tens": 2,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": "Pass",
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-204",
+      "hand": "QT62.543.K632.92",
+      "hcp": 5,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": "Pass",
+          "bba_rest": "Pass 2NT Pass Pass 3♠ Pass Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-205",
+      "hand": "9532.Q92.J.KT863",
+      "hcp": 6,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        1,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-206",
+      "hand": "9632.Q73.643.KJ5",
+      "hcp": 6,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-207",
+      "hand": "T842.J2.JT6.A954",
+      "hcp": 6,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": "Pass",
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "Pass Pass",
+          "bba_alert": "0 to 5 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-208",
+      "hand": "8642.53.A965.Q85",
+      "hcp": 6,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-209",
+      "hand": "9532.752.KJ74.K2",
+      "hcp": 7,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-210",
+      "hand": "A632.J96.852.QT9",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass X Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-211",
+      "hand": "JT42.Q9864.53.A2",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        4,
+        5,
+        2,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♦ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-212",
+      "hand": "QT86.43.K432.Q87",
+      "hcp": 7,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-213",
+      "hand": "T986.QJ6.75.AJ53",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♣ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-214",
+      "hand": "J764.K65.52.KJT7",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♦ Pass Pass 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-215",
+      "hand": "K542.2.T765.KQT9",
+      "hcp": 8,
+      "tens": 2,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ 3♣ Pass 4♥ 4♠ 5♥ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-216",
+      "hand": "A742.98.A654.T63",
+      "hcp": 8,
+      "tens": 1,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-217",
+      "hand": "QT92.972.853.AQJ",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-218",
+      "hand": "A742.J85.QT4.Q95",
+      "hcp": 9,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ X Pass 3♥ Pass 4♥ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-219",
+      "hand": "JT52.J.A75.KT652",
+      "hcp": 9,
+      "tens": 2,
+      "shape": [
+        4,
+        1,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "4♠ Pass Pass X Pass 5♥ X Pass Pass Pass",
+          "bba_alert": "preemptive | 3 to 7 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-220",
+      "hand": "AQ72.972.K62.982",
+      "hcp": 9,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-221",
+      "hand": "QT62.J95.A5.KT52",
+      "hcp": 10,
+      "tens": 2,
+      "shape": [
+        4,
+        3,
+        2,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2♠ Pass Pass 3♥ 3♠ Pass Pass Pass",
+          "bba_alert": "calculated bid | 7 to 9 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-222",
+      "hand": "A743.K7.654.QJ75",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        3,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-223",
+      "hand": "KJ53.A864.952.Q2",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        4,
+        4,
+        3,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-224",
+      "hand": "A742.5.AQ32.9763",
+      "hcp": 10,
+      "tens": 0,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-225",
+      "hand": "T963.T.A943.AKT3",
+      "hcp": 11,
+      "tens": 3,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-226",
+      "hand": "A932.Q96.QT93.K7",
+      "hcp": 11,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-227",
+      "hand": "K542.AJ.T932.KT8",
+      "hcp": 11,
+      "tens": 2,
+      "shape": [
+        4,
+        2,
+        4,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "3♠ Pass Pass Pass",
+          "bba_alert": "1M-3M inviting | 10 to 12 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-228",
+      "hand": "AQ84.J9543..A732",
+      "hcp": 11,
+      "tens": 0,
+      "shape": [
+        4,
+        5,
+        0,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Diamonds"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass 4♣ Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-229",
+      "hand": "Q982.J2.J4.AKJ73",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        4,
+        2,
+        2,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-230",
+      "hand": "A764.KQT653.92.K",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        4,
+        6,
+        2,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-231",
+      "hand": "KJ54.3.AKJ752.T5",
+      "hcp": 12,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        6,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-232",
+      "hand": "A842.983.A92.A65",
+      "hcp": 12,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 3,
+              "strain": "Spades"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-233",
+      "hand": "QT82.Q.J98.AKJ52",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        3,
+        5
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-234",
+      "hand": "A974.J82.A832.KJ",
+      "hcp": 13,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-235",
+      "hand": "KJ85.AJ43.AT73.T",
+      "hcp": 13,
+      "tens": 2,
+      "shape": [
+        4,
+        4,
+        4,
+        1
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "4♣ X Pass Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 12 to 20 total points, 0 to 1 cards in clubs, 0 to 13 cards in diamonds, 0 to 13 cards in hearts, 3 to 3 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-236",
+      "hand": "Q862.KT4.Q52.AQ6",
+      "hcp": 13,
+      "tens": 1,
+      "shape": [
+        4,
+        3,
+        3,
+        3
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT Pass 3NT Pass 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-237",
+      "hand": "QT82..KJT98.AKJT",
+      "hcp": 14,
+      "tens": 3,
+      "shape": [
+        4,
+        0,
+        5,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT 3♥ 3♠ Pass 3NT 4♥ 4NT 5♥ 5♠ Pass 6♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-238",
+      "hand": "AJ64.K85.AQ54.74",
+      "hcp": 14,
+      "tens": 0,
+      "shape": [
+        4,
+        3,
+        4,
+        2
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 2,
+              "strain": "NoTrump"
+            }
+          },
+          "bba_rest": "2NT 3♠ 4♠ Pass Pass Pass",
+          "bba_alert": "Jacoby 2NT | 11 to 37 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 4 cards in hearts, 4 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-239",
+      "hand": "K853.3.AT93.AK95",
+      "hcp": 14,
+      "tens": 1,
+      "shape": [
+        4,
+        1,
+        4,
+        4
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Hearts"
+            }
+          },
+          "bba_rest": "4♥ X 4♠ Pass 4NT Pass 5♦ Pass 5♥ X XX Pass 5♠ Pass Pass Pass",
+          "bba_alert": "Splinter | 12 to 20 total points, 0 to 13 cards in clubs, 0 to 13 cards in diamonds, 0 to 1 cards in hearts, 3 to 13 cards in spades."
+        }
+      ]
+    },
+    {
+      "label": "resp1S-240",
+      "hand": "QT84.KT32.AKQ75.",
+      "hcp": 14,
+      "tens": 2,
+      "shape": [
+        4,
+        4,
+        5,
+        0
+      ],
+      "cells": [
+        {
+          "bba": {
+            "Bid": {
+              "level": 2,
+              "strain": "Diamonds"
+            }
+          },
+          "ours": {
+            "Bid": {
+              "level": 4,
+              "strain": "Clubs"
+            }
+          },
+          "bba_rest": "2♦ Pass 2NT Pass 4♣ Pass 4NT Pass 5♦ Pass 5♠ Pass Pass Pass",
+          "bba_alert": "Strength Lawrence structure | 12 to 29 total points, 0 to 6 cards in clubs, 4 to 13 cards in diamonds, 0 to 13 cards in hearts, 0 to 4 cards in spades."
+        }
+      ]
+    }
+  ],
+  "out_dir": ".rbb-cache/grids/range-resp1S"
+}

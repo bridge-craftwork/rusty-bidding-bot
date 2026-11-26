@@ -1,0 +1,200 @@
+{"id": "reb1D1S-001", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-002", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-003", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-004", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-005", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-006", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-007", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-008", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-009", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-010", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-011", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-012", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-013", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-014", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-015", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-016", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-017", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-018", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-019", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-020", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-021", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-022", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-023", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-024", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-025", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-026", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-027", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-028", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-029", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-030", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-031", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-032", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-033", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-034", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-035", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-036", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-037", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-038", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-039", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-040", "call": "2S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-041", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-042", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-043", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-044", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-045", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-046", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-047", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-048", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-049", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-050", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-051", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-052", "call": "3S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "not balanced and S >= 4 and S_points >= 15 and hcp<= 17", "alert": true}
+{"id": "reb1D1S-053", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-054", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-055", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-056", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-057", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-058", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-059", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-060", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-061", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-062", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-063", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-064", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-065", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-066", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-067", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-068", "call": "4S", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "S >= 4 and hcp>= 18", "alert": true}
+{"id": "reb1D1S-069", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-070", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-071", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-072", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-073", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-074", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-075", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-076", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-077", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-078", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-079", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-080", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-081", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-082", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-083", "call": "5D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 8 and hcp<= 14", "alert": true}
+{"id": "reb1D1S-084", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-085", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-086", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-087", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-088", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-089", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-090", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-091", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-092", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-093", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-094", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-095", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-096", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-097", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-098", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-099", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-100", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-101", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-102", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-103", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-104", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-105", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-106", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-107", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-108", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-109", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-110", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-111", "call": "3D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "(D >= 6 and totalpoints >= 17 and hcp >= 14) | (D >= 6 and hcp>= 17)", "alert": true}
+{"id": "reb1D1S-112", "call": "3NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(solid('D') and hcp >= 15 and S <= 1 and singlesuited) | (semisolid('D') and hcp >= 17 and S <= 2 and singlesuited)", "alert": true}
+{"id": "reb1D1S-113", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-114", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-115", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-116", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-117", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-118", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-119", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-120", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-121", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-122", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-123", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-124", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-125", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-126", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-127", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-128", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-129", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-130", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-131", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-132", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-133", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-134", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-135", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-136", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-137", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-138", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-139", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-140", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-141", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-142", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-143", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-144", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-145", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-146", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-147", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-148", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-149", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-150", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-151", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-152", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-153", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-154", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-155", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-156", "call": "3C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "(C >= 4 and hcp>= 17 and D>= 5) | (C >= 5 and losers <= 4 and D >= 5 and hcp >= 15)", "alert": true}
+{"id": "reb1D1S-157", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-158", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-159", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-160", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-161", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-162", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-163", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-164", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-165", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-166", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-167", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-168", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-169", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-170", "call": "1NT", "ruleSet": "Responses to 1V-PX-1W-PX", "requires": "(hcp <= 14 and balanced) | (hcp <= 14 and semibalanced and S <= 3)", "alert": true}
+{"id": "reb1D1S-171", "call": "2C", "ruleSet": "Responses to 1D-PX-1Ma-PX", "requires": "C >= 4 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-172", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-173", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-174", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-175", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-176", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-177", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-178", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-179", "call": "2D", "ruleSet": "Responses to 1Mi-PX-1Ma-PX", "requires": "D >= 5 and hcp<= 16", "alert": true}
+{"id": "reb1D1S-180", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-181", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-182", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-183", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-184", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-185", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-186", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-187", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-188", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-189", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-190", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-191", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-192", "call": "2NT", "ruleSet": "Responses to 1V-PX-1W-PX | Responses to 1Mi-PX-1Ma-PX", "requires": "(hcp >= 18 and hcp<= 19 and (balanced or semibalanced) and S <= 3) | ((balanced or semibalanced) and hcp>= 18 and S < 4 and hcp <= 19)", "alert": true}
+{"id": "reb1D1S-193", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-194", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-195", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-196", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-197", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-198", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-199", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
+{"id": "reb1D1S-200", "call": "2H", "ruleSet": "Responses to 1Mi-PX-1S-PX", "requires": "(not balanced and H >= 4 and hcp>= 17 and S <= 3) | (H >= 4 and totalpoints >= 18 and S <= 3)", "alert": true}
