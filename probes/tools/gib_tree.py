@@ -6,7 +6,7 @@
     probes/tools/gib_tree.py prefixes --compare ALL.json [--top 2000] [--tag NAME]
     probes/tools/gib_tree.py fetch    [--tag NAME] [--max N]
     probes/tools/gib_tree.py report   [--tag NAME] [--card 21GF-GIB] [--rules DIR]
-    probes/tools/gib_tree.py agreed   [--tag NAME] [--card 21GF-GIB] [--rules DIR] [--fresh]
+    probes/tools/gib_tree.py agreed   [--tag NAME] [--card 21GF-GIB] [--rules DIR] [--set F=V] [--fresh]
     probes/tools/gib_tree.py run      --compare ALL.json [--top 2000]   # prefixes, fetch, report
 
 BBO's GIB robot publishes what each call means in its system: for an
@@ -264,6 +264,8 @@ def explain(args, calls):
     cmd = [args.rbb, "explain-auction", "-a", a, "-d", "N", "-c", resolve_card(args.card), "--json"]
     if args.rules:
         cmd += ["--rules", args.rules]
+    for kv in getattr(args, "set", None) or []:
+        cmd += ["--set", kv]
     p = subprocess.run(cmd, capture_output=True, text=True)
     if p.returncode != 0:
         return None
@@ -1152,6 +1154,8 @@ def main():
     ap.add_argument("--interval", type=float, default=1.0, help="seconds between requests (>= 1)")
     ap.add_argument("--card", default="21GF-GIB", help="a stock card's name or a path")
     ap.add_argument("--rules", help="rules for our readings (default: compiled in)")
+    ap.add_argument("--set", action="append", default=[], metavar="PATH=VALUE",
+                    help="a card field for our readings (repeatable), e.g. general.style=gib")
     ap.add_argument("--rbb", default=str(ROOT / "target/release/rbb"))
     ap.add_argument("--tol", type=int, default=2)
     ap.add_argument("--jobs", type=int, default=6)
