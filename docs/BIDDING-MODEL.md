@@ -726,15 +726,25 @@ entered with slam values and an uncontrolled side suit). Not tracked yet:
 Lower-level items found by the GIB comparison and the bottom review, so
 they are not forgotten. Highest first; "par" means settle by par tests.
 
-1. Fourth seat after their 1M–P–1NT: no overcall or double rule existed.
-   (In progress 2026-11-26, pack branch `fourth-seat`.)
+1. Fourth seat after their 1x–P–1NT: no overcall or double rule existed.
+   Done 2026-11-26 (merged into `bottom-review`): two-level overcalls (six
+   cards, or five with 16-18), weak jumps, takeout double with shortness,
+   Michaels 12-17, advances. Kept tighter than GIB and the books: the
+   light versions lost 407 IMPs on the acting side's contract errors in
+   100k random deals; the tight ones gain 27. Still open: the opening
+   side's answers to these calls.
 2. Balancing in the pass-out seat over their fit, and the borrowed king
    in balancing ranges and advances (3.8). (In progress, `balancing-fit`.)
 3. `general.style=gib`: third-seat four-card majors, weak twos with a
-   four-card side suit, the power double's strength (3.9). Help-suit try
-   choice (4.4). (In progress, `gib-style`.)
+   four-card side suit (3.9). Help-suit try choice (4.4). Done 2026-11-26
+   (merged): the style's item list is the pack's `settings/styles.md`.
+   GIB's power-double suit is 18+, like ours.
 4. Range probe across BBA, Brill, WBridge5 and GIB, starting with
-   responder's 1NT after 1x–P (3.3). (In progress, `range-probe`.)
+   responder's 1NT after 1x–P (3.3). First round done 2026-11-26
+   (`probes/range-probe/REPORT.md` on branch `range-probe`): three of our
+   choices sit below every robot's floor (invitational jump shift from 7
+   HCP, 3NT response from 11, game-forcing 2♣ with three trumps on 10-11),
+   all from length counted into points.
 5. Par: Drury opener's 4♠ from 14 or 15.
 6. Par: opener's 4♥ over the cue-bid raise after 1♥–1♠–2♠, 15-17 or 14+.
 7. Par: the long-hand thresholds moved to GIB's numbers in 71ad51d.
