@@ -513,6 +513,30 @@ how well we track GIB. Built as `gib_tree.py coverage` and
 The reports are in `.rbb-cache/gib-tree/` (main checkout):
 `coverage-random100k.json` and `agreed-random100k-top5000.md` / `.json`.
 
+### 4.3 How the lower levels are fixed (Rick, 2026-11-25)
+
+- **Order:** settle the lower levels first, then rebalance the higher
+  bidding once. Nothing merges to a release until both are done: the
+  engine work stays on `freak-patterns` (PR #103 held), the pack work on
+  `bottom-review`.
+- **Judged by GIB, not IMPs:** a lower-level change can't be judged on
+  IMPs before the higher levels are tuned to it. Checking IMPs is fine,
+  but expect them to be bad. The work is the GIB comparison: find the
+  limits we missed entirely and the ranges very different from GIB's,
+  and fix them whatever the IMP cost. The higher-level tuning should
+  recover that cost and more.
+- **Drury:** adopt GIB's continuation after opener's 3M rebid (the
+  slam try): 4M 10-12 total, 3NT 3-4 trumps and 9-11 HCP, cue bids an
+  ace and 11-12, 4NT Blackwood with 12. Two-way Reverse Drury (2♣ exactly
+  three trumps, 2♦ four or more) is already a treatment
+  (`drury:two_d`), useful when a third-seat opener may hold four.
+- **More GIB positions** may be fetched slowly by an agent if more
+  coverage is wanted.
+- **GIB's version:** the `gibrest` tree is an older GIB; BBO's robots
+  run a newer one. Our browser extension can capture robot auctions
+  played by the new version, which will matter later, e.g. to capture
+  Precision auctions, now available online.
+
 ## 5. Controls
 
 **Decided (Rick, 2026-11-24):**
