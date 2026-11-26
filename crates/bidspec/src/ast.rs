@@ -290,6 +290,12 @@ pub struct Rule {
     pub priority: Option<i64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub replaces: Option<String>,
+    /// `converts X`: this call converts the caller's last double (or
+    /// redouble) into another kind: partner forgets what it was read as
+    /// and reads the hand by this call (a takeout double, then the
+    /// doubler's own suit or notrump: a power double).
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub converts: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
     /// The call does not name a place to play (a transfer, an ask, an

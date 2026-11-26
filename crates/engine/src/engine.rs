@@ -914,13 +914,28 @@ impl Engine {
                         .map(|s| ctx.resolve(s, &mut c.b.clone()))
                 })
                 .collect();
+            // `converts X`: the caller's last double is read again without
+            // its meaning (a power double after a takeout double); what it
+            // denied stays, and this call says what the hand is.
+            if let Some(conv) = &entry.rule.converts {
+                let now = pos.calls.len();
+                let earlier = (1..=now / 4).map(|n| now - 4 * n).find(|&i| {
+                    matches!(
+                        (conv.as_str(), &pos.calls[i]),
+                        ("X", Call::Double) | ("XX", Call::Redouble)
+                    )
+                });
+                if let Some(again) = earlier.and_then(|i| k.without_meaning_of(i)) {
+                    k = again;
+                }
+            }
             if meanings.len() == matching.len() && !meanings.is_empty() {
                 let meaning = if meanings.len() == 1 {
                     meanings.into_iter().next().unwrap()
                 } else {
                     Expr::Or { any: meanings }
                 };
-                if !k.add(meaning) {
+                if !k.add_meaning(meaning, pos.calls.len()) {
                     warnings.push(format!("{call} contradicts what {caller:?} showed before"));
                 }
             }

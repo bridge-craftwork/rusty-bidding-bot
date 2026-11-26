@@ -304,10 +304,20 @@ A context can combine both: `after 1N (P) when !passed_hand`.
     prefer   <expression>     # score used when ranking (section 7)
     priority <n>
     replaces <module>[.<rule-id>]
+    converts X | XX           # this call converts my last double (redouble): partner
+                              # forgets what it showed and reads the hand by this call
     artificial                # not a place to play: passing it out is a mistake; on a pass, a
                               # pass with a conventional meaning (DOPI), allowed in a force
     as       <rule-id>
 ```
+
+`converts X` (engine 0.20.0): the caller's last double is converted
+into another kind by this call, so partner reads the hand by this call
+alone. A takeout double followed by the doubler's own suit or notrump is
+a power double (Rick, 2026-11-25): it no longer promises the takeout
+double's shape, and shows what an overcall of that suit (or notrump)
+would, with more strength. The double's meaning is dropped from what the
+seat has shown; what it denied (the calls it did not make) stays.
 
 Short clauses can go on the rule's own line:
 
@@ -627,7 +637,8 @@ These are enforced by `bidspec`, with file:line:column errors:
   neither may stand anywhere else.
 - `shows`, `when` and `denies` may be repeated, on the rule line or on
   continuation lines; the repeats are combined with AND. `prefer`,
-  `priority`, `replaces`, `as` and `alert`/`announce` may appear once.
+  `priority`, `replaces`, `converts`, `as` and `alert`/`announce` may
+  appear once.
 - A `skill` path is lower-case letters, digits and `_` on both sides of
   one `/` (`precision/1c_opener`); `/` appears nowhere else in the
   language. `rbb bid check` warns about a path that the rules'

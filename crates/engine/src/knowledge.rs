@@ -146,6 +146,11 @@ pub struct SeatKnowledge {
     pub shown: Vec<String>,
     #[serde(skip)]
     pub constraints: Vec<Expr>,
+    /// Which constraints are the meaning of which call (the index of the
+    /// call in the auction, the index into `constraints`), so a later call
+    /// can convert an earlier one (`converts`, `without_meaning_of`).
+    #[serde(skip)]
+    pub meanings: Vec<(usize, usize)>,
 }
 
 impl Default for SeatKnowledge {
@@ -168,6 +173,7 @@ impl SeatKnowledge {
             valuation,
             shown: Vec::new(),
             constraints: Vec::new(),
+            meanings: Vec::new(),
         }
     }
 }
@@ -309,6 +315,48 @@ impl SeatKnowledge {
             }
             None => false,
         }
+    }
+
+    /// `add(e)` for the meaning of the call at `call` (its index in the
+    /// auction), remembered as that call's so a later call may convert it.
+    pub fn add_meaning(&mut self, e: Expr, call: usize) -> bool {
+        let at = self.constraints.len();
+        let ok = self.add(e);
+        if ok {
+            self.meanings.push((call, at));
+        }
+        ok
+    }
+
+    /// The seat read again without the meaning of the call at `call`: what
+    /// a later call that converts it leaves (a takeout double, then the
+    /// doubler's own suit or notrump: a power double, read by the second
+    /// call alone; Rick 2026-11-25, docs/BIDDING-MODEL.md 3.6). What the
+    /// call denied, and everything else the seat showed, stays. `None`
+    /// when that call recorded no meaning.
+    pub fn without_meaning_of(&self, call: usize) -> Option<SeatKnowledge> {
+        let drop: Vec<usize> = self
+            .meanings
+            .iter()
+            .filter(|(c, _)| *c == call)
+            .map(|(_, i)| *i)
+            .collect();
+        if drop.is_empty() {
+            return None;
+        }
+        let mut k = SeatKnowledge::with_valuation(self.valuation);
+        for (i, c) in self.constraints.iter().enumerate() {
+            if drop.contains(&i) {
+                continue;
+            }
+            let at = k.constraints.len();
+            if k.add(c.clone()) {
+                if let Some((call, _)) = self.meanings.iter().find(|(_, j)| *j == i) {
+                    k.meanings.push((*call, at));
+                }
+            }
+        }
+        Some(k)
     }
 
     /// The ranges `add(e)` leaves, or `None` if `e` contradicts them.
@@ -1483,6 +1531,22 @@ mod tests {
         k.add(expr("shape 5-5-x-x"));
         assert_eq!(k.len[0], Range::new(0, 5));
         assert!(!k.add(expr("S>=6")));
+    }
+
+    #[test]
+    fn a_converted_call_is_read_again_without_its_meaning() {
+        // A takeout double of 1D (three or four spades, 12+), a denial, then
+        // the doubler's five spades: the double's shape goes, the rest stays.
+        let mut k = SeatKnowledge::default();
+        assert!(k.add_meaning(expr("S>=3, S<=4, H>=3, hcp>=12"), 1));
+        assert!(k.add(expr("!(S>=5, hcp<=16)")));
+        assert!(!k.add_meaning(expr("S>=5, hcp>=17"), 5));
+        let mut k = k.without_meaning_of(1).unwrap();
+        assert!(k.add_meaning(expr("S>=5, hcp>=17"), 5));
+        assert_eq!(k.len[3].lo, 5);
+        assert_eq!(k.len[2].lo, 0);
+        assert!(k.without_meaning_of(1).is_none());
+        assert!(k.without_meaning_of(5).is_some());
     }
 
     #[test]

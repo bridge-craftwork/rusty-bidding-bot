@@ -352,6 +352,24 @@ hand that bids within the licence does not widen what partner reads.
 Our 1NT rules show `balanced` or 5-4-2-2 with honours in the short
 suits, and partner reads 2-5 each (4.1, "Built").
 
+**Third and fourth seat (Rick, 2026-11-25).** It is normally accepted
+that a third- or fourth-seat 1♥/1♠ may be a four-card suit even when the
+card says 1M promises five. So the light four-card opening there stays,
+whatever `major_openings.min_length_3rd_4th` says; GIB's 5+ is a
+different treatment, not a gap.
+
+**The power double (Rick, 2026-11-25).** A double is read as takeout
+(the unbid suits, 12+). If the doubler then shows a suit of his own, or
+bids notrump, it converts to a power double: it no longer promises the
+takeout double's shape or strength, and shows what an overcall of that
+suit (or a 1NT overcall) would, with more strength: normally 18+ for a
+suit (GIB may say 17+), and 19-21 for notrump, since a 1NT overcall is
+15-18. Built as the rule clause `converts X` (docs/LANGUAGE.md section
+5): the doubler's suit and notrump rebids carry it, and the engine reads
+the seat again without the double's meaning (what the double denied
+stays). After 1♦ X P 1♥ P 1♠ the doubler reads ♠5+, 18+ declarer points,
+no heart length; after 1♦ X P 1♥ P 1NT, 19-21 balanced.
+
 ### 3.7 What "total points" means in the GIB comparison
 
 GIB states HCP and total points: HCP plus length for the long hand,

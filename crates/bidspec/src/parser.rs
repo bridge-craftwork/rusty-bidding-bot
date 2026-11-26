@@ -14,6 +14,7 @@ const CLAUSES: &[&str] = &[
     "prefer",
     "priority",
     "replaces",
+    "converts",
     "as",
     "alert",
     "announce",
@@ -767,6 +768,7 @@ impl<'a> Parser<'a> {
             prefer: None,
             priority: None,
             replaces: None,
+            converts: None,
             id: None,
             artificial: false,
             line: l.no,
@@ -781,7 +783,7 @@ impl<'a> Parser<'a> {
                 self.error(
                     child.line,
                     Some(0),
-                    "expected a clause (shows, when, sets, denies, prefer, priority, replaces, as); \
+                    "expected a clause (shows, when, sets, denies, prefer, priority, replaces, converts, as); \
                      a rule cannot contain another rule",
                 );
                 continue;
@@ -878,6 +880,16 @@ impl<'a> Parser<'a> {
                     return dup("replaces");
                 }
                 rule.replaces = Some(raw()?);
+            }
+            "converts" => {
+                if rule.converts.is_some() {
+                    return dup("converts");
+                }
+                let name = raw()?;
+                if !matches!(name.as_str(), "X" | "XX") {
+                    return Err((kw.end, "expected `X` or `XX` after `converts`".into()));
+                }
+                rule.converts = Some(name);
             }
             "as" => {
                 if rule.id.is_some() {
