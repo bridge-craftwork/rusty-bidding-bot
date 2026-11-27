@@ -120,3 +120,12 @@ seat = "af99d0e"
 what = "Reads the opponents' meanings (#6), WBF alerts, explanations for robots"
 evidence = "droplet: container rusty-seat-service-1 created 2026-11-21 00:03 UTC from :main built 00:02 UTC (checked 2026-11-27); #6-#8 merged 2026-11-20 13:19-15:56 PST"
 confidence = "stated"
+
+[[deployment]]
+date = "2026-11-28"
+kind = "play"
+label = "BEN 0.9.0.5"
+ben = "0.9.0.5"
+what = "BEN 0.8.8.7 -> 0.9.0.5 (new play and lead models, bridge-solver DD, scoring read per request), systems.conf cut to 21GF-GIB for memory"
+evidence = "switched 2026-11-27 19:21 UTC (deploy.sh ben; /opt/bridge-craftwork/deploy.log), after that day's dailies; bridge-craftwork-platform #35"
+confidence = "stated"
