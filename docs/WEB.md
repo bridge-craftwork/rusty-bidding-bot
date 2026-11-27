@@ -178,7 +178,7 @@ measurement run, from the repository root:
 probes/tools/self_ab.py --batch probes/self-ab.toml                 # .rbb-cache/self-ab
 probes/tools/conv_ab.py                                             # .rbb-cache/conv-ab (bba-cli twice per scenario)
 probes/tools/status_data.py --compare /tmp/all.json                 # web/status/status.json
-probes/tools/brill_fetch.py && probes/tools/brill_dd_data.py        # web/brill/brill-dd.json (the Brill dashboard)
+probes/tools/brill_fetch.py && probes/tools/brill_deployments.py && probes/tools/brill_dd_data.py  # the Brill dashboard
 ```
 
 and commit `web/status/status.json`. `status_data.py` reads the
@@ -209,9 +209,17 @@ dummy). A table gives each period's means with counts and the standard
 error. Data: `brill/brill-dd.json`, written by
 `probes/tools/brill_dd_data.py` from the daily mails
 (`.rbb-cache/brill/<day>/mail.txt`, fetched by `brill_fetch.py`) and the
-curated deployments in `probes/brill-deployments.toml` (add one with every
-rusty-seat-service or BEN deployment). After `brill_fetch.py`, run
-`brill_dd_data.py` and commit the JSON. `node web/scripts/test.mjs` checks
+deployments in `probes/brill-deployments.toml`. Each entry names the
+versions it puts in force (`rbb`, `seat`, `card`; `ben`), which
+`brill_dd_data.py` carries forward as `in_force`, so the period and
+deployment tables and the hover name the Rusty and the BEN in force;
+markers of one day sit side by side. The entries up to 2026-11-21 are
+hand-kept from tags and notes; from the deploy of rusty-seat-service's
+`/deployments` on, `probes/tools/brill_deployments.py` appends them from
+the service's own history (`ssh bridge-droplet`, the dashboard key read
+on the droplet; `--from-json`, `--dry-run`), confidence "recorded". After
+`brill_fetch.py`, run `brill_deployments.py` and `brill_dd_data.py` and
+commit the TOML and the JSON. `node web/scripts/test.mjs` checks
 that it parses and the pages link to it.
 
 ## Auction explorer

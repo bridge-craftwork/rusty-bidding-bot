@@ -28,6 +28,23 @@ function fmt(v, scoring, signed = scoring === 'IMP') {
 }
 const fmtDelta = (v) => (v == null ? '–' : (v > 0 ? '+' : '') + v.toFixed(1))
 
+// The versions in force on `date` (each deployment's `in_force`, from
+// brill_dd_data.py: Rusty's rbb, seat and card, and BEN's version).
+function inForce(data, date) {
+  let now = {}
+  for (const d of data.deployments) if (d.date <= date) now = d.in_force || now
+  return now
+}
+const rustyName = (v) => (v.rbb ? `rbb ${v.rbb}` : 'rbb ?') + (v.seat ? ` · seat ${v.seat}` : '') + (v.card ? ` · ${v.card}` : '')
+const benName = (v) => (v.ben ? `BEN ${v.ben}` : 'BEN ?')
+// The BEN versions in force over [start, end): the one at the start and any
+// BEN change inside.
+function bensOver(data, start, end) {
+  const out = [inForce(data, start).ben]
+  for (const d of data.deployments) if (d.kind === 'play' && d.date > start && d.date < end) out.push(d.ben || d.in_force?.ben)
+  return [...new Set(out.filter(Boolean))]
+}
+
 // The sessions of one scoring type, one point per day (the mean of the
 // day's chosen events).
 function daily(data, scoring) {
@@ -81,7 +98,7 @@ function draw(box, data, scoring, kind, range, ps) {
   if (!days.length) { box.textContent = 'No sessions.'; return }
   const W = Math.max(320, box.clientWidth || 800)
   const H = kind === 'score' ? (W < 560 ? 240 : 300) : 130
-  const m = { l: 40, r: 12, t: kind === 'score' ? 34 : 8, b: 22 }
+  const m = { l: 40, r: 12, t: kind === 'score' ? 46 : 8, b: 22 }
   const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img',
     'aria-label': `${scoring} ${kind === 'score' ? 'double-dummy and actual scores' : 'cardplay contribution'} by day` }, box)
   const x0 = t(range[0]) - DAY / 2, x1 = t(range[1]) + DAY / 2
@@ -112,17 +129,27 @@ function draw(box, data, scoring, kind, range, ps) {
     tx.textContent = iso.slice(5)
   }
 
-  // Deployments.
-  data.deployments.forEach((dep, i) => {
+  // Deployments. Markers of one day sit side by side (a BEN change and a
+  // bidding change on the same day both show); labels take the first of
+  // three rows with room.
+  const rowEnd = [-Infinity, -Infinity, -Infinity]
+  const sameDay = new Map()
+  for (const dep of data.deployments) {
+    const k = sameDay.get(dep.date) ?? 0
+    sameDay.set(dep.date, k + 1)
     const gx = el('g', { class: 'deploy ' + dep.kind }, svg)
-    const x = X(dep.date) - (W - m.l - m.r) / ((x1 - x0) / DAY) / 2
+    const x = X(dep.date) - (W - m.l - m.r) / ((x1 - x0) / DAY) / 2 + k * 4
     el('line', { x1: x, x2: x, y1: m.t - (kind === 'score' ? 4 : 0), y2: H - m.b }, gx)
     // Labels need room; on a narrow screen the hover names the deployment.
     if (kind === 'score' && W >= 700) {
-      const lab = el('text', { x: x + 3, y: m.t - 6 - (i % 2) * 12 }, gx)
-      lab.textContent = dep.kind === 'play' ? dep.label : dep.label.replace(/^seat v[\d.]+\+? \/ /, '')
+      const text = dep.kind === 'play' ? dep.label : dep.label.replace(/^seat v[\d.]+\+? \/ /, '')
+      const row = rowEnd.findIndex((end) => x + 3 > end + 6)
+      if (row < 0) continue
+      const lab = el('text', { x: x + 3, y: m.t - 6 - row * 12 }, gx)
+      lab.textContent = text
+      rowEnd[row] = x + 3 + text.length * 5.6
     }
-  })
+  }
 
   if (kind === 'score') {
     // Period means (dashed steps).
@@ -170,7 +197,9 @@ function draw(box, data, scoring, kind, range, ps) {
     const p = ps.find((q) => d.date >= q.start && d.date < q.end)
     const deps = data.deployments.filter((x) => x.date === d.date)
     const name = (e) => data.events.find((x) => x.id === e)?.name ?? e
+    const v = inForce(data, d.date)
     tip.innerHTML = `<b>${d.date}</b> <span class="muted">${esc(p?.label ?? '')}</span><br>` +
+      `<span class="muted">${esc(rustyName(v))}; ${esc(benName(v))}</span><br>` +
       d.rows.map((r) => `${esc(name(r.event))}: <span class="sw" style="background:var(--series-dd)"></span>DD ${fmt(r.dd, scoring)} · ` +
         `<span class="sw" style="background:var(--series-actual)"></span>actual ${fmt(r.actual, scoring)} ` +
         `<span class="muted">(cardplay ${fmtDelta(r.cardplay)}; ${r.rank} of ${r.field}${r.dd_source === 'field' ? '; DD from the field PBN' : ''})</span>`).join('<br>') +
@@ -216,15 +245,17 @@ function summary(data, ps) {
 }
 
 function periodTable(data, ps) {
-  const head = `<tr><th>Period</th><th>From</th><th class="num">Days</th><th class="num">Sessions</th><th class="num">Double dummy</th>` +
+  const head = `<tr><th>Period</th><th>From</th><th>Rusty</th><th>BEN</th><th class="num">Days</th><th class="num">Sessions</th><th class="num">Double dummy</th>` +
     `<th class="num">± s.e.</th><th class="num">Δ DD</th><th class="num">Actual</th><th class="num">Cardplay</th></tr>`
   let html = ''
   for (const sc of ['IMP', 'MP']) {
-    html += `<tr class="group"><th colspan="9">${sc} events ${sc === 'IMP' ? '(IMPs per session)' : '(percent)'}</th></tr>` + head
+    html += `<tr class="group"><th colspan="11">${sc} events ${sc === 'IMP' ? '(IMPs per session)' : '(percent)'}</th></tr>` + head
     let prev = null
     for (const p of periodStats(data, sc, ps)) {
       if (!p.n) continue
-      html += `<tr><td>${esc(p.label)}</td><td>${p.start}</td><td class="num">${p.days}</td><td class="num">${p.n}</td>` +
+      html += `<tr><td>${esc(p.label)}</td><td>${p.start}</td>` +
+        `<td>${esc(rustyName(inForce(data, p.start)))}</td><td>${esc(bensOver(data, p.start, p.end).join(', ') || '?')}</td>` +
+        `<td class="num">${p.days}</td><td class="num">${p.n}</td>` +
         `<td class="num">${fmt(p.dd, sc)}</td><td class="num">${p.se == null ? '–' : p.se.toFixed(1)}</td>` +
         `<td class="num">${prev ? fmtDelta(p.dd - prev.dd) : ''}</td><td class="num">${fmt(p.actual, sc)}</td><td class="num">${fmtDelta(p.cardplay)}</td></tr>`
       prev = p
@@ -234,9 +265,11 @@ function periodTable(data, ps) {
 }
 
 function deployTable(data) {
-  $('deploys').innerHTML = `<tr><th>First day</th><th>Kind</th><th>Deployment</th><th>What changed</th><th>Date</th></tr>` +
+  $('deploys').innerHTML = `<tr><th>First day</th><th>Kind</th><th>Deployment</th><th>In force from that day</th><th>What changed</th><th>Date</th></tr>` +
     data.deployments.map((d) => `<tr><td>${d.date}</td><td>${d.kind === 'play' ? 'BEN (play)' : 'bidding'}</td><td>${esc(d.label)}</td>` +
-      `<td class="wrap">${esc(d.what)}<br><span class="hint">${esc(d.evidence)}</span></td><td>${esc(d.confidence)}</td></tr>`).join('')
+      `<td>${esc(rustyName(d.in_force || {}))}<br>${esc(benName(d.in_force || {}))}</td>` +
+      `<td class="wrap">${esc(d.what)}<br><span class="hint">${esc(d.evidence)}</span></td><td>${esc(d.confidence)}` +
+      `${d.started_at ? `<br><span class="hint">${esc(d.started_at)}</span>` : ''}</td></tr>`).join('')
 }
 
 function sessionTable(data) {

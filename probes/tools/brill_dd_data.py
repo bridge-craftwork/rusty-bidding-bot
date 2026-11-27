@@ -4,6 +4,9 @@
     probes/tools/brill_dd_data.py [--brill DIR] [--out web/brill/brill-dd.json]
                                   [--deployments probes/brill-deployments.toml] [-v]
 
+Deployments recorded by rusty-seat-service on the droplet are merged into
+the deployments file first by probes/tools/brill_deployments.py.
+
 Reads every .rbb-cache/brill/<day>/mail.txt (the daily results mails that
 probes/tools/brill_fetch.py saves) and writes web/brill/brill-dd.json, the
 data of web/brill.html. Run it after brill_fetch.py; it is idempotent (the
@@ -166,6 +169,24 @@ def boards_in_pbn(dirpath, eid, day):
     return n or None
 
 
+VERSION_KEYS = ("rbb", "seat", "card", "ben")
+
+
+def carry_versions(deployments):
+    """Give every deployment `in_force`: the rbb, seat, card and BEN versions
+    in force from its first day on (its own fields, the earlier entries' for
+    the rest), so the dashboard names both Rusty's and BEN's version for
+    every period. Entries of one day share the state at the end of that
+    day: a BEN change and a bidding change on the same day both count."""
+    now = {}
+    for day in sorted({d["date"] for d in deployments}):
+        same = [d for d in deployments if d["date"] == day]
+        for d in same:
+            now.update({k: d[k] for k in VERSION_KEYS if d.get(k)})
+        for d in same:
+            d["in_force"] = dict(now)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--brill", default=None, help="the days' folder (default: .rbb-cache/brill of the main checkout)")
@@ -213,7 +234,9 @@ def main():
     deployments = []
     if os.path.exists(args.deployments):
         with open(args.deployments, "rb") as f:
-            deployments = sorted(tomllib.load(f).get("deployment", []), key=lambda d: (d["date"], d["kind"]))
+            deployments = sorted(tomllib.load(f).get("deployment", []),
+                                 key=lambda d: (d["date"], d.get("started_at", ""), d["kind"]))
+    carry_versions(deployments)
 
     out = {
         "about": "Rusty in the Brill daily events: each session's actual score and the score of its contracts "

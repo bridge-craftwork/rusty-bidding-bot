@@ -344,10 +344,18 @@ await test('the Brill page: brill-dd.json parses, sessions and deployments are w
     assert.ok(r.dd === null || typeof r.dd === 'number')
     assert.ok(r.rank >= 1 && r.rank <= r.field, `${r.date} ${r.event}`)
   }
+  let benSeen = false
   for (const d of data.deployments) {
     assert.match(d.date, /^\d{4}-\d\d-\d\d$/)
     assert.ok(d.kind === 'bidding' || d.kind === 'play', d.kind)
     assert.ok(d.label && d.what)
+    // The versions in force: BEN's from the first BEN entry on, Rusty's on
+    // every bidding entry (the deployment and period tables name both).
+    assert.equal(typeof d.in_force, 'object', `${d.date} ${d.label}: in_force`)
+    if (d.kind === 'play') { assert.ok(d.ben, `${d.date} ${d.label}: ben`); benSeen = true }
+    if (d.kind === 'bidding') assert.ok(d.in_force.rbb, `${d.date} ${d.label}: in_force.rbb`)
+    if (benSeen) assert.ok(d.in_force.ben, `${d.date} ${d.label}: in_force.ben`)
+    if (d.confidence === 'recorded') assert.ok(d.started_at && Number.isInteger(d.recorded_id), d.label)
   }
   const html = await readFile(path.join(dist, 'brill.html'), 'utf8')
   assert.match(html, /src="brill\/brill\.js"/)

@@ -28,73 +28,146 @@
    "date": "2026-10-08",
    "kind": "play",
    "label": "BEN 0.8.7.7",
+   "ben": "0.8.7.7",
+   "rbb": "v0.5.0",
+   "card": "21GF-GIB",
    "what": "BEN 0.8.7.7 at the start (OOM-killed three times that day)",
    "evidence": "rusty-seat-service CLAUDE.md, 'BEN memory incident (2026-10-08)'; image ghcr.io/lorserker/ben-play:0.8.7.7 still on the droplet",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.5.0",
+    "card": "21GF-GIB",
+    "ben": "0.8.7.7"
+   }
   },
   {
    "date": "2026-10-09",
    "kind": "bidding",
    "label": "seat v0.1.0 / rbb v0.5.0",
+   "rbb": "v0.5.0",
+   "seat": "v0.1.0",
+   "card": "21GF-GIB",
    "what": "A pass no rule chose is explained as Pass, not 'No rule applies'",
    "evidence": "tag v0.1.0: 'as deployed 2026-10-09 (rbb v0.5.0)'",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.5.0",
+    "card": "21GF-GIB",
+    "ben": "0.8.8.7",
+    "seat": "v0.1.0"
+   }
   },
   {
    "date": "2026-10-09",
    "kind": "play",
    "label": "BEN 0.8.8.7",
+   "ben": "0.8.8.7",
    "what": "BEN 0.8.7.7 -> 0.8.8.7 with memory limits, after three OOM kills",
    "evidence": "droplet: container bridge-craftwork-ben-1 created 2026-10-09 00:39 UTC from ben-play:0.8.8.7 and up since (checked 2026-11-27); platform #30 (43bc2ad)",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.5.0",
+    "card": "21GF-GIB",
+    "ben": "0.8.8.7",
+    "seat": "v0.1.0"
+   }
   },
   {
    "date": "2026-10-13",
    "kind": "bidding",
    "label": "rbb v0.7.0",
+   "rbb": "v0.7.0",
+   "seat": "37e324b",
    "what": "Never pass out our own artificial bid; Michaels 2NT asks for the minor",
    "evidence": "rusty-seat-service 37e324b, 2026-10-13 07:50 PDT; tag v0.1.0 made then as its rollback point",
-   "confidence": "inferred"
+   "confidence": "inferred",
+   "in_force": {
+    "rbb": "v0.7.0",
+    "card": "21GF-GIB",
+    "ben": "0.8.8.7",
+    "seat": "37e324b"
+   }
   },
   {
    "date": "2026-10-16",
    "kind": "bidding",
    "label": "rbb v0.9.0 / Brill card",
+   "rbb": "v0.9.0",
+   "seat": "fa7228a",
+   "card": "Brill",
    "what": "Plays the Brill card (21GF-GIB plus what Brill plays) instead of 21GF-GIB",
    "evidence": "rusty-seat-service fa7228a and platform 84dfe26 (2026-10-15 22:34 PDT); its CLAUDE.md '2026-10-16: plays the Brill card'",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.9.0",
+    "card": "Brill",
+    "ben": "0.8.8.7",
+    "seat": "fa7228a"
+   }
   },
   {
    "date": "2026-10-21",
    "kind": "bidding",
    "label": "seat v0.2.0+ / rbb v0.10.0",
+   "rbb": "v0.10.0",
+   "seat": "0aefaf9",
    "what": "2/1 rebid styles (Bergen), major rebids read six, overcalls over their raise",
    "evidence": "rusty-seat-service 0aefaf9, 2026-10-21 07:37 PDT; tag v0.2.0 made a minute before as its rollback point",
-   "confidence": "inferred"
+   "confidence": "inferred",
+   "in_force": {
+    "rbb": "v0.10.0",
+    "card": "Brill",
+    "ben": "0.8.8.7",
+    "seat": "0aefaf9"
+   }
   },
   {
    "date": "2026-10-30",
    "kind": "bidding",
    "label": "seat v0.3.0 / rbb v0.13.0",
+   "rbb": "v0.13.0",
+   "seat": "v0.3.0",
    "what": "Explanations from rbb_engine::explain (rbb v0.11.2), then card schema 2.0 (rbb v0.13.0, convention-card v0.27.1)",
    "evidence": "tag v0.3.0: 'rbb v0.13.0 ... live 2026-10-30 to 2026-11-10'; #4 merged 2026-10-30 14:37 PDT; v0.11.2 (#3) merged 2026-10-29 13:38 PDT, its own deploy not recorded",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.13.0",
+    "card": "Brill",
+    "ben": "0.8.8.7",
+    "seat": "v0.3.0"
+   }
   },
   {
    "date": "2026-11-10",
    "kind": "bidding",
    "label": "seat v0.4.0 / rbb v0.15.3",
+   "rbb": "v0.15.3",
+   "seat": "v0.4.0",
    "what": "rbb v0.15.3 and convention-card v0.44.0",
    "evidence": "tag v0.4.0: 'rbb v0.15.3 ... live 2026-11-10 to 2026-11-20'; #5 merged 2026-11-10 05:36 PST",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.15.3",
+    "card": "Brill",
+    "ben": "0.8.8.7",
+    "seat": "v0.4.0"
+   }
   },
   {
    "date": "2026-11-21",
    "kind": "bidding",
    "label": "rbb v0.19.0",
+   "rbb": "v0.19.0",
+   "seat": "af99d0e",
    "what": "Reads the opponents' meanings (#6), WBF alerts, explanations for robots",
    "evidence": "droplet: container rusty-seat-service-1 created 2026-11-21 00:03 UTC from :main built 00:02 UTC (checked 2026-11-27); #6-#8 merged 2026-11-20 13:19-15:56 PST",
-   "confidence": "stated"
+   "confidence": "stated",
+   "in_force": {
+    "rbb": "v0.19.0",
+    "card": "Brill",
+    "ben": "0.8.8.7",
+    "seat": "af99d0e"
+   }
   }
  ],
  "rows": [

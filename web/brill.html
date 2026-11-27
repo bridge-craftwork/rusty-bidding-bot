@@ -80,15 +80,17 @@
   <section class="panel" aria-labelledby="h-periods">
     <h2 id="h-periods">By deployment period</h2>
     <p class="hint">Mean per session between one deployment of the bidding engine and the next (± one standard
-      error of the double-dummy mean). Changes of BEN, the card player, are marked on the charts but do not split
-      a period.</p>
+      error of the double-dummy mean), with the Rusty and the BEN in force. Changes of BEN, the card player, are
+      marked on the charts but do not split a period; a period that saw one lists both BEN versions.</p>
     <div class="scroll"><table class="periods" id="periods"></table></div>
   </section>
 
   <section class="panel" aria-labelledby="h-deploys">
     <h2 id="h-deploys">Deployments</h2>
     <p class="hint">From rusty-seat-service's tags and history and the platform's compose file
-      (<code>probes/brill-deployments.toml</code>); "inferred" dates come from a merge time, not a recorded deploy.</p>
+      (<code>probes/brill-deployments.toml</code>); "inferred" dates come from a merge time, not a recorded deploy;
+      "recorded" ones from the seat service's own deployment history (<code>probes/tools/brill_deployments.py</code>),
+      with its start time in UTC.</p>
     <div class="scroll"><table class="deploys" id="deploys"></table></div>
   </section>
 
