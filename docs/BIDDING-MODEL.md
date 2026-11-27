@@ -761,7 +761,16 @@ they are not forgotten. Highest first; "par" means settle by par tests.
 10. Reopening double's notrump rebid range (19-21 for now).
 11. Scoring-dependent licence, e.g. 1♦–1♥–1♠–1NT, correct to 2♦ at IMPs
     (3.6).
-12. Higher levels, after all of the above: opener's passes after game,
+12. Done 2026-11-27 (merged): the doubler in the pass-out seat after
+    their new suit, (1x) X (1y/2y/3y) P (P) (Brill 2026-11-26 MP-strongest
+    board 1); `vs_to_double.jump_shift=weak` now read (off on every stock
+    card). The GIB comparison could not see this position: our own
+    responders never pass out a jump after a double.
+13. Engine: an opponent's announced natural meaning that leaves out the
+    rule's main promise should replace the rule's reading, not narrow it
+    (`engine/heard.rs`): Brill's weak 2♥ over a double is still read with
+    the fit-showing jump's four clubs.
+14. Higher levels, after all of the above: opener's passes after game,
     GIB's Drury continuation after 3M (4.3), slam thresholds, quantitative
     4NT, `serious-3nt.test`.
 
