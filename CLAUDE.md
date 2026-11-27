@@ -343,6 +343,8 @@ local checkouts").
   `probes/tools/brill_fetch.py [--report]` pulls new days into
   `.rbb-cache/brill/<day>/` through the script's token-protected web app
   (config `~/.config/rusty-bidding-bot/brill-drive.json`) and reports on them.
+  Then `probes/tools/brill_dd_data.py` (the mails' actual and double-dummy scores and
+  `probes/brill-deployments.toml` into `web/brill/brill-dd.json`, the dashboard `web/brill.html`); commit the JSON.
 - `probes/tools/brill_probe.py run [--top 2000]`: where our reading of
   auctions on 21GF-GIB differs from Brill's. The top N auctions of a
   compare JSON (`auctions`), Brill's `/explain` of each from Thorvald's

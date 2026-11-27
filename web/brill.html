@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rusty-bidding-bot: Brill dailies</title>
+<meta name="description" content="Rusty in the Brill daily events: each session's score with its contracts played double dummy (the bidding's quality) and as actually played, over time, with every deployment of the bidding engine marked.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/json" href="brill/brill-dd.json" title="Brill daily scores (JSON)">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="status/status.css">
+<link rel="stylesheet" href="brill/brill.css">
+</head>
+<body>
+<header class="top">
+  <h1><a href="./" class="home">rusty-bidding-bot</a> <span class="sub">Brill dailies</span></h1>
+  <p class="tagline">Rusty bids, BEN plays: the daily events' scores with the cards played double dummy (the bidding) and as played, deployment by deployment.</p>
+  <nav>
+    <a href="./">Bid a deal</a>
+    <a href="explorer.html">Auction explorer</a>
+    <a href="validate.html">Rule checker</a>
+    <a href="status.html">Status</a>
+    <a href="reference.txt">Reference</a>
+    <a href="brill/brill-dd.json">Data</a>
+    <a href="https://github.com/bridge-craftwork/rusty-bidding-bot">Source</a>
+  </nav>
+</header>
+
+<noscript>
+  <p class="panel wrapish">This page draws its charts with JavaScript. The same data is
+  <a href="brill/brill-dd.json">brill-dd.json</a>.</p>
+</noscript>
+
+<main class="status brill">
+  <section class="panel summary" aria-label="Summary" id="summary"></section>
+
+  <section class="panel" aria-label="Options">
+    <div class="tools">
+      <label class="narrow">Events
+        <select id="events">
+          <option value="both">both (the day's mean)</option>
+          <option value="normal">Daily IMP / Daily MP</option>
+          <option value="strongest">strongest hand only</option>
+        </select>
+      </label>
+      <label class="narrow">Rolling mean
+        <select id="window">
+          <option value="1">off</option>
+          <option value="5">5 days</option>
+          <option value="7" selected>7 days</option>
+          <option value="14">14 days</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="points" checked> Daily points</label>
+      <label class="check"><input type="checkbox" id="actual" checked> Actual score</label>
+    </div>
+    <p class="hint">The <b>double-dummy</b> score is the session scored with Rusty's contracts all played double dummy
+      (and everyone else's): what the bidding earned, whoever played the cards. The <b>actual</b> score is the
+      session as played (BEN plays Rusty's cards); the <b>cardplay</b> is the difference. IMP sessions are totals over
+      the session's 8 boards (0 = the field's average), MP sessions percentages (50% = average). A dashed step
+      is the mean over a deployment period.</p>
+  </section>
+
+  <section class="panel chart-panel" aria-labelledby="h-imp">
+    <h2 id="h-imp">IMP events <span class="unit">IMPs per session</span></h2>
+    <div class="legend-row" id="legend-imp"></div>
+    <div class="chart" id="chart-imp"></div>
+    <h3>Cardplay <span class="unit">actual minus double dummy</span></h3>
+    <div class="chart small" id="cardplay-imp"></div>
+  </section>
+
+  <section class="panel chart-panel" aria-labelledby="h-mp">
+    <h2 id="h-mp">MP events <span class="unit">percent</span></h2>
+    <div class="legend-row" id="legend-mp"></div>
+    <div class="chart" id="chart-mp"></div>
+    <h3>Cardplay <span class="unit">actual minus double dummy, points of percent</span></h3>
+    <div class="chart small" id="cardplay-mp"></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-periods">
+    <h2 id="h-periods">By deployment period</h2>
+    <p class="hint">Mean per session between one deployment of the bidding engine and the next (± one standard
+      error of the double-dummy mean). Changes of BEN, the card player, are marked on the charts but do not split
+      a period.</p>
+    <div class="scroll"><table class="periods" id="periods"></table></div>
+  </section>
+
+  <section class="panel" aria-labelledby="h-deploys">
+    <h2 id="h-deploys">Deployments</h2>
+    <p class="hint">From rusty-seat-service's tags and history and the platform's compose file
+      (<code>probes/brill-deployments.toml</code>); "inferred" dates come from a merge time, not a recorded deploy.</p>
+    <div class="scroll"><table class="deploys" id="deploys"></table></div>
+  </section>
+
+  <details class="panel">
+    <summary>Every session</summary>
+    <div class="scroll"><table class="sessions" id="sessions"></table></div>
+  </details>
+</main>
+
+<div class="tip" id="tip" role="status" hidden></div>
+
+<footer class="foot">
+  <p id="foot">Data: <a href="brill/brill-dd.json">brill-dd.json</a>, written by
+  <code>probes/tools/brill_dd_data.py</code> from the Brill daily results mails
+  (<code>probes/tools/brill_fetch.py</code>).</p>
+</footer>
+
+<script type="module" src="brill/brill.js"></script>
+</body>
+</html>

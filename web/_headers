@@ -31,6 +31,10 @@
   Cache-Control: public, max-age=0, must-revalidate
 /status/*
   Cache-Control: public, max-age=0, must-revalidate
+/brill.html
+  Cache-Control: public, max-age=0, must-revalidate
+/brill/*
+  Cache-Control: public, max-age=0, must-revalidate
 /explorer.html
   Cache-Control: public, max-age=0, must-revalidate
 /explorer/*
