@@ -6,7 +6,7 @@
 # `date` is the first daily played on the new version: the day of the
 # deploy when it went out in the Pacific morning, the next day when it
 # went out in the evening (the dailies' date is Danish). The droplet
-# keeps no deploy log and pulls `:main` by hand, so the dates come from
+# kept no deploy log before 2026-11-27 and pulls `:main` by hand, so the dates come from
 # the evidence named in `evidence`: rusty-seat-service's tag messages
 # ("live A to B"), its CLAUDE.md, the merge time of the pin, and
 # bridge-craftwork-platform's compose file. `confidence` is "stated"
@@ -19,10 +19,18 @@
 [[deployment]]
 date = "2026-10-08"
 kind = "play"
+label = "BEN 0.8.7.7"
+what = "BEN 0.8.7.7 at the start (OOM-killed three times that day)"
+evidence = "rusty-seat-service CLAUDE.md, 'BEN memory incident (2026-10-08)'; image ghcr.io/lorserker/ben-play:0.8.7.7 still on the droplet"
+confidence = "stated"
+
+[[deployment]]
+date = "2026-10-09"
+kind = "play"
 label = "BEN 0.8.8.7"
 what = "BEN 0.8.7.7 -> 0.8.8.7 with memory limits, after three OOM kills"
-evidence = "bridge-craftwork-platform #30 (43bc2ad, 2026-10-08); first daily the same day"
-confidence = "inferred"
+evidence = "droplet: container bridge-craftwork-ben-1 created 2026-10-09 00:39 UTC from ben-play:0.8.8.7 and up since (checked 2026-11-27); platform #30 (43bc2ad)"
+confidence = "stated"
 
 [[deployment]]
 date = "2026-10-09"
@@ -47,14 +55,6 @@ label = "rbb v0.9.0 / Brill card"
 what = "Plays the Brill card (21GF-GIB plus what Brill plays) instead of 21GF-GIB"
 evidence = "rusty-seat-service fa7228a and platform 84dfe26 (2026-10-15 22:34 PDT); its CLAUDE.md '2026-10-16: plays the Brill card'"
 confidence = "stated"
-
-[[deployment]]
-date = "2026-10-18"
-kind = "play"
-label = "BEN 0.8.8.8"
-what = "BEN 0.8.8.8: reads matchtype, no shared scoring setting between requests"
-evidence = "rusty-seat-service branch docs-ben-0.8.8.8 (6d183df, 2026-10-18), unmerged; the platform compose still says 0.8.8.7"
-confidence = "inferred"
 
 [[deployment]]
 date = "2026-10-21"
@@ -85,5 +85,5 @@ date = "2026-11-21"
 kind = "bidding"
 label = "rbb v0.19.0"
 what = "Reads the opponents' meanings (#6), WBF alerts, explanations for robots"
-evidence = "rusty-seat-service #6-#8 merged 2026-11-20 13:19-15:56 PST; tag v0.4.0 ends v0.15.3's run on 2026-11-20"
-confidence = "inferred"
+evidence = "droplet: container rusty-seat-service-1 created 2026-11-21 00:03 UTC from :main built 00:02 UTC (checked 2026-11-27); #6-#8 merged 2026-11-20 13:19-15:56 PST"
+confidence = "stated"
