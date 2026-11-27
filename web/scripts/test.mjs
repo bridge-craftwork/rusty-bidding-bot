@@ -332,6 +332,38 @@ await test('the status page: status.json parses and every tile has a status', as
   assert.match(await readFile(path.join(dist, 'index.html'), 'utf8'), /href="status\.html"/)
 })
 
+await test('the Brill page: brill-dd.json parses, sessions and deployments are well formed', async () => {
+  const data = JSON.parse(await readFile(path.join(dist, 'brill', 'brill-dd.json'), 'utf8'))
+  const events = new Set(data.events.map((e) => e.id))
+  assert.ok(data.rows.length > 0)
+  for (const r of data.rows) {
+    assert.match(r.date, /^\d{4}-\d\d-\d\d$/)
+    assert.ok(events.has(r.event), r.event)
+    assert.ok(r.scoring === 'IMP' || r.scoring === 'MP')
+    assert.equal(typeof r.actual, 'number')
+    assert.ok(r.dd === null || typeof r.dd === 'number')
+    assert.ok(r.rank >= 1 && r.rank <= r.field, `${r.date} ${r.event}`)
+  }
+  let benSeen = false
+  for (const d of data.deployments) {
+    assert.match(d.date, /^\d{4}-\d\d-\d\d$/)
+    assert.ok(d.kind === 'bidding' || d.kind === 'play', d.kind)
+    assert.ok(d.label && d.what)
+    // The versions in force: BEN's from the first BEN entry on, Rusty's on
+    // every bidding entry (the deployment and period tables name both).
+    assert.equal(typeof d.in_force, 'object', `${d.date} ${d.label}: in_force`)
+    if (d.kind === 'play') { assert.ok(d.ben, `${d.date} ${d.label}: ben`); benSeen = true }
+    if (d.kind === 'bidding') assert.ok(d.in_force.rbb, `${d.date} ${d.label}: in_force.rbb`)
+    if (benSeen) assert.ok(d.in_force.ben, `${d.date} ${d.label}: in_force.ben`)
+    if (d.confidence === 'recorded') assert.ok(d.started_at && Number.isInteger(d.recorded_id), d.label)
+  }
+  const html = await readFile(path.join(dist, 'brill.html'), 'utf8')
+  assert.match(html, /src="brill\/brill\.js"/)
+  for (const page of ['index.html', 'status.html', 'explorer.html', 'validate.html']) {
+    assert.match(await readFile(path.join(dist, page), 'utf8'), /href="brill\.html"/, page)
+  }
+})
+
 if (pbsDir) {
   await test('a PBS scenario from the corpus, with its cards and BBA\'s auction', async () => {
     const s = new Session(rbb, { fetchImpl })

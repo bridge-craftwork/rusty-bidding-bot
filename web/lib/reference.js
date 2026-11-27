@@ -48,6 +48,7 @@ ships, so it describes exactly the tool served beside it.
 
   Page:    https://bridge-craftwork.com/${TOOL}/
   Status:  https://bridge-craftwork.com/${TOOL}/status.html (data: status/status.json)
+  Brill:   https://bridge-craftwork.com/${TOOL}/brill.html (data: brill/brill-dd.json)
   Source:  https://github.com/bridge-craftwork/rusty-bidding-bot
   Engine:  ${info.modules} convention modules, ${info.rules} rules
 

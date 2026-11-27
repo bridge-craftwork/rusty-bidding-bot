@@ -46,6 +46,7 @@ Pages at `web/dist`; `npx wrangler pages dev` serves it locally with the real
 | `styles.css` | the bridge-craftwork design tokens, copied from Bridge-Classroom (not fetched) |
 | `cards/21_intermediate_card.json` | Bridge-Classroom's 2/1 Intermediate card (seed data), offered as `BC-21-Intermediate` |
 | `status.html`, `status/` | the status page (below): `status.js` draws, `legend.js` the status vocabulary, `status.css`, and `status.json`, its data (committed) |
+| `brill.html`, `brill/` | the Brill dashboard (below): `brill.js` draws, `brill.css`, and `brill-dd.json`, its data (committed) |
 | `explorer.html`, `explorer/` | the auction explorer (below): `explorer.js`, `explorer.css` |
 | `validate.html`, `validate/` | the rule checker (below): `validate.js`, `validate.css` |
 | `rules/` (built) | `pack.json`: the convention pack's snapshot the engine is built with (the rule files as text, and the names they are checked against), copied from `pack/pack.json` by build.sh |
@@ -177,6 +178,7 @@ measurement run, from the repository root:
 probes/tools/self_ab.py --batch probes/self-ab.toml                 # .rbb-cache/self-ab
 probes/tools/conv_ab.py                                             # .rbb-cache/conv-ab (bba-cli twice per scenario)
 probes/tools/status_data.py --compare /tmp/all.json                 # web/status/status.json
+probes/tools/brill_fetch.py && probes/tools/brill_deployments.py && probes/tools/brill_dd_data.py  # the Brill dashboard
 ```
 
 and commit `web/status/status.json`. `status_data.py` reads the
@@ -193,6 +195,32 @@ in `.rbb-cache/conv-ab/results.json`, which `status_data.py --conv-ab`
 reads (the default path). `node web/scripts/test.mjs`
 checks that the shipped `status.json` parses and every tile has a known
 status.
+
+## Brill dashboard
+
+`brill.html` (Rick, 2026-11-27): Rusty's scores in the Brill daily events
+over time, to see whether deployments move them. Per scoring type (IMP
+sessions as totals over 8 boards, MP in percent) the double-dummy score
+(Rusty's contracts all played double dummy: the bidding's) and the actual
+score, a rolling mean, the mean per deployment period as dashed steps,
+and deployments as vertical lines (solid: the bidding engine; dotted: BEN,
+which plays the cards); below each, the cardplay (actual minus double
+dummy). A table gives each period's means with counts and the standard
+error. Data: `brill/brill-dd.json`, written by
+`probes/tools/brill_dd_data.py` from the daily mails
+(`.rbb-cache/brill/<day>/mail.txt`, fetched by `brill_fetch.py`) and the
+deployments in `probes/brill-deployments.toml`. Each entry names the
+versions it puts in force (`rbb`, `seat`, `card`; `ben`), which
+`brill_dd_data.py` carries forward as `in_force`, so the period and
+deployment tables and the hover name the Rusty and the BEN in force;
+markers of one day sit side by side. The entries up to 2026-11-21 are
+hand-kept from tags and notes; from the deploy of rusty-seat-service's
+`/deployments` on, `probes/tools/brill_deployments.py` appends them from
+the service's own history (`ssh bridge-droplet`, the dashboard key read
+on the droplet; `--from-json`, `--dry-run`), confidence "recorded". After
+`brill_fetch.py`, run `brill_deployments.py` and `brill_dd_data.py` and
+commit the TOML and the JSON. `node web/scripts/test.mjs` checks
+that it parses and the pages link to it.
 
 ## Auction explorer
 

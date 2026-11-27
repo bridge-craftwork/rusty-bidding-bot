@@ -44,8 +44,8 @@ mkdir -p "$dist" "$cache"
 # The page: copied as it is (no bundler; relative URLs throughout, so it
 # works at / and under /rusty-bidding-bot/).
 cp "$here"/index.html "$here"/404.html "$here"/_headers "$here"/favicon.svg \
-   "$here"/app.js "$here"/app.css "$here"/styles.css "$here"/status.html "$here"/explorer.html "$here"/validate.html "$dist"/
-cp -R "$here"/lib "$here"/cards "$here"/status "$here"/explorer "$here"/validate "$dist"/
+   "$here"/app.js "$here"/app.css "$here"/styles.css "$here"/status.html "$here"/brill.html "$here"/explorer.html "$here"/validate.html "$dist"/
+cp -R "$here"/lib "$here"/cards "$here"/status "$here"/brill "$here"/explorer "$here"/validate "$dist"/
 
 # The rule set, for the rule checker (validate.html checks files added to
 # it): the convention pack's snapshot the engine is built with.
