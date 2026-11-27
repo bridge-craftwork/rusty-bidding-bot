@@ -770,7 +770,25 @@ they are not forgotten. Highest first; "par" means settle by par tests.
     rule's main promise should replace the rule's reading, not narrow it
     (`engine/heard.rs`): Brill's weak 2♥ over a double is still read with
     the fit-showing jump's four clubs.
-14. Higher levels, after all of the above: opener's passes after game,
+14. From the Brill problem boards (docs/reviews/2026-11-27-brill-gaps.md,
+    400 boards flagged "bidding", 102 lower-level gaps, none fixed by
+    `bottom-review`): (a) second calls in competition, one pass: opener
+    after partner's negative double when they bid on, the overcaller's
+    second call, the doubler's rebid after their raise or a jump advance,
+    the overcaller after partner bid and they competed, opener after their
+    takeout double and advance (29 boards); (b) the GIB comparison's blind
+    spot: take positions from the Brill field PBNs and other robots, or
+    self-play against EW on `general.style=gib` (44 of 102 gaps never
+    arise in our self-play); (c) advancer's raises of an overcall, direct
+    two-level overcalls and the takeout double's minor length, raising
+    partner's weak two; (d) values doubles and game over preempts; (e)
+    responder passing below game with game values after a free bid; (f)
+    opener after their balancing call, 1NT rebids that hide a major;
+    (g) Brill partner's conventions we misread (mixed raise, super-accept
+    with a doubleton, help-suit try after their double, takeout double of
+    1S-P-3S read as penalty). The seat service plays the `Brill` card, not
+    21GF-GIB.
+15. Higher levels, after all of the above: opener's passes after game,
     GIB's Drury continuation after 3M (4.3), slam thresholds, quantitative
     4NT, `serious-3nt.test`.
 
