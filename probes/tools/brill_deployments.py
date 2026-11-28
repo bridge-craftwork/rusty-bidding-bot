@@ -108,7 +108,14 @@ def changes(rows, existing):
     done = {e.get("recorded_id") for e in existing if e.get("recorded_id") is not None}
     # The first row continues the hand-kept history; later rows, the row
     # before them (the recorded history is complete from its first row).
-    before = in_force([e for e in existing if e.get("confidence") != "recorded"])
+    # Only the hand-kept entries dated before the first row: a later one
+    # (written by hand for a change the rows also record) is not yet in force.
+    hand = [e for e in existing if e.get("confidence") != "recorded"]
+    first = first_daily(rows[0]["started_at"]) if rows else ""
+    before = in_force([e for e in hand if e["date"] < first])
+    # A change already written by hand (same kind, day and version) is not
+    # added again.
+    stated = {(e["date"], e["kind"], e.get("ben") if e["kind"] == "play" else e.get("rbb")) for e in hand}
     out, prev = [], None
     for row in rows:
         if prev is None:
@@ -140,6 +147,10 @@ def changes(rows, existing):
                     f"seat {seat_name(row)} (image :{row.get('image_tag')}), rbb {row['rbb_tag']} "
                     f"({row['rbb_commit'][:7]}), convention-card {row['convention_card_tag']}, "
                     f"pack {row['pack_id']}, card {row['card']}, BEN {row['ben_version']}")
+        if bidding and (common["date"], "bidding", row["rbb_tag"]) in stated:
+            bidding = False
+        if play and (common["date"], "play", row["ben_version"]) in stated:
+            play = False
         if bidding:
             out.append({**common, "kind": "bidding",
                         "label": f"seat {seat_name(row)} / rbb {row['rbb_tag']}",
